@@ -59,6 +59,7 @@ export default function GrantsModule(props: GrantsModuleProps) {
   );
   const isLoading = useStoreState((state) => state.GrantsList.loading);
   const appliedFilters = useStoreState((state) => state.AppliedFiltersState);
+  const datasource = useStoreState((state) => state.DataSourceState.value);
 
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
@@ -78,6 +79,7 @@ export default function GrantsModule(props: GrantsModuleProps) {
       {
         page: resetPage ? 1 : page,
         search: search.length > 0 ? search : undefined,
+        datasource,
       }
     );
     fetchData({

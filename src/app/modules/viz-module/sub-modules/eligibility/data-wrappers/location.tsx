@@ -17,6 +17,7 @@ export function LocationDetailEligibilityWrapper(props: Props) {
   useTitle("The Data Explorer - Location Eligibility");
 
   // api call & data
+  const datasource = useStoreState((state) => state.DataSourceState.value);
   const fetchData = useStoreActions((store) => store.EligibilityCountry.fetch);
   const data = useStoreState(
     (state) =>
@@ -37,7 +38,8 @@ export function LocationDetailEligibilityWrapper(props: Props) {
             ...appliedFilters,
             locations: [...appliedFilters.locations, props.code],
           }
-        : appliedFilters
+        : appliedFilters,
+      { datasource }
     );
     fetchData({ filterString });
   }, [props.code, appliedFilters]);

@@ -25,6 +25,7 @@ export default function DocumentsModule() {
   const [openToolboxPanel, setOpenToolboxPanel] = React.useState(!isMobile);
 
   // api call & data
+  const datasource = useStoreState((state) => state.DataSourceState.value);
   const fetchData = useStoreActions((store) => store.Documents.fetch);
   const data = useStoreState(
     (state) =>
@@ -39,7 +40,7 @@ export default function DocumentsModule() {
   }, []);
 
   React.useEffect(() => {
-    const filterString = getAPIFormattedFilters(appliedFilters, { search });
+    const filterString = getAPIFormattedFilters(appliedFilters, { search, datasource });
     if (search.length === 0) {
       fetchData({ filterString });
     }
@@ -47,7 +48,7 @@ export default function DocumentsModule() {
 
   useUpdateEffect(() => {
     if (search.length === 0) {
-      const filterString = getAPIFormattedFilters(appliedFilters);
+      const filterString = getAPIFormattedFilters(appliedFilters, { datasource });
       fetchData({ filterString });
     }
   }, [search]);
@@ -57,7 +58,7 @@ export default function DocumentsModule() {
   const [,] = useDebounce(
     () => {
       if (search.length > 0) {
-        const filterString = getAPIFormattedFilters(appliedFilters, { search });
+        const filterString = getAPIFormattedFilters(appliedFilters, { search, datasource });
         fetchData({ filterString });
       }
     },

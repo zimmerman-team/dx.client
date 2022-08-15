@@ -23,6 +23,7 @@ interface Props {
 export function InvestmentsGeoMap(props: Props) {
   useTitle("The Data Explorer - Investments/Map");
   // api call & data
+  const datasource = useStoreState((state) => state.DataSourceState.value);
   const fetchData = useStoreActions((store) => store.DisbursementsGeomap.fetch);
   const data = useStoreState(
     (state) =>
@@ -67,7 +68,8 @@ export function InvestmentsGeoMap(props: Props) {
               props.code,
             ],
           }
-        : appliedFilters
+        : appliedFilters,
+      { datasource }
     );
     if (geomapView === "countries") {
       fetchData({

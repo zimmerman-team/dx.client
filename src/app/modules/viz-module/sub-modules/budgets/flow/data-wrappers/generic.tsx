@@ -35,6 +35,7 @@ export function GenericBudgetsFlowWrapper(props: Props) {
   const [vizCompData, setVizCompData] = React.useState([]);
 
   // api call & data
+  const datasource = useStoreState((state) => state.DataSourceState.value);
   const fetchData = useStoreActions((store) => store.BudgetsFlow.fetch);
   const nodes = useStoreState(
     (state) =>
@@ -97,13 +98,13 @@ export function GenericBudgetsFlowWrapper(props: Props) {
   const appliedFilters = useStoreState((state) => state.AppliedFiltersState);
 
   React.useEffect(() => {
-    const filterString = getAPIFormattedFilters(appliedFilters);
+    const filterString = getAPIFormattedFilters(appliedFilters, { datasource });
     fetchData({ filterString });
   }, [appliedFilters]);
 
   useUpdateEffect(() => {
     if (vizSelected.filterStr !== undefined) {
-      const filterString = getAPIFormattedFilters(appliedFilters);
+      const filterString = getAPIFormattedFilters(appliedFilters, { datasource });
       fetchDrilldownLevel1Data({
         filterString: `levelParam=${vizSelected.filterStr}${
           filterString.length > 0 ? `&${filterString}` : ""
@@ -126,7 +127,7 @@ export function GenericBudgetsFlowWrapper(props: Props) {
       const filterString = getAPIFormattedFilters({
         ...appliedFilters,
         components: [...appliedFilters.components, componentFilter],
-      });
+      }, { datasource });
       fetchDrilldownLevel2Data({
         filterString: `levelParam=${
           vizSelected.filterStr

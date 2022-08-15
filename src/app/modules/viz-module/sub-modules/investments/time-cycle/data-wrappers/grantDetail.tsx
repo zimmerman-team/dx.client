@@ -28,6 +28,7 @@ export function GrantDetailInvestmentsTimeCycleWrapper(props: Props) {
   >(undefined);
 
   // api call & data
+  const datasource = useStoreState((state) => state.DataSourceState.value);
   const fetchData = useStoreActions((store) => {
     switch (props.type) {
       case "Disbursed":
@@ -70,7 +71,7 @@ export function GrantDetailInvestmentsTimeCycleWrapper(props: Props) {
   React.useEffect(() => {
     if (props.code) {
       fetchData({
-        filterString: `grantId='${props.code}'&IPnumber=${props.implementationPeriod}`,
+        filterString: `grantId='${props.code}'&IPnumber=${props.implementationPeriod}&datasource=${datasource}`,
       });
     }
   }, [props.code, props.implementationPeriod, props.type]);

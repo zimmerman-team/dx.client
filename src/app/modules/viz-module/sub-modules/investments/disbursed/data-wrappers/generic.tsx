@@ -24,6 +24,7 @@ export function GenericInvestmentsDisbursedWrapper(props: Props) {
   );
 
   // api call & data
+  const datasource = useStoreState((state) => state.DataSourceState.value);
   const fetchData = useStoreActions((store) => {
     switch (props.type) {
       case "Disbursed":
@@ -110,7 +111,8 @@ export function GenericInvestmentsDisbursedWrapper(props: Props) {
             ...appliedFilters,
             locations: [...appliedFilters.locations, props.code],
           }
-        : appliedFilters
+        : appliedFilters,
+      { datasource }
     );
     fetchData({ filterString });
   }, [props.code, appliedFilters, props.type]);
@@ -129,7 +131,7 @@ export function GenericInvestmentsDisbursedWrapper(props: Props) {
           filterString = getAPIFormattedFilters({
             ...appliedFilters,
             locations,
-          });
+          }, { datasource });
         } else {
           const locations = [...appliedFilters.locations];
           const components = [...appliedFilters.components];
@@ -141,7 +143,7 @@ export function GenericInvestmentsDisbursedWrapper(props: Props) {
             ...appliedFilters,
             locations,
             components,
-          });
+          }, { datasource });
         }
         fetchDrilldownData({ filterString });
       }

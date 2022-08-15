@@ -41,6 +41,7 @@ export function AllocationsModule(props: AllocationsModuleProps) {
   );
 
   // api call & data
+  const datasource = useStoreState((state) => state.DataSourceState.value);
   const fetchData = useStoreActions((store) => store.Allocations.fetch);
   const total = useStoreState(
     (state) => get(state.Allocations.data, "total", []) as number
@@ -223,7 +224,8 @@ export function AllocationsModule(props: AllocationsModuleProps) {
             ...appliedFilters,
             locations: [...appliedFilters.locations, props.code],
           }
-        : appliedFilters
+        : appliedFilters,
+      { datasource }
     );
     fetchData({
       filterString: `periods=${selectedPeriod}${
@@ -261,9 +263,11 @@ export function AllocationsModule(props: AllocationsModuleProps) {
               ...appliedFilters,
               locations: [...appliedFilters.locations, props.code],
             }
-          : appliedFilters
+          : appliedFilters,
+        { datasource }
       );
       fetchDrilldownLevelData({
+        // TODO: hardcoded filter string
         filterString: `levelParam=component/componentName in (${(vizSelected ===
         "Total"
           ? keys.join(",")
@@ -289,7 +293,7 @@ export function AllocationsModule(props: AllocationsModuleProps) {
 
   React.useEffect(() => {
     setVizDrilldowns([{ name: "Dataset" }]);
-    fetchPeriodOptionsData({});
+    fetchPeriodOptionsData({filterString: `datasource=${datasource}`,});
 
     // setTimeout(() => {
     //   const viz = document.getElementById("allocations-radial-bar");

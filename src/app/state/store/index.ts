@@ -14,6 +14,7 @@ import {
   ToolBoxPanelInvestmentsMapViewState,
   ToolBoxPanelPFPeriodState,
   ToolBoxPanelResultsYearState,
+  DataSourceState,
 } from "app/state/api/action-reducers/sync";
 
 import GrantsList from "app/state/api/action-reducers/viz/grantsList";
@@ -283,6 +284,7 @@ const storeContent: StoreModel = {
   ToolBoxPanelEligibilityAdvancedCheckboxState: persist(
     ToolBoxPanelEligibilityAdvancedCheckboxState
   ),
+  DataSourceState: persist(DataSourceState),
 };
 
 export const store = createStore(storeContent);

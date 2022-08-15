@@ -17,6 +17,7 @@ interface Props {
 
 export function LocationGrants(props: Props) {
   const isMobile = useMediaQuery("(max-width: 767px)");
+  const datasource = useStoreState((state) => state.DataSourceState.value);
   const fetchData = useStoreActions((store) => store.LocationGrants.fetch);
   const appliedFilters = useStoreState((state) => state.AppliedFiltersState);
   const data = useStoreState((state) =>
@@ -40,7 +41,8 @@ export function LocationGrants(props: Props) {
               props.code,
             ],
           }
-        : appliedFilters
+        : appliedFilters,
+      { datasource }
     );
     fetchData({ filterString });
   }, [props.code, appliedFilters]);

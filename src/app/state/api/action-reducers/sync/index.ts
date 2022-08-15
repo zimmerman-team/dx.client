@@ -138,3 +138,11 @@ export const ToolBoxPanelDisbursementsSliderValues: ToolBoxPanelDisbursementsSli
     state.values = payload;
   }),
 };
+
+export interface DataSourceStateModel { value: string, setValue: Action<DataSourceStateModel, string> }
+export const DataSourceState: DataSourceStateModel = {
+  value: "TGFOData",
+  setValue: action((state, payload: string) => {
+    state.value = payload;
+  }),
+}

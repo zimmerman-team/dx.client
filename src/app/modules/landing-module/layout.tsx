@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import BigLogo from "app/assets/BigLogo";
 import { Search } from "app/components/Search";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
+import { useStoreState } from "app/state/store/hooks";
 import { DatasetCarousel } from "app/components/DatasetCarousel";
 import {
   container,
@@ -13,6 +14,7 @@ import {
 
 export const LandingLayout = () => {
   const isMobile = useMediaQuery("(max-width: 767px)");
+  const datasource = useStoreState((state) => state.DataSourceState.value);
 
   return (
     <div css={container}>
@@ -31,7 +33,7 @@ export const LandingLayout = () => {
         `}
       >
         <BigLogo />
-        <div css={subtitle}>Free and open access to the Global Fund Data</div>
+        <div css={subtitle}>Free and open access to the { datasource === 'TGFOData' ? 'Global Fund Data' : `${datasource} dataset` }</div>
         <Search />
         {!isMobile && (
           <React.Fragment>

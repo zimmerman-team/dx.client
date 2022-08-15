@@ -21,6 +21,7 @@ export function Search() {
   // api call & data
   const clearData = useStoreActions((store) => store.GlobalSearch.clear);
   const fetchData = useStoreActions((store) => store.GlobalSearch.fetch);
+  const datasource = useStoreState((state) => state.DataSourceState.value);
   const data = useStoreState(
     (state) =>
       get(state.GlobalSearch.data, "data", []) as SearchResultsTabModel[]
@@ -40,7 +41,7 @@ export function Search() {
     () => {
       if (value.length > 0) {
         fetchData({
-          filterString: `q=${value}`,
+          filterString: `q=${value}&datasource=${datasource}`,
         });
       } else {
         clearData();

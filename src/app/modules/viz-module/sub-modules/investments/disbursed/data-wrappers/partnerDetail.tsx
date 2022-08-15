@@ -23,6 +23,7 @@ export function PartnerDetailInvestmentsDisbursedWrapper(props: Props) {
   );
 
   // api call & data
+  const datasource = useStoreState((state) => state.DataSourceState.value);
   const fetchData = useStoreActions((store) => {
     switch (props.type) {
       case "Disbursed":
@@ -75,7 +76,8 @@ export function PartnerDetailInvestmentsDisbursedWrapper(props: Props) {
             ...appliedFilters,
             partners: [...appliedFilters.partners, props.code],
           }
-        : appliedFilters
+        : appliedFilters,
+      { datasource }
     );
     fetchData({ filterString });
   }, [props.code, appliedFilters, props.type]);

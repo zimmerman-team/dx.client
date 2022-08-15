@@ -33,6 +33,7 @@ export function GenericEligibilityWrapper() {
     (state) => state.ToolBoxPanelEligibilityYearState.value
   );
 
+  const datasource = useStoreState((state) => state.DataSourceState.value);
   const fetchYearOptionsData = useStoreActions(
     (store) => store.EligibilityYears.fetch
   );
@@ -60,11 +61,11 @@ export function GenericEligibilityWrapper() {
   const appliedFilters = useStoreState((state) => state.AppliedFiltersState);
 
   React.useEffect(() => {
-    fetchYearOptionsData({});
+    fetchYearOptionsData({filterString: `datasource=${datasource}`,});
   }, []);
 
   React.useEffect(() => {
-    const filterString = getAPIFormattedFilters(appliedFilters);
+    const filterString = getAPIFormattedFilters(appliedFilters, { datasource });
     fetchData({
       filterString: `aggregateBy=${aggregateBy}&periods=${selectedYear}${
         filterString.length > 0 ? `&${filterString}` : ""

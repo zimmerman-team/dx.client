@@ -11,6 +11,7 @@ import {
   ToolBoxPanelInvestmentsMapViewStateModel,
   ToolBoxPanelPFPeriodStateModel,
   ToolBoxPanelResultsYearStateModel,
+  DataSourceStateModel,
 } from "app/state/api/action-reducers/sync";
 import { AppliedFiltersStateModel } from "../action-reducers/sync/filters";
 
@@ -175,4 +176,6 @@ export interface StoreModel {
   ToolBoxPanelInvestmentsMapViewState: ToolBoxPanelInvestmentsMapViewStateModel;
   ToolBoxPanelDisbursementsSliderValues: ToolBoxPanelDisbursementsSliderValuesModel;
   ToolBoxPanelEligibilityAdvancedCheckboxState: ToolBoxPanelEligibilityAdvancedCheckboxStateModel;
+  // datasource selector
+  DataSourceState: DataSourceStateModel;
 }

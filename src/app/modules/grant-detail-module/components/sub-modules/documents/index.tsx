@@ -21,6 +21,7 @@ export function GrantDetailDocumentsModule(
   const [search, setSearch] = React.useState("");
 
   // api call & data
+  const datasource = useStoreState((state) => state.DataSourceState.value);
   const fetchData = useStoreActions(
     (store) => store.GrantDetailDocuments.fetch
   );
@@ -38,19 +39,19 @@ export function GrantDetailDocumentsModule(
 
   React.useEffect(() => {
     if (props.code) {
-      fetchData({ filterString: `grantId='${props.code}'` });
+      fetchData({ filterString: `grantId='${props.code}'&datasource=${datasource}` });
     }
   }, [props.code]);
 
   useUpdateEffect(() => {
     if (search.length === 0)
-      fetchData({ filterString: `grantId='${props.code}'` });
+      fetchData({ filterString: `grantId='${props.code}'&datasource=${datasource}` });
   }, [search]);
 
   const [,] = useDebounce(
     () => {
       if (search.length > 0) {
-        fetchData({ filterString: `q=${search}&grantId='${props.code}'` });
+        fetchData({ filterString: `q=${search}&grantId='${props.code}'&datasource=${datasource}` });
       }
     },
     500,

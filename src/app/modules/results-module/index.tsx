@@ -32,6 +32,7 @@ export default function ResultsModule() {
   );
 
   // api call & data
+  const datasource = useStoreState((state) => state.DataSourceState.value);
   const fetchData = useStoreActions((store) => store.ResultsList.fetch);
   const data = useStoreState(
     (state) => get(state.ResultsList.data, "data", []) as ResultListItemModel[]
@@ -45,7 +46,7 @@ export default function ResultsModule() {
 
   React.useEffect(() => {
     document.body.style.background = "#fff";
-    fetchYearOptionsData({});
+    fetchYearOptionsData({filterString: `datasource=${datasource}`,});
   }, []);
 
   React.useEffect(() => {
@@ -55,7 +56,7 @@ export default function ResultsModule() {
   }, [location.pathname]);
 
   React.useEffect(() => {
-    const filterString = getAPIFormattedFilters(appliedFilters, { search });
+    const filterString = getAPIFormattedFilters(appliedFilters, { search, datasource });
     if (search.length === 0) {
       fetchData({
         filterString: `${filterString}${
@@ -72,7 +73,7 @@ export default function ResultsModule() {
 
   useUpdateEffect(() => {
     if (search.length === 0) {
-      const filterString = getAPIFormattedFilters(appliedFilters);
+      const filterString = getAPIFormattedFilters(appliedFilters, { datasource });
       fetchData({
         filterString: `${filterString}${
           filterString.length > 0 ? "&" : ""
@@ -86,7 +87,7 @@ export default function ResultsModule() {
   const [,] = useDebounce(
     () => {
       if (search.length > 0) {
-        const filterString = getAPIFormattedFilters(appliedFilters, { search });
+        const filterString = getAPIFormattedFilters(appliedFilters, { search, datasource });
         fetchData({
           filterString: `${filterString}${
             filterString.length > 0 ? "&" : ""

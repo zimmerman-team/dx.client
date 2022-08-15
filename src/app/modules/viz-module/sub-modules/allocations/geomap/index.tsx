@@ -23,6 +23,7 @@ export function AllocationsGeoMap(props: Props) {
     `The Data Explorer -${props.code ? ` ${props.code}` : ""} Allocations`
   );
   // api call & data
+  const datasource = useStoreState((state) => state.DataSourceState.value);
   const fetchData = useStoreActions((store) => store.AllocationsGeomap.fetch);
   const data = useStoreState(
     (state) =>
@@ -64,7 +65,7 @@ export function AllocationsGeoMap(props: Props) {
   const appliedFilters = useStoreState((state) => state.AppliedFiltersState);
 
   React.useEffect(() => {
-    fetchPeriodOptionsData({});
+    fetchPeriodOptionsData({filterString: `datasource=${datasource}`,});
   }, []);
 
   React.useEffect(() => {
@@ -74,7 +75,8 @@ export function AllocationsGeoMap(props: Props) {
             ...appliedFilters,
             locations: [...appliedFilters.locations, props.code],
           }
-        : appliedFilters
+        : appliedFilters,
+      { datasource }
     );
     if (geomapView === "countries") {
       fetchData({

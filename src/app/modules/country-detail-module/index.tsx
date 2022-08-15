@@ -46,6 +46,7 @@ export default function CountryDetail() {
   }>();
 
   // api call & data
+  const datasource = useStoreState((state) => state.DataSourceState.value);
   const fetchLocationInfoData = useStoreActions(
     (store) => store.LocationDetailInfo.fetch
   );
@@ -71,7 +72,7 @@ export default function CountryDetail() {
   React.useEffect(() => {
     document.body.style.background = "#fff";
     fetchLocationInfoData({
-      filterString: `locations=${paramCode}`,
+      filterString: `locations=${paramCode}&datasource=${datasource}`,
     });
 
     return () => clearEligibilityData();

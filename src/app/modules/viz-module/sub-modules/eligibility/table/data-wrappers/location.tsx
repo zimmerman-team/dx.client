@@ -66,6 +66,7 @@ export function LocationEligibilityTableWrapper(props: Props) {
     getTableData(data)
   );
 
+  const datasource = useStoreState((state) => state.DataSourceState.value);
   const fetchData = useStoreActions((store) => store.EligibilityCountry.fetch);
 
   const isLoading = useStoreState((state) => state.EligibilityCountry.loading);
@@ -79,7 +80,8 @@ export function LocationEligibilityTableWrapper(props: Props) {
             ...appliedFilters,
             locations: [...appliedFilters.locations, props.code],
           }
-        : appliedFilters
+        : appliedFilters,
+      { datasource }
     );
     fetchData({ filterString });
   }, [props.code, appliedFilters]);

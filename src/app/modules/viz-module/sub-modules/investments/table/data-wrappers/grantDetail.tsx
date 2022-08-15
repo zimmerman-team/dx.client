@@ -66,6 +66,7 @@ export function GrantDetailInvestmentsTableWrapper(props: Props) {
     getTableData(data)
   );
 
+  const datasource = useStoreState((state) => state.DataSourceState.value);
   const fetchData = useStoreActions(
     (store) => store.GrantDetailDisbursementsTreemap.fetch
   );
@@ -76,7 +77,7 @@ export function GrantDetailInvestmentsTableWrapper(props: Props) {
   React.useEffect(() => {
     if (props.code) {
       fetchData({
-        filterString: `grantId='${props.code}'&IPnumber=${props.implementationPeriod}`,
+        filterString: `grantId='${props.code}'&IPnumber=${props.implementationPeriod}&datasource=${datasource}`,
       });
     }
   }, [props.code, props.implementationPeriod]);

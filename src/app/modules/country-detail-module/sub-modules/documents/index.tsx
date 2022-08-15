@@ -26,6 +26,7 @@ export function LocationDetailDocumentsModule(
   const [page, setPage] = React.useState(1);
 
   // api call & data
+  const datasource = useStoreState((state) => state.DataSourceState.value);
   const fetchData = useStoreActions(
     (store) => store.LocationDetailDocuments.fetch
   );
@@ -46,7 +47,7 @@ export function LocationDetailDocumentsModule(
   React.useEffect(() => {
     let filterString = "";
     if (props.isMultiCountry) {
-      filterString = getAPIFormattedFilters(appliedFilters);
+      filterString = getAPIFormattedFilters(appliedFilters, { datasource });
       filterString = `${filterString}${
         filterString.length > 0 ? "&" : ""
       }multicountries=${props.code}`;
@@ -57,7 +58,8 @@ export function LocationDetailDocumentsModule(
               ...appliedFilters,
               locations: [...appliedFilters.locations, props.code],
             }
-          : appliedFilters
+          : appliedFilters,
+        { datasource }
       );
     }
     fetchData({ filterString });
@@ -71,7 +73,8 @@ export function LocationDetailDocumentsModule(
               ...appliedFilters,
               locations: [...appliedFilters.locations, props.code],
             }
-          : appliedFilters
+          : appliedFilters, 
+        { datasource }
       );
       fetchData({ filterString });
     }
@@ -86,7 +89,8 @@ export function LocationDetailDocumentsModule(
                 ...appliedFilters,
                 locations: [...appliedFilters.locations, props.code],
               }
-            : appliedFilters
+            : appliedFilters,
+          { datasource }
         );
         fetchData({ filterString: `q=${search}&${filterString}` });
       }

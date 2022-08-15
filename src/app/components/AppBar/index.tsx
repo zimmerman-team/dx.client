@@ -6,6 +6,7 @@ import IconButton from "@material-ui/core/IconButton";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import IconChevronLeft from "@material-ui/icons/ChevronLeft";
 import { NavLink, useLocation, useHistory } from "react-router-dom";
+import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import { MobileAppbarSearch } from "app/components/Mobile/AppBarSearch";
 
 const TextHeader = (label: string) => (
@@ -19,6 +20,8 @@ const TextHeader = (label: string) => (
     {label}
   </h2>
 );
+
+
 
 function MobileHeader() {
   const history = useHistory();
@@ -41,7 +44,20 @@ function MobileHeader() {
 export function AppBar() {
   const location = useLocation();
   const isMobile = useMediaQuery("(max-width: 767px)");
-
+  const datasource = useStoreState((state) => state.DataSourceState.value);
+  const changeDatasource = useStoreActions((store) => store.DataSourceState.setValue);
+  
+  const changeDatasourceOnClick = () => {
+    let newValue = datasource
+    switch (datasource) {
+      case 'TGFOData': newValue = 'HXLPalestine'; break;
+      case 'HXLPalestine': newValue = 'IATIAllBudgets'; break;
+      case 'IATIAllBudgets': newValue = 'IATICovidActivities'; break;
+      case 'IATICovidActivities': newValue = 'TGFOData'; break;
+    }
+    changeDatasource(newValue);
+  }
+  
   if (location.pathname === "/") {
     return <React.Fragment />;
   }
@@ -81,17 +97,32 @@ export function AppBar() {
                   alt="TGF Data Explorer logo"
                 />
               </NavLink>
-              <NavLink
-                to="/about"
-                css={`
-                  color: #fff;
-                  font-size: 14px;
-                  letter-spacing: 0.5px;
-                  text-decoration: none;
-                `}
-              >
-                About
-              </NavLink>
+              <div>
+                <NavLink
+                  to="/"
+                  css={`
+                    color: #fff;
+                    font-size: 14px;
+                    letter-spacing: 0.5px;
+                    text-decoration: none;
+                    padding-right: 20px;
+                  `}
+                  onClick= { () => {changeDatasourceOnClick()} }
+                >
+                  { datasource }
+                </NavLink>
+                <NavLink
+                  to="/about"
+                  css={`
+                    color: #fff;
+                    font-size: 14px;
+                    letter-spacing: 0.5px;
+                    text-decoration: none;
+                  `}
+                >
+                  About
+                </NavLink>
+              </div>
             </React.Fragment>
           )}
         </Toolbar>

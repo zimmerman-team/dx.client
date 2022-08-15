@@ -22,6 +22,7 @@ export function LocationResults(props: Props) {
   const data = useStoreState(
     (state) => get(state.ResultsList.data, "data", []) as ResultListItemModel[]
   );
+  const datasource = useStoreState((state) => state.DataSourceState.value);
   const fetchYearOptionsData = useStoreActions(
     (store) => store.ResultsYears.fetch
   );
@@ -33,7 +34,7 @@ export function LocationResults(props: Props) {
 
   React.useEffect(() => {
     document.body.style.background = "#fff";
-    fetchYearOptionsData({});
+    fetchYearOptionsData({filterString: `datasource=${datasource}`,});
   }, []);
 
   React.useEffect(() => {
@@ -47,7 +48,7 @@ export function LocationResults(props: Props) {
             ],
           }
         : appliedFilters,
-      { search }
+      { search, datasource }
     );
     if (search.length === 0) {
       fetchData({
@@ -70,7 +71,7 @@ export function LocationResults(props: Props) {
               ],
             }
           : appliedFilters,
-        { search }
+        { search, datasource }
       );
       fetchData({
         filterString: `${filterString}${
@@ -93,7 +94,7 @@ export function LocationResults(props: Props) {
                 ],
               }
             : appliedFilters,
-          { search }
+          { search, datasource }
         );
         fetchData({
           filterString: `${filterString}${

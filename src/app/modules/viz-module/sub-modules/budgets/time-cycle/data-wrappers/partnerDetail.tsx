@@ -33,6 +33,7 @@ export function PartnerDetailGenericBudgetsTimeCycleWrapper(props: Props) {
   const [vizCompData, setVizCompData] = React.useState([]);
 
   // api call & data
+  const datasource = useStoreState((state) => state.DataSourceState.value);
   const fetchData = useStoreActions(
     (store) => store.PartnerDetailBudgetsTimeCycle.fetch
   );
@@ -94,7 +95,8 @@ export function PartnerDetailGenericBudgetsTimeCycleWrapper(props: Props) {
             ...appliedFilters,
             partners: [...appliedFilters.partners, props.code],
           }
-        : appliedFilters
+        : appliedFilters,
+      { datasource }
     );
     fetchData({ filterString });
   }, [props.code, appliedFilters]);
@@ -107,7 +109,8 @@ export function PartnerDetailGenericBudgetsTimeCycleWrapper(props: Props) {
               ...appliedFilters,
               partners: [...appliedFilters.partners, props.code],
             }
-          : appliedFilters
+          : appliedFilters,
+        { datasource }
       );
       fetchDrilldownLevel1Data({
         filterString: `levelParam=budgetPeriodStartYear eq ${vizSelected}&${filterString}`,
@@ -131,7 +134,7 @@ export function PartnerDetailGenericBudgetsTimeCycleWrapper(props: Props) {
         ...appliedFilters,
         components: [...appliedFilters.components, componentFilter],
         partners: [...appliedFilters.partners, props.code],
-      });
+      }, { datasource });
       fetchDrilldownLevel2Data({
         filterString: `levelParam=budgetPeriodStartYear eq ${vizSelected}&activityAreaName=${activityAreaNameFilter}${
           filterString.length > 0 ? `&${filterString}` : ""

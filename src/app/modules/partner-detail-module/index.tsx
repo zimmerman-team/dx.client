@@ -46,6 +46,7 @@ export default function PartnerDetail() {
   }>();
 
   // api call & data
+  const datasource = useStoreState((state) => state.DataSourceState.value);
   const fetchPartnerInfoData = useStoreActions(
     (store) => store.PartnerDetailInfo.fetch
   );
@@ -60,7 +61,7 @@ export default function PartnerDetail() {
   React.useEffect(() => {
     document.body.style.background = "#fff";
     fetchPartnerInfoData({
-      filterString: `partners=${paramCode}`,
+      filterString: `partners=${paramCode}&datasource=${datasource}`,
     });
   }, [paramCode]);
 

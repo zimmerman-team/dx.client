@@ -30,6 +30,7 @@ export function PledgesContributionsTreemap() {
   ] = React.useState<TreeMapNodeDatum | null>(null);
 
   // api call & data
+  const datasource = useStoreState((state) => state.DataSourceState.value);
   const fetchData = useStoreActions(
     (store) => store.PledgesContributionsTreemap.fetch
   );
@@ -66,7 +67,7 @@ export function PledgesContributionsTreemap() {
   );
 
   React.useEffect(() => {
-    const filterString = getAPIFormattedFilters(appliedFilters);
+    const filterString = getAPIFormattedFilters(appliedFilters, { datasource });
     fetchData({
       filterString: `valueType=${valueType}${
         filterString.length > 0 ? `&${filterString}` : ""

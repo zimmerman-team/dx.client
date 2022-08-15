@@ -25,6 +25,7 @@ export function PledgesContributionsGeoMap() {
   );
 
   // api call & data
+  const datasource = useStoreState((state) => state.DataSourceState.value);
   const fetchData = useStoreActions(
     (store) => store.PledgesContributionsGeomap.fetch
   );
@@ -53,7 +54,7 @@ export function PledgesContributionsGeoMap() {
   const appliedFilters = useStoreState((state) => state.AppliedFiltersState);
 
   React.useEffect(() => {
-    const filterString = getAPIFormattedFilters(appliedFilters);
+    const filterString = getAPIFormattedFilters(appliedFilters, { datasource });
     fetchData({
       filterString: `valueType=${valueType}${
         filterString.length > 0 ? `&${filterString}` : ""

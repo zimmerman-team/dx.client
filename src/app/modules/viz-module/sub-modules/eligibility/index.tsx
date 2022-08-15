@@ -25,6 +25,7 @@ export function EligibilityModule() {
   );
 
   // api call & data
+  const datasource = useStoreState((state) => state.DataSourceState.value);
   const fetchData = useStoreActions((store) => store.Eligibility.fetch);
   const data = useStoreState(
     (state) => get(state.Eligibility.data, "data", []) as DotChartModel[]
@@ -38,11 +39,11 @@ export function EligibilityModule() {
   const appliedFilters = useStoreState((state) => state.AppliedFiltersState);
 
   React.useEffect(() => {
-    fetchYearOptionsData({});
+    fetchYearOptionsData({filterString: `datasource=${datasource}`,});
   }, []);
 
   React.useEffect(() => {
-    const filterString = getAPIFormattedFilters(appliedFilters);
+    const filterString = getAPIFormattedFilters(appliedFilters, { datasource });
     fetchData({
       filterString: `aggregateBy=${aggregateBy}&periods=${selectedYear}${
         filterString.length > 0 ? `&${filterString}` : ""

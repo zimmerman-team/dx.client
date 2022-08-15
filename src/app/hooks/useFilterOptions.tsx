@@ -22,6 +22,8 @@ export function useFilterOptions(
   props: UseFilterOptionsProps
 ): null | UseFilterOptionsReturn {
   const location = useLocation();
+  const datasource = useStoreState((state) => state.DataSourceState.value);
+
   const getLocations = useStoreActions(
     (store) => store.LocationFilterOptions.fetch
   );
@@ -66,22 +68,22 @@ export function useFilterOptions(
 
   React.useEffect(() => {
     if (locations.length === 0) {
-      getLocations({});
+      getLocations({filterString: `datasource=${datasource}`,});
     }
     if (components.length === 0) {
-      getComponents({});
+      getComponents({filterString: `datasource=${datasource}`,});
     }
     if (partnerTypes.length === 0) {
-      getPartnerTypes({});
+      getPartnerTypes({filterString: `datasource=${datasource}`,});
     }
     if (status.length === 0) {
-      getStatus({});
+      getStatus({filterString: `datasource=${datasource}`,});
     }
     if (replenishmentPeriods.length === 0) {
-      getReplenishmentPeriods({});
+      getReplenishmentPeriods({filterString: `datasource=${datasource}`,});
     }
     if (donors.length === 0) {
-      getDonors({});
+      getDonors({filterString: `datasource=${datasource}`,});
     }
   }, []);
 

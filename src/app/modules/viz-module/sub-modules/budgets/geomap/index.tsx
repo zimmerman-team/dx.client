@@ -27,6 +27,7 @@ export function BudgetsGeoMap(props: Props) {
   const isMobile = useMediaQuery("(max-width: 767px)");
 
   // api call & data
+  const datasource = useStoreState((state) => state.DataSourceState.value);
   const fetchData = useStoreActions((store) => store.BudgetsGeomap.fetch);
   const data = useStoreState(
     (state) =>
@@ -67,7 +68,8 @@ export function BudgetsGeoMap(props: Props) {
               props.code,
             ],
           }
-        : appliedFilters
+        : appliedFilters,
+      { datasource }
     );
     if (props.grantCode && props.grantPeriod) {
       filterString = `grantId='${props.grantCode}'&IPnumber=${props.grantPeriod}`;

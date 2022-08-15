@@ -36,6 +36,7 @@ export function LocationDetailBudgetsFlowWrapper(props: Props) {
   const [vizCompData, setVizCompData] = React.useState([]);
 
   // api call & data
+  const datasource = useStoreState((state) => state.DataSourceState.value);
   const fetchData = useStoreActions(
     (store) => store.LocationDetailBudgetsFlow.fetch
   );
@@ -108,7 +109,8 @@ export function LocationDetailBudgetsFlowWrapper(props: Props) {
             ...appliedFilters,
             locations: [...appliedFilters.locations, props.code],
           }
-        : appliedFilters
+        : appliedFilters,
+      { datasource }
     );
     fetchData({ filterString });
   }, [props.code, appliedFilters]);
@@ -121,7 +123,8 @@ export function LocationDetailBudgetsFlowWrapper(props: Props) {
               ...appliedFilters,
               locations: [...appliedFilters.locations, props.code],
             }
-          : appliedFilters
+          : appliedFilters,
+        { datasource }
       );
       fetchDrilldownLevel1Data({
         filterString: `levelParam=${vizSelected.filterStr}&${filterString}`,
@@ -144,7 +147,7 @@ export function LocationDetailBudgetsFlowWrapper(props: Props) {
         ...appliedFilters,
         locations: [...appliedFilters.locations, props.code],
         components: [...appliedFilters.components, componentFilter],
-      });
+      }, { datasource });
       fetchDrilldownLevel2Data({
         filterString: `levelParam=${
           vizSelected.filterStr

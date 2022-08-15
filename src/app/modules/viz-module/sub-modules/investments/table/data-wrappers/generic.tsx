@@ -66,6 +66,7 @@ export function GenericInvestmentsTableWrapper(props: Props) {
     getTableData(data)
   );
 
+  const datasource = useStoreState((state) => state.DataSourceState.value);
   const fetchData = useStoreActions(
     (store) => store.DisbursementsTreemap.fetch
   );
@@ -82,7 +83,8 @@ export function GenericInvestmentsTableWrapper(props: Props) {
             ...appliedFilters,
             locations: [...appliedFilters.locations, props.code],
           }
-        : appliedFilters
+        : appliedFilters,
+      { datasource }
     );
     fetchData({ filterString });
   }, [props.code, appliedFilters]);
