@@ -20,9 +20,9 @@ function Providers(props: ProviderProps) {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <StoreProvider store={store}>
-          <AppContainer>
-            {/* react router */}
-            <Router>
+          {/* react router */}
+          <Router>
+            <AppContainer>
               <AppBar />
               <Container
                 maxWidth="lg"
@@ -37,8 +37,8 @@ function Providers(props: ProviderProps) {
               >
                 {props.children}
               </Container>
-            </Router>
-          </AppContainer>
+            </AppContainer>
+          </Router>
         </StoreProvider>
       </ThemeProvider>
     </StylesProvider>
