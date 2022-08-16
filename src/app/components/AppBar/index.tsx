@@ -1,4 +1,5 @@
 import React from "react";
+import get from "lodash/get";
 import Toolbar from "@material-ui/core/Toolbar";
 import MUIAppBar from "@material-ui/core/AppBar";
 import Container from "@material-ui/core/Container";
@@ -21,8 +22,6 @@ const TextHeader = (label: string) => (
   </h2>
 );
 
-
-
 function MobileHeader() {
   const history = useHistory();
 
@@ -44,20 +43,46 @@ function MobileHeader() {
 export function AppBar() {
   const location = useLocation();
   const isMobile = useMediaQuery("(max-width: 767px)");
+  // DataSourceState maintains which of the datasources is currently active.
   const datasource = useStoreState((state) => state.DataSourceState.value);
   const changeDatasource = useStoreActions((store) => store.DataSourceState.setValue);
-  
+  // We use the DataSourceMappingState to track in-app which datasets to display
+  const changeDatasourceMapping = useStoreActions((store) => store.DataSourceMappingState.setValue);
+  // The datasetMapping is a string[] indicating the mapped datasets, e.g. ["results", "grants"], fetched and accessed through DataSetList
+  const getDatasetMapping = useStoreActions((store) => store.DataSetList.fetch);
+  const datasetMapping = useStoreState(
+    (state) => get(state.DataSetList.data, "data", []) as string[]
+  );
+  // We use the DataSourceList to track the available datasources, eg TGF, IATI and HXL.
+  const getDataSourceList = useStoreActions((store) => store.DataSourceList.fetch);
+  const dataSourceList = useStoreState(
+    (state) => get(state.DataSourceList.data, "data", ["TGFOData"]) as string[] // Default to TGFOData original datasource
+  );
+
   const changeDatasourceOnClick = () => {
-    let newValue = datasource
-    switch (datasource) {
-      case 'TGFOData': newValue = 'HXLPalestine'; break;
-      case 'HXLPalestine': newValue = 'IATIAllBudgets'; break;
-      case 'IATIAllBudgets': newValue = 'IATICovidActivities'; break;
-      case 'IATICovidActivities': newValue = 'TGFOData'; break;
-    }
-    changeDatasource(newValue);
+    // When the datasource is clicked, we change to the next datasource in line.
+    // This should be changed later into a selector.
+    if (dataSourceList.length < 1) return;
+    const index = dataSourceList.indexOf(datasource);
+    const newIndex = index === dataSourceList.length - 1 ? 0 : index + 1;
+    changeDatasource(dataSourceList[newIndex]);
   }
   
+  // Retrieve the updated datasource list
+  React.useEffect(() => {
+    getDataSourceList({});
+  }, []);
+
+  // When a change in active datasource is detected, retrieve the available datasets for the new datasource
+  React.useEffect(() => {
+    getDatasetMapping({ filterString: `datasource=${datasource}` })
+  }, [datasource]);
+
+  // When the available datasets have been updated, update the datasourceMapping
+  React.useEffect(() => {
+    changeDatasourceMapping(datasetMapping);
+  }, [datasetMapping]);
+
   if (location.pathname === "/") {
     return <React.Fragment />;
   }

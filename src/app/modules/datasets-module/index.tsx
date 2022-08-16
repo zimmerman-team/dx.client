@@ -14,15 +14,16 @@ import { DocumentsTablePreview } from "app/assets/dataset-preview/documentsTable
 import { EligibilityDotsPreview } from "app/assets/dataset-preview/eligibilityDots";
 import { AllocationsRadialPreview } from "app/assets/dataset-preview/allocationsRadial";
 import { InvestmentsTreemapPreview } from "app/assets/dataset-preview/investmentsTreemap";
+import { useStoreState } from "app/state/store/hooks";
 
-interface DatasetItemModel {
+export interface DatasetItemModel {
   name: string;
   link: string;
   group: string;
   preview: JSX.Element;
 }
 
-const datasets: DatasetItemModel[] = [
+export const datasets: DatasetItemModel[] = [
   {
     name: "Pledges & Contributions",
     link: "/viz/pledges-contributions/treemap",
@@ -154,6 +155,7 @@ const datasets: DatasetItemModel[] = [
 export default function Datasets() {
   useTitle(`The Data Explorer - Datasets`);
   const isMobile = useMediaQuery("(max-width: 767px)");
+  const datasourceMapping = useStoreState((state) => state.DataSourceMappingState.value);
 
   React.useEffect(() => {
     document.body.style.background = "#F5F5F7";
@@ -183,53 +185,56 @@ export default function Datasets() {
       )}
       <PageTopSpacer />
       <Grid container spacing={4}>
-        {datasets.map((dataset: DatasetItemModel) => (
-          <Grid item xs={12} sm={6} md={6} key={dataset.link}>
-            <Link to={dataset.link} css="text-decoration: none;">
-              <div
-                css={`
-                  width: 100%;
-                  height: 28vh;
-                  padding: 20px;
-                  color: #262c34;
-                  background: #fff;
-                  border-radius: 20px;
-                  border: 2px solid #fff;
-
-                  @media screen and (min-width: 900px) {
-                    height: 370px;
-                  }
-
-                  @media screen and (max-width: 767px) {
-                    height: 227px;
-                  }
-
-                  > div {
-                    font-weight: bold;
-                    margin-bottom: 10px;
-                    font-family: "GothamNarrow-Bold", "Helvetica Neue",
-                      sans-serif;
-                  }
-
-                  > svg {
+        {datasets.map((dataset: DatasetItemModel) => {
+          if (!datasourceMapping.includes(dataset.name) && !datasourceMapping.includes(dataset.group)) return <React.Fragment key={dataset.link} />;
+          return (
+            <Grid item xs={12} sm={6} md={6} key={dataset.link}>
+              <Link to={dataset.link} css="text-decoration: none;">
+                <div
+                  css={`
                     width: 100%;
-                    height: calc(100% - 30px);
-                  }
+                    height: 28vh;
+                    padding: 20px;
+                    color: #262c34;
+                    background: #fff;
+                    border-radius: 20px;
+                    border: 2px solid #fff;
 
-                  &:hover {
-                    border-color: #13183f;
-                  }
-                `}
-              >
-                <div>
-                  {dataset.group} {dataset.name.length > 0 ? "·" : ""}{" "}
-                  {dataset.name}
+                    @media screen and (min-width: 900px) {
+                      height: 370px;
+                    }
+
+                    @media screen and (max-width: 767px) {
+                      height: 227px;
+                    }
+
+                    > div {
+                      font-weight: bold;
+                      margin-bottom: 10px;
+                      font-family: "GothamNarrow-Bold", "Helvetica Neue",
+                        sans-serif;
+                    }
+
+                    > svg {
+                      width: 100%;
+                      height: calc(100% - 30px);
+                    }
+
+                    &:hover {
+                      border-color: #13183f;
+                    }
+                  `}
+                >
+                  <div>
+                    {dataset.group} {dataset.name.length > 0 ? "·" : ""}{" "}
+                    {dataset.name}
+                  </div>
+                  {dataset.preview}
                 </div>
-                {dataset.preview}
-              </div>
-            </Link>
-          </Grid>
-        ))}
+              </Link>
+            </Grid>
+          )})
+        }
       </Grid>
       <div
         css={`

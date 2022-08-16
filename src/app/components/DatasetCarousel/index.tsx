@@ -4,13 +4,8 @@ import { Link } from "react-router-dom";
 import Carousel from "react-grid-carousel";
 import { useMediaQuery } from "@material-ui/core";
 import { ArrowForwardIcon } from "app/assets/icons/ArrowForward";
-import { BudgetFlowPreview } from "app/assets/dataset-preview/budgetFlow";
-import { GrantsListPreview } from "app/assets/dataset-preview/grantsList";
-import { ResultsListPreview } from "app/assets/dataset-preview/resultsList";
-import { DocumentsTablePreview } from "app/assets/dataset-preview/documentsTable";
-import { EligibilityDotsPreview } from "app/assets/dataset-preview/eligibilityDots";
-import { AllocationsRadialPreview } from "app/assets/dataset-preview/allocationsRadial";
-import { InvestmentsTreemapPreview } from "app/assets/dataset-preview/investmentsTreemap";
+import { DatasetItemModel, datasets } from "app/modules/datasets-module"
+import { useStoreState } from "app/state/store/hooks";
 
 const griditem = (content: React.ReactElement, link: string) => (
   <Link to={link} css="text-decoration: none;">
@@ -50,6 +45,7 @@ const griditem = (content: React.ReactElement, link: string) => (
 
 export function DatasetCarousel() {
   const isSmallScreen = useMediaQuery("(max-width: 960px)");
+  const datasourceMapping = useStoreState((state) => state.DataSourceMappingState.value);
   return (
     <div
       css={`
@@ -121,237 +117,22 @@ export function DatasetCarousel() {
           </div>
         }
       >
-        <Carousel.Item>
-          {griditem(
-            <>
-              <div>
-                <b>Finance</b> · Pledges & Contributions
-              </div>
-              <InvestmentsTreemapPreview />
-            </>,
-            "/viz/pledges-contributions/treemap"
-          )}
-        </Carousel.Item>
-        <Carousel.Item>
-          {griditem(
-            <>
-              <div>
-                <b>Finance</b> · Signed Amounts
-              </div>
-              <InvestmentsTreemapPreview />
-            </>,
-            "/viz/signed/treemap"
-          )}
-        </Carousel.Item>
-        <Carousel.Item>
-          {griditem(
-            <>
-              <div>
-                <b>Finance</b> · Commitments
-              </div>
-              <InvestmentsTreemapPreview />
-            </>,
-            "/viz/commitment/treemap"
-          )}
-        </Carousel.Item>
-        <Carousel.Item>
-          {griditem(
-            <>
-              <div>
-                <b>Finance</b> · Disbursements
-              </div>
-              <InvestmentsTreemapPreview />
-            </>,
-            "/viz/disbursements/treemap"
-          )}
-        </Carousel.Item>
-        <Carousel.Item>
-          {griditem(
-            <>
-              <div>
-                <b>Finance</b> · Budgets
-              </div>
-              <BudgetFlowPreview />
-            </>,
-            "/viz/budgets/flow"
-          )}
-        </Carousel.Item>
-        <Carousel.Item>
-          {griditem(
-            <>
-              <div>
-                <b>Access to Funding</b> · Eligibility
-              </div>
-              <EligibilityDotsPreview />
-            </>,
-            "/viz/eligibility"
-          )}
-        </Carousel.Item>
-        <Carousel.Item>
-          {griditem(
-            <>
-              <div>
-                <b>Access to Funding</b> · Allocations
-              </div>
-              <AllocationsRadialPreview />
-            </>,
-            "/viz/allocations"
-          )}
-        </Carousel.Item>
-        <Carousel.Item>
-          {griditem(
-            <>
-              <div>
-                <b>Grants</b>
-              </div>
-              <GrantsListPreview />
-            </>,
-            "/grants"
-          )}
-        </Carousel.Item>
-        <Carousel.Item>
-          {griditem(
-            <>
-              <div>
-                <b>Results</b>
-              </div>
-              <ResultsListPreview />
-            </>,
-            "/results"
-          )}
-        </Carousel.Item>
-        <Carousel.Item>
-          {griditem(
-            <>
-              <div>
-                <b>Documents</b>
-              </div>
-              <DocumentsTablePreview />
-            </>,
-            "/documents"
-          )}
-        </Carousel.Item>
-        {/* <Carousel.Item>
-          {griditem(
-            <>
-              <div>
-                <b>Finance</b> · Budgets Time cycle
-              </div>
-              <InvestmentsBarPreview />
-            </>,
-            "/viz/budgets/time-cycle"
-          )}
-        </Carousel.Item> */}
-        {/* <Carousel.Item>
-          {griditem(
-            <>
-              <div>
-                <b>Finance</b> · Budgets Map
-              </div>
-              <GeomapPreview />
-            </>,
-            "/viz/budgets/map"
-          )}
-        </Carousel.Item> */}
-        {/* <Carousel.Item>
-          {griditem(
-            <>
-              <div>
-                <b>Finance</b> · Disbursements Time cycle
-              </div>
-              <InvestmentsBarPreview />
-            </>,
-            "/viz/disbursements/time-cycle"
-          )}
-        </Carousel.Item>
-        <Carousel.Item>
-          {griditem(
-            <>
-              <div>
-                <b>Finance</b> · Disbursements Map
-              </div>
-              <GeomapPreview />
-            </>,
-            "/viz/disbursements/map"
-          )}
-        </Carousel.Item> */}
-        {/* <Carousel.Item>
-          {griditem(
-            <>
-              <div>
-                <b>Finance</b> · Signed Time cycle
-              </div>
-              <InvestmentsBarPreview />
-            </>,
-            "/viz/signed/time-cycle"
-          )}
-        </Carousel.Item>
-        <Carousel.Item>
-          {griditem(
-            <>
-              <div>
-                <b>Finance</b> · Signed Map
-              </div>
-              <GeomapPreview />
-            </>,
-            "/viz/signed/map"
-          )}
-        </Carousel.Item> */}
-        {/* <Carousel.Item>
-          {griditem(
-            <>
-              <div>
-                <b>Finance</b> · Commitments Time cycle
-              </div>
-              <InvestmentsBarPreview />
-            </>,
-            "/viz/commitment/time-cycle"
-          )}
-        </Carousel.Item>
-        <Carousel.Item>
-          {griditem(
-            <>
-              <div>
-                <b>Finance</b> · Commitments Map
-              </div>
-              <GeomapPreview />
-            </>,
-            "/viz/commitment/map"
-          )}
-        </Carousel.Item> */}
-        {/* <Carousel.Item>
-          {griditem(
-            <>
-              <div>
-                <b>Finance</b> · Pledges & Contributions Time cycle
-              </div>
-              <InvestmentsBarPreview />
-            </>,
-            "/viz/pledges-contributions/time-cycle"
-          )}
-        </Carousel.Item>
-        <Carousel.Item>
-          {griditem(
-            <>
-              <div>
-                <b>Finance</b> · Pledges & Contributions Map
-              </div>
-              <GeomapPreview />
-            </>,
-            "/viz/pledges-contributions/map"
-          )}
-        </Carousel.Item> */}
-        {/* <Carousel.Item>
-          {griditem(
-            <>
-              <div>
-                <b>Finance</b> · Allocations Map
-              </div>
-              <GeomapPreview />
-            </>,
-            "/viz/allocations/map"
-          )}
-        </Carousel.Item> */}
+        {datasets.map((dataset: DatasetItemModel) => {
+          if (!datasourceMapping.includes(dataset.name) && !datasourceMapping.includes(dataset.group)) return <React.Fragment key={dataset.link} />;
+          return (
+            <Carousel.Item key={dataset.link}>
+              {griditem(
+                <React.Fragment>
+                  <div>
+                    <b>{dataset.group}</b>{["Finance", "Access to Funding"].includes(dataset.group) && ` · ${dataset.name}`}
+                  </div>
+                  {dataset.preview}
+                </React.Fragment>,
+                dataset.link
+              )}
+            </Carousel.Item>
+          )
+        })}
       </Carousel>
     </div>
   );

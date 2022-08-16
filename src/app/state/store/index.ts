@@ -1,6 +1,8 @@
 import { createStore, persist } from "easy-peasy";
 import { StoreModel } from "app/state/api/interfaces";
 
+import DataSetList from "app/state/api/action-reducers/datasource/dataset";
+import DataSourceList from "app/state/api/action-reducers/datasource/datasources";
 import { AppliedFiltersState } from "app/state/api/action-reducers/sync/filters";
 import {
   PageHeaderVizDrilldownsState,
@@ -15,6 +17,7 @@ import {
   ToolBoxPanelPFPeriodState,
   ToolBoxPanelResultsYearState,
   DataSourceState,
+  DataSourceMappingState,
 } from "app/state/api/action-reducers/sync";
 
 import GrantsList from "app/state/api/action-reducers/viz/grantsList";
@@ -285,6 +288,9 @@ const storeContent: StoreModel = {
     ToolBoxPanelEligibilityAdvancedCheckboxState
   ),
   DataSourceState: persist(DataSourceState),
+  DataSourceMappingState: persist(DataSourceMappingState),
+  DataSourceList: persist(DataSourceList),
+  DataSetList: persist(DataSetList),
 };
 
 export const store = createStore(storeContent);

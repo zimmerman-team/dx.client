@@ -141,8 +141,27 @@ export const ToolBoxPanelDisbursementsSliderValues: ToolBoxPanelDisbursementsSli
 
 export interface DataSourceStateModel { value: string, setValue: Action<DataSourceStateModel, string> }
 export const DataSourceState: DataSourceStateModel = {
-  value: "TGFOData",
+  value: "TGFOData", // TGFOData is our original datasource
   setValue: action((state, payload: string) => {
     state.value = payload;
+  }),
+}
+
+export interface DataSourceMappingStateModel { value: string[], setValue: Action<DataSourceMappingStateModel, string[]> }
+export const DataSourceMappingState: DataSourceMappingStateModel = {
+  value: [ // These datasets are mapped for our original datasource TGFOData
+    "Pledges & Contributions",
+    "Signed",
+    "Commitments",
+    "Disbursements",
+    "Budgets",
+    "Eligibility",
+    "Allocations",
+    "Grants",
+    "Results",
+    "Documents"
+  ],
+  setValue: action((state, payload: string[]) => {
+    state.value = payload
   }),
 }

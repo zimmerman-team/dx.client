@@ -12,6 +12,7 @@ import {
   ToolBoxPanelPFPeriodStateModel,
   ToolBoxPanelResultsYearStateModel,
   DataSourceStateModel,
+  DataSourceMappingStateModel,
 } from "app/state/api/action-reducers/sync";
 import { AppliedFiltersStateModel } from "../action-reducers/sync/filters";
 
@@ -178,4 +179,7 @@ export interface StoreModel {
   ToolBoxPanelEligibilityAdvancedCheckboxState: ToolBoxPanelEligibilityAdvancedCheckboxStateModel;
   // datasource selector
   DataSourceState: DataSourceStateModel;
+  DataSourceMappingState: DataSourceMappingStateModel;
+  DataSourceList: ApiCallModel;
+  DataSetList: ApiCallModel;
 }
