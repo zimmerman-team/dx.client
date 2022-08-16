@@ -9,6 +9,7 @@ import IconChevronLeft from "@material-ui/icons/ChevronLeft";
 import { NavLink, useLocation, useHistory } from "react-router-dom";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import { MobileAppbarSearch } from "app/components/Mobile/AppBarSearch";
+import { Dropdown } from "app/components/Dropdown";
 
 const TextHeader = (label: string) => (
   <h2
@@ -42,6 +43,7 @@ function MobileHeader() {
 
 export function AppBar() {
   const location = useLocation();
+  const history = useHistory();
   const isMobile = useMediaQuery("(max-width: 767px)");
   // DataSourceState maintains which of the datasources is currently active.
   const datasource = useStoreState((state) => state.DataSourceState.value);
@@ -59,13 +61,9 @@ export function AppBar() {
     (state) => get(state.DataSourceList.data, "data", ["TGFOData"]) as string[] // Default to TGFOData original datasource
   );
 
-  const changeDatasourceOnClick = () => {
-    // When the datasource is clicked, we change to the next datasource in line.
-    // This should be changed later into a selector.
-    if (dataSourceList.length < 1) return;
-    const index = dataSourceList.indexOf(datasource);
-    const newIndex = index === dataSourceList.length - 1 ? 0 : index + 1;
-    changeDatasource(dataSourceList[newIndex]);
+  const changeDatasourceOnClick = (value: string) => {
+    changeDatasource(value);
+    history.push("/datasets");
   }
   
   // Retrieve the updated datasource list
@@ -83,9 +81,16 @@ export function AppBar() {
     changeDatasourceMapping(datasetMapping);
   }, [datasetMapping]);
 
-  if (location.pathname === "/") {
-    return <React.Fragment />;
-  }
+  React.useEffect(() => {
+    // REVIEW: @stefanos: This updates the data source list every time the user navigates
+    // is this acceptable? Otherwise, the fetch could be automatically triggered every minute.
+    getDataSourceList({});
+  }, [history.location]);
+
+  // disabled to show dataset selection dropdown on home page
+  // if (location.pathname === "/") {
+  //   return <React.Fragment />;
+  // }
 
   function getMobilePageHeader() {
     switch (location.pathname) {
@@ -123,19 +128,11 @@ export function AppBar() {
                 />
               </NavLink>
               <div>
-                <NavLink
-                  to="/"
-                  css={`
-                    color: #fff;
-                    font-size: 14px;
-                    letter-spacing: 0.5px;
-                    text-decoration: none;
-                    padding-right: 20px;
-                  `}
-                  onClick= { () => {changeDatasourceOnClick()} }
-                >
-                  { datasource }
-                </NavLink>
+                <Dropdown
+                  options={dataSourceList}
+                  value={datasource}
+                  handleChange={(value: string) => changeDatasourceOnClick(value)}
+                />
                 <NavLink
                   to="/about"
                   css={`
