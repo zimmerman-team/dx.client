@@ -1,0 +1,70 @@
+name: E2E Tests
+
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: ["main", "develop", "feat/**", "feature/**", "fix/**"]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  deployment:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup node
+        uses: actions/setup-node@v3
+
+      - name: Setup yarn
+        run: npm install -g yarn
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Build
+        run: yarn run build
+        env:
+          REACT_APP_API: https://data.api.theglobalfund.org
+          REACT_APP_CMS_API: https://cms-prod.tgf.nyuki.io/api
+          REACT_APP_CMS_TOKEN: ${{ secrets.REACT_APP_CMS_TOKEN }}
+          REACT_APP_MAPBOX_TOKEN: ${{ secrets.REACT_APP_MAPBOX_TOKEN }}
+
+      - name: Install SSH Key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          known_hosts: unnecessary
+
+      - name: Adding Known Hosts
+        run: ssh-keyscan -p ${{ secrets.SSH_PORT }} -H ${{ secrets.SSH_HOST }}  >> ~/.ssh/known_hosts
+
+      - name: Deploy with rsync
+        run: rsync -avz -e "ssh -p ${{ secrets.SSH_PORT }}" ./build ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/${{ secrets.SSH_USER }}/tests-deployment
+
+  execution:
+    needs: deployment
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup node
+        uses: actions/setup-node@v3
+
+      - name: Setup yarn
+        run: npm install -g yarn
+
+      - name: Install Chrome
+        uses: browser-actions/setup-chrome@latest
+
+      - name: Install selenium-side-runner
+        run: yarn global add selenium-side-runner
+
+      - name: Install chromedriver
+        run: yarn global add chromedriver
+
+      - name: Execute tests
+        run: selenium-side-runner --base-url https://tests.tgf.nyuki.io/ -c "browserName=chrome goog:chromeOptions.args=[disable-infobars, headless]" ./tests/*.side

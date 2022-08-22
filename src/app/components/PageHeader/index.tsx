@@ -140,6 +140,7 @@ export function PageHeader(props: PageHeaderProps) {
             `}
           >
             <div
+              id="page-header"
               style={titleExtraStyle}
               css={styles.title(
                 props.tabs !== undefined && props.tabs.length > 0

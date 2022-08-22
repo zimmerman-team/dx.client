@@ -140,6 +140,7 @@ export function LocationDetailOverviewModule(props: Props) {
         <Grid
           item
           xs={12}
+          id="country-summary"
           lg={props.openToolboxPanel ? 7 : 8}
           css={`
             > div {
@@ -179,6 +180,7 @@ export function LocationDetailOverviewModule(props: Props) {
         <Grid
           item
           xs={12}
+          id="country-references"
           md={countrySummaryCMSData ? 12 : 4}
           css={`
             margin-bottom: ${countrySummaryCMSData ? "20px" : 0};
@@ -325,6 +327,7 @@ export function LocationDetailOverviewModule(props: Props) {
         <Grid
           item
           xs={12}
+          id="country-investments"
           md={countrySummaryCMSData ? 12 : 7}
           css={
             !countrySummaryCMSData

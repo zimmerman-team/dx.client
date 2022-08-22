@@ -1,0 +1,690 @@
+{
+  "id": "9a20194f-df4e-4f73-94ff-d7367737b53e",
+  "version": "2.0",
+  "name": "data-explorer-client",
+  "url": "http://localhost:3000/",
+  "tests": [{
+    "id": "8f3bdea1-664e-4306-972f-2a8b8769b586",
+    "name": "Country detail page (from search)",
+    "commands": [{
+      "id": "26b1c167-ca35-4087-be65-24d81c1bd1b3",
+      "comment": "",
+      "command": "setSpeed",
+      "target": "",
+      "targets": [],
+      "value": "1000"
+    }, {
+      "id": "18890f7a-8ab7-4dab-a525-7f955c2d6bb4",
+      "comment": "",
+      "command": "open",
+      "target": "/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "0ce1d54a-37ff-440e-a8f3-4fcef2ebd763",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1920x1055",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "6d2cd148-07b4-4e43-8498-4c7f4d75e041",
+      "comment": "",
+      "command": "click",
+      "target": "css=.layout___StyledInput-sc-spnvx4-3",
+      "targets": [
+        ["css=.layout___StyledInput-sc-spnvx4-3", "css:finder"],
+        ["xpath=//input[@value='']", "xpath:attributes"],
+        ["xpath=//div[@id='search-container']/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "0a74471d-d37e-4666-978c-f640392e6583",
+      "comment": "",
+      "command": "type",
+      "target": "css=.layout___StyledInput-sc-spnvx4-3",
+      "targets": [
+        ["css=.layout___StyledInput-sc-spnvx4-3", "css:finder"],
+        ["xpath=//input[@value='kenya']", "xpath:attributes"],
+        ["xpath=//div[@id='search-container']/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": "kenya"
+    }, {
+      "id": "2c9d9746-e20c-4a12-8de1-5d82ff191887",
+      "comment": "",
+      "command": "click",
+      "target": "css=.results___StyledLink-sc-f304sp-6",
+      "targets": [
+        ["css=.results___StyledLink-sc-f304sp-6", "css:finder"],
+        ["xpath=//div[@id='search-results-container']/div[2]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '/location/KEN/overview')]", "xpath:href"],
+        ["xpath=//div[2]/a", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "18b6a4d2-1458-429a-811e-2bf723021a14",
+      "comment": "",
+      "command": "assertText",
+      "target": "id=page-header",
+      "targets": [],
+      "value": "Kenya"
+    }, {
+      "id": "88b0648e-22c3-4ccc-980e-12ad23bfe799",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "id=country-summary",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "d6559f6e-0b8b-4af5-ac50-6ecaa5fd9b19",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "id=country-references",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "4206e5c9-c723-4a73-a1fc-df33c1308b64",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "id=country-investments",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "3bb49197-d093-409b-b570-2f37d3397ecc",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Signed",
+      "targets": [
+        ["linkText=Signed", "linkText"],
+        ["css=.tabs___StyledLi-sc-bao9za-0:nth-child(2) > a", "css:finder"],
+        ["xpath=//a[contains(text(),'Signed')]", "xpath:link"],
+        ["xpath=//div[@id='root']/div/div/div/div/div/div[2]/div/ul/li[2]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '/location/KEN/signed/treemap')]", "xpath:href"],
+        ["xpath=//li[2]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Signed')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "f5f133c0-2638-4411-b6da-e966ff060c2b",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "css=#HIV > .treemapnode___StyledDiv5-sc-1ncby4e-4",
+      "targets": [
+        ["css=#HIV > .treemapnode___StyledDiv5-sc-1ncby4e-4", "css:finder"],
+        ["xpath=//div[@id='HIV']/div[2]", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div/div/div/div/div/div[2]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "8247120e-bafb-4969-9556-c740115cec77",
+      "comment": "",
+      "command": "click",
+      "target": "css=.controlrow___StyledLink-sc-1y91cjs-2:nth-child(2) > svg",
+      "targets": [
+        ["css=.controlrow___StyledLink-sc-1y91cjs-2:nth-child(2) > svg", "css:finder"]
+      ],
+      "value": ""
+    }, {
+      "id": "b5729da4-42fe-486a-a0e4-517d2c947d9f",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "css=rect:nth-child(1)",
+      "targets": [
+        ["css=rect:nth-child(1)", "css:finder"]
+      ],
+      "value": ""
+    }, {
+      "id": "9959455f-99c6-4b72-a7b7-7fb751ec47c3",
+      "comment": "",
+      "command": "click",
+      "target": "name=cumulative",
+      "targets": [
+        ["name=cumulative", "name"],
+        ["css=.PrivateSwitchBase-input-12", "css:finder"],
+        ["xpath=//input[@name='cumulative']", "xpath:attributes"],
+        ["xpath=//div[@id='investments-time-cycle']/div[2]/div/div[2]/div/label/span/span/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "ed2164be-7b48-404a-a40a-841862b0aef5",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "css=.bar___StyledText-sc-c7axcl-1",
+      "targets": [
+        ["css=.ehVRms", "css:finder"]
+      ],
+      "value": ""
+    }, {
+      "id": "7b74706a-44e9-41af-ad90-6af74aa90ad9",
+      "comment": "",
+      "command": "click",
+      "target": "css=.controlrow___StyledLink-sc-1y91cjs-2:nth-child(3) > svg",
+      "targets": [
+        ["css=.controlrow___StyledLink-sc-1y91cjs-2:nth-child(3) > svg", "css:finder"]
+      ],
+      "value": ""
+    }, {
+      "id": "034759ea-5162-474f-9289-c5b9c5871828",
+      "comment": "",
+      "command": "waitForElementPresent",
+      "target": "css=.overlays",
+      "targets": [],
+      "value": "5000"
+    }, {
+      "id": "11c02a51-1b6b-43e8-bd50-9563e521eef3",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "css=.overlays",
+      "targets": [
+        ["css=.overlays", "css:finder"],
+        ["xpath=//div[@id='export-view-div']/div/div/div/div/div[2]", "xpath:idRelative"],
+        ["xpath=//div[3]/div/div/div/div/div[2]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "3c2a4cb7-fb8f-4370-a6f4-10a295412121",
+      "comment": "",
+      "command": "click",
+      "target": "css=.controlrow___StyledLink-sc-1y91cjs-2:nth-child(4) > svg",
+      "targets": [
+        ["css=.controlrow___StyledLink-sc-1y91cjs-2:nth-child(4) > svg", "css:finder"]
+      ],
+      "value": ""
+    }, {
+      "id": "00a70243-b69d-4258-946f-c12c677ee0f4",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "css=.MuiTableRow-root:nth-child(1) > .cqJKgM",
+      "targets": [
+        ["css=.MuiTableRow-root:nth-child(1) > .cqJKgM", "css:finder"],
+        ["xpath=//div[@id='export-view-div']/div/table/tbody/tr/td", "xpath:idRelative"],
+        ["xpath=//td", "xpath:position"],
+        ["xpath=//td[contains(.,'HIV')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "0545e720-7171-4623-bac7-07057bd4ab70",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Commitment",
+      "targets": [
+        ["linkText=Commitment", "linkText"],
+        ["css=.tabs___StyledLi-sc-bao9za-0:nth-child(3) > a", "css:finder"],
+        ["xpath=//a[contains(text(),'Commitment')]", "xpath:link"],
+        ["xpath=//div[@id='root']/div/div/div/div/div/div[2]/div/ul/li[3]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '/location/KEN/commitment/treemap')]", "xpath:href"],
+        ["xpath=//li[3]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Commitment')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "b61554f1-a84f-4d21-8ab9-8a3ca5e9f297",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "css=#HIV > div:nth-child(1)",
+      "targets": [
+        ["css=#HIV > div:nth-child(1)", "css:finder"],
+        ["xpath=//div[@id='HIV']/div", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div/div/div/div/div/div", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "1fbc189a-54e9-4023-ab79-584787e79f60",
+      "comment": "",
+      "command": "click",
+      "target": "css=.controlrow___StyledLink-sc-1y91cjs-2:nth-child(2) > svg",
+      "targets": [
+        ["css=.controlrow___StyledLink-sc-1y91cjs-2:nth-child(2) > svg", "css:finder"]
+      ],
+      "value": ""
+    }, {
+      "id": "edefcd28-d18d-4dfc-96a9-b7ff71f4a4d3",
+      "comment": "",
+      "command": "waitForElementPresent",
+      "target": "css=rect:nth-child(1)",
+      "targets": [
+        ["css=rect:nth-child(1)", "css:finder"]
+      ],
+      "value": "30000"
+    }, {
+      "id": "981aef31-2b83-4658-b239-4b17e4f07f2c",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "css=rect:nth-child(1)",
+      "targets": [
+        ["css=rect:nth-child(1)", "css:finder"]
+      ],
+      "value": ""
+    }, {
+      "id": "b524f760-05ef-4cb1-a168-a6c637d49460",
+      "comment": "",
+      "command": "click",
+      "target": "name=cumulative",
+      "targets": [
+        ["name=cumulative", "name"],
+        ["css=.PrivateSwitchBase-input-12", "css:finder"],
+        ["xpath=//input[@name='cumulative']", "xpath:attributes"],
+        ["xpath=//div[@id='investments-time-cycle']/div[2]/div/div[2]/div/label/span/span/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "5527a380-234e-461c-a669-ea4aa28d8a92",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "css=.bar___StyledText-sc-c7axcl-1",
+      "targets": [
+        ["css=.jIqXDt", "css:finder"]
+      ],
+      "value": ""
+    }, {
+      "id": "64f98a6f-11a3-4f3b-8e0f-14c778cb95af",
+      "comment": "",
+      "command": "click",
+      "target": "css=.controlrow___StyledLink-sc-1y91cjs-2:nth-child(3) > svg",
+      "targets": [
+        ["css=.controlrow___StyledLink-sc-1y91cjs-2:nth-child(3) > svg", "css:finder"]
+      ],
+      "value": ""
+    }, {
+      "id": "2b7975f1-c503-43a1-b746-ca41ef206952",
+      "comment": "",
+      "command": "waitForElementPresent",
+      "target": "css=.overlays",
+      "targets": [],
+      "value": "5000"
+    }, {
+      "id": "00261aff-fff9-4498-a176-2bdf38429146",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "css=.overlays",
+      "targets": [
+        ["css=.overlays", "css:finder"],
+        ["xpath=//div[@id='export-view-div']/div/div/div/div/div[2]", "xpath:idRelative"],
+        ["xpath=//div[3]/div/div/div/div/div[2]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "1aea5546-d338-428f-9112-3604993c5ca9",
+      "comment": "",
+      "command": "click",
+      "target": "css=.controlrow___StyledLink-sc-1y91cjs-2:nth-child(4) > svg",
+      "targets": [
+        ["css=.controlrow___StyledLink-sc-1y91cjs-2:nth-child(4) > svg", "css:finder"]
+      ],
+      "value": ""
+    }, {
+      "id": "ef69d233-0561-4a17-ae62-4c02dec3d5c5",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "css=.MuiTableRow-root:nth-child(1) ",
+      "targets": [
+        ["css=.MuiTableRow-root:nth-child(1) > .cqJKgM", "css:finder"],
+        ["xpath=//div[@id='export-view-div']/div/table/tbody/tr/td", "xpath:idRelative"],
+        ["xpath=//td", "xpath:position"],
+        ["xpath=//td[contains(.,'HIV')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "12c345fd-b1a7-455d-97cd-937c011e4fa1",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Disbursement",
+      "targets": [
+        ["linkText=Disbursement", "linkText"],
+        ["css=.tabs___StyledLi-sc-bao9za-0:nth-child(4) > a", "css:finder"],
+        ["xpath=//a[contains(text(),'Disbursement')]", "xpath:link"],
+        ["xpath=//div[@id='root']/div/div/div/div/div/div[2]/div/ul/li[4]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '/location/KEN/disbursements/treemap')]", "xpath:href"],
+        ["xpath=//li[4]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Disbursement')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "9995e0a2-33f8-429a-ad12-419c527444dd",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "css=#HIV > div:nth-child(1)",
+      "targets": [
+        ["css=#HIV > div:nth-child(1)", "css:finder"],
+        ["xpath=//div[@id='HIV']/div", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div/div/div/div/div/div", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "7aa4f581-847c-43e8-858f-5f1c165b366d",
+      "comment": "",
+      "command": "click",
+      "target": "css=.controlrow___StyledLink-sc-1y91cjs-2:nth-child(2) > svg",
+      "targets": [
+        ["css=.controlrow___StyledLink-sc-1y91cjs-2:nth-child(2) > svg", "css:finder"]
+      ],
+      "value": ""
+    }, {
+      "id": "9ccdf42e-b9c6-4592-a817-0c0e5496f5c9",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "css=rect:nth-child(1)",
+      "targets": [
+        ["css=rect:nth-child(1)", "css:finder"]
+      ],
+      "value": ""
+    }, {
+      "id": "c0c13dc9-5b48-4942-af5d-e75edf6d8b6f",
+      "comment": "",
+      "command": "click",
+      "target": "name=cumulative",
+      "targets": [
+        ["name=cumulative", "name"],
+        ["css=.PrivateSwitchBase-input-12", "css:finder"],
+        ["xpath=//input[@name='cumulative']", "xpath:attributes"],
+        ["xpath=//div[@id='investments-time-cycle']/div[2]/div/div[2]/div/label/span/span/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "40bd24d3-e768-49cf-97fa-d37e3394c43f",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "css=.bar___StyledText-sc-c7axcl-1",
+      "targets": [
+        ["css=.jIqXDt", "css:finder"]
+      ],
+      "value": ""
+    }, {
+      "id": "6f44f4b8-0810-4cac-8e64-9d28941741b7",
+      "comment": "",
+      "command": "click",
+      "target": "css=.controlrow___StyledLink-sc-1y91cjs-2:nth-child(3) > svg",
+      "targets": [
+        ["css=.controlrow___StyledLink-sc-1y91cjs-2:nth-child(3) > svg", "css:finder"]
+      ],
+      "value": ""
+    }, {
+      "id": "95a1b75a-498e-4544-9296-cee7481ff0cf",
+      "comment": "",
+      "command": "waitForElementPresent",
+      "target": "css=.overlays",
+      "targets": [],
+      "value": "5000"
+    }, {
+      "id": "afa87de5-5dcd-4b06-937d-86bb1eaf22d1",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "css=.overlays",
+      "targets": [
+        ["css=.overlays", "css:finder"],
+        ["xpath=//div[@id='export-view-div']/div/div/div/div/div[2]", "xpath:idRelative"],
+        ["xpath=//div[3]/div/div/div/div/div[2]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "bafd89d2-3172-4b3b-a1c1-2188398fd24a",
+      "comment": "",
+      "command": "click",
+      "target": "css=.controlrow___StyledLink-sc-1y91cjs-2:nth-child(4) > svg",
+      "targets": [
+        ["css=.controlrow___StyledLink-sc-1y91cjs-2:nth-child(4) > svg", "css:finder"]
+      ],
+      "value": ""
+    }, {
+      "id": "cfe1d811-76fd-4207-95e0-3c840b8c9d0a",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "css=.MuiTableRow-root:nth-child(1) > .cqJKgM",
+      "targets": [
+        ["css=.MuiTableRow-root:nth-child(1) > .cqJKgM", "css:finder"],
+        ["xpath=//div[@id='export-view-div']/div/table/tbody/tr/td", "xpath:idRelative"],
+        ["xpath=//td", "xpath:position"],
+        ["xpath=//td[contains(.,'HIV')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "44c7481c-c81d-4b21-9cd7-e5b7dd473328",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Budgets",
+      "targets": [
+        ["linkText=Budgets", "linkText"],
+        ["css=.tabs___StyledLi-sc-bao9za-0:nth-child(5) > a", "css:finder"],
+        ["xpath=//a[contains(text(),'Budgets')]", "xpath:link"],
+        ["xpath=//div[@id='root']/div/div/div/div/div/div[2]/div/ul/li[5]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '/location/KEN/budgets/flow')]", "xpath:href"],
+        ["xpath=//li[5]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Budgets')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "a8f1d548-1aaf-4dde-8869-e1cd0fb9fd12",
+      "comment": "",
+      "command": "waitForElementPresent",
+      "target": "css=rect:nth-child(1)",
+      "targets": [],
+      "value": "5000"
+    }, {
+      "id": "47cd2c5e-d3db-4125-8aff-8fc82be986f2",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "css=rect:nth-child(1)",
+      "targets": [
+        ["css=rect:nth-child(1)", "css:finder"]
+      ],
+      "value": ""
+    }, {
+      "id": "9fdad1ab-b149-435a-a44b-99379f1c1c36",
+      "comment": "",
+      "command": "click",
+      "target": "css=.controlrow___StyledLink-sc-1y91cjs-2:nth-child(2) > svg",
+      "targets": [
+        ["css=.controlrow___StyledLink-sc-1y91cjs-2:nth-child(2) > svg", "css:finder"]
+      ],
+      "value": ""
+    }, {
+      "id": "08ea79d6-31b4-433c-8dcc-fa707fc1da94",
+      "comment": "",
+      "command": "waitForElementPresent",
+      "target": "css=svg > rect",
+      "targets": [],
+      "value": "5000"
+    }, {
+      "id": "5f123f39-c8c2-4028-8413-2e9551f3ca7a",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "css=svg > rect",
+      "targets": [
+        ["css=svg > rect", "css:finder"]
+      ],
+      "value": ""
+    }, {
+      "id": "a2af0b64-4cde-41a6-a251-37c06cc75a66",
+      "comment": "",
+      "command": "click",
+      "target": "css=.controlrow___StyledLink-sc-1y91cjs-2:nth-child(3) > svg",
+      "targets": [
+        ["css=.controlrow___StyledLink-sc-1y91cjs-2:nth-child(3) > svg", "css:finder"]
+      ],
+      "value": ""
+    }, {
+      "id": "fcb73a4a-3288-4cf0-8ee2-a49b25cecde5",
+      "comment": "",
+      "command": "waitForElementPresent",
+      "target": "css=.overlays",
+      "targets": [],
+      "value": "5000"
+    }, {
+      "id": "1764c431-82a1-4130-8d25-d527c77f6756",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "css=.overlays",
+      "targets": [
+        ["css=.overlays", "css:finder"],
+        ["xpath=//div[@id='export-view-div']/div/div/div/div/div[2]", "xpath:idRelative"],
+        ["xpath=//div[3]/div/div/div/div/div[2]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "f5e76f1b-acc0-4e22-ac89-c9e9a49795f6",
+      "comment": "",
+      "command": "click",
+      "target": "css=.tabs___StyledLi2-sc-bao9za-3 > div",
+      "targets": [
+        ["css=.tabs___StyledLi2-sc-bao9za-3 > div", "css:finder"],
+        ["xpath=//div[@id='root']/div/div/div/div/div/div[2]/div/ul/li[6]/div", "xpath:idRelative"],
+        ["xpath=//li[6]/div", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "4c871153-9e10-4ae8-bfee-7a556c368277",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Allocation",
+      "targets": [
+        ["linkText=Allocation", "linkText"],
+        ["css=.jss5:nth-child(1) > a", "css:finder"],
+        ["xpath=//a[contains(text(),'Allocation')]", "xpath:link"],
+        ["xpath=//div[@id='page-header-more-tabs']/div[3]/ul/li/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '/location/KEN/allocation')]", "xpath:href"],
+        ["xpath=//div[3]/ul/li/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Allocation')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "85ee0279-3f75-49be-80e9-3b865c14e2ac",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "css=.apexcharts-canvas",
+      "targets": [
+        ["id=SvgjsCircle1371", "id"],
+        ["css=#SvgjsCircle1371", "css:finder"]
+      ],
+      "value": ""
+    }, {
+      "id": "60b1305b-3235-4cd4-a597-597511f46639",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Eligibility",
+      "targets": [
+        ["linkText=Eligibility", "linkText"],
+        ["css=.MuiButtonBase-root:nth-child(2) > a", "css:finder"],
+        ["xpath=//a[contains(text(),'Eligibility')]", "xpath:link"],
+        ["xpath=//div[@id='page-header-more-tabs']/div[3]/ul/li[2]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '/location/KEN/eligibility')]", "xpath:href"],
+        ["xpath=//div[3]/ul/li[2]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Eligibility')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "2341bc7b-c315-4323-a2ef-f6ac12e2e2c5",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "css=.Scatterplot___StyledGrid2-sc-sztmxl-4",
+      "targets": [
+        ["css=.Scatterplot___StyledGrid2-sc-sztmxl-4", "css:finder"],
+        ["xpath=//div[@id='export-view-div']/div[2]/div[2]", "xpath:idRelative"],
+        ["xpath=//div[3]/div[2]/div[2]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "ab73d8e2-cf32-41dc-9e14-b2f883635d64",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Documents",
+      "targets": [
+        ["linkText=Documents", "linkText"],
+        ["css=.tabs___StyledStyledMenuItem-sc-bao9za-5:nth-child(3) > a", "css:finder"],
+        ["xpath=//a[contains(text(),'Documents')]", "xpath:link"],
+        ["xpath=//div[@id='page-header-more-tabs']/div[3]/ul/li[3]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '/location/KEN/documents')]", "xpath:href"],
+        ["xpath=//div[3]/ul/li[3]/a", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "6291bc53-bbfc-4a67-8287-73142b390690",
+      "comment": "",
+      "command": "waitForElementPresent",
+      "target": "css=.MuiTable-root",
+      "targets": [
+        ["css=.MuiTableCell-head:nth-child(1)", "css:finder"],
+        ["xpath=//div[@id='export-view-div']/div/div[3]/table/thead/tr/th", "xpath:idRelative"],
+        ["xpath=//th", "xpath:position"],
+        ["xpath=//th[contains(.,'Location')]", "xpath:innerText"]
+      ],
+      "value": "5000"
+    }, {
+      "id": "88161721-28f4-44a9-b7d3-2bf9eebdb1b8",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "css=.MuiTableRow-root:nth-child(1)",
+      "targets": [
+        ["css=.MuiTableRow-root:nth-child(1) > .cqJKgM", "css:finder"],
+        ["xpath=//div[@id='export-view-div']/div/table/tbody/tr/td", "xpath:idRelative"],
+        ["xpath=//td", "xpath:position"],
+        ["xpath=//td[contains(.,'2002')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "9eb219c1-5f48-4867-ad18-246d685b32cf",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Grants",
+      "targets": [
+        ["linkText=Grants", "linkText"],
+        ["css=.tabs___StyledStyledMenuItem-sc-bao9za-5:nth-child(4) > a", "css:finder"],
+        ["xpath=//a[contains(text(),'Grants')]", "xpath:link"],
+        ["xpath=//div[@id='page-header-more-tabs']/div[3]/ul/li[4]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '/location/KEN/grants')]", "xpath:href"],
+        ["xpath=//div[3]/ul/li[4]/a", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "7bce1f78-57e6-429b-ba4a-97118af9b988",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "css=.grants___StyledDiv-sc-111gxmz-1",
+      "targets": [
+        ["css=.grants___StyledDiv-sc-111gxmz-1", "css:finder"],
+        ["xpath=//div[@id='export-view-div']/div/div[2]/div", "xpath:idRelative"],
+        ["xpath=//div[3]/div/div[2]/div", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "15d5c4fc-929b-44dc-a437-80265d541684",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Results",
+      "targets": [
+        ["linkText=Results", "linkText"],
+        ["css=.tabs___StyledStyledMenuItem-sc-bao9za-5:nth-child(5) > a", "css:finder"],
+        ["xpath=//a[contains(text(),'Results')]", "xpath:link"],
+        ["xpath=//div[@id='page-header-more-tabs']/div[3]/ul/li[5]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '/location/KEN/results')]", "xpath:href"],
+        ["xpath=//div[3]/ul/li[5]/a", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "29b7fbfb-aed6-4ae5-ba0d-0ab10af01761",
+      "comment": "",
+      "command": "waitForElementPresent",
+      "target": "css=#\\35 009e166-97d6-4868-8455-dffc37f73c06",
+      "targets": [
+        ["css=#\\35 009e166-97d6-4868-8455-dffc37f73c06 > .List___StyledDiv-sc-13lgkh1-0", "css:finder"],
+        ["xpath=//div[@id='5009e166-97d6-4868-8455-dffc37f73c06']/div", "xpath:idRelative"],
+        ["xpath=//div[5]/div/div", "xpath:position"]
+      ],
+      "value": "5000"
+    }]
+  }],
+  "suites": [{
+    "id": "a0cdeb1a-d773-4d1f-a21a-618a05e3b4eb",
+    "name": "Data Explorer",
+    "persistSession": false,
+    "parallel": false,
+    "timeout": 300,
+    "tests": ["8f3bdea1-664e-4306-972f-2a8b8769b586"]
+  }],
+  "urls": ["https://tests.tgf.nyuki.io/", "http://localhost:3000/"],
+  "plugins": []
+}
