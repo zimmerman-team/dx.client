@@ -44,6 +44,9 @@ export default function HomeModule() {
             width: 100%;
             display: flex;
             padding-top: 130px;
+            padding-bottom: 30px;
+
+            /* margin-top: 3rem; */
             align-items: center;
             flex-direction: column;
             a {
