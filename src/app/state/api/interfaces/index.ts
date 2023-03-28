@@ -351,4 +351,11 @@ export interface StoreModel {
     DatasetGetList: ApiCallModel;
     DatasetCreate: ApiCallModel;
   };
+  charts: {
+    ChartsGet: ApiCallModel;
+    ChartDelete: ApiCallModel;
+  };
+  reports: {
+    ReportsGet: ApiCallModel;
+  };
 }

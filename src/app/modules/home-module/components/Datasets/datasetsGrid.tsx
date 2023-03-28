@@ -74,7 +74,7 @@ export default function DatasetsGrid() {
       <Grid container spacing={2}>
         <DatasetAddnewCard />
         {(datasets || []).map((data, index) => (
-          <Grid item xs={12} sm={6} md={4} lg={3}>
+          <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
             <GridItem
               key={index}
               date={data.createdDate}

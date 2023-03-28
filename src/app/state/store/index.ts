@@ -199,6 +199,8 @@ import {
   AvailableDatasources,
   MappedDatasets,
 } from "../api/action-reducers/viz/datasourcesNdatasets";
+import { chartDelete, ChartsGet } from "../api/action-reducers/charts";
+import { ReportsGet } from "../api/action-reducers/reports";
 
 const storeContent: StoreModel = {
   // data viz api
@@ -425,6 +427,13 @@ const storeContent: StoreModel = {
     DataThemeGetList: persist(DataThemeGetList),
     DatasetGetList: persist(DatasetGetList),
     DatasetCreate: persist(DatasetCreate),
+  },
+  charts: {
+    ChartsGet: persist(ChartsGet),
+    ChartDelete: persist(chartDelete),
+  },
+  reports: {
+    ReportsGet: persist(ReportsGet),
   },
 };
 

@@ -35,8 +35,8 @@ export const cmsDataAtom = atom({
   effects_UNSTABLE: [persistAtom],
 });
 
-
-export const homeDisplayAtom = atom<  "data" | "charts" | "report" | ''>({
+export const homeDisplayAtom = atom<"data" | "charts" | "report">({
   key: "homeDisplayAtom",
-  default: '',
+  default: "data",
+  effects_UNSTABLE: [persistAtom],
 });

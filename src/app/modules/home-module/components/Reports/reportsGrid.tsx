@@ -1,33 +1,34 @@
 import Grid from "@material-ui/core/Grid";
 import { ReactComponent as ReportIcon } from "../../assets/reports-img.svg";
 import React from "react";
-import { reportsDummyData } from "./data";
+
 import GridItem from "./gridItem";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
-import { DataThemeListItemAPIModel } from "app/modules/data-themes-module/sub-modules/list";
 import ReportAddnewCard from "./reportAddNewCard";
+import { PageLoader } from "app/modules/common/page-loader";
 
 export default function ReportsGrid() {
-  const loadedDataThemes = useStoreState(
-    (state) =>
-      (state.dataThemes.DataThemeGetList.crudData ??
-        []) as DataThemeListItemAPIModel[]
+  const loadedReports = useStoreState(
+    (state) => state.reports.ReportsGet.crudData ?? []
+  ) as any;
+  const isLoadingReports = useStoreState(
+    (state) => state.reports.ReportsGet.loading
   );
-  const isLoadingDataThemes = useStoreState(
-    (state) => state.dataThemes.DataThemeGetList.loading
-  );
-  const loadDataThemes = useStoreActions(
-    (actions) => actions.dataThemes.DataThemeGetList.fetch
+  const loadReports = useStoreActions(
+    (actions) => actions.reports.ReportsGet.fetch
   );
 
   React.useEffect(() => {
-    loadDataThemes({ filterString: `order=createdDate DESC` });
+    loadReports({ filterString: `` });
   }, []);
+  if (isLoadingReports) {
+    return <PageLoader />;
+  }
 
   return (
     <Grid container spacing={2}>
       <ReportAddnewCard />
-      {loadedDataThemes.slice(0, 11).map((data) => (
+      {loadedReports?.map((data: any) => (
         <Grid item xs={12} sm={6} md={4} lg={3}>
           <GridItem
             key={data.id}
