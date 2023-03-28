@@ -18,10 +18,6 @@ export default function HomeModule() {
   useTitle("Dataxplorer - Home");
   const [display, setDisplay] = useRecoilState(homeDisplayAtom);
 
-  React.useEffect(() => {
-    setDisplay("data");
-  }, []);
-
   const displayGrid = () => {
     switch (display) {
       case "data":

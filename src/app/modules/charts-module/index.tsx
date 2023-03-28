@@ -13,7 +13,7 @@ import GridItem from "./gridItem";
 import { BarIcon, MapIcon, SankeyIcon, TableIcon } from "./vizIcons";
 
 export default function ChartsGrid() {
-  const [cardId, setCardId] = React.useState<number>(0);
+  const [cardId, setCardId] = React.useState<string>("");
   const [modalDisplay, setModalDisplay] = React.useState<boolean>(false);
   const [inputValue, setInputValue] = React.useState<string>("");
   const [enableButton, setEnableButton] = React.useState<boolean>(false);
@@ -22,8 +22,8 @@ export default function ChartsGrid() {
     datasetsData.map((data) => ({ ...data, id: "63dd016c20ff974becd6330b" }))
   );
 
-  const handleDelete = (id: number) => {
-    const newData = data.filter((data, i) => i !== id);
+  const handleDelete = (id: string) => {
+    const newData = data.filter((data, i) => data.id !== id);
     setData(newData);
     setModalDisplay(false);
     setEnableButton(false);
@@ -39,7 +39,7 @@ export default function ChartsGrid() {
     }
   };
 
-  const handleModal = (id: number) => {
+  const handleModal = (id: string) => {
     setCardId(id);
     setModalDisplay(true);
   };
@@ -78,7 +78,7 @@ export default function ChartsGrid() {
                 path={data.path}
                 title={data.title}
                 viz={setViz(data.viz)}
-                handleDelete={() => handleModal(index as number)}
+                handleDelete={() => handleModal(data.id as string)}
                 id={data.id}
               />
             </Grid>

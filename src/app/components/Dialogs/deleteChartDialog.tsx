@@ -12,8 +12,8 @@ interface Props {
   modalDisplay: boolean;
   setModalDisplay: (value: boolean) => void;
   handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  handleDelete: (id: number) => void;
-  cardId: number;
+  handleDelete: (id: string) => void;
+  cardId: string;
   enableButton: boolean;
 }
 

@@ -67,9 +67,7 @@ export function MainRoutes() {
         <RouteWithAppBar exact path="/chart/:page">
           <ChartDetailModule />
         </RouteWithAppBar>
-        <RouteWithAppBar exact path="/datasets">
-          <DatasetsModule />
-        </RouteWithAppBar>
+
         <RouteWithAppBar exact path="/charts">
           <ChartsModule />
         </RouteWithAppBar>
