@@ -199,7 +199,22 @@ import {
   AvailableDatasources,
   MappedDatasets,
 } from "../api/action-reducers/viz/datasourcesNdatasets";
-import { chartDelete, ChartsGet } from "../api/action-reducers/charts";
+import {
+  ChartsActivePanelsState,
+  ChartsChartTypeState,
+  ChartsDatasetState,
+  ChartsEnabledFilterOptionGroupsState,
+  ChartsMappingState,
+} from "../api/action-reducers/sync/charts";
+import { ChartsAppliedFiltersState } from "../api/action-reducers/sync/charts/filters";
+import {
+  ChartCreate,
+  ChartDelete,
+  ChartDuplicate,
+  ChartGet,
+  ChartGetList,
+  ChartUpdate,
+} from "../api/action-reducers/charts";
 import { ReportsGet } from "../api/action-reducers/reports";
 
 const storeContent: StoreModel = {
@@ -429,8 +444,18 @@ const storeContent: StoreModel = {
     DatasetCreate: persist(DatasetCreate),
   },
   charts: {
-    ChartsGet: persist(ChartsGet),
-    ChartDelete: persist(chartDelete),
+    ChartGet: persist(ChartGet),
+    ChartCreate: persist(ChartCreate),
+    ChartUpdate: persist(ChartUpdate),
+    ChartDelete: persist(ChartDelete),
+    ChartDuplicate: persist(ChartDuplicate),
+    ChartGetList: persist(ChartGetList),
+    activePanels: persist(ChartsActivePanelsState),
+    dataset: persist(ChartsDatasetState),
+    mapping: persist(ChartsMappingState),
+    chartType: persist(ChartsChartTypeState),
+    appliedFilters: persist(ChartsAppliedFiltersState),
+    enabledFilterOptionGroups: persist(ChartsEnabledFilterOptionGroupsState),
   },
   reports: {
     ReportsGet: persist(ReportsGet),
