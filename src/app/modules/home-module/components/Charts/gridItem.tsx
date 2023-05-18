@@ -7,7 +7,7 @@ import { ReactComponent as EditIcon } from "../../assets/edit.svg";
 import { ReactComponent as DeleteIcon } from "../../assets/delete.svg";
 import { ReactComponent as DuplicateIcon } from "../../assets/duplicate.svg";
 
-interface Props {
+export interface ChartGridItemProps {
   id: string;
   path: string;
   title: string;
@@ -18,7 +18,7 @@ interface Props {
   handleDuplicate?: (id: string) => void;
 }
 
-export default function GridItem(props: Props) {
+export default function GridItem(props: ChartGridItemProps) {
   const [menuOptionsDisplay, setMenuOptionsDisplay] = React.useState(false);
 
   const showMenuOptions = () => {

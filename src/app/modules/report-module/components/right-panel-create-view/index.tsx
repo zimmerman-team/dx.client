@@ -1,6 +1,8 @@
 import React from "react";
 import find from "lodash/find";
 import { useDrag } from "react-dnd";
+import { getEmptyImage } from "react-dnd-html5-backend";
+
 import { EditorState } from "draft-js";
 import { useRecoilState } from "recoil";
 import Paper from "@material-ui/core/Paper";
@@ -27,6 +29,7 @@ import {
   isDividerOrRowFrameDraggingAtom,
   reportRightPanelViewAtom,
 } from "app/state/recoil/atoms";
+import { CustomChartDragLayer } from "../custom-drag-layer/chart";
 
 const Button = withStyles(() => ({
   root: {
@@ -129,10 +132,38 @@ interface Props {
   setHeaderDetails: React.Dispatch<React.SetStateAction<IHeaderDeatils>>;
 }
 
+interface ChartItemProps {
+  id: string;
+  name: string;
+  vizType: string;
+  datasetId: string;
+  elementType: string;
+  createdDate: string;
+  pickedCharts: string[];
+  setPickedCharts: React.Dispatch<React.SetStateAction<string[]>>;
+}
+
+const sortByOptions = [
+  { value: "createdDate desc", label: "Recent (DESC)" },
+  { value: "createdDate asc", label: "Recent (ASC)" },
+  { value: "name desc", label: "Name (DESC)" },
+  { value: "name asc", label: "Name (ASC)" },
+];
+export const getIcon = (vizType: string) => {
+  const type = find(echartTypes(true), { id: vizType });
+  if (type) {
+    return type.icon;
+  }
+  return echartTypes(true)[0].icon;
+};
+
 export function ReportRightPanelCreateView(props: Props) {
   const [currentView, setCurrentView] = useRecoilState(
     reportRightPanelViewAtom
   );
+  const [snapToGridAfterDrop, setSnapToGridAfterDrop] = React.useState(false);
+  const [snapToGridWhileDragging, setSnapToGridWhileDragging] =
+    React.useState(false);
 
   const elementItemDetails = [
     {
@@ -248,13 +279,6 @@ export function ReportRightPanelCreateView(props: Props) {
     </div>
   );
 }
-
-const sortByOptions = [
-  { value: "createdDate desc", label: "Recent (DESC)" },
-  { value: "createdDate asc", label: "Recent (ASC)" },
-  { value: "name desc", label: "Name (DESC)" },
-  { value: "name asc", label: "Name (ASC)" },
-];
 
 function ReportRightPanelCreateViewChartList(props: {
   pickedCharts: string[];
@@ -466,22 +490,16 @@ function ElementItem(props: {
   );
 }
 
-function ChartItem(props: {
-  id: string;
-  name: string;
-  vizType: string;
-  datasetId: string;
-  elementType: string;
-  createdDate: string;
-  pickedCharts: string[];
-  setPickedCharts: React.Dispatch<React.SetStateAction<string[]>>;
-}) {
+function ChartItem(props: ChartItemProps) {
   const nullRef = React.useRef(null);
-  const [{ isDragging }, drag] = useDrag(() => ({
+  const [{ isDragging }, drag, preview] = useDrag(() => ({
     type: props.elementType,
     item: {
       type: props.elementType,
       value: props.id,
+      name: props.name,
+      vizType: props.vizType,
+      date: props.createdDate,
     },
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
@@ -494,15 +512,11 @@ function ChartItem(props: {
     },
   }));
 
-  const getIcon = (vizType: string) => {
-    const type = find(echartTypes(true), { id: vizType });
-    if (type) {
-      return type.icon;
-    }
-    return echartTypes(true)[0].icon;
-  };
-
   const added = props.pickedCharts.includes(props.id);
+
+  React.useEffect(() => {
+    preview(getEmptyImage(), { captureDraggingState: true });
+  }, []);
 
   return (
     <div
@@ -533,6 +547,7 @@ function ChartItem(props: {
         viz={getIcon(props.vizType)}
         descr="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
       />
+      <CustomChartDragLayer />
     </div>
   );
 }
