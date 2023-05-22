@@ -1,0 +1,172 @@
+{
+  "id": "fe772786-f091-4638-a8a0-c0c603134bcf",
+  "version": "2.0",
+  "name": "DnD chart",
+  "url": "http://localhost:3000",
+  "tests": [{
+    "id": "a44f6ff6-a92a-4a38-8bfb-7fa002859893",
+    "name": "Drag and drop chart",
+    "commands": [{
+      "id": "81d545b4-e7ba-402d-a586-6f2d50c9061a",
+      "comment": "",
+      "command": "open",
+      "target": "/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "60dcc35c-3cfc-4014-b10f-f79dbeb32abd",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1460x901",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "90505df2-0c9c-41ad-b4a4-8568d586084e",
+      "comment": "",
+      "command": "mouseOver",
+      "target": "css=.MuiButtonBase-root:nth-child(3) > .MuiToggleButton-label",
+      "targets": [
+        ["css=.MuiButtonBase-root:nth-child(3) > .MuiToggleButton-label", "css:finder"],
+        ["xpath=//div[@id='root']/div/div/div/div[2]/div/button[3]/span", "xpath:idRelative"],
+        ["xpath=//button[3]/span", "xpath:position"],
+        ["xpath=//span[contains(.,'Reports')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "695ce0a4-94d8-4a61-afb6-53328e55f654",
+      "comment": "",
+      "command": "click",
+      "target": "css=.MuiButtonBase-root:nth-child(3) > .MuiToggleButton-label",
+      "targets": [
+        ["css=.MuiButtonBase-root:nth-child(3) > .MuiToggleButton-label", "css:finder"],
+        ["xpath=//div[@id='root']/div/div/div/div[2]/div/button[3]/span", "xpath:idRelative"],
+        ["xpath=//button[3]/span", "xpath:position"],
+        ["xpath=//span[contains(.,'Reports')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "a4f1fd1b-d957-44b8-b587-1c385cf89e82",
+      "comment": "",
+      "command": "mouseOut",
+      "target": "css=.Mui-selected > .MuiToggleButton-label",
+      "targets": [
+        ["css=.Mui-selected > .MuiToggleButton-label", "css:finder"],
+        ["xpath=//div[@id='root']/div/div/div/div[2]/div/button[3]/span", "xpath:idRelative"],
+        ["xpath=//button[3]/span", "xpath:position"],
+        ["xpath=//span[contains(.,'Reports')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "0b6ee515-5667-403c-b0f7-7d345ad21955",
+      "comment": "",
+      "command": "mouseOver",
+      "target": "css=.reportAddNewCard___StyledIconButton-sc-d5y1xn-3 svg",
+      "targets": [
+        ["css=.reportAddNewCard___StyledIconButton-sc-d5y1xn-3 svg", "css:finder"]
+      ],
+      "value": ""
+    }, {
+      "id": "4bbfcd05-8cbe-4739-a794-2e485edb4f4f",
+      "comment": "",
+      "command": "click",
+      "target": "css=.reportAddNewCard___StyledIconButton-sc-d5y1xn-3 svg",
+      "targets": [
+        ["css=.reportAddNewCard___StyledIconButton-sc-d5y1xn-3 svg", "css:finder"]
+      ],
+      "value": ""
+    }, {
+      "id": "8e79ec51-8907-4a2a-aca4-b95c4c18b324",
+      "comment": "",
+      "command": "click",
+      "target": "css=.MuiGrid-root:nth-child(1) > .data___StyledDiv-sc-adoy3f-0",
+      "targets": [
+        ["css=.MuiGrid-root:nth-child(1) > .data___StyledDiv-sc-adoy3f-0", "css:finder"],
+        ["xpath=//div[@id='root']/div/div[4]/div[2]/div/div[3]/div/div", "xpath:idRelative"],
+        ["xpath=//div[3]/div/div", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "c9c368e8-6c51-41de-b89b-8fd7496e540c",
+      "comment": "",
+      "command": "click",
+      "target": "css=.button__PrimaryButton-sc-1wfgx2g-0",
+      "targets": [
+        ["css=.button__PrimaryButton-sc-1wfgx2g-0", "css:finder"],
+        ["xpath=//div[@id='root']/div/div[4]/div[4]/div/button", "xpath:idRelative"],
+        ["xpath=//button", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "a277820e-9ce5-40c4-8f80-dbf5584260e2",
+      "comment": "",
+      "command": "//mouseOver",
+      "target": "css=.button__PrimaryButton-sc-1wfgx2g-0",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "d3c9dc08-39f0-443f-b46a-5d9ea92efd5f",
+      "comment": "",
+      "command": "click",
+      "target": "css=.rowFrame___StyledDiv4-sc-62dh6b-4",
+      "targets": [
+        ["css=.rowFrame___StyledDiv4-sc-62dh6b-4", "css:finder"],
+        ["xpath=//div[@id='root']/div/div[4]/div[2]/div/div[2]/div/div/div/div/div", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div[2]/div/div/div/div/div", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "fdd73d78-8d50-4854-85ae-49aa8f1d5759",
+      "comment": "",
+      "command": "mouseOver",
+      "target": "css=.right-panel-create-view___StyledButton2-sc-m60jwp-3 > .MuiButton-label",
+      "targets": [
+        ["css=.right-panel-create-view___StyledButton2-sc-m60jwp-3 > .MuiButton-label", "css:finder"],
+        ["xpath=//div[@id='root']/div/div[2]/div[2]/div/button[2]/span", "xpath:idRelative"],
+        ["xpath=//div[2]/div/button[2]/span", "xpath:position"],
+        ["xpath=//span[contains(.,'Charts')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "e71d8f2a-96f0-4129-a527-9e38a0df1669",
+      "comment": "",
+      "command": "click",
+      "target": "css=.right-panel-create-view___StyledButton2-sc-m60jwp-3 > .MuiButton-label",
+      "targets": [
+        ["css=.right-panel-create-view___StyledButton2-sc-m60jwp-3 > .MuiButton-label", "css:finder"],
+        ["xpath=//div[@id='root']/div/div[2]/div[2]/div/button[2]/span", "xpath:idRelative"],
+        ["xpath=//div[2]/div/button[2]/span", "xpath:position"],
+        ["xpath=//span[contains(.,'Charts')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "bc6f4e12-9520-47d5-896b-efeb1201c88d",
+      "comment": "",
+      "command": "mouseOut",
+      "target": "css=.right-panel-create-view___StyledButton2-sc-m60jwp-3 > .MuiButton-label",
+      "targets": [
+        ["css=.right-panel-create-view___StyledButton2-sc-m60jwp-3 > .MuiButton-label", "css:finder"],
+        ["xpath=//div[@id='root']/div/div[2]/div[2]/div/button[2]/span", "xpath:idRelative"],
+        ["xpath=//div[2]/div/button[2]/span", "xpath:position"],
+        ["xpath=//span[contains(.,'Charts')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "0f02397f-a0d5-4e26-9371-633b33380ad4",
+      "comment": "",
+      "command": "dragAndDropToObject",
+      "target": "css=.right-panel-create-view___StyledDiv6-sc-m60jwp-12:nth-child(1)",
+      "targets": [],
+      "value": "css=.rowStructure___StyledP-sc-w73t4g-8"
+    }]
+  }],
+  "suites": [{
+    "id": "b0886e7f-5e4d-41ce-91f4-5bdc9d08be9f",
+    "name": "Default Suite",
+    "persistSession": false,
+    "parallel": false,
+    "timeout": 300,
+    "tests": ["a44f6ff6-a92a-4a38-8bfb-7fa002859893"]
+  }],
+  "urls": ["http://localhost:3000/"],
+  "plugins": []
+}
