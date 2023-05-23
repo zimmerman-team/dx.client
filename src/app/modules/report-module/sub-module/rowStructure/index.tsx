@@ -346,6 +346,7 @@ const Box = (props: {
     content
   ) : (
     <div
+      id={`${props.rowId}-${props.itemIndex}`}
       css={`
         background: #dfe3e6;
         width: ${props.width};

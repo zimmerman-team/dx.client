@@ -24,9 +24,9 @@
       "id": "1547fdd3-b8cc-4a3a-85a0-4e3bbf2b5f98",
       "comment": "",
       "command": "mouseOver",
-      "target": "css=.MuiButtonBase-root:nth-child(3) p",
+      "target": "css=.MuiButtonBase-root:nth-child(3) > .MuiToggleButton-label",
       "targets": [
-        ["css=.MuiButtonBase-root:nth-child(3) p", "css:finder"],
+        ["css=.MuiButtonBase-root:nth-child(3) > .MuiToggleButton-label", "css:finder"],
         ["xpath=//div[@id='root']/div/div/div/div[2]/div/button[3]/span/p", "xpath:idRelative"],
         ["xpath=//button[3]/span/p", "xpath:position"],
         ["xpath=//p[contains(.,'Reports')]", "xpath:innerText"]
@@ -36,9 +36,9 @@
       "id": "ef3dd25f-1fec-4d1b-91ba-45c2dcb91d18",
       "comment": "",
       "command": "click",
-      "target": "css=.MuiButtonBase-root:nth-child(3) p",
+      "target": "css=.MuiButtonBase-root:nth-child(3) > .MuiToggleButton-label",
       "targets": [
-        ["css=.MuiButtonBase-root:nth-child(3) p", "css:finder"],
+        ["css=.MuiButtonBase-root:nth-child(3) > .MuiToggleButton-label", "css:finder"],
         ["xpath=//div[@id='root']/div/div/div/div[2]/div/button[3]/span/p", "xpath:idRelative"],
         ["xpath=//button[3]/span/p", "xpath:position"],
         ["xpath=//p[contains(.,'Reports')]", "xpath:innerText"]
@@ -48,9 +48,9 @@
       "id": "b84ae36d-205d-430c-b622-535c2af248fb",
       "comment": "",
       "command": "mouseOut",
-      "target": "css=.Mui-selected p",
+      "target": "css=.Mui-selected > .MuiToggleButton-label",
       "targets": [
-        ["css=.Mui-selected p", "css:finder"],
+        ["css=.Mui-selected > .MuiToggleButton-label", "css:finder"],
         ["xpath=//div[@id='root']/div/div/div/div[2]/div/button[3]/span/p", "xpath:idRelative"],
         ["xpath=//button[3]/span/p", "xpath:position"],
         ["xpath=//p[contains(.,'Reports')]", "xpath:innerText"]

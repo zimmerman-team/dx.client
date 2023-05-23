@@ -24,12 +24,13 @@
       "id": "36dab778-1b29-4242-9384-868711abf546",
       "comment": "",
       "command": "click",
-      "target": "css=.MuiButtonBase-root:nth-child(2) p",
+      "target": "css=.MuiToggleButton-root:nth-child(2)",
       "targets": [
-        ["css=.MuiButtonBase-root:nth-child(2) p", "css:finder"],
-        ["xpath=//div[@id='root']/div/div/div/div[2]/div/button[2]/span/p", "xpath:idRelative"],
-        ["xpath=//button[2]/span/p", "xpath:position"],
-        ["xpath=//p[contains(.,'Charts')]", "xpath:innerText"]
+        ["css=.MuiToggleButton-root:nth-child(2)", "css:finder"],
+        ["xpath=//button[@value='charts']", "xpath:attributes"],
+        ["xpath=//div[@id='root']/div/div/div/div[2]/div/button[2]", "xpath:idRelative"],
+        ["xpath=//button[2]", "xpath:position"],
+        ["xpath=//button[contains(.,'Charts')]", "xpath:innerText"]
       ],
       "value": ""
     }, {
@@ -57,7 +58,7 @@
       "id": "3df2133b-3dec-48e8-8835-f09996b76dfe",
       "comment": "",
       "command": "click",
-      "target": "css=.WithStyles\\(ForwardRef\\(MenuItem\\)\\)-root-24:nth-child(3)",
+      "target": "xpath=//div[@id='breadcrumb-menu']/div[3]/ul/li[3]",
       "targets": [
         ["css=.WithStyles\\(ForwardRef\\(MenuItem\\)\\)-root-24:nth-child(3)", "css:finder"],
         ["xpath=//div[@id='breadcrumb-menu']/div[3]/ul/li[3]", "xpath:idRelative"],
@@ -148,23 +149,34 @@
       ],
       "value": ""
     }, {
+      "id": "b35f4103-bc03-4c75-b925-78d32db266f6",
+      "comment": "",
+      "command": "mouseOver",
+      "target": "css=.bFxPLs",
+      "targets": [],
+      "value": ""
+    }, {
       "id": "ef25a3e7-bc07-4cb9-be1f-ab07ff8a78a7",
       "comment": "",
       "command": "dragAndDropToObject",
-      "target": "css=.cZORu",
+      "target": "css=#mapping-item-ID",
       "targets": [
-        ["css=.Mapping___StyledDiv4-sc-xrhyqq-3:nth-child(1)", "css:finder"],
+        ["id=mapping-item-ID", "id"],
+        ["css=#mapping-item-ID", "css:finder"],
+        ["xpath=//div[@id='mapping-item-ID']", "xpath:attributes"],
         ["xpath=//div[@id='step3-content']/div/div/div[2]/div", "xpath:idRelative"],
         ["xpath=//div[4]/div[2]/div/div/div/div/div/div[2]/div", "xpath:position"]
       ],
-      "value": "css=.iLQmVw"
+      "value": "css=#mapping-item-Bars"
     }, {
       "id": "073dd43d-365f-4dc0-8e61-9c76d650fc1c",
       "comment": "",
       "command": "dragAndDropToObject",
-      "target": "css=#mapping-item-activitystatuscode",
-      "targets": [],
-      "value": "css=.mapping___StyledDiv10-sc-18dliv5-10"
+      "target": "css=#mapping-item-ExpenditureEndYear",
+      "targets": [
+        ["css=.Mapping___StyledIconButton-sc-xrhyqq-10 .MuiSvgIcon-root", "css:finder"]
+      ],
+      "value": "css=#mapping-item-Size"
     }, {
       "id": "0f9560a6-6f21-43d1-847b-7d401dfb9fd4",
       "comment": "",
@@ -192,9 +204,9 @@
       "id": "4bed4115-96e1-4a38-86cd-a4b9eb04515b",
       "comment": "",
       "command": "mouseOver",
-      "target": "css=.ExpandedFilterGroup___StyledDiv7-sc-8bp8to-8:nth-child(1) .PrivateSwitchBase-input-18",
+      "target": "css=.ExpandedFilterGroup___StyledDiv7-sc-8bp8to-8:nth-child(1) .PrivateSwitchBase-input-22",
       "targets": [
-        ["css=.ExpandedFilterGroup___StyledDiv7-sc-8bp8to-8:nth-child(1) .PrivateSwitchBase-input-18", "css:finder"],
+        ["css=.ExpandedFilterGroup___StyledDiv7-sc-8bp8to-8:nth-child(1) .PrivateSwitchBase-input-22", "css:finder"],
         ["xpath=(//input[@value=''])[3]", "xpath:attributes"],
         ["xpath=//div[@id='step4-content']/div/div/div[4]/div/div/label/span/span/input", "xpath:idRelative"],
         ["xpath=//div[4]/div/div/label/span/span/input", "xpath:position"]
@@ -204,7 +216,7 @@
       "id": "0b761994-c4d6-4111-8f72-f42f10e06139",
       "comment": "",
       "command": "click",
-      "target": "css=.ExpandedFilterGroup___StyledDiv7-sc-8bp8to-8:nth-child(1) .PrivateSwitchBase-input-18",
+      "target": "css=.ExpandedFilterGroup___StyledDiv7-sc-8bp8to-8:nth-child(1) .PrivateSwitchBase-input-22",
       "targets": [
         ["css=.ExpandedFilterGroup___StyledDiv7-sc-8bp8to-8:nth-child(1) .PrivateSwitchBase-input-18", "css:finder"],
         ["xpath=(//input[@value=''])[3]", "xpath:attributes"],

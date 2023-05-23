@@ -507,6 +507,7 @@ function ChartItem(props: {
   return (
     <div
       ref={added ? nullRef : drag}
+      id={props.name}
       css={`
         width: 100%;
         font-size: 12px;

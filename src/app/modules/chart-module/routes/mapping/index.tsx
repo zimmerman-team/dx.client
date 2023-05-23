@@ -459,6 +459,7 @@ function ChartBuilderMappingDimension(
           get(dimensionMapping, "value", []).length === 0) && (
           <div
             ref={drop}
+            id={`mapping-item-${dimension.name}`}
             css={`
               width: 100%;
               height: 32px;

@@ -279,6 +279,7 @@ export const PlaceHolder = (props: PlaceholderProps) => {
     <>
       <div
         ref={drop}
+        id={`${props.rowId}-placeholder`}
         css={`
           width: 100%;
           height: 20px;

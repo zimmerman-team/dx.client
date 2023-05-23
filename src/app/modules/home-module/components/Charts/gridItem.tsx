@@ -38,6 +38,7 @@ export default function GridItem(props: Props) {
         flex-direction: column;
         justify-content: space-between;
       `}
+      id={`${props.id}-grid-item`}
     >
       <div
         css={`
