@@ -46,6 +46,8 @@ import {
   turnsDataCss,
 } from "app/modules/home-module/style";
 
+import { Chat } from "app/components/Chat";
+
 const StyledTab = withStyles(() => ({
   root: {
     "&.MuiButtonBase-root": {
@@ -257,6 +259,7 @@ export default function HomeModule() {
         <Box height={52} />
         <Box css={featuredAssetsCss}>
           <h3>Featured assets in DX:</h3>
+          <Chat />
           <Box height={20} />
           <Grid
             container
