@@ -55,12 +55,12 @@ export default function AddDatasetFragment(props: DragAndDropProps) {
 
   const ACCEPTED_FILES = {
     "text/csv": [".csv"],
-    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": [
-      ".xlsx",
-    ],
-    "application/xml": [".xml"],
-    "application/vnd.ms-excel": [".xls"],
-    "application/xhtml+xml": [".xhtml"],
+    // "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": [
+    //   ".xlsx",
+    // ],
+    // "application/xml": [".xml"],
+    // "application/vnd.ms-excel": [".xls"],
+    // "application/xhtml+xml": [".xhtml"],
   };
 
   const onDrop = useCallback((acceptedFiles: File[]) => {

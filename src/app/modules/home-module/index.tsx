@@ -257,9 +257,11 @@ export default function HomeModule() {
         `}
       >
         <Box height={52} />
+        <h3>Let our AI Assistant create a Report for you! Type your search term, hit 'submit topic', then select a dataset. Once the process finishes you will be presented with a link.</h3>
+        <Chat />
+        <Box height={52} />
         <Box css={featuredAssetsCss}>
           <h3>Featured assets in DX:</h3>
-          <Chat />
           <Box height={20} />
           <Grid
             container
