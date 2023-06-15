@@ -335,6 +335,7 @@ export default function ReportModule() {
   ) => {
     setButtonActive(active);
     setReportType(type);
+    setRightPanelOpen(type !== "ai");
   };
 
   const resetFrames = () => {
@@ -445,13 +446,13 @@ export default function ReportModule() {
   return (
     <DndProvider backend={HTML5Backend}>
       {(reportCreateLoading || reportEditLoading) && <PageLoader />}
-      <SubheaderToolbar
+      {(reportType !== "ai") && (<SubheaderToolbar
         pageType="report"
         onReportSave={onSave}
         setName={setReportName}
         forceEnablePreviewSave={isPreviewSaveEnabled}
         name={page !== "new" && !view ? reportGetData.name : reportName}
-      />
+      />)}
       {view &&
         view !== "preview" &&
         !reportPreviewMode &&

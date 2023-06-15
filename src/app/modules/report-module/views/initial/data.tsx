@@ -36,7 +36,7 @@ export const templates: ReportTemplateModel[] = [
     description: "Use AI to create your report",
     value: "ai",
     templateImg: <AITemplateImg />,
-    available: false,
+    available: true,
   },
 ];
 

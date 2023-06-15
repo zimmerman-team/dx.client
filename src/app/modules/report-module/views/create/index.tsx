@@ -20,8 +20,25 @@ import {
   isDividerOrRowFrameDraggingAtom,
   unSavedReportPreviewModeAtom,
 } from "app/state/recoil/atoms";
+import ReactMarkdown from 'react-markdown';
+import axios from "axios";
+import _ from "lodash";
+import { useHistory } from "react-router-dom";
+
+interface DatasetMetadata {
+  title: string;
+  subtitle: string;
+  description: string;
+  url: string;
+  result?: string;
+}
+
+interface DatasetObject {
+  [key: string]: DatasetMetadata;
+}
 
 export function ReportCreateView(props: ReportCreateViewProps) {
+  const history = useHistory();
   const [reportPreviewMode] = useRecoilState(unSavedReportPreviewModeAtom);
   const [rowStructureType, setRowStructuretype] =
     React.useState<IRowFrameStructure>({
@@ -29,6 +46,49 @@ export function ReportCreateView(props: ReportCreateViewProps) {
       rowType: "",
       disableAddRowStructureButton: false,
     });
+
+  /** AI REPORT */
+  const [topic, setTopic] = React.useState('I want to create a report about malaria');
+  const [datasetMetadata, setDatasetMetadata] = React.useState<DatasetObject>({});
+  const [datasetUrl, setDatasetUrl] = React.useState("");
+  const [loading, setLoading] = React.useState(false);
+  const [aiStage, setAiStage] = React.useState('start');
+  async function handleClick() {
+    setLoading(true);
+    setAiStage('datasetSearch');
+    await axios.post(`http://localhost:4004/report-ai/search/${encodeURIComponent(topic)}`)
+      .then((response) => {
+        console.log(response)
+        setDatasetMetadata(response.data)
+      })
+      .catch((error) => console.log(error));
+      setLoading(false)
+      setAiStage('datasetSelect');
+  }
+
+  async function handleDatasetSelect(datasetKey: string) {
+    console.log("Dataset selected: ", datasetKey);
+    setDatasetMetadata({});
+    setDatasetUrl("Loading");
+    setLoading(true);
+    setAiStage('reportCreating');
+    let url = '';
+    await axios.post(`http://localhost:4004/report-ai/create-report/${encodeURIComponent(datasetKey)}`)
+      .then((response) => {
+        console.log(response);
+        setDatasetUrl(response.data.url);
+        console.log(response.data.url)
+        // url = the last part of the response.data.url split by /
+        url = response.data.url.split('/').pop();
+        console.log(url)
+      })
+      .catch((error) => console.log(error));
+      setLoading(false)
+      setAiStage('final');
+      // navigate the user to response.data.url
+      history.push(`/report/${url}`);
+  }
+  /** AI REPORT END */
 
   function deleteFrame(id: string) {
     props.setFramesArray((prev) => {
@@ -153,7 +213,88 @@ export function ReportCreateView(props: ReportCreateViewProps) {
     }
   }, [props.reportType]);
 
-  return (
+  return (props.reportType === "ai") ? (
+    <Container maxWidth="lg"><div css={`
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      padding-bottom: 160px;
+    `}>
+      <div css={`
+        background-color: #eee;
+        display: flex;
+        flex-direction: row;
+        width: calc(100vw - ((100vw - 1280px) / 2) - 400px - 50px);
+        padding-bottom: 170px;
+      `}>
+        { aiStage === 'datasetSearch' && (
+          <div>
+            <p>Searching for datasets...</p>
+            <img src="https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif" alt="loading..." />
+          </div>
+        )}
+        { aiStage === 'datasetSelect' && Object.keys(datasetMetadata).map((datasetKey) => {
+          const metadata = datasetMetadata[datasetKey];
+          if (metadata.result) return <div style={{ whiteSpace: 'pre-wrap' }} key={datasetKey}>{metadata.result}</div>
+          return (
+            <div style={{ whiteSpace: 'pre-wrap', background: '#fff', margin: '10px', paddingBottom: '40px', position: 'relative'}} key={datasetKey}>
+              <div>
+                <h5>dataset: {_.get(metadata, 'title', '')}</h5>
+                <h6>{_.get(metadata, 'subtitle', '')}</h6>
+                <ReactMarkdown>{_.get(metadata, 'description', '')}</ReactMarkdown>
+              </div>
+              
+              <div css={`
+                position: absolute;
+                bottom: 0;
+              `}>
+                <hr />
+                <a href={_.get(metadata, 'url', '')}>Click here to view the dataset at source</a>
+                <br />
+                <button onClick={() => {handleDatasetSelect(datasetKey)}}>Select this dataset!</button>
+              </div>
+            </div>
+          )
+        }) }
+        { aiStage === 'reportCreating' && (
+          <div>
+            <p>Processing your dataset... This entails: Uploading the dataset, processing the dataset, creating charts and finally creating a Report.</p>
+            <img src="https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif" alt="loading..." />
+          </div>
+        )}
+      </div>
+      <hr />
+      <div css={`
+        background-color: #ddd;
+        position: fixed;
+        bottom: 10px;
+        height: 150px;
+        width: calc(100vw - ((100vw - 1280px) / 2) - 400px - 50px);
+      `}>
+        { aiStage === 'start' && (
+          <div>
+            <p>Type your own search terms, consider something like: "I want to create a report about Malaria", or simply "Unemployment". Hit 'Search Datasets'</p>
+          </div>
+        )}
+        { aiStage === 'datasetSelect' && (
+          <div>
+            <p>Choose a dataset from the list above, or search again. (Note: you might have to scroll to select the dataset with the button)</p>
+          </div>
+        )}
+        { aiStage === 'final' && (
+          <a href={datasetUrl}>Click here to view the Report our AI Assistant has created for you!</a>
+        )}
+        <input
+          type="text"
+          placeholder="Enter topic"
+          value={topic}
+          onChange={(e) => setTopic(e.target.value)}
+          style= {{ width: '50%' }}
+        />
+        <button onClick={handleClick} disabled={loading}>Search Datasets</button>
+      </div>
+    </div></Container>
+  ) : (
     <div>
       <HeaderBlock
         previewMode={reportPreviewMode}
