@@ -122,6 +122,10 @@ export const unSavedReportPreviewModeAtom = atom<boolean>({
   default: false,
   effects_UNSTABLE: [persistAtom],
 });
+export const automateChartCreationAtom = atom<boolean>({
+  key: "automateChartCreationAtom",
+  default: false,
+});
 
 export const createChartFromReportAtom = atom<{
   state: boolean;

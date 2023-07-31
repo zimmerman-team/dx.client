@@ -6,7 +6,7 @@ import MuiButton from "@material-ui/core/Button";
 import { useStoreState } from "app/state/store/hooks";
 import { withStyles } from "@material-ui/core/styles";
 import MuiAccordion from "@material-ui/core/Accordion";
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory, useLocation, useParams } from "react-router-dom";
 import { ArrowDropDownSharp } from "@material-ui/icons";
 import useUpdateEffect from "react-use/lib/useUpdateEffect";
 import MuiAccordionSummary from "@material-ui/core/AccordionSummary";
@@ -20,6 +20,9 @@ import { ChartToolBoxFilters } from "app/modules/chart-module/components/toolbox
 import { ChartToolBoxChartType } from "app/modules/chart-module/components/toolbox/views/steps/panels-content/ChartType";
 import { ChartToolBoxCustomize } from "app/modules/chart-module/components/toolbox/views/steps/panels-content/Customize";
 import { ChartToolBoxSelectDataset } from "app/modules/chart-module/components/toolbox/views/steps/panels-content/SelectDataset";
+import { ReactComponent as InfoIcon } from "app/modules/chart-module/assets/info.svg";
+import { useRecoilState } from "recoil";
+import { automateChartCreationAtom } from "app/state/recoil/atoms";
 
 export const Accordion = withStyles({
   root: {
@@ -121,11 +124,14 @@ interface ChartToolBoxStepsProps {
 export function ChartToolBoxSteps(props: ChartToolBoxStepsProps) {
   const history = useHistory();
   const { page } = useParams<{ page: string }>();
-  const { data, loading, loadDataset, filterOptionGroups } = props;
+  const location = useLocation();
+  const { data, loadDataset, filterOptionGroups } = props;
 
   const [collapsed, setCollapsed] = React.useState(false);
   const [expanded, setExpanded] = React.useState<number>(props.openPanel ?? 0);
-
+  const [_automateChartCreation, setAutomateChartCreation] = useRecoilState(
+    automateChartCreationAtom
+  );
   const appliedFilters = useStoreState(
     (state) => state.charts.appliedFilters.value
   );
@@ -379,6 +385,49 @@ export function ChartToolBoxSteps(props: ChartToolBoxStepsProps) {
             />
           </AccordionDetails>
         </Accordion>
+        {activePanels == 1 && (
+          <button
+            type="button"
+            disabled={location.pathname === stepPaths[1]}
+            onClick={() => {
+              setAutomateChartCreation(true);
+              history.push(stepPaths[3]);
+            }}
+            css={`
+              position: relative;
+              width: 349px;
+              height: 45px;
+              border: none;
+              outline: none;
+              margin: auto;
+              margin-top: 32px;
+              opacity: ${location.pathname === stepPaths[1] ? 0.6 : 1};
+              cursor: ${location.pathname === stepPaths[1]
+                ? "auto"
+                : "pointer"};
+              border-radius: 8px;
+              background: #359c96;
+              color: #fff;
+              font-family: "Gotham Narrow", sans-serif;
+              font-size: 14px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-weight: bold;
+            `}
+          >
+            <p>Generate chart with AI</p>
+            <div
+              css={`
+                position: absolute;
+                right: 10px;
+                top: 11px;
+              `}
+            >
+              <InfoIcon />
+            </div>
+          </button>
+        )}
       </div>
       <div
         css={`

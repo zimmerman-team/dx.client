@@ -11,13 +11,17 @@ import {
   ChartTypeModel,
   ChartBuilderChartTypeProps,
 } from "app/modules/chart-module/routes/chart-type/data";
+import { useRecoilState } from "recoil";
+import { automateChartCreationAtom } from "app/state/recoil/atoms";
 
 export function ChartBuilderChartType(props: ChartBuilderChartTypeProps) {
   useTitle("DX DataXplorer - Chart Type");
 
   const history = useHistory();
   const { page } = useParams<{ page: string }>();
-
+  const [automateChartCreation, setAutomateChartCreation] = useRecoilState(
+    automateChartCreationAtom
+  );
   const chartType = useStoreState((state) => state.charts.chartType.value);
   const dataset = useStoreState((state) => state.charts.dataset.value);
   const setChartType = useStoreActions(
@@ -64,6 +68,7 @@ export function ChartBuilderChartType(props: ChartBuilderChartTypeProps) {
                     ct.label === "" ? () => {} : onChartTypeChange(ct.id)
                   }
                   css={`
+                    position: relative;
                     width: 100%;
                     height: 64px;
                     display: flex;
@@ -74,7 +79,22 @@ export function ChartBuilderChartType(props: ChartBuilderChartTypeProps) {
                     align-items: center;
                     background: ${chartType === ct.id ? "#cfd4da" : "#dfe3e6"};
                     border: 1px solid
-                      ${chartType === ct.id ? "#262c34" : "#dfe3e6"};
+                      ${(() => {
+                        if (
+                          chartType === "echartsSankey" &&
+                          ct.id === "echartsSankey"
+                        ) {
+                          return "#6061E5";
+                        } else if (chartType === ct.id) {
+                          return "#262c34";
+                        } else {
+                          return "#dfe3e6";
+                        }
+                      })()};
+
+                    ${automateChartCreation &&
+                    ct.id === "echartsSankey" &&
+                    `background: #359C96; color: white; svg{path{fill: white;}}`}
 
                     ${ct.label === "" &&
                     `pointer-events: none;background: #f1f3f5;`}
@@ -83,6 +103,10 @@ export function ChartBuilderChartType(props: ChartBuilderChartTypeProps) {
                       cursor: ${ct.label !== "" ? "pointer" : "auto"};
                       background: #cfd4da;
                       border-color: #262c34;
+
+                      ${automateChartCreation &&
+                      ct.id === "echartsSankey" &&
+                      `background: #359C96; color: white; border-color:#6061E5; svg{path{fill: white; }}`}
                     }
                   `}
                 >
@@ -111,6 +135,29 @@ export function ChartBuilderChartType(props: ChartBuilderChartTypeProps) {
                       {ct.categories.join(", ")}
                     </div>
                   </div>
+                  {automateChartCreation && ct.id === "echartsSankey" && (
+                    <p
+                      css={`
+                        position: absolute;
+                        top: 8px;
+                        right: 7px;
+                        width: 104px;
+                        height: 17px;
+                        border-radius: 10px;
+                        background-color: #daf5f3;
+                        color: #231d2c;
+                        text-align: center;
+                        justify-content: center;
+                        display: flex;
+                        align-items: center;
+                        font-family: "Gotham Narrow", sans-serif;
+                        font-size: 12px;
+                        margin: 0;
+                      `}
+                    >
+                      Recommended
+                    </p>
+                  )}
                 </div>
               </Grid>
             ))}
