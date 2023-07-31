@@ -4,6 +4,8 @@ import { Dropdown } from "react-bootstrap";
 import { useDrag, useDrop } from "react-dnd";
 import Close from "@material-ui/icons/Close";
 import IconButton from "@material-ui/core/IconButton";
+import RotateRightIcon from "@material-ui/icons/RotateRight";
+import { ReactComponent as InfoIcon } from "app/modules/chart-module/assets/info.svg";
 
 interface ChartToolBoxMappingProps {
   dataTypes: any;
@@ -51,7 +53,7 @@ export function ChartToolBoxMapping(props: ChartToolBoxMappingProps) {
           overflow-y: auto;
           padding-right: 88px;
           flex-direction: column;
-          max-height: calc(100vh - 340px);
+          max-height: calc(100vh - 440px);
 
           &::-webkit-scrollbar {
             width: 4px;
@@ -85,6 +87,36 @@ export function ChartToolBoxMapping(props: ChartToolBoxMappingProps) {
           }
         )}
       </div>
+      <button
+        type="button"
+        css={`
+          position: relative;
+          border: none;
+          outline: none;
+          border-radius: 8px;
+          background: #359c96;
+          width: 264px;
+          height: 45px;
+          margin-top: 16px;
+          padding-left: 22px;
+          display: flex;
+          gap: 8px;
+          align-items: center;
+          color: white;
+          font-family: "Gotham Narrow", sans-serif;
+          font-size: 14px;
+          cursor: pointer;
+        `}
+      >
+        <RotateRightIcon color="inherit" /> <b>Auto map again with AI </b>
+        <InfoIcon
+          css={`
+            position: absolute;
+            top: 11px;
+            right: 10px;
+          `}
+        />
+      </button>
     </div>
   );
 }

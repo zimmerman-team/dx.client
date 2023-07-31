@@ -4,12 +4,10 @@ import isEmpty from "lodash/isEmpty";
 import { useRecoilState } from "recoil";
 import styled from "styled-components/macro";
 import Button from "@material-ui/core/Button";
-import Switch from "@material-ui/core/Switch";
 import SaveIcon from "@material-ui/icons/Save";
 import EditIcon from "@material-ui/icons/Edit";
 import Tooltip from "@material-ui/core/Tooltip";
 import Popover from "@material-ui/core/Popover";
-import Divider from "@material-ui/core/Divider";
 import ShareIcon from "@material-ui/icons/Share";
 import { LinkIcon } from "app/assets/icons/Link";
 import Snackbar from "@material-ui/core/Snackbar";
@@ -22,7 +20,6 @@ import FileCopyIcon from "@material-ui/icons/FileCopy";
 import { PageLoader } from "app/modules/common/page-loader";
 import { Link, useHistory, useParams } from "react-router-dom";
 import SnackbarContent from "@material-ui/core/SnackbarContent";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { styles } from "app/modules/common/subheader-toolbar/styles";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import DeleteChartDialog from "app/components/Dialogs/deleteChartDialog";
@@ -36,7 +33,9 @@ import {
   persistedReportStateAtom,
   createChartFromReportAtom,
   unSavedReportPreviewModeAtom,
+  automateChartCreationAtom,
 } from "app/state/recoil/atoms";
+import { ReactComponent as InfoIcon } from "app/modules/chart-module/assets/info.svg";
 
 const InfoSnackbar = styled((props) => <Snackbar {...props} />)`
   && {
@@ -98,6 +97,9 @@ export function SubheaderToolbar(props: SubheaderToolbarProps) {
   const [createChartFromReport, setCreateChartFromReport] = useRecoilState(
     createChartFromReportAtom
   );
+  const [automateChartCreation, _setAutomateChartCreation] = useRecoilState(
+    automateChartCreationAtom
+  );
 
   const [__, setReportPreviewMode] = useRecoilState(
     unSavedReportPreviewModeAtom
@@ -106,7 +108,6 @@ export function SubheaderToolbar(props: SubheaderToolbarProps) {
     persistedReportStateAtom
   );
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
-  const [isPublicTheme, setIsPublicTheme] = React.useState(false);
   const [isSavedEnabled, setIsSavedEnabled] = React.useState(false);
   const [isPreviewEnabled, setIsPreviewEnabled] = React.useState(false);
   const [showSnackbar, setShowSnackbar] = React.useState<string | null>(null);
@@ -436,6 +437,8 @@ export function SubheaderToolbar(props: SubheaderToolbarProps) {
     }
   };
 
+  console.log(`/chart/${page}`, automateChartCreation);
+
   return (
     <div id="subheader-toolbar" css={styles.container}>
       {createOrEditChartLoading && <PageLoader />}
@@ -480,19 +483,66 @@ export function SubheaderToolbar(props: SubheaderToolbarProps) {
           {view === "initial" ? (
             <p>Select your report template</p>
           ) : (
-            <input
-              value={props.name}
-              placeholder="Title"
-              css={styles.nameInput}
-              onChange={onNameChange}
-              style={
-                page !== "new" && !view
-                  ? {
-                      pointerEvents: "none",
+            <div
+              css={`
+                display: flex;
+                align-items: center;
+                gap: 28px;
+              `}
+            >
+              <input
+                value={props.name}
+                placeholder="Title"
+                css={styles.nameInput}
+                onChange={onNameChange}
+                style={
+                  page !== "new" && !view
+                    ? {
+                        display: "none",
+                      }
+                    : {}
+                }
+              />
+              {page !== "new" && !view && (
+                <div
+                  css={`
+                    font-size: 24px;
+                    font-weight: 700;
+                    font-family: "GothamNarrow-Bold", "Helvetica Neue",
+                      sans-serif;
+                    margin: 0;
+                  `}
+                >
+                  {props.name}
+                </div>
+              )}
+
+              {location.pathname === `/chart/${page}` && automateChartCreation && (
+                <div
+                  css={`
+                    border-radius: 20px;
+                    background: #359c96;
+                    width: 131px;
+                    height: 26px;
+                    font-family: "Gotham Narrow", sans-serif;
+                    font-size: 12px;
+                    color: #fff;
+                    display: flex;
+                    align-items: center;
+                    gap: 9px;
+                    justify-content: center;
+                    padding-left: 8px;
+                    /* padding-right: 4px; */
+                    svg {
+                      width: 16px;
+                      height: 16px;
                     }
-                  : {}
-              }
-            />
+                  `}
+                >
+                  Created with AI <InfoIcon />
+                </div>
+              )}
+            </div>
           )}
           {view !== "initial" && (
             <div css={styles.endContainer}>

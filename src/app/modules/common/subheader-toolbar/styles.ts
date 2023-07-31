@@ -105,10 +105,10 @@ export const styles = {
     color: #262c34;
     font-size: 24px;
     font-weight: 700;
+    font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
     border-style: none;
     background: transparent;
     transition: background 0.2s ease-in-out;
-    font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
 
     &:focus {
       background: #f1f3f5;
