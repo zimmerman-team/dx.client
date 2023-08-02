@@ -291,7 +291,11 @@ export function ChartToolBoxSteps(props: ChartToolBoxStepsProps) {
             <ChartToolBoxChartType />
           </AccordionDetails>
         </Accordion>
-        <Accordion square expanded={expanded === 3} onChange={handleChange(4)}>
+        <Accordion
+          square
+          expanded={expanded === 3 && !collapsed}
+          onChange={handleChange(4)}
+        >
           <AccordionSummary
             id="step3-header"
             aria-controls="step3-content"
@@ -303,7 +307,11 @@ export function ChartToolBoxSteps(props: ChartToolBoxStepsProps) {
             <ChartToolBoxMapping dataTypes={props.dataTypes} />
           </AccordionDetails>
         </Accordion>
-        <Accordion square expanded={expanded === 4} onChange={handleChange(5)}>
+        <Accordion
+          square
+          expanded={expanded === 4 && !collapsed}
+          onChange={handleChange(5)}
+        >
           <AccordionSummary
             id="step4-header"
             aria-controls="step4-content"
@@ -363,7 +371,7 @@ export function ChartToolBoxSteps(props: ChartToolBoxStepsProps) {
         </Accordion>
         <Accordion
           square
-          expanded={expanded === 5}
+          expanded={expanded === 5 && !collapsed}
           onChange={handleChange(6)}
           css={`
             border-bottom: 1px solid #c0c7d2;
