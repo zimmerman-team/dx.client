@@ -8,6 +8,12 @@ export interface IFormDetails {
   description: string;
   category?: string;
   public?: boolean;
+  sql_table?: string;
+  sql_username?: string;
+  sql_password?: string;
+  sql_host?: string;
+  sql_port?: string;
+  sql_database?: string;
 }
 interface Props {
   onSubmit: (data: IFormDetails) => void;
@@ -17,6 +23,12 @@ interface Props {
     description: string;
     category: string;
     public: boolean;
+    sql_table: string;
+    sql_username: string;
+    sql_password: string;
+    sql_host: string;
+    sql_port: string;
+    sql_database: string;
   };
   setFormDetails: React.Dispatch<
     React.SetStateAction<{
@@ -24,6 +36,12 @@ interface Props {
       description: string;
       category: string;
       public: boolean;
+      sql_table: string;
+      sql_username: string;
+      sql_password: string;
+      sql_host: string;
+      sql_port: string;
+      sql_database: string;
     }>
   >;
 }
@@ -99,7 +117,7 @@ export default function MetaData(props: Props) {
             <Grid lg={12} xs={12} md={12} item>
               <CssTextField
                 id="outlined-basic"
-                label="Data title "
+                label="Data title* "
                 variant="outlined"
                 {...register("name", { required: true })}
                 helperText="Title must be between 6 and 50 characters in lenght."
@@ -140,6 +158,78 @@ export default function MetaData(props: Props) {
                   {characterCount}/150
                 </p>
               </div>
+            </Grid>
+
+            <Grid lg={12} xs={12} md={12} item>
+              <CssTextField
+                id="outlined-basic"
+                label="SQL(ite) Table name - only required if you entered a SQLite file or when you are providing SQL credentials"
+                variant="outlined"
+                {...register("sql_table", { required: false })}
+                helperText="Title must be between 6 and 50 characters in lenght."
+                onChange={handleChange}
+                fullWidth
+              />
+            </Grid>
+
+            <Grid lg={12} xs={12} md={12} item>
+              <CssTextField
+                id="outlined-basic"
+                label="SQL username - only required if you are providing SQL credentials"
+                variant="outlined"
+                {...register("sql_username", { required: false })}
+                helperText="Title must be between 6 and 50 characters in lenght."
+                onChange={handleChange}
+                fullWidth
+              />
+            </Grid>
+
+            <Grid lg={12} xs={12} md={12} item>
+              <CssTextField
+                id="outlined-basic"
+                label="SQL password - only required if you are providing SQL credentials"
+                variant="outlined"
+                {...register("sql_password", { required: false })}
+                helperText="Title must be between 6 and 50 characters in lenght."
+                onChange={handleChange}
+                fullWidth
+              />
+            </Grid>
+
+            <Grid lg={12} xs={12} md={12} item>
+              <CssTextField
+                id="outlined-basic"
+                label="SQL host - only required if you are providing SQL credentials"
+                variant="outlined"
+                {...register("sql_host", { required: false })}
+                helperText="Title must be between 6 and 50 characters in lenght."
+                onChange={handleChange}
+                fullWidth
+              />
+            </Grid>
+
+            <Grid lg={12} xs={12} md={12} item>
+              <CssTextField
+                id="outlined-basic"
+                label="SQL port - only required if you are providing SQL credentials"
+                variant="outlined"
+                {...register("sql_port", { required: false })}
+                helperText="Title must be between 6 and 50 characters in lenght."
+                onChange={handleChange}
+                fullWidth
+              />
+            </Grid>
+
+            <Grid lg={12} xs={12} md={12} item>
+              <CssTextField
+                id="outlined-basic"
+                label="SQL database - only required if you are providing SQL credentials"
+                variant="outlined"
+                {...register("sql_database", { required: false })}
+                helperText="Title must be between 6 and 50 characters in lenght."
+                onChange={handleChange}
+                fullWidth
+              />
             </Grid>
           </Grid>
           <div

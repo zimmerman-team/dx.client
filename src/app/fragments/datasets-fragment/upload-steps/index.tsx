@@ -33,6 +33,12 @@ function DatasetUploadSteps() {
     description: "",
     category: "General",
     public: false,
+    sql_table: "",
+    sql_username: "",
+    sql_password: "",
+    sql_host: "",
+    sql_port: "",
+    sql_database: "",
   });
 
   React.useEffect(() => {
@@ -145,6 +151,12 @@ function DatasetUploadSteps() {
         let file = selectedFile;
         let filename = "dx" + response.data.id;
         formData.append(filename, file as File);
+        formData.append("table", formDetails.sql_table);
+        formData.append("username", formDetails.sql_username);
+        formData.append("password", formDetails.sql_password);
+        formData.append("host", formDetails.sql_host);
+        formData.append("port", formDetails.sql_port);
+        formData.append("database", formDetails.sql_database);
         axios
           .post(`${process.env.REACT_APP_API}/files`, formData, {
             headers: {

@@ -62,7 +62,14 @@ export default function AddDatasetFragment(props: DragAndDropProps) {
     ],
     "application/xml": [".xml"],
     "application/vnd.ms-excel": [".xls"],
-    "application/xhtml+xml": [".xhtml"],
+    "application/json": [".json"],
+    "application/vnd.ms-excel.sheet.macroEnabled.12": [".xlsm"],
+    "application/vnd.ms-excel.sheet.binary.macroEnabled.12": [".xlsb"],
+    "application/vnd.oasis.opendocument.spreadsheet": [".ods"],
+    "application/x-spss-sav": [".sav"],
+    "application/x-hdf": [".h5"],
+    "application/vnd.sqlite3": [".sqlite"],
+    "application/octet-stream": [".orc", ".dta", ".feather", ".parquet"],
   };
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
@@ -110,7 +117,7 @@ export default function AddDatasetFragment(props: DragAndDropProps) {
 
   const fileRejectionItems = fileRejections.map(({ file, errors }) => (
     <li key={file.name}>
-      {file.name} - {formatBytes(file.size)}
+      {file.name} - {formatBytes(file.size)} - {file.type}
       <ul>
         {errors.map((e) => (
           <li key={e.code}>{e.message}</li>
@@ -151,6 +158,10 @@ interface DropzoneProps extends Props {
   handleOpenPicker(e: React.MouseEvent<HTMLButtonElement>): void;
 }
 
+const handlePSQL = () => {
+  console.log("psql");
+}
+
 export const DropZone = (props: DropzoneProps) => {
   return (
     <>
@@ -175,7 +186,20 @@ export const DropZone = (props: DropzoneProps) => {
                   margin-top: 5px;
                 `}
               >
-                Supports: XLSX, CSV
+                Supports the following file extensions: .csv, .tsv, .json*, .xml*, .xls, .xlsx, .xlsm, .xlsb, .ods,
+                .dta, .h5, .orc, .feather, .parquet, .sav, .sas7bdat, .sas, .sqlite
+              </p>
+              <p
+                css={`
+                  font-weight: 500;
+                  font-size: 12px;
+                  color: #231d2c;
+                  margin-top: 5px;
+                `}
+              >
+                We also provide support for SQL in the form of MySQL, PostgreSQL,
+                SQLite (through direct upload), MicrosoftSQL, Oracle. <br />You will be asked to provide connection details,
+                none of which will be stored in our systems and will be discarded immediately after access.
               </p>
               <p
                 css={`
