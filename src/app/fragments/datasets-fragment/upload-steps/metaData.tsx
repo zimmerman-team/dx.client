@@ -14,6 +14,9 @@ export interface IFormDetails {
   sql_host?: string;
   sql_port?: string;
   sql_database?: string;
+  api_url?: string;
+  json_root?: string;
+  xml_root?: string;
 }
 interface Props {
   onSubmit: (data: IFormDetails) => void;
@@ -29,6 +32,9 @@ interface Props {
     sql_host: string;
     sql_port: string;
     sql_database: string;
+    api_url: string;
+    json_root: string;
+    xml_root: string;
   };
   setFormDetails: React.Dispatch<
     React.SetStateAction<{
@@ -42,6 +48,9 @@ interface Props {
       sql_host: string;
       sql_port: string;
       sql_database: string;
+      api_url: string;
+      json_root: string;
+      xml_root: string;
     }>
   >;
 }
@@ -226,6 +235,42 @@ export default function MetaData(props: Props) {
                 label="SQL database - only required if you are providing SQL credentials"
                 variant="outlined"
                 {...register("sql_database", { required: false })}
+                helperText="Title must be between 6 and 50 characters in lenght."
+                onChange={handleChange}
+                fullWidth
+              />
+            </Grid>
+            <hr />
+            <Grid lg={12} xs={12} md={12} item>
+              <CssTextField
+                id="outlined-basic"
+                label="Provide URL to your API"
+                variant="outlined"
+                {...register("api_url", { required: false })}
+                helperText="Title must be between 6 and 50 characters in lenght."
+                onChange={handleChange}
+                fullWidth
+              />
+            </Grid>
+
+            <Grid lg={12} xs={12} md={12} item>
+              <CssTextField
+                id="outlined-basic"
+                label="JSON root - only required if you are providing JSON api url, provide . if no root"
+                variant="outlined"
+                {...register("json_root", { required: false })}
+                helperText="Title must be between 6 and 50 characters in lenght."
+                onChange={handleChange}
+                fullWidth
+              />
+            </Grid>
+
+            <Grid lg={12} xs={12} md={12} item>
+              <CssTextField
+                id="outlined-basic"
+                label="xml root - only required if you are providing XML api url, provide . if no root"
+                variant="outlined"
+                {...register("xml_root", { required: false })}
                 helperText="Title must be between 6 and 50 characters in lenght."
                 onChange={handleChange}
                 fullWidth

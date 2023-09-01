@@ -39,6 +39,9 @@ function DatasetUploadSteps() {
     sql_host: "",
     sql_port: "",
     sql_database: "",
+    api_url: "",
+    json_root: "",
+    xml_root: "",
   });
 
   React.useEffect(() => {
@@ -157,6 +160,9 @@ function DatasetUploadSteps() {
         formData.append("host", formDetails.sql_host);
         formData.append("port", formDetails.sql_port);
         formData.append("database", formDetails.sql_database);
+        formData.append("api_url", formDetails.api_url);
+        formData.append("json_root", formDetails.json_root);
+        formData.append("xml_root", formDetails.xml_root);
         axios
           .post(`${process.env.REACT_APP_API}/files`, formData, {
             headers: {

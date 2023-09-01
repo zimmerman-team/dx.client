@@ -69,7 +69,7 @@ export default function AddDatasetFragment(props: DragAndDropProps) {
     "application/x-spss-sav": [".sav"],
     "application/x-hdf": [".h5"],
     "application/vnd.sqlite3": [".sqlite"],
-    "application/octet-stream": [".orc", ".dta", ".feather", ".parquet"],
+    "application/octet-stream": [".orc", ".dta", ".feather", ".parquet", ".api"],
   };
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
