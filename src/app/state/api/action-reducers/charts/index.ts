@@ -24,3 +24,8 @@ export const ChartDuplicate: ApiCallModel = {
 export const ChartGetList: ApiCallModel = {
   ...APIModel(`${process.env.REACT_APP_API}/charts`),
 };
+export const ChartSuggest: ApiCallModel = {
+  ...APIModel(
+    `${process.env.REACT_APP_API_BACKEND}/chart-suggest/ai-report-builder-from-existing`
+  ),
+};

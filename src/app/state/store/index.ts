@@ -218,6 +218,7 @@ import {
   ChartDuplicate,
   ChartGet,
   ChartGetList,
+  ChartSuggest,
   ChartUpdate,
 } from "../api/action-reducers/charts";
 import {
@@ -462,6 +463,7 @@ const storeContent: StoreModel = {
     ChartDelete: persist(ChartDelete),
     ChartDuplicate: persist(ChartDuplicate),
     ChartGetList: persist(ChartGetList),
+    ChartSuggest: persist(ChartSuggest),
     activePanels: persist(ChartsActivePanelsState),
     dataset: persist(ChartsDatasetState),
     mapping: persist(ChartsMappingState),

@@ -367,6 +367,7 @@ export interface StoreModel {
     ChartDelete: ApiCallModel;
     ChartDuplicate: ApiCallModel;
     ChartGetList: ApiCallModel;
+    ChartSuggest: ApiCallModel;
     activePanels: ChartsActivePanelsStateModel;
     dataset: ChartsDatasetStateModel;
     mapping: ChartsMappingStateModel;

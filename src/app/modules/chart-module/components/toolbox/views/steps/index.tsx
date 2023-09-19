@@ -3,7 +3,7 @@ import React from "react";
 import findIndex from "lodash/findIndex";
 import Tooltip from "@material-ui/core/Tooltip";
 import MuiButton from "@material-ui/core/Button";
-import { useStoreState } from "app/state/store/hooks";
+import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import { withStyles } from "@material-ui/core/styles";
 import MuiAccordion from "@material-ui/core/Accordion";
 import { useHistory, useLocation, useParams } from "react-router-dom";
@@ -126,7 +126,6 @@ export function ChartToolBoxSteps(props: ChartToolBoxStepsProps) {
   const { page } = useParams<{ page: string }>();
   const location = useLocation();
   const { data, loadDataset, filterOptionGroups } = props;
-
   const [collapsed, setCollapsed] = React.useState(false);
   const [expanded, setExpanded] = React.useState<number>(props.openPanel ?? 0);
   const [_automateChartCreation, setAutomateChartCreation] = useRecoilState(
@@ -139,6 +138,10 @@ export function ChartToolBoxSteps(props: ChartToolBoxStepsProps) {
   const activePanels = useStoreState(
     (state) => state.charts.activePanels.value
   );
+  const suggestChart = useStoreActions(
+    (actions) => actions.charts.ChartSuggest.post
+  );
+  const dataset = useStoreState((state) => state.charts.dataset.value);
 
   Object.keys(appliedFilters || {}).forEach((key) => {
     appliedFiltersCount += appliedFilters[key].length;
@@ -163,6 +166,17 @@ export function ChartToolBoxSteps(props: ChartToolBoxStepsProps) {
         history.push(stepPaths[panel]);
       }
     };
+
+  const handleChartAutomation = () => {
+    const form = new FormData();
+    form.append("id", dataset as string);
+
+    setAutomateChartCreation(true);
+
+    suggestChart(form);
+
+    history.push(stepPaths[3]);
+  };
 
   const onNavBtnClick =
     (direction: "prev" | "next") =>
@@ -397,10 +411,7 @@ export function ChartToolBoxSteps(props: ChartToolBoxStepsProps) {
           <button
             type="button"
             disabled={location.pathname === stepPaths[1]}
-            onClick={() => {
-              setAutomateChartCreation(true);
-              history.push(stepPaths[3]);
-            }}
+            onClick={handleChartAutomation}
             css={`
               position: relative;
               width: 349px;
