@@ -459,8 +459,6 @@ export function SubheaderToolbar(props: SubheaderToolbarProps) {
     }
   };
 
-  console.log(`/chart/${page}`, automateChartCreation);
-
   return (
     <div id="subheader-toolbar" css={styles.container}>
       {createOrEditChartLoading && <PageLoader />}

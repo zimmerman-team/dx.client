@@ -35,6 +35,7 @@ import {
   emptyChartAPI,
   ChartRenderedItem,
   defaultChartOptions,
+  AIChartTypeProps,
 } from "app/modules/chart-module/data";
 import { IHeaderDetails } from "../report-module/components/right-panel/data";
 
@@ -157,6 +158,26 @@ export default function ChartModule() {
     () => Boolean(renderedChartSsr),
     [renderedChartSsr]
   );
+
+  const suggestedChartType = useStoreState(
+    (state) => state.charts.ChartSuggest.crudData
+  ) as { code: number; result: string[] };
+
+  const suggestedChartTypeArray: AIChartTypeProps[] = [];
+
+  try {
+    if (suggestedChartType) {
+      const result = suggestedChartType.result;
+      //'result' is an array of  JSON objects representing chart configurations.
+      // access and parse each configuration as follows:
+      result.forEach((config: string) => {
+        const chartConfig = JSON.parse(config);
+        suggestedChartTypeArray.push(chartConfig);
+      });
+    }
+  } catch (error) {
+    console.error("Error parsing JSON:", error);
+  }
 
   function setVisualOptionsOnChange() {
     const options = {
@@ -392,10 +413,14 @@ export default function ChartModule() {
               renderedChart={content}
               renderedChartSsr={activeRenderedChartSsr}
               renderedChartMappedData={renderedChartMappedData}
+              suggestedChartTypeArray={suggestedChartTypeArray}
             />
           </Route>
           <Route path="/chart/:page/chart-type">
-            <ChartBuilderChartType loading={loading} />
+            <ChartBuilderChartType
+              loading={loading}
+              suggestedChartTypeArray={suggestedChartTypeArray}
+            />
           </Route>
           <Route path="/chart/:page/preview-data">
             <ChartBuilderPreview

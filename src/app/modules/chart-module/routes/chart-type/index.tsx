@@ -8,7 +8,6 @@ import { useStoreState, useStoreActions } from "app/state/store/hooks";
 import { styles as commonStyles } from "app/modules/chart-module/routes/common/styles";
 import {
   echartTypes,
-  ChartTypeModel,
   ChartBuilderChartTypeProps,
 } from "app/modules/chart-module/routes/chart-type/data";
 import { useRecoilState } from "recoil";
@@ -23,6 +22,11 @@ export function ChartBuilderChartType(props: ChartBuilderChartTypeProps) {
     automateChartCreationAtom
   );
   const chartType = useStoreState((state) => state.charts.chartType.value);
+
+  const getSuggestedChartType = () => {
+    return props.suggestedChartTypeArray.map((chart) => chart.chartType);
+  };
+
   const dataset = useStoreState((state) => state.charts.dataset.value);
   const setChartType = useStoreActions(
     (actions) => actions.charts.chartType.setValue
@@ -61,106 +65,111 @@ export function ChartBuilderChartType(props: ChartBuilderChartTypeProps) {
           `}
         >
           <Grid container item spacing={2}>
-            {echartTypes(false).map((ct: ChartTypeModel) => (
-              <Grid item xs={12} sm={6} md={4} key={ct.id}>
-                <div
-                  onClick={
-                    ct.label === "" ? () => {} : onChartTypeChange(ct.id)
-                  }
-                  css={`
-                    position: relative;
-                    width: 100%;
-                    height: 64px;
-                    display: flex;
-                    padding: 0 15px;
-                    user-select: none;
-                    border-radius: 8px;
-                    flex-direction: row;
-                    align-items: center;
-                    background: ${chartType === ct.id ? "#cfd4da" : "#dfe3e6"};
-                    border: 1px solid
-                      ${(() => {
-                        if (
-                          chartType === "echartsSankey" &&
-                          ct.id === "echartsSankey"
-                        ) {
-                          return "#6061E5";
-                        } else if (chartType === ct.id) {
-                          return "#262c34";
-                        } else {
-                          return "#dfe3e6";
-                        }
-                      })()};
-
-                    ${automateChartCreation &&
-                    ct.id === "echartsSankey" &&
-                    `background: #359C96; color: white; svg{path{fill: white;}}`}
-
-                    ${ct.label === "" &&
-                    `pointer-events: none;background: #f1f3f5;`}
-
-                    &:hover {
-                      cursor: ${ct.label !== "" ? "pointer" : "auto"};
-                      background: #cfd4da;
-                      border-color: #262c34;
+            {echartTypes(false).map((ct) => {
+              return (
+                <Grid item xs={12} sm={6} md={4} key={ct.id}>
+                  <div
+                    onClick={
+                      ct.label === "" ? () => {} : onChartTypeChange(ct.id)
+                    }
+                    css={`
+                      position: relative;
+                      width: 100%;
+                      height: 64px;
+                      display: flex;
+                      padding: 0 15px;
+                      user-select: none;
+                      border-radius: 8px;
+                      flex-direction: row;
+                      align-items: center;
+                      background: ${chartType === ct.id
+                        ? "#cfd4da"
+                        : "#dfe3e6"};
+                      border: 1px solid
+                        ${(() => {
+                          if (
+                            chartType === ct.id &&
+                            getSuggestedChartType().includes(ct.subId)
+                          ) {
+                            return "#6061E5";
+                          } else if (chartType === ct.id) {
+                            return "#262c34";
+                          } else {
+                            return "#dfe3e6";
+                          }
+                        })()};
 
                       ${automateChartCreation &&
-                      ct.id === "echartsSankey" &&
-                      `background: #359C96; color: white; border-color:#6061E5; svg{path{fill: white; }}`}
-                    }
-                  `}
-                >
-                  {ct.icon}
-                  <div
-                    css={`
-                      display: flex;
-                      margin-left: 15px;
-                      flex-direction: column;
+                      getSuggestedChartType().includes(ct.subId) &&
+                      `background: #359C96; color: white; svg{path{fill: white;}}`}
+
+                      ${ct.label === "" &&
+                      `pointer-events: none;background: #f1f3f5;`}
+
+                    &:hover {
+                        cursor: ${ct.label !== "" ? "pointer" : "auto"};
+                        background: #cfd4da;
+                        border-color: #262c34;
+
+                        ${automateChartCreation &&
+                        getSuggestedChartType().includes(ct.subId) &&
+                        `background: #359C96; color: white; border-color:#6061E5; svg{path{fill: white; }}`}
+                      }
                     `}
                   >
+                    {ct.icon}
                     <div
                       css={`
-                        font-size: 14px;
-                      `}
-                    >
-                      <b>{ct.label}</b>
-                    </div>
-                    <div
-                      css={`
-                        font-size: 12px;
-                        font-family: "GothamNarrow-Book", "Helvetica Neue",
-                          sans-serif;
-                      `}
-                    >
-                      {ct.categories.join(", ")}
-                    </div>
-                  </div>
-                  {automateChartCreation && ct.id === "echartsSankey" && (
-                    <p
-                      css={`
-                        position: absolute;
-                        top: 8px;
-                        right: 7px;
-                        width: 104px;
-                        height: 17px;
-                        border-radius: 10px;
-                        background-color: #daf5f3;
-                        color: #231d2c;
-                        text-align: center;
-                        justify-content: center;
                         display: flex;
-                        align-items: center;
-                        font-family: "Gotham Narrow", sans-serif;
-                        font-size: 12px;
-                        margin: 0;
+                        margin-left: 15px;
+                        flex-direction: column;
                       `}
                     >
-                      Recommended
-                    </p>
-                  )}
-                </div>
-              </Grid>
-            ))}
+                      <div
+                        css={`
+                          font-size: 14px;
+                        `}
+                      >
+                        <b>{ct.label}</b>
+                      </div>
+                      <div
+                        css={`
+                          font-size: 12px;
+                          font-family: "GothamNarrow-Book", "Helvetica Neue",
+                            sans-serif;
+                        `}
+                      >
+                        {ct.categories.join(", ")}
+                      </div>
+                    </div>
+                    {automateChartCreation &&
+                      getSuggestedChartType().includes(ct.subId) && (
+                        <p
+                          css={`
+                            position: absolute;
+                            top: 8px;
+                            right: 7px;
+                            width: 104px;
+                            height: 17px;
+                            border-radius: 10px;
+                            background-color: #daf5f3;
+                            color: #231d2c;
+                            text-align: center;
+                            justify-content: center;
+                            display: flex;
+                            align-items: center;
+                            font-family: "Gotham Narrow", sans-serif;
+                            font-size: 12px;
+                            margin: 0;
+                          `}
+                        >
+                          Recommended
+                        </p>
+                      )}
+                  </div>
+                </Grid>
+              );
+            })}
           </Grid>
         </Grid>
       </div>

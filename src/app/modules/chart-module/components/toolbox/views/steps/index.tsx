@@ -139,7 +139,7 @@ export function ChartToolBoxSteps(props: ChartToolBoxStepsProps) {
     (state) => state.charts.activePanels.value
   );
   const suggestChart = useStoreActions(
-    (actions) => actions.charts.ChartSuggest.post
+    (actions) => actions.charts.ChartSuggest.fetch
   );
   const dataset = useStoreState((state) => state.charts.dataset.value);
 
@@ -173,7 +173,7 @@ export function ChartToolBoxSteps(props: ChartToolBoxStepsProps) {
 
     setAutomateChartCreation(true);
 
-    suggestChart(form);
+    suggestChart({ filterString: `id=${dataset}`, storeInCrudData: true });
 
     history.push(stepPaths[3]);
   };

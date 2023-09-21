@@ -31,6 +31,7 @@ import {
   typeIcon,
 } from "app/modules/chart-module/routes/mapping/data";
 import { useDebounce } from "react-use";
+import { AIChartTypeProps } from "../../data";
 
 export function ChartBuilderMapping(props: ChartBuilderMappingProps) {
   useTitle("DX DataXplorer - Mapping");
@@ -142,6 +143,7 @@ export function ChartBuilderMapping(props: ChartBuilderMappingProps) {
                 dimension={dimension}
                 dataTypes={props.dataTypes}
                 replaceDimension={replaceDimension}
+                suggestedChartTypeArray={props.suggestedChartTypeArray}
               />
             ))}
           </Grid>
@@ -173,6 +175,7 @@ export function ChartBuilderMapping(props: ChartBuilderMappingProps) {
                 dimension={dimension}
                 dataTypes={props.dataTypes}
                 replaceDimension={replaceDimension}
+                suggestedChartTypeArray={props.suggestedChartTypeArray}
               />
             ))}
           </Grid>
@@ -204,6 +207,7 @@ function ChartBuilderMappingDimension(
   props: ChartBuilderMappingDimensionProps
 ) {
   const { dimension, dataTypes, replaceDimension } = props;
+  const chartType = useStoreState((state) => state.charts.chartType.value);
 
   const mapping = useStoreState((state) => state.charts.mapping.value);
   const setMapping = useStoreActions(
@@ -211,6 +215,40 @@ function ChartBuilderMappingDimension(
   );
 
   const dimensionMapping = get(mapping, dimension.id, {});
+
+  const selectedSuggestedChart = () => {
+    if (chartType === "echartsBarchart") {
+      //get the respective chart type from the suggestedChartTypeArray
+      const barChart = props.suggestedChartTypeArray.find(
+        (chart) => chart.chartType === "barchart"
+      ) as AIChartTypeProps;
+      //flatens the object and returns the first key
+      barChart.size = Object.keys(barChart.size as string)[0];
+      return barChart;
+    } else if (chartType === "echartsGeomap") {
+      return props.suggestedChartTypeArray.find(
+        (chart) => chart.chartType === "geomap"
+      );
+    } else if (chartType === "echartsLinechart") {
+      return props.suggestedChartTypeArray.find(
+        (chart) => chart.chartType === "linechart"
+      );
+    } else if (chartType === "echartsSankey") {
+      return props.suggestedChartTypeArray.find(
+        (chart) => chart.chartType === "sankey"
+      );
+    } else if (chartType === "echartsTreemap") {
+      //get the respective chart type from the suggestedChartTypeArray
+      const treemap = props.suggestedChartTypeArray.find(
+        (chart) => chart.chartType === "treemap"
+      ) as AIChartTypeProps;
+      //flatens the object and returns the first key
+      treemap.size = Object.keys(treemap.size as string)[0];
+      console.log(treemap.size, "key");
+
+      return treemap;
+    } else return null;
+  };
 
   const [{ isOver }, drop] = useDrop(() => ({
     accept: ["column", "card"],
@@ -227,6 +265,7 @@ function ChartBuilderMappingDimension(
       ) as { [key: string]: any };
 
       const localDimensionMapping = get(mappingFromStorage, dimension.id, {});
+
       if (item.type === "column") {
         const defaulAggregation = dimension.aggregation
           ? getDefaultDimensionAggregation(dimension, dataTypes[item.id])
@@ -261,6 +300,52 @@ function ChartBuilderMappingDimension(
       }
     },
   }));
+
+  React.useEffect(() => {
+    const dataValue = (selectedSuggestedChart() as AIChartTypeProps)[
+      dimension.id as keyof AIChartTypeProps
+    ];
+    const mappingFromStorage = get(
+      JSON.parse(
+        sessionStorage.getItem("[EasyPeasyStore][0][charts.mapping]") || ""
+      ),
+      "data.value",
+      {}
+    ) as { [key: string]: any };
+
+    const defaulAggregation = dimension.aggregation
+      ? getDefaultDimensionAggregation(
+          dimension,
+          dataTypes[dataValue as string]
+        )
+      : null;
+
+    const localDimensionMapping = get(mappingFromStorage, dimension.id, {});
+
+    const columnDataType = getTypeName(dataTypes[dataValue as string]);
+    const isValid =
+      dimension.validTypes?.length === 0 ||
+      dimension.validTypes?.includes(columnDataType);
+
+    if (props.suggestedChartTypeArray.length !== 0) {
+      setMapping({
+        [dimension.id]: {
+          ids: (localDimensionMapping.ids || []).concat(uniqueId()),
+          value: [...(localDimensionMapping.value || []), dataValue],
+          isValid: isValid,
+          mappedType: columnDataType,
+          config: dimension.aggregation
+            ? {
+                aggregation: [
+                  ...(get(localDimensionMapping, "config.aggregation") || []),
+                  defaulAggregation,
+                ],
+              }
+            : undefined,
+        },
+      });
+    }
+  }, []);
 
   const setAggregation = React.useCallback(
     (newAggregations) => {

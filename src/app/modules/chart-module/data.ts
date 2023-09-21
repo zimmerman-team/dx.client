@@ -254,3 +254,21 @@ export const emptyChartAPI: ChartAPIModel = {
   vizType: "echartsBarchart",
   datasetId: "investment-signed",
 };
+
+export type AIChartTypeProps = {
+  chartType:
+    | "linechart"
+    | "geomap"
+    | "barchart"
+    | "treemap"
+    | "sankey"
+    | string;
+  bars?: string;
+  lines?: string;
+  x?: string;
+  y?: string;
+  country?: string;
+  size?: string;
+  step?: string;
+  hierachy?: string;
+};

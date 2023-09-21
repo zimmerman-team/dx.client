@@ -1,3 +1,5 @@
+import { AIChartTypeProps } from "app/modules/chart-module/data";
+
 export interface ChartBuilderMappingProps {
   loading: boolean;
   dataTypes: any[];
@@ -7,11 +9,13 @@ export interface ChartBuilderMappingProps {
   renderedChartSsr: boolean;
   renderedChartMappedData: any;
   setVisualOptions: (value: any) => void;
+  suggestedChartTypeArray: AIChartTypeProps[];
 }
 
 export interface ChartBuilderMappingDimensionProps {
   dimension: any;
   dataTypes: any;
+  suggestedChartTypeArray: AIChartTypeProps[];
   replaceDimension: (
     fromDimension: string,
     toDimension: string,

@@ -15,13 +15,16 @@ import ColoredTreeMapIcon from "app/assets/icons/data-themes-chart-types/colored
 
 import BigNumberIcon from "app/assets/icons/data-themes-chart-types/bigNumber";
 import ColoredBigNumberIcon from "app/assets/icons/data-themes-chart-types/coloredBigNumber";
+import { AIChartTypeProps } from "app/modules/chart-module/data";
 
 export interface ChartBuilderChartTypeProps {
   loading: boolean;
+  suggestedChartTypeArray: AIChartTypeProps[];
 }
 
 export interface ChartTypeModel {
   id: string;
+  subId?: "linechart" | "geomap" | "barchart" | "treemap" | "sankey" | string;
   label: string;
   icon: React.ReactNode;
   categories: string[];
@@ -33,6 +36,7 @@ export const echartTypes = (big: boolean) => {
   return [
     {
       id: "echartsBarchart",
+      subId: "barchart",
       label: "Bar chart",
       icon: <BarChartIcon big={big} />,
       categories: ["Correllations"],
@@ -42,6 +46,7 @@ export const echartTypes = (big: boolean) => {
     },
     {
       id: "echartsGeomap",
+      subId: "geomap",
       label: "Geo map",
       icon: <GeomapChartIcon big={big} />,
       categories: ["Locations"],
@@ -50,6 +55,7 @@ export const echartTypes = (big: boolean) => {
     },
     {
       id: "echartsLinechart",
+      subId: "linechart",
       label: "Line chart",
       icon: <LineChartIcon big={big} />,
       categories: ["Trends", "changes over time"],
@@ -59,6 +65,7 @@ export const echartTypes = (big: boolean) => {
     },
     {
       id: "echartsSankey",
+      subId: "sankey",
       label: "Sankey diagram",
       icon: <SankeyChartIcon big={big} />,
       categories: ["Networks"],
@@ -68,6 +75,7 @@ export const echartTypes = (big: boolean) => {
     },
     {
       id: "echartsTreemap",
+      subId: "treemap",
       label: "Treemap diagram",
       icon: <TreeMapIcon big={big} />,
       categories: ["Hierarchies", "Proportions"],
@@ -77,6 +85,7 @@ export const echartTypes = (big: boolean) => {
     },
     {
       id: "bigNumber",
+      subId: "bignumber",
       label: "Big number",
       icon: <BigNumberIcon />,
       categories: ["Hierarchies", "Proportions"],
@@ -86,6 +95,7 @@ export const echartTypes = (big: boolean) => {
     },
     {
       id: "placeholder1",
+      subId: "",
       label: "",
       icon: <></>,
       categories: [],
@@ -94,6 +104,8 @@ export const echartTypes = (big: boolean) => {
     },
     {
       id: "placeholder2",
+      subId: "",
+
       label: "",
       icon: <></>,
       categories: [],
@@ -102,6 +114,8 @@ export const echartTypes = (big: boolean) => {
     },
     {
       id: "placeholder3",
+      subId: "",
+
       label: "",
       icon: <></>,
       categories: [],
@@ -110,6 +124,8 @@ export const echartTypes = (big: boolean) => {
     },
     {
       id: "placeholder4",
+      subId: "",
+
       label: "",
       icon: <></>,
       categories: [],
@@ -118,6 +134,8 @@ export const echartTypes = (big: boolean) => {
     },
     {
       id: "placeholder5",
+      subId: "",
+
       label: "",
       icon: <></>,
       categories: [],
@@ -126,6 +144,8 @@ export const echartTypes = (big: boolean) => {
     },
     {
       id: "placeholder7",
+      subId: "",
+
       label: "",
       icon: <></>,
       categories: [],
@@ -134,6 +154,8 @@ export const echartTypes = (big: boolean) => {
     },
     {
       id: "placeholder8",
+      subId: "",
+
       label: "",
       icon: <></>,
       categories: [],
@@ -142,6 +164,7 @@ export const echartTypes = (big: boolean) => {
     },
     {
       id: "placeholder9",
+      subId: "",
       label: "",
       icon: <></>,
       categories: [],
@@ -150,6 +173,8 @@ export const echartTypes = (big: boolean) => {
     },
     {
       id: "placeholder10",
+      subId: "",
+
       label: "",
       icon: <></>,
       categories: [],
