@@ -50,6 +50,9 @@ export default function ChartModule() {
   );
   const [rawViz, setRawViz] = React.useState<any>(null);
   const [chartName, setChartName] = React.useState("My First Chart");
+  const [suggestedChartTypeArray, setSuggestedChartTypeArray] = React.useState<
+    AIChartTypeProps[]
+  >([]);
 
   const {
     loading,
@@ -159,25 +162,26 @@ export default function ChartModule() {
     [renderedChartSsr]
   );
 
+  //handle ai chart type suggestion
   const suggestedChartType = useStoreState(
     (state) => state.charts.ChartSuggest.crudData
   ) as { code: number; result: string[] };
 
-  const suggestedChartTypeArray: AIChartTypeProps[] = [];
-
-  try {
-    if (suggestedChartType) {
-      const result = suggestedChartType.result;
-      //'result' is an array of  JSON objects representing chart configurations.
-      // access and parse each configuration as follows:
-      result.forEach((config: string) => {
-        const chartConfig = JSON.parse(config);
-        suggestedChartTypeArray.push(chartConfig);
-      });
+  React.useEffect(() => {
+    try {
+      if (suggestedChartType) {
+        const result = suggestedChartType.result;
+        //'result' is an array of  JSON objects representing chart configurations.
+        // access and parse each configuration as follows:
+        result.forEach((config: string) => {
+          const chartConfig = JSON.parse(config);
+          setSuggestedChartTypeArray((prev) => [...prev, chartConfig]);
+        });
+      }
+    } catch (error) {
+      console.error("Error parsing JSON:", error);
     }
-  } catch (error) {
-    console.error("Error parsing JSON:", error);
-  }
+  }, [suggestedChartType]);
 
   function setVisualOptionsOnChange() {
     const options = {

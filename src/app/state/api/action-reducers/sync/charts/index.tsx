@@ -33,6 +33,22 @@ export const ChartsDatasetState: ChartsDatasetStateModel = {
   }),
 };
 
+export interface AutoRemappedChartStateModel {
+  value: string | null;
+  reset: Action<ChartsDatasetStateModel>;
+  setValue: Action<ChartsDatasetStateModel, string | null>;
+}
+
+export const AutoRemappedChartState: AutoRemappedChartStateModel = {
+  value: null,
+  setValue: action((state, payload) => {
+    state.value = payload;
+  }),
+  reset: action((state) => {
+    state.value = null;
+  }),
+};
+
 export interface ChartsMappingStateModel {
   value: {
     [key: string]: any;

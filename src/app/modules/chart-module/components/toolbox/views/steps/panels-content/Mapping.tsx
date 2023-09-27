@@ -6,6 +6,8 @@ import Close from "@material-ui/icons/Close";
 import IconButton from "@material-ui/core/IconButton";
 import RotateRightIcon from "@material-ui/icons/RotateRight";
 import { ReactComponent as InfoIcon } from "app/modules/chart-module/assets/info.svg";
+import axios from "axios";
+import { useStoreActions, useStoreState } from "app/state/store/hooks";
 
 interface ChartToolBoxMappingProps {
   dataTypes: any;
@@ -30,6 +32,45 @@ export const AGGREGATIONS_LABELS = {
 };
 
 export function ChartToolBoxMapping(props: ChartToolBoxMappingProps) {
+  const dataset = useStoreState((state) => state.charts.dataset.value);
+  const chartType = useStoreState((state) => state.charts.chartType.value);
+
+  const setReMapping = useStoreActions(
+    (state) => state.charts.autoReMapping.setValue
+  );
+  let aiChartType: string | null = null;
+  if (chartType === "echartsBarchart") {
+    aiChartType = "barchart";
+  } else if (chartType === "echartsLinechart") {
+    aiChartType = "linechart";
+  } else if (chartType === "echartsSankey") {
+    aiChartType = "sankey";
+  } else if (chartType === "echartsGeomap") {
+    aiChartType = "geomap";
+  } else if (chartType === "echartsTreemap") {
+    aiChartType = "treemap";
+  }
+
+  const handleAutomap = () => {
+    axios
+      .get(
+        `${process.env.REACT_APP_API_BACKEND}/chart-suggest/ai-report-chart-suggest-from-existing`,
+        {
+          params: {
+            id: dataset,
+            chart: aiChartType,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        const mapValue = JSON.parse(res.data.result);
+        setReMapping(mapValue);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <div
       css={`
@@ -89,6 +130,7 @@ export function ChartToolBoxMapping(props: ChartToolBoxMappingProps) {
       </div>
       <button
         type="button"
+        onClick={handleAutomap}
         css={`
           position: relative;
           border: none;
@@ -229,8 +271,6 @@ export function ChartToolBoxMappingItem(props: ChartToolBoxMappingItemProps) {
     //   }
     // },
     drop: (item: any) => {
-      // console.log("drop 2");
-      // console.log("drop 2 item", item);
       if (!dimension || !onMove || !onChangeDimension || !replaceDimension)
         return;
       if (!dimension.multiple) {

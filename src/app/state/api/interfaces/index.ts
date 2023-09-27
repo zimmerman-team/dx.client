@@ -70,6 +70,7 @@ import {
   DataPathStepsStateModel,
 } from "../action-reducers/sync/dataPath";
 import {
+  AutoRemappedChartStateModel,
   ChartsActivePanelsStateModel,
   ChartsChartTypeStateModel,
   ChartsDatasetStateModel,
@@ -371,6 +372,7 @@ export interface StoreModel {
     activePanels: ChartsActivePanelsStateModel;
     dataset: ChartsDatasetStateModel;
     mapping: ChartsMappingStateModel;
+    autoReMapping: AutoRemappedChartStateModel;
     chartType: ChartsChartTypeStateModel;
     appliedFilters: ChartsAppliedFiltersStateModel;
     enabledFilterOptionGroups: ChartsEnabledFilterOptionGroupsStateModel;

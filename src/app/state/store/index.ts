@@ -205,6 +205,7 @@ import {
   MappedDatasets,
 } from "../api/action-reducers/viz/datasourcesNdatasets";
 import {
+  AutoRemappedChartState,
   ChartsActivePanelsState,
   ChartsChartTypeState,
   ChartsDatasetState,
@@ -467,6 +468,7 @@ const storeContent: StoreModel = {
     activePanels: persist(ChartsActivePanelsState),
     dataset: persist(ChartsDatasetState),
     mapping: persist(ChartsMappingState),
+    autoReMapping: persist(AutoRemappedChartState),
     chartType: persist(ChartsChartTypeState),
     appliedFilters: persist(ChartsAppliedFiltersState),
     enabledFilterOptionGroups: persist(ChartsEnabledFilterOptionGroupsState),

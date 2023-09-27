@@ -32,6 +32,8 @@ import {
 } from "app/modules/chart-module/routes/mapping/data";
 import { useDebounce } from "react-use";
 import { AIChartTypeProps } from "../../data";
+import { useRecoilValue } from "recoil";
+import { automateChartCreationAtom } from "app/state/recoil/atoms";
 
 export function ChartBuilderMapping(props: ChartBuilderMappingProps) {
   useTitle("DX DataXplorer - Mapping");
@@ -208,8 +210,11 @@ function ChartBuilderMappingDimension(
 ) {
   const { dimension, dataTypes, replaceDimension } = props;
   const chartType = useStoreState((state) => state.charts.chartType.value);
+  const isAutomateChartCreation = useRecoilValue(automateChartCreationAtom);
 
   const mapping = useStoreState((state) => state.charts.mapping.value);
+  const reMapping = useStoreState((state) => state.charts.autoReMapping.value);
+
   const setMapping = useStoreActions(
     (actions) => actions.charts.mapping.setValue
   );
@@ -217,6 +222,9 @@ function ChartBuilderMappingDimension(
   const dimensionMapping = get(mapping, dimension.id, {});
 
   const selectedSuggestedChart = () => {
+    if (reMapping !== null) {
+      return reMapping;
+    }
     if (chartType === "echartsBarchart") {
       //get the respective chart type from the suggestedChartTypeArray
       const barChart = props.suggestedChartTypeArray.find(
@@ -302,50 +310,52 @@ function ChartBuilderMappingDimension(
   }));
 
   React.useEffect(() => {
-    const dataValue = (selectedSuggestedChart() as AIChartTypeProps)[
-      dimension.id as keyof AIChartTypeProps
-    ];
-    const mappingFromStorage = get(
-      JSON.parse(
-        sessionStorage.getItem("[EasyPeasyStore][0][charts.mapping]") || ""
-      ),
-      "data.value",
-      {}
-    ) as { [key: string]: any };
+    if (isAutomateChartCreation) {
+      const dataValue = (selectedSuggestedChart() as AIChartTypeProps)[
+        dimension.id as keyof AIChartTypeProps
+      ];
+      const mappingFromStorage = get(
+        JSON.parse(
+          sessionStorage.getItem("[EasyPeasyStore][0][charts.mapping]") || ""
+        ),
+        "data.value",
+        {}
+      ) as { [key: string]: any };
 
-    const defaulAggregation = dimension.aggregation
-      ? getDefaultDimensionAggregation(
-          dimension,
-          dataTypes[dataValue as string]
-        )
-      : null;
+      const defaulAggregation = dimension.aggregation
+        ? getDefaultDimensionAggregation(
+            dimension,
+            dataTypes[dataValue as string]
+          )
+        : null;
 
-    const localDimensionMapping = get(mappingFromStorage, dimension.id, {});
+      const localDimensionMapping = get(mappingFromStorage, dimension.id, {});
 
-    const columnDataType = getTypeName(dataTypes[dataValue as string]);
-    const isValid =
-      dimension.validTypes?.length === 0 ||
-      dimension.validTypes?.includes(columnDataType);
+      const columnDataType = getTypeName(dataTypes[dataValue as string]);
+      const isValid =
+        dimension.validTypes?.length === 0 ||
+        dimension.validTypes?.includes(columnDataType);
 
-    if (props.suggestedChartTypeArray.length !== 0) {
-      setMapping({
-        [dimension.id]: {
-          ids: (localDimensionMapping.ids || []).concat(uniqueId()),
-          value: [...(localDimensionMapping.value || []), dataValue],
-          isValid: isValid,
-          mappedType: columnDataType,
-          config: dimension.aggregation
-            ? {
-                aggregation: [
-                  ...(get(localDimensionMapping, "config.aggregation") || []),
-                  defaulAggregation,
-                ],
-              }
-            : undefined,
-        },
-      });
+      if (props.suggestedChartTypeArray.length !== 0) {
+        setMapping({
+          [dimension.id]: {
+            ids: (localDimensionMapping.ids || []).concat(uniqueId()),
+            value: [...(localDimensionMapping.value || []), dataValue],
+            isValid: isValid,
+            mappedType: columnDataType,
+            config: dimension.aggregation
+              ? {
+                  aggregation: [
+                    ...(get(localDimensionMapping, "config.aggregation") || []),
+                    defaulAggregation,
+                  ],
+                }
+              : undefined,
+          },
+        });
+      }
     }
-  }, []);
+  }, [reMapping]);
 
   const setAggregation = React.useCallback(
     (newAggregations) => {

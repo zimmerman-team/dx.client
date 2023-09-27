@@ -24,7 +24,11 @@ export function ChartBuilderChartType(props: ChartBuilderChartTypeProps) {
   const chartType = useStoreState((state) => state.charts.chartType.value);
 
   const getSuggestedChartType = () => {
-    return props.suggestedChartTypeArray.map((chart) => chart.chartType);
+    if (props.suggestedChartTypeArray.length > 0) {
+      return props.suggestedChartTypeArray?.map((chart) => chart.chartType);
+    } else {
+      return [];
+    }
   };
 
   const dataset = useStoreState((state) => state.charts.dataset.value);
