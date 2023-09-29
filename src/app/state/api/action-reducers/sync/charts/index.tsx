@@ -34,9 +34,9 @@ export const ChartsDatasetState: ChartsDatasetStateModel = {
 };
 
 export interface AutoRemappedChartStateModel {
-  value: string | null;
-  reset: Action<ChartsDatasetStateModel>;
-  setValue: Action<ChartsDatasetStateModel, string | null>;
+  value: any | null;
+  reset: Action<AutoRemappedChartStateModel>;
+  setValue: Action<AutoRemappedChartStateModel, any | null>;
 }
 
 export const AutoRemappedChartState: AutoRemappedChartStateModel = {

@@ -95,6 +95,9 @@ export default function ChartModule() {
   const resetMapping = useStoreActions(
     (actions) => actions.charts.mapping.reset
   );
+  const resetReMapping = useStoreActions(
+    (actions) => actions.charts.autoReMapping.reset
+  );
   const resetChartType = useStoreActions(
     (actions) => actions.charts.chartType.reset
   );
@@ -218,6 +221,7 @@ export default function ChartModule() {
     resetChartType();
     resetAppliedFilters();
     resetEnabledFilterOptionGroups();
+    resetReMapping();
   }
 
   function clearChartBuilder() {

@@ -223,6 +223,11 @@ function ChartBuilderMappingDimension(
 
   const selectedSuggestedChart = () => {
     if (reMapping !== null) {
+      if (reMapping.chartType === "barchart") {
+        let val = reMapping;
+        val.size = Object.keys(val.size as string)[0];
+        return val;
+      }
       return reMapping;
     }
     if (chartType === "echartsBarchart") {
@@ -336,23 +341,40 @@ function ChartBuilderMappingDimension(
         dimension.validTypes?.length === 0 ||
         dimension.validTypes?.includes(columnDataType);
 
-      if (props.suggestedChartTypeArray.length !== 0) {
-        setMapping({
-          [dimension.id]: {
-            ids: (localDimensionMapping.ids || []).concat(uniqueId()),
-            value: [...(localDimensionMapping.value || []), dataValue],
-            isValid: isValid,
-            mappedType: columnDataType,
-            config: dimension.aggregation
-              ? {
-                  aggregation: [
-                    ...(get(localDimensionMapping, "config.aggregation") || []),
-                    defaulAggregation,
-                  ],
-                }
-              : undefined,
-          },
-        });
+      if (props.suggestedChartTypeArray?.length !== 0) {
+        if (localDimensionMapping?.value?.length > 0) {
+          setMapping({
+            [dimension.id]: {
+              ids: [uniqueId()],
+              value: [dataValue],
+              isValid: isValid,
+              mappedType: columnDataType,
+              config: dimension.aggregation
+                ? {
+                    aggregation: [defaulAggregation],
+                  }
+                : undefined,
+            },
+          });
+        } else {
+          setMapping({
+            [dimension.id]: {
+              ids: (localDimensionMapping.ids || []).concat(uniqueId()),
+              value: [...(localDimensionMapping.value || []), dataValue],
+              isValid: isValid,
+              mappedType: columnDataType,
+              config: dimension.aggregation
+                ? {
+                    aggregation: [
+                      ...(get(localDimensionMapping, "config.aggregation") ||
+                        []),
+                      defaulAggregation,
+                    ],
+                  }
+                : undefined,
+            },
+          });
+        }
       }
     }
   }, [reMapping]);
