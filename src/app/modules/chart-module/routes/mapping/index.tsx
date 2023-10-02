@@ -34,6 +34,7 @@ import { useDebounce } from "react-use";
 import { AIChartTypeProps } from "../../data";
 import { useRecoilValue } from "recoil";
 import { automateChartCreationAtom } from "app/state/recoil/atoms";
+import { set } from "lodash";
 
 export function ChartBuilderMapping(props: ChartBuilderMappingProps) {
   useTitle("DX DataXplorer - Mapping");
@@ -214,6 +215,7 @@ function ChartBuilderMappingDimension(
 
   const mapping = useStoreState((state) => state.charts.mapping.value);
   const reMapping = useStoreState((state) => state.charts.autoReMapping.value);
+  const [autoMapped, setAutoMapped] = React.useState(false);
 
   const setMapping = useStoreActions(
     (actions) => actions.charts.mapping.setValue
@@ -269,6 +271,8 @@ function ChartBuilderMappingDimension(
       isOver: monitor.isOver(),
     }),
     drop: (item: any) => {
+      setAutoMapped(false);
+
       const mappingFromStorage = get(
         JSON.parse(
           sessionStorage.getItem("[EasyPeasyStore][0][charts.mapping]") || ""
@@ -316,6 +320,7 @@ function ChartBuilderMappingDimension(
 
   React.useEffect(() => {
     if (isAutomateChartCreation) {
+      setAutoMapped(true);
       const dataValue = (selectedSuggestedChart() as AIChartTypeProps)[
         dimension.id as keyof AIChartTypeProps
       ];
@@ -601,6 +606,7 @@ function ChartBuilderMappingDimension(
                 onChangeAggregation={onChangeAggregation}
                 backgroundColor={isValid ? undefined : "#fa7355"}
                 marginBottom={!dimension.multiple ? "0px" : "16px"}
+                autoMapped={autoMapped}
               />
             );
           })}

@@ -8,6 +8,7 @@ import RotateRightIcon from "@material-ui/icons/RotateRight";
 import { ReactComponent as InfoIcon } from "app/modules/chart-module/assets/info.svg";
 import axios from "axios";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
+import AccessTimeIcon from "@material-ui/icons/AccessTime";
 
 interface ChartToolBoxMappingProps {
   dataTypes: any;
@@ -17,6 +18,37 @@ const typeIcon = {
   string: "/icons/string.svg",
   number: "/icons/number.svg",
   date: "/icons/date.svg",
+};
+const SVGTypeIcon = {
+  string: (
+    <svg
+      width="19"
+      height="16"
+      viewBox="0 0 19 16"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M5.3125 3.92871L2.01758 13H0.670898L4.46484 3.04688H5.33301L5.3125 3.92871ZM8.07422 13L4.77246 3.92871L4.75195 3.04688H5.62012L9.42773 13H8.07422ZM7.90332 9.31543V10.3955H2.31152V9.31543H7.90332ZM14.9307 11.7354V7.92773C14.9307 7.63607 14.8714 7.38314 14.7529 7.16895C14.639 6.9502 14.4658 6.78158 14.2334 6.66309C14.001 6.5446 13.7139 6.48535 13.3721 6.48535C13.0531 6.48535 12.7728 6.54004 12.5312 6.64941C12.2943 6.75879 12.1074 6.90234 11.9707 7.08008C11.8385 7.25781 11.7725 7.44922 11.7725 7.6543H10.5078C10.5078 7.38997 10.5762 7.12793 10.7129 6.86816C10.8496 6.6084 11.0456 6.3737 11.3008 6.16406C11.5605 5.94987 11.8704 5.78125 12.2305 5.6582C12.5951 5.5306 13.0007 5.4668 13.4473 5.4668C13.985 5.4668 14.459 5.55794 14.8691 5.74023C15.2839 5.92253 15.6074 6.19824 15.8398 6.56738C16.0768 6.93197 16.1953 7.38997 16.1953 7.94141V11.3867C16.1953 11.6328 16.2158 11.8949 16.2568 12.1729C16.3024 12.4508 16.3685 12.6901 16.4551 12.8906V13H15.1357C15.0719 12.8542 15.0218 12.6605 14.9854 12.4189C14.9489 12.1729 14.9307 11.945 14.9307 11.7354ZM15.1494 8.51562L15.1631 9.4043H13.8848C13.5247 9.4043 13.2035 9.43392 12.9209 9.49316C12.6383 9.54785 12.4014 9.63216 12.21 9.74609C12.0186 9.86003 11.8727 10.0036 11.7725 10.1768C11.6722 10.3454 11.6221 10.5436 11.6221 10.7715C11.6221 11.0039 11.6745 11.2158 11.7793 11.4072C11.8841 11.5986 12.0413 11.7513 12.251 11.8652C12.4652 11.9746 12.7272 12.0293 13.0371 12.0293C13.4245 12.0293 13.7663 11.9473 14.0625 11.7832C14.3587 11.6191 14.5934 11.4186 14.7666 11.1816C14.9443 10.9447 15.04 10.7145 15.0537 10.4912L15.5938 11.0996C15.5618 11.291 15.4753 11.5029 15.334 11.7354C15.1927 11.9678 15.0036 12.1911 14.7666 12.4053C14.5342 12.6149 14.2562 12.7904 13.9326 12.9316C13.6136 13.0684 13.2536 13.1367 12.8525 13.1367C12.3512 13.1367 11.9115 13.0387 11.5332 12.8428C11.1595 12.6468 10.8678 12.3848 10.6582 12.0566C10.4531 11.724 10.3506 11.3525 10.3506 10.9424C10.3506 10.5459 10.4281 10.1973 10.583 9.89648C10.738 9.59115 10.9613 9.33822 11.2529 9.1377C11.5446 8.93262 11.8955 8.77767 12.3057 8.67285C12.7158 8.56803 13.1738 8.51562 13.6797 8.51562H15.1494Z"
+        fill="#231D2C"
+      />
+    </svg>
+  ),
+  number: (
+    <svg
+      width="8"
+      height="10"
+      viewBox="0 0 8 10"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M6.976 6.598V7.522H5.394L5.044 10H4.162L4.512 7.522H2.244L1.894 10H0.998L1.348 7.522H0.018V6.598H1.488L1.922 3.56H0.48V2.636H2.062L2.412 0.199999H3.294L2.944 2.636H5.212L5.562 0.199999H6.458L6.108 2.636H7.424V3.56H5.968L5.534 6.598H6.976ZM2.804 3.546L2.356 6.598H4.652L5.1 3.546H2.804Z"
+        fill="#231D2C"
+      />
+    </svg>
+  ),
+  date: <AccessTimeIcon />,
 };
 
 export const AGGREGATIONS_LABELS = {
@@ -178,6 +210,7 @@ interface ChartToolBoxMappingItemProps {
   onChangeAggregation?: (index: number, value: any) => void;
   onChangeDimension?: (index: number, item: any) => void;
   onMove?: (dragIndex: number, hoverIndex: number) => void;
+  autoMapped?: boolean;
   replaceDimension?: (
     fromDimension: string,
     toDimension: string,
@@ -312,16 +345,18 @@ export function ChartToolBoxMappingItem(props: ChartToolBoxMappingItemProps) {
         height: 31px;
         display: flex;
         min-height: 31px;
-
         position: relative;
         padding-left: 16px;
         align-items: center;
         border-radius: 25px;
         z-index: 10;
-
         transform: translate(0px, 0px);
         margin-bottom: ${props.marginBottom};
         background: ${props.backgroundColor || "#cfd4da"};
+
+        ${props.autoMapped &&
+        "background: #359C96; color: white; svg{path{fill:white;}}"}
+
         cursor: ${isDragging
           ? "grabbing"
           : !props.onDeleteItem
@@ -335,18 +370,13 @@ export function ChartToolBoxMappingItem(props: ChartToolBoxMappingItemProps) {
     >
       <div
         css={`
-          width: 16px;
-          height: 16px;
-          min-width: 16px;
           margin-right: 13px;
-          background-size: contain;
-          background-position: center;
-          background-repeat: no-repeat;
-          background-image: url(${typeIcon[
-            props.type as "string" | "number" | "date"
-          ]});
+          display: flex;
+          align-items: center;
         `}
-      />
+      >
+        {SVGTypeIcon[props.type]}
+      </div>
 
       <div
         css={`
