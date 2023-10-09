@@ -12,6 +12,7 @@ import ReformedGridItem from "app/modules/home-module/components/Charts/reformed
 import ChartAddnewCard from "./chartAddNewCard";
 import { useInfinityScroll } from "app/hooks/useInfinityScroll";
 import { get } from "lodash";
+import CircleLoader from "app/components/Loader/circleLoader";
 
 interface Props {
   sortBy: string;
@@ -199,6 +200,7 @@ export default function ChartsGrid(props: Props) {
       <Box height={100} />
 
       <div ref={observerTarget} />
+      {loading && <CircleLoader />}
 
       <DeleteChartDialog
         cardId={cardId}

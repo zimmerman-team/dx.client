@@ -6,7 +6,7 @@ export const homeFootercss = css`
   height: 92px;
   display: flex;
   background: #fff;
-  position: absolute;
+  position: fixed;
   align-items: center;
   justify-content: flex-start;
 

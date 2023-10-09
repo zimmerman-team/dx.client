@@ -12,6 +12,7 @@ import DeleteReportDialog from "app/components/Dialogs/deleteReportDialog";
 import ReformedGridItem from "app/modules/home-module/components/Reports/reformedGridItem";
 import ReportAddnewCard from "./reportAddNewCard";
 import { useInfinityScroll } from "app/hooks/useInfinityScroll";
+import CircleLoader from "app/components/Loader/circleLoader";
 
 interface Props {
   sortBy: string;
@@ -43,6 +44,9 @@ export default function ReportsGrid(props: Props) {
 
   const loadReports = useStoreActions(
     (actions) => actions.reports.ReportGetList.fetch
+  );
+  const loading = useStoreState(
+    (actions) => actions.reports.ReportGetList.loading
   );
   const reportsLoadSuccess = useStoreState(
     (state) => state.reports.ReportGetList.success
@@ -194,6 +198,7 @@ export default function ReportsGrid(props: Props) {
       <Box height={100} />
 
       <div ref={observerTarget} />
+      {loading && <CircleLoader />}
 
       <DeleteReportDialog
         cardId={cardId}

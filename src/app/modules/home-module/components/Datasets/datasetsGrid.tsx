@@ -11,6 +11,7 @@ import { DatasetListItemAPIModel } from "app/modules/data-themes-module/sub-modu
 import ReformedGridItem from "app/modules/home-module/components/Datasets/reformedGridItem";
 import DatasetAddnewCard from "./datasetAddNewCard";
 import { useInfinityScroll } from "app/hooks/useInfinityScroll";
+import CircleLoader from "app/components/Loader/circleLoader";
 
 interface Props {
   sortBy: string;
@@ -34,6 +35,9 @@ export default function DatasetsGrid(props: Props) {
 
   const loadDatasets = useStoreActions(
     (actions) => actions.dataThemes.DatasetGetList.fetch
+  );
+  const loading = useStoreState(
+    (actions) => actions.dataThemes.DatasetGetList.loading
   );
   const clearDatasets = useStoreActions(
     (actions) => actions.dataThemes.DatasetGetList.clear
@@ -204,6 +208,7 @@ export default function DatasetsGrid(props: Props) {
           height: 10px;
         `}
       />
+      {loading && <CircleLoader />}
       <DeleteDatasetDialog
         cardId={cardId}
         enableButton={enableButton}
