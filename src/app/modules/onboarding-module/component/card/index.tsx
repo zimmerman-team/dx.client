@@ -3,8 +3,9 @@ import { useAuth0 } from "@auth0/auth0-react";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { socialloginbuttoncss, termsOfServiceCss } from "./style";
-import { ReactComponent as GoogleIcon } from "../../asset/google-img.svg";
-import { ReactComponent as LinkedInIcon } from "../../asset/linkedIn-img.svg";
+import { ReactComponent as GoogleIcon } from "app/modules/onboarding-module/asset/google-img.svg";
+import { ReactComponent as LinkedInIcon } from "app/modules/onboarding-module/asset/linkedIn-img.svg";
+import Form from "app/modules/onboarding-module/component/card/form";
 
 export default function AuthCard(props: { isLogin?: boolean }) {
   const { loginWithRedirect } = useAuth0();
@@ -41,6 +42,7 @@ export default function AuthCard(props: { isLogin?: boolean }) {
         <LinkedInIcon />
         {props.isLogin ? "Log in" : "Sign up"} with LinkedIn
       </button>
+      <Form />
       {!props.isLogin && (
         <FormControlLabel
           control={
