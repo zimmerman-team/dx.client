@@ -4,18 +4,28 @@ import Grid from "@material-ui/core/Grid";
 import SplitBar from "./component/splibar";
 import { useAuth0 } from "@auth0/auth0-react";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
-import { Route, Switch, useHistory } from "react-router-dom";
+import { Route, Switch, useHistory, useLocation } from "react-router-dom";
 import AuthCard from "app/modules/onboarding-module/component/card";
 import OnboardingRightDeco from "app/modules/onboarding-module/asset/onboardingRight-img.svg";
 
 export default function Onboarding() {
   const history = useHistory();
+  const location = useLocation();
   const { isAuthenticated } = useAuth0();
   const mobile = useMediaQuery("(max-width: 768px)");
 
   if (isAuthenticated) {
     history.replace("/");
   }
+  const [title, setTitle] = React.useState("");
+  React.useEffect(() => {
+    console.log(location.pathname, "kk");
+    if (location.pathname.includes("login")) {
+      setTitle("Welcome back!");
+    } else {
+      setTitle("Create your free account.");
+    }
+  }, [location.pathname]);
 
   return (
     <Grid
@@ -24,7 +34,7 @@ export default function Onboarding() {
       css={`
         margin-top: 0px;
         position: relative;
-        overflow-y: hidden;
+        background-color: white;
       `}
     >
       <Grid
@@ -55,9 +65,7 @@ export default function Onboarding() {
               font-family: "GothamNarrow-Bold";
             `}
           >
-            {history.location.pathname.includes("login")
-              ? "Welcome back!"
-              : "Create your free account."}
+            {title}
           </h2>
           <Box height={10} />
           <div

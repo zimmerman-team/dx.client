@@ -1,13 +1,11 @@
 import React from "react";
 import { useAuth0 } from "@auth0/auth0-react";
-import Checkbox from "@material-ui/core/Checkbox";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import { socialloginbuttoncss, termsOfServiceCss } from "./style";
+import { socialloginbuttoncss } from "./style";
 import { ReactComponent as GoogleIcon } from "app/modules/onboarding-module/asset/google-img.svg";
 import { ReactComponent as LinkedInIcon } from "app/modules/onboarding-module/asset/linkedIn-img.svg";
 import Form from "app/modules/onboarding-module/component/card/form";
 
-export default function AuthCard(props: { isLogin?: boolean }) {
+export default function AuthCard(props: Readonly<{ isLogin?: boolean }>) {
   const { loginWithRedirect } = useAuth0();
   const [checked, setChecked] = React.useState(false);
 
@@ -42,41 +40,11 @@ export default function AuthCard(props: { isLogin?: boolean }) {
         <LinkedInIcon />
         {props.isLogin ? "Log in" : "Sign up"} with LinkedIn
       </button>
-      <Form />
-      {!props.isLogin && (
-        <FormControlLabel
-          control={
-            <Checkbox
-              name="tna"
-              color="default"
-              checked={checked}
-              onChange={handleChange}
-            />
-          }
-          label={
-            <p
-              css={`
-                color: #231d2c;
-                font-size: 12px;
-                font-family: "GothamNarrow-Book";
-              `}
-            >
-              I agree with DX's{" "}
-              <a
-                href=""
-                target="_blank"
-                rel="noreferrer noopener"
-                css={`
-                  color: #231d2c;
-                `}
-              >
-                terms of services and privacy policy
-              </a>
-            </p>
-          }
-          css={termsOfServiceCss}
-        />
-      )}
+      <Form
+        isLogin={props.isLogin as boolean}
+        checked={checked}
+        handleChange={handleChange}
+      />
     </div>
   );
 }
