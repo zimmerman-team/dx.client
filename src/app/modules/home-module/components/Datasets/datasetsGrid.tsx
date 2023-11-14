@@ -77,6 +77,7 @@ export default function DatasetsGrid(props: Props) {
     //refrain from loading data if all the data is loaded
     await loadDatasets({
       token,
+      nonAuthCall: !token,
       storeInCrudData: true,
       filterString: getFilterString(),
     });
@@ -86,6 +87,8 @@ export default function DatasetsGrid(props: Props) {
     setOffset(0);
     if (token) {
       loadDatasetCount({ token, filterString: getWhereString() });
+    } else {
+      loadDatasetCount({ nonAuthCall: true, filterString: getWhereString() });
     }
     setLoadedDatasets([]);
     loadData();
@@ -109,9 +112,7 @@ export default function DatasetsGrid(props: Props) {
   }, [isObserved]);
 
   React.useEffect(() => {
-    if (token) {
-      reloadData();
-    }
+    reloadData();
   }, [props.sortBy, token]);
 
   const handleDelete = (id: string) => {

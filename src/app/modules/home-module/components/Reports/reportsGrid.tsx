@@ -68,19 +68,23 @@ export default function ReportsGrid(props: Props) {
 
   const loadData = async () => {
     //refrain from loading data if all the data is loaded
-    if (token) {
-      await loadReports({
-        token,
-        storeInCrudData: true,
-        filterString: getFilterString(),
-      });
-    }
+    await loadReports({
+      token,
+      nonAuthCall: !token,
+      storeInCrudData: true,
+      filterString: getFilterString(),
+    });
   };
 
   const reloadData = async () => {
     setOffset(0);
     if (token) {
       await loadReportsCount({ token, filterString: getWhereString() });
+    } else {
+      await loadReportsCount({
+        nonAuthCall: true,
+        filterString: getWhereString(),
+      });
     }
     setLoadedReports([]);
     loadData();
@@ -103,9 +107,7 @@ export default function ReportsGrid(props: Props) {
   }, [offset]);
 
   React.useEffect(() => {
-    if (token) {
-      reloadData();
-    }
+    reloadData();
   }, [props.sortBy, token]);
 
   const handleDelete = (index?: number) => {
@@ -191,6 +193,7 @@ export default function ReportsGrid(props: Props) {
                 id={data.id}
                 key={data.id}
                 descr={data.name}
+                public={data.public}
                 date={data.createdDate}
                 viz={<ColoredReportIcon />}
                 color={data.backgroundColor}
@@ -217,7 +220,6 @@ export default function ReportsGrid(props: Props) {
         />
       )}
       <Box height={100} />
-
       <div ref={observerTarget} />
       {loading && <CircleLoader />}
       <DeleteReportDialog

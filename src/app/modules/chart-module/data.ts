@@ -112,6 +112,7 @@ export interface ChartAPIModel {
   vizOptions: any;
   appliedFilters: { [key: string]: any[] };
   createdDate: Date;
+  owner: string;
   public?: boolean;
 }
 
@@ -247,6 +248,7 @@ export const routeToConfig: ChartRoutesConfigModel = {
 export const emptyChartAPI: ChartAPIModel = {
   id: "",
   name: "",
+  owner: "",
   createdDate: new Date(),
   mapping: {},
   vizOptions: {},

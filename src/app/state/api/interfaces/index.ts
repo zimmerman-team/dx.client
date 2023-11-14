@@ -88,6 +88,7 @@ export interface RequestValues<T> {
   addOnData?: boolean;
   isCMSfetch?: boolean;
   filterString?: string;
+  nonAuthCall?: boolean;
   storeInCrudData?: boolean;
 }
 

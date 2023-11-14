@@ -104,7 +104,9 @@ export default function ChartModule() {
   );
   const chartError401 = useStoreState(
     (state) =>
-      get(state.charts.ChartGet.errorData, "data.error.statusCode", 0) === 401
+      get(state.charts.ChartGet.errorData, "data.error.statusCode", 0) ===
+        401 ||
+      get(state.charts.ChartGet.crudData, "error", "") === "Unauthorized"
   );
   const clearChart = useStoreActions(
     (actions) => actions.charts.ChartGet.clear
@@ -310,6 +312,8 @@ export default function ChartModule() {
     if (page !== "new") {
       if (token.length > 0) {
         loadChart({ token, getId: page });
+      } else {
+        loadChart({ nonAuthCall: true, getId: page });
       }
     } else {
       clearChart();

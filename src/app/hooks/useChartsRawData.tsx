@@ -163,7 +163,9 @@ export function useChartsRawData(props: {
       setLoading(true);
       await axios
         .post(
-          `${process.env.REACT_APP_API}/chart/${chartId ?? page}/render`,
+          `${process.env.REACT_APP_API}/chart/${chartId ?? page}/render${
+            token === "" ? "/public" : ""
+          }`,
           body,
           {
             headers: {
@@ -288,12 +290,18 @@ export function useChartsRawData(props: {
 
       if (page && allRequiredKeysExist(req, mapping)) {
         axios
-          .post(`${process.env.REACT_APP_API}/chart/${page}/render`, body, {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          })
+          .post(
+            `${process.env.REACT_APP_API}/chart/${page}/render${
+              token === "" ? "/public" : ""
+            }`,
+            body,
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          )
           .then((response) => {
             const chart = response.data || {};
             setChartFromAPI(chart);

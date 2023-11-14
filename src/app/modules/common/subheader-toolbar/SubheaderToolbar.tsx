@@ -37,8 +37,8 @@ import {
 import { InfoSnackbar } from ".";
 
 export function SubheaderToolbar(props: SubheaderToolbarProps) {
-  const { user } = useAuth0();
   const history = useHistory();
+  const { user, isAuthenticated } = useAuth0();
   const token = useSessionStorage("authToken", "")[0];
   const { page, view } = useParams<{ page: string; view?: string }>();
   const [modalDisplay, setModalDisplay] = React.useState({
@@ -122,6 +122,10 @@ export function SubheaderToolbar(props: SubheaderToolbarProps) {
   const editChartClear = useStoreActions(
     (actions) => actions.charts.ChartUpdate.clear
   );
+
+  const canChartEditDelete = React.useMemo(() => {
+    return isAuthenticated && loadedChart && loadedChart.owner === user?.sub;
+  }, [user, isAuthenticated, loadedChart]);
 
   const [snackbarState, setSnackbarState] = React.useState<ISnackbarState>({
     open: false,
@@ -521,11 +525,13 @@ export function SubheaderToolbar(props: SubheaderToolbarProps) {
                 {page !== "new" && !view && (
                   <React.Fragment>
                     <ExportChartButton />
-                    <Tooltip title="Duplicate">
-                      <IconButton onClick={handleDuplicate}>
-                        <FileCopyIcon htmlColor="#262c34" />
-                      </IconButton>
-                    </Tooltip>
+                    {isAuthenticated && (
+                      <Tooltip title="Duplicate">
+                        <IconButton onClick={handleDuplicate}>
+                          <FileCopyIcon htmlColor="#262c34" />
+                        </IconButton>
+                      </Tooltip>
+                    )}
                     <Tooltip title="Share">
                       <IconButton onClick={handleClick}>
                         <ShareIcon htmlColor="#262c34" />
@@ -560,21 +566,25 @@ export function SubheaderToolbar(props: SubheaderToolbarProps) {
                         </CopyToClipboard>
                       </div>
                     </Popover>
-                    <Tooltip title="Edit">
-                      <IconButton
-                        component={Link}
-                        to={`/${props.pageType}/${page}/${
-                          props.pageType === "chart" ? "customize" : "edit"
-                        }`}
-                      >
-                        <EditIcon htmlColor="#262c34" />
-                      </IconButton>
-                    </Tooltip>
-                    <Tooltip title="Delete">
-                      <IconButton onClick={handleModalDisplay}>
-                        <DeleteIcon htmlColor="#262c34" />
-                      </IconButton>
-                    </Tooltip>
+                    {canChartEditDelete && (
+                      <Tooltip title="Edit">
+                        <IconButton
+                          component={Link}
+                          to={`/${props.pageType}/${page}/${
+                            props.pageType === "chart" ? "customize" : "edit"
+                          }`}
+                        >
+                          <EditIcon htmlColor="#262c34" />
+                        </IconButton>
+                      </Tooltip>
+                    )}
+                    {canChartEditDelete && (
+                      <Tooltip title="Delete">
+                        <IconButton onClick={handleModalDisplay}>
+                          <DeleteIcon htmlColor="#262c34" />
+                        </IconButton>
+                      </Tooltip>
+                    )}
                   </React.Fragment>
                 )}
               </div>
