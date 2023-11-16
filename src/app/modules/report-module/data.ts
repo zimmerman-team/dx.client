@@ -30,7 +30,7 @@ export interface ReportModel {
   backgroundColor: string;
   titleColor: string;
   descriptionColor: string;
-
+  owner: string;
   dateColor: string;
 }
 
@@ -55,7 +55,7 @@ export const emptyReport: ReportModel = {
   backgroundColor: "#252c34",
   titleColor: "#ffffff",
   descriptionColor: "#ffffff",
-
+  owner: "",
   dateColor: "#ffffff",
 };
 

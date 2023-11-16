@@ -35,6 +35,7 @@ import {
   reportRightPanelViewAtom,
 } from "app/state/recoil/atoms";
 import { InfoSnackbar } from ".";
+import { ReportModel, emptyReport } from "app/modules/report-module/data";
 
 export function SubheaderToolbar(props: SubheaderToolbarProps) {
   const history = useHistory();
@@ -87,6 +88,9 @@ export function SubheaderToolbar(props: SubheaderToolbarProps) {
   const loadReports = useStoreActions(
     (actions) => actions.reports.ReportGetList.fetch
   );
+  const loadedReport = useStoreState(
+    (state) => (state.reports.ReportGet.crudData ?? emptyReport) as ReportModel
+  );
 
   const loadCharts = useStoreActions(
     (actions) => actions.charts.ChartGetList.fetch
@@ -124,8 +128,9 @@ export function SubheaderToolbar(props: SubheaderToolbarProps) {
   );
 
   const canChartEditDelete = React.useMemo(() => {
-    return isAuthenticated && loadedChart && loadedChart.owner === user?.sub;
-  }, [user, isAuthenticated, loadedChart]);
+    const asset = props.pageType === "report" ? loadedReport : loadedChart;
+    return isAuthenticated && asset && asset.owner === user?.sub;
+  }, [user, isAuthenticated, loadedChart, loadedReport, props.pageType]);
 
   const [snackbarState, setSnackbarState] = React.useState<ISnackbarState>({
     open: false,

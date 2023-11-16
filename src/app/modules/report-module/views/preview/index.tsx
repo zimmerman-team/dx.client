@@ -41,7 +41,9 @@ export function ReportPreviewView(props: {
 
   const Error401 = useStoreState(
     (state) =>
-      get(state.reports.ReportGet.errorData, "data.error.statusCode", 0) === 401
+      get(state.reports.ReportGet.errorData, "data.error.statusCode", 0) ===
+        401 ||
+      get(state.reports.ReportGet.crudData, "error", "") === "Unauthorized"
   );
 
   const fetchReportData = useStoreActions(
@@ -66,7 +68,7 @@ export function ReportPreviewView(props: {
     if (token) {
       fetchReportData({ token, getId: page });
     } else {
-      fetchReportData({ getId: page });
+      fetchReportData({ nonAuthCall: true, getId: page });
     }
   }, [page, token]);
 
@@ -117,7 +119,7 @@ export function ReportPreviewView(props: {
           title: reportPreviewData.title,
           showHeader: reportPreviewData.showHeader,
           description: EditorState.createWithContent(
-            convertFromRaw(reportPreviewData.subTitle)
+            convertFromRaw(reportPreviewData.subTitle ?? emptyReport.subTitle)
           ),
           backgroundColor: reportPreviewData.backgroundColor,
           titleColor: reportPreviewData.titleColor,
@@ -130,60 +132,61 @@ export function ReportPreviewView(props: {
       <Container id="content-container" maxWidth="lg" ref={ref}>
         <Box height={45} />
         {Error401 && <NotAuthorizedMessageModule asset="report" />}
-        {reportPreviewData.rows.map((rowFrame, index) => {
-          const contentTypes = rowFrame.items.map((item) => {
-            if (item === null) {
-              return null;
+        {!Error401 &&
+          reportPreviewData.rows.map((rowFrame, index) => {
+            const contentTypes = rowFrame.items.map((item) => {
+              if (item === null) {
+                return null;
+              }
+              return typeof item === "object" ? "text" : "chart";
+            });
+            if (
+              rowFrame.items &&
+              rowFrame.items.length === 1 &&
+              rowFrame.items[0] === ReportElementsType.DIVIDER
+            ) {
+              return (
+                <div
+                  key={"divider" + `${index}`}
+                  css={`
+                    margin: 0 0 50px 0;
+                    height: 2px;
+                    width: 100%;
+                    background-color: #cfd4da;
+                  `}
+                />
+              );
             }
-            return typeof item === "object" ? "text" : "chart";
-          });
-          if (
-            rowFrame.items &&
-            rowFrame.items.length === 1 &&
-            rowFrame.items[0] === ReportElementsType.DIVIDER
-          ) {
+
             return (
-              <div
-                key={"divider" + `${index}`}
-                css={`
-                  margin: 0 0 50px 0;
-                  height: 2px;
-                  width: 100%;
-                  background-color: #cfd4da;
-                `}
+              <RowFrame
+                key={"rowframe" + `${index}`}
+                rowId={""}
+                rowIndex={index}
+                forceSelectedType={rowFrame.structure ?? undefined}
+                previewItems={rowFrame.items.map((item, index) => {
+                  return contentTypes[index] === "text"
+                    ? EditorState.createWithContent(
+                        convertFromRaw(item as any),
+                        linkDecorator
+                      )
+                    : item;
+                })}
+                handlePersistReportState={() => {}}
+                handleRowFrameItemResize={() => {}}
+                type="rowFrame"
+                setFramesArray={() => {}}
+                rowContentHeights={
+                  rowFrame.contentHeights?.heights ?? rowFrame.contentHeights
+                }
+                rowContentWidths={
+                  rowFrame.contentWidths?.widths ?? rowFrame.contentWidths
+                }
+                framesArray={[]}
+                view={"preview"}
               />
             );
-          }
-
-          return (
-            <RowFrame
-              key={"rowframe" + `${index}`}
-              rowId={""}
-              rowIndex={index}
-              forceSelectedType={rowFrame.structure ?? undefined}
-              previewItems={rowFrame.items.map((item, index) => {
-                return contentTypes[index] === "text"
-                  ? EditorState.createWithContent(
-                      convertFromRaw(item as any),
-                      linkDecorator
-                    )
-                  : item;
-              })}
-              handlePersistReportState={() => {}}
-              handleRowFrameItemResize={() => {}}
-              type="rowFrame"
-              setFramesArray={() => {}}
-              rowContentHeights={
-                rowFrame.contentHeights?.heights ?? rowFrame.contentHeights
-              }
-              rowContentWidths={
-                rowFrame.contentWidths?.widths ?? rowFrame.contentWidths
-              }
-              framesArray={[]}
-              view={"preview"}
-            />
-          );
-        })}
+          })}
         <Box height={45} />
       </Container>
     </div>
