@@ -30,7 +30,7 @@ export default function ChartsGrid(props: Props) {
   const [modalDisplay, setModalDisplay] = React.useState<boolean>(false);
   const [enableButton, setEnableButton] = React.useState<boolean>(false);
 
-  const token = useSessionStorage("authToken", "")[0];
+  const token = useStoreState((state) => state.AuthToken.value);
 
   const limit = 15;
   //used over usestate to get current offset value in the IntersectionObserver api, as it is not updated in usestate.

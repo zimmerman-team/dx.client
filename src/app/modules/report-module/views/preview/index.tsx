@@ -3,13 +3,14 @@ import get from "lodash/get";
 import { useRecoilState } from "recoil";
 import Box from "@material-ui/core/Box";
 import { useParams } from "react-router-dom";
-import { useSessionStorage } from "react-use";
+import { useAuth0 } from "@auth0/auth0-react";
 import useResizeObserver from "use-resize-observer";
 import Container from "@material-ui/core/Container";
 import { EditorState, convertFromRaw } from "draft-js";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import { ReportModel, emptyReport } from "app/modules/report-module/data";
 import RowFrame from "app/modules/report-module/sub-module/rowStructure/rowFrame";
+import { ReportPreviewViewProps } from "app/modules/report-module/views/preview/data";
 import HeaderBlock from "app/modules/report-module/sub-module/components/headerBlock";
 import { NotAuthorizedMessageModule } from "app/modules/common/not-authorized-message";
 import { ReportElementsType } from "app/modules/report-module/components/right-panel-create-view";
@@ -20,11 +21,10 @@ import {
 } from "app/state/recoil/atoms";
 import { linkDecorator } from "app/modules/chart-module/routes/text/RichEditor/decorators";
 
-export function ReportPreviewView(props: {
-  setIsPreviewView: React.Dispatch<React.SetStateAction<boolean>>;
-}) {
+export function ReportPreviewView(props: ReportPreviewViewProps) {
   const { page } = useParams<{ page: string }>();
-  const token = useSessionStorage("authToken", "")[0];
+
+  const { isLoading, isAuthenticated } = useAuth0();
 
   const { ref, width } = useResizeObserver<HTMLDivElement>();
 
@@ -34,6 +34,8 @@ export function ReportPreviewView(props: {
   const [containerWidth, setContainerWidth] = useRecoilState(
     reportContentContainerWidth
   );
+
+  const token = useStoreState((state) => state.AuthToken.value);
 
   const reportData = useStoreState(
     (state) => (state.reports.ReportGet.crudData ?? emptyReport) as ReportModel
@@ -65,12 +67,14 @@ export function ReportPreviewView(props: {
   const [reportPreviewData, setReportPreviewData] = React.useState(reportData);
 
   React.useEffect(() => {
-    if (token) {
-      fetchReportData({ token, getId: page });
-    } else {
-      fetchReportData({ nonAuthCall: true, getId: page });
+    if (!isLoading) {
+      if (token) {
+        fetchReportData({ token, getId: page });
+      } else if (!isAuthenticated) {
+        fetchReportData({ nonAuthCall: true, getId: page });
+      }
     }
-  }, [page, token]);
+  }, [page, token, isLoading, isAuthenticated]);
 
   React.useEffect(() => {
     if (width && width !== containerWidth) {
@@ -133,7 +137,7 @@ export function ReportPreviewView(props: {
         <Box height={45} />
         {Error401 && <NotAuthorizedMessageModule asset="report" />}
         {!Error401 &&
-          reportPreviewData.rows.map((rowFrame, index) => {
+          get(reportPreviewData, "rows", []).map((rowFrame, index) => {
             const contentTypes = rowFrame.items.map((item) => {
               if (item === null) {
                 return null;

@@ -70,7 +70,7 @@ export default function ReportModule() {
     {} as IHeaderDetails
   );
 
-  const token = useSessionStorage("authToken", "")[0];
+  const token = useStoreState((state) => state.AuthToken.value);
 
   const setRightPanelView = useRecoilState(reportRightPanelViewAtom)[1];
 

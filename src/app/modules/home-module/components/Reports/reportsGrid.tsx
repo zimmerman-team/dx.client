@@ -25,7 +25,6 @@ interface Props {
 
 export default function ReportsGrid(props: Props) {
   const observerTarget = React.useRef(null);
-  const token = useSessionStorage("authToken", "")[0];
   const [cardId, setCardId] = React.useState<number>(0);
   const [modalDisplay, setModalDisplay] = React.useState<boolean>(false);
   const [enableButton, setEnableButton] = React.useState<boolean>(false);
@@ -34,6 +33,7 @@ export default function ReportsGrid(props: Props) {
   //used over usestate to get current offset value in the IntersectionObserver api, as it is not updated in usestate.
   const [offset, setOffset] = React.useState(0);
   const { isObserved } = useInfinityScroll(observerTarget);
+  const token = useStoreState((state) => state.AuthToken.value);
   const reports = useStoreState(
     (state) => (state.reports.ReportGetList.crudData ?? []) as ReportModel[]
   );

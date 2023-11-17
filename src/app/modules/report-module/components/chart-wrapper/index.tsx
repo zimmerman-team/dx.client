@@ -18,7 +18,7 @@ interface Props {
 }
 
 export function ReportChartWrapper(props: Props) {
-  const token = useSessionStorage("authToken", "")[0];
+  const token = useStoreState((state) => state.AuthToken.value);
 
   const containerRef = React.useRef<HTMLDivElement>(null);
 

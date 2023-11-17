@@ -12,6 +12,7 @@ import {
   Auth0Provider,
   User,
   WithAuthenticationRequiredOptions,
+  useAuth0,
   withAuthenticationRequired,
 } from "@auth0/auth0-react";
 
@@ -78,6 +79,26 @@ const Auth0ProviderWithRedirectCallback = (props: {
   );
 };
 
+const AuthLoader = () => {
+  const { isLoading } = useAuth0();
+
+  if (isLoading) {
+    return (
+      <div
+        css={`
+          > div {
+            background: #fff;
+          }
+        `}
+      >
+        <PageLoader />;
+      </div>
+    );
+  }
+
+  return null;
+};
+
 export function MainRoutes() {
   useScrollToTop();
 
@@ -90,6 +111,7 @@ export function MainRoutes() {
         redirect_uri: `${window.location.origin}/callback`,
       }}
     >
+      <AuthLoader />
       <Suspense fallback={<PageLoader />}>
         <Switch>
           <Route exact path="/callback">

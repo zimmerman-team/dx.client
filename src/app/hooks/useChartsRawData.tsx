@@ -4,9 +4,10 @@ import get from "lodash/get";
 import filter from "lodash/filter";
 import isEmpty from "lodash/isEmpty";
 import { useParams } from "react-router-dom";
+import { useAuth0 } from "@auth0/auth0-react";
+import { useMount, useUpdateEffect } from "react-use";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
-import { useMount, useSessionStorage, useUpdateEffect } from "react-use";
 /* project */
 import { ChartRenderedItem } from "app/modules/chart-module/data";
 
@@ -61,7 +62,8 @@ export function useChartsRawData(props: {
   inChartWrapper?: boolean;
   dimensions?: any;
 }) {
-  const token = useSessionStorage("authToken", "")[0];
+  const { isLoading } = useAuth0();
+  const token = useStoreState((state) => state.AuthToken.value);
   const { visualOptions, chartFromAPI, setVisualOptions, setChartFromAPI } =
     props;
 
@@ -216,10 +218,10 @@ export function useChartsRawData(props: {
   }, [view]);
 
   React.useEffect(() => {
-    if (!props.inChartWrapper && page !== "new" && !isEditMode) {
+    if (!props.inChartWrapper && page !== "new" && !isEditMode && !isLoading) {
       loadDataFromAPI();
     }
-  }, [page, isEditMode]);
+  }, [page, isEditMode, token]);
 
   useUpdateEffect(() => {
     if (

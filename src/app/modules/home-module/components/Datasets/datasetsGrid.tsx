@@ -23,7 +23,6 @@ interface Props {
 
 export default function DatasetsGrid(props: Props) {
   const observerTarget = React.useRef(null);
-  const token = useSessionStorage("authToken", "")[0];
   const [cardId, setCardId] = React.useState<string>("");
   const [enableButton, setEnableButton] = React.useState<boolean>(false);
   const [modalDisplay, setModalDisplay] = React.useState<boolean>(false);
@@ -35,6 +34,7 @@ export default function DatasetsGrid(props: Props) {
     DatasetListItemAPIModel[]
   >([]);
 
+  const token = useStoreState((state) => state.AuthToken.value);
   const datasets = useStoreState(
     (state) =>
       (state.dataThemes.DatasetGetList.crudData ??

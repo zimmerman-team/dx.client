@@ -3,6 +3,7 @@ import { StoreModel } from "app/state/api/interfaces";
 
 import { AppliedFiltersState } from "app/state/api/action-reducers/sync/filters";
 import {
+  AuthTokenState,
   DataSourceSnackbarVisibilityState,
   DataSourceState,
   PageHeaderVizDrilldownsState,
@@ -393,6 +394,7 @@ const storeContent: StoreModel = {
   AvailableDatasources: persist(AvailableDatasources),
   MappedDatasets: persist(MappedDatasets),
   DataSourceSnackbarVisibility: persist(DataSourceSnackbarVisibilityState),
+  AuthToken: AuthTokenState,
   // CMS API
   cms: {
     componentsAppBar: persist(componentsAppBar),

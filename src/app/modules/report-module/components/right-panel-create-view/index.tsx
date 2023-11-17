@@ -276,7 +276,7 @@ function ReportRightPanelCreateViewChartList(props: {
   reportName: string;
   handlePersistReportState: () => void;
 }) {
-  const token = useSessionStorage("authToken", "")[0];
+  const token = useStoreState((state) => state.AuthToken.value);
 
   const [search, setSearch] = React.useState("");
   const [sortBy, setSortBy] = React.useState(sortByOptions[0]);

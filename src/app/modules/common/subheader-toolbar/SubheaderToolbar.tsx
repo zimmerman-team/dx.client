@@ -40,7 +40,7 @@ import { ReportModel, emptyReport } from "app/modules/report-module/data";
 export function SubheaderToolbar(props: SubheaderToolbarProps) {
   const history = useHistory();
   const { user, isAuthenticated } = useAuth0();
-  const token = useSessionStorage("authToken", "")[0];
+  const token = useStoreState((state) => state.AuthToken.value);
   const { page, view } = useParams<{ page: string; view?: string }>();
   const [modalDisplay, setModalDisplay] = React.useState({
     report: false,

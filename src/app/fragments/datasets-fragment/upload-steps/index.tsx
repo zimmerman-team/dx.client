@@ -2,7 +2,7 @@ import React from "react";
 import axios from "axios";
 import { useSessionStorage, useUpdateEffect } from "react-use";
 import Container from "@material-ui/core/Container";
-import { useStoreActions } from "app/state/store/hooks";
+import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import { useChartsRawData } from "app/hooks/useChartsRawData";
 import { stepcss } from "app/fragments/datasets-fragment/style";
 import { PageTopSpacer } from "app/modules/common/page-top-spacer";
@@ -15,7 +15,7 @@ import AddDatasetFragment from "app/fragments/datasets-fragment/upload-steps/add
 
 function DatasetUploadSteps() {
   const { user } = useAuth0();
-  const token = useSessionStorage("authToken", "")[0];
+  const token = useStoreState((state) => state.AuthToken.value);
 
   const [activeStep, setActiveStep] = React.useState<number>(0);
   const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
