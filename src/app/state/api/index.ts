@@ -106,8 +106,11 @@ export const APIModel = <QueryModel, ResponseModel>(
           }
         )
         .then(
-          (resp: AxiosResponse) =>
-            actions.onSuccess({ ...resp.data, addOnData: false }),
+          (resp: AxiosResponse) => {
+            if (resp.data) {
+              return actions.onSuccess({ ...resp.data, addOnData: false });
+            }
+          },
           (error: any) => actions.onError(error.response)
         );
     }
@@ -123,8 +126,10 @@ export const APIModel = <QueryModel, ResponseModel>(
       })
       .then(
         (resp: AxiosResponse) => {
-          actions.onSuccess(resp.data);
-          return actions.onSuccessCrudData(resp.data);
+          if (resp.data) {
+            actions.onSuccess(resp.data);
+            return actions.onSuccessCrudData(resp.data);
+          }
         },
         (error: any) => actions.onError(error.response)
       );
@@ -139,7 +144,11 @@ export const APIModel = <QueryModel, ResponseModel>(
         },
       })
       .then(
-        (resp: AxiosResponse) => actions.onSuccessCrudData(resp.data),
+        (resp: AxiosResponse) => {
+          if (resp.data) {
+            return actions.onSuccessCrudData(resp.data);
+          }
+        },
         (error: any) => actions.onError(error.response)
       );
   }),

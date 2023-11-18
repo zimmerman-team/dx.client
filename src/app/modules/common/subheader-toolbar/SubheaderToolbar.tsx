@@ -211,7 +211,7 @@ export function SubheaderToolbar(props: SubheaderToolbarProps) {
 
   React.useEffect(() => {
     if (editChartSuccess && createChartFromReport.view === "") {
-      console.log(createChartFromReport.state, "state");
+      //returns back to chart detail page
       history.push(`/chart/${page}`);
     }
   }, [editChartSuccess]);
@@ -257,7 +257,7 @@ export function SubheaderToolbar(props: SubheaderToolbarProps) {
         createChartSuccess ? `Chart created successfully!` : null
       );
       const chartId = createChartSuccess ? createChartData.id : page;
-      if (createChartFromReport.view === "") {
+      if (createChartFromReport.view === "" && createChartSuccess) {
         history.push(`/chart/${chartId}`);
       }
     }

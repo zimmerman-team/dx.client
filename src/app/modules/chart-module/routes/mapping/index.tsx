@@ -106,9 +106,9 @@ function ChartBuilderMapping(props: ChartBuilderMappingProps) {
     [mapping, props.dataTypes, props.dimensions, setMapping, chartType]
   );
 
-  if (dataset === null && !props.loading) {
-    history.push(`/chart/${page}/data`);
-  }
+  // if (dataset === null && !props.loading) {
+  //   history.push(`/chart/${page}/data`);
+  // }
 
   const nonStaticDimensions = filter(props.dimensions, (d: any) => !d.static);
   const staticDimensions = filter(props.dimensions, (d: any) => d.static);

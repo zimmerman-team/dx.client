@@ -93,9 +93,9 @@ export function ChartBuilderPreviewTheme(props: ChartBuilderPreviewThemeProps) {
       !isEmpty(mapping) &&
       !isEmpty(visualOptions)
     ) {
-      try {
-        const loader = document.getElementById("chart-placeholder");
+      const loader = document.getElementById("chart-placeholder");
 
+      try {
         new Promise((resolve, reject) => {
           try {
             if (loader) {
@@ -148,6 +148,10 @@ export function ChartBuilderPreviewTheme(props: ChartBuilderPreviewThemeProps) {
             }
           });
       } catch (e) {
+        if (loader) {
+          loader.style.display = "none";
+        }
+
         while (domRef.current.firstChild) {
           domRef.current.removeChild(domRef.current.firstChild);
         }

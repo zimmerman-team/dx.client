@@ -76,6 +76,9 @@ export default function ChartModule() {
     loadDataset,
     loadDataFromAPI,
     Error401,
+    setDataError,
+    setNotFound,
+    notFound,
     dataError,
   } = useChartsRawData({
     visualOptions,
@@ -108,6 +111,12 @@ export default function ChartModule() {
   );
   const clearChart = useStoreActions(
     (actions) => actions.charts.ChartGet.clear
+  );
+  const createChartClear = useStoreActions(
+    (actions) => actions.charts.ChartCreate.clear
+  );
+  const editChartClear = useStoreActions(
+    (actions) => actions.charts.ChartUpdate.clear
   );
   const resetAppliedFilters = useStoreActions(
     (actions) => actions.charts.appliedFilters.reset
@@ -150,6 +159,11 @@ export default function ChartModule() {
   React.useEffect(() => {
     setChartFromAPI(null);
   }, [chartType, dataTypes]);
+
+  //reset filters dataset types changes
+  React.useEffect(() => {
+    resetAppliedFilters();
+  }, [dataTypes]);
 
   //set chart name to selected dataset if chart name has not been focused
   React.useEffect(() => {
@@ -240,7 +254,11 @@ export default function ChartModule() {
     resetAppliedFilters();
     resetEnabledFilterOptionGroups();
     clearChart();
-    setChartName("Untitled Report");
+    createChartClear();
+    editChartClear();
+    setChartName("Untitled Chart");
+    setDataError(false);
+    setNotFound(false);
   }
 
   function clearChartBuilder() {
@@ -322,7 +340,13 @@ export default function ChartModule() {
   const errorComponent = () => {
     return (
       <div css={commonStyles.container}>
-        <div css={commonStyles.innercontainer}>
+        <div
+          css={
+            location.pathname === `/chart/${page}`
+              ? ""
+              : commonStyles.innercontainer
+          }
+        >
           <div
             css={`
               height: 362.598px;
@@ -339,17 +363,35 @@ export default function ChartModule() {
               font-weight: bold;
               font-family: "Gotham Narrow", sans-serif;
               text-align: center;
+              button {
+                outline: none;
+                border: none;
+                background: transparent;
+                cursor: pointer;
+                text-decoration: underline;
+              }
               p {
                 margin-top: 18px;
               }
             `}
           >
             <ErrorOutlineIcon htmlColor="#E75656" fontSize="large" />
-            <p>
-              Something went wrong with loading your data!
-              <br />
-              Choose another dataset or upload new.
-            </p>
+            {notFound ? (
+              <p>
+                Something went wrong with rendering your chart!
+                <br />
+                <span>
+                  <button onClick={() => loadDataFromAPI()}>Reload</button>{" "}
+                </span>{" "}
+                to try again.
+              </p>
+            ) : (
+              <p>
+                Something went wrong with loading your data!
+                <br />
+                Choose another dataset or upload new.
+              </p>
+            )}
           </div>
         </div>
       </div>
@@ -416,7 +458,7 @@ export default function ChartModule() {
           position: relative;
         `}
       >
-        {dataError ? (
+        {dataError || notFound ? (
           <>{errorComponent()}</>
         ) : (
           <Switch>
@@ -492,7 +534,7 @@ export default function ChartModule() {
               />
             </Route>
             <Route path="/chart/:page/data">
-              <ChartModuleDataView />
+              <ChartModuleDataView clearChartBuilder={clearChartBuilder} />
             </Route>
             <Route path="/chart/:page/preview">
               <ChartBuilderPreviewTheme

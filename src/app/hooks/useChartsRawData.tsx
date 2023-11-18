@@ -108,6 +108,7 @@ export function useChartsRawData(props: {
       extraLoader.style.display = "block";
     }
     setLoading(true);
+    setDataError(false);
     return await axios
       .get(`${process.env.REACT_APP_API}/${endpoint}`, {
         headers: {
@@ -116,22 +117,24 @@ export function useChartsRawData(props: {
         },
       })
       .then((response: AxiosResponse) => {
-        setNotFound(false);
-
-        setDataStats(response.data.stats);
-        setSampleData(response.data.sample);
-        setDataTypes(response.data.dataTypes);
-        setDataTotalCount(response.data.count);
-        setEnabledFilterOptionGroups(response.data.filterOptionGroups);
         if (extraLoader) {
           extraLoader.style.display = "none";
         }
         setLoading(false);
-        return response.data.sample;
+        if (isEmpty(response.data)) {
+          setDataError(true);
+        } else {
+          setDataStats(response.data.stats);
+          setSampleData(response.data.sample);
+          setDataTypes(response.data.dataTypes);
+          setDataTotalCount(response.data.count);
+          setEnabledFilterOptionGroups(response.data.filterOptionGroups);
+        }
+
+        return response.data?.sample;
       })
       .catch((error: AxiosError) => {
         console.log(error);
-        setNotFound(true);
         setDataError(true);
         setDataStats([]);
         setSampleData([]);
@@ -161,6 +164,8 @@ export function useChartsRawData(props: {
           : appliedFilters,
       };
       setLoading(true);
+      setNotFound(false);
+
       await axios
         .post(
           `${process.env.REACT_APP_API}/chart/${chartId ?? page}/render`,
@@ -173,9 +178,9 @@ export function useChartsRawData(props: {
           }
         )
         .then((response) => {
-          setNotFound(false);
-
+          // setNotFound(false);
           const chart = response.data || {};
+          setLoading(false);
           if (!isEmpty(chart)) {
             setAllAppliedFilters(chart.appliedFilters || {});
             setEnabledFilterOptionGroups(chart.enabledFilterOptionGroups);
@@ -184,17 +189,14 @@ export function useChartsRawData(props: {
             setSelectedChartType(chart.vizType);
             setDataset(chart.datasetId);
             setChartFromAPI(chart);
-          }
-          if (response.data === null || response.data === undefined) {
+          } else {
             setNotFound(true);
           }
-
-          setLoading(false);
         })
         .catch((error) => {
           console.log("API call error: " + error.message);
-          setNotFound(true);
           setLoading(false);
+          setNotFound(true);
           setError401(error.response?.status === 401);
         });
     }
@@ -264,29 +266,35 @@ export function useChartsRawData(props: {
       const requiredDimensions = props.dimensions.filter(
         (dimension: any) => dimension.required
       );
-      let req = {} as any;
+      let requiredMappingKey = {} as any;
 
       requiredDimensions.forEach((element: any) => {
         if (element.id in mapping) {
-          req[element.id] = true;
+          requiredMappingKey[element.id] = true;
         } else {
-          req[element.id] = false;
+          requiredMappingKey[element.id] = false;
         }
       });
       function allRequiredKeysExist(req: any, allreq: any) {
-        for (const key in req) {
-          if (req.hasOwnProperty(key) && !allreq.hasOwnProperty(key)) {
-            return false;
+        if (isEmpty(mapping)) {
+          return false;
+        } else {
+          for (const key in req) {
+            if (req.hasOwnProperty(key) && !allreq.hasOwnProperty(key)) {
+              return false;
+            }
+            //return false if chartType is sankey and only one dimension is selected
+            if (chartType === "echartsSankey" && allreq[key].ids.length < 2) {
+              return false;
+            }
           }
-          //return false if chartType is sankey and only one dimension is selected
-          if (chartType === "echartsSankey" && allreq[key].ids.length < 2) {
-            return false;
-          }
+          return true;
         }
-        return true;
       }
 
-      if (page && allRequiredKeysExist(req, mapping)) {
+      if (page && allRequiredKeysExist(requiredMappingKey, mapping)) {
+        setNotFound(false);
+
         axios
           .post(`${process.env.REACT_APP_API}/chart/${page}/render`, body, {
             headers: {
@@ -295,23 +303,25 @@ export function useChartsRawData(props: {
             },
           })
           .then((response) => {
-            const chart = response.data || {};
-            setChartFromAPI(chart);
-            setNotFound(false);
-
-            setLoading(false);
             if (extraLoader) {
               extraLoader.style.display = "none";
+            }
+            const chart = response.data || {};
+            if (isEmpty(chart)) {
+              setNotFound(true);
+            } else {
+              setChartFromAPI(chart);
+              setLoading(false);
             }
           })
           .catch((error) => {
             console.log("API call error: " + error.message);
-            setNotFound(true);
-            setLoading(false);
-            setError401(error.response?.status === 401);
             if (extraLoader) {
               extraLoader.style.display = "none";
             }
+            setNotFound(true);
+            setLoading(false);
+            setError401(error.response?.status === 401);
           });
       }
     }
@@ -327,6 +337,8 @@ export function useChartsRawData(props: {
   return {
     loading,
     notFound,
+    setNotFound,
+    setDataError,
     Error401,
     dataError,
     dataTypes,
