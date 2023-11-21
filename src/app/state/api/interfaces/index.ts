@@ -95,6 +95,7 @@ export interface ResponseData<T> {
   data: any[];
   count: number;
   addOnData?: boolean;
+  isUpdateCrudData?: boolean;
 }
 
 export interface Errors {

@@ -25,9 +25,13 @@ export const APIModel = <QueryModel, ResponseModel>(
     state.errorData = payload;
   }),
   onSuccess: action((state, payload: ResponseData<ResponseModel>) => {
-    const { addOnData, ...actualPayload } = payload;
+    const { addOnData, isUpdateCrudData, ...actualPayload } = payload;
     state.loading = false;
     state.success = true;
+
+    if (isUpdateCrudData) {
+      state.crudData = actualPayload;
+    }
     if (addOnData) {
       // @ts-ignore
       state.data = {
@@ -127,8 +131,7 @@ export const APIModel = <QueryModel, ResponseModel>(
       .then(
         (resp: AxiosResponse) => {
           if (resp.data) {
-            actions.onSuccess(resp.data);
-            return actions.onSuccessCrudData(resp.data);
+            actions.onSuccess({ ...resp.data, isUpdateCrudData: true });
           }
         },
         (error: any) => actions.onError(error.response)
