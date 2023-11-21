@@ -34,7 +34,7 @@ function ChartBuilderFilters(props: ChartBuilderFiltersProps) {
   useUpdateEffectOnce(() => {
     if (
       containerRef.current &&
-      props.visualOptions.width === CHART_DEFAULT_WIDTH
+      props.visualOptions?.width === CHART_DEFAULT_WIDTH
     ) {
       const tmpVisualOptions = {
         ...props.visualOptions,

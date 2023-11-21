@@ -75,7 +75,7 @@ export default function ChartModule() {
     isEditMode,
     loadDataset,
     loadDataFromAPI,
-    Error401,
+    error401,
     setDataError,
     setNotFound,
     notFound,
@@ -398,7 +398,7 @@ export default function ChartModule() {
     );
   };
 
-  if (chartError401 || Error401) {
+  if (chartError401 || error401) {
     return (
       <>
         <div css="width: 100%; height: 100px;" />

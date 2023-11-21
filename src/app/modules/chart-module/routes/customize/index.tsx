@@ -36,7 +36,7 @@ function ChartBuilderCustomize(props: ChartBuilderCustomizeProps) {
   useUpdateEffectOnce(() => {
     if (
       containerRef.current &&
-      props.visualOptions.width === CHART_DEFAULT_WIDTH
+      props.visualOptions?.width === CHART_DEFAULT_WIDTH
     ) {
       const tmpVisualOptions = {
         ...props.visualOptions,
