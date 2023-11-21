@@ -6,7 +6,7 @@ import isEmpty from "lodash/isEmpty";
 import { useParams } from "react-router-dom";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
-import { useMount, useSessionStorage, useUpdateEffect } from "react-use";
+import { useSessionStorage, useUpdateEffect } from "react-use";
 /* project */
 import { ChartRenderedItem } from "app/modules/chart-module/data";
 
@@ -15,43 +15,70 @@ function checkIfIsEditMode(view?: string): boolean {
   return false;
 }
 
-function checkMappingAndDatasetIdNotEmpty(
-  tabmappings: [
-    [
-      {
-        [key: string]: any;
-      }
-    ]
-  ],
-  tabdatasetIds: [
-    [
-      {
-        dataset: string | null;
-      }
-    ]
-  ],
-  activeTabIndex: number,
-  vizIsTextContent: boolean[][]
-): boolean {
-  let mappingsCheck = true;
-  // tabmappings.forEach((tabmapping) => {
-  tabmappings[activeTabIndex].forEach((contentmapping, index) => {
-    if (!vizIsTextContent[activeTabIndex][index]) {
-      mappingsCheck = mappingsCheck && !isEmpty(contentmapping);
-    }
+const getValidMapping = (
+  chartFromAPI: ChartRenderedItem | null,
+  mapping: {
+    [key: string]: any;
+  }
+) => {
+  const dimensionIDs =
+    chartFromAPI?.dimensions?.map((item: any) => item.id) || [];
+  const validMappingKeys = filter(
+    Object.keys(mapping),
+    (key: string) => dimensionIDs.indexOf(key) > -1
+  );
+  let validMapping = {};
+  if (validMappingKeys.length === 0) {
+    validMapping = mapping;
+  }
+  validMappingKeys.forEach((key: string) => {
+    validMapping = {
+      ...validMapping,
+      [key]: mapping[key],
+    };
   });
-  // });
-  let datasetIdsCheck = true;
-  // tabdatasetIds.forEach((tabdatasetId) => {
-  tabdatasetIds[activeTabIndex].forEach((contentdatasetId, index) => {
-    if (!vizIsTextContent[activeTabIndex][index]) {
-      datasetIdsCheck = datasetIdsCheck && !isEmpty(contentdatasetId);
-    }
-  });
-  // });
+  return validMapping;
+};
 
-  return mappingsCheck && datasetIdsCheck;
-}
+const getReqMappingKeyFromReqDimension = (
+  dimensions: any,
+  mapping: {
+    [key: string]: any;
+  }
+) => {
+  //get required dimensions
+  const requiredDimensions = dimensions.filter(
+    (dimension: any) => dimension.required
+  );
+  let requiredMappingKey: { [key: string]: boolean } = {};
+
+  requiredDimensions.forEach((element: any) => {
+    //assign true if mapping key exists and false if not
+    requiredMappingKey[element.id] = element.id in mapping;
+  });
+  return requiredMappingKey;
+};
+
+const allRequiredKeysExist = (
+  req: any,
+  allreq: any,
+  chartType: string | null
+): boolean => {
+  if (isEmpty(allreq)) {
+    return false;
+  }
+
+  for (const key in req) {
+    if (req.hasOwnProperty(key) && !allreq.hasOwnProperty(key)) {
+      return false;
+    }
+    //return false if chartType is sankey and only one dimension is selected
+    if (chartType === "echartsSankey" && allreq[key].ids.length < 2) {
+      return false;
+    }
+  }
+  return true;
+};
 
 export function useChartsRawData(props: {
   visualOptions: any;
@@ -66,13 +93,14 @@ export function useChartsRawData(props: {
     props;
 
   const { page, view } = useParams<{ page: string; view?: string }>();
+  console.log(view, "view");
 
   const [dataTypes, setDataTypes] = React.useState([]);
   const [dataStats, setDataStats] = React.useState([]);
   const [sampleData, setSampleData] = React.useState([]);
   const [loading, setLoading] = React.useState(page !== "new");
   const [notFound, setNotFound] = React.useState(false);
-  const [Error401, setError401] = React.useState(false);
+  const [error401, setError401] = React.useState(false);
   const [dataError, setDataError] = React.useState(false);
   const [dataTotalCount, setDataTotalCount] = React.useState(0);
   const [isEditMode, setIsEditMode] = React.useState(checkIfIsEditMode(view));
@@ -178,7 +206,6 @@ export function useChartsRawData(props: {
           }
         )
         .then((response) => {
-          // setNotFound(false);
           const chart = response.data || {};
           setLoading(false);
           if (!isEmpty(chart)) {
@@ -202,12 +229,6 @@ export function useChartsRawData(props: {
     }
   }
 
-  useMount(() => {
-    if (isEditMode && page !== "new" && !props.inChartWrapper) {
-      loadDataFromAPI();
-    }
-  });
-
   React.useEffect(() => {
     const newValue = checkIfIsEditMode(view);
     if (newValue !== isEditMode) {
@@ -216,10 +237,14 @@ export function useChartsRawData(props: {
   }, [view]);
 
   React.useEffect(() => {
-    if (!props.inChartWrapper && page !== "new" && !isEditMode) {
+    if (
+      !props.inChartWrapper &&
+      page !== "new" &&
+      (isEditMode || !props.inChartWrapper)
+    ) {
       loadDataFromAPI();
     }
-  }, [page, isEditMode]);
+  }, [page, isEditMode, props.inChartWrapper]);
 
   useUpdateEffect(() => {
     if (
@@ -232,22 +257,13 @@ export function useChartsRawData(props: {
       if (extraLoader) {
         extraLoader.style.display = "block";
       }
-      const dimensionKeys =
-        chartFromAPI?.dimensions?.map((item: any) => item.id) || [];
-      const validMappingKeys = filter(
-        Object.keys(mapping),
-        (key: string) => dimensionKeys.indexOf(key) > -1
+
+      const validMapping = getValidMapping(chartFromAPI, mapping);
+      const requiredMappingKey = getReqMappingKeyFromReqDimension(
+        props.dimensions,
+        mapping
       );
-      let validMapping = {};
-      if (validMappingKeys.length === 0) {
-        validMapping = mapping;
-      }
-      validMappingKeys.forEach((key: string) => {
-        validMapping = {
-          ...validMapping,
-          [key]: mapping[key],
-        };
-      });
+
       const body = {
         rows: [
           [
@@ -262,38 +278,12 @@ export function useChartsRawData(props: {
         ],
       };
 
-      //get required dimensions
-      const requiredDimensions = props.dimensions.filter(
-        (dimension: any) => dimension.required
-      );
-      let requiredMappingKey = {} as any;
-
-      requiredDimensions.forEach((element: any) => {
-        if (element.id in mapping) {
-          requiredMappingKey[element.id] = true;
-        } else {
-          requiredMappingKey[element.id] = false;
-        }
-      });
-      function allRequiredKeysExist(req: any, allreq: any) {
-        if (isEmpty(mapping)) {
-          return false;
-        } else {
-          for (const key in req) {
-            if (req.hasOwnProperty(key) && !allreq.hasOwnProperty(key)) {
-              return false;
-            }
-            //return false if chartType is sankey and only one dimension is selected
-            if (chartType === "echartsSankey" && allreq[key].ids.length < 2) {
-              return false;
-            }
-          }
-          return true;
-        }
-      }
-
-      if (page && allRequiredKeysExist(requiredMappingKey, mapping)) {
+      if (
+        page &&
+        allRequiredKeysExist(requiredMappingKey, mapping, chartType)
+      ) {
         setNotFound(false);
+        console.log("mount2");
 
         axios
           .post(`${process.env.REACT_APP_API}/chart/${page}/render`, body, {
@@ -339,7 +329,7 @@ export function useChartsRawData(props: {
     notFound,
     setNotFound,
     setDataError,
-    Error401,
+    error401,
     dataError,
     dataTypes,
     dataStats,
