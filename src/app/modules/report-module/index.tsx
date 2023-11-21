@@ -301,7 +301,6 @@ export default function ReportModule() {
             }
           )
         : framesArray;
-    console.log(localFramesArray, "localFramesArray");
 
     setFramesArray(localFramesArray);
   }, [persistedReportState]);

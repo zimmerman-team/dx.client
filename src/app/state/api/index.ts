@@ -144,11 +144,8 @@ export const APIModel = <QueryModel, ResponseModel>(
         },
       })
       .then(
-        (resp: AxiosResponse) => {
-          if (resp.data) {
-            return actions.onSuccessCrudData(resp.data);
-          }
-        },
+        (resp: AxiosResponse) => actions.onSuccessCrudData(resp.data),
+
         (error: any) => actions.onError(error.response)
       );
   }),

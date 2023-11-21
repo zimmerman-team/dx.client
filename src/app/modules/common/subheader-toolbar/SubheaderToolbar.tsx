@@ -194,10 +194,6 @@ export function SubheaderToolbar(props: SubheaderToolbarProps) {
       createChartFromReport.state
     ) {
       //returns back to persisted report view
-      setCreateChartFromReport({
-        ...createChartFromReport,
-        state: false,
-      });
       setRightPanelView("charts");
       if (createChartFromReport.view === undefined) {
         history.push(`/report/${createChartFromReport.page}/edit`);
@@ -206,15 +202,11 @@ export function SubheaderToolbar(props: SubheaderToolbarProps) {
           `/report/${createChartFromReport.page}/${createChartFromReport.view}`
         );
       }
-    }
-  }, [editChartSuccess, createChartSuccess]);
-
-  React.useEffect(() => {
-    if (editChartSuccess && createChartFromReport.view === "") {
+    } else if (editChartSuccess && !createChartFromReport.state) {
       //returns back to chart detail page
       history.push(`/chart/${page}`);
     }
-  }, [editChartSuccess]);
+  }, [editChartSuccess, createChartSuccess]);
 
   React.useEffect(() => {
     return () => {
