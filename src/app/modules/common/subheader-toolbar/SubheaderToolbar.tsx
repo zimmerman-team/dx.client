@@ -129,6 +129,10 @@ export function SubheaderToolbar(props: SubheaderToolbarProps) {
     horizontal: "center",
   });
 
+  const clearChart = () => {
+    editChartClear();
+    createChartClear();
+  };
   const onNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     props.setName(event.target.value);
   };
@@ -210,8 +214,7 @@ export function SubheaderToolbar(props: SubheaderToolbarProps) {
 
   React.useEffect(() => {
     return () => {
-      createChartClear();
-      editChartClear();
+      clearChart();
     };
   }, []);
 
@@ -393,7 +396,7 @@ export function SubheaderToolbar(props: SubheaderToolbarProps) {
     <div id="subheader-toolbar" css={styles.container}>
       {createOrEditChartLoading && <PageLoader />}
       <InfoSnackbar
-        gap={createChartFromReport.view !== ""}
+        gap={location.pathname.includes("report")}
         data-testid="create-chart-snackbar"
         onClose={() => setShowSnackbar(null)}
         open={showSnackbar !== null && showSnackbar !== ""}
@@ -403,7 +406,7 @@ export function SubheaderToolbar(props: SubheaderToolbarProps) {
           aria-describedby="create-chart-snackbar-content"
           action={
             <>
-              {createChartFromReport.view === "" && (
+              {!location.pathname.includes("report") && (
                 <button
                   onClick={() => {
                     setShowSnackbar(null);
