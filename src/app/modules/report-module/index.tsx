@@ -301,6 +301,7 @@ export default function ReportModule() {
             }
           )
         : framesArray;
+    console.log(localFramesArray, "localFramesArray");
 
     setFramesArray(localFramesArray);
   }, [persistedReportState]);
@@ -418,23 +419,7 @@ export default function ReportModule() {
         descriptionColor: "#ffffff",
         dateColor: "#ffffff",
       },
-      framesArray: JSON.stringify([
-        {
-          id,
-          frame: {
-            rowIndex: 0,
-            rowId: id,
-            handlePersistReportState,
-            handleRowFrameItemResize,
-            type: "rowFrame",
-          },
-          content: [],
-          contentWidths: [],
-          contentHeights: [],
-          contentTypes: [],
-          structure: null,
-        },
-      ]),
+      framesArray: JSON.stringify([]),
     });
     setFramesArray([
       {
