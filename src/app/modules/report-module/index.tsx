@@ -35,6 +35,7 @@ import {
   Redirect,
 } from "react-router-dom";
 import {
+  createChartFromReportAtom,
   persistedReportStateAtom,
   reportRightPanelViewAtom,
 } from "app/state/recoil/atoms";
@@ -74,6 +75,11 @@ export default function ReportModule() {
 
   const setRightPanelView = useRecoilState(reportRightPanelViewAtom)[1];
 
+  const [createChartFromReport, setCreateChartFromReport] = useRecoilState(
+    createChartFromReportAtom
+  );
+
+  console.log(createChartFromReport, "createChartFromReport");
   const [persistedReportState, setPersistedReportState] = useRecoilState(
     persistedReportStateAtom
   );
@@ -377,6 +383,14 @@ export default function ReportModule() {
     };
   }, []);
 
+  React.useEffect(() => {
+    setCreateChartFromReport({
+      state: false,
+      page: "",
+      view: "",
+    });
+  }, []);
+
   //get current value of states for handlePersistReportState function
   headerDetailsRef.current = headerDetails;
   AppliedHeaderDetailsRef.current = appliedHeaderDetails;
@@ -391,6 +405,8 @@ export default function ReportModule() {
       history.push(`/report/${page}/create`);
     }
   };
+
+  console.log(persistedReportState, "persistedReportState");
 
   const resetReport = () => {
     const id = v4();
