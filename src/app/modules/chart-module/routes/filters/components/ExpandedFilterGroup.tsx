@@ -47,6 +47,12 @@ export function ExpandedFilterGroup(props: ExpandedFilterGroupProps) {
     ...appliedFilters,
   ]);
 
+  const [shiftKeyDown, setShiftKeyDown] = React.useState(false);
+
+  const [lastClickedPosition, setLastClickedPosition] = React.useState(
+    appliedFilters.length - 1
+  );
+
   React.useEffect(() => {
     let allOptionsCount = 0;
     props.options.forEach((option: FilterGroupOptionModel) => {
@@ -177,19 +183,107 @@ export function ExpandedFilterGroup(props: ExpandedFilterGroupProps) {
     props.goBack();
   }
 
+  const compareArrays = (subTemp: any[], temp: any[]) => {
+    return subTemp.some((val) => temp.includes(val));
+  };
+
+  const multiCheckFilterOptions = (
+    tmpOptions: any[],
+    optionsValueList: string[],
+    currentPosition: number
+  ) => {
+    if (lastClickedPosition > currentPosition) {
+      //get a slice of the range of options that are between the last clicked position and the current position
+      const subTemp = optionsValueList.slice(
+        currentPosition,
+        lastClickedPosition + 1
+      );
+      //reverse the slice so that the options are in the correct order and push them to the tmpOptions array
+      tmpOptions.push(...subTemp.reverse());
+    } else if (currentPosition > lastClickedPosition) {
+      //get a slice of the range of options that are between the last clicked position and the current position
+      const subTemp = optionsValueList.slice(
+        lastClickedPosition,
+        currentPosition + 1
+      );
+      //push the slice to the tmpOptions array
+      tmpOptions.push(...subTemp);
+    }
+  };
+
+  const multiUnCheckFilterOptions = (
+    tmpOptions: any[],
+    optionsValueList: string[],
+    currentPosition: number
+  ) => {
+    if (lastClickedPosition > currentPosition) {
+      //get a slice of the range of options that are between the last clicked position and the current position
+      const subTemp = optionsValueList.slice(
+        currentPosition,
+        lastClickedPosition + 1
+      );
+      //filter the tmpOptions array to remove the options that are in the slice
+      const filteredTmp = tmpOptions.filter((item) => !subTemp.includes(item));
+
+      //if the slice is in the tmpOptions array, then replace the tmpOptions array with the filteredTmp array,
+      //otherwise return the tmpOptions array
+      tmpOptions = compareArrays(subTemp, tmpOptions)
+        ? filteredTmp
+        : tmpOptions;
+    } else if (currentPosition > lastClickedPosition) {
+      //get a slice of the range of options that are between the last clicked position and the current position
+      const subTemp = optionsValueList.slice(
+        lastClickedPosition,
+        currentPosition + 1
+      );
+      //filter the tmpOptions array to remove the options that are in the slice
+      const filteredTmp = tmpOptions.filter((item) => !subTemp.includes(item));
+      //if the slice is in the tmpOptions array, then replace the tmpOptions array with the filteredTmp array,
+      tmpOptions = compareArrays(subTemp, tmpOptions)
+        ? filteredTmp
+        : tmpOptions;
+    }
+
+    return tmpOptions;
+  };
+
   function onOptionChange(
     checked: boolean,
     option: FilterGroupOptionModel,
-    level: number
+    currentPosition: number,
+    level?: number
   ) {
-    const tmp = [...tmpAppliedFilters];
-    if (checked) {
+    let tmp = [...tmpAppliedFilters];
+    const optionsValueList = optionsToShow.map((o) => o.value);
+
+    if (shiftKeyDown && checked && tmp.length > 0) {
+      multiCheckFilterOptions(tmp, optionsValueList, currentPosition);
+    } else if (shiftKeyDown && !checked && tmp.length > 0) {
+      tmp = multiUnCheckFilterOptions(tmp, optionsValueList, currentPosition);
+    } else if (checked) {
       tmp.push(option.value);
     } else {
       remove(tmp, (o: string) => o === option.value);
     }
-    setTmpAppliedFilters(tmp);
+    // used set to remove duplicates
+    setTmpAppliedFilters([...new Set(tmp)]);
+
+    //update lastClickedPosition
+    setLastClickedPosition(currentPosition);
   }
+
+  React.useEffect(() => {
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Shift") {
+        setShiftKeyDown(true);
+      }
+    });
+    document.addEventListener("keyup", (event) => {
+      if (event.key === "Shift") {
+        setShiftKeyDown(false);
+      }
+    });
+  }, []);
 
   function resetFilters() {
     if (appliedFilters.length > 0) {
@@ -326,13 +420,14 @@ export function ExpandedFilterGroup(props: ExpandedFilterGroupProps) {
           }
         `}
       >
-        {optionsToShow.map((option: FilterGroupOptionModel) => (
+        {optionsToShow.map((option: FilterGroupOptionModel, index: number) => (
           <FilterOption
             {...option}
             level={1}
+            position={index}
             key={option.value}
             forceExpand={value.length > 0}
-            onOptionChange={onOptionChange}
+            onOptionChange={(e) => onOptionChange(e, option, index)}
             selectedOptions={tmpAppliedFilters}
             selected={
               find(tmpAppliedFilters, (o: string) => o === option.value) !==
@@ -471,22 +566,25 @@ function FilterOption(props: FilterOptionProps) {
             }
           `}
         >
-          {props.subOptions.map((option: FilterGroupOptionModel) => (
-            <FilterOption
-              {...option}
-              key={option.value}
-              level={props.level + 1}
-              forceExpand={props.forceExpand}
-              onOptionChange={props.onOptionChange}
-              selectedOptions={props.selectedOptions}
-              selected={
-                find(
-                  props.selectedOptions,
-                  (o: string) => o === option.value
-                ) !== undefined
-              }
-            />
-          ))}
+          {props.subOptions.map(
+            (option: FilterGroupOptionModel, index: number) => (
+              <FilterOption
+                {...option}
+                key={option.value}
+                position={index}
+                level={props.level + 1}
+                forceExpand={props.forceExpand}
+                onOptionChange={props.onOptionChange}
+                selectedOptions={props.selectedOptions}
+                selected={
+                  find(
+                    props.selectedOptions,
+                    (o: string) => o === option.value
+                  ) !== undefined
+                }
+              />
+            )
+          )}
         </div>
       )}
     </div>
