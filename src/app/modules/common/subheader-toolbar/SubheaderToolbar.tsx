@@ -48,7 +48,7 @@ export function SubheaderToolbar(props: SubheaderToolbarProps) {
   const [enableButton, setEnableButton] = React.useState<boolean>(false);
 
   const setHomeTab = useRecoilState(homeDisplayAtom)[1];
-  const [createChartFromReport, setCreateChartFromReport] = useRecoilState(
+  const [createChartFromReport, _setCreateChartFromReport] = useRecoilState(
     createChartFromReportAtom
   );
   const setRightPanelView = useRecoilState(reportRightPanelViewAtom)[1];

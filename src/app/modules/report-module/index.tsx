@@ -38,6 +38,7 @@ import {
   createChartFromReportAtom,
   persistedReportStateAtom,
   reportRightPanelViewAtom,
+  unSavedReportPreviewModeAtom,
 } from "app/state/recoil/atoms";
 
 interface RowFrameProps {
@@ -79,7 +80,10 @@ export default function ReportModule() {
     createChartFromReportAtom
   );
 
-  console.log(createChartFromReport, "createChartFromReport");
+  const [_reportPreviewMode, setReportPreviewMode] = useRecoilState(
+    unSavedReportPreviewModeAtom
+  );
+
   const [persistedReportState, setPersistedReportState] = useRecoilState(
     persistedReportStateAtom
   );
@@ -306,7 +310,23 @@ export default function ReportModule() {
               };
             }
           )
-        : framesArray;
+        : [
+            {
+              id,
+              frame: {
+                rowIndex: 0,
+                rowId: id,
+                handlePersistReportState,
+                handleRowFrameItemResize,
+                type: "rowFrame",
+              },
+              content: [],
+              contentWidths: [],
+              contentHeights: [],
+              contentTypes: [],
+              structure: null,
+            },
+          ];
 
     setFramesArray(localFramesArray);
   }, [persistedReportState]);
@@ -406,10 +426,27 @@ export default function ReportModule() {
     }
   };
 
-  console.log(persistedReportState, "persistedReportState");
-
   const resetReport = () => {
     const id = v4();
+    setFramesArray([
+      {
+        id,
+        frame: {
+          rowIndex: 0,
+          rowId: id,
+
+          handlePersistReportState,
+          handleRowFrameItemResize,
+          type: "rowFrame",
+        },
+        content: [],
+        contentWidths: [],
+        contentHeights: [],
+        contentTypes: [],
+        structure: null,
+      },
+    ]);
+    console.log("sup");
     setPersistedReportState({
       reportName: "Untitled report",
       headerDetails: {
@@ -436,24 +473,7 @@ export default function ReportModule() {
       },
       framesArray: JSON.stringify([]),
     });
-    setFramesArray([
-      {
-        id,
-        frame: {
-          rowIndex: 0,
-          rowId: id,
 
-          handlePersistReportState,
-          handleRowFrameItemResize,
-          type: "rowFrame",
-        },
-        content: [],
-        contentWidths: [],
-        contentHeights: [],
-        contentTypes: [],
-        structure: null,
-      },
-    ]);
     setHeaderDetails({
       title: "",
       description: EditorState.createEmpty(),
@@ -466,9 +486,12 @@ export default function ReportModule() {
     setReportName("Untitled report");
     setRightPanelView("elements");
     setRightPanelOpen(true);
+    setReportPreviewMode(false);
   };
 
   const onSave = async () => {
+    setReportPreviewMode(false);
+
     const action = page === "new" ? reportCreate : reportEdit;
     action({
       token,
