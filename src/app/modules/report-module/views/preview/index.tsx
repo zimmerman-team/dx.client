@@ -97,7 +97,7 @@ export function ReportPreviewView(props: {
       setReportPreviewData({
         ...reportPreviewData,
 
-        title: persistedReportState.headerDetails.title,
+        title: JSON.parse(persistedReportState.headerDetails.title),
         showHeader: persistedReportState.headerDetails.showHeader,
         backgroundColor: persistedReportState.headerDetails.backgroundColor,
         titleColor: persistedReportState.headerDetails.titleColor,
@@ -114,7 +114,9 @@ export function ReportPreviewView(props: {
       <HeaderBlock
         previewMode
         headerDetails={{
-          title: reportPreviewData.title,
+          title: EditorState.createWithContent(
+            convertFromRaw(reportPreviewData.title)
+          ),
           showHeader: reportPreviewData.showHeader,
           description: EditorState.createWithContent(
             convertFromRaw(reportPreviewData.subTitle)
@@ -125,6 +127,9 @@ export function ReportPreviewView(props: {
           dateColor: reportPreviewData.dateColor,
           createdDate: reportPreviewData.createdDate,
         }}
+        isEditorFocused={false}
+        setIsEditorFocused={() => {}}
+        setPlugins={() => {}}
         setHeaderDetails={() => {}}
       />
       <Container id="content-container" maxWidth="lg" ref={ref}>
@@ -181,6 +186,9 @@ export function ReportPreviewView(props: {
               }
               framesArray={[]}
               view={"preview"}
+              isEditorFocused={false}
+              setIsEditorFocused={() => {}}
+              setPlugins={() => {}}
             />
           );
         })}

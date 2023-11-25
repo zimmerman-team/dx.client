@@ -145,7 +145,9 @@ export const persistedReportStateAtom = atom<{
   default: {
     reportName: "Untitled report",
     headerDetails: {
-      title: "",
+      title: JSON.stringify(
+        convertToRaw(EditorState.createEmpty().getCurrentContent())
+      ),
       description: JSON.stringify(
         convertToRaw(EditorState.createEmpty().getCurrentContent())
       ),
@@ -156,7 +158,9 @@ export const persistedReportStateAtom = atom<{
       dateColor: "#ffffff",
     },
     appliedHeaderDetails: {
-      title: "",
+      title: JSON.stringify(
+        convertToRaw(EditorState.createEmpty().getCurrentContent())
+      ),
       description: JSON.stringify(
         convertToRaw(EditorState.createEmpty().getCurrentContent())
       ),

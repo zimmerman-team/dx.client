@@ -2,7 +2,7 @@ import { EditorState } from "draft-js";
 import { IFramesArray } from "../../views/create/data";
 
 export interface IHeaderDetails {
-  title: string;
+  title: EditorState;
   showHeader: boolean;
   description: EditorState;
   backgroundColor: string;
@@ -14,7 +14,7 @@ export interface ReportRightPanelProps {
   open: boolean;
   onOpen: () => void;
   onClose: () => void;
-
+  isEditorFocused: boolean;
   showHeaderItem: boolean;
   currentView: "initial" | "edit" | "create" | "preview" | "ai-template";
   appliedHeaderDetails: IHeaderDetails;

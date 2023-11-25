@@ -1,0 +1,100 @@
+import React, { useRef } from "react";
+import { styles } from "app/modules/report-module/components/reportSubHeaderToolbar/styles";
+
+type InputProps = React.DetailedHTMLProps<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  HTMLInputElement
+> & {
+  autoResize: boolean;
+  minWidth: number;
+  maxWidth: number;
+  name: string;
+  setName: (name: string) => void;
+};
+export default function AutoResizeInput(props: InputProps) {
+  const spanAutoResize = useRef<HTMLSpanElement | null>(null);
+
+  const { minWidth } = props;
+  const [autoResizeInputWidth, setAutoResizeInputWidth] =
+    React.useState<number>(100);
+
+  console.log(props.autoResize, "autor");
+
+  React.useEffect(() => {
+    if (props.autoResize) {
+      handleAutoResize();
+    }
+  }, [props.name, props.autoResize]);
+
+  const handleAutoResize = () => {
+    let spanAutoResizeWidth = 0;
+    if (spanAutoResize) {
+      spanAutoResizeWidth = spanAutoResize.current
+        ? spanAutoResize.current.offsetWidth
+        : 0;
+    }
+
+    const autoResizeInputWidth =
+      !minWidth || spanAutoResizeWidth > minWidth
+        ? spanAutoResizeWidth
+        : minWidth;
+
+    console.log(autoResizeInputWidth, "autoResizeInputWidth");
+    if (autoResizeInputWidth < props.maxWidth) {
+      setAutoResizeInputWidth(autoResizeInputWidth);
+    }
+  };
+
+  function getInputStyle() {
+    const { autoResize, minWidth, maxWidth } = props;
+
+    const style = {
+      minWidth: 0,
+      maxWidth: 0,
+      width: 0,
+    };
+
+    if (minWidth) {
+      style.minWidth = minWidth;
+    }
+
+    if (maxWidth) {
+      style.maxWidth = maxWidth;
+    }
+
+    if (autoResize && autoResizeInputWidth) {
+      style.width = autoResizeInputWidth;
+    }
+
+    return style;
+  }
+
+  function onChange(value: string) {
+    props.setName(value);
+  }
+
+  return (
+    <div>
+      <input
+        {...props}
+        css={`
+          ${styles.nameInput};
+        `}
+        value={props.name}
+        onChange={(e) => onChange(e.target.value)}
+        style={getInputStyle()}
+      />
+      {!props.autoResize || (
+        <span
+          className="auto-resize-span"
+          ref={spanAutoResize}
+          css={`
+            ${styles.autoResizeSpan}
+          `}
+        >
+          {` ${props.name}`}
+        </span>
+      )}
+    </div>
+  );
+}

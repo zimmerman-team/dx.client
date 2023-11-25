@@ -14,7 +14,6 @@ import ReportEditView from "app/modules/report-module/views/edit";
 import AITemplate from "app/modules/report-module/views/ai-template";
 import { EditorState, convertFromRaw, convertToRaw } from "draft-js";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
-import { SubheaderToolbar } from "../common/subheader-toolbar/SubheaderToolbar";
 import {
   ReportContentHeightsType,
   ReportContentWidthsType,
@@ -38,6 +37,8 @@ import {
   persistedReportStateAtom,
   reportRightPanelViewAtom,
 } from "app/state/recoil/atoms";
+import { ReportSubheaderToolbar } from "app/modules/report-module/components/reportSubHeaderToolbar";
+import { ToolbarPluginsType } from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
 
 interface RowFrameProps {
   structure:
@@ -69,6 +70,11 @@ export default function ReportModule() {
   const AppliedHeaderDetailsRef = React.useRef<IHeaderDetails>(
     {} as IHeaderDetails
   );
+
+  /** static toolbar states */
+  const [plugins, setPlugins] = React.useState<ToolbarPluginsType>([]);
+  const [isEditorFocused, setIsEditorFocused] = React.useState(false);
+  /** end of static toolbar states */
 
   const token = useSessionStorage("authToken", "")[0];
 
@@ -102,7 +108,7 @@ export default function ReportModule() {
     "basic" | "advanced" | "ai"
   >("basic");
   const [headerDetails, setHeaderDetails] = React.useState({
-    title: "",
+    title: EditorState.createEmpty(),
     description: EditorState.createEmpty(),
     showHeader: true,
     backgroundColor: "#252c34",
@@ -183,12 +189,20 @@ export default function ReportModule() {
         description: JSON.stringify(
           convertToRaw(headerDetailsRef.current.description.getCurrentContent())
         ),
+        title: JSON.stringify(
+          convertToRaw(headerDetailsRef.current.title.getCurrentContent())
+        ),
       },
       appliedHeaderDetails: {
         ...AppliedHeaderDetailsRef.current,
         description: JSON.stringify(
           convertToRaw(
             AppliedHeaderDetailsRef.current.description.getCurrentContent()
+          )
+        ),
+        title: JSON.stringify(
+          convertToRaw(
+            AppliedHeaderDetailsRef.current.title.getCurrentContent()
           )
         ),
       },
@@ -245,6 +259,11 @@ export default function ReportModule() {
     setReportName(persistedReportState.reportName || "Untitled report");
     setHeaderDetails({
       ...persistedReportState.headerDetails,
+      title: EditorState.createWithContent(
+        convertFromRaw(
+          JSON.parse(persistedReportState.headerDetails.title as any)
+        )
+      ),
 
       description: EditorState.createWithContent(
         convertFromRaw(
@@ -255,6 +274,12 @@ export default function ReportModule() {
 
     setAppliedHeaderDetails({
       ...persistedReportState.appliedHeaderDetails,
+
+      title: EditorState.createWithContent(
+        convertFromRaw(
+          JSON.parse(persistedReportState.appliedHeaderDetails.title as any)
+        )
+      ),
 
       description: EditorState.createWithContent(
         convertFromRaw(
@@ -397,7 +422,9 @@ export default function ReportModule() {
     setPersistedReportState({
       reportName: "Untitled report",
       headerDetails: {
-        title: "",
+        title: JSON.stringify(
+          convertToRaw(EditorState.createEmpty().getCurrentContent())
+        ),
         description: JSON.stringify(
           convertToRaw(EditorState.createEmpty().getCurrentContent())
         ),
@@ -408,7 +435,9 @@ export default function ReportModule() {
         dateColor: "#ffffff",
       },
       appliedHeaderDetails: {
-        title: "",
+        title: JSON.stringify(
+          convertToRaw(EditorState.createEmpty().getCurrentContent())
+        ),
         description: JSON.stringify(
           convertToRaw(EditorState.createEmpty().getCurrentContent())
         ),
@@ -455,7 +484,7 @@ export default function ReportModule() {
       },
     ]);
     setHeaderDetails({
-      title: "",
+      title: EditorState.createEmpty(),
       description: EditorState.createEmpty(),
       showHeader: true,
       backgroundColor: "#252c34",
@@ -477,7 +506,11 @@ export default function ReportModule() {
         name: reportName,
         authId: user?.sub,
         showHeader: headerDetails.showHeader,
-        title: headerDetails.showHeader ? headerDetails.title : undefined,
+        title: convertToRaw(
+          headerDetails.showHeader
+            ? headerDetails.title.getCurrentContent()
+            : EditorState.createEmpty().getCurrentContent()
+        ),
         subTitle: convertToRaw(
           headerDetails.showHeader
             ? headerDetails.description.getCurrentContent()
@@ -547,7 +580,7 @@ export default function ReportModule() {
     <DndProvider backend={HTML5Backend}>
       {(reportCreateLoading || reportEditLoading) && <PageLoader />}
       {!reportError401 && view !== "ai-template" && view !== "initial" && (
-        <SubheaderToolbar
+        <ReportSubheaderToolbar
           pageType="report"
           onReportSave={onSave}
           setName={setReportName}
@@ -562,6 +595,8 @@ export default function ReportModule() {
           setStopInitializeFramesWidth={setStopInitializeFramesWidth}
           handlePersistReportState={handlePersistReportState}
           isPreviewView={isPreviewView}
+          isEditorFocused={isEditorFocused}
+          plugins={plugins}
         />
       )}
       {view &&
@@ -581,6 +616,7 @@ export default function ReportModule() {
             framesArray={framesArray}
             reportName={reportName}
             handlePersistReportState={handlePersistReportState}
+            isEditorFocused={isEditorFocused}
           />
         )}
       <div
@@ -614,6 +650,9 @@ export default function ReportModule() {
             setHeaderDetails={setHeaderDetails}
             handlePersistReportState={handlePersistReportState}
             handleRowFrameItemResize={handleRowFrameItemResize}
+            isEditorFocused={isEditorFocused}
+            setIsEditorFocused={setIsEditorFocused}
+            setPlugins={setPlugins}
           />
         </Route>
         <Route path="/report/:page/edit">
@@ -631,6 +670,9 @@ export default function ReportModule() {
             stopInitializeFramesWidth={stopInitializeFramesWidth}
             setStopInitializeFramesWidth={setStopInitializeFramesWidth}
             view={view}
+            isEditorFocused={isEditorFocused}
+            setIsEditorFocused={setIsEditorFocused}
+            setPlugins={setPlugins}
           />
         </Route>
         <Route path="/report/:page/preview">

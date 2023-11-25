@@ -96,7 +96,9 @@ function ReportEditView(props: ReportEditViewProps) {
     if (JSON.parse(persistedReportState.framesArray || "[]").length < 1) {
       props.setName(reportData.name);
       props.setHeaderDetails({
-        title: reportData.title,
+        title: EditorState.createWithContent(
+          convertFromRaw(reportData.title as any)
+        ),
         showHeader: reportData.showHeader,
         description: EditorState.createWithContent(
           convertFromRaw(reportData.subTitle as any)
@@ -107,7 +109,9 @@ function ReportEditView(props: ReportEditViewProps) {
         dateColor: reportData.dateColor,
       });
       props.setAppliedHeaderDetails({
-        title: reportData.title,
+        title: EditorState.createWithContent(
+          convertFromRaw(reportData.title as any)
+        ),
         showHeader: reportData.showHeader,
         description: EditorState.createWithContent(
           convertFromRaw(reportData.subTitle as any)
@@ -165,6 +169,12 @@ function ReportEditView(props: ReportEditViewProps) {
 
   return (
     <div>
+      <div
+        css={`
+          height: ${props.isEditorFocused ? "55px" : "0px"};
+          transition: all cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
+        `}
+      />
       <HeaderBlock
         previewMode={false}
         headerDetails={{
@@ -172,6 +182,9 @@ function ReportEditView(props: ReportEditViewProps) {
           createdDate: reportData.createdDate,
         }}
         setHeaderDetails={props.setHeaderDetails}
+        isEditorFocused={props.isEditorFocused}
+        setIsEditorFocused={props.setIsEditorFocused}
+        setPlugins={props.setPlugins}
       />
       <Container maxWidth="lg">
         <div
@@ -203,6 +216,9 @@ function ReportEditView(props: ReportEditViewProps) {
                     view={props.view}
                     rowContentHeights={frame.contentHeights}
                     rowContentWidths={frame.contentWidths}
+                    isEditorFocused={props.isEditorFocused}
+                    setIsEditorFocused={props.setIsEditorFocused}
+                    setPlugins={props.setPlugins}
                   />
                   <Box height={38} />
 

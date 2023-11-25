@@ -1,5 +1,6 @@
 import { EditorState } from "draft-js";
 import { IFramesArray } from "app/modules/report-module/views/create/data";
+import { ToolbarPluginsType } from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
 
 export interface ReportEditViewProps {
   open: boolean;
@@ -11,7 +12,7 @@ export interface ReportEditViewProps {
   setName: React.Dispatch<React.SetStateAction<string>>;
   handlePersistReportState: () => void;
   headerDetails: {
-    title: string;
+    title: EditorState;
     showHeader: boolean;
     description: EditorState;
     backgroundColor: string;
@@ -21,7 +22,7 @@ export interface ReportEditViewProps {
   };
   setHeaderDetails: React.Dispatch<
     React.SetStateAction<{
-      title: string;
+      title: EditorState;
       showHeader: boolean;
       description: EditorState;
       backgroundColor: string;
@@ -32,7 +33,7 @@ export interface ReportEditViewProps {
   >;
   setAppliedHeaderDetails: React.Dispatch<
     React.SetStateAction<{
-      title: string;
+      title: EditorState;
       showHeader: boolean;
       description: EditorState;
       backgroundColor: string;
@@ -50,4 +51,8 @@ export interface ReportEditViewProps {
   ) => void;
   stopInitializeFramesWidth: boolean;
   setStopInitializeFramesWidth: React.Dispatch<React.SetStateAction<boolean>>;
+
+  setPlugins: React.Dispatch<React.SetStateAction<ToolbarPluginsType>>;
+  isEditorFocused: boolean;
+  setIsEditorFocused: React.Dispatch<React.SetStateAction<boolean>>;
 }

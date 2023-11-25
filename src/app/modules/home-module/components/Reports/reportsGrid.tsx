@@ -14,6 +14,7 @@ import ReformedGridItem from "app/modules/home-module/components/Reports/reforme
 import ReportAddnewCard from "./reportAddNewCard";
 import { useInfinityScroll } from "app/hooks/useInfinityScroll";
 import CircleLoader from "../Loader";
+import { EditorState, convertFromRaw } from "draft-js";
 
 interface Props {
   sortBy: string;
@@ -180,6 +181,8 @@ export default function ReportsGrid(props: Props) {
     [props.searchStr]
   );
 
+  console.log(loadedReports, "loaded");
+
   return (
     <>
       {!props.tableView && (
@@ -198,7 +201,8 @@ export default function ReportsGrid(props: Props) {
                 handleDelete={() => handleModal(index)}
                 handleDuplicate={() => handleDuplicate(index)}
                 title={
-                  get(data, "title", "").length > 0 ? data.title : data.name
+                  convertFromRaw(data.title).getBlocksAsArray()[0].getText() ||
+                  data.name
                 }
               />
               <Box height={16} />
@@ -211,7 +215,9 @@ export default function ReportsGrid(props: Props) {
           data={loadedReports.map((data) => ({
             id: data.id,
             name: data.name,
-            description: data.title,
+            description: convertFromRaw(data.title)
+              .getBlocksAsArray()[0]
+              .getText(),
             createdDate: data.createdDate,
           }))}
         />

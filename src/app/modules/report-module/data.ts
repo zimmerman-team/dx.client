@@ -3,7 +3,7 @@ import { EditorState, convertToRaw, RawDraftContentState } from "draft-js";
 export interface ReportModel {
   id: string;
   name: string;
-  title: string;
+  title: RawDraftContentState;
   public: boolean;
   showHeader: boolean;
   subTitle: RawDraftContentState;
@@ -46,7 +46,7 @@ export interface ReportContentHeightsType {
 export const emptyReport: ReportModel = {
   id: "",
   name: "",
-  title: "",
+  title: convertToRaw(EditorState.createEmpty().getCurrentContent()),
   public: false,
   subTitle: convertToRaw(EditorState.createEmpty().getCurrentContent()),
   showHeader: false,
