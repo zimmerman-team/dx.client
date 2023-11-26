@@ -5,12 +5,14 @@ import { ToolbarPluginsType } from "app/modules/report-module/components/reportS
 export interface ReportEditViewProps {
   open: boolean;
   view: "initial" | "edit" | "create" | "preview" | "ai-template";
-
+  hasSubHeaderTitleFocused: boolean;
   setFramesArray: React.Dispatch<React.SetStateAction<IFramesArray[]>>;
   framesArray: IFramesArray[];
   localPickedCharts: string[];
   setName: React.Dispatch<React.SetStateAction<string>>;
+  setAutoSave: React.Dispatch<React.SetStateAction<boolean>>;
   handlePersistReportState: () => void;
+  reportName: string;
   headerDetails: {
     title: EditorState;
     showHeader: boolean;

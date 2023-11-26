@@ -78,7 +78,11 @@ export default function HeaderBlock(props: Props) {
     () => {
       // checks when headerDetails.title is empty and report title has not been focused
 
-      if (!props.hasSubHeaderTitleFocused && isReportTitleModified) {
+      if (
+        !props.hasSubHeaderTitleFocused &&
+        isReportTitleModified &&
+        (props.reportName === "Untitled report" || props.reportName === "")
+      ) {
         props.setReportName?.(
           props.headerDetails.title.getCurrentContent().getPlainText()
         );
@@ -115,7 +119,7 @@ export default function HeaderBlock(props: Props) {
       ...props.headerDetails,
       title: text,
     });
-    if (text.getCurrentContent().getBlocksAsArray()[0].getText() !== "") {
+    if (text.getCurrentContent().getPlainText() !== "") {
       console.log("mod");
       setIsReportTitleModified(true);
     }
@@ -215,12 +219,14 @@ export default function HeaderBlock(props: Props) {
         <div css={headerBlockcss.innerContainer}>
           <div
             css={`
+              ${props.previewMode && "pointer-events: none;"}
+
               ${headerBlockcss.inputStyle(props.headerDetails.titleColor)}
             `}
           >
             <RichEditor
               invertColors
-              editMode={true}
+              editMode={!props.previewMode}
               setTextContent={setTitleContent}
               placeholder="Add title"
               textContent={props.headerDetails.title}

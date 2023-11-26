@@ -17,13 +17,19 @@ import { ReactComponent as CloseIcon } from "app/modules/home-module/assets/clos
 import { ReactComponent as SearchIcon } from "app/modules/home-module/assets/search-fill.svg";
 import { ReactComponent as SortIcon } from "app/modules/home-module/assets/sort-fill.svg";
 import { ReactComponent as GridIcon } from "app/modules/home-module/assets/grid-fill.svg";
+import { ReportModel, emptyReport } from "app/modules/report-module/data";
 
 import { IconButton, Popover } from "@material-ui/core";
 import ReportsGrid from "app/modules/home-module/components/Reports/reportsGrid";
 import { persistedReportStateAtom } from "app/state/recoil/atoms";
 import { useResetRecoilState } from "recoil";
+import { useHistory, useParams } from "react-router-dom";
+import { useStoreState } from "app/state/store/hooks";
 
 export function ReportInitialView(props: ReportInitialViewProps) {
+  const history = useHistory();
+  const { page, view } = useParams<{ page: string; view?: string }>();
+
   const [tableView, setTableView] = React.useState(false);
   const [searchValue, setSearchValue] = React.useState("");
   const [openSearch, setOpenSearch] = React.useState(false);
@@ -32,6 +38,19 @@ export function ReportInitialView(props: ReportInitialViewProps) {
     React.useState<HTMLButtonElement | null>(null);
 
   const inputRef = React.useRef<HTMLInputElement>(null);
+
+  const reportEditSuccess = useStoreState(
+    (state) => state.reports.ReportUpdate.success
+  );
+
+  const reportCreateSuccess = useStoreState(
+    (state) => state.reports.ReportCreate.success
+  );
+
+  const reportCreateData = useStoreState(
+    (state) =>
+      (state.reports.ReportCreate.crudData ?? emptyReport) as ReportModel
+  );
 
   const openSortPopover = Boolean(sortPopoverAnchorEl);
 
@@ -61,6 +80,18 @@ export function ReportInitialView(props: ReportInitialViewProps) {
     clearPersistedReportState();
     props.resetReport();
   }, []);
+
+  React.useEffect(() => {
+    if (
+      (reportCreateSuccess &&
+        reportCreateData.id &&
+        reportCreateData.id.length > 0) ||
+      reportEditSuccess
+    ) {
+      const id = reportCreateSuccess ? reportCreateData.id : page;
+      history.push(`/report/${id}/edit`);
+    }
+  }, [reportCreateSuccess, reportEditSuccess, reportCreateData]);
 
   return (
     <Container maxWidth="lg">

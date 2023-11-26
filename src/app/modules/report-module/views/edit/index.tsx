@@ -71,6 +71,7 @@ function ReportEditView(props: ReportEditViewProps) {
 
   React.useEffect(() => {
     fetchReportData({ token, getId: page });
+    props.setAutoSave(false);
   }, [page, token]);
 
   React.useEffect(() => {
@@ -181,6 +182,9 @@ function ReportEditView(props: ReportEditViewProps) {
           ...props.headerDetails,
           createdDate: reportData.createdDate,
         }}
+        reportName={props.reportName}
+        setReportName={props.setName}
+        hasSubHeaderTitleFocused={props.hasSubHeaderTitleFocused}
         setHeaderDetails={props.setHeaderDetails}
         isEditorFocused={props.isEditorFocused}
         setIsEditorFocused={props.setIsEditorFocused}

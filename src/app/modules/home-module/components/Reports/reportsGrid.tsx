@@ -181,8 +181,6 @@ export default function ReportsGrid(props: Props) {
     [props.searchStr]
   );
 
-  console.log(loadedReports, "loaded");
-
   return (
     <>
       {!props.tableView && (
@@ -200,10 +198,7 @@ export default function ReportsGrid(props: Props) {
                 showMenuButton={props.showMenuButton}
                 handleDelete={() => handleModal(index)}
                 handleDuplicate={() => handleDuplicate(index)}
-                title={
-                  convertFromRaw(data.title).getBlocksAsArray()[0].getText() ||
-                  data.name
-                }
+                title={convertFromRaw(data.title).getPlainText() || data.name}
               />
               <Box height={16} />
             </Grid>
@@ -215,9 +210,7 @@ export default function ReportsGrid(props: Props) {
           data={loadedReports.map((data) => ({
             id: data.id,
             name: data.name,
-            description: convertFromRaw(data.title)
-              .getBlocksAsArray()[0]
-              .getText(),
+            description: convertFromRaw(data.title).getPlainText(),
             createdDate: data.createdDate,
           }))}
         />

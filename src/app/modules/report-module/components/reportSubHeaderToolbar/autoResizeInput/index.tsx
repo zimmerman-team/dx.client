@@ -18,8 +18,6 @@ export default function AutoResizeInput(props: InputProps) {
   const [autoResizeInputWidth, setAutoResizeInputWidth] =
     React.useState<number>(100);
 
-  console.log(props.autoResize, "autor");
-
   React.useEffect(() => {
     if (props.autoResize) {
       handleAutoResize();

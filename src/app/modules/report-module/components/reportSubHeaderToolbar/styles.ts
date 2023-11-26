@@ -12,7 +12,7 @@ export const styles = {
     position: fixed;
     background: #f4f4f4;
     flex-direction: column;
-    justify-content: start;
+    justify-content: ${toolbarVisible ? "start" : "center"};
     align-items: center;
   `,
   innercontainer: css`
@@ -98,9 +98,6 @@ export const styles = {
     }
   `,
   nameInput: css`
-    /* overflow: hidden;
-    height: 0px; */
-
     color: #262c34;
     font-size: 24px;
     font-weight: 700;
@@ -110,25 +107,9 @@ export const styles = {
     font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
     overflow-x: visible;
     outline: none;
-    /* padding-left: 5px; */
     &:focus {
       background: #f1f3f5;
     }
-
-    /* color: #262c34;
-    font-size: 12px;
-    line-height: 14px;
-    letter-spacing: 0.6px;
-    font-family: sans-serif;
-    font-weight: 400;
-    height: 20px;
-    min-width: 150px;
-    border: none;
-    border-bottom: 5px solid green;
-    background-color: transparent;
-
-    outline: none;
-    padding-left: 5px; */
   `,
   endContainer: css`
     display: flex;
@@ -136,7 +117,15 @@ export const styles = {
     align-items: center;
     width: 30%;
     justify-content: flex-end;
-    /* background-color: pink; */
+  `,
+  previewEndContainer: css`
+    display: flex;
+    gap: 0px;
+    align-items: center;
+    width: 30%;
+    justify-content: flex-end;
+    position: absolute;
+    right: 2%;
   `,
   iconbtns: css`
     display: flex;
@@ -151,21 +140,5 @@ export const styles = {
     white-space: pre;
     font-size: 24px;
     font-weight: 700;
-    /* color: #262c34;
-    font-size: 12px;
-    line-height: 14px;
-    letter-spacing: 0.6px;
-    font-family: sans-serif;
-    font-weight: 400;
-    height: 20px;
-    min-width: 150px;
-    border: none;
-    border-bottom: 5px solid pink;
-    background-color: transparent;
-
-    visibility: hidden;
-    position: fixed;
-    left: 0;
-    padding: 5px; */
   `,
 };

@@ -22,6 +22,7 @@ import { linkDecorator } from "app/modules/chart-module/routes/text/RichEditor/d
 
 export function ReportPreviewView(props: {
   setIsPreviewView: React.Dispatch<React.SetStateAction<boolean>>;
+  setAutoSave: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const { page } = useParams<{ page: string }>();
   const token = useSessionStorage("authToken", "")[0];
@@ -63,6 +64,8 @@ export function ReportPreviewView(props: {
   const [reportPreviewData, setReportPreviewData] = React.useState(reportData);
 
   React.useEffect(() => {
+    props.setAutoSave(true);
+
     if (token) {
       fetchReportData({ token, getId: page });
     } else {
@@ -112,7 +115,7 @@ export function ReportPreviewView(props: {
   return (
     <div id="export-container">
       <HeaderBlock
-        previewMode
+        previewMode={true}
         headerDetails={{
           title: EditorState.createWithContent(
             convertFromRaw(reportPreviewData.title)

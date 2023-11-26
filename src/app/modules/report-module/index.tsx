@@ -39,6 +39,7 @@ import {
 } from "app/state/recoil/atoms";
 import { ReportSubheaderToolbar } from "app/modules/report-module/components/reportSubHeaderToolbar";
 import { ToolbarPluginsType } from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
+import useAutosave from "app/hooks/useAutoSave";
 
 interface RowFrameProps {
   structure:
@@ -70,6 +71,7 @@ export default function ReportModule() {
   const AppliedHeaderDetailsRef = React.useRef<IHeaderDetails>(
     {} as IHeaderDetails
   );
+  const [autoSave, setAutoSave] = React.useState<boolean>(true);
 
   /** static toolbar states */
   const [plugins, setPlugins] = React.useState<ToolbarPluginsType>([]);
@@ -330,10 +332,6 @@ export default function ReportModule() {
     setFramesArray(localFramesArray);
   }, [persistedReportState]);
 
-  const reportCreateData = useStoreState(
-    (state) =>
-      (state.reports.ReportCreate.crudData ?? emptyReport) as ReportModel
-  );
   const clearChart = useStoreActions(
     (actions) => actions.charts.ChartGet.clear
   );
@@ -352,14 +350,6 @@ export default function ReportModule() {
     (state) => (state.reports.ReportGet.crudData ?? emptyReport) as ReportModel
   );
 
-  const reportCreateLoading = useStoreState(
-    (state) => state.reports.ReportCreate.loading
-  );
-
-  const reportCreateSuccess = useStoreState(
-    (state) => state.reports.ReportCreate.success
-  );
-
   const reportCreate = useStoreActions(
     (actions) => actions.reports.ReportCreate.post
   );
@@ -370,10 +360,6 @@ export default function ReportModule() {
 
   const reportEditLoading = useStoreState(
     (state) => state.reports.ReportUpdate.loading
-  );
-
-  const reportEditSuccess = useStoreState(
-    (state) => state.reports.ReportUpdate.success
   );
 
   const reportEdit = useStoreActions(
@@ -413,7 +399,7 @@ export default function ReportModule() {
     if (type === "ai") {
       history.push(`/report/${page}/ai-template`);
     } else {
-      history.push(`/report/${page}/create`);
+      onSave();
     }
   };
 
@@ -540,6 +526,14 @@ export default function ReportModule() {
     });
   };
 
+  useAutosave(
+    () => {
+      onSave();
+    },
+    30 * 1000,
+    autoSave
+  );
+
   React.useEffect(() => {
     if (view === "edit" && !rightPanelOpen) {
       setRightPanelOpen(true);
@@ -564,24 +558,13 @@ export default function ReportModule() {
     setIsPreviewSaveEnabled(textValue || framesArrayState);
   }, [reportName, framesArray, headerDetails]);
 
-  React.useEffect(() => {
-    if (
-      (reportCreateSuccess &&
-        reportCreateData.id &&
-        reportCreateData.id.length > 0) ||
-      reportEditSuccess
-    ) {
-      const id = reportCreateSuccess ? reportCreateData.id : page;
-      history.push(`/report/${id}`);
-    }
-  }, [reportCreateSuccess, reportEditSuccess, reportCreateData]);
-
   return (
     <DndProvider backend={HTML5Backend}>
-      {(reportCreateLoading || reportEditLoading) && <PageLoader />}
       {!reportError401 && view !== "ai-template" && view !== "initial" && (
         <ReportSubheaderToolbar
           pageType="report"
+          autoSave={autoSave as boolean}
+          setAutoSave={setAutoSave}
           onReportSave={onSave}
           setName={setReportName}
           setHasSubHeaderTitleFocused={setHasSubHeaderTitleFocused}
@@ -659,6 +642,7 @@ export default function ReportModule() {
           <ReportEditView
             open={rightPanelOpen}
             setName={setReportName}
+            reportName={reportName}
             localPickedCharts={localPickedCharts}
             framesArray={framesArray}
             headerDetails={headerDetails}
@@ -670,16 +654,24 @@ export default function ReportModule() {
             stopInitializeFramesWidth={stopInitializeFramesWidth}
             setStopInitializeFramesWidth={setStopInitializeFramesWidth}
             view={view}
+            hasSubHeaderTitleFocused={hasSubHeaderTitleFocused}
             isEditorFocused={isEditorFocused}
             setIsEditorFocused={setIsEditorFocused}
             setPlugins={setPlugins}
+            setAutoSave={setAutoSave}
           />
         </Route>
         <Route path="/report/:page/preview">
-          <ReportPreviewView setIsPreviewView={setIsPreviewView} />
+          <ReportPreviewView
+            setIsPreviewView={setIsPreviewView}
+            setAutoSave={setAutoSave}
+          />
         </Route>
         <Route path="/report/:page">
-          <ReportPreviewView setIsPreviewView={setIsPreviewView} />
+          <ReportPreviewView
+            setIsPreviewView={setIsPreviewView}
+            setAutoSave={setAutoSave}
+          />
         </Route>
         <Route path="/report/new">
           <Redirect to="/report/new/initial" />
