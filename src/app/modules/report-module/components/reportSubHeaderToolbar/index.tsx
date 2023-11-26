@@ -409,6 +409,7 @@ export function ReportSubheaderToolbar(props: ReportSubheaderToolbarProps) {
                     font-family: "Gotham Narrow", sans-serif;
                     font-size: 12px;
                     font-weight: 325;
+                    margin: 0px;
                   `}
                 >
                   saving changes{" "}
@@ -422,7 +423,7 @@ export function ReportSubheaderToolbar(props: ReportSubheaderToolbarProps) {
                   align-items: center;
                   gap: 4px;
                   span {
-                    margin-bottom: -4px;
+                    margin-bottom: -7px;
                   }
                 `}
               >
@@ -435,6 +436,8 @@ export function ReportSubheaderToolbar(props: ReportSubheaderToolbarProps) {
                     font-family: "Gotham Narrow", sans-serif;
                     font-size: 12px;
                     font-weight: 325;
+                    margin: 0px;
+                    margin-top: 2px;
                   `}
                 >
                   All changes saved{" "}
@@ -482,6 +485,7 @@ export function ReportSubheaderToolbar(props: ReportSubheaderToolbarProps) {
                             : !isSavedEnabled
                         }
                         css={`
+                          padding: 4px;
                           :disabled {
                             opacity: 0.5;
                           }

@@ -12,11 +12,10 @@ export const styles = {
     position: fixed;
     background: #f4f4f4;
     flex-direction: column;
-    justify-content: ${toolbarVisible ? "start" : "center"};
+    justify-content: center;
     align-items: center;
   `,
   innercontainer: css`
-    height: 100%;
     display: flex;
     align-items: center;
     flex-direction: row;
@@ -113,7 +112,7 @@ export const styles = {
   `,
   endContainer: css`
     display: flex;
-    gap: 67px;
+    gap: 22px;
     align-items: center;
     width: 30%;
     justify-content: flex-end;

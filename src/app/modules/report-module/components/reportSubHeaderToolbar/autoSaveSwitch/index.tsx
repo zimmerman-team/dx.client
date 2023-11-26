@@ -1,27 +1,67 @@
 import React from "react";
-import "app/modules/report-module/components/reportSubHeaderToolbar/autoSaveSwitch/style.css";
-export default function AutoSaveSwitch(props: {
+
+import styled from "styled-components";
+interface Props {
+  checked: boolean;
+  setAutoSave?: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const StyledLabel = styled.label<Props>`
+  position: relative;
+  display: inline-block;
+  width: 62px;
+  height: 24px;
+  border-radius: 36px;
+  background-color: ${({ checked }) => (checked ? "#231D2C" : "#ADB5BD")};
+  cursor: pointer;
+  padding-right: 4px;
+  p {
+    color: #fff;
+    margin: 0;
+    font-size: 12px;
+    transform: ${({ checked }) =>
+      checked ? "translateX(6px)" : "translateX(32px)"};
+  }
+`;
+
+const StyledInput = styled.input`
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 36px;
+  appearance: none;
+  cursor: pointer;
+`;
+
+const StyledSpan = styled.span<Props>`
+  position: absolute;
+  left: 0;
+  width: 14px;
+  height: 14px;
+  border-radius: 36px;
+  transition: transform 0.3s ease-in-out;
+  top: 4.5px;
+  background-color: #fff;
+  cursor: pointer;
+  transform: ${({ checked }) =>
+    checked ? "translateX(42px)" : "translateX(6px)"};
+`;
+
+const AutoSaveSwitch = (props: {
   checked: boolean;
   setAutoSave: React.Dispatch<React.SetStateAction<boolean>>;
-}) {
+}) => {
   return (
-    <>
-      <div className="toggle-button-cover">
-        <div className="button-cover">
-          <div className="button b2" id="button-13">
-            <input
-              type="checkbox"
-              className="checkbox"
-              checked={props.checked}
-              onChange={(e) => props.setAutoSave(e.target.checked)}
-            />
-            <div className="knobs" id="text">
-              <span></span>
-            </div>
-            <div className="layer"></div>
-          </div>
-        </div>
-      </div>
-    </>
+    <StyledLabel checked={props.checked}>
+      <p>{props.checked ? "ON" : "OFF"}</p>
+      <StyledInput
+        type="checkbox"
+        checked={props.checked}
+        onChange={(e) => props.setAutoSave(e.target.checked)}
+      />
+      <StyledSpan checked={props.checked} />
+    </StyledLabel>
   );
-}
+};
+
+export default AutoSaveSwitch;
