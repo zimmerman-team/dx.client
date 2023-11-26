@@ -1,10 +1,12 @@
+import { IHeaderDetails } from "app/modules/report-module/components/right-panel/data";
+import { IFramesArray } from "app/modules/report-module/views/create/data";
 import React from "react";
 
 function useAutosave(
   callback: () => void,
   delay: number,
   autoSave: boolean,
-  deps = []
+  deps: (IFramesArray[] | string | IHeaderDetails)[]
 ) {
   const savedCallback = React.useRef<() => void>(); // to save the current "fresh" callback
 
@@ -19,13 +21,14 @@ function useAutosave(
     function runCallback() {
       savedCallback.current?.();
     }
-    if (autoSave === false) {
+
+    if (autoSave) {
       // run the interval
-      let interval = setInterval(runCallback, delay);
+      let timeout = setTimeout(runCallback, delay);
       // clean up on unmount or dependency change
-      return () => clearInterval(interval);
+      return () => clearTimeout(timeout);
     }
-  }, [delay, autoSave, ...deps]);
+  }, [autoSave, ...deps]);
 }
 
 export default useAutosave;

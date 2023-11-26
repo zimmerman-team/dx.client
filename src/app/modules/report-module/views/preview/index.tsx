@@ -64,7 +64,7 @@ export function ReportPreviewView(props: {
   const [reportPreviewData, setReportPreviewData] = React.useState(reportData);
 
   React.useEffect(() => {
-    props.setAutoSave(true);
+    props.setAutoSave(false);
 
     if (token) {
       fetchReportData({ token, getId: page });

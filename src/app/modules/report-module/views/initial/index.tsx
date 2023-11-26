@@ -24,7 +24,8 @@ import ReportsGrid from "app/modules/home-module/components/Reports/reportsGrid"
 import { persistedReportStateAtom } from "app/state/recoil/atoms";
 import { useResetRecoilState } from "recoil";
 import { useHistory, useParams } from "react-router-dom";
-import { useStoreState } from "app/state/store/hooks";
+import { useStoreActions, useStoreState } from "app/state/store/hooks";
+import { useMount, useUpdateEffect } from "react-use";
 
 export function ReportInitialView(props: ReportInitialViewProps) {
   const history = useHistory();
@@ -50,6 +51,9 @@ export function ReportInitialView(props: ReportInitialViewProps) {
   const reportCreateData = useStoreState(
     (state) =>
       (state.reports.ReportCreate.crudData ?? emptyReport) as ReportModel
+  );
+  const clearReportEdit = useStoreActions(
+    (actions) => actions.reports.ReportUpdate.clear
   );
 
   const openSortPopover = Boolean(sortPopoverAnchorEl);
@@ -81,7 +85,11 @@ export function ReportInitialView(props: ReportInitialViewProps) {
     props.resetReport();
   }, []);
 
-  React.useEffect(() => {
+  useMount(() => {
+    clearReportEdit();
+  });
+
+  useUpdateEffect(() => {
     if (
       (reportCreateSuccess &&
         reportCreateData.id &&

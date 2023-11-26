@@ -71,7 +71,7 @@ export default function ReportModule() {
   const AppliedHeaderDetailsRef = React.useRef<IHeaderDetails>(
     {} as IHeaderDetails
   );
-  const [autoSave, setAutoSave] = React.useState<boolean>(true);
+  const [autoSave, setAutoSave] = React.useState<boolean>(false);
 
   /** static toolbar states */
   const [plugins, setPlugins] = React.useState<ToolbarPluginsType>([]);
@@ -530,8 +530,9 @@ export default function ReportModule() {
     () => {
       onSave();
     },
-    30 * 1000,
-    autoSave
+    2 * 1000,
+    autoSave,
+    [framesArray, reportName, headerDetails]
   );
 
   React.useEffect(() => {

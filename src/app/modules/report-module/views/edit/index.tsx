@@ -71,7 +71,7 @@ function ReportEditView(props: ReportEditViewProps) {
 
   React.useEffect(() => {
     fetchReportData({ token, getId: page });
-    props.setAutoSave(false);
+    props.setAutoSave(true);
   }, [page, token]);
 
   React.useEffect(() => {
