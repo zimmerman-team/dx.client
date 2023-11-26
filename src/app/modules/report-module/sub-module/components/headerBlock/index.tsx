@@ -120,7 +120,6 @@ export default function HeaderBlock(props: Props) {
       title: text,
     });
     if (text.getCurrentContent().getPlainText() !== "") {
-      console.log("mod");
       setIsReportTitleModified(true);
     }
   };

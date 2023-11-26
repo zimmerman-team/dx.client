@@ -37,7 +37,6 @@ export default function AutoResizeInput(props: InputProps) {
         ? spanAutoResizeWidth
         : minWidth;
 
-    console.log(autoResizeInputWidth, "autoResizeInputWidth");
     if (autoResizeInputWidth < props.maxWidth) {
       setAutoResizeInputWidth(autoResizeInputWidth);
     }
