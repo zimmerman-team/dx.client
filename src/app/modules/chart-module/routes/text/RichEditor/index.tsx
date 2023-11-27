@@ -53,6 +53,7 @@ export const RichEditor = (props: {
 
   const emojiPlugin = createEmojiPlugin({
     selectButtonContent: EmojiButton,
+    theme: { emojiSelectButton: buttonStyles.emojiButton },
   });
   const textAlignmentPlugin = createTextAlignmentPlugin({
     theme: {

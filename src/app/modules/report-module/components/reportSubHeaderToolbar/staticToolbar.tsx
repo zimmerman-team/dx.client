@@ -60,7 +60,6 @@ export default function StaticToolbar(props: {
 
   const bgId = bgOpen ? "bg-popover" : undefined;
   const colorId = colorOpen ? "color-popover" : undefined;
-
   //end of control modals for color and background color pickers
 
   const Toolbar = (props.plugins[0] as StaticToolBarPlugin)?.Toolbar;
