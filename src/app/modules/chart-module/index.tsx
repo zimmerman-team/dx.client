@@ -87,6 +87,9 @@ export default function ChartModule() {
     chartFromAPI,
     dimensions,
   });
+  const [chartErrorMessage, setChartErrorMessage] = React.useState(
+    "Something went wrong with rendering your chart!"
+  );
   const isSaveLoading = useStoreState(
     (state) => state.charts.ChartCreate.loading
   );
@@ -337,6 +340,7 @@ export default function ChartModule() {
     };
   }, [page, token]);
 
+  console.log(chartErrorMessage, "charterrror");
   const errorComponent = () => {
     return (
       <div css={commonStyles.container}>
@@ -378,12 +382,17 @@ export default function ChartModule() {
             <ErrorOutlineIcon htmlColor="#E75656" fontSize="large" />
             {notFound ? (
               <p>
-                Something went wrong with rendering your chart!
+                {chartErrorMessage}
                 <br />
-                <span>
-                  <button onClick={() => loadDataFromAPI()}>Reload</button>{" "}
-                </span>{" "}
-                to try again.
+                {chartErrorMessage !==
+                  "Sankey is a DAG, the original data has cycle!" && (
+                  <>
+                    <span>
+                      <button onClick={() => loadDataFromAPI()}>Reload</button>{" "}
+                    </span>
+                    to try again.
+                  </>
+                )}
               </p>
             ) : (
               <p>
@@ -472,6 +481,8 @@ export default function ChartModule() {
                 setVisualOptions={setVisualOptions}
                 renderedChartSsr={activeRenderedChartSsr}
                 renderedChartMappedData={renderedChartMappedData}
+                setChartErrorMessage={setChartErrorMessage}
+                setNotFound={setNotFound}
               />
             </Route>
             <Route path="/chart/:page/customize">
@@ -484,6 +495,8 @@ export default function ChartModule() {
                 setVisualOptions={setVisualOptions}
                 renderedChartSsr={activeRenderedChartSsr}
                 renderedChartMappedData={renderedChartMappedData}
+                setChartErrorMessage={setChartErrorMessage}
+                setNotFound={setNotFound}
               />
             </Route>
             <Route path="/chart/:page/lock">
@@ -496,6 +509,8 @@ export default function ChartModule() {
                 setVisualOptions={setVisualOptions}
                 renderedChartSsr={activeRenderedChartSsr}
                 renderedChartMappedData={renderedChartMappedData}
+                setChartErrorMessage={setChartErrorMessage}
+                setNotFound={setNotFound}
               />
             </Route>
             <Route path="/chart/:page/filters">
@@ -507,6 +522,8 @@ export default function ChartModule() {
                 setVisualOptions={setVisualOptions}
                 renderedChartSsr={activeRenderedChartSsr}
                 renderedChartMappedData={renderedChartMappedData}
+                setChartErrorMessage={setChartErrorMessage}
+                setNotFound={setNotFound}
               />
             </Route>
             <Route path="/chart/:page/mapping">
@@ -519,6 +536,8 @@ export default function ChartModule() {
                 renderedChart={content}
                 renderedChartSsr={activeRenderedChartSsr}
                 renderedChartMappedData={renderedChartMappedData}
+                setChartErrorMessage={setChartErrorMessage}
+                setNotFound={setNotFound}
               />
             </Route>
             <Route path="/chart/:page/chart-type">

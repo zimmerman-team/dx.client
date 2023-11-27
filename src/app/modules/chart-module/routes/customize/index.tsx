@@ -69,6 +69,8 @@ function ChartBuilderCustomize(props: ChartBuilderCustomizeProps) {
             setVisualOptions={props.setVisualOptions}
             renderedChartSsr={props.renderedChartSsr}
             renderedChartMappedData={props.renderedChartMappedData}
+            setChartErrorMessage={props.setChartErrorMessage}
+            setNotFound={props.setNotFound}
           />
         </div>
       </div>
