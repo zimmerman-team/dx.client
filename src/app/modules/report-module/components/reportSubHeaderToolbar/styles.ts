@@ -105,6 +105,7 @@ export const styles = {
     transition: background 0.2s ease-in-out;
     font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
     overflow-x: visible;
+    padding-left: 0px;
     outline: none;
     &:focus {
       background: #f1f3f5;
