@@ -26,6 +26,7 @@ import { useResetRecoilState } from "recoil";
 import { useHistory, useParams } from "react-router-dom";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import { useMount, useUpdateEffect } from "react-use";
+import { isEmpty } from "lodash";
 
 export function ReportInitialView(props: ReportInitialViewProps) {
   const history = useHistory();
@@ -54,6 +55,9 @@ export function ReportInitialView(props: ReportInitialViewProps) {
   );
   const clearReportEdit = useStoreActions(
     (actions) => actions.reports.ReportUpdate.clear
+  );
+  const clearReportCreate = useStoreActions(
+    (actions) => actions.reports.ReportCreate.clear
   );
 
   const openSortPopover = Boolean(sortPopoverAnchorEl);
@@ -86,20 +90,16 @@ export function ReportInitialView(props: ReportInitialViewProps) {
   }, []);
 
   useMount(() => {
+    clearReportCreate();
     clearReportEdit();
   });
 
   useUpdateEffect(() => {
-    if (
-      (reportCreateSuccess &&
-        reportCreateData.id &&
-        reportCreateData.id.length > 0) ||
-      reportEditSuccess
-    ) {
-      const id = reportCreateSuccess ? reportCreateData.id : page;
+    if (reportCreateSuccess && !isEmpty(reportCreateData?.id)) {
+      const id = reportCreateData.id;
       history.push(`/report/${id}/edit`);
     }
-  }, [reportCreateSuccess, reportEditSuccess, reportCreateData]);
+  }, [reportCreateSuccess, reportCreateData]);
 
   return (
     <Container maxWidth="lg">

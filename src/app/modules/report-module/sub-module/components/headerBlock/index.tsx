@@ -20,6 +20,7 @@ import { ToolbarPluginsType } from "app/modules/report-module/components/reportS
 interface Props {
   previewMode: boolean;
   hasSubHeaderTitleFocused?: boolean;
+  setHasSubHeaderTitleFocused?: React.Dispatch<React.SetStateAction<boolean>>;
   setReportName?: React.Dispatch<React.SetStateAction<string>>;
   reportName?: string;
   setPlugins: React.Dispatch<React.SetStateAction<ToolbarPluginsType>>;
@@ -73,16 +74,17 @@ export default function HeaderBlock(props: Props) {
     inputRef.current?.focus();
   }, []);
 
+  React.useEffect(() => {
+    if (props.reportName !== "Untitled report") {
+      props.setHasSubHeaderTitleFocused?.(true);
+    }
+  }, []);
+
   //handles report name state
   const [,] = useDebounce(
     () => {
       // checks when headerDetails.title is empty and report title has not been focused
-
-      if (
-        !props.hasSubHeaderTitleFocused &&
-        isReportTitleModified &&
-        (props.reportName === "Untitled report" || props.reportName === "")
-      ) {
+      if (!props.hasSubHeaderTitleFocused && isReportTitleModified) {
         props.setReportName?.(
           props.headerDetails.title.getCurrentContent().getPlainText()
         );

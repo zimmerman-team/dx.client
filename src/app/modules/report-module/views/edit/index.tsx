@@ -182,9 +182,10 @@ function ReportEditView(props: ReportEditViewProps) {
           ...props.headerDetails,
           createdDate: reportData.createdDate,
         }}
-        reportName={props.reportName}
+        reportName={reportData.name}
         setReportName={props.setName}
         hasSubHeaderTitleFocused={props.hasSubHeaderTitleFocused}
+        setHasSubHeaderTitleFocused={props.setHasSubHeaderTitleFocused}
         setHeaderDetails={props.setHeaderDetails}
         isEditorFocused={props.isEditorFocused}
         setIsEditorFocused={props.setIsEditorFocused}

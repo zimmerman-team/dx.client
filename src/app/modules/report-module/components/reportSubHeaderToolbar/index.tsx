@@ -200,11 +200,11 @@ export function ReportSubheaderToolbar(props: ReportSubheaderToolbarProps) {
   };
 
   const onSave = () => {
-    props.onReportSave();
+    props.onReportSave("edit");
   };
 
   const handleViewReport = () => {
-    props.onReportSave().then(() => {
+    props.onReportSave("edit").then(() => {
       history.push(`/report/${page}`);
     });
   };

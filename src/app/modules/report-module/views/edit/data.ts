@@ -6,6 +6,7 @@ export interface ReportEditViewProps {
   open: boolean;
   view: "initial" | "edit" | "create" | "preview" | "ai-template";
   hasSubHeaderTitleFocused: boolean;
+  setHasSubHeaderTitleFocused: React.Dispatch<React.SetStateAction<boolean>>;
   setFramesArray: React.Dispatch<React.SetStateAction<IFramesArray[]>>;
   framesArray: IFramesArray[];
   localPickedCharts: string[];

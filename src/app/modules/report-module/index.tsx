@@ -399,7 +399,7 @@ export default function ReportModule() {
     if (type === "ai") {
       history.push(`/report/${page}/ai-template`);
     } else {
-      onSave();
+      onSave("create");
     }
   };
 
@@ -483,8 +483,8 @@ export default function ReportModule() {
     setRightPanelOpen(true);
   };
 
-  const onSave = async () => {
-    const action = page === "new" ? reportCreate : reportEdit;
+  const onSave = async (type: "create" | "edit") => {
+    const action = type === "create" ? reportCreate : reportEdit;
     action({
       token,
       patchId: page === "new" ? undefined : page,
@@ -528,7 +528,7 @@ export default function ReportModule() {
 
   useAutosave(
     () => {
-      onSave();
+      onSave("edit");
     },
     2 * 1000,
     autoSave,
@@ -656,6 +656,7 @@ export default function ReportModule() {
             setStopInitializeFramesWidth={setStopInitializeFramesWidth}
             view={view}
             hasSubHeaderTitleFocused={hasSubHeaderTitleFocused}
+            setHasSubHeaderTitleFocused={setHasSubHeaderTitleFocused}
             isEditorFocused={isEditorFocused}
             setIsEditorFocused={setIsEditorFocused}
             setPlugins={setPlugins}
