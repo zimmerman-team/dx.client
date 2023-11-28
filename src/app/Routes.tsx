@@ -2,11 +2,13 @@
 
 // base
 import React, { Suspense, lazy } from "react";
+import { socialAuth } from "app/utils/socialAuth";
 import { useScrollToTop } from "app/hooks/useScrollToTop";
 import { PageLoader } from "app/modules/common/page-loader";
 import { RouteWithAppBar } from "app/utils/RouteWithAppBar";
 import { Route, Switch, useHistory } from "react-router-dom";
 import { NoMatchPage } from "app/modules/common/no-match-page";
+import { useGoogleOneTapLogin } from "react-google-one-tap-login";
 import {
   AppState,
   Auth0Provider,
@@ -99,6 +101,37 @@ const AuthLoader = () => {
   return null;
 };
 
+const OneTapLoginComponent = () => {
+  const { isLoading, isAuthenticated } = useAuth0();
+  const loadRef = React.useRef<HTMLDivElement>(null);
+
+  useGoogleOneTapLogin({
+    disabled: isLoading || isAuthenticated,
+    onError: (error) => console.log(error),
+    onSuccess: (response) => socialAuth("google-oauth2", response.email),
+    googleAccountConfigs: {
+      client_id: process.env.REACT_APP_GOOGLE_API_CLIENT_ID!,
+      cancel_on_tap_outside: false,
+    },
+  });
+
+  const onBeforeUnload = () => {
+    if (loadRef.current) {
+      loadRef.current.style.display = "block";
+    }
+  };
+
+  React.useEffect(() => {
+    window.onbeforeunload = onBeforeUnload;
+  }, []);
+
+  return (
+    <div ref={loadRef} style={{ display: "none" }}>
+      <PageLoader />
+    </div>
+  );
+};
+
 export function MainRoutes() {
   useScrollToTop();
 
@@ -112,6 +145,7 @@ export function MainRoutes() {
       }}
     >
       <AuthLoader />
+      <OneTapLoginComponent />
       <Suspense fallback={<PageLoader />}>
         <Switch>
           <Route exact path="/callback">
