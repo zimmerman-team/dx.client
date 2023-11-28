@@ -22,6 +22,7 @@ import { ReactComponent as CloseIcon } from "app/modules/home-module/assets/clos
 import { ReactComponent as SearchIcon } from "app/modules/home-module/assets/search-fill.svg";
 
 function ChartModuleDataView(props: {
+  clearChartBuilder: () => void;
   loadDataset: (endpoint: string) => Promise<boolean>;
 }) {
   useTitle("DX DataXplorer - Select Data");
@@ -71,6 +72,8 @@ function ChartModuleDataView(props: {
   };
 
   React.useEffect(() => {
+    //clear chart state
+    props.clearChartBuilder();
     // When the Data View component is rendered, we are at step 1.
     setActivePanels(1);
   }, []);

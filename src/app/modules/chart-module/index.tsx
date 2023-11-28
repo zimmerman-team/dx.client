@@ -75,7 +75,10 @@ export default function ChartModule() {
     isEditMode,
     loadDataset,
     loadDataFromAPI,
-    Error401,
+    error401,
+    setDataError,
+    setNotFound,
+    notFound,
     dataError,
   } = useChartsRawData({
     visualOptions,
@@ -84,6 +87,9 @@ export default function ChartModule() {
     chartFromAPI,
     dimensions,
   });
+  const [chartErrorMessage, setChartErrorMessage] = React.useState(
+    "Something went wrong with rendering your chart!"
+  );
   const isSaveLoading = useStoreState(
     (state) => state.charts.ChartCreate.loading
   );
@@ -108,6 +114,12 @@ export default function ChartModule() {
   );
   const clearChart = useStoreActions(
     (actions) => actions.charts.ChartGet.clear
+  );
+  const createChartClear = useStoreActions(
+    (actions) => actions.charts.ChartCreate.clear
+  );
+  const editChartClear = useStoreActions(
+    (actions) => actions.charts.ChartUpdate.clear
   );
   const resetAppliedFilters = useStoreActions(
     (actions) => actions.charts.appliedFilters.reset
@@ -150,6 +162,11 @@ export default function ChartModule() {
   React.useEffect(() => {
     setChartFromAPI(null);
   }, [chartType, dataTypes]);
+
+  //reset filters dataset types changes
+  React.useEffect(() => {
+    resetAppliedFilters();
+  }, [dataTypes]);
 
   //set chart name to selected dataset if chart name has not been focused
   React.useEffect(() => {
@@ -240,12 +257,23 @@ export default function ChartModule() {
     resetAppliedFilters();
     resetEnabledFilterOptionGroups();
     clearChart();
-    setChartName("Untitled Report");
+    createChartClear();
+    editChartClear();
+    setChartName("Untitled Chart");
+    setDataError(false);
+    setNotFound(false);
   }
 
   function clearChartBuilder() {
     clear().then(() => {
-      console.log("End of reset.", "--visualOptions", visualOptions, chartName);
+      if (process.env.NODE_ENV === "development") {
+        console.log(
+          "End of reset.",
+          "--visualOptions",
+          visualOptions,
+          chartName
+        );
+      }
     });
   }
 
@@ -322,7 +350,13 @@ export default function ChartModule() {
   const errorComponent = () => {
     return (
       <div css={commonStyles.container}>
-        <div css={commonStyles.innercontainer}>
+        <div
+          css={
+            location.pathname === `/chart/${page}`
+              ? ""
+              : commonStyles.innercontainer
+          }
+        >
           <div
             css={`
               height: 362.598px;
@@ -339,24 +373,47 @@ export default function ChartModule() {
               font-weight: bold;
               font-family: "Gotham Narrow", sans-serif;
               text-align: center;
+              button {
+                outline: none;
+                border: none;
+                background: transparent;
+                cursor: pointer;
+                text-decoration: underline;
+              }
               p {
                 margin-top: 18px;
               }
             `}
           >
             <ErrorOutlineIcon htmlColor="#E75656" fontSize="large" />
-            <p>
-              Something went wrong with loading your data!
-              <br />
-              Choose another dataset or upload new.
-            </p>
+            {notFound ? (
+              <p>
+                {chartErrorMessage}
+                <br />
+                {chartErrorMessage !==
+                  "Sankey is a DAG, the original data has cycle!" && (
+                  <>
+                    <span>
+                      <button onClick={() => loadDataFromAPI()}>Reload</button>{" "}
+                    </span>
+                    to try again.
+                  </>
+                )}
+              </p>
+            ) : (
+              <p>
+                Something went wrong with loading your data!
+                <br />
+                Choose another dataset or upload new.
+              </p>
+            )}
           </div>
         </div>
       </div>
     );
   };
 
-  if (chartError401 || Error401) {
+  if (chartError401 || error401) {
     return (
       <>
         <div css="width: 100%; height: 100px;" />
@@ -416,7 +473,7 @@ export default function ChartModule() {
           position: relative;
         `}
       >
-        {dataError ? (
+        {dataError || notFound ? (
           <>{errorComponent()}</>
         ) : (
           <Switch>
@@ -430,6 +487,8 @@ export default function ChartModule() {
                 setVisualOptions={setVisualOptions}
                 renderedChartSsr={activeRenderedChartSsr}
                 renderedChartMappedData={renderedChartMappedData}
+                setChartErrorMessage={setChartErrorMessage}
+                setNotFound={setNotFound}
               />
             </Route>
             <Route path="/chart/:page/customize">
@@ -442,6 +501,8 @@ export default function ChartModule() {
                 setVisualOptions={setVisualOptions}
                 renderedChartSsr={activeRenderedChartSsr}
                 renderedChartMappedData={renderedChartMappedData}
+                setChartErrorMessage={setChartErrorMessage}
+                setNotFound={setNotFound}
               />
             </Route>
             <Route path="/chart/:page/lock">
@@ -454,6 +515,8 @@ export default function ChartModule() {
                 setVisualOptions={setVisualOptions}
                 renderedChartSsr={activeRenderedChartSsr}
                 renderedChartMappedData={renderedChartMappedData}
+                setChartErrorMessage={setChartErrorMessage}
+                setNotFound={setNotFound}
               />
             </Route>
             <Route path="/chart/:page/filters">
@@ -465,6 +528,8 @@ export default function ChartModule() {
                 setVisualOptions={setVisualOptions}
                 renderedChartSsr={activeRenderedChartSsr}
                 renderedChartMappedData={renderedChartMappedData}
+                setChartErrorMessage={setChartErrorMessage}
+                setNotFound={setNotFound}
               />
             </Route>
             <Route path="/chart/:page/mapping">
@@ -477,6 +542,8 @@ export default function ChartModule() {
                 renderedChart={content}
                 renderedChartSsr={activeRenderedChartSsr}
                 renderedChartMappedData={renderedChartMappedData}
+                setChartErrorMessage={setChartErrorMessage}
+                setNotFound={setNotFound}
               />
             </Route>
             <Route path="/chart/:page/chart-type">
@@ -492,7 +559,10 @@ export default function ChartModule() {
               />
             </Route>
             <Route path="/chart/:page/data">
-              <ChartModuleDataView loadDataset={loadDataset} />
+              <ChartModuleDataView
+                loadDataset={loadDataset}
+                clearChartBuilder={clearChartBuilder}
+              />
             </Route>
             <Route path="/chart/:page/preview">
               <ChartBuilderPreviewTheme

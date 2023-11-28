@@ -46,7 +46,9 @@ export default function AddDatasetFragment(props: DragAndDropProps) {
         },
         responseType: "blob", // important
       }).then((response) => {
-        console.log("response", response);
+        if (process.env.NODE_ENV === "development") {
+          console.log("response", response);
+        }
         const b = response.data;
         const gfile = new File([b], file.name, { type: "text/csv" });
         props.setFile(gfile);
@@ -97,7 +99,9 @@ export default function AddDatasetFragment(props: DragAndDropProps) {
       token: "",
       setSelectFolderEnabled: true,
       callbackFunction: (d: PickerCallback) => {
-        console.log(d);
+        if (process.env.NODE_ENV === "development") {
+          console.log(d);
+        }
         setFileData(d);
       },
     });

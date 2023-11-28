@@ -3,13 +3,13 @@ import { css } from "styled-components";
 export const undoButtonStyle = css`
   box-sizing: border-box;
   border: 1px solid #ddd;
-  height: 1.5em;
+  height: 1.9em;
   color: #888;
   border-radius: 1.5em;
   line-height: 1.2em;
   cursor: pointer;
 
-  width: 2.5em;
+  width: 2.9em;
   font-weight: bold;
   font-size: 1.5em;
   padding: 0;

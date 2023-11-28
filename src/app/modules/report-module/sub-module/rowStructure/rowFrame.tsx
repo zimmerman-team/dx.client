@@ -17,6 +17,7 @@ import {
 import { cloneDeep } from "lodash";
 import { IFramesArray } from "../../views/create/data";
 import { useOnClickOutside } from "usehooks-ts";
+import { ToolbarPluginsType } from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
 
 const _rowStructureDetailItems = [
   [{ rowType: "oneByOne", rowId: "oneByOne-1", width: "100%", factor: 1 }],
@@ -132,6 +133,9 @@ export interface RowFrameProps {
   handlePersistReportState: () => void;
   rowContentHeights: number[];
   rowContentWidths: number[];
+  setPlugins: React.Dispatch<React.SetStateAction<ToolbarPluginsType>>;
+  isEditorFocused: boolean;
+  setIsEditorFocused: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface IRowStructureType {
@@ -374,6 +378,9 @@ export default function RowFrame(props: RowFrameProps) {
         previewItems={props.previewItems}
         onRowBoxItemResize={onRowBoxItemResize}
         handlePersistReportState={props.handlePersistReportState}
+        isEditorFocused={props.isEditorFocused}
+        setIsEditorFocused={props.setIsEditorFocused}
+        setPlugins={props.setPlugins}
       />
     ),
     oneByTwo: (
@@ -395,6 +402,9 @@ export default function RowFrame(props: RowFrameProps) {
         previewItems={props.previewItems}
         onRowBoxItemResize={onRowBoxItemResize}
         handlePersistReportState={props.handlePersistReportState}
+        isEditorFocused={props.isEditorFocused}
+        setIsEditorFocused={props.setIsEditorFocused}
+        setPlugins={props.setPlugins}
       />
     ),
     oneByThree: (
@@ -416,6 +426,9 @@ export default function RowFrame(props: RowFrameProps) {
         previewItems={props.previewItems}
         onRowBoxItemResize={onRowBoxItemResize}
         handlePersistReportState={props.handlePersistReportState}
+        isEditorFocused={props.isEditorFocused}
+        setIsEditorFocused={props.setIsEditorFocused}
+        setPlugins={props.setPlugins}
       />
     ),
     oneByFour: (
@@ -436,6 +449,9 @@ export default function RowFrame(props: RowFrameProps) {
         rowContentWidths={props.rowContentWidths}
         deleteFrame={deleteFrame}
         handlePersistReportState={props.handlePersistReportState}
+        isEditorFocused={props.isEditorFocused}
+        setIsEditorFocused={props.setIsEditorFocused}
+        setPlugins={props.setPlugins}
         previewItems={props.previewItems}
       />
     ),
@@ -458,6 +474,9 @@ export default function RowFrame(props: RowFrameProps) {
         previewItems={props.previewItems}
         onRowBoxItemResize={onRowBoxItemResize}
         handlePersistReportState={props.handlePersistReportState}
+        isEditorFocused={props.isEditorFocused}
+        setIsEditorFocused={props.setIsEditorFocused}
+        setPlugins={props.setPlugins}
       />
     ),
   };
