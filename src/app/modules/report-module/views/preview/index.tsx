@@ -171,9 +171,18 @@ export function ReportPreviewView(props: {
 
             return (
               <RowFrame
-                key={"rowframe" + `${index}`}
-                rowId={""}
+                rowId=""
+                view="preview"
+                type="rowFrame"
                 rowIndex={index}
+                framesArray={[]}
+                setPlugins={() => {}}
+                isEditorFocused={false}
+                setFramesArray={() => {}}
+                key={"rowframe" + `${index}`}
+                setIsEditorFocused={() => {}}
+                handlePersistReportState={() => {}}
+                handleRowFrameItemResize={() => {}}
                 forceSelectedType={rowFrame.structure ?? undefined}
                 previewItems={rowFrame.items.map((item, index) => {
                   return contentTypes[index] === "text"
@@ -183,18 +192,12 @@ export function ReportPreviewView(props: {
                       )
                     : item;
                 })}
-                handlePersistReportState={() => {}}
-                handleRowFrameItemResize={() => {}}
-                type="rowFrame"
-                setFramesArray={() => {}}
                 rowContentHeights={
                   rowFrame.contentHeights?.heights ?? rowFrame.contentHeights
                 }
                 rowContentWidths={
                   rowFrame.contentWidths?.widths ?? rowFrame.contentWidths
                 }
-                framesArray={[]}
-                view={"preview"}
               />
             );
           })}

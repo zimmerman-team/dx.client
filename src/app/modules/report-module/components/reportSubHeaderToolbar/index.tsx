@@ -2,6 +2,7 @@ import React from "react";
 import axios from "axios";
 import { useRecoilState } from "recoil";
 import styled from "styled-components/macro";
+import { useAuth0 } from "@auth0/auth0-react";
 import Button from "@material-ui/core/Button";
 import { useSessionStorage } from "react-use";
 import SaveIcon from "@material-ui/icons/Save";
@@ -17,22 +18,24 @@ import IconButton from "@material-ui/core/IconButton";
 import CopyToClipboard from "react-copy-to-clipboard";
 import FileCopyIcon from "@material-ui/icons/FileCopy";
 import AutorenewIcon from "@material-ui/icons/Autorenew";
-import { PageLoader } from "app/modules/common/page-loader";
-import { Link, useHistory, useParams } from "react-router-dom";
-import { styles } from "app/modules/report-module/components/reportSubHeaderToolbar/styles";
-import { useStoreActions, useStoreState } from "app/state/store/hooks";
-import DeleteChartDialog from "app/components/Dialogs/deleteChartDialog";
-import DeleteReportDialog from "app/components/Dialogs/deleteReportDialog";
-import { ReportSubheaderToolbarProps } from "app/modules/common/subheader-toolbar/data";
-import { ExportChartButton } from "app/modules/common/subheader-toolbar/exportButton";
-import { ISnackbarState } from "app/fragments/datasets-fragment/upload-steps/previewFragment";
-import { ReactComponent as PlayIcon } from "app/modules/report-module/asset/play-icon.svg";
 import CloudDoneIcon from "@material-ui/icons/CloudDone";
 import { homeDisplayAtom } from "app/state/recoil/atoms";
-import StaticToolbar from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
-import AutoSaveSwitch from "./autoSaveSwitch";
-import AutoResizeInput from "./autoResizeInput";
+import { PageLoader } from "app/modules/common/page-loader";
 import { createStyles, makeStyles } from "@material-ui/core";
+import { Link, useHistory, useParams } from "react-router-dom";
+import { useStoreActions, useStoreState } from "app/state/store/hooks";
+import DeleteChartDialog from "app/components/Dialogs/deleteChartDialog";
+import { ReportModel, emptyReport } from "app/modules/report-module/data";
+import DeleteReportDialog from "app/components/Dialogs/deleteReportDialog";
+import { ChartAPIModel, emptyChartAPI } from "app/modules/chart-module/data";
+import { ExportChartButton } from "app/modules/common/subheader-toolbar/exportButton";
+import { ReportSubheaderToolbarProps } from "app/modules/common/subheader-toolbar/data";
+import { ReactComponent as PlayIcon } from "app/modules/report-module/asset/play-icon.svg";
+import { styles } from "app/modules/report-module/components/reportSubHeaderToolbar/styles";
+import { ISnackbarState } from "app/fragments/datasets-fragment/upload-steps/previewFragment";
+import StaticToolbar from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
+import AutoSaveSwitch from "app/modules/report-module/components/reportSubHeaderToolbar/autoSaveSwitch";
+import AutoResizeInput from "app/modules/report-module/components/reportSubHeaderToolbar/autoResizeInput";
 
 export const InfoSnackbar = styled((props) => <Snackbar {...props} />)`
   && {
@@ -100,6 +103,7 @@ export const useStyles = makeStyles(() =>
 export function ReportSubheaderToolbar(props: ReportSubheaderToolbarProps) {
   const history = useHistory();
   const classes = useStyles();
+  const { user, isAuthenticated } = useAuth0();
   const { page, view } = useParams<{ page: string; view?: string }>();
   const token = useSessionStorage("authToken", "")[0];
   const [modalDisplay, setModalDisplay] = React.useState({
@@ -127,9 +131,16 @@ export function ReportSubheaderToolbar(props: ReportSubheaderToolbarProps) {
   const loadReports = useStoreActions(
     (actions) => actions.reports.ReportGetList.fetch
   );
+  const loadedReport = useStoreState(
+    (state) => (state.reports.ReportGet.crudData ?? emptyReport) as ReportModel
+  );
 
   const loadCharts = useStoreActions(
     (actions) => actions.charts.ChartGetList.fetch
+  );
+  const loadedChart = useStoreState(
+    (state) =>
+      (state.charts.ChartGet.crudData ?? emptyChartAPI) as ChartAPIModel
   );
 
   const createOrEditChartLoading = useStoreState(
@@ -323,10 +334,14 @@ export function ReportSubheaderToolbar(props: ReportSubheaderToolbarProps) {
     }
   };
 
+  const canChartEditDelete = React.useMemo(() => {
+    const asset = props.pageType === "report" ? loadedReport : loadedChart;
+    return isAuthenticated && asset && asset.owner === user?.sub;
+  }, [user, isAuthenticated, loadedChart, loadedReport, props.pageType]);
+
   return (
     <div id="subheader-toolbar" css={styles.container(props.isEditorFocused)}>
       {createOrEditChartLoading && <PageLoader />}
-
       <Snackbar
         anchorOrigin={{
           vertical: "bottom",
@@ -500,11 +515,13 @@ export function ReportSubheaderToolbar(props: ReportSubheaderToolbarProps) {
               {page !== "new" && !view && (
                 <div css={styles.previewEndContainer}>
                   <ExportChartButton />
-                  <Tooltip title="Duplicate">
-                    <IconButton onClick={handleDuplicate}>
-                      <FileCopyIcon htmlColor="#262c34" />
-                    </IconButton>
-                  </Tooltip>
+                  {isAuthenticated && (
+                    <Tooltip title="Duplicate">
+                      <IconButton onClick={handleDuplicate}>
+                        <FileCopyIcon htmlColor="#262c34" />
+                      </IconButton>
+                    </Tooltip>
+                  )}
                   <Tooltip title="Share">
                     <IconButton onClick={handleClick}>
                       <ShareIcon htmlColor="#262c34" />
@@ -539,21 +556,25 @@ export function ReportSubheaderToolbar(props: ReportSubheaderToolbarProps) {
                       </CopyToClipboard>
                     </div>
                   </Popover>
-                  <Tooltip title="Edit">
-                    <IconButton
-                      component={Link}
-                      to={`/${props.pageType}/${page}/${
-                        props.pageType === "chart" ? "customize" : "edit"
-                      }`}
-                    >
-                      <EditIcon htmlColor="#262c34" />
-                    </IconButton>
-                  </Tooltip>
-                  <Tooltip title="Delete">
-                    <IconButton onClick={handleModalDisplay}>
-                      <DeleteIcon htmlColor="#262c34" />
-                    </IconButton>
-                  </Tooltip>
+                  {canChartEditDelete && (
+                    <Tooltip title="Edit">
+                      <IconButton
+                        component={Link}
+                        to={`/${props.pageType}/${page}/${
+                          props.pageType === "chart" ? "customize" : "edit"
+                        }`}
+                      >
+                        <EditIcon htmlColor="#262c34" />
+                      </IconButton>
+                    </Tooltip>
+                  )}
+                  {canChartEditDelete && (
+                    <Tooltip title="Delete">
+                      <IconButton onClick={handleModalDisplay}>
+                        <DeleteIcon htmlColor="#262c34" />
+                      </IconButton>
+                    </Tooltip>
+                  )}
                 </div>
               )}
             </>
@@ -568,7 +589,6 @@ export function ReportSubheaderToolbar(props: ReportSubheaderToolbarProps) {
           />
         </Container>
       )}
-
       <InfoSnackbar
         anchorOrigin={{
           vertical: snackbarState.vertical,
