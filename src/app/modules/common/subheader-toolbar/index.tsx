@@ -36,7 +36,11 @@ import {
   reportRightPanelViewAtom,
 } from "app/state/recoil/atoms";
 
-export const InfoSnackbar = styled((props) => <Snackbar {...props} />)`
+export const InfoSnackbar = styled((props) => {
+  const { gap, ...otherProps } = props;
+
+  return <Snackbar {...otherProps} />;
+})`
   && {
     bottom: 40px;
   }

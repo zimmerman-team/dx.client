@@ -1,4 +1,5 @@
 import { EditorState } from "draft-js";
+import { ToolbarPluginsType } from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
 
 export interface IRowFrame {
   rowIndex: number;
@@ -73,6 +74,10 @@ export interface ReportCreateViewProps {
     width: number,
     height: number
   ) => void;
+
+  setPlugins: React.Dispatch<React.SetStateAction<ToolbarPluginsType>>;
+  isEditorFocused: boolean;
+  setIsEditorFocused: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface PlaceholderProps {

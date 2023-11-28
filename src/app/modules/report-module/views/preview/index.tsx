@@ -21,7 +21,10 @@ import {
 } from "app/state/recoil/atoms";
 import { linkDecorator } from "app/modules/chart-module/routes/text/RichEditor/decorators";
 
-export function ReportPreviewView(props: ReportPreviewViewProps) {
+export function ReportPreviewView(props: {
+  setIsPreviewView: React.Dispatch<React.SetStateAction<boolean>>;
+  setAutoSave: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   const { page } = useParams<{ page: string }>();
 
   const { isLoading, isAuthenticated } = useAuth0();
@@ -67,6 +70,7 @@ export function ReportPreviewView(props: ReportPreviewViewProps) {
   const [reportPreviewData, setReportPreviewData] = React.useState(reportData);
 
   React.useEffect(() => {
+    props.setAutoSave(false);
     if (!isLoading) {
       if (token) {
         fetchReportData({ token, getId: page });
@@ -103,7 +107,7 @@ export function ReportPreviewView(props: ReportPreviewViewProps) {
       setReportPreviewData({
         ...reportPreviewData,
 
-        title: persistedReportState.headerDetails.title,
+        title: JSON.parse(persistedReportState.headerDetails.title),
         showHeader: persistedReportState.headerDetails.showHeader,
         backgroundColor: persistedReportState.headerDetails.backgroundColor,
         titleColor: persistedReportState.headerDetails.titleColor,
@@ -118,7 +122,7 @@ export function ReportPreviewView(props: ReportPreviewViewProps) {
   return (
     <div id="export-container">
       <HeaderBlock
-        previewMode
+        previewMode={true}
         headerDetails={{
           title: reportPreviewData.title,
           showHeader: reportPreviewData.showHeader,
@@ -131,6 +135,9 @@ export function ReportPreviewView(props: ReportPreviewViewProps) {
           dateColor: reportPreviewData.dateColor,
           createdDate: reportPreviewData.createdDate,
         }}
+        isEditorFocused={false}
+        setIsEditorFocused={() => {}}
+        setPlugins={() => {}}
         setHeaderDetails={() => {}}
       />
       <Container id="content-container" maxWidth="lg" ref={ref}>

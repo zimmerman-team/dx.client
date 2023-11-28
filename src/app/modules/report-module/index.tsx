@@ -14,7 +14,6 @@ import ReportEditView from "app/modules/report-module/views/edit";
 import AITemplate from "app/modules/report-module/views/ai-template";
 import { EditorState, convertFromRaw, convertToRaw } from "draft-js";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
-import { SubheaderToolbar } from "../common/subheader-toolbar/SubheaderToolbar";
 import {
   ReportContentHeightsType,
   ReportContentWidthsType,
@@ -35,9 +34,14 @@ import {
   Redirect,
 } from "react-router-dom";
 import {
+  createChartFromReportAtom,
   persistedReportStateAtom,
   reportRightPanelViewAtom,
+  unSavedReportPreviewModeAtom,
 } from "app/state/recoil/atoms";
+import { ReportSubheaderToolbar } from "app/modules/report-module/components/reportSubHeaderToolbar";
+import { ToolbarPluginsType } from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
+import useAutosave from "app/hooks/useAutoSave";
 
 interface RowFrameProps {
   structure:
@@ -69,10 +73,24 @@ export default function ReportModule() {
   const AppliedHeaderDetailsRef = React.useRef<IHeaderDetails>(
     {} as IHeaderDetails
   );
+  const [autoSave, setAutoSave] = React.useState<boolean>(false);
+
+  /** static toolbar states */
+  const [plugins, setPlugins] = React.useState<ToolbarPluginsType>([]);
+  const [isEditorFocused, setIsEditorFocused] = React.useState(false);
+  /** end of static toolbar states */
 
   const token = useStoreState((state) => state.AuthToken.value);
 
   const setRightPanelView = useRecoilState(reportRightPanelViewAtom)[1];
+
+  const [createChartFromReport, setCreateChartFromReport] = useRecoilState(
+    createChartFromReportAtom
+  );
+
+  const [_reportPreviewMode, setReportPreviewMode] = useRecoilState(
+    unSavedReportPreviewModeAtom
+  );
 
   const [persistedReportState, setPersistedReportState] = useRecoilState(
     persistedReportStateAtom
@@ -300,15 +318,27 @@ export default function ReportModule() {
               };
             }
           )
-        : framesArray;
+        : [
+            {
+              id,
+              frame: {
+                rowIndex: 0,
+                rowId: id,
+                handlePersistReportState,
+                handleRowFrameItemResize,
+                type: "rowFrame",
+              },
+              content: [],
+              contentWidths: [],
+              contentHeights: [],
+              contentTypes: [],
+              structure: null,
+            },
+          ];
 
     setFramesArray(localFramesArray);
   }, [persistedReportState]);
 
-  const reportCreateData = useStoreState(
-    (state) =>
-      (state.reports.ReportCreate.crudData ?? emptyReport) as ReportModel
-  );
   const clearChart = useStoreActions(
     (actions) => actions.charts.ChartGet.clear
   );
@@ -327,14 +357,6 @@ export default function ReportModule() {
     (state) => (state.reports.ReportGet.crudData ?? emptyReport) as ReportModel
   );
 
-  const reportCreateLoading = useStoreState(
-    (state) => state.reports.ReportCreate.loading
-  );
-
-  const reportCreateSuccess = useStoreState(
-    (state) => state.reports.ReportCreate.success
-  );
-
   const reportCreate = useStoreActions(
     (actions) => actions.reports.ReportCreate.post
   );
@@ -345,10 +367,6 @@ export default function ReportModule() {
 
   const reportEditLoading = useStoreState(
     (state) => state.reports.ReportUpdate.loading
-  );
-
-  const reportEditSuccess = useStoreState(
-    (state) => state.reports.ReportUpdate.success
   );
 
   const reportEdit = useStoreActions(
@@ -377,6 +395,14 @@ export default function ReportModule() {
     };
   }, []);
 
+  React.useEffect(() => {
+    setCreateChartFromReport({
+      state: false,
+      page: "",
+      view: "",
+    });
+  }, []);
+
   //get current value of states for handlePersistReportState function
   headerDetailsRef.current = headerDetails;
   AppliedHeaderDetailsRef.current = appliedHeaderDetails;
@@ -388,12 +414,30 @@ export default function ReportModule() {
     if (type === "ai") {
       history.push(`/report/${page}/ai-template`);
     } else {
-      history.push(`/report/${page}/create`);
+      onSave("create");
     }
   };
 
   const resetReport = () => {
     const id = v4();
+    setFramesArray([
+      {
+        id,
+        frame: {
+          rowIndex: 0,
+          rowId: id,
+
+          handlePersistReportState,
+          handleRowFrameItemResize,
+          type: "rowFrame",
+        },
+        content: [],
+        contentWidths: [],
+        contentHeights: [],
+        contentTypes: [],
+        structure: null,
+      },
+    ]);
     setPersistedReportState({
       reportName: "Untitled report",
       headerDetails: {
@@ -418,42 +462,9 @@ export default function ReportModule() {
         descriptionColor: "#ffffff",
         dateColor: "#ffffff",
       },
-      framesArray: JSON.stringify([
-        {
-          id,
-          frame: {
-            rowIndex: 0,
-            rowId: id,
-            handlePersistReportState,
-            handleRowFrameItemResize,
-            type: "rowFrame",
-          },
-          content: [],
-          contentWidths: [],
-          contentHeights: [],
-          contentTypes: [],
-          structure: null,
-        },
-      ]),
+      framesArray: JSON.stringify([]),
     });
-    setFramesArray([
-      {
-        id,
-        frame: {
-          rowIndex: 0,
-          rowId: id,
 
-          handlePersistReportState,
-          handleRowFrameItemResize,
-          type: "rowFrame",
-        },
-        content: [],
-        contentWidths: [],
-        contentHeights: [],
-        contentTypes: [],
-        structure: null,
-      },
-    ]);
     setHeaderDetails({
       title: "",
       description: EditorState.createEmpty(),
@@ -466,10 +477,11 @@ export default function ReportModule() {
     setReportName("Untitled report");
     setRightPanelView("elements");
     setRightPanelOpen(true);
+    setReportPreviewMode(false);
   };
 
-  const onSave = async () => {
-    const action = page === "new" ? reportCreate : reportEdit;
+  const onSave = async (type: "create" | "edit") => {
+    const action = type === "create" ? reportCreate : reportEdit;
     action({
       token,
       patchId: page === "new" ? undefined : page,
@@ -507,6 +519,15 @@ export default function ReportModule() {
     });
   };
 
+  useAutosave(
+    () => {
+      onSave("edit");
+    },
+    2 * 1000,
+    autoSave,
+    [framesArray, reportName, headerDetails]
+  );
+
   React.useEffect(() => {
     if (view === "edit" && !rightPanelOpen) {
       setRightPanelOpen(true);
@@ -531,24 +552,13 @@ export default function ReportModule() {
     setIsPreviewSaveEnabled(textValue || framesArrayState);
   }, [reportName, framesArray, headerDetails]);
 
-  React.useEffect(() => {
-    if (
-      (reportCreateSuccess &&
-        reportCreateData.id &&
-        reportCreateData.id.length > 0) ||
-      reportEditSuccess
-    ) {
-      const id = reportCreateSuccess ? reportCreateData.id : page;
-      history.push(`/report/${id}`);
-    }
-  }, [reportCreateSuccess, reportEditSuccess, reportCreateData]);
-
   return (
     <DndProvider backend={HTML5Backend}>
-      {(reportCreateLoading || reportEditLoading) && <PageLoader />}
       {!reportError401 && view !== "ai-template" && view !== "initial" && (
-        <SubheaderToolbar
+        <ReportSubheaderToolbar
           pageType="report"
+          autoSave={autoSave as boolean}
+          setAutoSave={setAutoSave}
           onReportSave={onSave}
           setName={setReportName}
           setHasSubHeaderTitleFocused={setHasSubHeaderTitleFocused}
@@ -562,6 +572,8 @@ export default function ReportModule() {
           setStopInitializeFramesWidth={setStopInitializeFramesWidth}
           handlePersistReportState={handlePersistReportState}
           isPreviewView={isPreviewView}
+          isEditorFocused={isEditorFocused}
+          plugins={plugins}
         />
       )}
       {view &&
@@ -581,6 +593,7 @@ export default function ReportModule() {
             framesArray={framesArray}
             reportName={reportName}
             handlePersistReportState={handlePersistReportState}
+            isEditorFocused={isEditorFocused}
           />
         )}
       <div
@@ -614,12 +627,16 @@ export default function ReportModule() {
             setHeaderDetails={setHeaderDetails}
             handlePersistReportState={handlePersistReportState}
             handleRowFrameItemResize={handleRowFrameItemResize}
+            isEditorFocused={isEditorFocused}
+            setIsEditorFocused={setIsEditorFocused}
+            setPlugins={setPlugins}
           />
         </Route>
         <Route path="/report/:page/edit">
           <ReportEditView
             open={rightPanelOpen}
             setName={setReportName}
+            reportName={reportName}
             localPickedCharts={localPickedCharts}
             framesArray={framesArray}
             headerDetails={headerDetails}
@@ -631,13 +648,25 @@ export default function ReportModule() {
             stopInitializeFramesWidth={stopInitializeFramesWidth}
             setStopInitializeFramesWidth={setStopInitializeFramesWidth}
             view={view}
+            hasSubHeaderTitleFocused={hasSubHeaderTitleFocused}
+            setHasSubHeaderTitleFocused={setHasSubHeaderTitleFocused}
+            isEditorFocused={isEditorFocused}
+            setIsEditorFocused={setIsEditorFocused}
+            setPlugins={setPlugins}
+            setAutoSave={setAutoSave}
           />
         </Route>
         <Route path="/report/:page/preview">
-          <ReportPreviewView setIsPreviewView={setIsPreviewView} />
+          <ReportPreviewView
+            setIsPreviewView={setIsPreviewView}
+            setAutoSave={setAutoSave}
+          />
         </Route>
         <Route path="/report/:page">
-          <ReportPreviewView setIsPreviewView={setIsPreviewView} />
+          <ReportPreviewView
+            setIsPreviewView={setIsPreviewView}
+            setAutoSave={setAutoSave}
+          />
         </Route>
         <Route path="/report/new">
           <Redirect to="/report/new/initial" />

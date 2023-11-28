@@ -15,12 +15,17 @@ import { headerBlockcss } from "app/modules/report-module/sub-module/components/
 import { ReactComponent as RowFrameHandleAdornment } from "app/modules/report-module/asset/rowFrameHandleAdornment.svg";
 import { Tooltip } from "@material-ui/core";
 import useDebounce from "react-use/lib/useDebounce";
+import { ToolbarPluginsType } from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
 
 interface Props {
   previewMode: boolean;
   hasSubHeaderTitleFocused?: boolean;
+  setHasSubHeaderTitleFocused?: React.Dispatch<React.SetStateAction<boolean>>;
   setReportName?: React.Dispatch<React.SetStateAction<string>>;
   reportName?: string;
+  setPlugins: React.Dispatch<React.SetStateAction<ToolbarPluginsType>>;
+  isEditorFocused: boolean;
+  setIsEditorFocused: React.Dispatch<React.SetStateAction<boolean>>;
   headerDetails: {
     title: string;
     showHeader: boolean;
@@ -48,6 +53,7 @@ export default function HeaderBlock(props: Props) {
   const location = useLocation();
   const { page } = useParams<{ page: string }>();
   const inputRef = React.useRef<HTMLInputElement>(null);
+  const focusTitleOnMount = true;
   const [currentView, setCurrentView] = useRecoilState(
     reportRightPanelViewAtom
   );
@@ -68,11 +74,16 @@ export default function HeaderBlock(props: Props) {
     inputRef.current?.focus();
   }, []);
 
+  React.useEffect(() => {
+    if (props.reportName !== "Untitled report") {
+      props.setHasSubHeaderTitleFocused?.(true);
+    }
+  }, []);
+
   //handles report name state
   const [,] = useDebounce(
     () => {
       // checks when headerDetails.title is empty and report title has not been focused
-
       if (!props.hasSubHeaderTitleFocused && isReportTitleModified) {
         props.setReportName?.(props.headerDetails.title);
       }
@@ -96,6 +107,13 @@ export default function HeaderBlock(props: Props) {
     },
   }));
 
+  const setDescriptionContent = (text: EditorState) => {
+    props.setHeaderDetails({
+      ...props.headerDetails,
+      description: text,
+    });
+  };
+
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -107,13 +125,6 @@ export default function HeaderBlock(props: Props) {
     if (name == "title") {
       setIsReportTitleModified(true);
     }
-  };
-
-  const setTextContent = (text: EditorState) => {
-    props.setHeaderDetails({
-      ...props.headerDetails,
-      description: text,
-    });
   };
 
   const onEdit = () => {
@@ -144,10 +155,7 @@ export default function HeaderBlock(props: Props) {
 
   return (
     <div
-      css={headerBlockcss.container(
-        props.headerDetails.backgroundColor,
-        props.headerDetails.titleColor
-      )}
+      css={headerBlockcss.container(props.headerDetails.backgroundColor)}
       {...handlers}
     >
       {(handleDisplay || currentView === "editHeader") && (
@@ -214,8 +222,10 @@ export default function HeaderBlock(props: Props) {
               onChange={handleChange}
               disabled={props.previewMode}
               value={props.headerDetails.title}
+              css={headerBlockcss.inputStyle(props.headerDetails.titleColor)}
             />
           </div>
+
           <Box height={17} />
           <div
             css={`
@@ -251,9 +261,12 @@ export default function HeaderBlock(props: Props) {
             <RichEditor
               invertColors
               editMode={true}
-              setTextContent={setTextContent}
+              setTextContent={setDescriptionContent}
               placeholder="Create summary"
               textContent={props.headerDetails.description}
+              setPlugins={props.setPlugins}
+              isEditorFocused={props.isEditorFocused}
+              setIsEditorFocused={props.setIsEditorFocused}
             />
           </div>
         </div>

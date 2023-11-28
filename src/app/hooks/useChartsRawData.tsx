@@ -3,56 +3,78 @@ import React from "react";
 import get from "lodash/get";
 import filter from "lodash/filter";
 import isEmpty from "lodash/isEmpty";
+import { useUpdateEffect } from "react-use";
 import { useParams } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
-import { useMount, useUpdateEffect } from "react-use";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
 /* project */
 import { ChartRenderedItem } from "app/modules/chart-module/data";
 
-function checkIfIsEditMode(view?: string): boolean {
-  if (view) return true;
-  return false;
-}
-
-function checkMappingAndDatasetIdNotEmpty(
-  tabmappings: [
-    [
-      {
-        [key: string]: any;
-      }
-    ]
-  ],
-  tabdatasetIds: [
-    [
-      {
-        dataset: string | null;
-      }
-    ]
-  ],
-  activeTabIndex: number,
-  vizIsTextContent: boolean[][]
-): boolean {
-  let mappingsCheck = true;
-  // tabmappings.forEach((tabmapping) => {
-  tabmappings[activeTabIndex].forEach((contentmapping, index) => {
-    if (!vizIsTextContent[activeTabIndex][index]) {
-      mappingsCheck = mappingsCheck && !isEmpty(contentmapping);
-    }
+const getValidMapping = (
+  chartFromAPI: ChartRenderedItem | null,
+  mapping: {
+    [key: string]: any;
+  }
+) => {
+  const dimensionIDs =
+    chartFromAPI?.dimensions?.map((item: any) => item.id) || [];
+  const validMappingKeys = filter(
+    Object.keys(mapping),
+    (key: string) => dimensionIDs.indexOf(key) > -1
+  );
+  let validMapping = {};
+  if (validMappingKeys.length === 0) {
+    validMapping = mapping;
+  }
+  validMappingKeys.forEach((key: string) => {
+    validMapping = {
+      ...validMapping,
+      [key]: mapping[key],
+    };
   });
-  // });
-  let datasetIdsCheck = true;
-  // tabdatasetIds.forEach((tabdatasetId) => {
-  tabdatasetIds[activeTabIndex].forEach((contentdatasetId, index) => {
-    if (!vizIsTextContent[activeTabIndex][index]) {
-      datasetIdsCheck = datasetIdsCheck && !isEmpty(contentdatasetId);
-    }
-  });
-  // });
+  return validMapping;
+};
 
-  return mappingsCheck && datasetIdsCheck;
-}
+const getReqMappingKeyFromReqDimension = (
+  dimensions: any,
+  mapping: {
+    [key: string]: any;
+  }
+) => {
+  //get required dimensions
+  const requiredDimensions = dimensions.filter(
+    (dimension: any) => dimension.required
+  );
+  let requiredMappingKey: { [key: string]: boolean } = {};
+
+  requiredDimensions.forEach((element: any) => {
+    //assign true if mapping key exists and false if not
+    requiredMappingKey[element.id] = element.id in mapping;
+  });
+  return requiredMappingKey;
+};
+
+const allRequiredKeysExist = (
+  req: any,
+  allreq: any,
+  chartType: string | null
+): boolean => {
+  if (isEmpty(allreq)) {
+    return false;
+  }
+
+  for (const key in req) {
+    if (req.hasOwnProperty(key) && !allreq.hasOwnProperty(key)) {
+      return false;
+    }
+    //return false if chartType is sankey and only one dimension is selected
+    if (chartType === "echartsSankey" && allreq[key].ids.length < 2) {
+      return false;
+    }
+  }
+  return true;
+};
 
 export function useChartsRawData(props: {
   visualOptions: any;
@@ -74,10 +96,10 @@ export function useChartsRawData(props: {
   const [sampleData, setSampleData] = React.useState([]);
   const [loading, setLoading] = React.useState(page !== "new");
   const [notFound, setNotFound] = React.useState(false);
-  const [Error401, setError401] = React.useState(false);
+  const [error401, setError401] = React.useState(false);
   const [dataError, setDataError] = React.useState(false);
   const [dataTotalCount, setDataTotalCount] = React.useState(0);
-  const [isEditMode, setIsEditMode] = React.useState(checkIfIsEditMode(view));
+  // const [isEditMode, setIsEditMode] = React.useState(checkIfIsEditMode(view));
   const appliedFilters = useStoreState(
     (state) => state.charts.appliedFilters.value
   );
@@ -103,6 +125,10 @@ export function useChartsRawData(props: {
   const setSelectedChartType = useStoreActions(
     (actions) => actions.charts.chartType.setValue
   );
+  const isEditMode = !(
+    (page !== "new" && view === undefined) ||
+    view === "preview"
+  );
 
   async function loadDataset(endpoint: string) {
     const extraLoader = document.getElementById("extra-loader");
@@ -110,6 +136,7 @@ export function useChartsRawData(props: {
       extraLoader.style.display = "block";
     }
     setLoading(true);
+    setDataError(false);
     return await axios
       .get(`${process.env.REACT_APP_API}/${endpoint}`, {
         headers: {
@@ -118,22 +145,24 @@ export function useChartsRawData(props: {
         },
       })
       .then((response: AxiosResponse) => {
-        setNotFound(false);
-
-        setDataStats(response.data.stats);
-        setSampleData(response.data.sample);
-        setDataTypes(response.data.dataTypes);
-        setDataTotalCount(response.data.count);
-        setEnabledFilterOptionGroups(response.data.filterOptionGroups);
         if (extraLoader) {
           extraLoader.style.display = "none";
         }
         setLoading(false);
-        return response.data.sample;
+        if (isEmpty(response.data)) {
+          setDataError(true);
+        } else {
+          setDataStats(response.data.stats);
+          setSampleData(response.data.sample);
+          setDataTypes(response.data.dataTypes);
+          setDataTotalCount(response.data.count);
+          setEnabledFilterOptionGroups(response.data.filterOptionGroups);
+        }
+
+        return response.data?.sample;
       })
       .catch((error: AxiosError) => {
         console.log(error);
-        setNotFound(true);
         setDataError(true);
         setDataStats([]);
         setSampleData([]);
@@ -163,6 +192,8 @@ export function useChartsRawData(props: {
           : appliedFilters,
       };
       setLoading(true);
+      setNotFound(false);
+
       await axios
         .post(
           `${process.env.REACT_APP_API}/chart/${chartId ?? page}/render${
@@ -177,9 +208,8 @@ export function useChartsRawData(props: {
           }
         )
         .then((response) => {
-          setNotFound(false);
-
           const chart = response.data || {};
+          setLoading(false);
           if (!isEmpty(chart)) {
             setAllAppliedFilters(chart.appliedFilters || {});
             setEnabledFilterOptionGroups(chart.enabledFilterOptionGroups);
@@ -188,146 +218,97 @@ export function useChartsRawData(props: {
             setSelectedChartType(chart.vizType);
             setDataset(chart.datasetId);
             setChartFromAPI(chart);
-          }
-          if (response.data === null || response.data === undefined) {
+          } else {
             setNotFound(true);
           }
-
-          setLoading(false);
         })
         .catch((error) => {
           console.log("API call error: " + error.message);
-          setNotFound(true);
           setLoading(false);
+          setNotFound(true);
           setError401(error.response?.status === 401);
         });
     }
   }
 
-  useMount(() => {
-    if (isEditMode && page !== "new" && !props.inChartWrapper) {
+  React.useEffect(() => {
+    if (
+      !props.inChartWrapper &&
+      page !== "new" &&
+      (isEditMode || !props.inChartWrapper) &&
+      !isLoading
+    ) {
       loadDataFromAPI();
     }
-  });
+  }, [page, isEditMode, props.inChartWrapper]);
 
-  React.useEffect(() => {
-    const newValue = checkIfIsEditMode(view);
-    if (newValue !== isEditMode) {
-      setIsEditMode(newValue);
+  const renderChartFromAPI = () => {
+    const extraLoader = document.getElementById("extra-loader");
+    if (extraLoader) {
+      extraLoader.style.display = "block";
     }
-  }, [view]);
 
-  React.useEffect(() => {
-    if (!props.inChartWrapper && page !== "new" && !isEditMode && !isLoading) {
-      loadDataFromAPI();
+    const validMapping = getValidMapping(chartFromAPI, mapping);
+    const requiredMappingKey = getReqMappingKeyFromReqDimension(
+      props.dimensions,
+      mapping
+    );
+
+    const body = {
+      rows: [
+        [
+          {
+            mapping: validMapping,
+            vizType: selectedChartType,
+            datasetId: dataset,
+            vizOptions: visualOptions,
+            appliedFilters,
+          },
+        ],
+      ],
+    };
+
+    if (page && allRequiredKeysExist(requiredMappingKey, mapping, chartType)) {
+      setNotFound(false);
+
+      axios
+        .post(`${process.env.REACT_APP_API}/chart/${page}/render`, body, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => {
+          if (extraLoader) {
+            extraLoader.style.display = "none";
+          }
+          const chart = response.data || {};
+          if (isEmpty(chart)) {
+            setNotFound(true);
+          } else {
+            setChartFromAPI(chart);
+          }
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.log("API call error: " + error.message);
+          if (extraLoader) {
+            extraLoader.style.display = "none";
+          }
+          setNotFound(true);
+          setLoading(false);
+          setError401(error.response?.status === 401);
+        });
     }
-  }, [page, isEditMode, token]);
+  };
 
   useUpdateEffect(() => {
-    if (
-      !loading &&
-      !props.inChartWrapper &&
-      (page === "new" || isEditMode) &&
-      !isEmpty(dataset)
-    ) {
-      const extraLoader = document.getElementById("extra-loader");
-      if (extraLoader) {
-        extraLoader.style.display = "block";
-      }
-      const dimensionKeys =
-        chartFromAPI?.dimensions?.map((item: any) => item.id) || [];
-      const validMappingKeys = filter(
-        Object.keys(mapping),
-        (key: string) => dimensionKeys.indexOf(key) > -1
-      );
-      let validMapping = {};
-      if (validMappingKeys.length === 0) {
-        validMapping = mapping;
-      }
-      validMappingKeys.forEach((key: string) => {
-        validMapping = {
-          ...validMapping,
-          [key]: mapping[key],
-        };
-      });
-      const body = {
-        rows: [
-          [
-            {
-              mapping: validMapping,
-              vizType: selectedChartType,
-              datasetId: dataset,
-              vizOptions: visualOptions,
-              appliedFilters,
-            },
-          ],
-        ],
-      };
-
-      //get required dimensions
-      const requiredDimensions = props.dimensions.filter(
-        (dimension: any) => dimension.required
-      );
-      let req = {} as any;
-
-      requiredDimensions.forEach((element: any) => {
-        if (element.id in mapping) {
-          req[element.id] = true;
-        } else {
-          req[element.id] = false;
-        }
-      });
-      function allRequiredKeysExist(req: any, allreq: any) {
-        for (const key in req) {
-          if (req.hasOwnProperty(key) && !allreq.hasOwnProperty(key)) {
-            return false;
-          }
-          //return false if chartType is sankey and only one dimension is selected
-          if (chartType === "echartsSankey" && allreq[key].ids.length < 2) {
-            return false;
-          }
-        }
-        return true;
-      }
-
-      if (page && allRequiredKeysExist(req, mapping)) {
-        axios
-          .post(
-            `${process.env.REACT_APP_API}/chart/${page}/render${
-              token === "" ? "/public" : ""
-            }`,
-            body,
-            {
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          )
-          .then((response) => {
-            const chart = response.data || {};
-            setChartFromAPI(chart);
-            setNotFound(false);
-
-            setLoading(false);
-            if (extraLoader) {
-              extraLoader.style.display = "none";
-            }
-          })
-          .catch((error) => {
-            console.log("API call error: " + error.message);
-            setNotFound(true);
-            setLoading(false);
-            setError401(error.response?.status === 401);
-            if (extraLoader) {
-              extraLoader.style.display = "none";
-            }
-          });
-      }
+    if (!loading && !props.inChartWrapper && isEditMode && !isEmpty(dataset)) {
+      renderChartFromAPI();
     }
   }, [
     page,
-    isEditMode,
+    view,
     mapping,
     selectedChartType,
     get(chartFromAPI, "ssr", false) ? visualOptions : undefined,
@@ -337,7 +318,9 @@ export function useChartsRawData(props: {
   return {
     loading,
     notFound,
-    Error401,
+    setNotFound,
+    setDataError,
+    error401,
     dataError,
     dataTypes,
     dataStats,

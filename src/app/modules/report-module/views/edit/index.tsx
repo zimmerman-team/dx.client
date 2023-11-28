@@ -71,6 +71,7 @@ function ReportEditView(props: ReportEditViewProps) {
 
   React.useEffect(() => {
     fetchReportData({ token, getId: page });
+    props.setAutoSave(true);
   }, [page, token]);
 
   React.useEffect(() => {
@@ -165,13 +166,26 @@ function ReportEditView(props: ReportEditViewProps) {
 
   return (
     <div>
+      <div
+        css={`
+          height: ${props.isEditorFocused ? "55px" : "0px"};
+          transition: all cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
+        `}
+      />
       <HeaderBlock
         previewMode={false}
         headerDetails={{
           ...props.headerDetails,
           createdDate: reportData.createdDate,
         }}
+        reportName={reportData.name}
+        setReportName={props.setName}
+        hasSubHeaderTitleFocused={props.hasSubHeaderTitleFocused}
+        setHasSubHeaderTitleFocused={props.setHasSubHeaderTitleFocused}
         setHeaderDetails={props.setHeaderDetails}
+        isEditorFocused={props.isEditorFocused}
+        setIsEditorFocused={props.setIsEditorFocused}
+        setPlugins={props.setPlugins}
       />
       <Container maxWidth="lg">
         <div
@@ -203,6 +217,9 @@ function ReportEditView(props: ReportEditViewProps) {
                     view={props.view}
                     rowContentHeights={frame.contentHeights}
                     rowContentWidths={frame.contentWidths}
+                    isEditorFocused={props.isEditorFocused}
+                    setIsEditorFocused={props.setIsEditorFocused}
+                    setPlugins={props.setPlugins}
                   />
                   <Box height={38} />
 

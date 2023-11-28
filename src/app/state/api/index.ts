@@ -25,9 +25,13 @@ export const APIModel = <QueryModel, ResponseModel>(
     state.errorData = payload;
   }),
   onSuccess: action((state, payload: ResponseData<ResponseModel>) => {
-    const { addOnData, ...actualPayload } = payload;
+    const { addOnData, isUpdateCrudData, ...actualPayload } = payload;
     state.loading = false;
     state.success = true;
+
+    if (isUpdateCrudData) {
+      state.crudData = actualPayload;
+    }
     if (addOnData) {
       // @ts-ignore
       state.data = {
@@ -114,8 +118,11 @@ export const APIModel = <QueryModel, ResponseModel>(
           }
         )
         .then(
-          (resp: AxiosResponse) =>
-            actions.onSuccess({ ...resp.data, addOnData: false }),
+          (resp: AxiosResponse) => {
+            if (resp.data) {
+              return actions.onSuccess({ ...resp.data, addOnData: false });
+            }
+          },
           (error: any) => actions.onError(error.response)
         );
     }
@@ -131,8 +138,9 @@ export const APIModel = <QueryModel, ResponseModel>(
       })
       .then(
         (resp: AxiosResponse) => {
-          actions.onSuccess(resp.data);
-          return actions.onSuccessCrudData(resp.data);
+          if (resp.data) {
+            actions.onSuccess({ ...resp.data, isUpdateCrudData: true });
+          }
         },
         (error: any) => actions.onError(error.response)
       );
@@ -148,6 +156,7 @@ export const APIModel = <QueryModel, ResponseModel>(
       })
       .then(
         (resp: AxiosResponse) => actions.onSuccessCrudData(resp.data),
+
         (error: any) => actions.onError(error.response)
       );
   }),
