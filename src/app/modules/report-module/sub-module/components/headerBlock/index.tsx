@@ -27,7 +27,7 @@ interface Props {
   isEditorFocused: boolean;
   setIsEditorFocused: React.Dispatch<React.SetStateAction<boolean>>;
   headerDetails: {
-    title: EditorState;
+    title: string;
     showHeader: boolean;
     description: EditorState;
     createdDate: Date;
@@ -38,7 +38,7 @@ interface Props {
   };
   setHeaderDetails: React.Dispatch<
     React.SetStateAction<{
-      title: EditorState;
+      title: string;
       showHeader: boolean;
       description: EditorState;
       backgroundColor: string;
@@ -85,9 +85,7 @@ export default function HeaderBlock(props: Props) {
     () => {
       // checks when headerDetails.title is empty and report title has not been focused
       if (!props.hasSubHeaderTitleFocused && isReportTitleModified) {
-        props.setReportName?.(
-          props.headerDetails.title.getCurrentContent().getPlainText()
-        );
+        props.setReportName?.(props.headerDetails.title);
       }
     },
     500,
@@ -116,12 +114,15 @@ export default function HeaderBlock(props: Props) {
     });
   };
 
-  const setTitleContent = (text: EditorState) => {
+  const handleChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = event.target;
     props.setHeaderDetails({
       ...props.headerDetails,
-      title: text,
+      [name]: value,
     });
-    if (text.getCurrentContent().getPlainText() !== "") {
+    if (name == "title") {
       setIsReportTitleModified(true);
     }
   };
@@ -156,12 +157,6 @@ export default function HeaderBlock(props: Props) {
     <div
       css={headerBlockcss.container(props.headerDetails.backgroundColor)}
       {...handlers}
-      onBlur={() => {
-        props.setIsEditorFocused?.(false);
-      }}
-      onFocus={() => {
-        props.setIsEditorFocused?.(true);
-      }}
     >
       {(handleDisplay || currentView === "editHeader") && (
         <div
@@ -218,23 +213,19 @@ export default function HeaderBlock(props: Props) {
       )}
       <Container maxWidth="lg">
         <div css={headerBlockcss.innerContainer}>
-          <div
-            css={`
-              ${props.previewMode && "pointer-events: none;"}
-
-              ${headerBlockcss.inputStyle(props.headerDetails.titleColor)}
-            `}
-          >
-            <RichEditor
-              invertColors
-              editMode={!props.previewMode}
-              setTextContent={setTitleContent}
+          <div>
+            <input
+              ref={inputRef}
+              name="title"
+              type="text"
               placeholder="Add title"
-              textContent={props.headerDetails.title}
-              setPlugins={props.setPlugins}
-              focusOnMount={focusTitleOnMount}
+              onChange={handleChange}
+              disabled={props.previewMode}
+              value={props.headerDetails.title}
+              css={headerBlockcss.inputStyle(props.headerDetails.titleColor)}
             />
           </div>
+
           <Box height={17} />
           <div
             css={`
@@ -274,6 +265,8 @@ export default function HeaderBlock(props: Props) {
               placeholder="Create summary"
               textContent={props.headerDetails.description}
               setPlugins={props.setPlugins}
+              isEditorFocused={props.isEditorFocused}
+              setIsEditorFocused={props.setIsEditorFocused}
             />
           </div>
         </div>

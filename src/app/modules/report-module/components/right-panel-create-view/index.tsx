@@ -119,7 +119,7 @@ export const ReportElementsType = {
 };
 
 interface IHeaderDetails {
-  title: EditorState;
+  title: string;
   showHeader: boolean;
   description: EditorState;
   backgroundColor: string;

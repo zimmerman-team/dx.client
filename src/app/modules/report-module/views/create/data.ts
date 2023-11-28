@@ -48,7 +48,7 @@ export interface ReportCreateViewProps {
   hasSubHeaderTitleFocused: boolean;
   handlePersistReportState: () => void;
   headerDetails: {
-    title: EditorState;
+    title: string;
     showHeader: boolean;
     description: EditorState;
     backgroundColor: string;
@@ -58,7 +58,7 @@ export interface ReportCreateViewProps {
   };
   setHeaderDetails: React.Dispatch<
     React.SetStateAction<{
-      title: EditorState;
+      title: string;
       showHeader: boolean;
       description: EditorState;
       backgroundColor: string;

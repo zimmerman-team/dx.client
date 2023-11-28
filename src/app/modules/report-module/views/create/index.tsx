@@ -24,7 +24,7 @@ import TourGuide from "app/components/Dialogs/TourGuide";
 import { cloneDeep } from "lodash";
 import { withAuthenticationRequired } from "@auth0/auth0-react";
 
-function ReportCreateView(props: ReportCreateViewProps) {
+function ReportCreateView(props: Readonly<ReportCreateViewProps>) {
   const { ref, width } = useResizeObserver<HTMLDivElement>();
 
   const [containerWidth, setContainerWidth] = useRecoilState(

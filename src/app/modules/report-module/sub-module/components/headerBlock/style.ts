@@ -9,26 +9,16 @@ export const headerBlockcss = {
     background: ${backgroundColor};
   `,
   inputStyle: (titleColor: string) => css`
-    width: 60%;
+    width: 100%;
     color: ${titleColor};
+    height: 100%;
+    border: none;
+    outline: none;
     font-size: 28.9px;
     font-weight: 700;
     line-height: 48px;
     background: inherit;
-    overflow-y: hidden;
-    max-height: 90px;
-
-    > div {
-      padding: 0;
-      > div {
-        > div {
-          > div {
-            min-height: 20px !important;
-          }
-        }
-      }
-    }
-
+    padding-left: 0px;
     &:focus {
       &::placeholder {
         opacity: 0.5;

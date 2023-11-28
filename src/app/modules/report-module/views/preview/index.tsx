@@ -117,9 +117,7 @@ export function ReportPreviewView(props: {
       <HeaderBlock
         previewMode={true}
         headerDetails={{
-          title: EditorState.createWithContent(
-            convertFromRaw(reportPreviewData.title)
-          ),
+          title: reportPreviewData.title,
           showHeader: reportPreviewData.showHeader,
           description: EditorState.createWithContent(
             convertFromRaw(reportPreviewData.subTitle)

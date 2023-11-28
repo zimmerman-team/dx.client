@@ -110,7 +110,7 @@ export default function ReportModule() {
     "basic" | "advanced" | "ai"
   >("basic");
   const [headerDetails, setHeaderDetails] = React.useState({
-    title: EditorState.createEmpty(),
+    title: "",
     description: EditorState.createEmpty(),
     showHeader: true,
     backgroundColor: "#252c34",
@@ -191,20 +191,12 @@ export default function ReportModule() {
         description: JSON.stringify(
           convertToRaw(headerDetailsRef.current.description.getCurrentContent())
         ),
-        title: JSON.stringify(
-          convertToRaw(headerDetailsRef.current.title.getCurrentContent())
-        ),
       },
       appliedHeaderDetails: {
         ...AppliedHeaderDetailsRef.current,
         description: JSON.stringify(
           convertToRaw(
             AppliedHeaderDetailsRef.current.description.getCurrentContent()
-          )
-        ),
-        title: JSON.stringify(
-          convertToRaw(
-            AppliedHeaderDetailsRef.current.title.getCurrentContent()
           )
         ),
       },
@@ -261,11 +253,6 @@ export default function ReportModule() {
     setReportName(persistedReportState.reportName || "Untitled report");
     setHeaderDetails({
       ...persistedReportState.headerDetails,
-      title: EditorState.createWithContent(
-        convertFromRaw(
-          JSON.parse(persistedReportState.headerDetails.title as any)
-        )
-      ),
 
       description: EditorState.createWithContent(
         convertFromRaw(
@@ -276,12 +263,6 @@ export default function ReportModule() {
 
     setAppliedHeaderDetails({
       ...persistedReportState.appliedHeaderDetails,
-
-      title: EditorState.createWithContent(
-        convertFromRaw(
-          JSON.parse(persistedReportState.appliedHeaderDetails.title as any)
-        )
-      ),
 
       description: EditorState.createWithContent(
         convertFromRaw(
@@ -408,9 +389,7 @@ export default function ReportModule() {
     setPersistedReportState({
       reportName: "Untitled report",
       headerDetails: {
-        title: JSON.stringify(
-          convertToRaw(EditorState.createEmpty().getCurrentContent())
-        ),
+        title: "",
         description: JSON.stringify(
           convertToRaw(EditorState.createEmpty().getCurrentContent())
         ),
@@ -421,9 +400,7 @@ export default function ReportModule() {
         dateColor: "#ffffff",
       },
       appliedHeaderDetails: {
-        title: JSON.stringify(
-          convertToRaw(EditorState.createEmpty().getCurrentContent())
-        ),
+        title: "",
         description: JSON.stringify(
           convertToRaw(EditorState.createEmpty().getCurrentContent())
         ),
@@ -470,7 +447,7 @@ export default function ReportModule() {
       },
     ]);
     setHeaderDetails({
-      title: EditorState.createEmpty(),
+      title: "",
       description: EditorState.createEmpty(),
       showHeader: true,
       backgroundColor: "#252c34",
@@ -492,11 +469,7 @@ export default function ReportModule() {
         name: reportName,
         authId: user?.sub,
         showHeader: headerDetails.showHeader,
-        title: convertToRaw(
-          headerDetails.showHeader
-            ? headerDetails.title.getCurrentContent()
-            : EditorState.createEmpty().getCurrentContent()
-        ),
+        title: headerDetails.showHeader ? headerDetails.title : undefined,
         subTitle: convertToRaw(
           headerDetails.showHeader
             ? headerDetails.description.getCurrentContent()

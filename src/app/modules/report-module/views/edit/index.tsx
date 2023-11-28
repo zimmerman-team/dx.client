@@ -97,9 +97,7 @@ function ReportEditView(props: ReportEditViewProps) {
     if (JSON.parse(persistedReportState.framesArray || "[]").length < 1) {
       props.setName(reportData.name);
       props.setHeaderDetails({
-        title: EditorState.createWithContent(
-          convertFromRaw(reportData.title as any)
-        ),
+        title: reportData.title,
         showHeader: reportData.showHeader,
         description: EditorState.createWithContent(
           convertFromRaw(reportData.subTitle as any)
@@ -110,9 +108,7 @@ function ReportEditView(props: ReportEditViewProps) {
         dateColor: reportData.dateColor,
       });
       props.setAppliedHeaderDetails({
-        title: EditorState.createWithContent(
-          convertFromRaw(reportData.title as any)
-        ),
+        title: reportData.title,
         showHeader: reportData.showHeader,
         description: EditorState.createWithContent(
           convertFromRaw(reportData.subTitle as any)

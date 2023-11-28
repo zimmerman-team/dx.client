@@ -15,7 +15,7 @@ export interface ReportEditViewProps {
   handlePersistReportState: () => void;
   reportName: string;
   headerDetails: {
-    title: EditorState;
+    title: string;
     showHeader: boolean;
     description: EditorState;
     backgroundColor: string;
@@ -25,7 +25,7 @@ export interface ReportEditViewProps {
   };
   setHeaderDetails: React.Dispatch<
     React.SetStateAction<{
-      title: EditorState;
+      title: string;
       showHeader: boolean;
       description: EditorState;
       backgroundColor: string;
@@ -36,7 +36,7 @@ export interface ReportEditViewProps {
   >;
   setAppliedHeaderDetails: React.Dispatch<
     React.SetStateAction<{
-      title: EditorState;
+      title: string;
       showHeader: boolean;
       description: EditorState;
       backgroundColor: string;

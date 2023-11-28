@@ -2,7 +2,7 @@ import { EditorState } from "draft-js";
 import { IFramesArray } from "../../views/create/data";
 
 export interface IHeaderDetails {
-  title: EditorState;
+  title: string;
   showHeader: boolean;
   description: EditorState;
   backgroundColor: string;

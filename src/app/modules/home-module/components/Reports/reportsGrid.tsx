@@ -198,7 +198,7 @@ export default function ReportsGrid(props: Props) {
                 showMenuButton={props.showMenuButton}
                 handleDelete={() => handleModal(index)}
                 handleDuplicate={() => handleDuplicate(index)}
-                title={convertFromRaw(data.title).getPlainText() || data.name}
+                title={data.title || data.name}
               />
               <Box height={16} />
             </Grid>
@@ -210,7 +210,7 @@ export default function ReportsGrid(props: Props) {
           data={loadedReports.map((data) => ({
             id: data.id,
             name: data.name,
-            description: convertFromRaw(data.title).getPlainText(),
+            description: data.title,
             createdDate: data.createdDate,
           }))}
         />
