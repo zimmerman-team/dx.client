@@ -319,7 +319,6 @@ function DataThemesBuilderMappingDimension(
 
   const onMove = React.useCallback(
     (dragIndex: number, hoverIndex: number) => {
-      console.log("onMove");
       let nextConfig;
       if (dimensionMapping.config) {
         nextConfig = {

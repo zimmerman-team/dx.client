@@ -48,7 +48,7 @@ export function SubheaderToolbar(props: SubheaderToolbarProps) {
   const [enableButton, setEnableButton] = React.useState<boolean>(false);
 
   const setHomeTab = useRecoilState(homeDisplayAtom)[1];
-  const [createChartFromReport, setCreateChartFromReport] = useRecoilState(
+  const [createChartFromReport, _setCreateChartFromReport] = useRecoilState(
     createChartFromReportAtom
   );
   const setRightPanelView = useRecoilState(reportRightPanelViewAtom)[1];
@@ -129,6 +129,10 @@ export function SubheaderToolbar(props: SubheaderToolbarProps) {
     horizontal: "center",
   });
 
+  const clearChart = () => {
+    editChartClear();
+    createChartClear();
+  };
   const onNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     props.setName(event.target.value);
   };
@@ -194,10 +198,6 @@ export function SubheaderToolbar(props: SubheaderToolbarProps) {
       createChartFromReport.state
     ) {
       //returns back to persisted report view
-      setCreateChartFromReport({
-        ...createChartFromReport,
-        state: false,
-      });
       setRightPanelView("charts");
       if (createChartFromReport.view === undefined) {
         history.push(`/report/${createChartFromReport.page}/edit`);
@@ -206,20 +206,15 @@ export function SubheaderToolbar(props: SubheaderToolbarProps) {
           `/report/${createChartFromReport.page}/${createChartFromReport.view}`
         );
       }
+    } else if (editChartSuccess && !createChartFromReport.state) {
+      //returns back to chart detail page
+      history.push(`/chart/${page}`);
     }
   }, [editChartSuccess, createChartSuccess]);
 
   React.useEffect(() => {
-    if (editChartSuccess && createChartFromReport.view === "") {
-      console.log(createChartFromReport.state, "state");
-      history.push(`/chart/${page}`);
-    }
-  }, [editChartSuccess]);
-
-  React.useEffect(() => {
     return () => {
-      createChartClear();
-      editChartClear();
+      clearChart();
     };
   }, []);
 
@@ -257,7 +252,7 @@ export function SubheaderToolbar(props: SubheaderToolbarProps) {
         createChartSuccess ? `Chart created successfully!` : null
       );
       const chartId = createChartSuccess ? createChartData.id : page;
-      if (createChartFromReport.view === "") {
+      if (createChartFromReport.view === "" && createChartSuccess) {
         history.push(`/chart/${chartId}`);
       }
     }
@@ -401,7 +396,7 @@ export function SubheaderToolbar(props: SubheaderToolbarProps) {
     <div id="subheader-toolbar" css={styles.container}>
       {createOrEditChartLoading && <PageLoader />}
       <InfoSnackbar
-        gap={createChartFromReport.view !== ""}
+        gap={location.pathname.includes("report")}
         data-testid="create-chart-snackbar"
         onClose={() => setShowSnackbar(null)}
         open={showSnackbar !== null && showSnackbar !== ""}
@@ -411,7 +406,7 @@ export function SubheaderToolbar(props: SubheaderToolbarProps) {
           aria-describedby="create-chart-snackbar-content"
           action={
             <>
-              {createChartFromReport.view === "" && (
+              {!location.pathname.includes("report") && (
                 <button
                   onClick={() => {
                     setShowSnackbar(null);

@@ -21,6 +21,9 @@ export function ReportChartWrapper(props: Props) {
   const token = useSessionStorage("authToken", "")[0];
 
   const containerRef = React.useRef<HTMLDivElement>(null);
+  const [chartErrorMessage, setChartErrorMessage] = React.useState<string>(
+    "Something went wrong with loading your chart! Check your chart settings or data."
+  );
 
   const loadChart = useStoreActions((actions) => actions.charts.ChartGet.fetch);
   const loadedChart = useStoreState(
@@ -67,7 +70,7 @@ export function ReportChartWrapper(props: Props) {
     }
   }, [loadedChart]);
 
-  const { loadDataFromAPI, loading, notFound } = useChartsRawData({
+  const { loadDataFromAPI, loading, notFound, setNotFound } = useChartsRawData({
     visualOptions,
     setVisualOptions,
     setChartFromAPI,
@@ -124,10 +127,7 @@ export function ReportChartWrapper(props: Props) {
         `}
       >
         <ErrorOutlineIcon htmlColor="#E75656" fontSize="large" />
-        <p>
-          Something went wrong with loading your chart! Check your chart
-          settings or data.
-        </p>
+        <p>{chartErrorMessage}</p>
       </div>
     );
   }
@@ -203,6 +203,8 @@ export function ReportChartWrapper(props: Props) {
         setVisualOptions={setVisualOptions}
         renderedChartType={renderedChartType}
         renderedChartMappedData={renderedChartMappedData}
+        setChartErrorMessage={setChartErrorMessage}
+        setNotFound={setNotFound}
       />
     </div>
   );

@@ -8,7 +8,7 @@ import { PageLoader } from "app/modules/common/page-loader";
 import { styles } from "app/modules/chart-module/routes/data/styles";
 import { styles as commonStyles } from "app/modules/chart-module/routes/common/styles";
 
-function ChartModuleDataView() {
+function ChartModuleDataView(props: { clearChartBuilder(): void }) {
   useTitle("DX DataXplorer - Select Data");
 
   const setActivePanels = useStoreActions(
@@ -16,6 +16,8 @@ function ChartModuleDataView() {
   );
 
   React.useEffect(() => {
+    //clear chart state
+    props.clearChartBuilder();
     // When the Data View component is rendered, we are at step 1.
     setActivePanels(1);
   }, []);
