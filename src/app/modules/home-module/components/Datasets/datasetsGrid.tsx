@@ -234,6 +234,8 @@ export default function DatasetsGrid(props: Props) {
 
       {props.tableView && (
         <HomepageTable
+          onItemClick={props.onItemClick}
+          inChartBuilder={props.inChartBuilder}
           data={loadedDatasets.map((data) => ({
             id: data.id,
             name: data.name,
