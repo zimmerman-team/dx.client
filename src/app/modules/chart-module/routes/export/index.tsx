@@ -51,6 +51,8 @@ function ChartBuilderExport(props: ChartBuilderExportProps) {
             setVisualOptions={props.setVisualOptions}
             renderedChartSsr={props.renderedChartSsr}
             renderedChartMappedData={props.renderedChartMappedData}
+            setChartErrorMessage={props.setChartErrorMessage}
+            setNotFound={props.setNotFound}
           />
         </div>
       </div>

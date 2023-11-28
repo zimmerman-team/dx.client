@@ -34,8 +34,10 @@ import {
   Redirect,
 } from "react-router-dom";
 import {
+  createChartFromReportAtom,
   persistedReportStateAtom,
   reportRightPanelViewAtom,
+  unSavedReportPreviewModeAtom,
 } from "app/state/recoil/atoms";
 import { ReportSubheaderToolbar } from "app/modules/report-module/components/reportSubHeaderToolbar";
 import { ToolbarPluginsType } from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
@@ -81,6 +83,14 @@ export default function ReportModule() {
   const token = useSessionStorage("authToken", "")[0];
 
   const setRightPanelView = useRecoilState(reportRightPanelViewAtom)[1];
+
+  const [createChartFromReport, setCreateChartFromReport] = useRecoilState(
+    createChartFromReportAtom
+  );
+
+  const [_reportPreviewMode, setReportPreviewMode] = useRecoilState(
+    unSavedReportPreviewModeAtom
+  );
 
   const [persistedReportState, setPersistedReportState] = useRecoilState(
     persistedReportStateAtom
@@ -308,7 +318,23 @@ export default function ReportModule() {
               };
             }
           )
-        : framesArray;
+        : [
+            {
+              id,
+              frame: {
+                rowIndex: 0,
+                rowId: id,
+                handlePersistReportState,
+                handleRowFrameItemResize,
+                type: "rowFrame",
+              },
+              content: [],
+              contentWidths: [],
+              contentHeights: [],
+              contentTypes: [],
+              structure: null,
+            },
+          ];
 
     setFramesArray(localFramesArray);
   }, [persistedReportState]);
@@ -369,6 +395,14 @@ export default function ReportModule() {
     };
   }, []);
 
+  React.useEffect(() => {
+    setCreateChartFromReport({
+      state: false,
+      page: "",
+      view: "",
+    });
+  }, []);
+
   //get current value of states for handlePersistReportState function
   headerDetailsRef.current = headerDetails;
   AppliedHeaderDetailsRef.current = appliedHeaderDetails;
@@ -386,6 +420,24 @@ export default function ReportModule() {
 
   const resetReport = () => {
     const id = v4();
+    setFramesArray([
+      {
+        id,
+        frame: {
+          rowIndex: 0,
+          rowId: id,
+
+          handlePersistReportState,
+          handleRowFrameItemResize,
+          type: "rowFrame",
+        },
+        content: [],
+        contentWidths: [],
+        contentHeights: [],
+        contentTypes: [],
+        structure: null,
+      },
+    ]);
     setPersistedReportState({
       reportName: "Untitled report",
       headerDetails: {
@@ -410,42 +462,9 @@ export default function ReportModule() {
         descriptionColor: "#ffffff",
         dateColor: "#ffffff",
       },
-      framesArray: JSON.stringify([
-        {
-          id,
-          frame: {
-            rowIndex: 0,
-            rowId: id,
-            handlePersistReportState,
-            handleRowFrameItemResize,
-            type: "rowFrame",
-          },
-          content: [],
-          contentWidths: [],
-          contentHeights: [],
-          contentTypes: [],
-          structure: null,
-        },
-      ]),
+      framesArray: JSON.stringify([]),
     });
-    setFramesArray([
-      {
-        id,
-        frame: {
-          rowIndex: 0,
-          rowId: id,
 
-          handlePersistReportState,
-          handleRowFrameItemResize,
-          type: "rowFrame",
-        },
-        content: [],
-        contentWidths: [],
-        contentHeights: [],
-        contentTypes: [],
-        structure: null,
-      },
-    ]);
     setHeaderDetails({
       title: "",
       description: EditorState.createEmpty(),
@@ -458,6 +477,7 @@ export default function ReportModule() {
     setReportName("Untitled report");
     setRightPanelView("elements");
     setRightPanelOpen(true);
+    setReportPreviewMode(false);
   };
 
   const onSave = async (type: "create" | "edit") => {
