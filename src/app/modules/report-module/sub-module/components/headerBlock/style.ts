@@ -1,33 +1,32 @@
 import { css } from "styled-components/macro";
 
 export const headerBlockcss = {
-  container: (backgroundColor: string, titleColor: string) => css`
+  container: (backgroundColor: string) => css`
     width: 100%;
     height: 215px;
     padding: 35px 0;
     position: relative;
     background: ${backgroundColor};
+  `,
+  inputStyle: (titleColor: string) => css`
+    width: 100%;
+    color: ${titleColor};
+    height: 100%;
+    border: none;
+    outline: none;
+    font-size: 28.9px;
+    font-weight: 700;
+    line-height: 48px;
+    background: inherit;
+    padding-left: 0px;
+    &:focus {
+      &::placeholder {
+        opacity: 0.5;
+      }
+    }
 
-    input {
-      width: 100%;
+    ::placeholder {
       color: ${titleColor};
-      height: 100%;
-      border: none;
-      outline: none;
-      font-size: 28.9px;
-      font-weight: 700;
-      line-height: 48px;
-      background: inherit;
-
-      &:focus {
-        &::placeholder {
-          opacity: 0.5;
-        }
-      }
-
-      ::placeholder {
-        color: ${titleColor};
-      }
     }
   `,
   innerContainer: css`

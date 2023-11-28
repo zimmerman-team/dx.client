@@ -14,6 +14,7 @@ import ReformedGridItem from "app/modules/home-module/components/Reports/reforme
 import ReportAddnewCard from "./reportAddNewCard";
 import { useInfinityScroll } from "app/hooks/useInfinityScroll";
 import CircleLoader from "../Loader";
+import { EditorState, convertFromRaw } from "draft-js";
 
 interface Props {
   sortBy: string;
@@ -197,9 +198,7 @@ export default function ReportsGrid(props: Props) {
                 showMenuButton={props.showMenuButton}
                 handleDelete={() => handleModal(index)}
                 handleDuplicate={() => handleDuplicate(index)}
-                title={
-                  get(data, "title", "").length > 0 ? data.title : data.name
-                }
+                title={data.title || data.name}
               />
               <Box height={16} />
             </Grid>

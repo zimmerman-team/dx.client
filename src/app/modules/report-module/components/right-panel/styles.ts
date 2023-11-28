@@ -1,16 +1,17 @@
 import { css } from "styled-components/macro";
 
 export const styles = {
-  container: css`
+  container: (isToolbarVisisble: boolean) => css`
     right: 0;
-    top: 98px;
+    top: ${isToolbarVisisble ? "153px" : "98px"};
     z-index: 99;
     width: 400px;
     display: flex;
     position: fixed;
     background: #f2f7fd;
     flex-direction: column;
-    height: calc(100vh - 98px);
+    height: calc(100vh - ${isToolbarVisisble ? "153px" : "98px"});
+    transition: all cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
   `,
   initial: css`
     display: flex;

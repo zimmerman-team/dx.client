@@ -22,6 +22,7 @@ import { linkDecorator } from "app/modules/chart-module/routes/text/RichEditor/d
 
 export function ReportPreviewView(props: {
   setIsPreviewView: React.Dispatch<React.SetStateAction<boolean>>;
+  setAutoSave: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const { page } = useParams<{ page: string }>();
   const token = useSessionStorage("authToken", "")[0];
@@ -63,6 +64,8 @@ export function ReportPreviewView(props: {
   const [reportPreviewData, setReportPreviewData] = React.useState(reportData);
 
   React.useEffect(() => {
+    props.setAutoSave(false);
+
     if (token) {
       fetchReportData({ token, getId: page });
     } else {
@@ -97,7 +100,7 @@ export function ReportPreviewView(props: {
       setReportPreviewData({
         ...reportPreviewData,
 
-        title: persistedReportState.headerDetails.title,
+        title: JSON.parse(persistedReportState.headerDetails.title),
         showHeader: persistedReportState.headerDetails.showHeader,
         backgroundColor: persistedReportState.headerDetails.backgroundColor,
         titleColor: persistedReportState.headerDetails.titleColor,
@@ -112,7 +115,7 @@ export function ReportPreviewView(props: {
   return (
     <div id="export-container">
       <HeaderBlock
-        previewMode
+        previewMode={true}
         headerDetails={{
           title: reportPreviewData.title,
           showHeader: reportPreviewData.showHeader,
@@ -125,6 +128,9 @@ export function ReportPreviewView(props: {
           dateColor: reportPreviewData.dateColor,
           createdDate: reportPreviewData.createdDate,
         }}
+        isEditorFocused={false}
+        setIsEditorFocused={() => {}}
+        setPlugins={() => {}}
         setHeaderDetails={() => {}}
       />
       <Container id="content-container" maxWidth="lg" ref={ref}>
@@ -181,6 +187,9 @@ export function ReportPreviewView(props: {
               }
               framesArray={[]}
               view={"preview"}
+              isEditorFocused={false}
+              setIsEditorFocused={() => {}}
+              setPlugins={() => {}}
             />
           );
         })}
