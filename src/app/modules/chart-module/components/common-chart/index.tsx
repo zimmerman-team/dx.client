@@ -14,6 +14,8 @@ interface Props {
   setVisualOptions: (value: any) => void;
   containerRef: React.RefObject<HTMLDivElement>;
   chartId?: string;
+  setNotFound: React.Dispatch<React.SetStateAction<boolean>>;
+  setChartErrorMessage: React.Dispatch<React.SetStateAction<string>>;
   renderedChartType?:
     | "echartsBarchart"
     | "echartsGeomap"
@@ -100,9 +102,11 @@ export function CommonChart(props: Props) {
           visualOptions,
           `common-chart-render-container-${props.chartId || "1"}`
         );
-      } catch (e) {
+      } catch (e: any) {
         if (process.env.NODE_ENV === "development") {
           console.log("chart error", e);
+          props.setNotFound(true);
+          props.setChartErrorMessage(e.message);
         }
       }
     }

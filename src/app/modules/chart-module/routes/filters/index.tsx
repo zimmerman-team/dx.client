@@ -34,7 +34,7 @@ function ChartBuilderFilters(props: ChartBuilderFiltersProps) {
   useUpdateEffectOnce(() => {
     if (
       containerRef.current &&
-      props.visualOptions.width === CHART_DEFAULT_WIDTH
+      props.visualOptions?.width === CHART_DEFAULT_WIDTH
     ) {
       const tmpVisualOptions = {
         ...props.visualOptions,
@@ -65,6 +65,8 @@ function ChartBuilderFilters(props: ChartBuilderFiltersProps) {
             setVisualOptions={props.setVisualOptions}
             renderedChartSsr={props.renderedChartSsr}
             renderedChartMappedData={props.renderedChartMappedData}
+            setChartErrorMessage={props.setChartErrorMessage}
+            setNotFound={props.setNotFound}
           />
         </div>
       </div>

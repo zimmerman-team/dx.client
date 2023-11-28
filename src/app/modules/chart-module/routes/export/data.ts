@@ -8,4 +8,6 @@ export interface ChartBuilderExportProps {
   renderedChartMappedData: any;
   setRawViz: React.Dispatch<any>;
   setVisualOptions: (value: any) => void;
+  setChartErrorMessage: React.Dispatch<React.SetStateAction<string>>;
+  setNotFound: React.Dispatch<React.SetStateAction<boolean>>;
 }

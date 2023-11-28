@@ -6,6 +6,8 @@ export interface ChartBuilderMappingProps {
   renderedChart: string;
   renderedChartSsr: boolean;
   renderedChartMappedData: any;
+  setNotFound: React.Dispatch<React.SetStateAction<boolean>>;
+  setChartErrorMessage: React.Dispatch<React.SetStateAction<string>>;
   setVisualOptions: (value: any) => void;
 }
 

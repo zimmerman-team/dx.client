@@ -18,6 +18,7 @@ export interface FilterGroupProps {
 
 export interface FilterOptionProps extends FilterGroupOptionModel {
   level: number;
+  position?: number;
   selected: boolean;
   forceExpand: boolean;
   selectedOptions: string[];
