@@ -19,6 +19,9 @@ interface Props {
   searchStr: string;
   tableView: boolean;
   addCard?: boolean;
+  inChartBuilder?: boolean;
+  category?: string;
+  onItemClick?: (v: string) => void;
 }
 
 export default function DatasetsGrid(props: Props) {
@@ -161,6 +164,16 @@ export default function DatasetsGrid(props: Props) {
     });
   }, [datasetLoadSuccess]);
 
+  React.useEffect(() => {
+    if (props.category && props.category.length > 0) {
+      setLoadedDatasets((prevDatasets) => {
+        return prevDatasets.filter((d) => d.category === props.category);
+      });
+    } else {
+      setLoadedDatasets(datasets);
+    }
+  }, [props.category]);
+
   const [,] = useDebounce(
     () => {
       if (props.searchStr !== undefined) {
@@ -174,21 +187,47 @@ export default function DatasetsGrid(props: Props) {
   return (
     <>
       {!props.tableView && (
-        <Grid container spacing={2}>
+        <Grid container spacing={!props.inChartBuilder ? 2 : 1}>
           {props.addCard && <DatasetAddnewCard />}
           {(loadedDatasets || []).map((data, index) => (
-            <Grid item key={data.id} xs={12} sm={6} md={4} lg={3}>
+            <Grid
+              item
+              key={data.id}
+              xs={12}
+              sm={6}
+              md={!props.inChartBuilder ? 4 : 6}
+              lg={!props.inChartBuilder ? 3 : 4}
+              onClick={() => {
+                if (props.onItemClick) {
+                  props.onItemClick(data.id);
+                }
+              }}
+              css={
+                props.inChartBuilder
+                  ? `
+                  > div {
+                    width: 100%;
+
+                    &:hover {
+                      cursor: pointer;
+                      border: 1px solid #6061E5;
+                    }
+                  }
+              `
+                  : ""
+              }
+            >
               <ReformedGridItem
-                date={data.createdDate}
-                descr={data.description}
                 path={"#"}
                 title={data.name}
-                showMenu
-                handleDuplicate={() => {}}
+                date={data.createdDate}
                 handleDelete={() => {}}
+                descr={data.description}
+                handleDuplicate={() => {}}
+                showMenu={!props.inChartBuilder}
               />
 
-              <Box height={16} />
+              {!props.inChartBuilder && <Box height={16} />}
             </Grid>
           ))}
         </Grid>
@@ -196,6 +235,8 @@ export default function DatasetsGrid(props: Props) {
 
       {props.tableView && (
         <HomepageTable
+          onItemClick={props.onItemClick}
+          inChartBuilder={props.inChartBuilder}
           data={loadedDatasets.map((data) => ({
             id: data.id,
             name: data.name,

@@ -567,7 +567,10 @@ export default function ChartModule() {
               />
             </Route>
             <Route path="/chart/:page/data">
-              <ChartModuleDataView clearChartBuilder={clearChartBuilder} />
+              <ChartModuleDataView
+                loadDataset={loadDataset}
+                clearChartBuilder={clearChartBuilder}
+              />
             </Route>
             <Route path="/chart/:page/preview">
               <ChartBuilderPreviewTheme
