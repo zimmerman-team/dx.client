@@ -446,7 +446,6 @@ export default function ReportModule() {
         structure: null,
       },
     ]);
-    console.log("sup");
     setPersistedReportState({
       reportName: "Untitled report",
       headerDetails: {

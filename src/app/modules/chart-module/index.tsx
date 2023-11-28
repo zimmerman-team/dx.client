@@ -266,7 +266,14 @@ export default function ChartModule() {
 
   function clearChartBuilder() {
     clear().then(() => {
-      console.log("End of reset.", "--visualOptions", visualOptions, chartName);
+      if (process.env.NODE_ENV === "development") {
+        console.log(
+          "End of reset.",
+          "--visualOptions",
+          visualOptions,
+          chartName
+        );
+      }
     });
   }
 
@@ -340,7 +347,6 @@ export default function ChartModule() {
     };
   }, [page, token]);
 
-  console.log(chartErrorMessage, "charterrror");
   const errorComponent = () => {
     return (
       <div css={commonStyles.container}>
