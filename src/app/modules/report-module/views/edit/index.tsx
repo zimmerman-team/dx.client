@@ -30,7 +30,7 @@ import RowFrame from "../../sub-module/rowStructure/rowFrame";
 
 function ReportEditView(props: ReportEditViewProps) {
   const { page } = useParams<{ page: string }>();
-  const token = useSessionStorage("authToken", "")[0];
+  const token = useStoreState((state) => state.AuthToken.value);
 
   const { ref, width } = useResizeObserver<HTMLDivElement>();
 

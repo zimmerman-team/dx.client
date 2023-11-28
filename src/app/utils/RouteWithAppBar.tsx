@@ -2,7 +2,7 @@ import React from "react";
 import { Route } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import { AppBar } from "app/components/AppBar";
-import useSessionStorage from "react-use/lib/useSessionStorage";
+import { useStoreActions, useStoreState } from "app/state/store/hooks";
 
 interface RouteWithAppBarProps {
   path?: string;
@@ -12,13 +12,15 @@ interface RouteWithAppBarProps {
 }
 
 export function RouteWithAppBar(props: RouteWithAppBarProps) {
-  const [token, setToken] = useSessionStorage("authToken", "");
   const { isAuthenticated, getAccessTokenSilently } = useAuth0();
 
+  const token = useStoreState((state) => state.AuthToken.value);
+  const setToken = useStoreActions((actions) => actions.AuthToken.setValue);
+
   React.useEffect(() => {
-    if (isAuthenticated && !token) {
-      getAccessTokenSilently().then((token) => {
-        setToken(token);
+    if (isAuthenticated && token === "") {
+      getAccessTokenSilently().then((newToken) => {
+        setToken(newToken);
       });
     }
   }, [isAuthenticated]);

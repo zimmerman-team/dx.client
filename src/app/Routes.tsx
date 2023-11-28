@@ -81,6 +81,26 @@ const Auth0ProviderWithRedirectCallback = (props: {
   );
 };
 
+const AuthLoader = () => {
+  const { isLoading } = useAuth0();
+
+  if (isLoading) {
+    return (
+      <div
+        css={`
+          > div {
+            background: #fff;
+          }
+        `}
+      >
+        <PageLoader />;
+      </div>
+    );
+  }
+
+  return null;
+};
+
 const OneTapLoginComponent = () => {
   const { isLoading, isAuthenticated } = useAuth0();
   const loadRef = React.useRef<HTMLDivElement>(null);
@@ -124,6 +144,7 @@ export function MainRoutes() {
         redirect_uri: `${window.location.origin}/callback`,
       }}
     >
+      <AuthLoader />
       <OneTapLoginComponent />
       <Suspense fallback={<PageLoader />}>
         <Switch>

@@ -91,7 +91,7 @@ export function SubheaderToolbar(props: SubheaderToolbarProps) {
   const { user } = useAuth0();
   const history = useHistory();
   const { page, view } = useParams<{ page: string; view?: string }>();
-  const token = useSessionStorage("authToken", "")[0];
+  const token = useStoreState((state) => state.AuthToken.value);
   const [modalDisplay, setModalDisplay] = React.useState({
     report: false,
     chart: false,

@@ -1,6 +1,7 @@
 import React from "react";
 import moment from "moment";
 import { Link } from "react-router-dom";
+import { useAuth0 } from "@auth0/auth0-react";
 import { IconButton, Tooltip } from "@material-ui/core";
 import { ReactComponent as EditIcon } from "app/modules/home-module/assets/edit.svg";
 import { ReactComponent as MenuIcon } from "app/modules/home-module/assets/menu.svg";
@@ -13,12 +14,14 @@ interface Props {
   path: string;
   title: string;
   date: string;
+  public: boolean;
   viz: React.ReactNode;
   handleDelete?: (id: string) => void;
   handleDuplicate?: (id: string) => void;
 }
 
 export default function ReformedGridItem(props: Props) {
+  const { isAuthenticated } = useAuth0();
   const [menuOptionsDisplay, setMenuOptionsDisplay] = React.useState(false);
 
   const showMenuOptions = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -182,7 +185,9 @@ export default function ReformedGridItem(props: Props) {
               }
             `}
           >
-            <div>
+            <div
+              css={!isAuthenticated ? "opacity: 0.5;pointer-events: none;" : ""}
+            >
               <IconButton
                 onClick={() => {
                   props.handleDuplicate?.(props.id);
@@ -194,7 +199,13 @@ export default function ReformedGridItem(props: Props) {
                 </Tooltip>
               </IconButton>
             </div>
-            <div>
+            <div
+              css={
+                props.public || !isAuthenticated
+                  ? "opacity: 0.5;pointer-events: none;"
+                  : ""
+              }
+            >
               <Link to={`/chart/${props.id}/mapping`}>
                 <Tooltip title="Edit">
                   <EditIcon
@@ -205,7 +216,13 @@ export default function ReformedGridItem(props: Props) {
                 </Tooltip>
               </Link>
             </div>
-            <div>
+            <div
+              css={
+                props.public || !isAuthenticated
+                  ? "opacity: 0.5;pointer-events: none;"
+                  : ""
+              }
+            >
               <IconButton onClick={() => props.handleDelete?.(props.id)}>
                 <Tooltip title="Delete">
                   <DeleteIcon />

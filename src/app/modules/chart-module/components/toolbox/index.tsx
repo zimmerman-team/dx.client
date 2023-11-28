@@ -45,7 +45,7 @@ export function ChartModuleToolBox(props: ChartToolBoxProps) {
   const { page, view } = useParams<{ page: string; view?: string }>();
   const { user } = useAuth0();
   const history = useHistory();
-  const token = useSessionStorage("authToken", "")[0];
+  const token = useStoreState((state) => state.AuthToken.value);
   const [isSavedEnabled, setIsSavedEnabled] = React.useState(false);
 
   const mapping = useStoreState((state) => state.charts.mapping.value);

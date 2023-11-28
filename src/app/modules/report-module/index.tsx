@@ -80,7 +80,7 @@ export default function ReportModule() {
   const [isEditorFocused, setIsEditorFocused] = React.useState(false);
   /** end of static toolbar states */
 
-  const token = useSessionStorage("authToken", "")[0];
+  const token = useStoreState((state) => state.AuthToken.value);
 
   const setRightPanelView = useRecoilState(reportRightPanelViewAtom)[1];
 

@@ -35,11 +35,12 @@ import {
   reportRightPanelViewAtom,
 } from "app/state/recoil/atoms";
 import { InfoSnackbar } from ".";
+import { ReportModel, emptyReport } from "app/modules/report-module/data";
 
 export function SubheaderToolbar(props: SubheaderToolbarProps) {
-  const { user } = useAuth0();
   const history = useHistory();
-  const token = useSessionStorage("authToken", "")[0];
+  const { user, isAuthenticated } = useAuth0();
+  const token = useStoreState((state) => state.AuthToken.value);
   const { page, view } = useParams<{ page: string; view?: string }>();
   const [modalDisplay, setModalDisplay] = React.useState({
     report: false,
@@ -87,6 +88,9 @@ export function SubheaderToolbar(props: SubheaderToolbarProps) {
   const loadReports = useStoreActions(
     (actions) => actions.reports.ReportGetList.fetch
   );
+  const loadedReport = useStoreState(
+    (state) => (state.reports.ReportGet.crudData ?? emptyReport) as ReportModel
+  );
 
   const loadCharts = useStoreActions(
     (actions) => actions.charts.ChartGetList.fetch
@@ -122,6 +126,11 @@ export function SubheaderToolbar(props: SubheaderToolbarProps) {
   const editChartClear = useStoreActions(
     (actions) => actions.charts.ChartUpdate.clear
   );
+
+  const canChartEditDelete = React.useMemo(() => {
+    const asset = props.pageType === "report" ? loadedReport : loadedChart;
+    return isAuthenticated && asset && asset.owner === user?.sub;
+  }, [user, isAuthenticated, loadedChart, loadedReport, props.pageType]);
 
   const [snackbarState, setSnackbarState] = React.useState<ISnackbarState>({
     open: false,
@@ -529,11 +538,13 @@ export function SubheaderToolbar(props: SubheaderToolbarProps) {
                 {page !== "new" && !view && (
                   <React.Fragment>
                     <ExportChartButton />
-                    <Tooltip title="Duplicate">
-                      <IconButton onClick={handleDuplicate}>
-                        <FileCopyIcon htmlColor="#262c34" />
-                      </IconButton>
-                    </Tooltip>
+                    {isAuthenticated && (
+                      <Tooltip title="Duplicate">
+                        <IconButton onClick={handleDuplicate}>
+                          <FileCopyIcon htmlColor="#262c34" />
+                        </IconButton>
+                      </Tooltip>
+                    )}
                     <Tooltip title="Share">
                       <IconButton onClick={handleClick}>
                         <ShareIcon htmlColor="#262c34" />
@@ -568,21 +579,25 @@ export function SubheaderToolbar(props: SubheaderToolbarProps) {
                         </CopyToClipboard>
                       </div>
                     </Popover>
-                    <Tooltip title="Edit">
-                      <IconButton
-                        component={Link}
-                        to={`/${props.pageType}/${page}/${
-                          props.pageType === "chart" ? "customize" : "edit"
-                        }`}
-                      >
-                        <EditIcon htmlColor="#262c34" />
-                      </IconButton>
-                    </Tooltip>
-                    <Tooltip title="Delete">
-                      <IconButton onClick={handleModalDisplay}>
-                        <DeleteIcon htmlColor="#262c34" />
-                      </IconButton>
-                    </Tooltip>
+                    {canChartEditDelete && (
+                      <Tooltip title="Edit">
+                        <IconButton
+                          component={Link}
+                          to={`/${props.pageType}/${page}/${
+                            props.pageType === "chart" ? "customize" : "edit"
+                          }`}
+                        >
+                          <EditIcon htmlColor="#262c34" />
+                        </IconButton>
+                      </Tooltip>
+                    )}
+                    {canChartEditDelete && (
+                      <Tooltip title="Delete">
+                        <IconButton onClick={handleModalDisplay}>
+                          <DeleteIcon htmlColor="#262c34" />
+                        </IconButton>
+                      </Tooltip>
+                    )}
                   </React.Fragment>
                 )}
               </div>

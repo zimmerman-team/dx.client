@@ -18,6 +18,7 @@ import {
   DataThemesEnabledFilterOptionGroupsStateModel,
 } from "app/state/api/action-reducers/sync/data-themes";
 import {
+  AuthTokenModel,
   DataSourceSnackbarVisibilityStateModel,
   DataSourceStateModel,
   PageHeaderVizDrilldownsStateModel,
@@ -88,6 +89,7 @@ export interface RequestValues<T> {
   addOnData?: boolean;
   isCMSfetch?: boolean;
   filterString?: string;
+  nonAuthCall?: boolean;
   storeInCrudData?: boolean;
 }
 
@@ -304,6 +306,7 @@ export interface StoreModel {
   DataPathPanelVisibilityState: DataPathPanelVisibilityStateModel;
   DataPathSteps: DataPathStepsStateModel;
   DataPathActiveStep: DataPathActiveStepStateModel;
+  AuthToken: AuthTokenModel;
   // CMS
   cms: {
     componentsAppBar: CMSApiCallModel;

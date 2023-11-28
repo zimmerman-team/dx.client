@@ -4,16 +4,17 @@ import get from "lodash/get";
 import find from "lodash/find";
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
-import { useSessionStorage, useUpdateEffect } from "react-use";
+import { useAuth0 } from "@auth0/auth0-react";
 import useDebounce from "react-use/lib/useDebounce";
+import { useSessionStorage, useUpdateEffect } from "react-use";
 import { useInfinityScroll } from "app/hooks/useInfinityScroll";
+import CircleLoader from "app/modules/home-module/components/Loader";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import DeleteChartDialog from "app/components/Dialogs/deleteChartDialog";
 import { HomepageTable } from "app/modules/home-module/components/Table";
 import { coloredEchartTypes } from "app/modules/chart-module/routes/chart-type/data";
+import ChartAddnewCard from "app/modules/home-module/components/Charts/chartAddNewCard";
 import ReformedGridItem from "app/modules/home-module/components/Charts/reformedGridItem";
-import ChartAddnewCard from "./chartAddNewCard";
-import CircleLoader from "../Loader";
 
 interface Props {
   sortBy: string;
@@ -25,11 +26,11 @@ interface Props {
 export default function ChartsGrid(props: Props) {
   const observerTarget = React.useRef(null);
   const [cardId, setCardId] = React.useState<number>(0);
+  const [loadedCharts, setLoadedCharts] = React.useState<any[]>([]);
   const [modalDisplay, setModalDisplay] = React.useState<boolean>(false);
   const [enableButton, setEnableButton] = React.useState<boolean>(false);
-  const [loadedCharts, setLoadedCharts] = React.useState<any[]>([]);
 
-  const token = useSessionStorage("authToken", "")[0];
+  const token = useStoreState((state) => state.AuthToken.value);
 
   const limit = 15;
   //used over usestate to get current offset value in the IntersectionObserver api, as it is not updated in usestate.
@@ -78,6 +79,12 @@ export default function ChartsGrid(props: Props) {
         storeInCrudData: true,
         filterString: getFilterString(),
       });
+    } else {
+      loadCharts({
+        nonAuthCall: true,
+        storeInCrudData: true,
+        filterString: getWhereString(),
+      });
     }
   };
 
@@ -85,6 +92,8 @@ export default function ChartsGrid(props: Props) {
     setOffset(0);
     if (token) {
       loadChartsCount({ token, filterString: getWhereString() });
+    } else {
+      loadChartsCount({ nonAuthCall: true, filterString: getWhereString() });
     }
     setLoadedCharts([]);
     loadData();
@@ -95,6 +104,8 @@ export default function ChartsGrid(props: Props) {
       loadChartsCount({
         token,
       });
+    } else {
+      loadChartsCount({ nonAuthCall: true, filterString: getWhereString() });
     }
   }, [token]);
 
@@ -115,9 +126,7 @@ export default function ChartsGrid(props: Props) {
   }, [offset]);
 
   React.useEffect(() => {
-    if (token) {
-      reloadData();
-    }
+    reloadData();
   }, [props.sortBy, token]);
 
   const handleDelete = (index?: number) => {
@@ -209,6 +218,7 @@ export default function ChartsGrid(props: Props) {
               <ReformedGridItem
                 id={c.id}
                 title={c.name}
+                public={c.public}
                 date={c.createdDate}
                 path={`/chart/${c.id}`}
                 viz={getIcon(c.vizType)}

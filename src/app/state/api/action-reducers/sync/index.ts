@@ -254,3 +254,15 @@ export interface ReportOrderStateModel {
   >;
   clear: Action<ReportOrderStateModel>;
 }
+
+export interface AuthTokenModel {
+  value: string;
+  setValue: Action<AuthTokenModel, string>;
+}
+
+export const AuthTokenState: AuthTokenModel = {
+  value: "",
+  setValue: action((state, payload: string) => {
+    state.value = payload;
+  }),
+};

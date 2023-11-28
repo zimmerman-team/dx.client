@@ -3,10 +3,11 @@ import React from "react";
 import get from "lodash/get";
 import filter from "lodash/filter";
 import isEmpty from "lodash/isEmpty";
+import { useUpdateEffect } from "react-use";
 import { useParams } from "react-router-dom";
+import { useAuth0 } from "@auth0/auth0-react";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
-import { useSessionStorage, useUpdateEffect } from "react-use";
 /* project */
 import { ChartRenderedItem } from "app/modules/chart-module/data";
 
@@ -83,7 +84,8 @@ export function useChartsRawData(props: {
   inChartWrapper?: boolean;
   dimensions?: any;
 }) {
-  const token = useSessionStorage("authToken", "")[0];
+  const { isLoading } = useAuth0();
+  const token = useStoreState((state) => state.AuthToken.value);
   const { visualOptions, chartFromAPI, setVisualOptions, setChartFromAPI } =
     props;
 
@@ -194,7 +196,9 @@ export function useChartsRawData(props: {
 
       await axios
         .post(
-          `${process.env.REACT_APP_API}/chart/${chartId ?? page}/render`,
+          `${process.env.REACT_APP_API}/chart/${chartId ?? page}/render${
+            token === "" ? "/public" : ""
+          }`,
           body,
           {
             headers: {
@@ -231,7 +235,8 @@ export function useChartsRawData(props: {
     if (
       !props.inChartWrapper &&
       page !== "new" &&
-      (isEditMode || !props.inChartWrapper)
+      (isEditMode || !props.inChartWrapper) &&
+      !isLoading
     ) {
       loadDataFromAPI();
     }
@@ -282,8 +287,8 @@ export function useChartsRawData(props: {
             setNotFound(true);
           } else {
             setChartFromAPI(chart);
-            setLoading(false);
           }
+          setLoading(false);
         })
         .catch((error) => {
           console.log("API call error: " + error.message);

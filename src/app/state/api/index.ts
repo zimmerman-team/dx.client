@@ -59,15 +59,23 @@ export const APIModel = <QueryModel, ResponseModel>(
   }),
   fetch: thunk(async (actions, query: RequestValues<QueryModel>) => {
     actions.onRequest();
+    let Authorization: string | undefined = `Bearer ${get(
+      query,
+      "token",
+      undefined
+    )}`;
+    if (query.nonAuthCall) {
+      Authorization = undefined;
+    }
     axios
       .get(
-        `${url}${query.getId ? `/${query.getId}` : ""}${
-          query.filterString ? "?" : ""
-        }${query.filterString ?? ""}`,
+        `${url}${query.nonAuthCall ? "/public" : ""}${
+          query.getId ? `/${query.getId}` : ""
+        }${query.filterString ? "?" : ""}${query.filterString ?? ""}`,
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${get(query, "token", undefined)}`,
+            Authorization,
           },
         }
       )

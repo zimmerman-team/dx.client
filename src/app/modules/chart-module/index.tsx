@@ -2,6 +2,7 @@
 import React from "react";
 import get from "lodash/get";
 import { DndProvider } from "react-dnd";
+import { useAuth0 } from "@auth0/auth0-react";
 import { useSessionStorage } from "react-use";
 import Container from "@material-ui/core/Container";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -39,10 +40,11 @@ import {
 import { IHeaderDetails } from "../report-module/components/right-panel/data";
 import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 import { styles as commonStyles } from "app/modules/chart-module/routes/common/styles";
-import { NotAuthorizedMessageModule } from "../common/not-authorized-message";
+import { NotAuthorizedMessageModule } from "app/modules/common/not-authorized-message";
 
 export default function ChartModule() {
-  const token = useSessionStorage("authToken", "")[0];
+  const { isLoading, isAuthenticated } = useAuth0();
+  const token = useStoreState((state) => state.AuthToken.value);
   const { page, view } = useParams<{ page: string; view?: string }>();
   const [chartFromAPI, setChartFromAPI] =
     React.useState<ChartRenderedItem | null>(null);
@@ -110,7 +112,9 @@ export default function ChartModule() {
   );
   const chartError401 = useStoreState(
     (state) =>
-      get(state.charts.ChartGet.errorData, "data.error.statusCode", 0) === 401
+      get(state.charts.ChartGet.errorData, "data.error.statusCode", 0) ===
+        401 ||
+      get(state.charts.ChartGet.crudData, "error", "") === "Unauthorized"
   );
   const clearChart = useStoreActions(
     (actions) => actions.charts.ChartGet.clear
@@ -336,16 +340,20 @@ export default function ChartModule() {
       });
     }
     if (page !== "new") {
-      if (token.length > 0) {
-        loadChart({ token, getId: page });
+      if (!isLoading) {
+        if (token.length > 0) {
+          loadChart({ token, getId: page });
+        } else if (!isAuthenticated) {
+          loadChart({ nonAuthCall: true, getId: page });
+        }
+      } else {
+        clearChart();
       }
-    } else {
-      clearChart();
     }
     return () => {
       clearChartBuilder();
     };
-  }, [page, token]);
+  }, [page, token, isLoading, isAuthenticated]);
 
   const errorComponent = () => {
     return (

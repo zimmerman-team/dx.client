@@ -23,7 +23,6 @@ interface Props {
 
 export default function DatasetsGrid(props: Props) {
   const observerTarget = React.useRef(null);
-  const token = useSessionStorage("authToken", "")[0];
   const [cardId, setCardId] = React.useState<string>("");
   const [enableButton, setEnableButton] = React.useState<boolean>(false);
   const [modalDisplay, setModalDisplay] = React.useState<boolean>(false);
@@ -35,6 +34,7 @@ export default function DatasetsGrid(props: Props) {
     DatasetListItemAPIModel[]
   >([]);
 
+  const token = useStoreState((state) => state.AuthToken.value);
   const datasets = useStoreState(
     (state) =>
       (state.dataThemes.DatasetGetList.crudData ??
@@ -77,6 +77,7 @@ export default function DatasetsGrid(props: Props) {
     //refrain from loading data if all the data is loaded
     await loadDatasets({
       token,
+      nonAuthCall: !token,
       storeInCrudData: true,
       filterString: getFilterString(),
     });
@@ -86,6 +87,8 @@ export default function DatasetsGrid(props: Props) {
     setOffset(0);
     if (token) {
       loadDatasetCount({ token, filterString: getWhereString() });
+    } else {
+      loadDatasetCount({ nonAuthCall: true, filterString: getWhereString() });
     }
     setLoadedDatasets([]);
     loadData();
@@ -108,9 +111,7 @@ export default function DatasetsGrid(props: Props) {
   }, [isObserved]);
 
   React.useEffect(() => {
-    if (token) {
-      reloadData();
-    }
+    reloadData();
   }, [props.sortBy, token]);
 
   const handleDelete = (id: string) => {

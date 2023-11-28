@@ -4,7 +4,6 @@ import { useStyles } from "./deleteChartDialog";
 import { CloseOutlined } from "@material-ui/icons";
 import { IconButton, Modal } from "@material-ui/core";
 import { useStoreActions } from "app/state/store/hooks";
-import useSessionStorage from "react-use/lib/useSessionStorage";
 
 interface Props {
   modalDisplay: boolean;
@@ -15,7 +14,7 @@ export default function LogOutDialog(props: Props) {
   const classes = useStyles();
   const { logout } = useAuth0();
 
-  const setToken = useSessionStorage("authToken", "")[1];
+  const setToken = useStoreActions((actions) => actions.AuthToken.setValue);
 
   const clearDatasets = useStoreActions(
     (actions) => actions.dataThemes.DatasetGetList.clear
