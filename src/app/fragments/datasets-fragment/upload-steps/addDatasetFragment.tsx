@@ -18,18 +18,19 @@ import { formatBytes } from "app/utils/formatBytes";
 import useDrivePicker from "react-google-drive-picker";
 import { PickerCallback } from "react-google-drive-picker/dist/typeDefs";
 import axios from "axios";
+import { ReactComponent as ErrorICon } from "app/fragments/datasets-fragment/assets/error-icon.svg";
+import Processing, { ProcessingMetaDataProps } from "./processing";
 
 interface Props {
   disabled: boolean;
-}
 
-interface DragAndDropProps {
-  disabled: boolean;
-  handleNext: () => void;
   setFile: React.Dispatch<React.SetStateAction<File | null>>;
+  uploading: boolean;
+  processing: ProcessingMetaDataProps;
+  processingError: boolean;
 }
 
-export default function AddDatasetFragment(props: DragAndDropProps) {
+export default function AddDatasetFragment(props: Props) {
   const [openPicker, authResponse] = useDrivePicker();
   const [fileData, setFileData] = React.useState<PickerCallback | null>(null);
 
@@ -51,8 +52,8 @@ export default function AddDatasetFragment(props: DragAndDropProps) {
         }
         const b = response.data;
         const gfile = new File([b], file.name, { type: "text/csv" });
+
         props.setFile(gfile);
-        props.handleNext();
       });
     }
   }, [authResponse, fileData]);
@@ -86,7 +87,8 @@ export default function AddDatasetFragment(props: DragAndDropProps) {
   useEffect(() => {
     if (acceptedFiles.length > 0) {
       props.setFile(acceptedFiles[0]);
-      props.handleNext();
+      console.log("herree", acceptedFiles[0]);
+      // props.handleFileSubmit();
     }
   }, [acceptedFiles]);
 
@@ -125,21 +127,30 @@ export default function AddDatasetFragment(props: DragAndDropProps) {
 
   return (
     <>
-      <DropZone
-        disabled={props.disabled}
-        getRootProps={getRootProps}
-        getInputProps={getInputProps}
-        isDragActive={isDragActive}
-        fileRejections={fileRejections}
-        acceptedFiles={acceptedFiles}
-        handleOpenPicker={handleOpenPicker}
-      />
-      {fileRejections.length > 0 && fileRejectionItems}
+      {props.uploading ? (
+        <>
+          <Processing {...props.processing} />
+        </>
+      ) : (
+        <>
+          <DropZone
+            disabled={props.disabled}
+            getRootProps={getRootProps}
+            getInputProps={getInputProps}
+            isDragActive={isDragActive}
+            fileRejections={fileRejections}
+            acceptedFiles={acceptedFiles}
+            handleOpenPicker={handleOpenPicker}
+            uploadError={props.processingError}
+          />
+          {fileRejections.length > 0 && fileRejectionItems}
+        </>
+      )}
     </>
   );
 }
 
-interface DropzoneProps extends Props {
+interface DropzoneProps {
   getRootProps: (props?: DropzoneRootProps) => DropzoneRootProps;
   getInputProps: (props?: DropzoneInputProps) => DropzoneInputProps;
   isDragActive: boolean;
@@ -153,6 +164,8 @@ interface DropzoneProps extends Props {
   rootRef?: React.RefObject<HTMLElement>;
   inputRef?: React.RefObject<HTMLInputElement>;
   handleOpenPicker(e: React.MouseEvent<HTMLButtonElement>): void;
+  uploadError: boolean;
+  disabled: boolean;
 }
 
 export const DropZone = (props: DropzoneProps) => {
@@ -206,7 +219,37 @@ export const DropZone = (props: DropzoneProps) => {
                   <GoogleDriveIcon /> <p>Connect to google drive</p>
                 </button>
               </div>
-              <Box height={80} />
+              <Box height={40} />
+              {props.uploadError && (
+                <div
+                  css={`
+                    color: #e75656;
+                    font-size: 18;
+                    font-family: " Gotham Narrow", sans-serif;
+                    font-weight: bold;
+                    /* background: pink; */
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex-direction: column;
+                    p {
+                      display: flex;
+                      align-items: center;
+                      gap: 13px;
+                      margin: 0;
+                    }
+                    small {
+                      text-align: center;
+                    }
+                  `}
+                >
+                  <p>
+                    <ErrorICon />{" "}
+                    <span>Unable to upload your file. Please try again!</span>
+                  </p>
+                  <span>Error</span>
+                </div>
+              )}
             </>
           )}
         </div>
