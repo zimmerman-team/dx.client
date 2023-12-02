@@ -55,8 +55,7 @@ function ReportEditView(props: ReportEditViewProps) {
   );
 
   const reportError401 = useStoreState(
-    (state) =>
-      get(state.reports.ReportGet.errorData, "data.error.statusCode", 0) === 401
+    (state) => state.reports.ReportGet.errorData
   );
 
   function deleteFrame(id: string) {
@@ -160,6 +159,7 @@ function ReportEditView(props: ReportEditViewProps) {
     }
   }, [reportData]);
 
+  // console.log(reportError401, "reportError401");
   if (reportError401) {
     return <NotAuthorizedMessageModule asset="report" />;
   }
@@ -207,9 +207,20 @@ function ReportEditView(props: ReportEditViewProps) {
             childrenData={props.framesArray}
             setFramesArray={props.setFramesArray}
           >
-            {props.framesArray.map((frame) => {
+            {props.framesArray.map((frame, index) => {
               return (
                 <div key={frame.id}>
+                  {index === 0 && (
+                    <PlaceHolder
+                      index={index}
+                      rowId={frame.id}
+                      deleteFrame={deleteFrame}
+                      framesArray={props.framesArray}
+                      setFramesArray={props.setFramesArray}
+                      handlePersistReportState={props.handlePersistReportState}
+                      handleRowFrameItemResize={props.handleRowFrameItemResize}
+                    />
+                  )}
                   <RowFrame
                     {...frame.frame}
                     framesArray={props.framesArray}
@@ -224,7 +235,6 @@ function ReportEditView(props: ReportEditViewProps) {
                   <Box height={38} />
 
                   <PlaceHolder
-                    index={frame.id}
                     rowId={frame.id}
                     deleteFrame={deleteFrame}
                     framesArray={props.framesArray}
