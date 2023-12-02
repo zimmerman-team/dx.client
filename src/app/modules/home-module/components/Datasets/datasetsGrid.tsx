@@ -50,9 +50,6 @@ export default function DatasetsGrid(props: Props) {
     (state) => state.dataThemes.DatasetGetList.loading
   );
 
-  const clearDatasets = useStoreActions(
-    (actions) => actions.dataThemes.DatasetGetList.clear
-  );
   const loadDatasetCount = useStoreActions(
     (actions) => actions.dataThemes.DatasetCount.fetch
   );

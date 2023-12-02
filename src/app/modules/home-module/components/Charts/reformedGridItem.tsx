@@ -120,6 +120,11 @@ export default function ReformedGridItem(props: Props) {
           </div>
           <div
             css={`
+              height: 10px;
+            `}
+          />
+          <div
+            css={`
               display: flex;
               font-size: 12px;
               justify-content: flex-end;
