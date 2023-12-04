@@ -171,7 +171,6 @@ function ReportCreateView(props: Readonly<ReportCreateViewProps>) {
                   <Box height={38} />
                   <PlaceHolder
                     rowId={frame.id}
-                    index={frame.id}
                     deleteFrame={props.deleteFrame}
                     framesArray={props.framesArray}
                     setFramesArray={props.setFramesArray}
@@ -217,15 +216,16 @@ export const PlaceHolder = (props: PlaceholderProps) => {
       props.setFramesArray((prev) => {
         const tempPrev = cloneDeep(prev);
 
-        const tempIndex = tempPrev.findIndex(
-          (frame) => frame.id === props.index
-        );
+        const tempIndex =
+          props.index ??
+          tempPrev.findIndex((frame) => frame.id === props.rowId) + 1;
+
         const id = v4();
-        tempPrev.splice(tempIndex + 1, 0, {
+        tempPrev.splice(tempIndex, 0, {
           id,
           frame: {
             rowId: id,
-            rowIndex: tempIndex + 1,
+            rowIndex: tempIndex,
 
             handlePersistReportState: props.handlePersistReportState,
             handleRowFrameItemResize: props.handleRowFrameItemResize,

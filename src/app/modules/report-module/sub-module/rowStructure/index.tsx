@@ -247,6 +247,7 @@ const Box = (props: {
   const [textContent, setTextContent] = React.useState<EditorState>(
     EditorState.createEmpty()
   );
+  const [displayBoxIcons, setDisplayBoxIcons] = React.useState(false);
 
   const handleEditChart = () => {
     setCreateChartFromReport({
@@ -412,8 +413,12 @@ const Box = (props: {
             }
           `}
         >
-          <div ref={textResizableRef}>
-            {!viewOnlyMode && (
+          <div
+            ref={textResizableRef}
+            onMouseEnter={() => setDisplayBoxIcons(true)}
+            onMouseLeave={() => setDisplayBoxIcons(false)}
+          >
+            {!viewOnlyMode && displayBoxIcons && (
               <IconButton
                 onClick={() => {
                   setDisplayChart(false);
@@ -432,6 +437,7 @@ const Box = (props: {
                   height: 22px;
                   border-radius: 50%;
                   background: #adb5bd;
+
                   :hover {
                     background: #adb5bd;
                     svg {
@@ -478,12 +484,15 @@ const Box = (props: {
           <div
             css={`
               height: 100%;
-              background: #fff;
               position: relative;
               padding: ${props.rowType === "oneByFive" ? "0" : "24px"};
             `}
+            onMouseEnter={() => setDisplayBoxIcons(true)}
+            onMouseLeave={() => setDisplayBoxIcons(false)}
+            onFocus={() => setDisplayBoxIcons(true)}
+            onBlur={() => setDisplayBoxIcons(false)}
           >
-            {!viewOnlyMode && (
+            {!viewOnlyMode && displayBoxIcons && (
               <div>
                 <IconButton
                   onClick={() => {
@@ -558,6 +567,7 @@ const Box = (props: {
     chartId,
     textContent,
     viewOnlyMode,
+    displayBoxIcons,
     width,
     props.height,
   ]);

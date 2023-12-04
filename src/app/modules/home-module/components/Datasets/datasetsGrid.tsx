@@ -3,7 +3,7 @@ import axios from "axios";
 import get from "lodash/get";
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
-import { useSessionStorage, useUpdateEffect } from "react-use";
+import { useUpdateEffect } from "react-use";
 import useDebounce from "react-use/lib/useDebounce";
 import { useInfinityScroll } from "app/hooks/useInfinityScroll";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
@@ -50,9 +50,6 @@ export default function DatasetsGrid(props: Props) {
     (state) => state.dataThemes.DatasetGetList.loading
   );
 
-  const clearDatasets = useStoreActions(
-    (actions) => actions.dataThemes.DatasetGetList.clear
-  );
   const loadDatasetCount = useStoreActions(
     (actions) => actions.dataThemes.DatasetCount.fetch
   );

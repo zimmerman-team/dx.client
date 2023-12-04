@@ -1,6 +1,5 @@
 import React from "react";
 import axios from "axios";
-import { useSessionStorage, useUpdateEffect } from "react-use";
 import Container from "@material-ui/core/Container";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import { useChartsRawData } from "app/hooks/useChartsRawData";
@@ -9,11 +8,11 @@ import { PageTopSpacer } from "app/modules/common/page-top-spacer";
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 import MetaData from "app/fragments/datasets-fragment/upload-steps/metaData";
 import Processing from "app/fragments/datasets-fragment/upload-steps/processing";
-import PreviewFragment from "app/fragments/datasets-fragment/upload-steps/previewFragment";
 import FinishedFragment from "app/fragments/datasets-fragment/upload-steps/finishedFragment";
 import AddDatasetFragment from "app/fragments/datasets-fragment/upload-steps/addDatasetFragment";
 import { useRecoilState } from "recoil";
 import { loadedDatasetsAtom } from "app/state/recoil/atoms";
+import ObjectId from "app/utils/ObjectId";
 
 function DatasetUploadSteps() {
   const { user } = useAuth0();
@@ -54,7 +53,7 @@ function DatasetUploadSteps() {
     };
   }, [estUploadTime]);
 
-  const steps = ["Upload", "Description", "Processing Data", "Finished"];
+  const steps = ["Connect", "Description", "Processing Data", "Finished"];
 
   const loadDatasets = useStoreActions(
     (actions) => actions.dataThemes.DatasetGetList.fetch
@@ -73,10 +72,6 @@ function DatasetUploadSteps() {
       setChartFromAPI: () => {},
       chartFromAPI: null,
     });
-
-  useUpdateEffect(() => {
-    loadDataset(`chart/sample-data/${datasetId}`);
-  }, [datasetId]);
 
   const handleNext = () => {
     const newActiveStep = activeStep + 1;
@@ -138,12 +133,10 @@ function DatasetUploadSteps() {
 
   const onSubmit = async () => {
     // Post the dataset
-    handleNext();
-    setUploading(true);
     axios
       .post(
         `${process.env.REACT_APP_API}/datasets`,
-        { ...formDetails, authId: user?.sub },
+        { ...formDetails, authId: user?.sub, id: datasetId },
         {
           headers: {
             "Content-Type": "application/json",
@@ -153,42 +146,8 @@ function DatasetUploadSteps() {
       )
       .then((response) => {
         // if the dataset was created successfully, post the file to the server
-        const formData = new FormData();
-        let file = selectedFile;
-        let filename = "dx" + response.data.id;
-        formData.append(filename, file as File);
-        axios
-          .post(`${process.env.REACT_APP_API}/files`, formData, {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-            onUploadProgress,
-          })
-          .then(async () => {
-            setUploading(false);
-            setUploadSuccess(true);
-            loadDatasets({ token, storeInCrudData: true });
-            setDatasetId(response.data.id);
-            setActiveStep(3);
-          })
-          .catch((error) => {
-            console.debug("Dataset upload error", error);
-            setProcessingError(true);
-            setUploading(false);
-            setUploadSuccess(false);
-            setSelectedFile(null);
-            setErrorMessage(
-              "The file could not be uploaded, make sure it is less than 40MB, and of type XLSX, CSV, JSON or XML."
-            );
-            axios
-              .delete(
-                `${process.env.REACT_APP_API}/datasets/${response.data.id}`
-              )
-              .then(async () => {
-                loadDatasets({ token, storeInCrudData: true });
-              })
-              .catch((error) => console.log(error));
-          });
+        loadDataset(`chart/sample-data/${response.data.id}`);
+        setActiveStep(3);
       })
       .catch((error) => {
         console.debug("Dataset creation error", error);
@@ -199,14 +158,61 @@ function DatasetUploadSteps() {
       });
   };
 
+  const onFileSubmit = () => {
+    const formData = new FormData();
+    setUploading(true);
+    const id = ObjectId();
+    setDatasetId(id);
+    let fieldname = "dx" + id;
+    formData.append(fieldname, selectedFile as File);
+    axios
+      .post(`${process.env.REACT_APP_API}/files`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        onUploadProgress,
+      })
+      .then(async () => {
+        setUploading(false);
+        setUploadSuccess(true);
+        loadDatasets({ token, storeInCrudData: true });
+        handleNext();
+      })
+      .catch((error) => {
+        console.debug("Dataset upload error", error);
+        setProcessingError(true);
+        setUploading(false);
+        setUploadSuccess(false);
+        setSelectedFile(null);
+        setErrorMessage(
+          "The file could not be uploaded, make sure it is less than 40MB, and of type XLSX, CSV, JSON or XML."
+        );
+      });
+  };
+
+  React.useEffect(() => {
+    if (selectedFile) {
+      onFileSubmit();
+    }
+  }, [selectedFile]);
+
   const currentStep = () => {
     switch (activeStep) {
       case 0:
         return (
           <AddDatasetFragment
-            handleNext={handleNext}
             setFile={setSelectedFile}
             disabled={false}
+            uploading={uploading}
+            processingError={processingError}
+            processing={{
+              processingError,
+              loaded: loadedProgress,
+              percentageLoaded: percentageLoadedProgress,
+              estimatedUploadTime: estUploadTime,
+              setProcessingError,
+              fileName: (selectedFile && selectedFile.name) as string,
+            }}
           />
         );
       case 1:
@@ -242,9 +248,18 @@ function DatasetUploadSteps() {
       default:
         return (
           <AddDatasetFragment
-            handleNext={handleNext}
             setFile={setSelectedFile}
             disabled={false}
+            uploading={uploading}
+            processingError={processingError}
+            processing={{
+              processingError,
+              loaded: loadedProgress,
+              percentageLoaded: percentageLoadedProgress,
+              estimatedUploadTime: estUploadTime,
+              setProcessingError,
+              fileName: (selectedFile && selectedFile.name) as string,
+            }}
           />
         );
     }

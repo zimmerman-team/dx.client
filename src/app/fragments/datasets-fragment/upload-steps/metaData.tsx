@@ -82,7 +82,7 @@ export const CssTextField = withStyles({
   },
 })(TextField);
 
-export const categories = [
+export const datasetCategories = [
   "Arts and Culture",
   "Economy",
   "Education",
@@ -151,7 +151,9 @@ const SelectField = (props: {
         PaperProps: {
           style: {
             borderRadius: "20px",
-            marginTop: `${(findIndex(categories, props.value) + 1) * 60}px`,
+            marginTop: `${
+              (findIndex(datasetCategories, props.value) + 1) * 60
+            }px`,
           },
         },
       }}
@@ -166,7 +168,7 @@ const SelectField = (props: {
       <MenuItem value="">
         <em>None</em>
       </MenuItem>
-      {categories.map((category) => (
+      {datasetCategories.map((category) => (
         <MenuItem key={category} value={category}>
           {category}
         </MenuItem>
@@ -175,7 +177,7 @@ const SelectField = (props: {
   </FormControl>
 );
 
-export default function MetaData(props: Props) {
+export default function MetaData(props: Readonly<Props>) {
   const { register, handleSubmit, getValues } = useForm<IFormDetails>();
 
   const [characterCount, setCharacterCount] = React.useState(0);
@@ -216,7 +218,7 @@ export default function MetaData(props: Props) {
                 label="Data title "
                 variant="outlined"
                 {...register("name", { required: true })}
-                helperText="Title must be between 6 and 50 characters in lenght."
+                helperText="Title must be between 6 and 50 characters in length."
                 onChange={handleChange}
                 fullWidth
               />

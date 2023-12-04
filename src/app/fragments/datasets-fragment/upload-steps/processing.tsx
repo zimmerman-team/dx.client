@@ -1,9 +1,7 @@
 import React from "react";
-import { RotatingLines } from "react-loader-spinner";
-import { ReactComponent as ProcessingIcon } from "../assets/spin.svg";
-import { ReactComponent as ErrorICon } from "../assets/error-icon.svg";
+import { ReactComponent as ErrorICon } from "app/fragments/datasets-fragment/assets/error-icon.svg";
 
-interface Props {
+export interface ProcessingMetaDataProps {
   setProcessingError: React.Dispatch<React.SetStateAction<boolean>>;
   processingError: boolean;
   fileName: string;
@@ -12,7 +10,7 @@ interface Props {
   estimatedUploadTime: number;
 }
 
-export default function Processing(props: Props) {
+export default function Processing(props: ProcessingMetaDataProps) {
   const getTimeInHoursnMins = (time: number) => {
     const mft = Math.floor(time / 60);
     const se = " seconds (estimated)";

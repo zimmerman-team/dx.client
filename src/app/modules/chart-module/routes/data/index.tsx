@@ -13,13 +13,14 @@ import {
   searchInputCss,
   sortByItemCss,
 } from "app/modules/home-module/style";
-import { categories } from "app/fragments/datasets-fragment/upload-steps/metaData";
+import { datasetCategories } from "app/fragments/datasets-fragment/upload-steps/metaData";
 import DatasetsGrid from "app/modules/home-module/components/Datasets/datasetsGrid";
 import { styles as commonStyles } from "app/modules/chart-module/routes/common/styles";
 import { ReactComponent as SortIcon } from "app/modules/home-module/assets/sort-fill.svg";
 import { ReactComponent as GridIcon } from "app/modules/home-module/assets/grid-fill.svg";
 import { ReactComponent as CloseIcon } from "app/modules/home-module/assets/close-icon.svg";
 import { ReactComponent as SearchIcon } from "app/modules/home-module/assets/search-fill.svg";
+import DatasetCategoryList from "app/modules/home-module/components/Datasets/datasetCategoryList";
 
 function ChartModuleDataView(props: {
   clearChartBuilder: () => void;
@@ -191,59 +192,12 @@ function ChartModuleDataView(props: {
           <GridIcon />
         </IconButton>
       </div>
-      <div
-        css={`
-          gap: 14px;
-          width: 100%;
-          height: 55px;
-          display: flex;
-          max-width: 100%;
-          overflow-x: auto;
-          flex-direction: row;
-          margin: 40px 0 20px 0;
-
-          &::-webkit-scrollbar {
-            height: 5px;
-            border-radius: 20px;
-            background: #231d2c;
-          }
-          &::-webkit-scrollbar-track {
-            background: #dfe3e6;
-          }
-          &::-webkit-scrollbar-thumb {
-            background: #231d2c;
-          }
-
-          > button {
-            width: 160px;
-            height: 40px;
-            font-size: 14px;
-            cursor: pointer;
-            min-width: 160px;
-            max-width: 160px;
-            background: #fff;
-            border-radius: 30px;
-            border: 1px solid #231d2c;
-          }
-        `}
-      >
-        {categories.map((c: string) => (
-          <button
-            key={c}
-            onClick={() => setCategory(c !== category ? c : "")}
-            style={
-              c === category
-                ? {
-                    color: "#6061e5",
-                    borderColor: "#6061e5",
-                  }
-                : {}
-            }
-          >
-            {c}
-          </button>
-        ))}
-      </div>
+      <DatasetCategoryList
+        category={category}
+        datasetCategories={datasetCategories}
+        setCategory={setCategory}
+        customCss={{ gap: "10px" }}
+      />
       <DatasetsGrid
         inChartBuilder
         sortBy={sortValue}
