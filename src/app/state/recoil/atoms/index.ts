@@ -1,6 +1,7 @@
 import { atom } from "recoil";
 import { recoilPersist } from "recoil-persist";
 import { convertToRaw, EditorState } from "draft-js";
+import { DatasetListItemAPIModel } from "app/modules/data-themes-module/sub-modules/list";
 
 export interface IRowFrameStructure {
   rowType:
@@ -102,6 +103,12 @@ export const reportCreationTourStepAtom = atom<number>({
 export const unSavedReportPreviewModeAtom = atom<boolean>({
   key: "unSavedReportPreviewModeAtom",
   default: false,
+  effects_UNSTABLE: [persistAtom],
+});
+
+export const loadedDatasetsAtom = atom<DatasetListItemAPIModel[]>({
+  key: "loadedDatasetsAtom",
+  default: [],
   effects_UNSTABLE: [persistAtom],
 });
 

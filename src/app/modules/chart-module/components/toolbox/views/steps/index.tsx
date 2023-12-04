@@ -5,12 +5,10 @@ import Tooltip from "@material-ui/core/Tooltip";
 import MuiButton from "@material-ui/core/Button";
 import { useStoreState } from "app/state/store/hooks";
 import { withStyles } from "@material-ui/core/styles";
-import MuiAccordion from "@material-ui/core/Accordion";
 import { useHistory, useParams } from "react-router-dom";
 import { ArrowDropDownSharp } from "@material-ui/icons";
 import useUpdateEffect from "react-use/lib/useUpdateEffect";
-import MuiAccordionSummary from "@material-ui/core/AccordionSummary";
-import MuiAccordionDetails from "@material-ui/core/AccordionDetails";
+
 /* project */
 import { PrimaryButton } from "app/components/Styled/button";
 import { FilterGroupModel } from "app/components/ToolBoxPanel/components/filters/data";
@@ -19,63 +17,16 @@ import { ChartToolBoxMapping } from "app/modules/chart-module/components/toolbox
 import { ChartToolBoxFilters } from "app/modules/chart-module/components/toolbox/views/steps/panels-content/Filters";
 import { ChartToolBoxChartType } from "app/modules/chart-module/components/toolbox/views/steps/panels-content/ChartType";
 import { ChartToolBoxCustomize } from "app/modules/chart-module/components/toolbox/views/steps/panels-content/Customize";
-import { ChartToolBoxSelectDataset } from "app/modules/chart-module/components/toolbox/views/steps/panels-content/SelectDataset";
-
-export const Accordion = withStyles({
-  root: {
-    boxShadow: "none",
-    borderTop: "1px solid #C0C7D2",
-    backgroundColor: "transparent",
-    "&:before": {
-      display: "none",
-    },
-    "&$expanded": {
-      margin: "auto",
-    },
-  },
-  expanded: {},
-})(MuiAccordion);
-
-export const AccordionSummary = withStyles({
-  root: {
-    minHeight: 56,
-    marginBottom: -1,
-    padding: "0 24px",
-    backgroundColor: "transparent",
-    "&$expanded": {
-      minHeight: 56,
-    },
-  },
-  content: {
-    fontSize: "14px",
-    "& > div": {
-      width: 23,
-      height: 23,
-      color: "#fff",
-      marginRight: 25,
-      fontSize: "14px",
-      borderRadius: "50%",
-      textAlign: "center",
-      backgroundColor: "#727F95",
-    },
-    "&$expanded": {
-      margin: "12px 0",
-      fontFamily: "GothamNarrow-Bold, sans-serif",
-      fontWeight: 700,
-      "& > div": {
-        backgroundColor: "#262C34",
-      },
-    },
-  },
-  expanded: {},
-})(MuiAccordionSummary);
-
-export const AccordionDetails = withStyles(() => ({
-  root: {
-    padding: "16px 24px",
-    flexDirection: "column",
-  },
-}))(MuiAccordionDetails);
+import {
+  ChartToolBoxSelectDataset,
+  ConnectData,
+} from "app/modules/chart-module/components/toolbox/views/steps/panels-content/SelectDataset";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+} from "app/modules/chart-module/components/toolbox/styles";
+import { Box } from "@material-ui/core";
 
 const Button = withStyles(() => ({
   root: {
@@ -238,35 +189,14 @@ export function ChartToolBoxSteps(props: ChartToolBoxStepsProps) {
           >
             Choose from the DX library
           </p>
+
           <AccordionDetails>
             <ChartToolBoxSelectDataset
               loadDataset={loadDataset}
               expanded={expanded === 1}
             />
-            <div>
-              <div>
-                <p
-                  css={`
-                    margin-left: 27px;
-                  `}
-                >
-                  OR
-                </p>
-                <div
-                  css={`
-                    width: 187px;
-                    color: #ffffff;
-                  `}
-                >
-                  <PrimaryButton
-                    dark
-                    onClick={() => history.push("/dataset-upload")}
-                  >
-                    add new dataset
-                  </PrimaryButton>
-                </div>
-              </div>
-            </div>
+            <Box height={16} />
+            <ConnectData />
           </AccordionDetails>
         </Accordion>
         <Accordion

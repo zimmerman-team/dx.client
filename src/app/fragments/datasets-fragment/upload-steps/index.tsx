@@ -12,6 +12,8 @@ import Processing from "app/fragments/datasets-fragment/upload-steps/processing"
 import PreviewFragment from "app/fragments/datasets-fragment/upload-steps/previewFragment";
 import FinishedFragment from "app/fragments/datasets-fragment/upload-steps/finishedFragment";
 import AddDatasetFragment from "app/fragments/datasets-fragment/upload-steps/addDatasetFragment";
+import { useRecoilState } from "recoil";
+import { loadedDatasetsAtom } from "app/state/recoil/atoms";
 
 function DatasetUploadSteps() {
   const { user } = useAuth0();
@@ -57,7 +59,13 @@ function DatasetUploadSteps() {
   const loadDatasets = useStoreActions(
     (actions) => actions.dataThemes.DatasetGetList.fetch
   );
+  const datasets = useStoreState(
+    (state) => state.dataThemes.DatasetGetList.crudData as any[]
+  );
+  const [loadedDatasets, setLoadedDatasets] =
+    useRecoilState(loadedDatasetsAtom);
 
+  console.log(loadedDatasets, "loadedDatasets", datasets);
   const { loadDataset, sampleData, dataTotalCount, dataStats } =
     useChartsRawData({
       visualOptions: () => {},
@@ -87,6 +95,10 @@ function DatasetUploadSteps() {
       setActiveStep(newActiveStep);
     }
   };
+
+  React.useEffect(() => {
+    setLoadedDatasets(datasets);
+  }, [datasets]);
 
   const onUploadProgress = (progressEvent: any) => {
     const { loaded, total } = progressEvent;
