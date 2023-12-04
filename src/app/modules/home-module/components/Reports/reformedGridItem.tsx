@@ -163,6 +163,7 @@ export default function ReformedGridItem(props: Props) {
             gap: 3px;
             > p {
               margin: 0;
+              font-size: 8.814px;
             }
           `}
         >
