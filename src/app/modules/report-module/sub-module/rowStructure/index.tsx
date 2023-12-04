@@ -387,8 +387,6 @@ const Box = (props: {
 
   const textResizableRef = React.useRef<HTMLDivElement>(null);
 
-  console.log(displayBoxIcons, "displayBoxIcons");
-
   const content = React.useMemo(() => {
     if (displayTextBox) {
       return (
@@ -417,43 +415,42 @@ const Box = (props: {
         >
           <div
             ref={textResizableRef}
-            onMouseOver={() => setDisplayBoxIcons(true)}
-            onMouseOut={() => setDisplayBoxIcons(false)}
+            onMouseEnter={() => setDisplayBoxIcons(true)}
+            onMouseLeave={() => setDisplayBoxIcons(false)}
           >
-            {!viewOnlyMode ||
-              (displayBoxIcons && (
-                <IconButton
-                  onClick={() => {
-                    setDisplayChart(false);
-                    setChartId(null);
-                    setDisplayTextBox(false);
-                    setTextContent(EditorState.createEmpty());
-                    handleRowFrameItemRemoval(props.rowId, props.itemIndex);
-                  }}
-                  css={`
-                    top: 12px;
-                    z-index: 1;
-                    right: 12px;
-                    position: absolute;
-                    padding: 4px;
-                    width: 22px;
-                    height: 22px;
-                    border-radius: 50%;
-                    background: #adb5bd;
+            {!viewOnlyMode && displayBoxIcons && (
+              <IconButton
+                onClick={() => {
+                  setDisplayChart(false);
+                  setChartId(null);
+                  setDisplayTextBox(false);
+                  setTextContent(EditorState.createEmpty());
+                  handleRowFrameItemRemoval(props.rowId, props.itemIndex);
+                }}
+                css={`
+                  top: 12px;
+                  z-index: 1;
+                  right: 12px;
+                  position: absolute;
+                  padding: 4px;
+                  width: 22px;
+                  height: 22px;
+                  border-radius: 50%;
+                  background: #adb5bd;
 
-                    :hover {
-                      background: #adb5bd;
-                      svg {
-                        path {
-                          fill: #fff;
-                        }
+                  :hover {
+                    background: #adb5bd;
+                    svg {
+                      path {
+                        fill: #fff;
                       }
                     }
-                  `}
-                >
-                  <DeleteIcon />
-                </IconButton>
-              ))}
+                  }
+                `}
+              >
+                <DeleteIcon />
+              </IconButton>
+            )}
 
             <RichEditor
               fullWidth
@@ -490,10 +487,12 @@ const Box = (props: {
               position: relative;
               padding: ${props.rowType === "oneByFive" ? "0" : "24px"};
             `}
-            onMouseOver={() => setDisplayBoxIcons(true)}
+            onMouseEnter={() => setDisplayBoxIcons(true)}
             onMouseLeave={() => setDisplayBoxIcons(false)}
+            onFocus={() => setDisplayBoxIcons(true)}
+            onBlur={() => setDisplayBoxIcons(false)}
           >
-            {displayBoxIcons && (
+            {!viewOnlyMode && displayBoxIcons && (
               <div>
                 <IconButton
                   onClick={() => {
@@ -568,6 +567,7 @@ const Box = (props: {
     chartId,
     textContent,
     viewOnlyMode,
+    displayBoxIcons,
     width,
     props.height,
   ]);
