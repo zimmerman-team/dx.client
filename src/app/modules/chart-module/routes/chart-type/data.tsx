@@ -79,10 +79,10 @@ export const echartTypes = (big: boolean) => {
       id: "bigNumber",
       label: "Big number",
       icon: <BigNumberIcon />,
-      categories: ["Hierarchies", "Proportions"],
+      categories: ["Key data points"],
       ssr: true,
       description:
-        "It displays hierarchically structured data and a related quantitative dimension. It is composed of an area divided into small rectangles, representing the last level of the tree structure. The rectangles’ size depends on the quantitative dimension.",
+        "Big number charts present specific, standout numerical values or key performance indicators in a visually prominent and easily digestible format, enabling quick recognition of important data points.",
     },
     {
       id: "placeholder1",
@@ -215,10 +215,10 @@ export const coloredEchartTypes = () => {
       id: "bigNumber",
       label: "Big Number diagram",
       icon: <ColoredBigNumberIcon />,
-      categories: ["Hierarchies", "Proportions"],
+      categories: ["Key data points"],
       ssr: true,
       description:
-        "It displays hierarchically structured data and a related quantitative dimension. It is composed of an area divided into small rectangles, representing the last level of the tree structure. The rectangles’ size depends on the quantitative dimension.",
+        "Big number charts present specific, standout numerical values or key performance indicators in a visually prominent and easily digestible format, enabling quick recognition of important data points.",
     },
   ];
 };
