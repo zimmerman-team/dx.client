@@ -2,10 +2,8 @@ import React from "react";
 import axios from "axios";
 import isEmpty from "lodash/isEmpty";
 import { useRecoilState } from "recoil";
-import styled from "styled-components/macro";
-import Button from "@material-ui/core/Button";
-import { useSessionStorage } from "react-use";
 import { useAuth0 } from "@auth0/auth0-react";
+import Button from "@material-ui/core/Button";
 import SaveIcon from "@material-ui/icons/Save";
 import EditIcon from "@material-ui/icons/Edit";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -35,63 +33,14 @@ import {
   unSavedReportPreviewModeAtom,
   reportRightPanelViewAtom,
 } from "app/state/recoil/atoms";
+import { InfoSnackbar } from "app/modules/common/subheader-toolbar/infoSnackbar";
+import { ReportModel, emptyReport } from "app/modules/report-module/data";
 
-export const InfoSnackbar = styled((props) => {
-  const { gap, ...otherProps } = props;
-
-  return <Snackbar {...otherProps} />;
-})`
-  && {
-    bottom: 40px;
-  }
-
-  & [class*="MuiSnackbarContent-root"] {
-    width: 100%;
-    display: flex;
-    padding: 0 78px;
-    background: #fff;
-    flex-wrap: nowrap;
-    border-radius: 12px;
-    gap: ${(props) => (props.gap ? "0px" : "84px")};
-    justify-content: center;
-    box-shadow: 0 8px 17px -4px rgba(130, 142, 148, 0.35),
-      0 0 4px 0 rgba(130, 142, 148, 0.16), 0 0 2px 0 rgba(130, 142, 148, 0.12);
-
-    @media (max-width: 550px) {
-      width: calc(100% - 16px);
-    }
-  }
-
-  & [class*="MuiSnackbarContent-message"] {
-    color: #000;
-    font-size: 18px;
-    padding: 16px 0;
-    font-weight: 700;
-    font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
-  }
-
-  & [class*="MuiSnackbarContent-action"] {
-    > button {
-      color: #fff;
-      cursor: pointer;
-      font-size: 14px;
-      border-style: none;
-      padding: 12px 27px;
-      background: #262c34;
-      border-radius: 20px;
-    }
-  }
-
-  & [class*="MuiSnackbarContent-action"] {
-    padding: 16px 0;
-  }
-`;
-
-export function SubheaderToolbar(props: SubheaderToolbarProps) {
-  const { user } = useAuth0();
+export function SubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
   const history = useHistory();
-  const { page, view } = useParams<{ page: string; view?: string }>();
+  const { user, isAuthenticated } = useAuth0();
   const token = useStoreState((state) => state.AuthToken.value);
+  const { page, view } = useParams<{ page: string; view?: string }>();
   const [modalDisplay, setModalDisplay] = React.useState({
     report: false,
     chart: false,
@@ -99,20 +48,14 @@ export function SubheaderToolbar(props: SubheaderToolbarProps) {
   const [enableButton, setEnableButton] = React.useState<boolean>(false);
 
   const setHomeTab = useRecoilState(homeDisplayAtom)[1];
-  const [createChartFromReport, setCreateChartFromReport] = useRecoilState(
+  const [createChartFromReport, _setCreateChartFromReport] = useRecoilState(
     createChartFromReportAtom
   );
   const setRightPanelView = useRecoilState(reportRightPanelViewAtom)[1];
-
-  const setReportPreviewMode = useRecoilState(unSavedReportPreviewModeAtom)[1];
-
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
   const [isSavedEnabled, setIsSavedEnabled] = React.useState(false);
   const [isPreviewEnabled, setIsPreviewEnabled] = React.useState(false);
   const [showSnackbar, setShowSnackbar] = React.useState<string | null>(null);
-  const [duplicatedReportId, setDuplicatedReportId] = React.useState<
-    string | null
-  >(null);
   const [duplicatedChartId, setDuplicatedChartId] = React.useState<
     string | null
   >(null);
@@ -133,10 +76,6 @@ export function SubheaderToolbar(props: SubheaderToolbarProps) {
   );
   const selectedChartType = useStoreState(
     (state) => state.charts.chartType.value
-  );
-
-  const loadReports = useStoreActions(
-    (actions) => actions.reports.ReportGetList.fetch
   );
 
   const loadCharts = useStoreActions(
@@ -174,12 +113,20 @@ export function SubheaderToolbar(props: SubheaderToolbarProps) {
     (actions) => actions.charts.ChartUpdate.clear
   );
 
+  const canChartEditDelete = React.useMemo(() => {
+    return isAuthenticated && loadedChart && loadedChart.owner === user?.sub;
+  }, [user, isAuthenticated, loadedChart]);
+
   const [snackbarState, setSnackbarState] = React.useState<ISnackbarState>({
     open: false,
     vertical: "bottom",
     horizontal: "center",
   });
 
+  const clearChart = () => {
+    editChartClear();
+    createChartClear();
+  };
   const onNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     props.setName(event.target.value);
   };
@@ -211,10 +158,6 @@ export function SubheaderToolbar(props: SubheaderToolbarProps) {
   };
 
   const onSave = () => {
-    if (props.onReportSave) {
-      props.onReportSave();
-      return;
-    }
     const chart = {
       name: props.name,
       authId: user?.sub,
@@ -237,13 +180,14 @@ export function SubheaderToolbar(props: SubheaderToolbarProps) {
         values: chart,
       });
     }
+  };
 
-    //completes chart creation, returns back to persisted report view
-    if (createChartFromReport.state) {
-      setCreateChartFromReport({
-        ...createChartFromReport,
-        state: false,
-      });
+  React.useEffect(() => {
+    if (
+      (editChartSuccess || createChartSuccess) &&
+      createChartFromReport.state
+    ) {
+      //returns back to persisted report view
       setRightPanelView("charts");
       if (createChartFromReport.view === undefined) {
         history.push(`/report/${createChartFromReport.page}/edit`);
@@ -252,13 +196,15 @@ export function SubheaderToolbar(props: SubheaderToolbarProps) {
           `/report/${createChartFromReport.page}/${createChartFromReport.view}`
         );
       }
+    } else if (editChartSuccess && !createChartFromReport.state) {
+      //returns back to chart detail page
+      history.push(`/chart/${page}`);
     }
-  };
+  }, [editChartSuccess, createChartSuccess]);
 
   React.useEffect(() => {
     return () => {
-      createChartClear();
-      editChartClear();
+      clearChart();
     };
   }, []);
 
@@ -288,161 +234,91 @@ export function SubheaderToolbar(props: SubheaderToolbarProps) {
 
   React.useEffect(() => {
     if (
-      (createChartSuccess &&
-        createChartData.id &&
-        createChartData.id.length > 0) ||
-      editChartSuccess
+      createChartSuccess &&
+      createChartData.id &&
+      createChartData.id.length > 0
     ) {
       setShowSnackbar(
-        `Chart ${
-          view !== undefined && page !== "new" ? "saved" : "created"
-        } successfully!`
+        createChartSuccess ? `Chart created successfully!` : null
       );
-      const id = createChartSuccess ? createChartData.id : page;
-      if (createChartFromReport.view === "") {
-        history.push(`/chart/${id}`);
+      const chartId = createChartSuccess ? createChartData.id : page;
+      if (createChartFromReport.view === "" && createChartSuccess) {
+        history.push(`/chart/${chartId}`);
       }
     }
-  }, [createChartSuccess, editChartSuccess, createChartData]);
+  }, [createChartSuccess, createChartData]);
 
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
 
   const handleModalDisplay = () => {
-    if (props.pageType === "chart") {
-      setModalDisplay({
-        ...modalDisplay,
-        chart: true,
-      });
-    } else {
-      setModalDisplay({
-        ...modalDisplay,
-        report: true,
-      });
-    }
+    setModalDisplay({
+      ...modalDisplay,
+      chart: true,
+    });
   };
 
   const handleDelete = () => {
     setEnableButton(false);
-    if (props.pageType === "report") {
-      setModalDisplay({
-        ...modalDisplay,
-        report: false,
-      });
-      axios
-        .delete(`${process.env.REACT_APP_API}/report/${page}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then(async () => {
-          loadReports({
-            token,
-            storeInCrudData: true,
-            filterString: "filter[order]=createdDate desc",
-          });
-        })
-        .catch((error) => console.log(error));
-      setHomeTab("reports");
-    } else {
-      setModalDisplay({
-        ...modalDisplay,
-        chart: false,
-      });
-      axios
-        .delete(`${process.env.REACT_APP_API}/chart/${page}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then(async () => {
-          loadCharts({
-            token,
-            storeInCrudData: true,
-            filterString: "filter[order]=createdDate desc",
-          });
-        })
-        .catch((error) => console.log(error));
-      setHomeTab("charts");
-    }
+
+    setModalDisplay({
+      ...modalDisplay,
+      chart: false,
+    });
+    axios
+      .delete(`${process.env.REACT_APP_API}/chart/${page}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then(async () => {
+        loadCharts({
+          token,
+          storeInCrudData: true,
+          filterString: "filter[order]=createdDate desc",
+        });
+      })
+      .catch((error) => console.log(error));
+    setHomeTab("charts");
+
     history.replace("/");
   };
 
   const handleDuplicate = () => {
-    if (props.pageType === "report") {
-      axios
-        .get(`${process.env.REACT_APP_API}/report/duplicate/${page}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then((response) => {
-          loadReports({
-            token,
-            storeInCrudData: true,
-            filterString: "filter[order]=createdDate desc",
-          });
-          setDuplicatedReportId(response.data.id);
-          setSnackbarState({
-            ...snackbarState,
-            open: true,
-          });
-        })
-        .catch((error) => console.log(error));
-    } else {
-      axios
-        .get(`${process.env.REACT_APP_API}/chart/duplicate/${page}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then(async (response) => {
-          loadCharts({
-            token,
-            storeInCrudData: true,
-            filterString: "filter[order]=createdDate desc",
-          });
-          setDuplicatedChartId(response.data.id);
-          setSnackbarState({
-            ...snackbarState,
-            open: true,
-          });
-        })
-        .catch((error) => console.log(error));
-    }
+    axios
+      .get(`${process.env.REACT_APP_API}/chart/duplicate/${page}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then(async (response) => {
+        loadCharts({
+          token,
+          storeInCrudData: true,
+          filterString: "filter[order]=createdDate desc",
+        });
+        setDuplicatedChartId(response.data.id);
+        setSnackbarState({
+          ...snackbarState,
+          open: true,
+        });
+      })
+      .catch((error) => console.log(error));
   };
 
   const handlePreviewMode = () => {
-    if (props.pageType === "report") {
-      setReportPreviewMode(true);
-      props.handlePersistReportState?.();
-      if (props.setStopInitializeFramesWidth) {
-        props.setStopInitializeFramesWidth(true);
-      }
-      history.push(`/${props.pageType}/${page}/preview`);
-    } else {
-      history.push(`/${props.pageType}/${page}/preview`);
-    }
+    history.push(`/chart/${page}/preview`);
   };
 
   const handleBackToEdit = () => {
-    if (props.pageType === "report") {
-      setReportPreviewMode(false);
-      if (page === "new") {
-        history.push(`/report/new/create`);
-      } else {
-        history.push(`/${props.pageType}/${page}/${"edit"}`);
-      }
-    } else {
-      history.goBack();
-    }
+    history.goBack();
   };
 
   return (
     <div id="subheader-toolbar" css={styles.container}>
       {createOrEditChartLoading && <PageLoader />}
       <InfoSnackbar
-        gap={createChartFromReport.view !== ""}
+        gap={location.pathname.includes("report")}
         data-testid="create-chart-snackbar"
         onClose={() => setShowSnackbar(null)}
         open={showSnackbar !== null && showSnackbar !== ""}
@@ -452,7 +328,7 @@ export function SubheaderToolbar(props: SubheaderToolbarProps) {
           aria-describedby="create-chart-snackbar-content"
           action={
             <>
-              {createChartFromReport.view === "" && (
+              {!location.pathname.includes("report") && (
                 <button
                   onClick={() => {
                     setShowSnackbar(null);
@@ -484,6 +360,11 @@ export function SubheaderToolbar(props: SubheaderToolbarProps) {
             placeholder="Title"
             css={styles.nameInput}
             onChange={onNameChange}
+            onFocus={() => {
+              props.setHasSubHeaderTitleFocused?.(true);
+              props.setHasSubHeaderTitleBlurred?.(false);
+            }}
+            onBlur={() => props.setHasSubHeaderTitleBlurred?.(true)}
             onClick={(e) => {
               if (props.name === "Untitled report") {
                 e.currentTarget.value = "";
@@ -502,16 +383,14 @@ export function SubheaderToolbar(props: SubheaderToolbarProps) {
           {view !== "initial" && (
             <div css={styles.endContainer}>
               {view === "preview" && (
-                <>
-                  <button
-                    onClick={handleBackToEdit}
-                    css={styles.backToEdit}
-                    type="button"
-                  >
-                    <EditIcon htmlColor="#fff" />
-                    Go back to editing
-                  </button>
-                </>
+                <button
+                  onClick={handleBackToEdit}
+                  css={styles.backToEdit}
+                  type="button"
+                >
+                  <EditIcon htmlColor="#fff" />
+                  Go back to editing
+                </button>
               )}
               <div css={styles.iconbtns}>
                 {(page === "new" || view) && (
@@ -570,11 +449,13 @@ export function SubheaderToolbar(props: SubheaderToolbarProps) {
                 {page !== "new" && !view && (
                   <React.Fragment>
                     <ExportChartButton />
-                    <Tooltip title="Duplicate">
-                      <IconButton onClick={handleDuplicate}>
-                        <FileCopyIcon htmlColor="#262c34" />
-                      </IconButton>
-                    </Tooltip>
+                    {isAuthenticated && (
+                      <Tooltip title="Duplicate">
+                        <IconButton onClick={handleDuplicate}>
+                          <FileCopyIcon htmlColor="#262c34" />
+                        </IconButton>
+                      </Tooltip>
+                    )}
                     <Tooltip title="Share">
                       <IconButton onClick={handleClick}>
                         <ShareIcon htmlColor="#262c34" />
@@ -609,21 +490,23 @@ export function SubheaderToolbar(props: SubheaderToolbarProps) {
                         </CopyToClipboard>
                       </div>
                     </Popover>
-                    <Tooltip title="Edit">
-                      <IconButton
-                        component={Link}
-                        to={`/${props.pageType}/${page}/${
-                          props.pageType === "chart" ? "customize" : "edit"
-                        }`}
-                      >
-                        <EditIcon htmlColor="#262c34" />
-                      </IconButton>
-                    </Tooltip>
-                    <Tooltip title="Delete">
-                      <IconButton onClick={handleModalDisplay}>
-                        <DeleteIcon htmlColor="#262c34" />
-                      </IconButton>
-                    </Tooltip>
+                    {canChartEditDelete && (
+                      <Tooltip title="Edit">
+                        <IconButton
+                          component={Link}
+                          to={`/chart/${page}/customize`}
+                        >
+                          <EditIcon htmlColor="#262c34" />
+                        </IconButton>
+                      </Tooltip>
+                    )}
+                    {canChartEditDelete && (
+                      <Tooltip title="Delete">
+                        <IconButton onClick={handleModalDisplay}>
+                          <DeleteIcon htmlColor="#262c34" />
+                        </IconButton>
+                      </Tooltip>
+                    )}
                   </React.Fragment>
                 )}
               </div>
@@ -638,24 +521,18 @@ export function SubheaderToolbar(props: SubheaderToolbarProps) {
         }}
         open={snackbarState.open}
         onClose={() => setSnackbarState({ ...snackbarState, open: false })}
-        message={`${
-          props.pageType === "report" ? "Report" : "Chart"
-        } has been duplicated successfully!`}
+        message={`Chart has been duplicated successfully!`}
         key={snackbarState.vertical + snackbarState.horizontal}
         action={
           <button
             onClick={() => {
               setSnackbarState({ ...snackbarState, open: false });
-              if (props.pageType === "report") {
-                history.push(`/report/${duplicatedReportId}`);
-                setDuplicatedReportId(null);
-              } else {
-                history.push(`/chart/${duplicatedChartId}`);
-                setDuplicatedChartId(null);
-              }
+
+              history.push(`/chart/${duplicatedChartId}`);
+              setDuplicatedChartId(null);
             }}
           >
-            GO TO {props.pageType === "report" ? "REPORT" : "CHART"}
+            GO TO CHART
           </button>
         }
       />

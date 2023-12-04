@@ -217,7 +217,7 @@ export function ChartBuilderPreviewTheme(props: ChartBuilderPreviewThemeProps) {
 
       <div
         css={`
-          height: 80px;
+          height: 40px;
         `}
       />
       <div>

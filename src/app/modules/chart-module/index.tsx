@@ -19,7 +19,7 @@ import { useChartsRawData } from "app/hooks/useChartsRawData";
 import { NoMatchPage } from "app/modules/common/no-match-page";
 import ChartBuilderLock from "app/modules/chart-module/routes/lock";
 import ChartModuleDataView from "app/modules/chart-module/routes/data";
-import { SubheaderToolbar } from "../common/subheader-toolbar/SubheaderToolbar";
+import { SubheaderToolbar } from "../common/subheader-toolbar";
 import ChartBuilderExport from "app/modules/chart-module/routes/export";
 import ChartBuilderMapping from "app/modules/chart-module/routes/mapping";
 import ChartBuilderFilters from "app/modules/chart-module/routes/filters";
@@ -41,6 +41,8 @@ import { IHeaderDetails } from "../report-module/components/right-panel/data";
 import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 import { styles as commonStyles } from "app/modules/chart-module/routes/common/styles";
 import { NotAuthorizedMessageModule } from "app/modules/common/not-authorized-message";
+import { useRecoilState } from "recoil";
+import { loadedDatasetsAtom } from "app/state/recoil/atoms";
 
 export default function ChartModule() {
   const { isLoading, isAuthenticated } = useAuth0();
@@ -147,6 +149,8 @@ export default function ChartModule() {
   const datasets = useStoreState(
     (state) => state.dataThemes.DatasetGetList.crudData as any[]
   );
+  const [loadedDatasets, setLoadedDatasets] =
+    useRecoilState(loadedDatasetsAtom);
 
   const dataset = useStoreState((state) => state.charts.dataset.value);
 
@@ -167,24 +171,25 @@ export default function ChartModule() {
     setChartFromAPI(null);
   }, [chartType, dataTypes]);
 
-  //reset filters dataset types changes
+  //reset filters when dataset types changes
   React.useEffect(() => {
     resetAppliedFilters();
   }, [dataTypes]);
 
   //set chart name to selected dataset if chart name has not been focused
+  console.log(dataset, loadedDatasets, "dataset");
   React.useEffect(() => {
     if (page === "new" && !hasSubHeaderTitleFocused && dataset) {
-      const datasetName = datasets.find((d) => d.id === dataset)?.name;
+      const datasetName = loadedDatasets.find((d) => d.id === dataset)?.name;
+      console.log(datasetName, "here");
       setChartName(datasetName as string);
     }
   }, [dataset]);
 
+  //set chart name to loaded chart name
   React.useEffect(() => {
     if (loadedChart.name.length > 0) {
       setChartName(loadedChart.name);
-    } else {
-      setChartName("Untitled Chart");
     }
   }, [loadedChart]);
 
@@ -280,7 +285,8 @@ export default function ChartModule() {
       }
     });
   }
-
+  const { updRequiredFields, updErrors, updMinValuesFields } =
+    getRequiredFieldsAndErrors(mapping, dimensions);
   function getForceNextEnabledValue(param?: string) {
     switch (param) {
       case "initial":
@@ -295,8 +301,6 @@ export default function ChartModule() {
       case "lock":
       case "customize":
       case "mapping":
-        const { updRequiredFields, updErrors, updMinValuesFields } =
-          getRequiredFieldsAndErrors(mapping, dimensions);
         return (
           updRequiredFields.length === 0 &&
           updErrors.length === 0 &&
@@ -433,7 +437,6 @@ export default function ChartModule() {
   return (
     <DndProvider backend={HTML5Backend}>
       <SubheaderToolbar
-        pageType="chart"
         visualOptions={visualOptions}
         name={chartName}
         setName={setChartName}
@@ -443,7 +446,6 @@ export default function ChartModule() {
         appliedHeaderDetails={{} as IHeaderDetails}
         framesArray={[]}
         headerDetails={{} as IHeaderDetails}
-        reportName=""
         isPreviewView={isPreviewView}
       />
       <ChartModuleToolBox

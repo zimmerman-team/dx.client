@@ -59,7 +59,7 @@ function ChartBuilderCustomize(props: ChartBuilderCustomizeProps) {
           ref={containerRef}
           css={`
             width: calc(100% - 24px);
-            height: calc(100vh - 225px);
+            height: calc(100vh - 425px);
           `}
         >
           <CommonChart
