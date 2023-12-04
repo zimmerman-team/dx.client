@@ -1,6 +1,5 @@
 import React from "react";
 import axios from "axios";
-import { useSessionStorage, useUpdateEffect } from "react-use";
 import Container from "@material-ui/core/Container";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import { useChartsRawData } from "app/hooks/useChartsRawData";
@@ -9,9 +8,9 @@ import { PageTopSpacer } from "app/modules/common/page-top-spacer";
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 import MetaData from "app/fragments/datasets-fragment/upload-steps/metaData";
 import Processing from "app/fragments/datasets-fragment/upload-steps/processing";
-import PreviewFragment from "app/fragments/datasets-fragment/upload-steps/previewFragment";
 import FinishedFragment from "app/fragments/datasets-fragment/upload-steps/finishedFragment";
 import AddDatasetFragment from "app/fragments/datasets-fragment/upload-steps/addDatasetFragment";
+import ObjectId from "app/utils/ObjectId";
 
 function DatasetUploadSteps() {
   const { user } = useAuth0();
@@ -65,10 +64,6 @@ function DatasetUploadSteps() {
       setChartFromAPI: () => {},
       chartFromAPI: null,
     });
-
-  useUpdateEffect(() => {
-    loadDataset(`chart/sample-data/${datasetId}`);
-  }, [datasetId]);
 
   const handleNext = () => {
     const newActiveStep = activeStep + 1;
@@ -129,7 +124,7 @@ function DatasetUploadSteps() {
     axios
       .post(
         `${process.env.REACT_APP_API}/datasets`,
-        { ...formDetails, authId: user?.sub },
+        { ...formDetails, authId: user?.sub, id: datasetId },
         {
           headers: {
             "Content-Type": "application/json",
@@ -139,7 +134,7 @@ function DatasetUploadSteps() {
       )
       .then((response) => {
         // if the dataset was created successfully, post the file to the server
-        setDatasetId(response.data.id);
+        loadDataset(`chart/sample-data/${response.data.id}`);
         setActiveStep(3);
       })
       .catch((error) => {
@@ -153,10 +148,11 @@ function DatasetUploadSteps() {
 
   const onFileSubmit = () => {
     const formData = new FormData();
-    // let file = selectedFile;
     setUploading(true);
-    let filename = "dx" + selectedFile?.name;
-    formData.append(filename, selectedFile as File);
+    const id = ObjectId();
+    setDatasetId(id);
+    let fieldname = "dx" + id;
+    formData.append(fieldname, selectedFile as File);
     axios
       .post(`${process.env.REACT_APP_API}/files`, formData, {
         headers: {
