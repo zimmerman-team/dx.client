@@ -13,18 +13,21 @@ import AddDatasetFragment from "app/fragments/datasets-fragment/upload-steps/add
 import { useRecoilState } from "recoil";
 import { loadedDatasetsAtom } from "app/state/recoil/atoms";
 import ObjectId from "app/utils/ObjectId";
+import { find } from "lodash";
 
-function DatasetUploadSteps() {
+function DatasetUploadSteps(props: {
+  datasetId: string;
+  setDatasetId: React.Dispatch<React.SetStateAction<string>>;
+}) {
   const { user } = useAuth0();
   const token = useStoreState((state) => state.AuthToken.value);
 
   const [activeStep, setActiveStep] = React.useState<number>(0);
   const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
   const [uploading, setUploading] = React.useState(false);
-  const [uploadSuccess, setUploadSuccess] = React.useState(false);
+  const [_uploadSuccess, setUploadSuccess] = React.useState(false);
   const [processingError, setProcessingError] = React.useState(false);
-  const [errorMessage, setErrorMessage] = React.useState("");
-  const [datasetId, setDatasetId] = React.useState("");
+  const [_errorMessage, setErrorMessage] = React.useState("");
   const [loadedProgress, setLoadedProgress] = React.useState("0B");
   const [percentageLoadedProgress, setPercentageLoadedProgress] =
     React.useState(0);
@@ -61,10 +64,10 @@ function DatasetUploadSteps() {
   const datasets = useStoreState(
     (state) => state.dataThemes.DatasetGetList.crudData as any[]
   );
-  const [loadedDatasets, setLoadedDatasets] =
+
+  const [_loadedDatasets, setLoadedDatasets] =
     useRecoilState(loadedDatasetsAtom);
 
-  console.log(loadedDatasets, "loadedDatasets", datasets);
   const { loadDataset, sampleData, dataTotalCount, dataStats } =
     useChartsRawData({
       visualOptions: () => {},
@@ -72,6 +75,11 @@ function DatasetUploadSteps() {
       setChartFromAPI: () => {},
       chartFromAPI: null,
     });
+
+  const description = find(
+    datasets,
+    (d: any) => d.id === props.datasetId
+  )?.description;
 
   const handleNext = () => {
     const newActiveStep = activeStep + 1;
@@ -136,7 +144,7 @@ function DatasetUploadSteps() {
     axios
       .post(
         `${process.env.REACT_APP_API}/datasets`,
-        { ...formDetails, authId: user?.sub, id: datasetId },
+        { ...formDetails, authId: user?.sub, id: props.datasetId },
         {
           headers: {
             "Content-Type": "application/json",
@@ -147,6 +155,8 @@ function DatasetUploadSteps() {
       .then((response) => {
         // if the dataset was created successfully, post the file to the server
         loadDataset(`chart/sample-data/${response.data.id}`);
+        loadDatasets({ token, storeInCrudData: true });
+
         setActiveStep(3);
       })
       .catch((error) => {
@@ -162,7 +172,7 @@ function DatasetUploadSteps() {
     const formData = new FormData();
     setUploading(true);
     const id = ObjectId();
-    setDatasetId(id);
+    props.setDatasetId(id);
     let fieldname = "dx" + id;
     formData.append(fieldname, selectedFile as File);
     axios
@@ -175,7 +185,6 @@ function DatasetUploadSteps() {
       .then(async () => {
         setUploading(false);
         setUploadSuccess(true);
-        loadDatasets({ token, storeInCrudData: true });
         handleNext();
       })
       .catch((error) => {
@@ -241,8 +250,9 @@ function DatasetUploadSteps() {
           <FinishedFragment
             data={sampleData}
             stats={dataStats}
-            datasetId={datasetId}
+            datasetId={props.datasetId}
             dataTotalCount={dataTotalCount}
+            description={description}
           />
         );
       default:

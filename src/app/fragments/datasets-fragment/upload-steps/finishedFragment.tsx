@@ -1,9 +1,8 @@
 import React from "react";
-import find from "lodash/find";
-import { Link } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
 import { dataSetsCss } from "app/modules/datasets-module/style";
 import { PageTopSpacer } from "app/modules/common/page-top-spacer";
-import { useStoreActions, useStoreState } from "app/state/store/hooks";
+import { useStoreActions } from "app/state/store/hooks";
 import { DatasetDataTable } from "app/fragments/datasets-fragment/component/data-table";
 import { CssSnackbar, ISnackbarState } from "./previewFragment";
 
@@ -12,20 +11,15 @@ interface Props {
   stats: any[];
   datasetId: string;
   dataTotalCount: number;
+  description: string;
 }
 
 export default function FinishedFragment(props: Props) {
-  const datasets = useStoreState(
-    (state) => state.dataThemes.DatasetGetList.crudData as any[]
-  );
+  const history = useHistory();
+  const location = useLocation();
   const setDataset = useStoreActions(
     (actions) => actions.charts.dataset.setValue
   );
-
-  const description = find(
-    datasets,
-    (d: any) => d.id === props.datasetId
-  )?.description;
 
   function handleCreateNewChart() {
     setDataset(props.datasetId);
@@ -43,12 +37,24 @@ export default function FinishedFragment(props: Props) {
       setSnackbarState({ ...snackbarState, open: true });
       snackbarTimeOut = setTimeout(() => {
         setSnackbarState({ ...snackbarState, open: false });
-      }, 10000);
+      }, 5000);
     }
     return () => {
       clearTimeout(snackbarTimeOut);
     };
   }, [props.dataTotalCount]);
+
+  React.useEffect(() => {
+    let redirectTimeout: any;
+    if (location.pathname === "/dataset/new/upload") {
+      redirectTimeout = setTimeout(() => {
+        history.push(`/dataset/${props.datasetId}/detail`);
+      }, 8000);
+    }
+    return () => {
+      clearTimeout(redirectTimeout);
+    };
+  }, []);
 
   return (
     <div css={dataSetsCss}>
@@ -70,9 +76,10 @@ export default function FinishedFragment(props: Props) {
             font-family: "Inter", sans-serif;
             line-height: 19px;
             margin-bottom: 17px;
+            font-weight: bold;
           `}
         >
-          {description}
+          {props.description}
         </div>
         <div
           css={`
