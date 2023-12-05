@@ -11,6 +11,7 @@ import {
   LineChart,
   SankeyChart,
   TreemapChart,
+  SunburstChart,
 } from "echarts/charts";
 import {
   GridComponent,
@@ -32,6 +33,7 @@ echarts.use([
   LegendComponent,
   TooltipComponent,
   VisualMapComponent,
+  SunburstChart,
 ]);
 
 export function useDataThemesEchart() {
@@ -459,6 +461,92 @@ export function useDataThemesEchart() {
     return option;
   }
 
+  function echartsSunburst(data: any, visualOptions: any) {
+    const {
+      // artboard
+      width,
+      height,
+      marginTop,
+      marginRight,
+      marginBottom,
+      marginLeft,
+      // labels
+      showLabels,
+      labelFontSize,
+      showBreadcrumbs,
+      // tooltip
+      showTooltip,
+      isMonetaryValue,
+    } = visualOptions;
+
+    const option = {
+      // backgroundColor: background,
+      backgroundColor: "transparent",
+      series: [
+        {
+          name: "All",
+          type: "sunburst",
+          data,
+          radius: [0, "95%"],
+          sort: undefined,
+          emphasis: {
+            focus: "ancestor",
+          },
+          levels: [
+            {},
+            {
+              r0: "15%",
+              r: "35%",
+              itemStyle: {
+                borderWidth: 2,
+              },
+              label: {
+                rotate: "tangential",
+              },
+            },
+            {
+              r0: "35%",
+              r: "70%",
+              label: {
+                align: "right",
+              },
+            },
+            {
+              r0: "70%",
+              r: "72%",
+              label: {
+                position: "outside",
+                padding: 3,
+                silent: false,
+              },
+              itemStyle: {
+                borderWidth: 3,
+              },
+            },
+          ],
+          width,
+          height,
+          roam: false,
+          top: marginTop,
+          left: marginLeft,
+          right: marginRight,
+          bottom: marginBottom,
+          leafDepth: 1,
+          label: {
+            show: showLabels,
+            fontSize: labelFontSize,
+          },
+          breadcrumb: {
+            show: showBreadcrumbs,
+            top: 0,
+            bottom: "auto",
+          },
+        },
+      ],
+    };
+
+    return option;
+  }
   function bigNumberRender(data: any, node: HTMLElement) {
     const formatedData = {
       ...data,
@@ -480,7 +568,8 @@ export function useDataThemesEchart() {
       | "echartsLinechart"
       | "echartsSankey"
       | "echartsTreemap"
-      | "bigNumber",
+      | "bigNumber"
+      | "echartsSunburst",
     visualOptions: any,
     id: string
   ) {
@@ -504,6 +593,7 @@ export function useDataThemesEchart() {
         echartsLinechart: () => echartsLinechart(data, visualOptions),
         echartsSankey: () => echartsSankey(data, visualOptions),
         echartsTreemap: () => echartsTreemap(data, visualOptions),
+        echartsSunburst: () => echartsSunburst(data, visualOptions),
       };
 
       chart.setOption(CHART_TYPE_TO_COMPONENT[chartType]());

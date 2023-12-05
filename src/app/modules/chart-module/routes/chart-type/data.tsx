@@ -16,6 +16,9 @@ import ColoredTreeMapIcon from "app/assets/icons/data-themes-chart-types/colored
 import BigNumberIcon from "app/assets/icons/data-themes-chart-types/bigNumber";
 import ColoredBigNumberIcon from "app/assets/icons/data-themes-chart-types/coloredBigNumber";
 
+import SunburstIcon from "app/assets/icons/data-themes-chart-types/sunburst";
+import ColoredSunburstIcon from "app/assets/icons/data-themes-chart-types/coloredSunburst";
+
 export interface ChartBuilderChartTypeProps {
   loading: boolean;
 }
@@ -73,7 +76,7 @@ export const echartTypes = (big: boolean) => {
       categories: ["Hierarchies", "Proportions"],
       ssr: false,
       description:
-        "It displays hierarchically structured data and a related quantitative dimension. It is composed of an area divided into small rectangles, representing the last level of the tree structure. The rectangles’ size depends on the quantitative dimension.",
+        "It displays hierarchically structured data and a related quantitative dimension. It is composed of an area divided into small rectangles, representing the last level of the tree structure. The rectangles' size depends on the quantitative dimension.",
     },
     {
       id: "bigNumber",
@@ -82,7 +85,16 @@ export const echartTypes = (big: boolean) => {
       categories: ["Hierarchies", "Proportions"],
       ssr: true,
       description:
-        "It displays hierarchically structured data and a related quantitative dimension. It is composed of an area divided into small rectangles, representing the last level of the tree structure. The rectangles’ size depends on the quantitative dimension.",
+        "It displays hierarchically structured data and a related quantitative dimension. It is composed of an area divided into small rectangles, representing the last level of the tree structure. The rectangles' size depends on the quantitative dimension.",
+    },
+    {
+      id: "echartsSunburst",
+      label: "Sunburst diagram",
+      icon: <SunburstIcon big={big} />,
+      categories: ["Hierarchies", "Proportions"],
+      ssr: false,
+      description:
+        "It displays hierarchically structured data and a related quantitative dimension using concentric circles. The circle in the center represents the root node, with the hierarchies moving outward from the center. The angle of each arc corresponds to the qualitative dimension.",
     },
     {
       id: "placeholder1",
@@ -219,6 +231,15 @@ export const coloredEchartTypes = () => {
       ssr: true,
       description:
         "It displays hierarchically structured data and a related quantitative dimension. It is composed of an area divided into small rectangles, representing the last level of the tree structure. The rectangles’ size depends on the quantitative dimension.",
+    },
+    {
+      id: "echartsSunburst",
+      label: "Sunburst diagram",
+      icon: <ColoredSunburstIcon />,
+      categories: ["Hierarchies", "Proportions"],
+      ssr: false,
+      description:
+        "It displays hierarchically structured data and a related quantitative dimension using concentric circles. The circle in the center represents the root node, with the hierarchies moving outward from the center. The angle of each arc corresponds to the qualitative dimension.",
     },
   ];
 };

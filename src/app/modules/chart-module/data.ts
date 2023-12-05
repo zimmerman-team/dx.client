@@ -7,6 +7,7 @@ import {
   echartsSankey,
   echartsTreemap,
   bigNumber,
+  echartsSunburst,
   // @ts-ignore
 } from "@rawgraphs/rawgraphs-charts";
 import { FilterGroupModel } from "app/components/ToolBoxPanel/components/filters/data";
@@ -18,6 +19,7 @@ export const charts = {
   echartsSankey,
   echartsTreemap,
   bigNumber,
+  echartsSunburst,
 };
 
 export const CHART_DEFAULT_WIDTH = 1000;
@@ -98,6 +100,34 @@ export const defaultChartOptions = {
     marginBottom: {
       ...echartsTreemap.visualOptions.marginBottom,
       default: 0,
+    },
+    echartsSunburst: {
+      ...baseOptions,
+      width: {
+        ...baseOptions.width,
+        default: CHART_DEFAULT_WIDTH,
+      },
+      height: {
+        ...baseOptions.height,
+        default: CHART_DEFAULT_HEIGHT,
+      },
+      ...echartsSunburst.visualOptions,
+      marginTop: {
+        ...echartsSunburst.visualOptions.marginTop,
+        default: 50,
+      },
+      marginLeft: {
+        ...echartsSunburst.visualOptions.marginLeft,
+        default: 70,
+      },
+      marginRight: {
+        ...echartsSunburst.visualOptions.marginRight,
+        default: 70,
+      },
+      marginBottom: {
+        ...echartsSunburst.visualOptions.marginBottom,
+        default: 50,
+      },
     },
   },
   bigNumber: {},
