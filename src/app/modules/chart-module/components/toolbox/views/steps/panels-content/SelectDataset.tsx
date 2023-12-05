@@ -210,7 +210,7 @@ export const ConnectData = () => {
         `}
       >
         <p>Or connect new data</p>
-        <button onClick={() => history.push("/dataset-upload")}>
+        <button onClick={() => history.push("/dataset/new/upload")}>
           add new dataset
         </button>
       </div>

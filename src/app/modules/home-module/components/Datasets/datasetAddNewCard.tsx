@@ -8,7 +8,7 @@ export default function DatasetAddnewCard() {
   const history = useHistory();
 
   const action = () => {
-    history.push("/dataset-upload");
+    history.push("/dataset/new/upload");
   };
 
   return (

@@ -45,6 +45,7 @@ const EditMetaData = lazy(
 const AuthCallbackModule = lazy(() => import("app/modules/callback-module"));
 const OnboardingModule = lazy(() => import("app/modules/onboarding-module"));
 const UserProfileModule = lazy(() => import("app/modules/user-profile-module"));
+const DatasetModule = lazy(() => import("app/modules/dataset-module"));
 
 const ProtectedRoute = (props: {
   component: React.ComponentType<any>;
@@ -169,6 +170,9 @@ export function MainRoutes() {
           <RouteWithAppBar exact path="/report/:page/:view?">
             <ReportModule />
           </RouteWithAppBar>
+          <RouteWithAppBar exact path="/dataset/:page/:view?">
+            <DatasetModule />
+          </RouteWithAppBar>
           <RouteWithAppBar exact path="/about">
             <AboutModule />
           </RouteWithAppBar>
@@ -177,9 +181,6 @@ export function MainRoutes() {
           </RouteWithAppBar>
           <RouteWithAppBar exact path="/dataset/:id/edit">
             <EditMetaData />
-          </RouteWithAppBar>
-          <RouteWithAppBar exact path="/dataset-upload">
-            <DatasetUploadSteps />
           </RouteWithAppBar>
           <RouteWithAppBar path="/onboarding">
             <OnboardingModule />
