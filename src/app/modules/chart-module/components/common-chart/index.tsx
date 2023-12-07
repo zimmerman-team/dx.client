@@ -22,7 +22,8 @@ interface Props {
     | "echartsLinechart"
     | "echartsSankey"
     | "echartsTreemap"
-    | "echartsSunburst";
+    | "echartsSunburst"
+    | "echartsPiechart";
 }
 
 export function CommonChart(props: Props) {
@@ -100,7 +101,8 @@ export function CommonChart(props: Props) {
               | "echartsLinechart"
               | "echartsSankey"
               | "echartsTreemap"
-              | "echartsSunburst"),
+              | "echartsSunburst"
+              | "echartsPiechart"),
           visualOptions,
           `common-chart-render-container-${props.chartId || "1"}`
         );

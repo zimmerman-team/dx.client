@@ -37,6 +37,7 @@ import {
   echartsSankey,
   echartsTreemap,
   echartsSunburst,
+  echartsPiechart,
   // @ts-ignore
 } from "@rawgraphs/rawgraphs-charts";
 import { FilterGroupModel } from "app/components/ToolBoxPanel/components/filters/data";
@@ -79,6 +80,7 @@ export const charts = {
   echartsSankey,
   echartsTreemap,
   echartsSunburst,
+  echartsPiechart,
 };
 
 export const CHART_DEFAULT_WIDTH = 1000;
@@ -1199,6 +1201,34 @@ export const defaultChartOptions = {
     marginBottom: {
       ...echartsSunburst.visualOptions.marginBottom,
       default: 50,
+    },
+    echartsPiechart: {
+      ...baseOptions,
+      width: {
+        ...baseOptions.width,
+        default: CHART_DEFAULT_WIDTH,
+      },
+      height: {
+        ...baseOptions.height,
+        default: CHART_DEFAULT_HEIGHT,
+      },
+      ...echartsPiechart.visualOptions,
+      marginTop: {
+        ...echartsPiechart.visualOptions.marginTop,
+        default: 50,
+      },
+      marginLeft: {
+        ...echartsPiechart.visualOptions.marginLeft,
+        default: 70,
+      },
+      marginRight: {
+        ...echartsPiechart.visualOptions.marginRight,
+        default: 70,
+      },
+      marginBottom: {
+        ...echartsPiechart.visualOptions.marginBottom,
+        default: 50,
+      },
     },
   },
 };

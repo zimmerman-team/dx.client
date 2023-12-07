@@ -9,6 +9,7 @@ import {
   MapChart,
   BarChart,
   LineChart,
+  PieChart,
   SankeyChart,
   TreemapChart,
   SunburstChart,
@@ -25,15 +26,16 @@ import { charts } from "app/modules/chart-module/data";
 echarts.use([
   BarChart,
   MapChart,
+  PieChart,
   LineChart,
   SankeyChart,
   TreemapChart,
   GridComponent,
+  SunburstChart,
   CanvasRenderer,
   LegendComponent,
   TooltipComponent,
   VisualMapComponent,
-  SunburstChart,
 ]);
 
 export function useDataThemesEchart() {
@@ -134,6 +136,55 @@ export function useDataThemesEchart() {
       },
     };
 
+    return option;
+  }
+
+  function echartsPiechart(data: any, visualOptions: any) {
+    const {
+      // artboard
+      width,
+      height,
+      marginTop,
+      marginRight,
+      marginBottom,
+      marginLeft,
+    } = visualOptions;
+
+    const option = {
+      tooltip: {
+        trigger: "item",
+      },
+      legend: {
+        top: "5%",
+        left: "center",
+      },
+      series: [
+        {
+          top: marginTop,
+          left: marginLeft,
+          right: marginRight,
+          bottom: marginBottom,
+          type: "pie",
+          radius: ["40%", "70%"],
+          avoidLabelOverlap: false,
+          label: {
+            show: false,
+            position: "center",
+          },
+          emphasis: {
+            label: {
+              show: true,
+              fontSize: 40,
+              fontWeight: "bold",
+            },
+          },
+          labelLine: {
+            show: false,
+          },
+          data: data,
+        },
+      ],
+    };
     return option;
   }
 
@@ -569,7 +620,8 @@ export function useDataThemesEchart() {
       | "echartsSankey"
       | "echartsTreemap"
       | "bigNumber"
-      | "echartsSunburst",
+      | "echartsSunburst"
+      | "echartsPiechart",
     visualOptions: any,
     id: string
   ) {
@@ -594,6 +646,7 @@ export function useDataThemesEchart() {
         echartsSankey: () => echartsSankey(data, visualOptions),
         echartsTreemap: () => echartsTreemap(data, visualOptions),
         echartsSunburst: () => echartsSunburst(data, visualOptions),
+        echartsPiechart: () => echartsPiechart(data, visualOptions),
       };
 
       chart.setOption(CHART_TYPE_TO_COMPONENT[chartType]());

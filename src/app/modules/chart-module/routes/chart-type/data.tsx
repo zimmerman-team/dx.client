@@ -19,6 +19,9 @@ import ColoredBigNumberIcon from "app/assets/icons/data-themes-chart-types/color
 import SunburstIcon from "app/assets/icons/data-themes-chart-types/sunburst";
 import ColoredSunburstIcon from "app/assets/icons/data-themes-chart-types/coloredSunburst";
 
+import PieIcon from "app/assets/icons/data-themes-chart-types/pie";
+import ColoredPieIcon from "app/assets/icons/data-themes-chart-types/coloredPie";
+
 export interface ChartBuilderChartTypeProps {
   loading: boolean;
 }
@@ -97,12 +100,13 @@ export const echartTypes = (big: boolean) => {
         "It displays hierarchically structured data and a related quantitative dimension using concentric circles. The circle in the center represents the root node, with the hierarchies moving outward from the center. The angle of each arc corresponds to the qualitative dimension.",
     },
     {
-      id: "placeholder1",
-      label: "",
-      icon: <></>,
-      categories: [],
+      id: "echartsPiechart",
+      label: "Pie Chart",
+      icon: <PieIcon big={big} />,
+      categories: ["Proportions"],
       ssr: false,
-      description: "",
+      description:
+        "It allows you to see the proportions between values that make up a whole, by using arcs composing a circle.",
     },
     {
       id: "placeholder2",
@@ -240,6 +244,15 @@ export const coloredEchartTypes = () => {
       ssr: false,
       description:
         "It displays hierarchically structured data and a related quantitative dimension using concentric circles. The circle in the center represents the root node, with the hierarchies moving outward from the center. The angle of each arc corresponds to the qualitative dimension.",
+    },
+    {
+      id: "echartsPiechart",
+      label: "Pie Chart",
+      icon: <ColoredPieIcon />,
+      categories: ["Proportions"],
+      ssr: false,
+      description:
+        "It allows you to see the proportions between values that make up a whole, by using arcs composing a circle.",
     },
   ];
 };
