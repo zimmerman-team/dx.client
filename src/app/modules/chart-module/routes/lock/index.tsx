@@ -20,14 +20,6 @@ function ChartBuilderLock(props: ChartBuilderLockProps) {
 
   const mapping = useStoreState((state) => state.charts.mapping.value);
   const dataset = useStoreState((state) => state.charts.dataset.value);
-  const setActivePanels = useStoreActions(
-    (state) => state.charts.activePanels.setValue
-  );
-
-  React.useEffect(() => {
-    // When the Lock component is rendered, we are at step 5.
-    setActivePanels(5);
-  }, []);
 
   if ((dataset === null && !props.loading) || isEmpty(mapping)) {
     history.push(`/chart/${page}/data`);

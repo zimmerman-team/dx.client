@@ -24,14 +24,6 @@ function ChartBuilderCustomize(props: ChartBuilderCustomizeProps) {
   const [createChartFromReport, _] = useRecoilState(createChartFromReportAtom);
   const mapping = useStoreState((state) => state.charts.mapping.value);
   const dataset = useStoreState((state) => state.charts.dataset.value);
-  const setActivePanels = useStoreActions(
-    (state) => state.charts.activePanels.setValue
-  );
-
-  React.useEffect(() => {
-    // When the Customize component is rendered, we are at step 6.
-    setActivePanels(6);
-  }, []);
 
   useUpdateEffectOnce(() => {
     if (

@@ -72,13 +72,6 @@ function ChartModuleDataView(props: {
     });
   };
 
-  React.useEffect(() => {
-    //clear chart state
-    props.clearChartBuilder();
-    // When the Data View component is rendered, we are at step 1.
-    setActivePanels(1);
-  }, []);
-
   return (
     <div css={commonStyles.innercontainer}>
       <div

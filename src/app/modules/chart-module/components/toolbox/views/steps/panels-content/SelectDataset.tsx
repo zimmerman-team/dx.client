@@ -3,73 +3,41 @@ import get from "lodash/get";
 import find from "lodash/find";
 import CloseIcon from "@material-ui/icons/Close";
 import { useStoreState, useStoreActions } from "app/state/store/hooks";
-import { DatasetListItemAPIModel } from "app/modules/data-themes-module/sub-modules/list";
-import { IconButton } from "@material-ui/core";
+import { Box, IconButton } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { loadedDatasetsAtom } from "app/state/recoil/atoms";
+import ToolboxSubHeader from "../sub-header";
 
-const DEFAULT_DATASETS = [
-  {
-    name: "Pledges & Contributions",
-    id: "pledges-contributions",
-  },
-  {
-    name: "Eligibility",
-    id: "eligibility",
-  },
-  {
-    name: "Allocations",
-    id: "allocations",
-  },
-  {
-    name: "Grants",
-    id: "grants",
-  },
-  {
-    name: "Investment - Signed",
-    id: "investment-signed",
-  },
-  {
-    name: "Investment - Committed",
-    id: "investment-committed",
-  },
-  {
-    name: "Investment - Disbursed",
-    id: "investment-disbursed",
-  },
-  {
-    name: "Budgets",
-    id: "budgets",
-  },
-];
+export function DatasetPanel() {
+  return (
+    <>
+      <ToolboxSubHeader name="Select Dataset" level={1} />
+      <Box height={16} />
 
-interface ChartToolBoxSelectDatasetProps {
-  expanded: boolean;
-  loadDataset: (endpoint: string) => Promise<boolean>;
+      <div
+        css={`
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        `}
+      >
+        <ChartToolBoxSelectDataset />
+        <Box height={16} />
+        <ConnectData />
+      </div>
+    </>
+  );
 }
 
-export function ChartToolBoxSelectDataset(
-  props: ChartToolBoxSelectDatasetProps
-) {
+function ChartToolBoxSelectDataset() {
   const history = useHistory();
   const dataset = useStoreState((state) => state.charts.dataset.value);
   const setDataset = useStoreActions(
     (actions) => actions.charts.dataset.setValue
   );
-  const [loadedDatasets, setLoadedDatasets] =
+  const [loadedDatasets, _setLoadedDatasets] =
     useRecoilState(loadedDatasetsAtom);
-  const datasets =
-    process.env.REACT_APP_USE_DEFAULT_DATASETS === "true"
-      ? DEFAULT_DATASETS
-      : useStoreState(
-          (state) =>
-            get(
-              state,
-              "dataThemes.DatasetGetList.crudData",
-              DEFAULT_DATASETS
-            ) as DatasetListItemAPIModel[]
-        );
 
   const deSelectDataset = () => {
     setDataset(null);
