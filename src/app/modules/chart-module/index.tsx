@@ -472,6 +472,7 @@ export default function ChartModule() {
         previewMode={!isEditMode && page !== "new"}
         forceNextEnabled={getForceNextEnabledValue(view)}
         openToolbox={toolboxOpen}
+        setToolboxOpen={setToolboxOpen}
         dimensions={dimensions}
         setDatasetName={setChartName}
         onClose={() => setToolboxOpen(false)}

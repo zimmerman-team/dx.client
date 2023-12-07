@@ -9,16 +9,11 @@ export const styles = {
     right: 0;
     z-index: 99;
     position: fixed;
-    top: ${!placeUnderSubHeader ? 45 : 97}px;
-
+    top: 97px;
     display: flex;
-    background: #f2f7fd;
+    background: #f1f3f5;
+    box-shadow: 0px 0px 10px 0px rgba(152, 161, 170, 0.6);
     flex-direction: column;
-
-    overflow-y: scroll;
-    ::-webkit-scrollbar {
-      display: none;
-    }
 
     > section {
       padding: 0 31px 25px 31px;
@@ -82,6 +77,124 @@ export const styles = {
     width: 400px;
     background: red;
     padding: 24px;
+  `,
+};
+
+export const mappingStyles = {
+  selectedButtoncss: (dimension: any) => css`
+    width: 100%;
+    display: flex;
+    font-size: 14px;
+    padding: 12px 16px;
+    margin-bottom: 8px;
+    margin-top: 6px;
+    flex-direction: row;
+    height: 31px;
+    border-radius: 36px;
+    border: ${dimension.mappedValues && !dimension.mapValuesDisplayed
+      ? "none"
+      : "0.722px dashed #262c34"};
+    background: ${dimension.mappedValues && !dimension.mapValuesDisplayed
+      ? "#262c34"
+      : "#dfe3e5"};
+    text-transform: capitalize;
+    justify-content: space-between;
+    color: ${dimension.mappedValues && !dimension.mapValuesDisplayed
+      ? "#fff"
+      : "#868e96"};
+
+    &:hover {
+      background: #262c34;
+      color: #fff;
+      svg {
+        path {
+          fill: #fff;
+        }
+      }
+    }
+
+    svg {
+      margin-left: 10px;
+      transition: all 0.2s ease-in-out;
+      transform: rotate(${dimension.mapValuesDisplayed ? "180" : "0"}deg);
+      > path {
+        fill: ${dimension.mappedValues && !dimension.mapValuesDisplayed
+          ? "#fff"
+          : "#262c34"};
+      }
+      span {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
+      }
+    }
+  `,
+  mappingItemcss: (props: any) => css`
+    height: 31px;
+    display: flex;
+    gap: 13px;
+    min-height: 31px;
+    position: relative;
+    padding-left: 16px;
+    align-items: center;
+    border-radius: 25px;
+    /* z-index: 10; */
+    transform: translate(0px, 0px);
+    margin-bottom: ${props.marginBottom};
+    color: #262c34;
+    background: ${props.backgroundColor ?? "#cfd4da"};
+    ${props.dimension.mappedValues.includes(props.dataTypeName) &&
+    "background: #262c34; color: #fff;"}
+    p {
+      font-family: "Roboto", sans-serif;
+      font-size: 14px;
+    }
+    &:last-child {
+      margin-bottom: 0px;
+    }
+    &:hover {
+      background: #262c34;
+      color: #fff;
+      svg {
+        path {
+          fill: #fff;
+        }
+      }
+    }
+    cursor: pointer;
+  `,
+  mappedValuecss: css`
+    height: 31px;
+    display: flex;
+    gap: 13px;
+    min-height: 31px;
+    position: relative;
+    padding-left: 16px;
+    align-items: center;
+    border-radius: 25px;
+    z-index: 10;
+    transform: translate(0px, 0px);
+    margin-bottom: 8px;
+    background: #262c34;
+    color: #fff;
+    p {
+      font-family: "Roboto", sans-serif;
+      font-size: 14px;
+    }
+    &:last-child {
+      margin-bottom: 0px;
+    }
+    &:hover {
+      background: #262c34;
+      color: #fff;
+      svg {
+        path {
+          fill: #fff;
+        }
+      }
+    }
+    cursor: pointer;
   `,
 };
 
