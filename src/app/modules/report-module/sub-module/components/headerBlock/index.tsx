@@ -53,11 +53,13 @@ export default function HeaderBlock(props: Props) {
   const location = useLocation();
   const { page } = useParams<{ page: string }>();
   const inputRef = React.useRef<HTMLInputElement>(null);
-  const focusTitleOnMount = true;
   const [currentView, setCurrentView] = useRecoilState(
     reportRightPanelViewAtom
   );
   const [handleDisplay, setHandleDisplay] = React.useState(false);
+  const placeholder = "Add a header description";
+  const [descriptionPlaceholderState, setDescriptionPlaceholderState] =
+    React.useState<string>(placeholder);
 
   const [isReportTitleModified, setIsReportTitleModified] =
     React.useState(false);
@@ -218,7 +220,7 @@ export default function HeaderBlock(props: Props) {
               ref={inputRef}
               name="title"
               type="text"
-              placeholder="Add title"
+              placeholder="Add a header title"
               onChange={handleChange}
               disabled={props.previewMode}
               value={props.headerDetails.title}
@@ -248,6 +250,13 @@ export default function HeaderBlock(props: Props) {
 
               > div {
                 padding: 0;
+                .public-DraftEditorPlaceholder-inner {
+                  position: absolute;
+                  color: #ffffff;
+
+                  font-weight: 325;
+                  font-size: 14px !important;
+                }
                 > div {
                   > div {
                     > div {
@@ -262,7 +271,9 @@ export default function HeaderBlock(props: Props) {
               invertColors
               editMode={true}
               setTextContent={setDescriptionContent}
-              placeholder="Create summary"
+              placeholder={placeholder}
+              placeholderState={descriptionPlaceholderState}
+              setPlaceholderState={setDescriptionPlaceholderState}
               textContent={props.headerDetails.description}
               setPlugins={props.setPlugins}
               isEditorFocused={props.isEditorFocused}

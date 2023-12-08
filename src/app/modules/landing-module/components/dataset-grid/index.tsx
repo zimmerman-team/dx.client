@@ -460,12 +460,12 @@ export function LandingDatasetGrid() {
       <Grid item xs={12} sm={6} md={6} lg={3}>
         <GridItem
           title={{ __html: "Add your dataset" }}
-          link="/dataset-upload"
+          link="/dataset/new/upload"
           description={{
             __html:
               "Upload your own dataset and view it with the Data Theme feature",
           }}
-          iconLinks={[{ icon: <ControlPointIcon />, link: "/dataset-upload" }]}
+          iconLinks={[{ icon: <ControlPointIcon />, link: "/dataset/new/upload" }]}
         />
         </Grid>*/}
     </Grid>

@@ -27,14 +27,6 @@ function ChartBuilderChartType(props: ChartBuilderChartTypeProps) {
   const clearMapping = useStoreActions(
     (actions) => actions.charts.mapping.reset
   );
-  const setActivePanels = useStoreActions(
-    (state) => state.charts.activePanels.setValue
-  );
-
-  React.useEffect(() => {
-    // When the Chart Type component is rendered, we are at step 2.
-    setActivePanels(2);
-  }, []);
 
   const onChartTypeChange =
     (chartTypeId: string) => (e: React.MouseEvent<HTMLDivElement>) => {
@@ -53,7 +45,6 @@ function ChartBuilderChartType(props: ChartBuilderChartTypeProps) {
           container
           spacing={2}
           css={`
-            width: calc(100% - 24px);
             max-height: calc(100vh - 225px);
           `}
         >

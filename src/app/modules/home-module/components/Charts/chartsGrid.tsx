@@ -33,7 +33,6 @@ export default function ChartsGrid(props: Props) {
   const token = useStoreState((state) => state.AuthToken.value);
 
   const limit = 15;
-  //used over usestate to get current offset value in the IntersectionObserver api, as it is not updated in usestate.
   const [offset, setOffset] = React.useState(0);
 
   const { isObserved } = useInfinityScroll(observerTarget);

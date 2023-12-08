@@ -11,7 +11,13 @@ export interface ChartToolBoxProps {
   guideView: boolean;
   textView: boolean;
   visualOptions: any;
+  dimensions: any[];
   filtersView: boolean;
+  setDatasetName: React.Dispatch<React.SetStateAction<string>>;
+  setToolboxOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  openToolbox: boolean;
+  onClose: () => void;
+  onOpen: () => void;
   loadDataFromAPI: (
     customAppliedFilters?: [
       [

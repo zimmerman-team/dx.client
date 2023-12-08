@@ -1,7 +1,7 @@
 /* third-party */
 import React from "react";
 import useTitle from "react-use/lib/useTitle";
-import { useStoreState, useStoreActions } from "app/state/store/hooks";
+import { useStoreState } from "app/state/store/hooks";
 /* project */
 import { PageLoader } from "app/modules/common/page-loader";
 import { styles as commonStyles } from "app/modules/chart-module/routes/common/styles";
@@ -24,19 +24,10 @@ interface ChartBuilderPreviewProps {
 
 export function ChartBuilderPreview(props: ChartBuilderPreviewProps) {
   useTitle("DX DataXplorer - Data");
-
   const dataset = useStoreState((state) => state.charts.dataset.value);
-  const setActivePanels = useStoreActions(
-    (state) => state.charts.activePanels.setValue
-  );
 
   React.useEffect(() => {
-    // When the Preview component is rendered, we are at step 1.
-    setActivePanels(1);
-
-    if (props.data.length === 0 && dataset) {
-      props.loadDataset(`chart/sample-data/${dataset}`);
-    }
+    props.loadDataset(`chart/sample-data/${dataset}`);
   }, []);
 
   return (

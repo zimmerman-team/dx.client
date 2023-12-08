@@ -84,7 +84,7 @@ export interface PlaceholderProps {
   setFramesArray: React.Dispatch<React.SetStateAction<IFramesArray[]>>;
 
   framesArray: IFramesArray[];
-  index: string;
+  index?: number;
   disableAddrowStructureButton?: boolean;
   deleteFrame: (id: string) => void;
   rowId: string;

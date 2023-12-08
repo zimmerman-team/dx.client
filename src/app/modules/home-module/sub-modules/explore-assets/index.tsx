@@ -35,6 +35,8 @@ import {
 import DatasetsGrid from "app/modules/home-module/components/Datasets/datasetsGrid";
 import ChartsGrid from "app/modules/home-module/components/Charts/chartsGrid";
 import ReportsGrid from "app/modules/home-module/components/Reports/reportsGrid";
+import { datasetCategories } from "app/fragments/datasets-fragment/upload-steps/metaData";
+import DatasetCategoryList from "app/modules/home-module/components/Datasets/datasetCategoryList";
 
 const StyledTab = withStyles(() => ({
   root: {
@@ -84,6 +86,7 @@ export default function ExploreAssetsModule() {
     clearCreateChartFromReportState();
     setReportPreviewMode(false);
   }, []);
+  const [category, setCategory] = React.useState("");
 
   const [tableView, setTableView] = React.useState(false);
   const [searchValue, setSearchValue] = React.useState("");
@@ -122,6 +125,7 @@ export default function ExploreAssetsModule() {
             sortBy={sortByStr}
             searchStr={searchStr}
             tableView={tableView}
+            category={category}
             addCard
           />
         );
@@ -313,6 +317,13 @@ export default function ExploreAssetsModule() {
             </Grid>
           </Grid>
           <Box height={20} />
+          {display === "data" && (
+            <DatasetCategoryList
+              category={category}
+              datasetCategories={datasetCategories}
+              setCategory={setCategory}
+            />
+          )}
         </Box>
         <div>{displayGrid(searchValue, sortValue)}</div>
       </Container>
