@@ -22,6 +22,9 @@ import ColoredSunburstIcon from "app/assets/icons/data-themes-chart-types/colore
 import PieIcon from "app/assets/icons/data-themes-chart-types/pie";
 import ColoredPieIcon from "app/assets/icons/data-themes-chart-types/coloredPie";
 
+import CirclePackingIcon from "app/assets/icons/data-themes-chart-types/circlepacking";
+import ColoredCirclePackingIcon from "app/assets/icons/data-themes-chart-types/coloredCirclepacking";
+
 export interface ChartBuilderChartTypeProps {
   loading: boolean;
 }
@@ -109,12 +112,13 @@ export const echartTypes = (big: boolean) => {
         "It allows you to see the proportions between values that make up a whole, by using arcs composing a circle.",
     },
     {
-      id: "placeholder2",
-      label: "",
-      icon: <></>,
-      categories: [],
+      id: "echartsCirclepacking",
+      label: "Circle Packing Chart",
+      icon: <CirclePackingIcon big={big} />,
+      categories: ["Hierarchies", "Proportions"],
       ssr: false,
-      description: "",
+      description:
+        "It displays values of leaf nodes of a hierarchical structure by using circles areas. The hierarchical structure is depicted using nested circles. A further quantitative dimension with size and a quantitative or categorical dimension with color.",
     },
     {
       id: "placeholder3",
@@ -253,6 +257,15 @@ export const coloredEchartTypes = () => {
       ssr: false,
       description:
         "It allows you to see the proportions between values that make up a whole, by using arcs composing a circle.",
+    },
+    {
+      id: "echartsCirclepacking",
+      label: "Circle Packing Chart",
+      icon: <ColoredCirclePackingIcon />,
+      categories: ["Hierarchies", "Proportions"],
+      ssr: false,
+      description:
+        "It displays values of leaf nodes of a hierarchical structure by using circles areas. The hierarchical structure is depicted using nested circles. A further quantitative dimension with size and a quantitative or categorical dimension with color.",
     },
   ];
 };

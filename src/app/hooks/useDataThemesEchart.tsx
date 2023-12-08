@@ -13,6 +13,7 @@ import {
   SankeyChart,
   TreemapChart,
   SunburstChart,
+  CustomChart,
 } from "echarts/charts";
 import {
   GridComponent,
@@ -22,12 +23,14 @@ import {
 } from "echarts/components";
 import { checkLists } from "app/modules/data-themes-module/sub-modules/theme-builder/views/customize/data";
 import { charts } from "app/modules/chart-module/data";
+import { drillDown } from "app/utils/getCirclePackingOption";
 
 echarts.use([
   BarChart,
   MapChart,
   PieChart,
   LineChart,
+  CustomChart,
   SankeyChart,
   TreemapChart,
   GridComponent,
@@ -154,12 +157,10 @@ export function useDataThemesEchart() {
       tooltip: {
         trigger: "item",
       },
-      legend: {
-        top: "5%",
-        left: "center",
-      },
       series: [
         {
+          width,
+          height,
           top: marginTop,
           left: marginLeft,
           right: marginRight,
@@ -512,6 +513,15 @@ export function useDataThemesEchart() {
     return option;
   }
 
+  function echartsCirclepacking(
+    data: any,
+    visualOptions: any,
+    targetPath: string | null
+  ) {
+    const option = drillDown(data, targetPath, visualOptions);
+    return option;
+  }
+
   function echartsSunburst(data: any, visualOptions: any) {
     const {
       // artboard
@@ -621,7 +631,8 @@ export function useDataThemesEchart() {
       | "echartsTreemap"
       | "bigNumber"
       | "echartsSunburst"
-      | "echartsPiechart",
+      | "echartsPiechart"
+      | "echartsCirclepacking",
     visualOptions: any,
     id: string
   ) {
@@ -647,11 +658,27 @@ export function useDataThemesEchart() {
         echartsTreemap: () => echartsTreemap(data, visualOptions),
         echartsSunburst: () => echartsSunburst(data, visualOptions),
         echartsPiechart: () => echartsPiechart(data, visualOptions),
+        echartsCirclepacking: () =>
+          echartsCirclepacking(data, visualOptions, null),
       };
 
       chart.setOption(CHART_TYPE_TO_COMPONENT[chartType]());
 
       window.addEventListener("resize", () => onResize(chart, id));
+      if (chartType === "echartsCirclepacking") {
+        chart.on("click", { seriesIndex: 0 }, (params: any) => {
+          chart.setOption(
+            echartsCirclepacking(data, visualOptions, params.data.path)
+          );
+        });
+
+        // Reset: click on the blank area.
+        chart.getZr().on("click", function (event) {
+          if (!event.target) {
+            chart.setOption(echartsCirclepacking(data, visualOptions, null));
+          }
+        });
+      }
     }
   }
 

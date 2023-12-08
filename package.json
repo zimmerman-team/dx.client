@@ -52,6 +52,7 @@
     "axios": "^0.21.3",
     "babel-plugin-transform-remove-console": "^6.9.4",
     "craco-plugin-react-hot-reload": "^0.1.0",
+    "d3-hierarchy": "^3.1.2",
     "d3-shape": "^3.0.1",
     "detect-it": "^4.0.1",
     "dom-to-image": "^2.6.0",
@@ -117,6 +118,7 @@
     "yup": "^1.2.0"
   },
   "devDependencies": {
+    "@types/d3-hierarchy": "^3.1.6",
     "@types/i18next-xhr-backend": "^1.4.2",
     "@types/jest": "^27.4.0",
     "@types/material-ui": "^0.21.8",

@@ -8,6 +8,7 @@ import {
   echartsTreemap,
   bigNumber,
   echartsSunburst,
+  echartsCirclepacking,
   echartsPiechart,
   // @ts-ignore
 } from "@rawgraphs/rawgraphs-charts";
@@ -21,6 +22,7 @@ export const charts = {
   echartsTreemap,
   bigNumber,
   echartsSunburst,
+  echartsCirclepacking,
   echartsPiechart,
 };
 
@@ -158,6 +160,34 @@ export const defaultChartOptions = {
         ...echartsPiechart.visualOptions.marginBottom,
         default: 50,
       },
+    },
+  },
+  echartsCirclepacking: {
+    ...baseOptions,
+    width: {
+      ...baseOptions.width,
+      default: CHART_DEFAULT_WIDTH,
+    },
+    height: {
+      ...baseOptions.height,
+      default: CHART_DEFAULT_HEIGHT,
+    },
+    ...echartsCirclepacking.visualOptions,
+    marginTop: {
+      ...echartsCirclepacking.visualOptions.marginTop,
+      default: 0,
+    },
+    marginLeft: {
+      ...echartsCirclepacking.visualOptions.marginLeft,
+      default: 0,
+    },
+    marginRight: {
+      ...echartsCirclepacking.visualOptions.marginRight,
+      default: 0,
+    },
+    marginBottom: {
+      ...echartsCirclepacking.visualOptions.marginBottom,
+      default: 0,
     },
   },
   bigNumber: {},
