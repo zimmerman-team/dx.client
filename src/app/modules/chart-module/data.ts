@@ -27,7 +27,7 @@ export const charts = {
 };
 
 export const CHART_DEFAULT_WIDTH = 1000;
-export const CHART_DEFAULT_HEIGHT = 750;
+export const CHART_DEFAULT_HEIGHT = 543;
 
 export const defaultChartOptions = {
   echartsBarchart: {

@@ -90,6 +90,7 @@ export default function RowstructureDisplay(props: RowStructureDisplayProps) {
 
   return (
     <div
+      ref={ref}
       css={`
         position: relative;
       `}
@@ -105,7 +106,6 @@ export default function RowstructureDisplay(props: RowStructureDisplayProps) {
       >
         {handleDisplay && (
           <div
-            ref={ref}
             css={`
               width: 32px;
               left: -3rem;
@@ -247,6 +247,10 @@ const Box = (props: {
   const [textContent, setTextContent] = React.useState<EditorState>(
     EditorState.createEmpty()
   );
+  const [displayBoxIcons, setDisplayBoxIcons] = React.useState(false);
+  const placeholder = "Add your story...";
+  const [textPlaceholderState, setTextPlaceholderState] =
+    React.useState<string>(placeholder);
 
   const handleEditChart = () => {
     setCreateChartFromReport({
@@ -262,7 +266,7 @@ const Box = (props: {
     //set persisted report state to current report state
     props.handlePersistReportState();
 
-    history.push(`/chart/${chartId}/mapping`);
+    history.push(`/chart/${chartId}/customize`);
   };
 
   const handleRowFrameItemAddition = (
@@ -412,8 +416,12 @@ const Box = (props: {
             }
           `}
         >
-          <div ref={textResizableRef}>
-            {!viewOnlyMode && (
+          <div
+            ref={textResizableRef}
+            onMouseEnter={() => setDisplayBoxIcons(true)}
+            onMouseLeave={() => setDisplayBoxIcons(false)}
+          >
+            {!viewOnlyMode && displayBoxIcons && (
               <IconButton
                 onClick={() => {
                   setDisplayChart(false);
@@ -432,6 +440,7 @@ const Box = (props: {
                   height: 22px;
                   border-radius: 50%;
                   background: #adb5bd;
+
                   :hover {
                     background: #adb5bd;
                     svg {
@@ -454,6 +463,9 @@ const Box = (props: {
               setPlugins={props.setPlugins}
               setIsEditorFocused={props.setIsEditorFocused}
               isEditorFocused={props.isEditorFocused}
+              placeholder={placeholder}
+              setPlaceholderState={setTextPlaceholderState}
+              placeholderState={textPlaceholderState}
             />
           </div>
         </Resizable>
@@ -478,12 +490,16 @@ const Box = (props: {
           <div
             css={`
               height: 100%;
-              background: #fff;
               position: relative;
               padding: ${props.rowType === "oneByFive" ? "0" : "24px"};
+              background: #fff;
             `}
+            onMouseEnter={() => setDisplayBoxIcons(true)}
+            onMouseLeave={() => setDisplayBoxIcons(false)}
+            onFocus={() => setDisplayBoxIcons(true)}
+            onBlur={() => setDisplayBoxIcons(false)}
           >
-            {!viewOnlyMode && (
+            {!viewOnlyMode && displayBoxIcons && (
               <div>
                 <IconButton
                   onClick={() => {
@@ -558,6 +574,7 @@ const Box = (props: {
     chartId,
     textContent,
     viewOnlyMode,
+    displayBoxIcons,
     width,
     props.height,
   ]);

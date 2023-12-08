@@ -157,9 +157,7 @@ export function CommonChart(props: Props) {
         css={`
           width: 100%;
           overflow: hidden;
-          margin-top: 40px;
           height: ${props.visualOptions?.height}px;
-
           * {
             font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif !important;
           }
@@ -173,6 +171,9 @@ export function CommonChart(props: Props) {
             height: 100%;
 
             > div:first-of-type {
+              canvas {
+                padding-bottom: 28px !important;
+              }
               > svg {
                 height: 100%;
 

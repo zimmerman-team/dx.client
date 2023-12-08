@@ -20,20 +20,6 @@ import {
 export function ChartBuilderPreviewThemePage(
   props: ChartBuilderPreviewThemePageProps
 ) {
-  const { page } = useParams<{ page: string }>();
-
-  const activePanels = useStoreState(
-    (state) => state.charts.activePanels.value
-  );
-
-  if (
-    page === "new" &&
-    activePanels < 3 &&
-    (activePanels > 1 ? !props.validMapping : true)
-  ) {
-    return <Redirect to="/chart/new/data" />;
-  }
-
   if (props.loading) {
     return <PageLoader />;
   }
@@ -217,7 +203,7 @@ export function ChartBuilderPreviewTheme(props: ChartBuilderPreviewThemeProps) {
 
       <div
         css={`
-          height: 80px;
+          height: 40px;
         `}
       />
       <div>

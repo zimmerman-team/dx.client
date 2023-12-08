@@ -9,10 +9,9 @@ export const styles = {
     left: 0;
     max-width: 1280px;
     position: relative;
-    padding: 70px 43px 0 0;
+    padding: 67px 0px 0 0;
     align-self: flex-start;
     min-height: calc(100vh - 98px);
-    width: calc(100vw - ((100vw - 1280px) / 2) - 400px - 24px);
 
     @media (max-width: 1280px) {
       width: calc(100vw - 400px);

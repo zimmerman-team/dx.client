@@ -7,186 +7,186 @@ export default function Icon() {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <g clipPath="url(#clip0_12064_5837)">
+      <g clip-path="url(#clip0_1306_5665)">
         <rect
-          x="-16.8759"
-          y="-12.4856"
+          x="-16.876"
+          y="-12.3076"
           width="176.671"
           height="101.505"
           rx="9.95781"
           fill="white"
         />
         <line
-          x1="-10.1307"
-          y1="16.1417"
+          x1="-10.1306"
+          y1="16.3197"
           x2="143.03"
-          y2="16.1417"
+          y2="16.3197"
           stroke="#CBCBCB"
-          strokeWidth="0.130683"
+          stroke-width="0.130683"
         />
         <line
-          x1="-10.1307"
-          y1="38.2271"
+          x1="-10.1306"
+          y1="38.4051"
           x2="143.03"
-          y2="38.2271"
+          y2="38.4051"
           stroke="#CBCBCB"
-          strokeWidth="0.130683"
+          stroke-width="0.130683"
         />
         <line
-          x1="-10.1307"
-          y1="62.534"
+          x1="-10.1306"
+          y1="62.712"
           x2="143.03"
-          y2="62.534"
+          y2="62.712"
           stroke="#CBCBCB"
-          strokeWidth="0.130683"
+          stroke-width="0.130683"
         />
         <rect
-          x="0.84726"
-          y="67.958"
+          x="0.847168"
+          y="68.136"
           width="48.2221"
           height="7.841"
           rx="3.9205"
-          transform="rotate(-90 0.84726 67.958)"
+          transform="rotate(-90 0.847168 68.136)"
           fill="#6061E5"
         />
         <rect
-          x="21.1031"
-          y="53.5837"
+          x="21.1033"
+          y="53.7617"
           width="37.3754"
           height="7.841"
           rx="3.9205"
-          transform="rotate(-90 21.1031 53.5837)"
+          transform="rotate(-90 21.1033 53.7617)"
           fill="#F2D1E2"
         />
         <rect
-          x="0.84726"
-          y="67.958"
+          x="0.847168"
+          y="68.136"
           width="23.523"
           height="7.841"
           rx="3.9205"
-          transform="rotate(-90 0.84726 67.958)"
+          transform="rotate(-90 0.847168 68.136)"
           fill="#565656"
         />
         <rect
-          x="21.1031"
-          y="53.5837"
+          x="21.1033"
+          y="53.7617"
           width="17.7729"
           height="7.841"
           rx="3.9205"
-          transform="rotate(-90 21.1031 53.5837)"
+          transform="rotate(-90 21.1033 53.7617)"
           fill="#565656"
         />
         <rect
-          x="41.359"
-          y="53.5837"
+          x="41.3591"
+          y="53.7617"
           width="47.438"
           height="7.841"
           rx="3.9205"
-          transform="rotate(-90 41.359 53.5837)"
+          transform="rotate(-90 41.3591 53.7617)"
           fill="#6061E5"
         />
         <rect
           x="62.5295"
-          y="65.9973"
+          y="66.1753"
           width="59.8529"
           height="7.841"
           rx="3.9205"
-          transform="rotate(-90 62.5295 65.9973)"
+          transform="rotate(-90 62.5295 66.1753)"
           fill="#F2D1E2"
         />
         <rect
-          x="81.2174"
-          y="58.1567"
+          x="81.2173"
+          y="58.3347"
           width="39.7277"
           height="7.841"
           rx="3.9205"
-          transform="rotate(-90 81.2174 58.1567)"
+          transform="rotate(-90 81.2173 58.3347)"
           fill="#6061E5"
         />
         <rect
           x="97.9446"
-          y="53.5837"
+          y="53.7617"
           width="27.7049"
           height="7.841"
           rx="3.9205"
-          transform="rotate(-90 97.9446 53.5837)"
+          transform="rotate(-90 97.9446 53.7617)"
           fill="#F2D1E2"
         />
         <rect
           x="114.541"
-          y="52.1453"
+          y="52.3232"
           width="27.7049"
           height="7.841"
           rx="3.9205"
-          transform="rotate(-90 114.541 52.1453)"
+          transform="rotate(-90 114.541 52.3232)"
           fill="#6061E5"
         />
         <rect
           x="131.792"
-          y="62.8611"
+          y="63.0391"
           width="53.5801"
           height="7.841"
           rx="3.9205"
-          transform="rotate(-90 131.792 62.8611)"
+          transform="rotate(-90 131.792 63.0391)"
           fill="#F2D1E2"
         />
         <rect
-          x="41.359"
-          y="53.5837"
+          x="41.3591"
+          y="53.7617"
           width="17.7729"
           height="7.841"
           rx="3.9205"
-          transform="rotate(-90 41.359 53.5837)"
+          transform="rotate(-90 41.3591 53.7617)"
           fill="#565656"
         />
         <rect
           x="62.5295"
-          y="65.9973"
+          y="66.1753"
           width="27.7049"
           height="7.841"
           rx="3.9205"
-          transform="rotate(-90 62.5295 65.9973)"
+          transform="rotate(-90 62.5295 66.1753)"
           fill="#565656"
         />
         <rect
           x="81.3479"
-          y="58.1567"
+          y="58.3347"
           width="16.4661"
           height="7.841"
           rx="3.9205"
-          transform="rotate(-90 81.3479 58.1567)"
+          transform="rotate(-90 81.3479 58.3347)"
           fill="#565656"
         />
         <rect
           x="97.9446"
-          y="53.5837"
+          y="53.7617"
           width="20.3866"
           height="7.841"
           rx="3.9205"
-          transform="rotate(-90 97.9446 53.5837)"
+          transform="rotate(-90 97.9446 53.7617)"
           fill="#565656"
         />
         <rect
           x="114.541"
-          y="52.1453"
+          y="52.3232"
           width="14.8979"
           height="7.841"
           rx="3.9205"
-          transform="rotate(-90 114.541 52.1453)"
+          transform="rotate(-90 114.541 52.3232)"
           fill="#565656"
         />
         <rect
           x="131.792"
-          y="62.8611"
+          y="63.0391"
           width="25.6139"
           height="7.841"
           rx="3.9205"
-          transform="rotate(-90 131.792 62.8611)"
+          transform="rotate(-90 131.792 63.0391)"
           fill="#565656"
         />
         <rect
-          x="0.791321"
-          y="71.6736"
+          x="0.79126"
+          y="71.8516"
           width="8.35171"
           height="2.56976"
           rx="1.28488"
@@ -194,15 +194,15 @@ export default function Icon() {
         />
         <rect
           x="21.0278"
-          y="71.6736"
+          y="71.8516"
           width="8.35171"
           height="2.56976"
           rx="1.28488"
           fill="#BCBEC2"
         />
         <rect
-          x="40.9437"
-          y="71.6736"
+          x="40.9438"
+          y="71.8516"
           width="8.35171"
           height="2.56976"
           rx="1.28488"
@@ -210,7 +210,7 @@ export default function Icon() {
         />
         <rect
           x="62.1443"
-          y="71.6736"
+          y="71.8516"
           width="8.35171"
           height="2.56976"
           rx="1.28488"
@@ -218,15 +218,15 @@ export default function Icon() {
         />
         <rect
           x="81.0962"
-          y="71.6736"
+          y="71.8516"
           width="8.35171"
           height="2.56976"
           rx="1.28488"
           fill="#BCBEC2"
         />
         <rect
-          x="97.7994"
-          y="71.6736"
+          x="97.7993"
+          y="71.8516"
           width="8.35171"
           height="2.56976"
           rx="1.28488"
@@ -234,7 +234,7 @@ export default function Icon() {
         />
         <rect
           x="114.182"
-          y="71.6736"
+          y="71.8516"
           width="8.35171"
           height="2.56976"
           rx="1.28488"
@@ -242,7 +242,7 @@ export default function Icon() {
         />
         <rect
           x="131.528"
-          y="71.6736"
+          y="71.8516"
           width="8.35171"
           height="2.56976"
           rx="1.28488"
@@ -250,12 +250,12 @@ export default function Icon() {
         />
       </g>
       <defs>
-        <clipPath id="clip0_12064_5837">
+        <clipPath id="clip0_1306_5665">
           <rect
             width="159.385"
             height="80.0596"
             fill="white"
-            transform="translate(0.751953)"
+            transform="translate(0.751953 0.177979)"
           />
         </clipPath>
       </defs>

@@ -3,7 +3,7 @@ import axios from "axios";
 import get from "lodash/get";
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
-import { useSessionStorage, useUpdateEffect } from "react-use";
+import { useUpdateEffect } from "react-use";
 import useDebounce from "react-use/lib/useDebounce";
 import { useInfinityScroll } from "app/hooks/useInfinityScroll";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
@@ -13,6 +13,8 @@ import { DatasetListItemAPIModel } from "app/modules/data-themes-module/sub-modu
 import ReformedGridItem from "app/modules/home-module/components/Datasets/reformedGridItem";
 import DatasetAddnewCard from "app/modules/home-module/components/Datasets/datasetAddNewCard";
 import CircleLoader from "../Loader";
+import { useRecoilState } from "recoil";
+import { loadedDatasetsAtom } from "app/state/recoil/atoms";
 
 interface Props {
   sortBy: string;
@@ -30,12 +32,10 @@ export default function DatasetsGrid(props: Props) {
   const [enableButton, setEnableButton] = React.useState<boolean>(false);
   const [modalDisplay, setModalDisplay] = React.useState<boolean>(false);
   const limit = 15;
-  //used over usestate to get current offset value in the IntersectionObserver api, as it is not updated in usestate.
   const [offset, setOffset] = React.useState(0);
   const { isObserved } = useInfinityScroll(observerTarget);
-  const [loadedDatasets, setLoadedDatasets] = React.useState<
-    DatasetListItemAPIModel[]
-  >([]);
+  const [loadedDatasets, setLoadedDatasets] =
+    useRecoilState(loadedDatasetsAtom);
 
   const token = useStoreState((state) => state.AuthToken.value);
   const datasets = useStoreState(
@@ -50,9 +50,6 @@ export default function DatasetsGrid(props: Props) {
     (state) => state.dataThemes.DatasetGetList.loading
   );
 
-  const clearDatasets = useStoreActions(
-    (actions) => actions.dataThemes.DatasetGetList.clear
-  );
   const loadDatasetCount = useStoreActions(
     (actions) => actions.dataThemes.DatasetCount.fetch
   );
@@ -78,12 +75,20 @@ export default function DatasetsGrid(props: Props) {
 
   const loadData = async () => {
     //refrain from loading data if all the data is loaded
-    await loadDatasets({
-      token,
-      nonAuthCall: !token,
-      storeInCrudData: true,
-      filterString: getFilterString(),
-    });
+    if (token) {
+      await loadDatasets({
+        token,
+        storeInCrudData: true,
+        filterString: getFilterString(),
+      });
+    } else {
+      await loadDatasets({
+        token,
+        nonAuthCall: !token,
+        storeInCrudData: true,
+        filterString: getFilterString(),
+      });
+    }
   };
 
   const reloadData = async () => {
@@ -97,9 +102,15 @@ export default function DatasetsGrid(props: Props) {
     loadData();
   };
 
-  useUpdateEffect(() => {
-    loadData();
-  }, [offset]);
+  React.useEffect(() => {
+    if (token) {
+      loadDatasetCount({
+        token,
+      });
+    } else {
+      loadDatasetCount({ nonAuthCall: true, filterString: getWhereString() });
+    }
+  }, [token]);
 
   React.useEffect(() => {
     //load data if intersection observer is triggered
@@ -113,9 +124,13 @@ export default function DatasetsGrid(props: Props) {
     }
   }, [isObserved]);
 
+  useUpdateEffect(() => {
+    loadData();
+  }, [offset]);
+
   React.useEffect(() => {
     reloadData();
-  }, [props.sortBy, token]);
+  }, [props.sortBy, token, props.category]);
 
   const handleDelete = (id: string) => {
     deleteDataset(id);
@@ -160,19 +175,15 @@ export default function DatasetsGrid(props: Props) {
       const f = datasets.filter(
         (dataset) => !prevDatasetsIds.includes(dataset.id)
       );
-      return [...prevDatasets, ...f];
+      if (props.category && props.category.length > 0) {
+        return [...prevDatasets, ...f].filter(
+          (d) => d.category === props.category
+        );
+      } else {
+        return [...prevDatasets, ...f];
+      }
     });
   }, [datasetLoadSuccess]);
-
-  React.useEffect(() => {
-    if (props.category && props.category.length > 0) {
-      setLoadedDatasets((prevDatasets) => {
-        return prevDatasets.filter((d) => d.category === props.category);
-      });
-    } else {
-      setLoadedDatasets(datasets);
-    }
-  }, [props.category]);
 
   const [,] = useDebounce(
     () => {
@@ -189,7 +200,7 @@ export default function DatasetsGrid(props: Props) {
       {!props.tableView && (
         <Grid container spacing={!props.inChartBuilder ? 2 : 1}>
           {props.addCard && <DatasetAddnewCard />}
-          {(loadedDatasets || []).map((data, index) => (
+          {loadedDatasets.map((data, index) => (
             <Grid
               item
               key={data.id}
@@ -197,7 +208,9 @@ export default function DatasetsGrid(props: Props) {
               sm={6}
               md={!props.inChartBuilder ? 4 : 6}
               lg={!props.inChartBuilder ? 3 : 4}
-              onClick={() => {
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
                 if (props.onItemClick) {
                   props.onItemClick(data.id);
                 }
@@ -205,9 +218,12 @@ export default function DatasetsGrid(props: Props) {
               css={
                 props.inChartBuilder
                   ? `
+                  a{
+                    pointer-events: none;
+                  }
                   > div {
                     width: 100%;
-
+                  
                     &:hover {
                       cursor: pointer;
                       border: 1px solid #6061E5;
@@ -225,6 +241,7 @@ export default function DatasetsGrid(props: Props) {
                 descr={data.description}
                 handleDuplicate={() => {}}
                 showMenu={!props.inChartBuilder}
+                id={data.id}
               />
 
               {!props.inChartBuilder && <Box height={16} />}

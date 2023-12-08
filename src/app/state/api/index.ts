@@ -28,6 +28,7 @@ export const APIModel = <QueryModel, ResponseModel>(
     const { addOnData, isUpdateCrudData, ...actualPayload } = payload;
     state.loading = false;
     state.success = true;
+    state.errorData = null;
 
     if (isUpdateCrudData) {
       state.crudData = actualPayload;
@@ -47,15 +48,19 @@ export const APIModel = <QueryModel, ResponseModel>(
   onSuccessCrudData: action((state, payload: ResponseData<ResponseModel>) => {
     state.loading = false;
     state.success = true;
+    state.errorData = null;
+
     state.crudData = payload;
   }),
   setSuccess: action((state) => {
     state.loading = false;
     state.success = true;
+    state.errorData = null;
   }),
   onRequest: action((state) => {
     state.loading = true;
     state.success = false;
+    state.errorData = null;
   }),
   fetch: thunk(async (actions, query: RequestValues<QueryModel>) => {
     actions.onRequest();

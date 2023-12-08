@@ -1,18 +1,19 @@
 /* eslint-disable no-param-reassign */
 import { action, Action } from "easy-peasy";
+import { ToolboxNavType } from "app/modules/chart-module/components/toolbox/views/steps/navbar";
 
 export interface ChartsActivePanelsStateModel {
-  value: number;
+  value: ToolboxNavType;
   reset: Action<ChartsActivePanelsStateModel>;
-  setValue: Action<ChartsActivePanelsStateModel, number>;
+  setValue: Action<ChartsActivePanelsStateModel, ToolboxNavType>;
 }
 
 export const ChartsActivePanelsState: ChartsActivePanelsStateModel = {
-  value: 1,
+  value: "selectDataset",
   reset: action((state) => {
-    state.value = 1;
+    state.value = "selectDataset";
   }),
-  setValue: action((state, payload: number) => {
+  setValue: action((state, payload: ToolboxNavType) => {
     state.value = payload;
   }),
 };
@@ -43,6 +44,10 @@ export interface ChartsMappingStateModel {
       [key: string]: any;
     }
   >;
+  removeMappingValue: Action<
+    ChartsMappingStateModel,
+    { id: any; value: string }
+  >;
   reset: Action<ChartsMappingStateModel>;
 }
 
@@ -69,6 +74,30 @@ export const ChartsMappingState: ChartsMappingStateModel = {
       state.value = { ...nextValue };
     }
   ),
+  removeMappingValue: action((state, payload: { id: any; value: string }) => {
+    let nextValue = { ...state.value };
+    //get value and ids for payload.id key
+    const mappingValues: string[] = nextValue[payload.id].value;
+    const mappingIds: string[] = nextValue[payload.id].ids;
+    //get postion of payload.value in mappingValues
+    const valueIndex = mappingValues.findIndex(
+      (item: string) => item === payload.value
+    );
+    //remove value and id from mappingValues and mappingIds at valueIndex which will be the same for both arrays
+    mappingValues.splice(valueIndex, 1);
+    mappingIds.splice(valueIndex, 1);
+
+    //update state
+    state.value = {
+      ...nextValue,
+      [payload.id]: {
+        ...nextValue[payload.id],
+        value: mappingValues,
+        ids: mappingIds,
+      },
+    };
+  }),
+
   reset: action((state) => {
     state.value = {};
   }),
