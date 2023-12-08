@@ -213,7 +213,9 @@ export default function DatasetsGrid(props: Props) {
               sm={6}
               md={!props.inChartBuilder ? 4 : 6}
               lg={!props.inChartBuilder ? 3 : 4}
-              onClick={() => {
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
                 if (props.onItemClick) {
                   props.onItemClick(data.id);
                 }
@@ -221,9 +223,12 @@ export default function DatasetsGrid(props: Props) {
               css={
                 props.inChartBuilder
                   ? `
+                  a{
+                    pointer-events: none;
+                  }
                   > div {
                     width: 100%;
-
+                  
                     &:hover {
                       cursor: pointer;
                       border: 1px solid #6061E5;
