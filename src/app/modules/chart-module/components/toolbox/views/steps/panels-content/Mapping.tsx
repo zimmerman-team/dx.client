@@ -64,7 +64,7 @@ export function ChartToolBoxMapping(props: Readonly<ChartToolBoxMappingProps>) {
       return {
         ...d,
         mappedValues: [],
-        mapValuesDisplayed: true,
+        mapValuesDisplayed: false,
       };
     })
   );
