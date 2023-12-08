@@ -19,6 +19,8 @@ import SearchIcon from "@material-ui/icons/Search";
 import { useDebounce } from "react-use";
 import { ChartAPIModel, emptyChartAPI } from "app/modules/chart-module/data";
 import { Dropdown } from "react-bootstrap";
+import { useRecoilState } from "recoil";
+import { dataTypeNameAtom } from "app/state/recoil/atoms";
 
 interface ChartToolBoxMappingProps {
   dataTypes: any;
@@ -28,7 +30,7 @@ interface ChartToolBoxMappingItemProps {
   index: number;
   dimension?: any;
   testId: string;
-  dataTypeName: string;
+  mappingItemValue: string;
   dataTypes: any[];
   marginBottom: string;
   backgroundColor?: string;
@@ -203,7 +205,8 @@ const NonStaticDimensionContainer = (props: {
   handleButtonToggle: (id: string) => void;
 }) => {
   const [searchValue, setSearchValue] = React.useState("");
-  const [dataTypeName, setDataTypeName] = React.useState("");
+  const [dataTypeName, setDataTypeName] = useRecoilState(dataTypeNameAtom);
+
   const columnDataType = getTypeName(props.dataTypes[dataTypeName as any]);
   const valueIndex = props.dimension.mappedValues.findIndex(
     (item: string) => item === dataTypeName
@@ -279,14 +282,20 @@ const NonStaticDimensionContainer = (props: {
         </div>
         {!!props.dimension?.multiple &&
           props.dimension.mappedValues?.map(
-            (value: string | number, index: number) => (
-              <button
-                css={mappingStyles.mappedValuecss}
-                key={value + `${index}`}
-              >
-                {value}
-              </button>
-            )
+            (value: string | number, index: number) => {
+              let type: "string" | "number" | "date" = props.getValidDataTypes(
+                props.dimension.validTypes,
+                searchValue
+              )[value];
+              return (
+                <button
+                  css={mappingStyles.mappedValuecss}
+                  key={value + `${index}`}
+                >
+                  <span>{typeIcon[type]}</span> <span> {value}</span>
+                </button>
+              );
+            }
           )}
 
         <DimensionSelect
@@ -338,20 +347,20 @@ const NonStaticDimensionContainer = (props: {
           </div>
           {Object.keys(
             props.getValidDataTypes(props.dimension.validTypes, searchValue)
-          )?.map((dataTypeName: string, index: number) => {
+          )?.map((mappingItemValue: string, index: number) => {
             let type = props.getValidDataTypes(
               props.dimension.validTypes,
               searchValue
-            )[dataTypeName];
+            )[mappingItemValue];
 
             return (
               <ChartToolBoxMappingItem
-                key={dataTypeName}
-                testId={`mapping-item-${dataTypeName}`}
+                key={mappingItemValue}
+                testId={`mapping-item-${mappingItemValue}`}
                 type={type}
                 index={index}
                 marginBottom="16px"
-                dataTypeName={dataTypeName}
+                mappingItemValue={mappingItemValue}
                 dimension={props.dimension}
                 setNonStaticDimensions={props.setNonStaticDimensions}
                 dataTypes={props.dataTypes}
@@ -407,13 +416,17 @@ const DimensionSelect = (props: {
     },
     [aggregationsMappedHere, setAggregation]
   );
-  let relatedAggregation = null;
+  const relatedAggregation = React.useMemo(() => {
+    if (props.dimension?.aggregation) {
+      return (
+        dimensionMapping.config?.aggregation[props.index] ||
+        getDefaultDimensionAggregation(props.dimension, props.columnDataType)
+      );
+    } else {
+      return null;
+    }
+  }, [props.dimension, props.index, dimensionMapping]);
 
-  if (props.dimension?.aggregation) {
-    relatedAggregation =
-      dimensionMapping.config?.aggregation[props.index] ||
-      getDefaultDimensionAggregation(props.dimension, props.columnDataType);
-  }
   return (
     <div
       css={`
@@ -522,11 +535,12 @@ function ChartToolBoxMappingItem(
   const removeMappingValue = useStoreActions(
     (state) => state.charts.mapping.removeMappingValue
   );
+  const [dataTypeName, setDataTypeName] = useRecoilState(dataTypeNameAtom);
 
   const item = {
     type: "card",
     index,
-    id: props.dataTypeName,
+    id: props.mappingItemValue,
     dimensionId: dimension.id,
   };
   const columnDataType = getTypeName(dataTypes[item.id as any]);
@@ -535,7 +549,8 @@ function ChartToolBoxMappingItem(
     const isValid =
       dimension.validTypes?.length === 0 ||
       dimension.validTypes?.includes(columnDataType);
-    props.setDataTypeName(props.dataTypeName);
+
+    setDataTypeName(props.mappingItemValue);
 
     if (isValid) {
       props.setNonStaticDimensions((prev) => {
@@ -543,7 +558,7 @@ function ChartToolBoxMappingItem(
           if (data.id === props.nonStaticDimensionsId) {
             return {
               ...data,
-              mappedValues: [...data.mappedValues, props.dataTypeName],
+              mappedValues: [...data.mappedValues, props.mappingItemValue],
               mapValuesDisplayed: false,
             };
           }
@@ -607,12 +622,12 @@ function ChartToolBoxMappingItem(
   const onDeleteItem = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
     e.stopPropagation();
-    removeMappingValue({ id: dimension.id, value: props.dataTypeName });
+    removeMappingValue({ id: dimension.id, value: props.mappingItemValue });
   };
 
   return (
     <div
-      key={props.dataTypeName}
+      key={props.mappingItemValue}
       id={props.testId}
       css={mappingStyles.mappingItemcss(props)}
       onClick={handleClick}
@@ -629,10 +644,10 @@ function ChartToolBoxMappingItem(
           text-transform: capitalize;
         `}
       >
-        {props.dataTypeName}
+        {props.mappingItemValue}
       </div>
 
-      {props.dimension.mappedValues.includes(props.dataTypeName) && (
+      {props.dimension.mappedValues.includes(props.mappingItemValue) && (
         <IconButton onClick={onDeleteItem}>
           <CloseIcon htmlColor="#fff" />
         </IconButton>

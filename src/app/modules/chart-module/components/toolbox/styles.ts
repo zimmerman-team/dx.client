@@ -91,15 +91,21 @@ export const mappingStyles = {
     flex-direction: row;
     height: 31px;
     border-radius: 36px;
-    border: ${dimension.mappedValues && !dimension.mapValuesDisplayed
+    border: ${dimension.mappedValues.length > 0 &&
+    !dimension.mapValuesDisplayed &&
+    !dimension.multiple
       ? "none"
       : "0.722px dashed #262c34"};
-    background: ${dimension.mappedValues && !dimension.mapValuesDisplayed
+    background: ${dimension.mappedValues.length > 0 &&
+    !dimension.mapValuesDisplayed &&
+    !dimension.multiple
       ? "#262c34"
       : "#dfe3e5"};
     text-transform: capitalize;
     justify-content: space-between;
-    color: ${dimension.mappedValues && !dimension.mapValuesDisplayed
+    color: ${dimension.mappedValues.length > 0 &&
+    !dimension.mapValuesDisplayed &&
+    !dimension.multiple
       ? "#fff"
       : "#868e96"};
 
@@ -118,7 +124,9 @@ export const mappingStyles = {
       transition: all 0.2s ease-in-out;
       transform: rotate(${dimension.mapValuesDisplayed ? "180" : "0"}deg);
       > path {
-        fill: ${dimension.mappedValues && !dimension.mapValuesDisplayed
+        fill: ${dimension.mappedValues.length > 0 &&
+        !dimension.mapValuesDisplayed &&
+        !dimension.multiple
           ? "#fff"
           : "#262c34"};
       }
@@ -144,7 +152,7 @@ export const mappingStyles = {
     margin-bottom: ${props.marginBottom};
     color: #262c34;
     background: ${props.backgroundColor ?? "#cfd4da"};
-    ${props.dimension.mappedValues.includes(props.dataTypeName) &&
+    ${props.dimension.mappedValues.includes(props.mappingItemValue) &&
     "background: #262c34; color: #fff;"}
     p {
       font-family: "Roboto", sans-serif;
@@ -171,12 +179,16 @@ export const mappingStyles = {
     min-height: 31px;
     position: relative;
     padding-left: 16px;
+    width: 100%;
     align-items: center;
     border-radius: 25px;
     z-index: 10;
     transform: translate(0px, 0px);
     margin-bottom: 8px;
     background: #262c34;
+    border: none;
+    gap: 12px;
+    outline: none;
     color: #fff;
     p {
       font-family: "Roboto", sans-serif;
