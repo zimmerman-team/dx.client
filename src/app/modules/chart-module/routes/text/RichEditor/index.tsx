@@ -28,7 +28,7 @@ import "@draft-js-plugins/emoji/lib/plugin.css";
 export const RichEditor = (props: {
   editMode: boolean;
   fullWidth?: boolean;
-  placeholder?: string;
+  placeholderState: string;
   invertColors?: boolean;
   textContent: EditorState;
   setTextContent: (value: EditorState) => void;
@@ -36,6 +36,8 @@ export const RichEditor = (props: {
   isEditorFocused?: boolean;
   setPlugins?: React.Dispatch<React.SetStateAction<ToolbarPluginsType>>;
   focusOnMount?: boolean;
+  setPlaceholderState: React.Dispatch<React.SetStateAction<string>>;
+  placeholder: string;
 }): ReactElement => {
   const editor = useRef<Editor | null>(null);
 
@@ -127,6 +129,9 @@ export const RichEditor = (props: {
 
         .public-DraftEditorPlaceholder-inner {
           position: absolute;
+          color: #dfe3e5;
+          font-weight: bold;
+          font-size: 16px;
         }
       `}
     >
@@ -143,12 +148,15 @@ export const RichEditor = (props: {
         onBlur={() => {
           setLocalFocus(false);
           props.setIsEditorFocused?.(false);
+          if (props.textContent.getCurrentContent().getPlainText().length === 0)
+            props.setPlaceholderState(props.placeholder);
         }}
         onFocus={() => {
           setLocalFocus(true);
           props.setIsEditorFocused?.(true);
+          props.setPlaceholderState("");
         }}
-        placeholder={props.placeholder ?? "Add your story..."}
+        placeholder={props.placeholderState}
         ref={(element) => {
           editor.current = element;
         }}

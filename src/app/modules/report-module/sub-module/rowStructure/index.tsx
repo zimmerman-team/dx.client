@@ -90,6 +90,7 @@ export default function RowstructureDisplay(props: RowStructureDisplayProps) {
 
   return (
     <div
+      ref={ref}
       css={`
         position: relative;
       `}
@@ -105,7 +106,6 @@ export default function RowstructureDisplay(props: RowStructureDisplayProps) {
       >
         {handleDisplay && (
           <div
-            ref={ref}
             css={`
               width: 32px;
               left: -3rem;
@@ -248,6 +248,9 @@ const Box = (props: {
     EditorState.createEmpty()
   );
   const [displayBoxIcons, setDisplayBoxIcons] = React.useState(false);
+  const placeholder = "Add your story...";
+  const [textPlaceholderState, setTextPlaceholderState] =
+    React.useState<string>(placeholder);
 
   const handleEditChart = () => {
     setCreateChartFromReport({
@@ -460,6 +463,9 @@ const Box = (props: {
               setPlugins={props.setPlugins}
               setIsEditorFocused={props.setIsEditorFocused}
               isEditorFocused={props.isEditorFocused}
+              placeholder={placeholder}
+              setPlaceholderState={setTextPlaceholderState}
+              placeholderState={textPlaceholderState}
             />
           </div>
         </Resizable>
