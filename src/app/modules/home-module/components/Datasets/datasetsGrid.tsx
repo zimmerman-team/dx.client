@@ -130,7 +130,7 @@ export default function DatasetsGrid(props: Props) {
 
   React.useEffect(() => {
     reloadData();
-  }, [props.sortBy, token]);
+  }, [props.sortBy, token, props.category]);
 
   const handleDelete = (id: string) => {
     deleteDataset(id);
@@ -175,20 +175,15 @@ export default function DatasetsGrid(props: Props) {
       const f = datasets.filter(
         (dataset) => !prevDatasetsIds.includes(dataset.id)
       );
-      return [...prevDatasets, ...f];
+      if (props.category && props.category.length > 0) {
+        return [...prevDatasets, ...f].filter(
+          (d) => d.category === props.category
+        );
+      } else {
+        return [...prevDatasets, ...f];
+      }
     });
-    // setTestState(testState + 1);
   }, [datasetLoadSuccess]);
-
-  React.useEffect(() => {
-    if (props.category && props.category.length > 0) {
-      setLoadedDatasets((prevDatasets) => {
-        return prevDatasets.filter((d) => d.category === props.category);
-      });
-    } else {
-      setLoadedDatasets(datasets);
-    }
-  }, [props.category]);
 
   const [,] = useDebounce(
     () => {
