@@ -19,8 +19,6 @@ import SearchIcon from "@material-ui/icons/Search";
 import { useDebounce } from "react-use";
 import { ChartAPIModel, emptyChartAPI } from "app/modules/chart-module/data";
 import { Dropdown } from "react-bootstrap";
-import { useRecoilState } from "recoil";
-import { dataTypeNameAtom } from "app/state/recoil/atoms";
 
 interface ChartToolBoxMappingProps {
   dataTypes: any;
@@ -39,7 +37,6 @@ interface ChartToolBoxMappingItemProps {
   nonStaticDimensionsIndex: number;
   setNonStaticDimensions: React.Dispatch<React.SetStateAction<any[]>>;
   nonStaticDimensions: any[];
-  setDataTypeName: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const typeIcon = {
@@ -205,12 +202,6 @@ const NonStaticDimensionContainer = (props: {
   handleButtonToggle: (id: string) => void;
 }) => {
   const [searchValue, setSearchValue] = React.useState("");
-  const [dataTypeName, setDataTypeName] = useRecoilState(dataTypeNameAtom);
-
-  const columnDataType = getTypeName(props.dataTypes[dataTypeName as any]);
-  const valueIndex = props.dimension.mappedValues.findIndex(
-    (item: string) => item === dataTypeName
-  );
 
   return (
     <div
@@ -302,8 +293,7 @@ const NonStaticDimensionContainer = (props: {
           dimension={props.dimension}
           getSelectButtonLabel={props.getSelectButtonLabel}
           handleButtonToggle={props.handleButtonToggle}
-          index={valueIndex}
-          columnDataType={columnDataType}
+          index={0}
         />
       </div>
       {props.dimension?.mapValuesDisplayed && (
@@ -367,7 +357,6 @@ const NonStaticDimensionContainer = (props: {
                 nonStaticDimensionsId={props.dimension.id}
                 nonStaticDimensionsIndex={props.dimensionIndex}
                 nonStaticDimensions={props.nonStaticDimensions}
-                setDataTypeName={setDataTypeName}
               />
             );
           })}
@@ -385,7 +374,6 @@ const DimensionSelect = (props: {
   ) => any;
   handleButtonToggle: (id: string) => void;
   index: number;
-  columnDataType: string;
 }) => {
   const mapping = useStoreState((state) => state.charts.mapping.value);
   const setMapping = useStoreActions(
@@ -418,10 +406,7 @@ const DimensionSelect = (props: {
   );
   const relatedAggregation = React.useMemo(() => {
     if (props.dimension?.aggregation) {
-      return (
-        dimensionMapping.config?.aggregation[props.index] ||
-        getDefaultDimensionAggregation(props.dimension, props.columnDataType)
-      );
+      return dimensionMapping.config?.aggregation[props.index] || "sum";
     } else {
       return null;
     }
@@ -535,7 +520,6 @@ function ChartToolBoxMappingItem(
   const removeMappingValue = useStoreActions(
     (state) => state.charts.mapping.removeMappingValue
   );
-  const [dataTypeName, setDataTypeName] = useRecoilState(dataTypeNameAtom);
 
   const item = {
     type: "card",
@@ -549,8 +533,6 @@ function ChartToolBoxMappingItem(
     const isValid =
       dimension.validTypes?.length === 0 ||
       dimension.validTypes?.includes(columnDataType);
-
-    setDataTypeName(props.mappingItemValue);
 
     if (isValid) {
       props.setNonStaticDimensions((prev) => {

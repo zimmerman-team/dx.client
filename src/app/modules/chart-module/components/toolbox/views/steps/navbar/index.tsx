@@ -115,16 +115,13 @@ export default function ToolboxNav(
             props.onMouseOverNavBtn(item.name);
           }}
           onMouseOut={() => {
-            console.log("mouse out");
             props.setIsClickable(false);
           }}
           //corresponding keyboard events for accessiblity
           onBlur={() => {
-            console.log("blur");
             props.setIsClickable(false);
           }}
           onFocus={() => {
-            console.log("focus");
             props.setIsClickable(true);
           }}
         >

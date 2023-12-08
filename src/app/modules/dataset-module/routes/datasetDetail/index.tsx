@@ -9,7 +9,6 @@ import { useParams } from "react-router-dom";
 
 export default function DatasetDetail() {
   const { page, view } = useParams<{ page: string; view?: string }>();
-  console.log(page, "page");
 
   const { loadDataset, sampleData, dataTotalCount, dataStats } =
     useChartsRawData({

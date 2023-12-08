@@ -182,7 +182,6 @@ export default function ChartModule() {
   React.useEffect(() => {
     if (page === "new" && !hasSubHeaderTitleFocused && dataset) {
       const datasetName = loadedDatasets.find((d) => d.id === dataset)?.name;
-      console.log(datasetName, "here");
       setChartName(datasetName as string);
     }
   }, [dataset]);

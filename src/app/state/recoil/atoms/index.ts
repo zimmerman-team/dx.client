@@ -71,11 +71,6 @@ export const reportRightPanelViewAtom = atom<
   default: "elements",
 });
 
-export const dataTypeNameAtom = atom<string>({
-  key: "dataTypeNameAtom",
-  default: "",
-});
-
 export const isChartDraggingAtom = atom<"chart" | "bigNumber" | null>({
   key: "isChartDraggingAtom",
   default: null,
