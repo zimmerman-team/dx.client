@@ -486,6 +486,7 @@ const Box = (props: {
               height: 100%;
               position: relative;
               padding: ${props.rowType === "oneByFive" ? "0" : "24px"};
+              background: #fff;
             `}
             onMouseEnter={() => setDisplayBoxIcons(true)}
             onMouseLeave={() => setDisplayBoxIcons(false)}
