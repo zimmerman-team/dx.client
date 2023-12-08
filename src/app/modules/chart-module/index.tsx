@@ -55,7 +55,7 @@ export default function ChartModule() {
     {}
   );
   const [rawViz, setRawViz] = React.useState<any>(null);
-  const [toolboxOpen, setToolboxOpen] = React.useState(true);
+  const [toolboxOpen, setToolboxOpen] = React.useState(Boolean(view));
 
   const [chartName, setChartName] = React.useState("Untitled Chart");
   const [isPreviewView, setIsPreviewView] = React.useState(false);
@@ -449,35 +449,38 @@ export default function ChartModule() {
         headerDetails={{} as IHeaderDetails}
         isPreviewView={isPreviewView}
       />
-      <ChartModuleToolBox
-        rawViz={rawViz}
-        data={sampleData}
-        chartName={chartName}
-        dataTypes={dataTypes2}
-        isEditMode={isEditMode}
-        mappedData={mappedData}
-        loadDataset={loadDataset}
-        textView={config.textView}
-        dataSteps={config.dataSteps}
-        guideView={config.guideView}
-        openPanel={config.openPanel}
-        visualOptions={visualOptions}
-        exportView={config.exportView}
-        filtersView={config.filtersView}
-        loadDataFromAPI={loadDataFromAPI}
-        setVisualOptions={setVisualOptions}
-        loading={loading || isChartLoading}
-        filterOptionGroups={filterOptionGroups}
-        addVizToLocalStates={addVizToLocalStates}
-        previewMode={!isEditMode && page !== "new"}
-        forceNextEnabled={getForceNextEnabledValue(view)}
-        openToolbox={toolboxOpen}
-        setToolboxOpen={setToolboxOpen}
-        dimensions={dimensions}
-        setDatasetName={setChartName}
-        onClose={() => setToolboxOpen(false)}
-        onOpen={() => setToolboxOpen(true)}
-      />
+      {view && (
+        <ChartModuleToolBox
+          rawViz={rawViz}
+          data={sampleData}
+          chartName={chartName}
+          dataTypes={dataTypes2}
+          isEditMode={isEditMode}
+          mappedData={mappedData}
+          loadDataset={loadDataset}
+          textView={config.textView}
+          dataSteps={config.dataSteps}
+          guideView={config.guideView}
+          openPanel={config.openPanel}
+          visualOptions={visualOptions}
+          exportView={config.exportView}
+          filtersView={config.filtersView}
+          loadDataFromAPI={loadDataFromAPI}
+          setVisualOptions={setVisualOptions}
+          loading={loading || isChartLoading}
+          filterOptionGroups={filterOptionGroups}
+          addVizToLocalStates={addVizToLocalStates}
+          previewMode={!isEditMode && page !== "new"}
+          forceNextEnabled={getForceNextEnabledValue(view)}
+          openToolbox={toolboxOpen}
+          setToolboxOpen={setToolboxOpen}
+          dimensions={dimensions}
+          setDatasetName={setChartName}
+          onClose={() => setToolboxOpen(false)}
+          onOpen={() => setToolboxOpen(true)}
+        />
+      )}
+
       <div
         css={`
           height: 50px;

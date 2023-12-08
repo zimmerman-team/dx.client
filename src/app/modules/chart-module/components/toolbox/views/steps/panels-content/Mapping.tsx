@@ -89,7 +89,6 @@ export function ChartToolBoxMapping(props: Readonly<ChartToolBoxMappingProps>) {
     //updates non static dimension with mapped values
     let updatedNonStaticDimensions = [...nonStaticDimensions];
     const mappingKeys = Object.keys(mapping);
-
     mappingKeys.forEach((dimensionId: string) => {
       const nonStaticDimensionIndex = updatedNonStaticDimensions.findIndex(
         (d) => d.id === dimensionId
@@ -409,113 +408,105 @@ const DimensionSelect = (props: {
     [aggregationsMappedHere, setAggregation]
   );
   let relatedAggregation = null;
-  console.log(props.dimension, "props.dimension");
 
   if (props.dimension?.aggregation) {
-    console.log("yh?");
     relatedAggregation =
       dimensionMapping.config?.aggregation[props.index] ||
       getDefaultDimensionAggregation(props.dimension, props.columnDataType);
   }
   return (
-    <>
-      <div
-        css={`
-          > span {
-            font-size: 14px;
-          }
-          position: relative;
-        `}
+    <div
+      css={`
+        > span {
+          font-size: 14px;
+        }
+        position: relative;
+      `}
+    >
+      <Button
+        disableTouchRipple
+        onClick={() => props.handleButtonToggle(props.dimension.id)}
+        css={mappingStyles.selectedButtoncss(props.dimension)}
       >
-        <Button
-          disableTouchRipple
-          onClick={() => props.handleButtonToggle(props.dimension.id)}
-          css={mappingStyles.selectedButtoncss(props.dimension)}
-        >
-          <span>
-            {props.getSelectButtonLabel(
-              props.dimension.mappedValues,
-              !!props.dimension?.multiple
-            )}
-          </span>
-          <ArrowDropUpIcon />
-        </Button>
-        {props.dimension &&
-          !!props.dimension?.aggregation &&
-          props.dimension.mappedValues.length > 0 &&
-          relatedAggregation &&
-          aggregators &&
-          onChangeAggregation && (
-            <Dropdown
-              className="d-inline-block ml-2 raw-dropdown"
-              id="rb-dropdown-menu"
+        <span>
+          {props.getSelectButtonLabel(
+            props.dimension.mappedValues,
+            !!props.dimension?.multiple
+          )}
+        </span>
+        <ArrowDropUpIcon />
+      </Button>
+      {props.dimension &&
+        !!props.dimension?.aggregation &&
+        props.dimension.mappedValues.length > 0 &&
+        relatedAggregation &&
+        aggregators &&
+        onChangeAggregation && (
+          <Dropdown
+            className="d-inline-block ml-2 raw-dropdown"
+            id="rb-dropdown-menu"
+            css={`
+              margin-right: -7px;
+              position: absolute;
+              right: 55px;
+              top: 2px;
+              z-index: 2;
+            `}
+          >
+            <Dropdown.Toggle
               css={`
-                margin-right: -7px;
-                position: absolute;
-                right: 55px;
-                top: 2px;
-                z-index: 2;
+                width: 110px;
+                color: #262c34;
+                font-size: 14px;
+                border-style: none;
+                border-radius: 26px;
+                padding-right: 16px;
+                background: #cfd4da;
+                box-shadow: none !important;
+                pointer-events: ${props.dimension.mapValuesDisplayed
+                  ? "auto"
+                  : "none"};
+
+                &:hover,
+                &:active,
+                &:focus {
+                  color: #262c34;
+                  background: #cfd4da;
+                }
               `}
             >
-              <Dropdown.Toggle
-                css={`
-                  width: 110px;
-                  color: #262c34;
-                  font-size: 14px;
-                  border-style: none;
-                  border-radius: 26px;
-                  padding-right: 16px;
-                  background: #cfd4da;
-                  box-shadow: none !important;
-                  pointer-events: ${props.dimension.mapValuesDisplayed
-                    ? "auto"
-                    : "none"};
-
-                  &:hover,
-                  &:active,
-                  &:focus {
-                    color: #262c34;
-                    background: #cfd4da;
+              {get(AGGREGATIONS_LABELS, relatedAggregation, relatedAggregation)}
+            </Dropdown.Toggle>
+            <Dropdown.Menu
+              css={`
+                min-width: 110px;
+                background: #dfe3e6;
+                border-radius: 13px;
+                box-shadow: none !important;
+                overflow: scroll;
+              `}
+            >
+              {aggregators.map((aggregatorName: string) => (
+                <Dropdown.Item
+                  key={aggregatorName}
+                  onClick={() =>
+                    onChangeAggregation &&
+                    onChangeAggregation(props.index, aggregatorName)
                   }
-                `}
-              >
-                {get(
-                  AGGREGATIONS_LABELS,
-                  relatedAggregation,
-                  relatedAggregation
-                )}
-              </Dropdown.Toggle>
-              <Dropdown.Menu
-                css={`
-                  min-width: 110px;
-                  background: #dfe3e6;
-                  border-radius: 13px;
-                  box-shadow: none !important;
-                  overflow: scroll;
-                `}
-              >
-                {aggregators.map((aggregatorName: string) => (
-                  <Dropdown.Item
-                    key={aggregatorName}
-                    onClick={() =>
-                      onChangeAggregation &&
-                      onChangeAggregation(props.index, aggregatorName)
-                    }
-                    css={`
-                      color: #262c34;
-                      font-size: 14px;
-                      padding: 6px 12px !important;
-                      border-bottom: 1px solid rgba(173, 181, 189, 0.5);
-                    `}
-                  >
-                    {get(AGGREGATIONS_LABELS, aggregatorName, aggregatorName)}
-                  </Dropdown.Item>
-                ))}
-              </Dropdown.Menu>
-            </Dropdown>
-          )}
-      </div>
-    </>
+                  css={`
+                    color: #262c34;
+                    font-size: 14px;
+                    padding: 6px 12px !important;
+                    border-bottom: 1px solid rgba(173, 181, 189, 0.5);
+                  `}
+                >
+                  {get(AGGREGATIONS_LABELS, aggregatorName, aggregatorName)}
+                </Dropdown.Item>
+              ))}
+            </Dropdown.Menu>
+          </Dropdown>
+        )}
+    </div>
   );
 };
 
@@ -664,6 +655,7 @@ const StaticDimensionContainer = (props: { dimension: any }) => {
     `mapping.${props.dimension.id}.value[0]`,
     ""
   );
+  const [valueCount, setValueCount] = React.useState(0);
   const [value, setValue] = React.useState(
     //for the case of BNC, mapping doesn't come with complete values, hence we fallback to the loaded chart mapping.
     //TODO: replace loadedChartMappingValue with ""  when mapping for BNC is fixed
@@ -694,74 +686,83 @@ const StaticDimensionContainer = (props: { dimension: any }) => {
   };
   const [,] = useDebounce(() => onValueChange(value), 1000, [value]);
   return (
-    <>
-      <div
-        key={`${props.dimension.id}`}
-        css={`
-          width: 100%;
-          padding: 16px 16px 8px 16px;
-          height: 100%;
-          overflow-y: hidden;
-          border-radius: 11px;
-          background: #dfe3e5;
-          margin-top: 16px;
-        `}
-      >
-        <div>
+    <div
+      key={`${props.dimension.id}`}
+      css={`
+        width: 100%;
+        padding: 16px 16px 8px 16px;
+        height: 100%;
+        overflow-y: hidden;
+        border-radius: 11px;
+        background: #dfe3e5;
+        margin-top: 16px;
+      `}
+    >
+      <div>
+        <div
+          css={`
+            width: 100%;
+            display: flex;
+            margin-bottom: 4px;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            font-family: "Gotham Narrow", sans-serif; ;
+          `}
+        >
           <div
             css={`
-              width: 100%;
+              width: 72px;
+              opacity: 0.5;
               display: flex;
-              margin-bottom: 4px;
               flex-direction: row;
               align-items: center;
-              justify-content: space-between;
-              font-family: "Gotham Narrow", sans-serif; ;
+              gap: 5px;
+              p {
+                margin: 0;
+              }
+              svg {
+                margin-top: 6px;
+              }
             `}
           >
-            <div
-              css={`
-                width: 72px;
-                opacity: 0.5;
-                display: flex;
-                flex-direction: row;
-                align-items: center;
-                gap: 5px;
-                p {
-                  margin: 0;
-                }
-                svg {
-                  margin-top: 6px;
-                }
-              `}
-            >
-              <p>{typeIcon["string"]}</p>
-            </div>
-            <div
-              css={`
-                font-size: 14px;
-                color: #262c34;
-              `}
-            >
-              <b> {props.dimension.name}</b>
-            </div>
-            <div
-              css={`
-                width: 72px;
-                color: #ef1320;
-                font-size: 32px;
-                text-align: right;
-                margin-bottom: -12px;
-                visibility: ${props.dimension.required ? "visible" : "hidden"};
-              `}
-            >
-              *
-            </div>
+            <p>{typeIcon["string"]}</p>
+          </div>
+          <div
+            css={`
+              font-size: 14px;
+              color: #262c34;
+            `}
+          >
+            <b> {props.dimension.name}</b>
+          </div>
+          <div
+            css={`
+              width: 72px;
+              color: #ef1320;
+              font-size: 32px;
+              text-align: right;
+              margin-bottom: -12px;
+              visibility: ${props.dimension.required ? "visible" : "hidden"};
+            `}
+          >
+            *
           </div>
         </div>
+      </div>
+      <div
+        css={`
+          position: relative;
+        `}
+      >
         <textarea
           value={value}
-          onChange={(e) => setValue(e.target.value)}
+          onChange={(e) => {
+            setValue(e.target.value);
+            setValueCount(e.target.value.length);
+          }}
+          maxLength={50}
+          minLength={6}
           css={`
             width: 100%;
             min-height: 40px;
@@ -771,19 +772,29 @@ const StaticDimensionContainer = (props: { dimension: any }) => {
             border: 1px solid #231d2c;
           `}
         />
-        <div
+        <span
           css={`
-            color: #231d2c;
+            position: absolute;
+            bottom: 4px;
+            right: 13px;
             font-size: 12px;
-            margin-top: 2px;
-            font-weight: 400;
-            line-height: 15px;
           `}
         >
-          The {props.dimension.name} must be between 6 and 50 characters in
-          length.
-        </div>
+          {valueCount}/50
+        </span>
       </div>
-    </>
+      <div
+        css={`
+          color: #231d2c;
+          font-size: 12px;
+          margin-top: 2px;
+          font-weight: 400;
+          line-height: 15px;
+        `}
+      >
+        The {props.dimension.name} must be between 6 and 50 characters in
+        length.
+      </div>
+    </div>
   );
 };

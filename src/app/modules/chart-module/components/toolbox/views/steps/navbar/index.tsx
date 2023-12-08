@@ -26,14 +26,14 @@ export default function ToolboxNav(
     mappedData: any;
     stepPaths: { name: string; path: string }[];
     onNavBtnClick: (name: ToolboxNavType) => void;
+    isClickable: boolean;
+    setIsClickable: React.Dispatch<React.SetStateAction<boolean>>;
+    onMouseOverNavBtn: (name: ToolboxNavType) => void;
   }>
 ) {
   const { page } = useParams<{ page: string }>();
   const history = useHistory();
   const location = useLocation();
-  const dataset = useStoreState((state) => state.charts.dataset.value);
-  const chartType = useStoreState((state) => state.charts.chartType.value);
-  const [isClickable, setIsClickable] = React.useState(false);
 
   const whiteBackgroundOnly = "background-color: #fff;";
   const whiteBackgroundRoundedBottomRight =
@@ -81,30 +81,6 @@ export default function ToolboxNav(
       ? 0
       : navContent.findIndex((nav) => nav.name === props.activeStep);
 
-  const onMouseOverNavBtn = (name: ToolboxNavType) => {
-    //handles state to set cursor types for nav buttons
-    if (
-      name === "dataset" ||
-      name === "selectDataset" ||
-      name === "chart" ||
-      name === "mapping"
-    ) {
-      if (name === "dataset") {
-        setIsClickable(true);
-      }
-      if (name === "chart" && !isEmpty(dataset)) {
-        setIsClickable(true);
-        return;
-      }
-      if (name === "mapping" && !isEmpty(dataset) && !isEmpty(chartType)) {
-        setIsClickable(true);
-        return;
-      }
-    } else if (!isEmpty(props.mappedData)) {
-      setIsClickable(true);
-    }
-  };
-
   return (
     <div
       css={`
@@ -117,7 +93,7 @@ export default function ToolboxNav(
           css={`
             ${stepcss(
               item.name === props.activeStep || index === activeStepIndex,
-              isClickable
+              props.isClickable
             )}
             ${(() => {
               if (index === activeStepIndex - 1) {
@@ -136,20 +112,20 @@ export default function ToolboxNav(
             props.onNavBtnClick(item.name);
           }}
           onMouseOver={() => {
-            onMouseOverNavBtn(item.name);
+            props.onMouseOverNavBtn(item.name);
           }}
           onMouseOut={() => {
             console.log("mouse out");
-            setIsClickable(false);
+            props.setIsClickable(false);
           }}
           //corresponding keyboard events for accessiblity
           onBlur={() => {
             console.log("blur");
-            setIsClickable(false);
+            props.setIsClickable(false);
           }}
           onFocus={() => {
             console.log("focus");
-            setIsClickable(true);
+            props.setIsClickable(true);
           }}
         >
           {item.icon}

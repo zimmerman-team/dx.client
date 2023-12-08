@@ -263,7 +263,7 @@ const Box = (props: {
     //set persisted report state to current report state
     props.handlePersistReportState();
 
-    history.push(`/chart/${chartId}/mapping`);
+    history.push(`/chart/${chartId}/customize`);
   };
 
   const handleRowFrameItemAddition = (

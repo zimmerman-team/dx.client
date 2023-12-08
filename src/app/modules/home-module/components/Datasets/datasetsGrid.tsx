@@ -241,6 +241,7 @@ export default function DatasetsGrid(props: Props) {
                 descr={data.description}
                 handleDuplicate={() => {}}
                 showMenu={!props.inChartBuilder}
+                id={data.id}
               />
 
               {!props.inChartBuilder && <Box height={16} />}

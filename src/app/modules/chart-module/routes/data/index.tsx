@@ -22,10 +22,12 @@ import { ReactComponent as CloseIcon } from "app/modules/home-module/assets/clos
 import { ReactComponent as SearchIcon } from "app/modules/home-module/assets/search-fill.svg";
 import DatasetCategoryList from "app/modules/home-module/components/Datasets/datasetCategoryList";
 
-function ChartModuleDataView(props: {
-  clearChartBuilder: () => void;
-  loadDataset: (endpoint: string) => Promise<boolean>;
-}) {
+function ChartModuleDataView(
+  props: Readonly<{
+    clearChartBuilder: () => void;
+    loadDataset: (endpoint: string) => Promise<boolean>;
+  }>
+) {
   useTitle("DX DataXplorer - Select Data");
 
   const history = useHistory();

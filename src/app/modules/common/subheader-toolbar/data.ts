@@ -24,7 +24,6 @@ export interface ReportSubheaderToolbarProps {
   setAutoSave: React.Dispatch<React.SetStateAction<boolean>>;
   visualOptions?: any;
   onReportSave: (type: "create" | "edit") => Promise<void>;
-  pageType: "chart" | "report";
   setName: (name: string) => void;
   forceEnablePreviewSave?: boolean;
   rawViz?: any;

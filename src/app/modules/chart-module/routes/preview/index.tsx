@@ -1,7 +1,7 @@
 /* third-party */
 import React from "react";
 import useTitle from "react-use/lib/useTitle";
-import { useStoreState, useStoreActions } from "app/state/store/hooks";
+import { useStoreState } from "app/state/store/hooks";
 /* project */
 import { PageLoader } from "app/modules/common/page-loader";
 import { styles as commonStyles } from "app/modules/chart-module/routes/common/styles";
@@ -24,6 +24,11 @@ interface ChartBuilderPreviewProps {
 
 export function ChartBuilderPreview(props: ChartBuilderPreviewProps) {
   useTitle("DX DataXplorer - Data");
+  const dataset = useStoreState((state) => state.charts.dataset.value);
+
+  React.useEffect(() => {
+    props.loadDataset(`chart/sample-data/${dataset}`);
+  }, []);
 
   return (
     <div css={commonStyles.container}>

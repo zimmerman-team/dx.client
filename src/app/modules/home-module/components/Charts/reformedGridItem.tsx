@@ -212,7 +212,7 @@ export default function ReformedGridItem(props: Props) {
                   : ""
               }
             >
-              <Link to={`/chart/${props.id}/mapping`}>
+              <Link to={`/chart/${props.id}/customize`}>
                 <Tooltip title="Edit">
                   <EditIcon
                     css={`

@@ -30,9 +30,7 @@ export default function DatasetDetail() {
 
   const name = find(datasets, (d: any) => d.id === page)?.name;
   const description = find(datasets, (d: any) => d.id === page)?.description;
-  console.log(datasets, "datasets", name);
-  console.log(sampleData, "sampleData");
-  console.log(dataset, "dataset");
+
   return (
     <Container maxWidth="lg">
       <DatasetSubHeaderToolbar name={name} />

@@ -1,30 +1,17 @@
 /* third-party */
 import React from "react";
-import isEmpty from "lodash/isEmpty";
 import useTitle from "react-use/lib/useTitle";
-import { useHistory, useParams } from "react-router-dom";
-import { useStoreActions, useStoreState } from "app/state/store/hooks";
 /* project */
 import { useUpdateEffectOnce } from "app/hooks/useUpdateEffectOnce";
 import { CHART_DEFAULT_WIDTH } from "app/modules/chart-module/data";
 import { CommonChart } from "app/modules/chart-module/components/common-chart";
 import { styles as commonStyles } from "app/modules/chart-module/routes/common/styles";
 import { ChartBuilderCustomizeProps } from "app/modules/chart-module/routes/customize/data";
-import { useRecoilState } from "recoil";
-import { createChartFromReportAtom } from "app/state/recoil/atoms";
 import { withAuthenticationRequired } from "@auth0/auth0-react";
 
-function ChartBuilderCustomize(props: ChartBuilderCustomizeProps) {
+function ChartBuilderCustomize(props: Readonly<ChartBuilderCustomizeProps>) {
   useTitle("DX DataXplorer - Customize");
-
-  const history = useHistory();
-  const { page } = useParams<{ page: string }>();
-
   const containerRef = React.useRef<HTMLDivElement>(null);
-  const [createChartFromReport, _] = useRecoilState(createChartFromReportAtom);
-  const mapping = useStoreState((state) => state.charts.mapping.value);
-  const dataset = useStoreState((state) => state.charts.dataset.value);
-
   useUpdateEffectOnce(() => {
     if (
       containerRef.current &&
@@ -37,12 +24,6 @@ function ChartBuilderCustomize(props: ChartBuilderCustomizeProps) {
       props.setVisualOptions(tmpVisualOptions);
     }
   }, [containerRef]);
-
-  if (!createChartFromReport.state) {
-    if ((dataset === null && !props.loading) || isEmpty(mapping)) {
-      history.push(`/chart/${page}/preview-data`);
-    }
-  }
 
   return (
     <div css={commonStyles.container}>

@@ -34,7 +34,9 @@ interface ChartToolBoxStepsProps {
   dimensions: any[];
   activeStep: ToolboxNavType;
   onNavBtnClick: (name: ToolboxNavType) => void;
-
+  isClickable: boolean;
+  setIsClickable: React.Dispatch<React.SetStateAction<boolean>>;
+  onMouseOverNavBtn: (name: ToolboxNavType) => void;
   stepPaths: { name: string; path: string }[];
 }
 
@@ -74,14 +76,21 @@ export function ChartToolBoxSteps(props: ChartToolBoxStepsProps) {
   };
 
   const handleBack = () => {
-    const prevPath = props.stepPaths[currentPathIndex - 1]?.path;
     const prevStep = props.stepPaths[currentPathIndex - 1]?.name;
-    props.onNavBtnClick(prevStep as ToolboxNavType);
-    console.log(currentPath, prevPath, prevStep);
     if (currentPathIndex == 0) {
       return;
     }
+    props.onNavBtnClick(prevStep as ToolboxNavType);
   };
+  const handleMouseOverNext = () => {
+    const nextStep = props.stepPaths[currentPathIndex + 1]?.name;
+    props.onMouseOverNavBtn(nextStep as ToolboxNavType);
+  };
+  const handleMouseOverBack = () => {
+    const prevStep = props.stepPaths[currentPathIndex - 1]?.name;
+    props.onMouseOverNavBtn(prevStep as ToolboxNavType);
+  };
+
   const displayToolboxPanel = () => {
     switch (props.activeStep) {
       case "dataset":
@@ -159,6 +168,8 @@ export function ChartToolBoxSteps(props: ChartToolBoxStepsProps) {
             justify-content: center;
             font-size: 14px;
             font-family: "Gotham Narrow", sans-serif;
+            cursor: ${props.isClickable ? "pointer" : "not-allowed"};
+            /* pointer-events: ${props.isClickable ? "auto" : "none"}; */
             :nth-child(1) {
               background: #dfe3e5;
               color: #262c34;
@@ -167,17 +178,34 @@ export function ChartToolBoxSteps(props: ChartToolBoxStepsProps) {
               background: #262c34;
               color: #fff;
             }
-            &:hover {
-              opacity: 0.9;
-              cursor: pointer;
-            }
           }
         `}
       >
-        <button type="button" onClick={handleBack}>
+        <button
+          type="button"
+          onClick={handleBack}
+          onMouseOver={handleMouseOverBack}
+          onMouseOut={() => {
+            props.setIsClickable(false);
+          }}
+          //corresponding keyboard events for accessiblity
+          onBlur={() => {
+            props.setIsClickable(false);
+          }}
+        >
           Back{" "}
         </button>
-        <button onClick={handleNext}>
+        <button
+          onClick={handleNext}
+          onMouseOver={handleMouseOverNext}
+          onMouseOut={() => {
+            props.setIsClickable(false);
+          }}
+          //corresponding keyboard events for accessiblity
+          onBlur={() => {
+            props.setIsClickable(false);
+          }}
+        >
           {currentPathIndex < 5 ? "Next" : "Save"}
         </button>
       </div>

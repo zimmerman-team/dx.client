@@ -33,7 +33,10 @@ export default function FinishedFragment(props: Props) {
 
   React.useEffect(() => {
     let snackbarTimeOut: any;
-    if (props.dataTotalCount > 0) {
+    if (
+      props.dataTotalCount > 0 &&
+      location.pathname === "/dataset/new/upload"
+    ) {
       setSnackbarState({ ...snackbarState, open: true });
       snackbarTimeOut = setTimeout(() => {
         setSnackbarState({ ...snackbarState, open: false });

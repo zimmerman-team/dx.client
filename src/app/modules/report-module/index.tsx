@@ -82,7 +82,10 @@ export default function ReportModule() {
 
   const token = useStoreState((state) => state.AuthToken.value);
 
-  const setRightPanelView = useRecoilState(reportRightPanelViewAtom)[1];
+  const [rightPanelView, setRightPanelView] = useRecoilState(
+    reportRightPanelViewAtom
+  );
+  console.log(rightPanelView, "rhV");
 
   const [createChartFromReport, setCreateChartFromReport] = useRecoilState(
     createChartFromReportAtom
@@ -556,7 +559,6 @@ export default function ReportModule() {
     <DndProvider backend={HTML5Backend}>
       {!reportError401 && view !== "ai-template" && view !== "initial" && (
         <ReportSubheaderToolbar
-          pageType="report"
           autoSave={autoSave as boolean}
           setAutoSave={setAutoSave}
           onReportSave={onSave}

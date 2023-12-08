@@ -2,8 +2,6 @@
 import React from "react";
 import { useRecoilState } from "recoil";
 import { useAuth0 } from "@auth0/auth0-react";
-import MuiButton from "@material-ui/core/Button";
-import { withStyles } from "@material-ui/core/styles";
 import { useHistory, useParams } from "react-router-dom";
 import { createChartFromReportAtom } from "app/state/recoil/atoms";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
@@ -17,37 +15,13 @@ import { Slide, useMediaQuery } from "@material-ui/core";
 import { TriangleXSIcon } from "app/assets/icons/TriangleXS";
 import { isEmpty } from "lodash";
 
-const Button = withStyles(() => ({
-  root: {
-    width: "100%",
-    height: "48px",
-    borderRadius: "0px",
-    backgroundColor: "#262C34",
-    fontFamily: "GothamNarrow-Book, sans-serif",
-    "&:first-child": {
-      borderRight: "1px solid #f1f3f5",
-    },
-    "&:hover": {
-      backgroundColor: "#495057",
-    },
-  },
-  label: {
-    color: "#fff",
-    fontSize: "14px",
-    textTransform: "none",
-    fontFamily: "GothamNarrow-Book, sans-serif",
-  },
-  disabled: {
-    backgroundColor: "#ADB5BD",
-  },
-}))(MuiButton);
-
 export function ChartModuleToolBox(props: ChartToolBoxProps) {
   const { page, view } = useParams<{ page: string; view?: string }>();
   const { user } = useAuth0();
   const history = useHistory();
   const token = useStoreState((state) => state.AuthToken.value);
   const isMobile = useMediaQuery("(max-width: 767px)");
+  const [isClickable, setIsClickable] = React.useState(false);
 
   const mapping = useStoreState((state) => state.charts.mapping.value);
   const dataset = useStoreState((state) => state.charts.dataset.value);
@@ -115,6 +89,29 @@ export function ChartModuleToolBox(props: ChartToolBoxProps) {
       }
     } else if (!isEmpty(props.mappedData)) {
       setActivePanels(name);
+    }
+  };
+  const onMouseOverNavBtn = (name: ToolboxNavType) => {
+    //handles state to set cursor types for nav buttons
+    if (
+      name === "dataset" ||
+      name === "selectDataset" ||
+      name === "chart" ||
+      name === "mapping"
+    ) {
+      if (name === "dataset") {
+        setIsClickable(true);
+      }
+      if (name === "chart" && !isEmpty(dataset)) {
+        setIsClickable(true);
+        return;
+      }
+      if (name === "mapping" && !isEmpty(dataset) && !isEmpty(chartType)) {
+        setIsClickable(true);
+        return;
+      }
+    } else if (!isEmpty(props.mappedData)) {
+      setIsClickable(true);
     }
   };
   function onSave() {
@@ -220,6 +217,9 @@ export function ChartModuleToolBox(props: ChartToolBoxProps) {
           mappedData={props.mappedData}
           stepPaths={stepPaths}
           onNavBtnClick={onNavBtnClick}
+          isClickable={isClickable}
+          setIsClickable={setIsClickable}
+          onMouseOverNavBtn={onMouseOverNavBtn}
         />
         {props.dataSteps && (
           <ChartToolBoxSteps
@@ -240,6 +240,9 @@ export function ChartModuleToolBox(props: ChartToolBoxProps) {
             activeStep={activePanels}
             onNavBtnClick={onNavBtnClick}
             stepPaths={stepPaths}
+            isClickable={isClickable}
+            setIsClickable={setIsClickable}
+            onMouseOverNavBtn={onMouseOverNavBtn}
           />
         )}
 

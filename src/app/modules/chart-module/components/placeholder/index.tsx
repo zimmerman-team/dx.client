@@ -92,11 +92,6 @@ export default function ChartPlaceholder(props: { loading?: boolean }) {
         <div
           css={`
             padding-right: 38px;
-
-            svg {
-              width: 100%;
-              height: 100%;
-            }
           `}
         >
           <div

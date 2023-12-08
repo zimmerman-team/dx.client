@@ -231,113 +231,62 @@ export function ReportSubheaderToolbar(props: ReportSubheaderToolbarProps) {
   const id = open ? "simple-popover" : undefined;
 
   const handleModalDisplay = () => {
-    if (props.pageType === "chart") {
-      setModalDisplay({
-        ...modalDisplay,
-        chart: true,
-      });
-    } else {
-      setModalDisplay({
-        ...modalDisplay,
-        report: true,
-      });
-    }
+    setModalDisplay({
+      ...modalDisplay,
+      report: true,
+    });
   };
 
   const handleDelete = () => {
     setEnableButton(false);
-    if (props.pageType === "report") {
-      setModalDisplay({
-        ...modalDisplay,
-        report: false,
-      });
-      axios
-        .delete(`${process.env.REACT_APP_API}/report/${page}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then(async () => {
-          loadReports({
-            token,
-            storeInCrudData: true,
-            filterString: "filter[order]=createdDate desc",
-          });
-        })
-        .catch((error) => console.log(error));
-      setHomeTab("reports");
-    } else {
-      setModalDisplay({
-        ...modalDisplay,
-        chart: false,
-      });
-      axios
-        .delete(`${process.env.REACT_APP_API}/chart/${page}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then(async () => {
-          loadCharts({
-            token,
-            storeInCrudData: true,
-            filterString: "filter[order]=createdDate desc",
-          });
-        })
-        .catch((error) => console.log(error));
-      setHomeTab("charts");
-    }
+    setModalDisplay({
+      ...modalDisplay,
+      report: false,
+    });
+    axios
+      .delete(`${process.env.REACT_APP_API}/report/${page}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then(async () => {
+        loadReports({
+          token,
+          storeInCrudData: true,
+          filterString: "filter[order]=createdDate desc",
+        });
+      })
+      .catch((error) => console.log(error));
+    setHomeTab("reports");
+
     history.replace("/");
   };
 
   const handleDuplicate = () => {
-    if (props.pageType === "report") {
-      axios
-        .get(`${process.env.REACT_APP_API}/report/duplicate/${page}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then((response) => {
-          loadReports({
-            token,
-            storeInCrudData: true,
-            filterString: "filter[order]=createdDate desc",
-          });
-          setDuplicatedReportId(response.data.id);
-          setSnackbarState({
-            ...snackbarState,
-            open: true,
-          });
-        })
-        .catch((error) => console.log(error));
-    } else {
-      axios
-        .get(`${process.env.REACT_APP_API}/chart/duplicate/${page}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then(async (response) => {
-          loadCharts({
-            token,
-            storeInCrudData: true,
-            filterString: "filter[order]=createdDate desc",
-          });
-          setDuplicatedChartId(response.data.id);
-          setSnackbarState({
-            ...snackbarState,
-            open: true,
-          });
-        })
-        .catch((error) => console.log(error));
-    }
+    axios
+      .get(`${process.env.REACT_APP_API}/report/duplicate/${page}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        loadReports({
+          token,
+          storeInCrudData: true,
+          filterString: "filter[order]=createdDate desc",
+        });
+        setDuplicatedReportId(response.data.id);
+        setSnackbarState({
+          ...snackbarState,
+          open: true,
+        });
+      })
+      .catch((error) => console.log(error));
   };
 
   const canChartEditDelete = React.useMemo(() => {
-    const asset = props.pageType === "report" ? loadedReport : loadedChart;
-    return isAuthenticated && asset && asset.owner === user?.sub;
-  }, [user, isAuthenticated, loadedChart, loadedReport, props.pageType]);
+    return isAuthenticated && loadedReport && loadedReport.owner === user?.sub;
+  }, [user, isAuthenticated, loadedChart, loadedReport]);
 
   return (
     <div id="subheader-toolbar" css={styles.container(props.isEditorFocused)}>
@@ -558,12 +507,7 @@ export function ReportSubheaderToolbar(props: ReportSubheaderToolbarProps) {
                   </Popover>
                   {canChartEditDelete && (
                     <Tooltip title="Edit">
-                      <IconButton
-                        component={Link}
-                        to={`/${props.pageType}/${page}/${
-                          props.pageType === "chart" ? "customize" : "edit"
-                        }`}
-                      >
+                      <IconButton component={Link} to={`/report/${page}/edit`}>
                         <EditIcon htmlColor="#262c34" />
                       </IconButton>
                     </Tooltip>
@@ -596,24 +540,17 @@ export function ReportSubheaderToolbar(props: ReportSubheaderToolbarProps) {
         }}
         open={snackbarState.open}
         onClose={() => setSnackbarState({ ...snackbarState, open: false })}
-        message={`${
-          props.pageType === "report" ? "Report" : "Chart"
-        } has been duplicated successfully!`}
+        message={`Report has been duplicated successfully!`}
         key={snackbarState.vertical + snackbarState.horizontal}
         action={
           <button
             onClick={() => {
               setSnackbarState({ ...snackbarState, open: false });
-              if (props.pageType === "report") {
-                history.push(`/report/${duplicatedReportId}`);
-                setDuplicatedReportId(null);
-              } else {
-                history.push(`/chart/${duplicatedChartId}`);
-                setDuplicatedChartId(null);
-              }
+              history.push(`/report/${duplicatedReportId}`);
+              setDuplicatedReportId(null);
             }}
           >
-            GO TO {props.pageType === "report" ? "REPORT" : "CHART"}
+            GO TO REPORT
           </button>
         }
       />
