@@ -16,14 +16,20 @@ import ColoredTreeMapIcon from "app/assets/icons/data-themes-chart-types/colored
 import BigNumberIcon from "app/assets/icons/data-themes-chart-types/bigNumber";
 import ColoredBigNumberIcon from "app/assets/icons/data-themes-chart-types/coloredBigNumber";
 
-import SunburstIcon from "app/assets/icons/data-themes-chart-types/sunburst";
-import ColoredSunburstIcon from "app/assets/icons/data-themes-chart-types/coloredSunburst";
+// import SunburstIcon from "app/assets/icons/data-themes-chart-types/sunburst";
+// import ColoredSunburstIcon from "app/assets/icons/data-themes-chart-types/coloredSunburst";
 
-import PieIcon from "app/assets/icons/data-themes-chart-types/pie";
-import ColoredPieIcon from "app/assets/icons/data-themes-chart-types/coloredPie";
+// import PieIcon from "app/assets/icons/data-themes-chart-types/pie";
+// import ColoredPieIcon from "app/assets/icons/data-themes-chart-types/coloredPie";
 
-import CirclePackingIcon from "app/assets/icons/data-themes-chart-types/circlepacking";
-import ColoredCirclePackingIcon from "app/assets/icons/data-themes-chart-types/coloredCirclepacking";
+// import CirclePackingIcon from "app/assets/icons/data-themes-chart-types/circlepacking";
+// import ColoredCirclePackingIcon from "app/assets/icons/data-themes-chart-types/coloredCirclepacking";
+
+// import ColoredForceGraphIcon from "app/assets/icons/data-themes-chart-types/coloredForcegraph";
+// import ForceGraphIcon from "app/assets/icons/data-themes-chart-types/forcegraph";
+
+// import ColoredCircularGraphIcon from "app/assets/icons/data-themes-chart-types/coloredCirculargraph";
+// import CircularGraphIcon from "app/assets/icons/data-themes-chart-types/circulargraph";
 
 import { ReactComponent as GeomapPreviewImg } from "app/modules/chart-module/assets/geomapPreview.svg";
 import { ReactComponent as BigNumberPreviewImg } from "app/modules/chart-module/assets/bigNumberPreview.svg";
@@ -31,12 +37,6 @@ import { ReactComponent as LineChartPreviewImg } from "app/modules/chart-module/
 import { ReactComponent as TreeMapPreviewImg } from "app/modules/chart-module/assets/treemapPreview.svg";
 import { ReactComponent as SankeyPreviewImg } from "app/modules/chart-module/assets/sankeyPreview.svg";
 import { ReactComponent as BarChartPreviewImg } from "app/modules/chart-module/assets/barChartPreview.svg";
-
-import ColoredForceGraphIcon from "app/assets/icons/data-themes-chart-types/coloredForcegraph";
-import ForceGraphIcon from "app/assets/icons/data-themes-chart-types/forcegraph";
-
-import ColoredCircularGraphIcon from "app/assets/icons/data-themes-chart-types/coloredCirculargraph";
-import CircularGraphIcon from "app/assets/icons/data-themes-chart-types/circulargraph";
 
 export interface ChartBuilderChartTypeProps {
   loading: boolean;
@@ -58,7 +58,6 @@ export const echartTypes = (big: boolean) => {
       label: "Bar chart",
       icon: <BarChartIcon big={big} />,
       preview: <BarChartPreviewImg />,
-
       categories: ["Correllations"],
       ssr: false,
       description:
@@ -69,7 +68,6 @@ export const echartTypes = (big: boolean) => {
       label: "Geo map",
       icon: <GeomapChartIcon big={big} />,
       preview: <GeomapPreviewImg />,
-
       categories: ["Locations"],
       ssr: false,
       description:
@@ -80,7 +78,6 @@ export const echartTypes = (big: boolean) => {
       label: "Line chart",
       icon: <LineChartIcon big={big} />,
       preview: <LineChartPreviewImg />,
-
       categories: ["Trends", "changes over time"],
       ssr: false,
       description:
@@ -91,7 +88,6 @@ export const echartTypes = (big: boolean) => {
       label: "Sankey diagram",
       icon: <SankeyChartIcon big={big} />,
       preview: <SankeyPreviewImg />,
-
       categories: ["Networks"],
       ssr: false,
       description:
@@ -102,7 +98,6 @@ export const echartTypes = (big: boolean) => {
       label: "Treemap diagram",
       icon: <TreeMapIcon big={big} />,
       preview: <TreeMapPreviewImg />,
-
       categories: ["Hierarchies", "Proportions"],
       ssr: false,
       description:
@@ -113,7 +108,6 @@ export const echartTypes = (big: boolean) => {
       label: "Big number",
       icon: <BigNumberIcon />,
       preview: <BigNumberPreviewImg />,
-
       categories: ["Key data points"],
       ssr: true,
       description:
@@ -122,7 +116,9 @@ export const echartTypes = (big: boolean) => {
     {
       id: "echartsSunburst",
       label: "Sunburst diagram",
-      icon: <SunburstIcon big={big} />,
+      icon: <BarChartIcon big={big} />,
+      // icon: <SunburstIcon big={big} />,
+      preview: <BarChartPreviewImg />,
       categories: ["Hierarchies", "Proportions"],
       ssr: false,
       description:
@@ -131,7 +127,9 @@ export const echartTypes = (big: boolean) => {
     {
       id: "echartsPiechart",
       label: "Pie Chart",
-      icon: <PieIcon big={big} />,
+      icon: <BarChartIcon big={big} />,
+      // icon: <PieIcon big={big} />,
+      preview: <BarChartPreviewImg />,
       categories: ["Proportions"],
       ssr: false,
       description:
@@ -140,7 +138,9 @@ export const echartTypes = (big: boolean) => {
     {
       id: "echartsCirclepacking",
       label: "Circle Packing Chart",
-      icon: <CirclePackingIcon big={big} />,
+      icon: <BarChartIcon big={big} />,
+      // icon: <CirclePackingIcon big={big} />,
+      preview: <BarChartPreviewImg />,
       categories: ["Hierarchies", "Proportions"],
       ssr: false,
       description:
@@ -149,7 +149,9 @@ export const echartTypes = (big: boolean) => {
     {
       id: "echartsForcegraph",
       label: "Force Layout Graph",
-      icon: <ForceGraphIcon big={big} />,
+      icon: <BarChartIcon big={big} />,
+      // icon: <ForceGraphIcon big={big} />,
+      preview: <BarChartPreviewImg />,
       categories: ["Networks"],
       ssr: false,
       description:
@@ -158,7 +160,9 @@ export const echartTypes = (big: boolean) => {
     {
       id: "echartsCirculargraph",
       label: "Circular Layout Graph",
-      icon: <CircularGraphIcon big={big} />,
+      icon: <BarChartIcon big={big} />,
+      // icon: <CircularGraphIcon big={big} />,
+      preview: <BarChartPreviewImg />,
       categories: ["Networks"],
       ssr: false,
       description:
@@ -271,7 +275,8 @@ export const coloredEchartTypes = () => {
     {
       id: "echartsSunburst",
       label: "Sunburst diagram",
-      icon: <ColoredSunburstIcon />,
+      icon: <ColoredBarChartIcon />,
+      // icon: <ColoredSunburstIcon />,
       categories: ["Hierarchies", "Proportions"],
       ssr: false,
       description:
@@ -280,7 +285,8 @@ export const coloredEchartTypes = () => {
     {
       id: "echartsPiechart",
       label: "Pie Chart",
-      icon: <ColoredPieIcon />,
+      icon: <ColoredBarChartIcon />,
+      // icon: <ColoredPieIcon />,
       categories: ["Proportions"],
       ssr: false,
       description:
@@ -289,7 +295,8 @@ export const coloredEchartTypes = () => {
     {
       id: "echartsCirclepacking",
       label: "Circle Packing Chart",
-      icon: <ColoredCirclePackingIcon />,
+      icon: <ColoredBarChartIcon />,
+      // icon: <ColoredCirclePackingIcon />,
       categories: ["Hierarchies", "Proportions"],
       ssr: false,
       description:
@@ -298,7 +305,8 @@ export const coloredEchartTypes = () => {
     {
       id: "echartsForcegraph",
       label: "Force Layout Graph",
-      icon: <ColoredForceGraphIcon />,
+      icon: <ColoredBarChartIcon />,
+      // icon: <ColoredForceGraphIcon />,
       categories: ["Networks"],
       ssr: false,
       description:
@@ -307,7 +315,8 @@ export const coloredEchartTypes = () => {
     {
       id: "echartsCirculargraph",
       label: "Circular Layout Graph",
-      icon: <ColoredCircularGraphIcon />,
+      icon: <ColoredBarChartIcon />,
+      // icon: <ColoredCircularGraphIcon />,
       categories: ["Networks"],
       ssr: false,
       description:
