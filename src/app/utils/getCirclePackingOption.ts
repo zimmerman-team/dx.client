@@ -32,8 +32,6 @@ function getOptionForCirclepacking(data: any[]) {
     maxDepth = Math.max(item?.depth, maxDepth);
   });
 
-  console.log(maxDepth);
-
   const renderItem = (
     params: CustomSeriesRenderItemParams,
     api: CustomSeriesRenderItemAPI

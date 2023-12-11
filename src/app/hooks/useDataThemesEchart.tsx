@@ -14,6 +14,7 @@ import {
   TreemapChart,
   SunburstChart,
   CustomChart,
+  GraphChart,
 } from "echarts/charts";
 import {
   GridComponent,
@@ -30,6 +31,7 @@ echarts.use([
   MapChart,
   PieChart,
   LineChart,
+  GraphChart,
   CustomChart,
   SankeyChart,
   TreemapChart,
@@ -452,6 +454,118 @@ export function useDataThemesEchart() {
     return option;
   }
 
+  function echartsForcegraph(data: any, visualOptions: any) {
+    const {
+      width,
+      height,
+      // margins
+      marginTop,
+      marginRight,
+      marginBottom,
+      marginLeft,
+      // chart options
+    } = visualOptions;
+
+    const nodes = uniqBy(data.nodes, "name");
+
+    const option = {
+      legend: [
+        {
+          data: data.categories?.map(function (a: { name: string }) {
+            return a.name;
+          }),
+        },
+      ],
+      series: [
+        {
+          type: "graph",
+          layout: "force",
+          data: nodes,
+          links: data.links,
+          categories: data.categories,
+          top: marginTop,
+          left: marginLeft,
+          right: marginRight,
+          bottom: marginBottom,
+          width,
+          height,
+          roam: false,
+          label: {
+            position: "right",
+          },
+          force: {
+            repulsion: 100,
+          },
+        },
+      ],
+    };
+    return option;
+  }
+
+  function echartsCirculargraph(data: any, visualOptions: any) {
+    const {
+      width,
+      height,
+      // margins
+      marginTop,
+      marginRight,
+      marginBottom,
+      marginLeft,
+      // chart options
+    } = visualOptions;
+
+    // data.nodes?.forEach(function (node: any) {
+    //   node.label = {
+    //     show: node.symbolSize > 30,
+    //   };
+    // });
+
+    const nodes = uniqBy(data.nodes, "name");
+
+    const option = {
+      legend: [
+        {
+          data: data.categories?.map(function (a: { name: string }) {
+            return a.name;
+          }),
+        },
+      ],
+      animationDurationUpdate: 1500,
+      animationEasingUpdate: "quinticInOut",
+      series: [
+        {
+          type: "graph",
+          layout: "circular",
+          circular: {
+            rotateLabel: true,
+          },
+          data: nodes,
+          links: data.links,
+          categories: data.categories,
+          top: marginTop,
+          left: marginLeft,
+          right: marginRight,
+          bottom: marginBottom,
+          width,
+          height,
+          roam: false,
+          force: {
+            repulsion: 100,
+          },
+          label: {
+            position: "right",
+            formatter: "{b}",
+          },
+          lineStyle: {
+            color: "source",
+            curveness: 0.3,
+          },
+        },
+      ],
+    };
+    return option;
+  }
+
   function echartsTreemap(data: any, visualOptions: any) {
     const {
       // artboard
@@ -631,6 +745,8 @@ export function useDataThemesEchart() {
       | "echartsTreemap"
       | "bigNumber"
       | "echartsSunburst"
+      | "echartsForcegraph"
+      | "echartsCirculargraph"
       | "echartsPiechart"
       | "echartsCirclepacking",
     visualOptions: any,
@@ -657,6 +773,8 @@ export function useDataThemesEchart() {
         echartsSankey: () => echartsSankey(data, visualOptions),
         echartsTreemap: () => echartsTreemap(data, visualOptions),
         echartsSunburst: () => echartsSunburst(data, visualOptions),
+        echartsForcegraph: () => echartsForcegraph(data, visualOptions),
+        echartsCirculargraph: () => echartsCirculargraph(data, visualOptions),
         echartsPiechart: () => echartsPiechart(data, visualOptions),
         echartsCirclepacking: () =>
           echartsCirclepacking(data, visualOptions, null),

@@ -39,6 +39,9 @@ import {
   echartsSunburst,
   echartsCirclepacking,
   echartsPiechart,
+  echartsForcegraph,
+  echartsCirculargraph,
+
   // @ts-ignore
 } from "@rawgraphs/rawgraphs-charts";
 import { FilterGroupModel } from "app/components/ToolBoxPanel/components/filters/data";
@@ -83,6 +86,8 @@ export const charts = {
   echartsSunburst,
   echartsCirclepacking,
   echartsPiechart,
+  echartsForcegraph,
+  echartsCirculargraph,
 };
 
 export const CHART_DEFAULT_WIDTH = 1000;
@@ -1232,6 +1237,30 @@ export const defaultChartOptions = {
         default: 50,
       },
     },
+  },
+  echartsForcegraph: {
+    ...baseOptions,
+    width: {
+      ...baseOptions.width,
+      default: CHART_DEFAULT_WIDTH,
+    },
+    height: {
+      ...baseOptions.height,
+      default: CHART_DEFAULT_HEIGHT,
+    },
+    ...echartsForcegraph.visualOptions,
+  },
+  echartsCirculargraph: {
+    ...baseOptions,
+    width: {
+      ...baseOptions.width,
+      default: CHART_DEFAULT_WIDTH,
+    },
+    height: {
+      ...baseOptions.height,
+      default: CHART_DEFAULT_HEIGHT,
+    },
+    ...echartsCirculargraph.visualOptions,
   },
   echartsCirclepacking: {
     ...baseOptions,

@@ -69,7 +69,12 @@ const allRequiredKeysExist = (
       return false;
     }
     //return false if chartType is sankey and only one dimension is selected
-    if (chartType === "echartsSankey" && allreq[key].ids.length < 2) {
+    if (
+      (chartType === "echartsSankey" ||
+        chartType === "echartsForcegraph" ||
+        chartType === "echartsCirculargraph") &&
+      allreq[key].ids.length < 2
+    ) {
       return false;
     }
   }

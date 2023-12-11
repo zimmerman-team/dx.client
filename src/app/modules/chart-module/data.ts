@@ -8,6 +8,8 @@ import {
   echartsTreemap,
   bigNumber,
   echartsSunburst,
+  echartsForcegraph,
+  echartsCirculargraph,
   echartsCirclepacking,
   echartsPiechart,
   // @ts-ignore
@@ -22,6 +24,8 @@ export const charts = {
   echartsTreemap,
   bigNumber,
   echartsSunburst,
+  echartsForcegraph,
+  echartsCirculargraph,
   echartsCirclepacking,
   echartsPiechart,
 };
@@ -77,6 +81,30 @@ export const defaultChartOptions = {
       default: CHART_DEFAULT_HEIGHT,
     },
     ...echartsSankey.visualOptions,
+  },
+  echartsForcegraph: {
+    ...baseOptions,
+    width: {
+      ...baseOptions.width,
+      default: CHART_DEFAULT_WIDTH,
+    },
+    height: {
+      ...baseOptions.height,
+      default: CHART_DEFAULT_HEIGHT,
+    },
+    ...echartsForcegraph.visualOptions,
+  },
+  echartsCirculargraph: {
+    ...baseOptions,
+    width: {
+      ...baseOptions.width,
+      default: CHART_DEFAULT_WIDTH,
+    },
+    height: {
+      ...baseOptions.height,
+      default: CHART_DEFAULT_HEIGHT,
+    },
+    ...echartsCirculargraph.visualOptions,
   },
   echartsTreemap: {
     ...baseOptions,

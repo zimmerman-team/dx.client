@@ -23,6 +23,8 @@ interface Props {
     | "echartsSankey"
     | "echartsTreemap"
     | "echartsSunburst"
+    | "echartsForcegraph"
+    | "echartsCirculargraph"
     | "echartsCirclepacking"
     | "echartsPiechart";
 }
@@ -103,6 +105,8 @@ export function CommonChart(props: Props) {
               | "echartsSankey"
               | "echartsTreemap"
               | "echartsSunburst"
+              | "echartsForcegraph"
+              | "echartsCirculargraph"
               | "echartsCirclepacking"
               | "echartsPiechart"),
           visualOptions,

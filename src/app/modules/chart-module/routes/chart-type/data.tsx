@@ -32,6 +32,12 @@ import { ReactComponent as TreeMapPreviewImg } from "app/modules/chart-module/as
 import { ReactComponent as SankeyPreviewImg } from "app/modules/chart-module/assets/sankeyPreview.svg";
 import { ReactComponent as BarChartPreviewImg } from "app/modules/chart-module/assets/barChartPreview.svg";
 
+import ColoredForceGraphIcon from "app/assets/icons/data-themes-chart-types/coloredForcegraph";
+import ForceGraphIcon from "app/assets/icons/data-themes-chart-types/forcegraph";
+
+import ColoredCircularGraphIcon from "app/assets/icons/data-themes-chart-types/coloredCirculargraph";
+import CircularGraphIcon from "app/assets/icons/data-themes-chart-types/circulargraph";
+
 export interface ChartBuilderChartTypeProps {
   loading: boolean;
 }
@@ -141,20 +147,22 @@ export const echartTypes = (big: boolean) => {
         "It displays values of leaf nodes of a hierarchical structure by using circles areas. The hierarchical structure is depicted using nested circles. A further quantitative dimension with size and a quantitative or categorical dimension with color.",
     },
     {
-      id: "placeholder3",
-      label: "",
-      icon: <></>,
-      categories: [],
+      id: "echartsForcegraph",
+      label: "Force Layout Graph",
+      icon: <ForceGraphIcon big={big} />,
+      categories: ["Networks"],
       ssr: false,
-      description: "",
+      description:
+        "It represents flows among nodes of a network. Nodes are represented as circles",
     },
     {
-      id: "placeholder4",
-      label: "",
-      icon: <></>,
-      categories: [],
+      id: "echartsCirculargraph",
+      label: "Circular Layout Graph",
+      icon: <CircularGraphIcon big={big} />,
+      categories: ["Networks"],
       ssr: false,
-      description: "",
+      description:
+        "It represents flows among nodes of a network. Nodes are represented as circles",
     },
     {
       id: "placeholder5",
@@ -286,6 +294,24 @@ export const coloredEchartTypes = () => {
       ssr: false,
       description:
         "It displays values of leaf nodes of a hierarchical structure by using circles areas. The hierarchical structure is depicted using nested circles. A further quantitative dimension with size and a quantitative or categorical dimension with color.",
+    },
+    {
+      id: "echartsForcegraph",
+      label: "Force Layout Graph",
+      icon: <ColoredForceGraphIcon />,
+      categories: ["Networks"],
+      ssr: false,
+      description:
+        "It represents flows among nodes of a network. Nodes are represented as circles, the size represents their value. Flows are represented with straight lines whose width is proportional to their value.",
+    },
+    {
+      id: "echartsCirculargraph",
+      label: "Circular Layout Graph",
+      icon: <ColoredCircularGraphIcon />,
+      categories: ["Networks"],
+      ssr: false,
+      description:
+        "It represents flows among nodes of a network. Nodes are represented as circles",
     },
   ];
 };
