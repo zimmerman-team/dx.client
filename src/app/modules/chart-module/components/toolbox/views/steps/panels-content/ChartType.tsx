@@ -13,22 +13,31 @@ import { Box, Grid } from "@material-ui/core";
 export function ChartToolBoxChartType() {
   const chartType = useStoreState((state) => state.charts.chartType.value);
 
-  const fChartType = find(
-    echartTypes(false),
-    (ct: ChartTypeModel) => ct.id === chartType
-  );
-  const topGap = fChartType?.id === "echartsGeomap" ? 33 : 20;
-  const bottomGap =
-    fChartType?.id === "echartsGeomap"
-      ? 33
-      : fChartType?.id === "echartsLinechart"
-      ? 36
-      : fChartType?.id === "echartsLinechart" ||
-        fChartType?.id === "echartsTreemap"
-      ? 31
-      : fChartType?.id === "bigNumber"
-      ? 37
-      : 45;
+  const fChartType = React.useMemo(() => {
+    return find(
+      echartTypes(false),
+      (ct: ChartTypeModel) => ct.id === chartType
+    );
+  }, [chartType]);
+
+  const topGap = React.useMemo(() => {
+    return fChartType?.id === "echartsGeomap" ? 33 : 20;
+  }, [fChartType]);
+
+  const bottomGap = React.useMemo(() => {
+    switch (fChartType?.id) {
+      case "echartsGeomap":
+        return 33;
+      case "echartsSunburst":
+      case "echartsLinechart":
+      case "echartsTreemap":
+        return 31;
+      case "bigNumber":
+        return 37;
+      default:
+        return 45;
+    }
+  }, [fChartType]);
 
   return (
     <>
