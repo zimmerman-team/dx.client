@@ -19,6 +19,7 @@ import SearchIcon from "@material-ui/icons/Search";
 import { useDebounce } from "react-use";
 import { ChartAPIModel, emptyChartAPI } from "app/modules/chart-module/data";
 import { Dropdown } from "react-bootstrap";
+import Icon from "app/assets/icons/ColoredReportIcon";
 
 interface ChartToolBoxMappingProps {
   dataTypes: any;
@@ -37,6 +38,7 @@ interface ChartToolBoxMappingItemProps {
   nonStaticDimensionsIndex: number;
   setNonStaticDimensions: React.Dispatch<React.SetStateAction<any[]>>;
   nonStaticDimensions: any[];
+  displayCloseButton?: boolean;
 }
 
 const typeIcon = {
@@ -271,23 +273,37 @@ const NonStaticDimensionContainer = (props: {
             *
           </div>
         </div>
+
         {!!props.dimension?.multiple &&
-          props.dimension.mappedValues?.map(
-            (value: string | number, index: number) => {
-              let type: "string" | "number" | "date" = props.getValidDataTypes(
+          Object.keys(
+            props.getValidDataTypes(props.dimension.validTypes, searchValue)
+          )
+            ?.filter((mappingItemValue: string) =>
+              props.dimension.mappedValues.includes(mappingItemValue)
+            )
+            .map((mappingItemValue: string, index: number) => {
+              let type = props.getValidDataTypes(
                 props.dimension.validTypes,
-                searchValue
-              )[value];
+                ""
+              )[mappingItemValue];
               return (
-                <button
-                  css={mappingStyles.mappedValuecss}
-                  key={value + `${index}`}
-                >
-                  <span>{typeIcon[type]}</span> <span> {value}</span>
-                </button>
+                <ChartToolBoxMappingItem
+                  key={mappingItemValue}
+                  testId={`mapping-item-${mappingItemValue}`}
+                  type={type}
+                  index={index}
+                  marginBottom="16px"
+                  mappingItemValue={mappingItemValue}
+                  dimension={props.dimension}
+                  setNonStaticDimensions={props.setNonStaticDimensions}
+                  dataTypes={props.dataTypes}
+                  nonStaticDimensionsId={props.dimension.id}
+                  nonStaticDimensionsIndex={props.dimensionIndex}
+                  nonStaticDimensions={props.nonStaticDimensions}
+                  displayCloseButton
+                />
               );
-            }
-          )}
+            })}
 
         <DimensionSelect
           dimension={props.dimension}
@@ -380,6 +396,9 @@ const DimensionSelect = (props: {
     (actions) => actions.charts.mapping.setValue
   );
   const aggregators = getAggregatorNames();
+  const removeMappingValue = useStoreActions(
+    (state) => state.charts.mapping.removeMappingValue
+  );
 
   let aggregationsMappedHere = get(mapping, "config.aggregation", []);
   const dimensionMapping = get(mapping, props.dimension.id, {});
@@ -412,6 +431,15 @@ const DimensionSelect = (props: {
     }
   }, [props.dimension, props.index, dimensionMapping]);
 
+  const onDeleteItem = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    removeMappingValue({
+      id: props.dimension.id,
+      value: props.dimension.mappedValues[0],
+    });
+  };
+
   return (
     <div
       css={`
@@ -432,7 +460,19 @@ const DimensionSelect = (props: {
             !!props.dimension?.multiple
           )}
         </span>
-        <ArrowDropUpIcon />
+        {!props.dimension.multiple &&
+        props.dimension.mappedValues.length > 0 ? (
+          <IconButton
+            onClick={onDeleteItem}
+            css={`
+              padding: 4px;
+            `}
+          >
+            <CloseIcon fontSize="small" />
+          </IconButton>
+        ) : (
+          <ArrowDropUpIcon />
+        )}
       </Button>
       {props.dimension &&
         !!props.dimension?.aggregation &&
@@ -629,9 +669,9 @@ function ChartToolBoxMappingItem(
         {props.mappingItemValue}
       </div>
 
-      {props.dimension.mappedValues.includes(props.mappingItemValue) && (
+      {props.displayCloseButton && (
         <IconButton onClick={onDeleteItem}>
-          <CloseIcon htmlColor="#fff" />
+          <CloseIcon htmlColor="#fff" fontSize="small" />
         </IconButton>
       )}
     </div>

@@ -91,21 +91,15 @@ export const mappingStyles = {
     flex-direction: row;
     height: 31px;
     border-radius: 36px;
-    border: ${dimension.mappedValues.length > 0 &&
-    !dimension.mapValuesDisplayed &&
-    !dimension.multiple
+    border: ${dimension.mappedValues.length > 0 && !dimension.multiple
       ? "none"
       : "0.722px dashed #262c34"};
-    background: ${dimension.mappedValues.length > 0 &&
-    !dimension.mapValuesDisplayed &&
-    !dimension.multiple
+    background: ${dimension.mappedValues.length > 0 && !dimension.multiple
       ? "#262c34"
       : "#dfe3e5"};
     text-transform: capitalize;
     justify-content: space-between;
-    color: ${dimension.mappedValues.length > 0 &&
-    !dimension.mapValuesDisplayed &&
-    !dimension.multiple
+    color: ${dimension.mappedValues.length > 0 && !dimension.multiple
       ? "#fff"
       : "#868e96"};
 
@@ -124,9 +118,7 @@ export const mappingStyles = {
       transition: all 0.2s ease-in-out;
       transform: rotate(${dimension.mapValuesDisplayed ? "180" : "0"}deg);
       > path {
-        fill: ${dimension.mappedValues.length > 0 &&
-        !dimension.mapValuesDisplayed &&
-        !dimension.multiple
+        fill: ${dimension.mappedValues.length > 0 && !dimension.multiple
           ? "#fff"
           : "#262c34"};
       }

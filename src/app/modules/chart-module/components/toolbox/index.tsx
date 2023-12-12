@@ -91,6 +91,15 @@ export function ChartModuleToolBox(props: ChartToolBoxProps) {
       setActivePanels(name);
     }
   };
+
+  React.useEffect(() => {
+    const step = stepPaths.find(
+      (step) => step.path === location.pathname
+    )?.name;
+
+    onNavBtnClick(step as ToolboxNavType);
+  }, [location.pathname]);
+
   const onMouseOverNavBtn = (name: ToolboxNavType) => {
     //handles state to set cursor types for nav buttons
     if (

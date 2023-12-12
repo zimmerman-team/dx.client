@@ -139,17 +139,11 @@ export function getRequiredFieldsAndErrors(mapping: any, dimensions: any) {
 
   Object.keys(mapping).forEach((dimensionId: string) => {
     const dimensionMapping = mapping[dimensionId];
-    if (dimensionMapping.isValid) {
+    const minValue = find(dimensions, { id: dimensionId })?.minValues ?? 1;
+    if (dimensionMapping.value.length >= minValue) {
       updRequiredFields = filter(
         updRequiredFields,
         (f: { id: string; name: string }) => f.id !== dimensionId
-      );
-    } else {
-      const fDimension = find(dimensions, { id: dimensionId });
-      updErrors.push(
-        `Data-type mismatch: you can't map ${
-          dimensionMapping.mappedType
-        }s on ${get(fDimension, "name", dimensionId)}`
       );
     }
   });

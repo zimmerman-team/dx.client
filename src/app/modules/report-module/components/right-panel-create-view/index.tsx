@@ -16,7 +16,7 @@ import ArrowRightAltIcon from "@material-ui/icons/ArrowRightAlt";
 import HeaderIcon from "app/modules/report-module/asset/HeaderIcon";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
-import GridItem from "app/modules/home-module/components/Charts/gridItem";
+import GridItem from "app/modules/home-module/components/Charts/rhpGridItem";
 import { IFramesArray } from "app/modules/report-module/views/create/data";
 import EditHeaderIcon from "app/modules/report-module/asset/EditHeaderIcon";
 import TextPreviewImg from "app/modules/report-module/asset/textPreview.svg";

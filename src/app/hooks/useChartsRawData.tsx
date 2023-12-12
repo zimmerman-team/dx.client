@@ -46,30 +46,21 @@ const getReqMappingKeyFromReqDimension = (
   const requiredDimensions = dimensions.filter(
     (dimension: any) => dimension.required
   );
-  let requiredMappingKey: { [key: string]: boolean } = {};
 
-  requiredDimensions.forEach((element: any) => {
-    //assign true if mapping key exists and false if not
-    requiredMappingKey[element.id] = element.id in mapping;
-  });
-  return requiredMappingKey;
-};
-
-const allRequiredKeysExist = (
-  req: any,
-  allreq: any,
-  chartType: string | null
-): boolean => {
-  if (isEmpty(allreq)) {
+  if (isEmpty(requiredDimensions) || isEmpty(mapping)) {
     return false;
   }
-
-  for (const key in req) {
-    if (req.hasOwnProperty(key) && !allreq.hasOwnProperty(key)) {
+  for (const element of requiredDimensions) {
+    if (
+      !mapping.hasOwnProperty(element.id) ||
+      mapping[element.id].ids.length < 1
+    ) {
       return false;
     }
-    //return false if chartType is sankey and only one dimension is selected
-    if (chartType === "echartsSankey" && allreq[key].ids.length < 2) {
+    if (
+      element.multiple &&
+      mapping[element.id].ids.length < element.minValues
+    ) {
       return false;
     }
   }
@@ -185,7 +176,7 @@ export function useChartsRawData(props: {
     ],
     chartId?: string
   ) {
-    if (chartId || page) {
+    if ((chartId || page) && !isEmpty(token)) {
       const body = {
         previewAppliedFilters: customAppliedFilters
           ? customAppliedFilters
@@ -240,13 +231,10 @@ export function useChartsRawData(props: {
     ) {
       loadDataFromAPI();
     }
-  }, [page, isEditMode, props.inChartWrapper]);
+  }, [page, isEditMode, props.inChartWrapper, isLoading, token]);
 
   const renderChartFromAPI = () => {
     const extraLoader = document.getElementById("extra-loader");
-    if (extraLoader) {
-      extraLoader.style.display = "block";
-    }
 
     const validMapping = getValidMapping(chartFromAPI, mapping);
     const requiredMappingKey = getReqMappingKeyFromReqDimension(
@@ -268,9 +256,11 @@ export function useChartsRawData(props: {
       ],
     };
 
-    if (page && allRequiredKeysExist(requiredMappingKey, mapping, chartType)) {
+    if (page && requiredMappingKey) {
       setNotFound(false);
-
+      if (extraLoader) {
+        extraLoader.style.display = "block";
+      }
       axios
         .post(`${process.env.REACT_APP_API}/chart/${page}/render`, body, {
           headers: {
@@ -303,7 +293,13 @@ export function useChartsRawData(props: {
   };
 
   useUpdateEffect(() => {
-    if (!loading && !props.inChartWrapper && isEditMode && !isEmpty(dataset)) {
+    if (
+      !loading &&
+      !props.inChartWrapper &&
+      isEditMode &&
+      !isEmpty(dataset) &&
+      token
+    ) {
       renderChartFromAPI();
     }
   }, [
@@ -313,6 +309,7 @@ export function useChartsRawData(props: {
     selectedChartType,
     get(chartFromAPI, "ssr", false) ? visualOptions : undefined,
     appliedFilters,
+    token,
   ]);
 
   return {

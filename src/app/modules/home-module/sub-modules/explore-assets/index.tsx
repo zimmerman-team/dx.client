@@ -89,7 +89,9 @@ export default function ExploreAssetsModule() {
   const [category, setCategory] = React.useState("");
 
   const [tableView, setTableView] = React.useState(false);
-  const [searchValue, setSearchValue] = React.useState("");
+  const [searchValue, setSearchValue] = React.useState<string | undefined>(
+    undefined
+  );
   const [openSearch, setOpenSearch] = React.useState(false);
   const [sortValue, setSortValue] = React.useState("createdDate");
   const [sortPopoverAnchorEl, setSortPopoverAnchorEl] =
@@ -116,6 +118,9 @@ export default function ExploreAssetsModule() {
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
   };
+  React.useEffect(() => {
+    setSearchValue(undefined);
+  }, [display]);
 
   const displayGrid = (searchStr: string, sortByStr: string) => {
     switch (display) {
@@ -325,7 +330,7 @@ export default function ExploreAssetsModule() {
             />
           )}
         </Box>
-        <div>{displayGrid(searchValue, sortValue)}</div>
+        <div>{displayGrid(searchValue as string, sortValue)}</div>
       </Container>
       <Box height={100} />
     </React.Fragment>

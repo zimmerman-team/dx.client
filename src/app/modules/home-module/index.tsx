@@ -91,6 +91,12 @@ export default function HomeModule() {
     setSearchValue(e.target.value);
   };
 
+  React.useEffect(() => {
+    setSearchValue(undefined);
+  }, [display]);
+
+  console.log(searchValue, "searchValue");
+
   const displayGrid = (searchStr: string, sortByStr: string) => {
     switch (display) {
       case "data":

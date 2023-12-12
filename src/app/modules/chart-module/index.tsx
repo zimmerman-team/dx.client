@@ -107,9 +107,7 @@ export default function ChartModule() {
     (actions) => actions.charts.mapping.setValue
   );
   const loadChart = useStoreActions((actions) => actions.charts.ChartGet.fetch);
-  const loadDatasets = useStoreActions(
-    (actions) => actions.dataThemes.DatasetGetList.fetch
-  );
+
   const loadedChart = useStoreState(
     (state) =>
       (state.charts.ChartGet.crudData ?? emptyChartAPI) as ChartAPIModel
@@ -336,13 +334,6 @@ export default function ChartModule() {
   }, [chartType, loading]);
 
   React.useEffect(() => {
-    if (token.length > 0) {
-      loadDatasets({
-        token,
-        storeInCrudData: true,
-        filterString: `filter={"where":{"name":{"like":".*","options":"i"}},"order":"createdDate desc"}`,
-      });
-    }
     if (page !== "new") {
       if (!isLoading) {
         if (token.length > 0) {

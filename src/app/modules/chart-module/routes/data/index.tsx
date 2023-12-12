@@ -35,7 +35,9 @@ function ChartModuleDataView(
 
   const [category, setCategory] = React.useState("");
   const [tableView, setTableView] = React.useState(false);
-  const [searchValue, setSearchValue] = React.useState("");
+  const [searchValue, setSearchValue] = React.useState<undefined | string>(
+    undefined
+  );
   const [openSearch, setOpenSearch] = React.useState(false);
   const [sortValue, setSortValue] = React.useState("createdDate");
   const [sortPopoverAnchorEl, setSortPopoverAnchorEl] =
@@ -198,7 +200,7 @@ function ChartModuleDataView(
         sortBy={sortValue}
         category={category}
         tableView={tableView}
-        searchStr={searchValue}
+        searchStr={searchValue as string}
         onItemClick={handleItemClick}
       />
     </div>

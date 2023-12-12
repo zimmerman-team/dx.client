@@ -1,9 +1,7 @@
 import React from "react";
-import { isEmpty } from "lodash";
 import { ActionCreator } from "easy-peasy";
 import TuneIcon from "@material-ui/icons/Tune";
 import PaletteIcon from "@material-ui/icons/Palette";
-import { useStoreState } from "app/state/store/hooks";
 import { useHistory, useLocation, useParams } from "react-router-dom";
 import CloudDoneIcon from "@material-ui/icons/CloudDone";
 import TableChartIcon from "@material-ui/icons/TableChart";

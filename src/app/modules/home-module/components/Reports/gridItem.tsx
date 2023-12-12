@@ -1,68 +1,92 @@
 import React from "react";
 import moment from "moment";
 import { Link } from "react-router-dom";
+import { useAuth0 } from "@auth0/auth0-react";
+import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
 import { ReactComponent as MenuIcon } from "app/modules/home-module/assets/menu.svg";
 import { ReactComponent as EditIcon } from "app/modules/home-module/assets/edit.svg";
 import { ReactComponent as DeleteIcon } from "app/modules/home-module/assets/delete.svg";
+import { ReactComponent as ClockIcon } from "app/modules/home-module/assets/clock-icon.svg";
 import { ReactComponent as DuplicateIcon } from "app/modules/home-module/assets/duplicate.svg";
-import { Tooltip } from "@material-ui/core";
 
 interface Props {
   date: Date;
   id?: string;
   title: string;
   descr: string;
+  color: string;
+  public: boolean;
   viz: JSX.Element;
   handleDelete?: (id: string) => void;
   handleDuplicate?: (id: string) => void;
+  showMenuButton: boolean;
 }
 
-export default function GridItem(props: Props) {
+export default function gridItem(props: Props) {
+  const { isAuthenticated } = useAuth0();
   const [menuOptionsDisplay, setMenuOptionsDisplay] = React.useState(false);
 
-  const showMenuOptions = () => {
+  const showMenuOptions = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
     setMenuOptionsDisplay(!menuOptionsDisplay);
   };
 
   return (
     <div
       css={`
-        width: 296px;
-        display: flex;
-        height: 125px;
-        color: #262c34;
-        background: #fff;
         position: relative;
-        padding: 12px 16px;
-        flex-direction: column;
-        justify-content: space-between;
       `}
     >
-      <div
+      <Link
+        to={`/report/${props.id}`}
         css={`
+          width: 296px;
+          padding: 12px;
           display: flex;
-          align-items: flex-start;
+          color: #262c34;
+          height: 161.59px;
+          background: #fff;
+          position: relative;
+          text-decoration: none;
+          flex-direction: column;
+          border: 1px solid #fff;
+          align-items: space-between;
           justify-content: space-between;
+          transition: box-shadow 0.2s ease-in-out;
+          box-shadow: 0px 4px 16px 0px rgba(0, 0, 0, 0.05);
 
-          a {
-            color: inherit;
-            text-decoration: none;
+          &:hover {
+            box-shadow: 0px 7px 22px 0px rgba(0, 0, 0, 0.1);
           }
         `}
       >
         <div
           css={`
-            width: 60%;
-            margin-top: -7px;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+
+            a {
+              color: inherit;
+              text-decoration: none;
+            }
           `}
         >
-          <Link to={`/report/${props.id}`}>
+          <div
+            css={`
+              width: 80%;
+              margin-top: -7px;
+            `}
+          >
             <p
               css={`
                 font-size: 14px;
-                margin-top: 8px;
-                line-height: 16.8px;
+                line-height: 22px;
+                font-family: "Gotham Narrow Bold", sans-serif;
+                margin-top: 2px;
+
                 overflow: hidden;
                 text-overflow: ellipsis;
                 white-space: nowrap;
@@ -71,55 +95,84 @@ export default function GridItem(props: Props) {
             >
               <b>{props.title}</b>
             </p>
-          </Link>
-          <p
+            <p
+              css={`
+                font-size: 10px;
+                line-height: 14px;
+                font-family: "Gotham Narrow ", sans-serif;
+                margin-top: 1px;
+                overflow: hidden;
+                display: -webkit-box;
+                -webkit-line-clamp: 3;
+                text-overflow: ellipsis;
+                -webkit-box-orient: vertical;
+                color: #495057;
+              `}
+            >
+              {props.descr}
+            </p>
+          </div>
+          <IconButton
             css={`
-              font-size: 10px;
-              margin-top: 1px;
-              overflow: hidden;
-              line-height: 12px;
-              display: -webkit-box;
-              -webkit-line-clamp: 3;
-              text-overflow: ellipsis;
-              -webkit-box-orient: vertical;
+              position: absolute;
+              right: -2px;
+              top: 0px;
+              cursor: pointer;
+
+              &:hover {
+                background: transparent;
+              }
             `}
+            onClick={showMenuOptions}
           >
-            {props.descr}
-          </p>
+            <MenuIcon />
+          </IconButton>
         </div>
         <div
           css={`
             margin-top: 4px;
+            position: absolute;
+            bottom: -8px;
+            svg {
+              width: 119.722px;
+              height: 83.717px;
+            }
+            rect:nth-of-type(2) {
+              fill: ${props.color || "#231d2c"};
+            }
+
+            ${props.showMenuButton &&
+            `
+            bottom: -5px;
+            transform: scale(0.7);
+            transform-origin: left bottom;
+          `}
           `}
         >
           {props.viz}
         </div>
-        <IconButton
+        <div
           css={`
-            padding: 0;
-            margin-top: 4px;
+            position: absolute;
+            bottom: 4px;
+            right: 3%;
+            display: flex;
+            font-size: 12px;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 3px;
+            > p {
+              margin: 0;
+              font-size: 8.814px;
+            }
           `}
-          onClick={showMenuOptions}
         >
-          <MenuIcon />
-        </IconButton>
-      </div>
-      <div
-        css={`
-          display: flex;
-          font-size: 12px;
-          justify-content: space-between;
-
-          > p {
-            margin: 0;
-          }
-        `}
-      >
-        <p>Creation date</p>
-        <p>{moment(props.date).format("DD-MM-YYYY")}</p>
-      </div>
+          <ClockIcon />
+          <p>{moment(props.date).format("MMMM YYYY")}</p>
+        </div>
+      </Link>
       {menuOptionsDisplay && (
-        <div>
+        <React.Fragment>
           <div
             css={`
               top: 0;
@@ -129,19 +182,19 @@ export default function GridItem(props: Props) {
               height: 100vh;
               position: fixed;
             `}
-            onClick={showMenuOptions}
+            onClick={() => setMenuOptionsDisplay(false)}
           />
           <div
             css={`
-              top: 30%;
-              gap: 1rem;
+              top: 38px;
+              position: absolute;
               right: 3%;
               z-index: 2;
+              gap: 1rem;
 
               display: flex;
               height: 38px;
               width: 143px;
-              position: absolute;
               background: #adb5bd;
               border-radius: 100px;
               align-items: center;
@@ -168,7 +221,9 @@ export default function GridItem(props: Props) {
               }
             `}
           >
-            <div>
+            <div
+              css={!isAuthenticated ? "opacity: 0.5;pointer-events: none;" : ""}
+            >
               <IconButton
                 onClick={() => {
                   props.handleDuplicate?.(props.id as string);
@@ -180,7 +235,13 @@ export default function GridItem(props: Props) {
                 </Tooltip>
               </IconButton>
             </div>
-            <div>
+            <div
+              css={
+                props.public || !isAuthenticated
+                  ? "opacity: 0.5;pointer-events: none;"
+                  : ""
+              }
+            >
               <Link to={`/report/${props.id}/edit`}>
                 <Tooltip title="Edit">
                   <EditIcon
@@ -191,7 +252,13 @@ export default function GridItem(props: Props) {
                 </Tooltip>
               </Link>
             </div>
-            <div>
+            <div
+              css={
+                props.public || !isAuthenticated
+                  ? "opacity: 0.5;pointer-events: none;"
+                  : ""
+              }
+            >
               <IconButton
                 onClick={() => props.handleDelete?.(props.id as string)}
               >
@@ -201,7 +268,7 @@ export default function GridItem(props: Props) {
               </IconButton>
             </div>
           </div>
-        </div>
+        </React.Fragment>
       )}
     </div>
   );
