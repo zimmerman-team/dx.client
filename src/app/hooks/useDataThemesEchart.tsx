@@ -153,11 +153,35 @@ export function useDataThemesEchart() {
       marginRight,
       marginBottom,
       marginLeft,
+      showLegend,
+      // Tooltip
+      showTooltip,
+      isMonetaryValue,
+      // chart
+      drawDonut,
+      arcThickness,
     } = visualOptions;
+    const defaultRadius = 80;
+
+    const thicknessPercent =
+      defaultRadius - (arcThickness / 100) * defaultRadius;
 
     const option = {
       tooltip: {
-        trigger: "item",
+        trigger: showTooltip ? "item" : "none",
+        confine: true,
+        formatter: (params: any) => {
+          return `${params.name}: ${
+            isMonetaryValue
+              ? formatFinancialValue(params.value, true)
+              : params.value
+          }`;
+        },
+      },
+      legend: {
+        top: "5%",
+        left: "center",
+        show: showLegend,
       },
       series: [
         {
@@ -168,7 +192,9 @@ export function useDataThemesEchart() {
           right: marginRight,
           bottom: marginBottom,
           type: "pie",
-          radius: ["40%", "70%"],
+          radius: drawDonut
+            ? [`${thicknessPercent}%`, `${defaultRadius}%`]
+            : [`${defaultRadius}%`],
           avoidLabelOverlap: false,
           label: {
             show: false,
@@ -456,17 +482,40 @@ export function useDataThemesEchart() {
 
   function echartsForcegraph(data: any, visualOptions: any) {
     const {
+      // artboard
       width,
       height,
+      showLegend,
       // margins
       marginTop,
       marginRight,
       marginBottom,
       marginLeft,
       // chart options
+      linksOpacity,
+      draggable,
+      // Tooltip
+      showTooltip,
+      isMonetaryValue,
+      // labels
+      showLabels,
+      labelFontSize,
+      // chart
+      nodeSize,
+      forceRepulsion,
     } = visualOptions;
 
     const nodes = uniqBy(data.nodes, "name");
+
+    nodes?.forEach(function (node: any) {
+      node.symbolSize = nodeSize;
+    });
+
+    data.links?.forEach(function (link: any) {
+      link.lineStyle = {
+        opacity: linksOpacity,
+      };
+    });
 
     const option = {
       legend: [
@@ -474,8 +523,19 @@ export function useDataThemesEchart() {
           data: data.categories?.map(function (a: { name: string }) {
             return a.name;
           }),
+          show: showLegend,
         },
       ],
+      tooltip: {
+        trigger: showTooltip ? "item" : "none",
+        formatter: (params: any) => {
+          return `${params.name}: ${
+            isMonetaryValue
+              ? formatFinancialValue(params.data.value, true)
+              : params.data.value
+          }`;
+        },
+      },
       series: [
         {
           type: "graph",
@@ -489,12 +549,14 @@ export function useDataThemesEchart() {
           bottom: marginBottom,
           width,
           height,
-          roam: false,
+          roam: draggable,
           label: {
             position: "right",
+            show: showLabels,
+            fontSize: labelFontSize,
           },
           force: {
-            repulsion: 100,
+            repulsion: forceRepulsion,
           },
         },
       ],
@@ -504,21 +566,50 @@ export function useDataThemesEchart() {
 
   function echartsCirculargraph(data: any, visualOptions: any) {
     const {
+      // artboard
       width,
       height,
+      showLegend,
       // margins
       marginTop,
       marginRight,
       marginBottom,
       marginLeft,
       // chart options
+      linksOpacity,
+      draggable,
+      linksCurveness,
+      // Tooltip
+      showTooltip,
+      isMonetaryValue,
+      // labels
+      showLabels,
+      labelFontSize,
+      rotateLabel,
     } = visualOptions;
 
-    // data.nodes?.forEach(function (node: any) {
-    //   node.label = {
-    //     show: node.symbolSize > 30,
-    //   };
-    // });
+    const maxValue = data.nodes?.reduce((prev: number, curr: any) => {
+      return Math.max(prev, curr.value);
+    }, 0);
+
+    data.nodes?.forEach(function (node: any) {
+      node.symbolSize = (node.value / maxValue) * 50; // making the symbol size relative to the max value but max at 50
+      let show = false;
+      if (showLabels == "largeNodes") {
+        show = node.symbolSize > 30;
+      } else if (showLabels == "true") {
+        show = true;
+      }
+      node.label = {
+        show,
+      };
+    });
+
+    data.links?.forEach(function (link: any) {
+      link.lineStyle = {
+        opacity: linksOpacity,
+      };
+    });
 
     const nodes = uniqBy(data.nodes, "name");
 
@@ -528,8 +619,21 @@ export function useDataThemesEchart() {
           data: data.categories?.map(function (a: { name: string }) {
             return a.name;
           }),
+
+          align: "left",
+          show: showLegend,
         },
       ],
+      tooltip: {
+        trigger: showTooltip ? "item" : "none",
+        formatter: (params: any) => {
+          return `${params.name}: ${
+            isMonetaryValue
+              ? formatFinancialValue(params.data.value, true)
+              : params.data.value
+          }`;
+        },
+      },
       animationDurationUpdate: 1500,
       animationEasingUpdate: "quinticInOut",
       series: [
@@ -537,7 +641,7 @@ export function useDataThemesEchart() {
           type: "graph",
           layout: "circular",
           circular: {
-            rotateLabel: true,
+            rotateLabel: rotateLabel,
           },
           data: nodes,
           links: data.links,
@@ -547,18 +651,20 @@ export function useDataThemesEchart() {
           right: marginRight,
           bottom: marginBottom,
           width,
-          height,
-          roam: false,
+          height: 0.95 * height, // Default height from echarts is overflowing so I had to remove .5 percent from the height to fit
+          roam: draggable as boolean,
           force: {
             repulsion: 100,
           },
           label: {
             position: "right",
             formatter: "{b}",
+            show: showLabels,
+            fontSize: labelFontSize,
           },
           lineStyle: {
             color: "source",
-            curveness: 0.3,
+            curveness: linksCurveness,
           },
         },
       ],
@@ -648,7 +754,6 @@ export function useDataThemesEchart() {
       // labels
       showLabels,
       labelFontSize,
-      showBreadcrumbs,
       // tooltip
       showTooltip,
       isMonetaryValue,
@@ -657,6 +762,16 @@ export function useDataThemesEchart() {
     const option = {
       // backgroundColor: background,
       backgroundColor: "transparent",
+      tooltip: {
+        trigger: showTooltip ? "item" : "none",
+        formatter: (params: any) => {
+          return `${params.name}: ${
+            isMonetaryValue
+              ? formatFinancialValue(params.data.value, true)
+              : params.data.value
+          }`;
+        },
+      },
       series: [
         {
           name: "All",
@@ -710,11 +825,6 @@ export function useDataThemesEchart() {
           label: {
             show: showLabels,
             fontSize: labelFontSize,
-          },
-          breadcrumb: {
-            show: showBreadcrumbs,
-            top: 0,
-            bottom: "auto",
           },
         },
       ],

@@ -10,6 +10,8 @@ import {
   TooltipComponentOption,
   VisualMapComponentOption,
 } from "echarts/components";
+import { formatFinancialValue } from "./formatFinancialValue";
+import { checkLists } from "app/modules/data-themes-module/sub-modules/theme-builder/views/customize/data";
 
 function convertData(root: d3.HierarchyCircularNode<any>) {
   return root.descendants().map((node) => ({
@@ -18,14 +20,27 @@ function convertData(root: d3.HierarchyCircularNode<any>) {
     x: node.x,
     y: node.y,
     depth: node.depth,
-    value: node.data.value,
+    value: node.depth, // using value as depth so echarts can interpolate colors
+    itemValue: node.data.value,
     name: node.data.name,
     path: node.data.path,
     isLeaf: !node.children || !node.children.length,
   }));
 }
 
-function getOptionForCirclepacking(data: any[]) {
+function getOptionForCirclepacking(data: any[], visualOptions: any) {
+  const {
+    // margin
+    marginTop,
+    marginRight,
+    marginBottom,
+    marginLeft,
+    // Color Palette
+    palette,
+    // Tooltip
+    showTooltip,
+    isMonetaryValue,
+  } = visualOptions;
   let maxDepth = 0;
 
   data.forEach((item) => {
@@ -76,13 +91,7 @@ function getOptionForCirclepacking(data: any[]) {
         position: "inside",
       },
       style: {
-        fill: interpolateColor(
-          "#006edd",
-          "#e0ffff",
-          0,
-          maxDepth,
-          dataItem.depth
-        ),
+        fill: api.visual("color"),
       },
       emphasis: {
         style: {
@@ -100,30 +109,40 @@ function getOptionForCirclepacking(data: any[]) {
   const option: echarts.ComposeOption<
     CustomSeriesOption | TooltipComponentOption | VisualMapComponentOption
   > = {
-    dataset: {
-      source: data,
+    tooltip: {
+      trigger: showTooltip ? "item" : "none",
+      formatter: (params: any) => {
+        return `${params.name}: ${
+          isMonetaryValue
+            ? formatFinancialValue(params.data.itemValue, true)
+            : params.data.itemValue
+        }`;
+      },
     },
-    tooltip: {},
     visualMap: {
       show: false,
       type: "continuous",
-      min: 1,
+      min: 0,
       max: maxDepth,
-      calculable: true,
-      dimension: 1,
       inRange: {
-        color: ["#006edd", "#e0ffff"],
+        color: checkLists
+          .find((item) => item.label === palette)
+          ?.value.slice(0, maxDepth),
       },
     },
 
     hoverLayerThreshold: Infinity,
+    top: marginTop,
+    left: marginLeft,
+    right: marginRight,
+    bottom: marginBottom,
     series: {
       type: "custom",
       renderItem: renderItem,
       progressive: 0,
       coordinateSystem: "none",
       encode: {
-        tooltip: "value",
+        tooltip: "itemValue",
         itemName: "name",
       },
       data: data,
@@ -131,33 +150,6 @@ function getOptionForCirclepacking(data: any[]) {
   };
   return option;
 }
-
-const interpolateColor = (
-  color1: string,
-  color2: string,
-  min: number,
-  max: number,
-  value: number
-) => {
-  // Example usage
-
-  const dimensionValue = value;
-
-  // Calculate the factor for interpolation
-  const factor = (dimensionValue - min) / (max - min);
-  // Parse the color values
-  const c1 = color1.match(/[A-Za-z0-9]{2}/g)?.map((v) => parseInt(v, 16));
-  const c2 = color2.match(/[A-Za-z0-9]{2}/g)?.map((v) => parseInt(v, 16));
-  if (c1 && c2) {
-    const interpolatedColor = c1.map((component, index) =>
-      Math.round(component + factor * (c2[index] - component))
-    );
-    const resultColor =
-      "#" +
-      interpolatedColor?.map((v) => v.toString(16).padStart(2, "0")).join("");
-    return resultColor;
-  }
-};
 
 const stratify = (dataset: any) => {
   return d3
@@ -188,29 +180,19 @@ export const drillDown = (
     // artboard
     width,
     height,
-    // margin
-    marginTop,
-    marginRight,
-    marginBottom,
-    marginLeft,
+    nodeClick,
   } = visualOptions;
 
-  const margin = {
-    top: marginTop,
-    right: marginRight,
-    bottom: marginBottom,
-    left: marginLeft,
-  };
-
-  const chartWidth = width - margin.left - margin.right;
-  const chartHeight = height - margin.top - margin.bottom;
-
-  if (targetId !== null) {
-    let y = root.descendants().find((node) => {
-      return node.data.path === targetId;
-    });
-    if (y) {
-      root = y;
+  const chartWidth = width;
+  const chartHeight = height;
+  if (nodeClick == "zoomToNode") {
+    if (targetId !== null) {
+      let y = root.descendants().find((node) => {
+        return node.data.path === targetId;
+      });
+      if (y) {
+        root = y;
+      }
     }
   }
 
@@ -219,7 +201,8 @@ export const drillDown = (
 
   d3.pack<any>().size([chartWidth, chartHeight]).padding(3)(root);
   const option = getOptionForCirclepacking(
-    convertData(root as d3.HierarchyCircularNode<any>)
+    convertData(root as d3.HierarchyCircularNode<any>),
+    visualOptions
   );
 
   return option;
