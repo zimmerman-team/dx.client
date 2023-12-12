@@ -651,7 +651,7 @@ export function useDataThemesEchart() {
           right: marginRight,
           bottom: marginBottom,
           width,
-          height: 0.95 * height, // Default height from echarts is overflowing so I had to remove .5 percent from the height to fit
+          height: 0.8 * height - marginTop - marginBottom, // Default height from echarts is overflowing so I had to remove .5 percent from the height to fit
           roam: draggable as boolean,
           force: {
             repulsion: 100,
@@ -669,7 +669,7 @@ export function useDataThemesEchart() {
         },
       ],
     };
-    return option;
+    return option as any;
   }
 
   function echartsTreemap(data: any, visualOptions: any) {
@@ -815,7 +815,7 @@ export function useDataThemesEchart() {
             },
           ],
           width,
-          height,
+          height: height,
           roam: false,
           top: marginTop,
           left: marginLeft,
