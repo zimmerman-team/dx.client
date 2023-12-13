@@ -42,9 +42,11 @@ function ChartBuilderMapping(props: ChartBuilderMappingProps) {
     setMinValuesFields(updMinValuesFields);
   }, [mapping, props.dimensions]);
 
-  if (dataset === null && !props.loading) {
-    history.push(`/chart/${page}/data`);
-  }
+  React.useEffect(() => {
+    if (dataset === null && !props.loading) {
+      history.push(`/chart/${page}/data`);
+    }
+  }, []);
 
   return (
     <div css={commonStyles.container}>

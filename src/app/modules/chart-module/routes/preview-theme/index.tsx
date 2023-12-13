@@ -226,8 +226,7 @@ export function ChartBuilderPreviewTheme(props: ChartBuilderPreviewThemeProps) {
               ${selectedChartType === "bigNumber" &&
               window.location.pathname.indexOf("/chart/") > -1 &&
               `
-                  transform: scale(2);
-                  transform-origin: left top;
+           
       
                   > div {
                     width: 135px;

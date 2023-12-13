@@ -21,9 +21,11 @@ function ChartBuilderLock(props: ChartBuilderLockProps) {
   const mapping = useStoreState((state) => state.charts.mapping.value);
   const dataset = useStoreState((state) => state.charts.dataset.value);
 
-  if ((dataset === null && !props.loading) || isEmpty(mapping)) {
-    history.push(`/chart/${page}/data`);
-  }
+  React.useEffect(() => {
+    if ((dataset === null && !props.loading) || isEmpty(mapping)) {
+      history.push(`/chart/${page}/data`);
+    }
+  }, []);
 
   return (
     <div css={commonStyles.container}>

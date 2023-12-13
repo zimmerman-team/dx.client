@@ -4,9 +4,8 @@ import get from "lodash/get";
 import find from "lodash/find";
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
-import { useAuth0 } from "@auth0/auth0-react";
 import useDebounce from "react-use/lib/useDebounce";
-import { useSessionStorage, useUpdateEffect } from "react-use";
+import { useUpdateEffect } from "react-use";
 import { useInfinityScroll } from "app/hooks/useInfinityScroll";
 import CircleLoader from "app/modules/home-module/components/Loader";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
@@ -14,7 +13,7 @@ import DeleteChartDialog from "app/components/Dialogs/deleteChartDialog";
 import { HomepageTable } from "app/modules/home-module/components/Table";
 import { coloredEchartTypes } from "app/modules/chart-module/routes/chart-type/data";
 import ChartAddnewCard from "app/modules/home-module/components/Charts/chartAddNewCard";
-import ReformedGridItem from "app/modules/home-module/components/Charts/reformedGridItem";
+import GridItem from "app/modules/home-module/components/Charts/gridItem";
 
 interface Props {
   sortBy: string;
@@ -214,7 +213,7 @@ export default function ChartsGrid(props: Props) {
           {props.addCard && <ChartAddnewCard />}
           {loadedCharts.map((c, index) => (
             <Grid item key={c.id} xs={12} sm={6} md={6} lg={3}>
-              <ReformedGridItem
+              <GridItem
                 id={c.id}
                 title={c.name}
                 public={c.public}

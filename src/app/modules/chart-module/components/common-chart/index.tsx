@@ -29,6 +29,7 @@ interface Props {
     | "echartsCirclepacking"
     | "echartsBubblechart"
     | "echartsPiechart";
+  inChartWrapper?: boolean;
 }
 
 export function CommonChart(props: Props) {
@@ -145,13 +146,19 @@ export function CommonChart(props: Props) {
           ${chartType === "bigNumber" &&
           window.location.pathname.indexOf("/chart/") > -1 &&
           `
-            transform: scale(2);
-            transform-origin: left top;
-
             > div {
               width: 135px;
             }
           `}
+          ${chartType === "bigNumber" &&
+          props.inChartWrapper &&
+          `
+        > div {
+       ::nth-child(1) {
+        font-size: 10px !important;
+       }
+            }
+        `}
 
           * {
             font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif !important;
@@ -179,6 +186,36 @@ export function CommonChart(props: Props) {
             height: 100%;
 
             > div:first-of-type {
+              ${chartType === "bigNumber" &&
+              props.inChartWrapper &&
+              `
+    
+      div:nth-child(1) {
+        font-size: 9.39px !important;
+        padding-bottom: 0px !important;
+       }
+       div:nth-child(2) {
+        font-size: 45.834px !important;
+        line-height: normal !important;
+        height: 0px !important;
+        margin-top: 29px !important;
+        margin-bottom: 25px  !important;
+
+       }
+        div:nth-child(3) {
+          font-size: 9.39px !important;
+          padding-bottom: 0px !important;
+          padding-top: 0px !important;
+
+        }
+        div:nth-child(4) {
+          font-size: 7.572px !important;
+          margin-top: 0px !important;
+          line-height: 16px !important;
+        }
+
+            
+        `}
               canvas {
                 padding-bottom: 28px !important;
               }

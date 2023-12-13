@@ -30,6 +30,9 @@ export function ReportChartWrapper(props: Props) {
     (state) =>
       (state.charts.ChartGet.crudData ?? emptyChartAPI) as ChartAPIModel
   );
+  const clearChart = useStoreActions(
+    (actions) => actions.charts.ChartGet.clear
+  );
 
   const [chartName, setChartName] = React.useState<string>("");
   const [rawViz, setRawViz] = React.useState<any>(null);
@@ -60,6 +63,9 @@ export function ReportChartWrapper(props: Props) {
     if (token.length > 0) {
       loadChart({ token, getId: props.id });
     }
+    return () => {
+      clearChart();
+    };
   }, [props.id, token]);
 
   React.useEffect(() => {
@@ -82,7 +88,7 @@ export function ReportChartWrapper(props: Props) {
     if (props.id) {
       loadDataFromAPI(undefined, props.id);
     }
-  }, [props.id]);
+  }, [props.id, token]);
 
   React.useEffect(() => {
     const visualOptionsWidth = get(visualOptions, "width", 0);
@@ -205,6 +211,7 @@ export function ReportChartWrapper(props: Props) {
         renderedChartMappedData={renderedChartMappedData}
         setChartErrorMessage={setChartErrorMessage}
         setNotFound={setNotFound}
+        inChartWrapper={true}
       />
     </div>
   );

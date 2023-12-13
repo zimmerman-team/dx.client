@@ -121,9 +121,7 @@ export function ReportSubheaderToolbar(props: ReportSubheaderToolbarProps) {
   const [duplicatedReportId, setDuplicatedReportId] = React.useState<
     string | null
   >(null);
-  const [duplicatedChartId, setDuplicatedChartId] = React.useState<
-    string | null
-  >(null);
+
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
   );

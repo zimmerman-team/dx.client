@@ -43,6 +43,7 @@ import { styles as commonStyles } from "app/modules/chart-module/routes/common/s
 import { NotAuthorizedMessageModule } from "app/modules/common/not-authorized-message";
 import { useRecoilState } from "recoil";
 import { loadedDatasetsAtom } from "app/state/recoil/atoms";
+import { isEmpty } from "lodash";
 
 export default function ChartModule() {
   const { isLoading, isAuthenticated } = useAuth0();
@@ -107,9 +108,7 @@ export default function ChartModule() {
     (actions) => actions.charts.mapping.setValue
   );
   const loadChart = useStoreActions((actions) => actions.charts.ChartGet.fetch);
-  const loadDatasets = useStoreActions(
-    (actions) => actions.dataThemes.DatasetGetList.fetch
-  );
+
   const loadedChart = useStoreState(
     (state) =>
       (state.charts.ChartGet.crudData ?? emptyChartAPI) as ChartAPIModel
@@ -141,16 +140,11 @@ export default function ChartModule() {
   const resetDataset = useStoreActions(
     (actions) => actions.charts.dataset.reset
   );
-  const resetActivePanels = useStoreActions(
-    (actions) => actions.charts.activePanels.reset
-  );
 
   const resetEnabledFilterOptionGroups = useStoreActions(
     (actions) => actions.charts.enabledFilterOptionGroups.clear
   );
-  const datasets = useStoreState(
-    (state) => state.dataThemes.DatasetGetList.crudData as any[]
-  );
+
   const [loadedDatasets, setLoadedDatasets] =
     useRecoilState(loadedDatasetsAtom);
 
@@ -173,6 +167,12 @@ export default function ChartModule() {
     setChartFromAPI(null);
   }, [chartType, dataTypes]);
 
+  React.useEffect(() => {
+    if (dataset === null) {
+      resetMapping();
+    }
+  }, [dataset]);
+
   //reset filters when dataset types changes
   React.useEffect(() => {
     resetAppliedFilters();
@@ -184,11 +184,14 @@ export default function ChartModule() {
       const datasetName = loadedDatasets.find((d) => d.id === dataset)?.name;
       setChartName(datasetName as string);
     }
+    if (isEmpty(dataset) && page === "new" && !hasSubHeaderTitleFocused) {
+      setChartName("Untitled Chart");
+    }
   }, [dataset]);
 
   //set chart name to loaded chart name
   React.useEffect(() => {
-    if (loadedChart.name.length > 0) {
+    if (page !== "new" && loadedChart.name.length > 0) {
       setChartName(loadedChart.name);
     }
   }, [loadedChart]);
@@ -260,7 +263,6 @@ export default function ChartModule() {
   async function clear() {
     sessionStorage.setItem("visualOptions", JSON.stringify({}));
     resetDataset();
-    resetActivePanels();
     resetMapping();
     resetChartType();
     resetAppliedFilters();
@@ -336,13 +338,6 @@ export default function ChartModule() {
   }, [chartType, loading]);
 
   React.useEffect(() => {
-    if (token.length > 0) {
-      loadDatasets({
-        token,
-        storeInCrudData: true,
-        filterString: `filter={"where":{"name":{"like":".*","options":"i"}},"order":"createdDate desc"}`,
-      });
-    }
     if (page !== "new") {
       if (!isLoading) {
         if (token.length > 0) {
