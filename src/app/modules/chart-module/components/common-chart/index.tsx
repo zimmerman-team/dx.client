@@ -20,8 +20,15 @@ interface Props {
     | "echartsBarchart"
     | "echartsGeomap"
     | "echartsLinechart"
+    | "echartsAreastack"
     | "echartsSankey"
-    | "echartsTreemap";
+    | "echartsTreemap"
+    | "echartsSunburst"
+    | "echartsForcegraph"
+    | "echartsCirculargraph"
+    | "echartsCirclepacking"
+    | "echartsBubblechart"
+    | "echartsPiechart";
   inChartWrapper?: boolean;
 }
 
@@ -98,8 +105,15 @@ export function CommonChart(props: Props) {
               | "echartsBarchart"
               | "echartsGeomap"
               | "echartsLinechart"
+              | "echartsAreastack"
               | "echartsSankey"
-              | "echartsTreemap"),
+              | "echartsTreemap"
+              | "echartsSunburst"
+              | "echartsForcegraph"
+              | "echartsCirculargraph"
+              | "echartsCirclepacking"
+              | "echartsBubblechart"
+              | "echartsPiechart"),
           visualOptions,
           `common-chart-render-container-${props.chartId || "1"}`
         );

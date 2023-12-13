@@ -4,9 +4,16 @@ import {
   echartsBarchart,
   echartsGeomap,
   echartsLinechart,
+  echartsAreastack,
   echartsSankey,
   echartsTreemap,
   bigNumber,
+  echartsSunburst,
+  echartsForcegraph,
+  echartsCirculargraph,
+  echartsCirclepacking,
+  echartsBubblechart,
+  echartsPiechart,
   // @ts-ignore
 } from "@rawgraphs/rawgraphs-charts";
 import { FilterGroupModel } from "app/components/ToolBoxPanel/components/filters/data";
@@ -15,9 +22,16 @@ export const charts = {
   echartsBarchart,
   echartsGeomap,
   echartsLinechart,
+  echartsAreastack,
   echartsSankey,
   echartsTreemap,
   bigNumber,
+  echartsSunburst,
+  echartsForcegraph,
+  echartsCirculargraph,
+  echartsCirclepacking,
+  echartsBubblechart,
+  echartsPiechart,
 };
 
 export const CHART_DEFAULT_WIDTH = 1000;
@@ -60,6 +74,18 @@ export const defaultChartOptions = {
     },
     ...echartsLinechart.visualOptions,
   },
+  echartsAreastack: {
+    ...baseOptions,
+    width: {
+      ...baseOptions.width,
+      default: CHART_DEFAULT_WIDTH,
+    },
+    height: {
+      ...baseOptions.height,
+      default: CHART_DEFAULT_HEIGHT,
+    },
+    ...echartsAreastack.visualOptions,
+  },
   echartsSankey: {
     ...baseOptions,
     width: {
@@ -71,6 +97,30 @@ export const defaultChartOptions = {
       default: CHART_DEFAULT_HEIGHT,
     },
     ...echartsSankey.visualOptions,
+  },
+  echartsForcegraph: {
+    ...baseOptions,
+    width: {
+      ...baseOptions.width,
+      default: CHART_DEFAULT_WIDTH,
+    },
+    height: {
+      ...baseOptions.height,
+      default: CHART_DEFAULT_HEIGHT,
+    },
+    ...echartsForcegraph.visualOptions,
+  },
+  echartsCirculargraph: {
+    ...baseOptions,
+    width: {
+      ...baseOptions.width,
+      default: CHART_DEFAULT_WIDTH,
+    },
+    height: {
+      ...baseOptions.height,
+      default: CHART_DEFAULT_HEIGHT,
+    },
+    ...echartsCirculargraph.visualOptions,
   },
   echartsTreemap: {
     ...baseOptions,
@@ -99,6 +149,102 @@ export const defaultChartOptions = {
       ...echartsTreemap.visualOptions.marginBottom,
       default: 0,
     },
+    echartsSunburst: {
+      ...baseOptions,
+      width: {
+        ...baseOptions.width,
+        default: CHART_DEFAULT_WIDTH,
+      },
+      height: {
+        ...baseOptions.height,
+        default: CHART_DEFAULT_HEIGHT,
+      },
+      ...echartsSunburst.visualOptions,
+      marginTop: {
+        ...echartsSunburst.visualOptions.marginTop,
+        default: 50,
+      },
+      marginLeft: {
+        ...echartsSunburst.visualOptions.marginLeft,
+        default: 70,
+      },
+      marginRight: {
+        ...echartsSunburst.visualOptions.marginRight,
+        default: 70,
+      },
+      marginBottom: {
+        ...echartsSunburst.visualOptions.marginBottom,
+        default: 50,
+      },
+    },
+    echartsPiechart: {
+      ...baseOptions,
+      width: {
+        ...baseOptions.width,
+        default: CHART_DEFAULT_WIDTH,
+      },
+      height: {
+        ...baseOptions.height,
+        default: CHART_DEFAULT_HEIGHT,
+      },
+      ...echartsPiechart.visualOptions,
+      marginTop: {
+        ...echartsPiechart.visualOptions.marginTop,
+        default: 50,
+      },
+      marginLeft: {
+        ...echartsPiechart.visualOptions.marginLeft,
+        default: 70,
+      },
+      marginRight: {
+        ...echartsPiechart.visualOptions.marginRight,
+        default: 70,
+      },
+      marginBottom: {
+        ...echartsPiechart.visualOptions.marginBottom,
+        default: 50,
+      },
+    },
+  },
+  echartsCirclepacking: {
+    ...baseOptions,
+    width: {
+      ...baseOptions.width,
+      default: CHART_DEFAULT_WIDTH,
+    },
+    height: {
+      ...baseOptions.height,
+      default: CHART_DEFAULT_HEIGHT,
+    },
+    ...echartsCirclepacking.visualOptions,
+    marginTop: {
+      ...echartsCirclepacking.visualOptions.marginTop,
+      default: 0,
+    },
+    marginLeft: {
+      ...echartsCirclepacking.visualOptions.marginLeft,
+      default: 0,
+    },
+    marginRight: {
+      ...echartsCirclepacking.visualOptions.marginRight,
+      default: 0,
+    },
+    marginBottom: {
+      ...echartsCirclepacking.visualOptions.marginBottom,
+      default: 0,
+    },
+  },
+  echartsBubblechart: {
+    ...baseOptions,
+    width: {
+      ...baseOptions.width,
+      default: CHART_DEFAULT_WIDTH,
+    },
+    height: {
+      ...baseOptions.height,
+      default: CHART_DEFAULT_HEIGHT,
+    },
+    ...echartsBubblechart.visualOptions,
   },
   bigNumber: {},
 };

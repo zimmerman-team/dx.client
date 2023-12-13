@@ -1,21 +1,17 @@
 import React from "react";
 
-interface Props {
-  big?: boolean;
-  pathFill?: string;
-}
-export default function Icon(props: Props) {
+export default function Icon() {
   return (
     <svg
-      width={props.big ? "74" : "48"}
-      height={props.big ? "74" : "48"}
+      width="82"
+      height="81"
       viewBox="0 0 48 48"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
       <path
         d="M24 44C12.96 43.988 4.012 35.04 4 24V23.6C4.22 12.61 13.27 3.85604 24.26 4.00004C35.254 4.14804 44.068 13.138 43.996 24.13C43.924 35.124 34.994 44 24 44ZM8 24.344C8.04562 28.5875 9.77508 32.639 12.8079 35.6074C15.8408 38.5757 19.9285 40.2177 24.172 40.172C28.4155 40.1264 32.467 38.397 35.4353 35.3641C38.4037 32.3313 40.0456 28.2435 40 24H24V8.00004C19.7582 8.00533 15.6916 9.69274 12.6921 12.6922C9.6927 15.6916 8.00529 19.7582 8 24V24.344Z"
-        fill="#262C34"
+        fill="#73D3CD"
       />
     </svg>
   );

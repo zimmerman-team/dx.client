@@ -103,6 +103,120 @@ export default function ChartPlaceholder(props: { loading?: boolean }) {
         </div>
       ),
     },
+    {
+      id: "echartsSunburst",
+      placeholder: (
+        <div
+          css={`
+            padding-right: 38px;
+            svg {
+              width: 100%;
+              height: 100%;
+            }
+          `}
+        >
+          <BarChartPlaceholderImage />
+        </div>
+      ),
+    },
+    {
+      id: "echartsForcegraph",
+      placeholder: (
+        <div
+          css={`
+            padding-right: 38px;
+            svg {
+              width: 100%;
+              height: 100%;
+            }
+          `}
+        >
+          <BarChartPlaceholderImage />
+        </div>
+      ),
+    },
+    {
+      id: "echartsCirculargraph",
+      placeholder: (
+        <div
+          css={`
+            padding-right: 38px;
+            svg {
+              width: 100%;
+              height: 100%;
+            }
+          `}
+        >
+          <BarChartPlaceholderImage />
+        </div>
+      ),
+    },
+    {
+      id: "echartsCirclepacking",
+      placeholder: (
+        <div
+          css={`
+            padding-right: 38px;
+            svg {
+              width: 100%;
+              height: 100%;
+            }
+          `}
+        >
+          <BarChartPlaceholderImage />
+        </div>
+      ),
+    },
+    {
+      id: "echartsPiechart",
+      placeholder: (
+        <div
+          css={`
+            padding-right: 38px;
+            svg {
+              width: 100%;
+              height: 100%;
+            }
+          `}
+        >
+          <BarChartPlaceholderImage />
+        </div>
+      ),
+    },
+    {
+      id: "echartsBubblechart",
+      placeholder: (
+        <div
+          css={`
+            padding-right: 38px;
+
+            svg {
+              width: 100%;
+              height: 100%;
+            }
+          `}
+        >
+          <LinechartPlaceholderImage />
+        </div>
+      ),
+    },
+    {
+      id: "echartsAreastack",
+      placeholder: (
+        <div
+          css={`
+            padding-right: 38px;
+
+            svg {
+              width: 100%;
+              height: 100%;
+            }
+          `}
+        >
+          <LinechartPlaceholderImage />
+        </div>
+      ),
+    },
   ];
 
   const getChartPlaceholder = () => {

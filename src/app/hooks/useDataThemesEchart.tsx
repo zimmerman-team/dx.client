@@ -9,8 +9,13 @@ import {
   MapChart,
   BarChart,
   LineChart,
+  PieChart,
   SankeyChart,
   TreemapChart,
+  SunburstChart,
+  CustomChart,
+  GraphChart,
+  ScatterChart,
 } from "echarts/charts";
 import {
   GridComponent,
@@ -20,14 +25,20 @@ import {
 } from "echarts/components";
 import { checkLists } from "app/modules/data-themes-module/sub-modules/theme-builder/views/customize/data";
 import { charts } from "app/modules/chart-module/data";
+import { drillDown } from "app/utils/getCirclePackingOption";
 
 echarts.use([
   BarChart,
   MapChart,
+  PieChart,
   LineChart,
+  GraphChart,
+  CustomChart,
   SankeyChart,
   TreemapChart,
   GridComponent,
+  SunburstChart,
+  ScatterChart,
   CanvasRenderer,
   LegendComponent,
   TooltipComponent,
@@ -135,6 +146,79 @@ export function useDataThemesEchart() {
     return option;
   }
 
+  function echartsPiechart(data: any, visualOptions: any) {
+    const {
+      // artboard
+      width,
+      height,
+      marginTop,
+      marginRight,
+      marginBottom,
+      marginLeft,
+      showLegend,
+      // Tooltip
+      showTooltip,
+      isMonetaryValue,
+      // chart
+      drawDonut,
+      arcThickness,
+    } = visualOptions;
+    const defaultRadius = 80;
+
+    const thicknessPercent =
+      defaultRadius - (arcThickness / 100) * defaultRadius;
+
+    const option = {
+      tooltip: {
+        trigger: showTooltip ? "item" : "none",
+        confine: true,
+        formatter: (params: any) => {
+          return `${params.name}: ${
+            isMonetaryValue
+              ? formatFinancialValue(params.value, true)
+              : params.value
+          }`;
+        },
+      },
+      legend: {
+        top: "5%",
+        left: "center",
+        show: showLegend,
+      },
+      series: [
+        {
+          width,
+          height,
+          top: marginTop,
+          left: marginLeft,
+          right: marginRight,
+          bottom: marginBottom,
+          type: "pie",
+          radius: drawDonut
+            ? [`${thicknessPercent}%`, `${defaultRadius}%`]
+            : [`${defaultRadius}%`],
+          avoidLabelOverlap: false,
+          label: {
+            show: false,
+            position: "center",
+          },
+          emphasis: {
+            label: {
+              show: true,
+              fontSize: 40,
+              fontWeight: "bold",
+            },
+          },
+          labelLine: {
+            show: false,
+          },
+          data: data,
+        },
+      ],
+    };
+    return option;
+  }
+
   function echartsGeomap(data: any, visualOptions: any) {
     const {
       // artboard
@@ -220,7 +304,6 @@ export function useDataThemesEchart() {
       marginBottom,
       marginLeft,
       // chart options
-      stack,
       showLegend,
       // Tooltip
       showTooltip,
@@ -261,7 +344,6 @@ export function useDataThemesEchart() {
           type: "line",
           name: d[0],
           data: d[1].map((l: any) => l.y),
-          stack: stack ? "Total" : undefined,
           z: -1,
           zlevel: -1,
         })
@@ -278,6 +360,175 @@ export function useDataThemesEchart() {
       },
     };
 
+    return option;
+  }
+
+  function echartsAreastack(data: any, visualOptions: any) {
+    const {
+      // artboard
+      // margins
+      marginTop,
+      marginRight,
+      marginBottom,
+      marginLeft,
+      // chart options
+      showLegend,
+      // Tooltip
+      showTooltip,
+      isMonetaryValue,
+    } = visualOptions;
+    const option = {
+      grid: {
+        top: marginTop,
+        left: marginLeft,
+        right: marginRight,
+        bottom: marginBottom,
+        zlevel: -1,
+        z: -1,
+      },
+      xAxis: {
+        type: "category",
+        data: data.xAxisValues || [],
+        zlevel: -1,
+        z: -1,
+      },
+      yAxis: {
+        type: "value",
+        zlevel: -1,
+        z: -1,
+      },
+      legend: {
+        show: showLegend,
+        data: filter(
+          get(data, "lines", []).map((d: any) => d[0]),
+          (d: any) => d !== null
+        ),
+      },
+      // backgroundColor: background,
+      backgroundColor: "transparent",
+
+      series: filter(get(data, "lines", []), (l: any) => l !== null).map(
+        (d: any) => ({
+          type: "line",
+          name: d[0],
+          data: d[1].map((l: any) => l.y),
+          stack: "Total",
+          areaStyle: {},
+          z: -1,
+          zlevel: -1,
+        })
+      ),
+      tooltip: {
+        show: showTooltip,
+        trigger: "axis",
+
+        confine: true,
+        valueFormatter: (value: number | string) =>
+          isMonetaryValue
+            ? formatFinancialValue(parseInt(value.toString(), 10), true)
+            : value,
+      },
+    };
+
+    return option;
+  }
+
+  function echartsBubblechart(data: any, visualOptions: any) {
+    const {
+      // artboard
+      showLegend,
+      // margin
+      marginTop,
+      marginRight,
+      marginBottom,
+      marginLeft,
+      // Tooltip
+      showTooltip,
+      isMonetaryValue,
+      // Label
+      showLabels,
+      labelFontSize,
+    } = visualOptions;
+    const groups = Object.keys(data);
+
+    const maxSize = Math.max(
+      ...groups.map((group) =>
+        data[group].reduce((prev: number, curr: any) => {
+          return Math.max(prev, curr.size);
+        }, 0)
+      )
+    );
+
+    const option = {
+      legend: {
+        right: "10%",
+        top: "3%",
+        data: groups,
+        show: showLegend,
+      },
+      grid: {
+        top: marginTop,
+        left: marginLeft,
+        right: marginRight,
+        bottom: marginBottom,
+      },
+      xAxis: {
+        splitLine: {
+          lineStyle: {
+            type: "dashed",
+          },
+        },
+      },
+      yAxis: {
+        splitLine: {
+          lineStyle: {
+            type: "dashed",
+          },
+        },
+        scale: true,
+      },
+      tooltip: {
+        trigger: showTooltip ? "item" : "none",
+        confine: true,
+        formatter: (params: any) => {
+          return `${params.data[3]}: ${
+            isMonetaryValue
+              ? formatFinancialValue(params.value, true)
+              : params.data[2]
+          }`;
+        },
+      },
+      series: groups.map((group) => ({
+        name: group,
+        data: data[group].map((item: any) => [
+          item.x,
+          item.y,
+          (item.size / maxSize) * 50, // making the symbol size relative to the max value but max at 50,
+          item.label,
+          item.color,
+        ]),
+        type: "scatter",
+        symbolSize: function (singleData: any) {
+          return singleData[2];
+        },
+        label: { show: showLabels, fontSize: labelFontSize },
+        emphasis: {
+          focus: "series",
+          label: {
+            show: true,
+            formatter: function (param: any) {
+              return param.data[3];
+            },
+            position: "top",
+          },
+        },
+        itemStyle: {
+          shadowBlur: 10,
+          shadowColor: "rgba(120, 36, 50, 0.5)",
+          shadowOffsetY: 5,
+        },
+      })),
+    };
     return option;
   }
 
@@ -398,6 +649,198 @@ export function useDataThemesEchart() {
     return option;
   }
 
+  function echartsForcegraph(data: any, visualOptions: any) {
+    const {
+      // artboard
+      width,
+      height,
+      showLegend,
+      // margins
+      marginTop,
+      marginRight,
+      marginBottom,
+      marginLeft,
+      // chart options
+      linksOpacity,
+      draggable,
+      // Tooltip
+      showTooltip,
+      isMonetaryValue,
+      // labels
+      showLabels,
+      labelFontSize,
+      // chart
+      nodeSize,
+      forceRepulsion,
+    } = visualOptions;
+
+    const nodes = uniqBy(data.nodes, "name");
+
+    nodes?.forEach(function (node: any) {
+      node.symbolSize = nodeSize;
+    });
+
+    data.links?.forEach(function (link: any) {
+      link.lineStyle = {
+        opacity: linksOpacity,
+      };
+    });
+
+    const option = {
+      legend: [
+        {
+          data: data.categories?.map(function (a: { name: string }) {
+            return a.name;
+          }),
+          show: showLegend,
+        },
+      ],
+      tooltip: {
+        trigger: showTooltip ? "item" : "none",
+        formatter: (params: any) => {
+          return `${params.name}: ${
+            isMonetaryValue
+              ? formatFinancialValue(params.data.value, true)
+              : params.data.value
+          }`;
+        },
+      },
+      series: [
+        {
+          type: "graph",
+          layout: "force",
+          data: nodes,
+          links: data.links,
+          categories: data.categories,
+          top: marginTop,
+          left: marginLeft,
+          right: marginRight,
+          bottom: marginBottom,
+          width,
+          height,
+          roam: draggable,
+          label: {
+            position: "right",
+            show: showLabels,
+            fontSize: labelFontSize,
+          },
+          force: {
+            repulsion: forceRepulsion,
+          },
+        },
+      ],
+    };
+    return option;
+  }
+
+  function echartsCirculargraph(data: any, visualOptions: any) {
+    const {
+      // artboard
+      width,
+      height,
+      showLegend,
+      // margins
+      marginTop,
+      marginRight,
+      marginBottom,
+      marginLeft,
+      // chart options
+      linksOpacity,
+      draggable,
+      linksCurveness,
+      // Tooltip
+      showTooltip,
+      isMonetaryValue,
+      // labels
+      showLabels,
+      labelFontSize,
+      rotateLabel,
+    } = visualOptions;
+
+    const maxValue = data.nodes?.reduce((prev: number, curr: any) => {
+      return Math.max(prev, curr.value);
+    }, 0);
+
+    data.nodes?.forEach(function (node: any) {
+      node.symbolSize = (node.value / maxValue) * 50; // making the symbol size relative to the max value but max at 50
+      let show = false;
+      if (showLabels == "largeNodes") {
+        show = node.symbolSize > 30;
+      } else if (showLabels == "true") {
+        show = true;
+      }
+      node.label = {
+        show,
+      };
+    });
+
+    data.links?.forEach(function (link: any) {
+      link.lineStyle = {
+        opacity: linksOpacity,
+      };
+    });
+
+    const nodes = uniqBy(data.nodes, "name");
+
+    const option = {
+      legend: [
+        {
+          data: data.categories?.map(function (a: { name: string }) {
+            return a.name;
+          }),
+
+          align: "left",
+          show: showLegend,
+        },
+      ],
+      tooltip: {
+        trigger: showTooltip ? "item" : "none",
+        formatter: (params: any) => {
+          return `${params.name}: ${
+            isMonetaryValue
+              ? formatFinancialValue(params.data.value, true)
+              : params.data.value
+          }`;
+        },
+      },
+      animationDurationUpdate: 1500,
+      animationEasingUpdate: "quinticInOut",
+      series: [
+        {
+          type: "graph",
+          layout: "circular",
+          circular: {
+            rotateLabel: rotateLabel,
+          },
+          data: nodes,
+          links: data.links,
+          categories: data.categories,
+          top: marginTop,
+          left: marginLeft,
+          right: marginRight,
+          bottom: marginBottom,
+          width,
+          height: 0.8 * height - marginTop - marginBottom, // Default height from echarts is overflowing so I had to remove .5 percent from the height to fit
+          roam: draggable as boolean,
+          force: {
+            repulsion: 100,
+          },
+          label: {
+            position: "right",
+            formatter: "{b}",
+            show: showLabels,
+            fontSize: labelFontSize,
+          },
+          lineStyle: {
+            color: "source",
+            curveness: linksCurveness,
+          },
+        },
+      ],
+    };
+    return option as any;
+  }
+
   function echartsTreemap(data: any, visualOptions: any) {
     const {
       // artboard
@@ -459,6 +902,111 @@ export function useDataThemesEchart() {
     return option;
   }
 
+  function echartsCirclepacking(
+    data: any,
+    visualOptions: any,
+    targetPath: string | null
+  ) {
+    const option = drillDown(data, targetPath, visualOptions);
+    return option;
+  }
+
+  function echartsSunburst(data: any, visualOptions: any) {
+    const {
+      // artboard
+      width,
+      height,
+      marginTop,
+      marginRight,
+      marginBottom,
+      marginLeft,
+      // labels
+      showLabels,
+      showLabel1,
+      showLabel2,
+      showLabel3,
+      labelFontSize,
+      // tooltip
+      showTooltip,
+      isMonetaryValue,
+    } = visualOptions;
+
+    const option = {
+      // backgroundColor: background,
+      backgroundColor: "transparent",
+      tooltip: {
+        trigger: showTooltip ? "item" : "none",
+        formatter: (params: any) => {
+          return `${params.name}: ${
+            isMonetaryValue
+              ? formatFinancialValue(params.data.value, true)
+              : params.data.value
+          }`;
+        },
+      },
+      series: [
+        {
+          name: "All",
+          type: "sunburst",
+          data,
+          radius: [0, "95%"],
+          sort: undefined,
+          emphasis: {
+            focus: "ancestor",
+          },
+          levels: [
+            {},
+            {
+              r0: "15%",
+              r: "35%",
+              itemStyle: {
+                borderWidth: 2,
+              },
+              label: {
+                rotate: "tangential",
+                show: showLabels ? showLabel1 : false,
+              },
+            },
+            {
+              r0: "35%",
+              r: "70%",
+              label: {
+                align: "right",
+                show: showLabels ? showLabel2 : false,
+              },
+            },
+            {
+              r0: "70%",
+              r: "72%",
+              label: {
+                position: "outside",
+                padding: 3,
+                silent: false,
+                show: showLabels ? showLabel3 : false,
+              },
+              itemStyle: {
+                borderWidth: 3,
+              },
+            },
+          ],
+          width,
+          height: height,
+          roam: false,
+          top: marginTop,
+          left: marginLeft,
+          right: marginRight,
+          bottom: marginBottom,
+          leafDepth: 1,
+          label: {
+            show: showLabels,
+            fontSize: labelFontSize,
+          },
+        },
+      ],
+    };
+
+    return option;
+  }
   function bigNumberRender(data: any, node: HTMLElement) {
     const formatedData = {
       ...data,
@@ -478,9 +1026,17 @@ export function useDataThemesEchart() {
       | "echartsBarchart"
       | "echartsGeomap"
       | "echartsLinechart"
+      | "echartsAreastack"
       | "echartsSankey"
       | "echartsTreemap"
-      | "bigNumber",
+      | "bigNumber"
+      | "echartsSunburst"
+      | "echartsForcegraph"
+      | "echartsCirculargraph"
+      | "echartsPiechart"
+      | "echartsBubblechart"
+      | "echartsCirclepacking",
+
     visualOptions: any,
     id: string
   ) {
@@ -502,13 +1058,35 @@ export function useDataThemesEchart() {
         echartsBarchart: () => echartsBarchart(data, visualOptions),
         echartsGeomap: () => echartsGeomap(data, visualOptions),
         echartsLinechart: () => echartsLinechart(data, visualOptions),
+        echartsAreastack: () => echartsAreastack(data, visualOptions),
         echartsSankey: () => echartsSankey(data, visualOptions),
         echartsTreemap: () => echartsTreemap(data, visualOptions),
+        echartsSunburst: () => echartsSunburst(data, visualOptions),
+        echartsForcegraph: () => echartsForcegraph(data, visualOptions),
+        echartsCirculargraph: () => echartsCirculargraph(data, visualOptions),
+        echartsPiechart: () => echartsPiechart(data, visualOptions),
+        echartsBubblechart: () => echartsBubblechart(data, visualOptions),
+        echartsCirclepacking: () =>
+          echartsCirclepacking(data, visualOptions, null),
       };
 
       chart.setOption(CHART_TYPE_TO_COMPONENT[chartType]());
 
       window.addEventListener("resize", () => onResize(chart, id));
+      if (chartType === "echartsCirclepacking") {
+        chart.on("click", { seriesIndex: 0 }, (params: any) => {
+          chart.setOption(
+            echartsCirclepacking(data, visualOptions, params.data.path)
+          );
+        });
+
+        // Reset: click on the blank area.
+        chart.getZr().on("click", function (event) {
+          if (!event.target) {
+            chart.setOption(echartsCirclepacking(data, visualOptions, null));
+          }
+        });
+      }
     }
   }
 

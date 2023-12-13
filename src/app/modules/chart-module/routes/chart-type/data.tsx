@@ -16,6 +16,21 @@ import ColoredTreeMapIcon from "app/assets/icons/data-themes-chart-types/colored
 import BigNumberIcon from "app/assets/icons/data-themes-chart-types/bigNumber";
 import ColoredBigNumberIcon from "app/assets/icons/data-themes-chart-types/coloredBigNumber";
 
+// import SunburstIcon from "app/assets/icons/data-themes-chart-types/sunburst";
+// import ColoredSunburstIcon from "app/assets/icons/data-themes-chart-types/coloredSunburst";
+
+// import PieIcon from "app/assets/icons/data-themes-chart-types/pie";
+// import ColoredPieIcon from "app/assets/icons/data-themes-chart-types/coloredPie";
+
+// import CirclePackingIcon from "app/assets/icons/data-themes-chart-types/circlepacking";
+// import ColoredCirclePackingIcon from "app/assets/icons/data-themes-chart-types/coloredCirclepacking";
+
+// import ColoredForceGraphIcon from "app/assets/icons/data-themes-chart-types/coloredForcegraph";
+// import ForceGraphIcon from "app/assets/icons/data-themes-chart-types/forcegraph";
+
+// import ColoredCircularGraphIcon from "app/assets/icons/data-themes-chart-types/coloredCirculargraph";
+// import CircularGraphIcon from "app/assets/icons/data-themes-chart-types/circulargraph";
+
 import { ReactComponent as GeomapPreviewImg } from "app/modules/chart-module/assets/geomapPreview.svg";
 import { ReactComponent as BigNumberPreviewImg } from "app/modules/chart-module/assets/bigNumberPreview.svg";
 import { ReactComponent as LineChartPreviewImg } from "app/modules/chart-module/assets/lineChartPreview.svg";
@@ -43,7 +58,6 @@ export const echartTypes = (big: boolean) => {
       label: "Bar chart",
       icon: <BarChartIcon big={big} />,
       preview: <BarChartPreviewImg />,
-
       categories: ["Correllations"],
       ssr: false,
       description:
@@ -54,7 +68,6 @@ export const echartTypes = (big: boolean) => {
       label: "Geo map",
       icon: <GeomapChartIcon big={big} />,
       preview: <GeomapPreviewImg />,
-
       categories: ["Locations"],
       ssr: false,
       description:
@@ -65,18 +78,26 @@ export const echartTypes = (big: boolean) => {
       label: "Line chart",
       icon: <LineChartIcon big={big} />,
       preview: <LineChartPreviewImg />,
-
       categories: ["Trends", "changes over time"],
       ssr: false,
       description:
         "Line charts present data by illustrating trends and changes in continuous or sequential data points over time, making them ideal for visualizing patterns, fluctuations, or relationships in data.",
     },
     {
+      id: "echartsAreastack",
+      label: "Area Stack",
+      icon: <LineChartIcon big={big} />,
+      preview: <LineChartPreviewImg />,
+      categories: ["Trends", "changes over time"],
+      ssr: false,
+      description:
+        "Area stack charts present data by illustrating trends and changes in continuous or sequential data points over time, making them ideal for visualizing patterns, fluctuations, or relationships in data.",
+    },
+    {
       id: "echartsSankey",
       label: "Sankey diagram",
       icon: <SankeyChartIcon big={big} />,
       preview: <SankeyPreviewImg />,
-
       categories: ["Networks"],
       ssr: false,
       description:
@@ -87,7 +108,6 @@ export const echartTypes = (big: boolean) => {
       label: "Treemap diagram",
       icon: <TreeMapIcon big={big} />,
       preview: <TreeMapPreviewImg />,
-
       categories: ["Hierarchies", "Proportions"],
       ssr: false,
       description:
@@ -98,51 +118,75 @@ export const echartTypes = (big: boolean) => {
       label: "Big number",
       icon: <BigNumberIcon />,
       preview: <BigNumberPreviewImg />,
-
       categories: ["Key data points"],
       ssr: true,
       description:
         "Big number charts present specific, standout numerical values or key performance indicators in a visually prominent and easily digestible format, enabling quick recognition of important data points.",
     },
     {
-      id: "placeholder1",
-      label: "",
-      icon: <></>,
-      categories: [],
+      id: "echartsSunburst",
+      label: "Sunburst diagram",
+      icon: <BarChartIcon big={big} />,
+      // icon: <SunburstIcon big={big} />,
+      preview: <BarChartPreviewImg />,
+      categories: ["Hierarchies", "Proportions"],
       ssr: false,
-      description: "",
+      description:
+        "It displays hierarchically structured data and a related quantitative dimension using concentric circles. The circle in the center represents the root node, with the hierarchies moving outward from the center. The angle of each arc corresponds to the qualitative dimension.",
     },
     {
-      id: "placeholder2",
-      label: "",
-      icon: <></>,
-      categories: [],
+      id: "echartsPiechart",
+      label: "Pie Chart",
+      icon: <BarChartIcon big={big} />,
+      // icon: <PieIcon big={big} />,
+      preview: <BarChartPreviewImg />,
+      categories: ["Proportions"],
       ssr: false,
-      description: "",
+      description:
+        "It allows you to see the proportions between values that make up a whole, by using arcs composing a circle.",
     },
     {
-      id: "placeholder3",
-      label: "",
-      icon: <></>,
-      categories: [],
+      id: "echartsCirclepacking",
+      label: "Circle Packing Chart",
+      icon: <BarChartIcon big={big} />,
+      // icon: <CirclePackingIcon big={big} />,
+      preview: <BarChartPreviewImg />,
+      categories: ["Hierarchies", "Proportions"],
       ssr: false,
-      description: "",
+      description:
+        "It displays values of leaf nodes of a hierarchical structure by using circles areas. The hierarchical structure is depicted using nested circles. A further quantitative dimension with size and a quantitative or categorical dimension with color.",
     },
     {
-      id: "placeholder4",
-      label: "",
-      icon: <></>,
-      categories: [],
+      id: "echartsForcegraph",
+      label: "Force Layout Graph",
+      icon: <BarChartIcon big={big} />,
+      // icon: <ForceGraphIcon big={big} />,
+      preview: <BarChartPreviewImg />,
+      categories: ["Networks"],
       ssr: false,
-      description: "",
+      description:
+        "It represents flows among nodes of a network. Nodes are represented as circles",
     },
     {
-      id: "placeholder5",
-      label: "",
-      icon: <></>,
-      categories: [],
+      id: "echartsCirculargraph",
+      label: "Circular Layout Graph",
+      icon: <BarChartIcon big={big} />,
+      // icon: <CircularGraphIcon big={big} />,
+      preview: <BarChartPreviewImg />,
+      categories: ["Networks"],
       ssr: false,
-      description: "",
+      description:
+        "It represents flows among nodes of a network. Nodes are represented as circles",
+    },
+    {
+      id: "echartsBubblechart",
+      label: "Bubble Chart",
+      icon: <BarChartIcon big={big} />,
+      preview: <BarChartPreviewImg />,
+      categories: ["Correlations", "Proportions"],
+      ssr: false,
+      description:
+        "The basic layout is a scatter plot, which allows to see correlations among two continuous dimensions. A further quantitative dimension with size and a quantitative or categorical dimension with color.",
     },
     {
       id: "placeholder7",
@@ -214,6 +258,15 @@ export const coloredEchartTypes = () => {
         "It displays a quantitative dimension over a continuous interval or time period. Colour can be optionally used to encode an additional quantitative or categorical dimension.",
     },
     {
+      id: "echartsAreastack",
+      label: "Area Stack",
+      icon: <ColoredLineChartIcon />,
+      categories: ["Trends", "changes over time"],
+      ssr: false,
+      description:
+        "Area stack charts present data by illustrating trends and changes in continuous or sequential data points over time, making them ideal for visualizing patterns, fluctuations, or relationships in data.",
+    },
+    {
       id: "echartsSankey",
       label: "Sankey diagram",
       icon: <ColoredSankeyChartIcon />,
@@ -239,6 +292,65 @@ export const coloredEchartTypes = () => {
       ssr: true,
       description:
         "Big number charts present specific, standout numerical values or key performance indicators in a visually prominent and easily digestible format, enabling quick recognition of important data points.",
+    },
+    {
+      id: "echartsSunburst",
+      label: "Sunburst diagram",
+      icon: <ColoredBarChartIcon />,
+      // icon: <ColoredSunburstIcon />,
+      categories: ["Hierarchies", "Proportions"],
+      ssr: false,
+      description:
+        "It displays hierarchically structured data and a related quantitative dimension using concentric circles. The circle in the center represents the root node, with the hierarchies moving outward from the center. The angle of each arc corresponds to the qualitative dimension.",
+    },
+    {
+      id: "echartsPiechart",
+      label: "Pie Chart",
+      icon: <ColoredBarChartIcon />,
+      // icon: <ColoredPieIcon />,
+      categories: ["Proportions"],
+      ssr: false,
+      description:
+        "It allows you to see the proportions between values that make up a whole, by using arcs composing a circle.",
+    },
+    {
+      id: "echartsCirclepacking",
+      label: "Circle Packing Chart",
+      icon: <ColoredBarChartIcon />,
+      // icon: <ColoredCirclePackingIcon />,
+      categories: ["Hierarchies", "Proportions"],
+      ssr: false,
+      description:
+        "It displays values of leaf nodes of a hierarchical structure by using circles areas. The hierarchical structure is depicted using nested circles. A further quantitative dimension with size and a quantitative or categorical dimension with color.",
+    },
+    {
+      id: "echartsForcegraph",
+      label: "Force Layout Graph",
+      icon: <ColoredBarChartIcon />,
+      // icon: <ColoredForceGraphIcon />,
+      categories: ["Networks"],
+      ssr: false,
+      description:
+        "It represents flows among nodes of a network. Nodes are represented as circles, the size represents their value. Flows are represented with straight lines whose width is proportional to their value.",
+    },
+    {
+      id: "echartsCirculargraph",
+      label: "Circular Layout Graph",
+      icon: <ColoredBarChartIcon />,
+      // icon: <ColoredCircularGraphIcon />,
+      categories: ["Networks"],
+      ssr: false,
+      description:
+        "It represents flows among nodes of a network. Nodes are represented as circles",
+    },
+    {
+      id: "echartsBubblechart",
+      label: "Bubble Chart",
+      icon: <ColoredBarChartIcon />,
+      categories: ["Correlations", "Proportions"],
+      ssr: false,
+      description:
+        "The basic layout is a scatter plot, which allows to see correlations among two continuous dimensions. A further quantitative dimension with size and a quantitative or categorical dimension with color.",
     },
   ];
 };
