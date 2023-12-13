@@ -922,6 +922,9 @@ export function useDataThemesEchart() {
       marginLeft,
       // labels
       showLabels,
+      showLabel1,
+      showLabel2,
+      showLabel3,
       labelFontSize,
       // tooltip
       showTooltip,
@@ -961,6 +964,7 @@ export function useDataThemesEchart() {
               },
               label: {
                 rotate: "tangential",
+                show: showLabels ? showLabel1 : false,
               },
             },
             {
@@ -968,6 +972,7 @@ export function useDataThemesEchart() {
               r: "70%",
               label: {
                 align: "right",
+                show: showLabels ? showLabel2 : false,
               },
             },
             {
@@ -977,6 +982,7 @@ export function useDataThemesEchart() {
                 position: "outside",
                 padding: 3,
                 silent: false,
+                show: showLabels ? showLabel3 : false,
               },
               itemStyle: {
                 borderWidth: 3,
