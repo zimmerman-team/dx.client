@@ -43,10 +43,6 @@ export function ReportInitialView(props: ReportInitialViewProps) {
 
   const inputRef = React.useRef<HTMLInputElement>(null);
 
-  const reportEditSuccess = useStoreState(
-    (state) => state.reports.ReportUpdate.success
-  );
-
   const reportCreateSuccess = useStoreState(
     (state) => state.reports.ReportCreate.success
   );
@@ -95,6 +91,7 @@ export function ReportInitialView(props: ReportInitialViewProps) {
     clearReportCreate();
     clearReportEdit();
   });
+  const dataset = useStoreState((state) => state.charts.dataset.value);
 
   useUpdateEffect(() => {
     if (reportCreateSuccess && !isEmpty(reportCreateData?.id)) {

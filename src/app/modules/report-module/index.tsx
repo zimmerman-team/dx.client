@@ -82,12 +82,11 @@ export default function ReportModule() {
 
   const token = useStoreState((state) => state.AuthToken.value);
 
-  const [rightPanelView, setRightPanelView] = useRecoilState(
+  const [_rightPanelView, setRightPanelView] = useRecoilState(
     reportRightPanelViewAtom
   );
-  console.log(rightPanelView, "rhV");
 
-  const [createChartFromReport, setCreateChartFromReport] = useRecoilState(
+  const [_createChartFromReport, setCreateChartFromReport] = useRecoilState(
     createChartFromReportAtom
   );
 
@@ -366,10 +365,6 @@ export default function ReportModule() {
 
   const reportCreateClear = useStoreActions(
     (actions) => actions.reports.ReportCreate.clear
-  );
-
-  const reportEditLoading = useStoreState(
-    (state) => state.reports.ReportUpdate.loading
   );
 
   const reportEdit = useStoreActions(

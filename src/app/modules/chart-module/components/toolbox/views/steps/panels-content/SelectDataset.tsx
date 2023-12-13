@@ -3,8 +3,8 @@ import get from "lodash/get";
 import find from "lodash/find";
 import CloseIcon from "@material-ui/icons/Close";
 import { useStoreState, useStoreActions } from "app/state/store/hooks";
-import { Box, IconButton } from "@material-ui/core";
-import { useHistory } from "react-router-dom";
+import { Box } from "@material-ui/core";
+import { useHistory, useParams } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { loadedDatasetsAtom } from "app/state/recoil/atoms";
 import ToolboxSubHeader from "../sub-header";
@@ -31,6 +31,7 @@ export function DatasetPanel() {
 }
 
 function ChartToolBoxSelectDataset() {
+  const { page } = useParams<{ page: string }>();
   const history = useHistory();
   const dataset = useStoreState((state) => state.charts.dataset.value);
   const setDataset = useStoreActions(
@@ -41,7 +42,7 @@ function ChartToolBoxSelectDataset() {
 
   const deSelectDataset = () => {
     setDataset(null);
-    history.push(`/chart/new/data`);
+    history.push(`/chart/${page}/data`);
   };
 
   return (
@@ -118,19 +119,16 @@ function ChartToolBoxSelectDataset() {
             "Select data from the list"
           )}
         </span>
-        <IconButton
+        <span
           onClick={deSelectDataset}
           css={`
-            padding: 0px;
-            :hover {
-              cursor: pointer;
-              background: transparent;
-            }
+            margin-top: 2px;
+            cursor: pointer;
             display: ${dataset ? "block" : "none"};
           `}
         >
           <CloseIcon />
-        </IconButton>
+        </span>
       </button>
     </div>
   );
@@ -140,48 +138,46 @@ export const ConnectData = () => {
   const history = useHistory();
 
   return (
-    <>
-      <div
-        css={`
-          width: 351px;
-          height: 97px;
-          border-radius: 11px;
-          background: #dfe3e5;
+    <div
+      css={`
+        width: 351px;
+        height: 97px;
+        border-radius: 11px;
+        background: #dfe3e5;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        font-family: "Gotham Narrow", sans-serif;
+        button {
           display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-          font-family: "Gotham Narrow", sans-serif;
-          button {
-            display: flex;
-            padding: 12px 27px;
-            align-items: flex-start;
-            gap: 10px;
-            border-radius: 30px;
-            background: var(--primary-dark, #231d2c);
-            font-family: "Inter", sans-serif;
-            font-size: 14px;
-            font-weight: 500;
-            text-transform: uppercase;
-            color: #fff;
-            border: none;
-            outline: none;
-            cursor: pointer;
-          }
-          p {
-            margin-bottom: 4px;
-            margin-top: -8px;
+          padding: 12px 27px;
+          align-items: flex-start;
+          gap: 10px;
+          border-radius: 30px;
+          background: var(--primary-dark, #231d2c);
+          font-family: "Inter", sans-serif;
+          font-size: 14px;
+          font-weight: 500;
+          text-transform: uppercase;
+          color: #fff;
+          border: none;
+          outline: none;
+          cursor: pointer;
+        }
+        p {
+          margin-bottom: 4px;
+          margin-top: -8px;
 
-            font-weight: bold;
-            font-size: 14px;
-          }
-        `}
-      >
-        <p>Or connect new data</p>
-        <button onClick={() => history.push("/dataset/new/upload")}>
-          add new dataset
-        </button>
-      </div>
-    </>
+          font-weight: bold;
+          font-size: 14px;
+        }
+      `}
+    >
+      <p>Or connect new data</p>
+      <button onClick={() => history.push("/dataset/new/upload")}>
+        add new dataset
+      </button>
+    </div>
   );
 };

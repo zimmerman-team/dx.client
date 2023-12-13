@@ -462,16 +462,21 @@ const DimensionSelect = (props: {
         </span>
         {!props.dimension.multiple &&
         props.dimension.mappedValues.length > 0 ? (
-          <IconButton
+          <span
             onClick={onDeleteItem}
             css={`
-              padding: 4px;
+              margin-top: 6px;
+              margin-right: -4px;
             `}
           >
             <CloseIcon fontSize="small" />
-          </IconButton>
+          </span>
         ) : (
-          <ArrowDropUpIcon />
+          <ArrowDropUpIcon
+            css={`
+              margin-right: -7px;
+            `}
+          />
         )}
       </Button>
       {props.dimension &&

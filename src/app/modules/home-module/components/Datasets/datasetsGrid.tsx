@@ -77,7 +77,6 @@ export default function DatasetsGrid(props: Props) {
 
   const loadData = async (reload?: boolean) => {
     //refrain from loading data if all the data is loaded
-    console.log("calling");
     if (token) {
       await loadDatasets({
         token,

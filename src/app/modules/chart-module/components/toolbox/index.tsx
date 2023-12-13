@@ -92,13 +92,14 @@ export function ChartModuleToolBox(props: ChartToolBoxProps) {
     }
   };
 
-  React.useEffect(() => {
-    const step = stepPaths.find(
-      (step) => step.path === location.pathname
-    )?.name;
+  //TODO: work on function to set active step based on url
+  // React.useEffect(() => {
+  //   const step = stepPaths.find(
+  //     (step) => step.path === location.pathname
+  //   )?.name;
 
-    onNavBtnClick(step as ToolboxNavType);
-  }, [location.pathname]);
+  //   onNavBtnClick(step as ToolboxNavType);
+  // }, [location.pathname]);
 
   const onMouseOverNavBtn = (name: ToolboxNavType) => {
     //handles state to set cursor types for nav buttons

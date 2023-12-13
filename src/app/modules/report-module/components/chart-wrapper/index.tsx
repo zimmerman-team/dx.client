@@ -30,6 +30,9 @@ export function ReportChartWrapper(props: Props) {
     (state) =>
       (state.charts.ChartGet.crudData ?? emptyChartAPI) as ChartAPIModel
   );
+  const clearChart = useStoreActions(
+    (actions) => actions.charts.ChartGet.clear
+  );
 
   const [chartName, setChartName] = React.useState<string>("");
   const [rawViz, setRawViz] = React.useState<any>(null);
@@ -60,6 +63,9 @@ export function ReportChartWrapper(props: Props) {
     if (token.length > 0) {
       loadChart({ token, getId: props.id });
     }
+    return () => {
+      clearChart();
+    };
   }, [props.id, token]);
 
   React.useEffect(() => {

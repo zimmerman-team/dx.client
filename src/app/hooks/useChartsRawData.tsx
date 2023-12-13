@@ -90,11 +90,9 @@ export function useChartsRawData(props: {
   const [error401, setError401] = React.useState(false);
   const [dataError, setDataError] = React.useState(false);
   const [dataTotalCount, setDataTotalCount] = React.useState(0);
-  // const [isEditMode, setIsEditMode] = React.useState(checkIfIsEditMode(view));
   const appliedFilters = useStoreState(
     (state) => state.charts.appliedFilters.value
   );
-  const chartType = useStoreState((state) => state.charts.chartType.value);
 
   const setAllAppliedFilters = useStoreActions(
     (actions) => actions.charts.appliedFilters.setAll

@@ -114,7 +114,6 @@ export const mappingStyles = {
     }
 
     svg {
-      margin-left: 10px;
       transition: all 0.2s ease-in-out;
       transform: rotate(${dimension.mapValuesDisplayed ? "180" : "0"}deg);
       > path {

@@ -7,6 +7,7 @@ import CloudDoneIcon from "@material-ui/icons/CloudDone";
 import TableChartIcon from "@material-ui/icons/TableChart";
 import AssessmentIcon from "@material-ui/icons/Assessment";
 import { stepcss } from "app/modules/chart-module/components/toolbox/views/steps/navbar/style";
+import { useStoreActions } from "app/state/store/hooks";
 
 export type ToolboxNavType =
   | "dataset"
@@ -32,7 +33,9 @@ export default function ToolboxNav(
   const { page } = useParams<{ page: string }>();
   const history = useHistory();
   const location = useLocation();
-
+  const resetActivePanels = useStoreActions(
+    (actions) => actions.charts.activePanels.reset
+  );
   const whiteBackgroundOnly = "background-color: #fff;";
   const whiteBackgroundRoundedBottomRight =
     whiteBackgroundOnly + " border-radius: 0px 0px 8px 0px;";
@@ -43,12 +46,15 @@ export default function ToolboxNav(
 
   React.useEffect(() => {
     //on first render, set activestep based on url
-    if (page !== "new") {
+    if (page !== "new" && location.pathname !== `/chart/${page}/preview`) {
       const step = props.stepPaths.find(
         (s) => s.path === location.pathname
       )?.name;
       props.setActiveStep(step as ToolboxNavType);
     }
+    return () => {
+      resetActivePanels();
+    };
   }, []);
 
   const handleStepChange = () => {
