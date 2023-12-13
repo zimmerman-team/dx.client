@@ -156,7 +156,6 @@ export function SubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
   const handleCloseSnackbar = () => {
     setOpenSnackbar(false);
   };
-
   const onSave = () => {
     const chart = {
       name: props.name,

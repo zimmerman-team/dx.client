@@ -36,9 +36,11 @@ function ChartBuilderFilters(props: ChartBuilderFiltersProps) {
     }
   }, [containerRef]);
 
-  if ((dataset === null && !props.loading) || isEmpty(mapping)) {
-    history.push(`/chart/${page}/data`);
-  }
+  React.useEffect(() => {
+    if ((dataset === null && !props.loading) || isEmpty(mapping)) {
+      history.push(`/chart/${page}/data`);
+    }
+  }, []);
 
   return (
     <div css={commonStyles.container}>

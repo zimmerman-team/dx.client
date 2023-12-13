@@ -33,17 +33,15 @@ export function ReportInitialView(props: ReportInitialViewProps) {
   const { page, view } = useParams<{ page: string; view?: string }>();
 
   const [tableView, setTableView] = React.useState(false);
-  const [searchValue, setSearchValue] = React.useState("");
+  const [searchValue, setSearchValue] = React.useState<undefined | string>(
+    undefined
+  );
   const [openSearch, setOpenSearch] = React.useState(false);
   const [sortValue, setSortValue] = React.useState("createdDate");
   const [sortPopoverAnchorEl, setSortPopoverAnchorEl] =
     React.useState<HTMLButtonElement | null>(null);
 
   const inputRef = React.useRef<HTMLInputElement>(null);
-
-  const reportEditSuccess = useStoreState(
-    (state) => state.reports.ReportUpdate.success
-  );
 
   const reportCreateSuccess = useStoreState(
     (state) => state.reports.ReportCreate.success
@@ -93,6 +91,7 @@ export function ReportInitialView(props: ReportInitialViewProps) {
     clearReportCreate();
     clearReportEdit();
   });
+  const dataset = useStoreState((state) => state.charts.dataset.value);
 
   useUpdateEffect(() => {
     if (reportCreateSuccess && !isEmpty(reportCreateData?.id)) {
@@ -287,7 +286,7 @@ export function ReportInitialView(props: ReportInitialViewProps) {
       </Grid>
       <ReportsGrid
         sortBy={sortValue}
-        searchStr={searchValue}
+        searchStr={searchValue as string}
         tableView={tableView}
         showMenuButton
       />

@@ -34,9 +34,11 @@ function ChartBuilderChartType(props: ChartBuilderChartTypeProps) {
       setChartType(chartType === chartTypeId ? null : chartTypeId);
     };
 
-  if (dataset === null && !props.loading) {
-    history.push(`/chart/${page}/data`);
-  }
+  React.useEffect(() => {
+    if (dataset === null && !props.loading) {
+      history.push(`/chart/${page}/data`);
+    }
+  }, []);
 
   return (
     <div css={commonStyles.container}>
