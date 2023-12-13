@@ -304,9 +304,7 @@ export function useDataThemesEchart() {
       marginBottom,
       marginLeft,
       // chart options
-      stack,
       showLegend,
-      showArea,
       // Tooltip
       showTooltip,
       isMonetaryValue,
@@ -346,8 +344,76 @@ export function useDataThemesEchart() {
           type: "line",
           name: d[0],
           data: d[1].map((l: any) => l.y),
-          stack: stack ? "Total" : undefined,
-          areaStyle: showArea ? {} : undefined,
+          z: -1,
+          zlevel: -1,
+        })
+      ),
+      tooltip: {
+        show: showTooltip,
+        trigger: "axis",
+
+        confine: true,
+        valueFormatter: (value: number | string) =>
+          isMonetaryValue
+            ? formatFinancialValue(parseInt(value.toString(), 10), true)
+            : value,
+      },
+    };
+
+    return option;
+  }
+
+  function echartsAreastack(data: any, visualOptions: any) {
+    const {
+      // artboard
+      // margins
+      marginTop,
+      marginRight,
+      marginBottom,
+      marginLeft,
+      // chart options
+      showLegend,
+      // Tooltip
+      showTooltip,
+      isMonetaryValue,
+    } = visualOptions;
+    const option = {
+      grid: {
+        top: marginTop,
+        left: marginLeft,
+        right: marginRight,
+        bottom: marginBottom,
+        zlevel: -1,
+        z: -1,
+      },
+      xAxis: {
+        type: "category",
+        data: data.xAxisValues || [],
+        zlevel: -1,
+        z: -1,
+      },
+      yAxis: {
+        type: "value",
+        zlevel: -1,
+        z: -1,
+      },
+      legend: {
+        show: showLegend,
+        data: filter(
+          get(data, "lines", []).map((d: any) => d[0]),
+          (d: any) => d !== null
+        ),
+      },
+      // backgroundColor: background,
+      backgroundColor: "transparent",
+
+      series: filter(get(data, "lines", []), (l: any) => l !== null).map(
+        (d: any) => ({
+          type: "line",
+          name: d[0],
+          data: d[1].map((l: any) => l.y),
+          stack: "Total",
+          areaStyle: {},
           z: -1,
           zlevel: -1,
         })
@@ -954,6 +1020,7 @@ export function useDataThemesEchart() {
       | "echartsBarchart"
       | "echartsGeomap"
       | "echartsLinechart"
+      | "echartsAreastack"
       | "echartsSankey"
       | "echartsTreemap"
       | "bigNumber"
@@ -985,6 +1052,7 @@ export function useDataThemesEchart() {
         echartsBarchart: () => echartsBarchart(data, visualOptions),
         echartsGeomap: () => echartsGeomap(data, visualOptions),
         echartsLinechart: () => echartsLinechart(data, visualOptions),
+        echartsAreastack: () => echartsAreastack(data, visualOptions),
         echartsSankey: () => echartsSankey(data, visualOptions),
         echartsTreemap: () => echartsTreemap(data, visualOptions),
         echartsSunburst: () => echartsSunburst(data, visualOptions),

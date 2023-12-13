@@ -84,6 +84,16 @@ export const echartTypes = (big: boolean) => {
         "Line charts present data by illustrating trends and changes in continuous or sequential data points over time, making them ideal for visualizing patterns, fluctuations, or relationships in data.",
     },
     {
+      id: "echartsAreastack",
+      label: "Area Stack",
+      icon: <LineChartIcon big={big} />,
+      preview: <LineChartPreviewImg />,
+      categories: ["Trends", "changes over time"],
+      ssr: false,
+      description:
+        "Area stack charts present data by illustrating trends and changes in continuous or sequential data points over time, making them ideal for visualizing patterns, fluctuations, or relationships in data.",
+    },
+    {
       id: "echartsSankey",
       label: "Sankey diagram",
       icon: <SankeyChartIcon big={big} />,
@@ -246,6 +256,15 @@ export const coloredEchartTypes = () => {
       ssr: false,
       description:
         "It displays a quantitative dimension over a continuous interval or time period. Colour can be optionally used to encode an additional quantitative or categorical dimension.",
+    },
+    {
+      id: "echartsAreastack",
+      label: "Area Stack",
+      icon: <ColoredLineChartIcon />,
+      categories: ["Trends", "changes over time"],
+      ssr: false,
+      description:
+        "Area stack charts present data by illustrating trends and changes in continuous or sequential data points over time, making them ideal for visualizing patterns, fluctuations, or relationships in data.",
     },
     {
       id: "echartsSankey",

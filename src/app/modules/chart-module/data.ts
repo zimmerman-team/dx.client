@@ -4,6 +4,7 @@ import {
   echartsBarchart,
   echartsGeomap,
   echartsLinechart,
+  echartsAreastack,
   echartsSankey,
   echartsTreemap,
   bigNumber,
@@ -21,6 +22,7 @@ export const charts = {
   echartsBarchart,
   echartsGeomap,
   echartsLinechart,
+  echartsAreastack,
   echartsSankey,
   echartsTreemap,
   bigNumber,
@@ -71,6 +73,18 @@ export const defaultChartOptions = {
       default: CHART_DEFAULT_HEIGHT,
     },
     ...echartsLinechart.visualOptions,
+  },
+  echartsAreastack: {
+    ...baseOptions,
+    width: {
+      ...baseOptions.width,
+      default: CHART_DEFAULT_WIDTH,
+    },
+    height: {
+      ...baseOptions.height,
+      default: CHART_DEFAULT_HEIGHT,
+    },
+    ...echartsAreastack.visualOptions,
   },
   echartsSankey: {
     ...baseOptions,
