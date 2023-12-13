@@ -11,6 +11,7 @@ import {
   echartsForcegraph,
   echartsCirculargraph,
   echartsCirclepacking,
+  echartsBubblechart,
   echartsPiechart,
   // @ts-ignore
 } from "@rawgraphs/rawgraphs-charts";
@@ -27,6 +28,7 @@ export const charts = {
   echartsForcegraph,
   echartsCirculargraph,
   echartsCirclepacking,
+  echartsBubblechart,
   echartsPiechart,
 };
 
@@ -217,6 +219,18 @@ export const defaultChartOptions = {
       ...echartsCirclepacking.visualOptions.marginBottom,
       default: 0,
     },
+  },
+  echartsBubblechart: {
+    ...baseOptions,
+    width: {
+      ...baseOptions.width,
+      default: CHART_DEFAULT_WIDTH,
+    },
+    height: {
+      ...baseOptions.height,
+      default: CHART_DEFAULT_HEIGHT,
+    },
+    ...echartsBubblechart.visualOptions,
   },
   bigNumber: {},
 };

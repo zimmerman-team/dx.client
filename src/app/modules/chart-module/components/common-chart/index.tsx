@@ -26,6 +26,7 @@ interface Props {
     | "echartsForcegraph"
     | "echartsCirculargraph"
     | "echartsCirclepacking"
+    | "echartsBubblechart"
     | "echartsPiechart";
 }
 
@@ -108,6 +109,7 @@ export function CommonChart(props: Props) {
               | "echartsForcegraph"
               | "echartsCirculargraph"
               | "echartsCirclepacking"
+              | "echartsBubblechart"
               | "echartsPiechart"),
           visualOptions,
           `common-chart-render-container-${props.chartId || "1"}`

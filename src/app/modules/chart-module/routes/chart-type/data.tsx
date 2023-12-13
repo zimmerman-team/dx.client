@@ -169,12 +169,14 @@ export const echartTypes = (big: boolean) => {
         "It represents flows among nodes of a network. Nodes are represented as circles",
     },
     {
-      id: "placeholder5",
-      label: "",
-      icon: <></>,
-      categories: [],
+      id: "echartsBubblechart",
+      label: "Bubble Chart",
+      icon: <BarChartIcon big={big} />,
+      preview: <BarChartPreviewImg />,
+      categories: ["Correlations", "Proportions"],
       ssr: false,
-      description: "",
+      description:
+        "The basic layout is a scatter plot, which allows to see correlations among two continuous dimensions. A further quantitative dimension with size and a quantitative or categorical dimension with color.",
     },
     {
       id: "placeholder7",
@@ -321,6 +323,15 @@ export const coloredEchartTypes = () => {
       ssr: false,
       description:
         "It represents flows among nodes of a network. Nodes are represented as circles",
+    },
+    {
+      id: "echartsBubblechart",
+      label: "Bubble Chart",
+      icon: <ColoredBarChartIcon />,
+      categories: ["Correlations", "Proportions"],
+      ssr: false,
+      description:
+        "The basic layout is a scatter plot, which allows to see correlations among two continuous dimensions. A further quantitative dimension with size and a quantitative or categorical dimension with color.",
     },
   ];
 };
