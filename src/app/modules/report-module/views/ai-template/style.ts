@@ -9,7 +9,7 @@ export const newsletterIllustrationcss = css`
   padding-right: 80px;
 
   background: linear-gradient(180deg, #a4a0ff 0%, #f8fcfc 100%);
-  padding-top: 271px;
+  padding-top: 120px;
 
   h1 {
     color: #6061e5;
@@ -23,6 +23,7 @@ export const newsletterIllustrationcss = css`
     font-family: "Gotham Narrow Bold", sans-serif;
     color: #231d2c;
     margin-top: 44px;
+    margin-bottom: 24px;
     font-weight: 700;
   }
   div {
@@ -124,29 +125,29 @@ export const notSubscribedcss = (error: boolean) => css`
 export const bigEllipsecss = css`
   position: absolute;
   z-index: -1;
-  top: -40px;
+  top: 59px;
   left: -8%;
 `;
 
 export const midEllipsecss = css`
   position: absolute;
-  z-index: -1;
-  top: 16rem;
+  /* z-index: 1; */
+  top: 23rem;
   left: 36%;
 `;
 
 export const btmGreenEllipsecss = css`
   position: absolute;
   z-index: -1;
-  top: 23rem;
-  left: 52%;
+  top: 26rem;
+  left: 56%;
 `;
 
 export const btmPurpleEllipsecss = css`
   position: absolute;
   z-index: -1;
   top: 8rem;
-  left: 74%;
+  left: 80%;
 `;
 
 export const datasetIllustrationcss = css`

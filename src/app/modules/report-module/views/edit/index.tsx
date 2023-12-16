@@ -6,7 +6,7 @@ import { useRecoilState } from "recoil";
 import { useParams } from "react-router-dom";
 import useResizeObserver from "use-resize-observer";
 import Container from "@material-ui/core/Container";
-import { EditorState, convertFromRaw } from "draft-js";
+import { EditorState, RawDraftContentState, convertFromRaw } from "draft-js";
 import { useSessionStorage, useUpdateEffect } from "react-use";
 import { withAuthenticationRequired } from "@auth0/auth0-react";
 import { PlaceHolder } from "app/modules/report-module/views/create";
@@ -69,7 +69,9 @@ function ReportEditView(props: ReportEditViewProps) {
   }
 
   React.useEffect(() => {
-    fetchReportData({ token, getId: page });
+    if (token) {
+      fetchReportData({ token, getId: page });
+    }
     props.setAutoSave(true);
   }, [page, token]);
 
@@ -98,26 +100,18 @@ function ReportEditView(props: ReportEditViewProps) {
       props.setHeaderDetails({
         title: reportData.title,
         showHeader: reportData.showHeader,
-        description: EditorState.createWithContent(
-          convertFromRaw(reportData.subTitle as any)
-        ),
+        description: reportData?.subTitle
+          ? EditorState.createWithContent(
+              convertFromRaw(reportData?.subTitle as RawDraftContentState)
+            )
+          : EditorState.createEmpty(),
         backgroundColor: reportData.backgroundColor,
         titleColor: reportData.titleColor,
         descriptionColor: reportData.descriptionColor,
         dateColor: reportData.dateColor,
       });
-      props.setAppliedHeaderDetails({
-        title: reportData.title,
-        showHeader: reportData.showHeader,
-        description: EditorState.createWithContent(
-          convertFromRaw(reportData.subTitle as any)
-        ),
-        backgroundColor: reportData.backgroundColor,
-        titleColor: reportData.titleColor,
-        descriptionColor: reportData.descriptionColor,
-        dateColor: reportData.dateColor,
-      });
-      const newFrameArray: IFramesArray[] = reportData.rows.map(
+
+      const newFrameArray: IFramesArray[] = reportData.rows?.map(
         (rowFrame, index) => {
           const contentTypes = rowFrame.items.map((item) => {
             if (item === null) {
@@ -207,7 +201,7 @@ function ReportEditView(props: ReportEditViewProps) {
             childrenData={props.framesArray}
             setFramesArray={props.setFramesArray}
           >
-            {props.framesArray.map((frame, index) => {
+            {props.framesArray?.map((frame, index) => {
               return (
                 <div key={frame.id}>
                   {index === 0 && (

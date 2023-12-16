@@ -36,7 +36,7 @@ const getValidMapping = (
   return validMapping;
 };
 
-const getReqMappingKeyFromReqDimension = (
+export const reqMappingKeyFromReqDimensionCheck = (
   dimensions: any,
   mapping: {
     [key: string]: any;
@@ -50,6 +50,7 @@ const getReqMappingKeyFromReqDimension = (
   if (isEmpty(requiredDimensions) || isEmpty(mapping)) {
     return false;
   }
+  //check if all required dimensions are mapped
   for (const element of requiredDimensions) {
     if (
       !mapping.hasOwnProperty(element.id) ||
@@ -83,6 +84,8 @@ export function useChartsRawData(props: {
   const { page, view } = useParams<{ page: string; view?: string }>();
 
   const [dataTypes, setDataTypes] = React.useState([]);
+  const [dataTypesFromRenderedChart, setDataTypesFromRenderedChart] =
+    React.useState([]);
   const [dataStats, setDataStats] = React.useState([]);
   const [sampleData, setSampleData] = React.useState([]);
   const [loading, setLoading] = React.useState(page !== "new");
@@ -235,7 +238,7 @@ export function useChartsRawData(props: {
     const extraLoader = document.getElementById("extra-loader");
 
     const validMapping = getValidMapping(chartFromAPI, mapping);
-    const requiredMappingKey = getReqMappingKeyFromReqDimension(
+    const requiredMappingKey = reqMappingKeyFromReqDimensionCheck(
       props.dimensions,
       mapping
     );
@@ -275,6 +278,7 @@ export function useChartsRawData(props: {
             setNotFound(true);
           } else {
             setChartFromAPI(chart);
+            setDataTypesFromRenderedChart(chart.dataTypes);
           }
           setLoading(false);
         })
@@ -318,6 +322,7 @@ export function useChartsRawData(props: {
     error401,
     dataError,
     dataTypes,
+    dataTypesFromRenderedChart,
     dataStats,
     sampleData,
     isEditMode,

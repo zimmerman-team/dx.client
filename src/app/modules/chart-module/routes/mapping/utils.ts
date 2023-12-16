@@ -135,8 +135,6 @@ export function getRequiredFieldsAndErrors(mapping: any, dimensions: any) {
     }
   });
 
-  const updErrors: string[] = [];
-
   Object.keys(mapping).forEach((dimensionId: string) => {
     const dimensionMapping = mapping[dimensionId];
     const minValue = find(dimensions, { id: dimensionId })?.minValues ?? 1;
@@ -148,5 +146,5 @@ export function getRequiredFieldsAndErrors(mapping: any, dimensions: any) {
     }
   });
 
-  return { updRequiredFields, updErrors, updMinValuesFields };
+  return { updRequiredFields, updMinValuesFields };
 }

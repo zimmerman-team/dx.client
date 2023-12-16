@@ -73,7 +73,6 @@ export default function ChartModule() {
       get(charts, `[${chartType}].dimensions`, [])
     );
   }, [chartFromAPI, chartType]);
-
   const {
     loading,
     dataTypes,
@@ -87,6 +86,7 @@ export default function ChartModule() {
     setNotFound,
     notFound,
     dataError,
+    dataTypesFromRenderedChart,
   } = useChartsRawData({
     visualOptions,
     setVisualOptions,
@@ -157,10 +157,12 @@ export default function ChartModule() {
     [chartFromAPI]
   );
 
-  const dataTypes2 = React.useMemo(
-    () => get(chartFromAPI, "dataTypes", dataTypes),
-    [chartFromAPI, dataTypes]
-  );
+  const dataTypes2 = React.useMemo(() => {
+    if (isEmpty(dataTypes)) {
+      return dataTypesFromRenderedChart;
+    }
+    return dataTypes;
+  }, [dataTypes, dataTypesFromRenderedChart]);
 
   //empty chart when chart type and dataset types changes
   React.useEffect(() => {
@@ -287,8 +289,10 @@ export default function ChartModule() {
       }
     });
   }
-  const { updRequiredFields, updErrors, updMinValuesFields } =
-    getRequiredFieldsAndErrors(mapping, dimensions);
+  const { updRequiredFields, updMinValuesFields } = getRequiredFieldsAndErrors(
+    mapping,
+    dimensions
+  );
   function getForceNextEnabledValue(param?: string) {
     switch (param) {
       case "initial":
@@ -304,9 +308,7 @@ export default function ChartModule() {
       case "customize":
       case "mapping":
         return (
-          updRequiredFields.length === 0 &&
-          updErrors.length === 0 &&
-          updMinValuesFields.length === 0
+          updRequiredFields.length === 0 && updMinValuesFields.length === 0
         );
       case "filters":
         return true;
@@ -320,13 +322,9 @@ export default function ChartModule() {
       return true;
     }
     if (param === "mapping") {
-      const { updRequiredFields, updErrors, updMinValuesFields } =
+      const { updRequiredFields, updMinValuesFields } =
         getRequiredFieldsAndErrors(mapping, dimensions);
-      return (
-        updRequiredFields.length === 0 &&
-        updErrors.length === 0 &&
-        updMinValuesFields.length === 0
-      );
+      return updRequiredFields.length === 0 && updMinValuesFields.length === 0;
     }
     return false;
   }
@@ -469,6 +467,7 @@ export default function ChartModule() {
           openToolbox={toolboxOpen}
           setToolboxOpen={setToolboxOpen}
           dimensions={dimensions}
+          setChartFromAPI={setChartFromAPI}
           setDatasetName={setChartName}
           onClose={() => setToolboxOpen(false)}
           onOpen={() => setToolboxOpen(true)}
@@ -556,7 +555,6 @@ export default function ChartModule() {
                   loading={loading}
                   visualOptions={visualOptions}
                   setVisualOptions={setVisualOptions}
-                  dataTypes={dataTypes2}
                   dimensions={dimensions}
                   renderedChart={content}
                   renderedChartSsr={activeRenderedChartSsr}

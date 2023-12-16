@@ -25,7 +25,6 @@ function ChartBuilderMapping(props: ChartBuilderMappingProps) {
 
   const dataset = useStoreState((state) => state.charts.dataset.value);
   const mapping = useStoreState((state) => state.charts.mapping.value);
-  const [errors, setErrors] = React.useState<string[]>([]);
   const [requiredFields, setRequiredFields] = React.useState<
     { id: string; name: string }[]
   >([]);
@@ -34,11 +33,11 @@ function ChartBuilderMapping(props: ChartBuilderMappingProps) {
   >([]);
 
   React.useEffect(() => {
-    const { updRequiredFields, updErrors, updMinValuesFields } =
+    const { updRequiredFields, updMinValuesFields } =
       getRequiredFieldsAndErrors(mapping, props.dimensions);
 
     setRequiredFields(updRequiredFields);
-    setErrors(updErrors);
+
     setMinValuesFields(updMinValuesFields);
   }, [mapping, props.dimensions]);
 
@@ -61,24 +60,21 @@ function ChartBuilderMapping(props: ChartBuilderMappingProps) {
               height: calc(100vh - 225px);
             `}
           >
-            {requiredFields.length === 0 &&
-              errors.length === 0 &&
-              minValuesFields.length === 0 && (
-                <CommonChart
-                  containerRef={containerRef}
-                  renderedChart={props.renderedChart}
-                  visualOptions={props.visualOptions}
-                  setVisualOptions={props.setVisualOptions}
-                  renderedChartSsr={props.renderedChartSsr}
-                  renderedChartMappedData={props.renderedChartMappedData}
-                  setChartErrorMessage={props.setChartErrorMessage}
-                  setNotFound={props.setNotFound}
-                />
-              )}
+            {requiredFields.length === 0 && minValuesFields.length === 0 && (
+              <CommonChart
+                containerRef={containerRef}
+                renderedChart={props.renderedChart}
+                visualOptions={props.visualOptions}
+                setVisualOptions={props.setVisualOptions}
+                renderedChartSsr={props.renderedChartSsr}
+                renderedChartMappedData={props.renderedChartMappedData}
+                setChartErrorMessage={props.setChartErrorMessage}
+                setNotFound={props.setNotFound}
+              />
+            )}
           </div>
         )}
         <ChartBuilderMappingMessage
-          errors={errors}
           requiredFields={requiredFields}
           minValuesFields={minValuesFields}
           dimensions={props.dimensions}
@@ -91,7 +87,7 @@ function ChartBuilderMapping(props: ChartBuilderMappingProps) {
 function ChartBuilderMappingMessage(
   props: Readonly<ChartBuilderMappingMessageProps>
 ) {
-  const { errors, requiredFields, minValuesFields } = props;
+  const { requiredFields, minValuesFields } = props;
 
   return (
     <div
@@ -104,47 +100,37 @@ function ChartBuilderMappingMessage(
         bottom: 5%;
         padding: 10px 20px;
         border-radius: 43px;
-        color: ${errors.length > 0 ? "#fff" : "#262c34"};
-        background: ${errors.length > 0 ? "#fa7355" : "#fff"};
+        color: #262c34;
+        background: #fff;
         box-shadow: 0px 0px 10px 0px rgba(152, 161, 170, 0.6);
-        display: ${requiredFields.length > 0 ||
-        errors.length > 0 ||
-        minValuesFields.length > 0
+        display: ${requiredFields.length > 0 || minValuesFields.length > 0
           ? "flex"
           : "none"};
         align-items: center;
         gap: 4px;
       `}
     >
-      {requiredFields.length > 0 && errors.length === 0 && (
+      {requiredFields.length > 0 && (
         <React.Fragment>
           Required chart variables: you need to map{" "}
           <b>
             {requiredFields
               .map((f: { id: string; name: string }) => f.name)
               .join(", ")}
+            .
           </b>
         </React.Fragment>
       )}
-      {minValuesFields.length > 0 &&
-        errors.length === 0 &&
-        requiredFields.length === 0 && (
-          <React.Fragment>
-            {minValuesFields.map(
-              (f: { id: string; name: string; minValues: number }) => (
-                <div key={f.id}>
-                  Please map at least <b>{f.minValues}</b> dimensions on{" "}
-                  <b>{f.name}</b>
-                </div>
-              )
-            )}
-          </React.Fragment>
-        )}
-      {errors.length > 0 && (
+      {minValuesFields.length > 0 && (
         <React.Fragment>
-          {errors.map((error: string) => (
-            <b key={error}>{error}</b>
-          ))}
+          {minValuesFields.map(
+            (f: { id: string; name: string; minValues: number }) => (
+              <div key={f.id}>
+                Please map at least <b>{f.minValues}</b> dimensions on{" "}
+                <b>{f.name}</b>
+              </div>
+            )
+          )}
         </React.Fragment>
       )}
     </div>

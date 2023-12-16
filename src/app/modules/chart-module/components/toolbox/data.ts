@@ -1,4 +1,5 @@
 import { FilterGroupModel } from "app/components/ToolBoxPanel/components/filters/data";
+import { ChartRenderedItem } from "app/modules/chart-module/data";
 
 export interface ChartToolBoxProps {
   data: { [key: string]: string | number | null }[];
@@ -36,4 +37,7 @@ export interface ChartToolBoxProps {
   filterOptionGroups: FilterGroupModel[];
   setVisualOptions: (value: any) => void;
   loadDataset: (endpoint: string) => Promise<boolean>;
+  setChartFromAPI: (
+    value: React.SetStateAction<ChartRenderedItem | null>
+  ) => void;
 }
