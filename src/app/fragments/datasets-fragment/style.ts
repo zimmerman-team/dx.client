@@ -107,3 +107,14 @@ export const metaDatacss = css`
     cursor: pointer;
   }
 `;
+
+export const dataSetsCss = css`
+  height: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  a {
+    text-decoration: none;
+  }
+`;
