@@ -17,6 +17,7 @@ interface ItemComponentProps {
   index: number;
   content: React.ReactNode;
   moveCard: (dragIndex: number, hoverIndex: number) => void;
+  childrenData: any[];
 }
 
 interface DragItem {
@@ -125,13 +126,15 @@ function ItemComponent(props: ItemComponentProps) {
           z-index: 1;
           width: 23px;
           cursor: grab;
-          display: flex;
           position: absolute;
           align-items: center;
           background: #adb5bd;
           border-radius: 3.45px;
           justify-content: center;
           height: calc(100% - 38px + 8px);
+          display: ${props.childrenData[props.index]?.structure === null
+            ? "none"
+            : "flex"};
         `}
       >
         <RowFrameHandleAdornment />
@@ -150,7 +153,7 @@ interface Props {
 
 export function ReportOrderContainer(props: Props) {
   const [items, setItems] = React.useState(
-    props.children.map((child: React.ReactNode, index: number) => ({
+    props.children?.map((child: React.ReactNode, index: number) => ({
       content: child,
       id: props.childrenData[index].id,
     }))
@@ -170,17 +173,21 @@ export function ReportOrderContainer(props: Props) {
     []
   );
 
-  const renderItem = React.useCallback((item: Item, index: number) => {
-    return (
-      <ItemComponent
-        key={item.id}
-        index={index}
-        id={item.id}
-        content={item.content}
-        moveCard={moveCard}
-      />
-    );
-  }, []);
+  const renderItem = React.useCallback(
+    (item: Item, index: number) => {
+      return (
+        <ItemComponent
+          key={item.id}
+          index={index}
+          id={item.id}
+          content={item.content}
+          moveCard={moveCard}
+          childrenData={props.childrenData}
+        />
+      );
+    },
+    [props.childrenData]
+  );
 
   useUpdateEffect(() => {
     setItems(

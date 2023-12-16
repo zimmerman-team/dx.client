@@ -30,7 +30,7 @@ export default function InlineColorPicker({
             disableAlpha
             color={color}
             onChangeComplete={(color) => onChange(color.hex)}
-          />
+            />
         </div>
       )}
     </>

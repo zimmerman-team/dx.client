@@ -66,8 +66,6 @@ export function ReportRightPanel(props: ReportRightPanelProps) {
             showHeaderItem={props.showHeaderItem}
             headerDetails={props.headerDetails}
             setHeaderDetails={props.setHeaderDetails}
-            appliedHeaderDetails={props.appliedHeaderDetails}
-            setAppliedHeaderDetails={props.setAppliedHeaderDetails}
             framesArray={props.framesArray}
             reportName={props.reportName}
             handlePersistReportState={props.handlePersistReportState}

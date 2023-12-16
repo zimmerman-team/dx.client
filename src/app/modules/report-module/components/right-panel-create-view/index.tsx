@@ -27,6 +27,8 @@ import RowFramePreviewImg from "app/modules/report-module/asset/rowframePreview.
 import { ReactComponent as AddNewImage } from "app/modules/home-module/assets/add-img.svg";
 import { ReactComponent as DividerIcon } from "app/modules/report-module/asset/dividerIcon.svg";
 import ChartOptionColor from "app/modules/chart-module/routes/customize/components/ChartOptionColor";
+import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
+
 import {
   persistedReportStateAtom,
   reportRightPanelViewAtom,
@@ -34,6 +36,8 @@ import {
   isDividerOrRowFrameDraggingAtom,
   isChartDraggingAtom,
 } from "app/state/recoil/atoms";
+import { Close } from "@material-ui/icons";
+import { IconButton } from "@material-ui/core";
 
 const Button = withStyles(() => ({
   root: {
@@ -130,8 +134,6 @@ interface IHeaderDetails {
 interface Props {
   showHeaderItem: boolean;
 
-  appliedHeaderDetails: IHeaderDetails;
-  setAppliedHeaderDetails: React.Dispatch<React.SetStateAction<IHeaderDetails>>;
   headerDetails: IHeaderDetails;
   setHeaderDetails: React.Dispatch<React.SetStateAction<IHeaderDetails>>;
   framesArray: IFramesArray[];
@@ -184,6 +186,7 @@ export function ReportRightPanelCreateView(props: Props) {
         display: flex;
         height: 100%;
         flex-direction: column;
+        box-shadow: 0px 0px 10px 0px rgba(152, 161, 170, 0.6);
       `}
     >
       <div
@@ -253,7 +256,6 @@ export function ReportRightPanelCreateView(props: Props) {
           headerDetails={props.headerDetails}
           framesArray={props.framesArray}
           reportName={props.reportName}
-          appliedHeaderDetails={props.appliedHeaderDetails}
           handlePersistReportState={props.handlePersistReportState}
         />
       )}
@@ -271,7 +273,6 @@ const sortByOptions = [
 
 function ReportRightPanelCreateViewChartList(props: {
   headerDetails: IHeaderDetails;
-  appliedHeaderDetails: IHeaderDetails;
   framesArray: IFramesArray[];
   reportName: string;
   handlePersistReportState: () => void;
@@ -421,7 +422,6 @@ function ReportRightPanelCreateViewChartList(props: {
           headerDetails={props.headerDetails}
           framesArray={props.framesArray}
           reportName={props.reportName}
-          appliedHeaderDetails={props.appliedHeaderDetails}
           handlePersistReportState={props.handlePersistReportState}
         />
         {chartList.map((chart, index) => (
@@ -500,7 +500,6 @@ function ElementItem(props: {
 function CreateChartCard(props: {
   reportName: string;
   headerDetails: IHeaderDetails;
-  appliedHeaderDetails: IHeaderDetails;
   framesArray: IFramesArray[];
   handlePersistReportState: () => void;
 }) {
@@ -680,6 +679,7 @@ function ChartItem(props: {
 
 function EditHeaderPanelView(props: Props) {
   const [_, setCurrentView] = useRecoilState(reportRightPanelViewAtom);
+  const [displayColorsList, setDisplayColorsList] = React.useState(true);
   return (
     <div
       css={`
@@ -688,149 +688,140 @@ function EditHeaderPanelView(props: Props) {
         display: flex;
         flex-direction: column;
         position: relative;
+        background: #f1f3f5;
       `}
     >
       <div
         css={`
           width: 100%;
-          height: 55px;
-          display: flex;
+          height: 78px;
           padding: 0 25px;
-          align-items: center;
-          background-color: #f2f7fd;
-          border-bottom: 1px solid #cfd4da;
-
-          > svg {
-            margin-right: 25px;
-          }
         `}
       >
-        <EditHeaderIcon />
-        Edit header
+        <div
+          css={`
+            display: flex;
+
+            align-items: center;
+            justify-content: space-between;
+            font-weight: bold;
+            > svg {
+              margin-right: 25px;
+            }
+            border-bottom: 1px solid #dfe3e5;
+            width: 99%;
+            height: 100%;
+            margin: auto;
+          `}
+        >
+          <div
+            css={`
+              display: flex;
+              align-items: center;
+              gap: 12px;
+            `}
+          >
+            <EditHeaderIcon />
+            Edit header
+          </div>
+          <span>
+            <IconButton
+              css={`
+                color: #262c34;
+              `}
+              onClick={() => {
+                setCurrentView("elements");
+              }}
+            >
+              <Close color="inherit" />
+            </IconButton>
+          </span>
+        </div>
       </div>
       <div
         css={`
-          padding: 0 24px;
+          padding: 0 25px;
+          margin-top: 10px;
         `}
       >
         <div
           css={`
             padding: 16px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-family: "Roboto", sans-serif;
+            svg {
+              transform: rotate(${displayColorsList ? "180" : "0"}deg);
+            }
           `}
         >
           Colors
-        </div>
-        <Paper
-          css={`
-            > label {
-              --bs-gutter-x: 0;
-              padding: 12px 24px;
-              border-bottom: 1px solid #dfe3e6;
-            }
-
-            #inline-color-picker-popover {
-              right: 0;
-            }
-          `}
-        >
-          <ChartOptionColor
-            isEnabled
-            error={false}
-            value={props.headerDetails.backgroundColor}
-            default={props.headerDetails.backgroundColor}
-            onChange={(value: string) => {
-              props.setHeaderDetails({
-                ...props.headerDetails,
-                backgroundColor: value,
-              });
-            }}
-            label="Background color"
-          />
-          <ChartOptionColor
-            isEnabled
-            error={false}
-            value={props.headerDetails.titleColor}
-            default={props.headerDetails.titleColor}
-            onChange={(value: string) => {
-              props.setHeaderDetails({
-                ...props.headerDetails,
-                titleColor: value,
-              });
-            }}
-            label="Title color"
-          />
-          <ChartOptionColor
-            isEnabled
-            error={false}
-            value={props.headerDetails.descriptionColor}
-            default={props.headerDetails.descriptionColor}
-            onChange={(value: string) => {
-              props.setHeaderDetails({
-                ...props.headerDetails,
-                descriptionColor: value,
-              });
-            }}
-            label="Description color"
-          />
-          <ChartOptionColor
-            isEnabled
-            error={false}
-            value={props.headerDetails.dateColor}
-            default={props.headerDetails.dateColor}
-            onChange={(value: string) => {
-              props.setHeaderDetails({
-                ...props.headerDetails,
-                dateColor: value,
-              });
-            }}
-            label="Date color"
-          />
-        </Paper>
-      </div>
-
-      <div
-        css={`
-          width: 100%;
-          display: flex;
-          flex-direction: row;
-          position: absolute;
-          bottom: 0;
-        `}
-      >
-        <Button
-          onClick={() => {
-            props.setHeaderDetails(props.appliedHeaderDetails);
-            setCurrentView("elements");
-          }}
-          css={`
-            background: #cfd4da;
-            :hover {
-              p {
-                color: #fff;
-              }
-            }
-          `}
-        >
-          <p
+          <IconButton
             css={`
-              color: #70777e;
+              color: #262c34;
+            `}
+            onClick={() => {
+              setDisplayColorsList(!displayColorsList);
+            }}
+          >
+            <ArrowDropUpIcon color="inherit" />
+          </IconButton>
+        </div>
+        {displayColorsList && (
+          <div
+            css={`
+              > label {
+                --bs-gutter-x: 0;
+                padding: 12px 5px;
+              }
+
+              #inline-color-picker-popover {
+                right: 0;
+              }
             `}
           >
-            Cancel
-          </p>
-        </Button>
-        <Button
-          onClick={() => {
-            props.setAppliedHeaderDetails(props.headerDetails);
-            setCurrentView("elements");
-          }}
-          css={`
-            background: #262c34;
-            color: #ffffff;
-          `}
-        >
-          Apply
-        </Button>
+            <ChartOptionColor
+              isEnabled
+              error={false}
+              value={props.headerDetails.backgroundColor}
+              default={props.headerDetails.backgroundColor}
+              onChange={(value: string) => {
+                props.setHeaderDetails({
+                  ...props.headerDetails,
+                  backgroundColor: value,
+                });
+              }}
+              label="Background color"
+            />
+            <ChartOptionColor
+              isEnabled
+              error={false}
+              value={props.headerDetails.titleColor}
+              default={props.headerDetails.titleColor}
+              onChange={(value: string) => {
+                props.setHeaderDetails({
+                  ...props.headerDetails,
+                  titleColor: value,
+                });
+              }}
+              label="Title color"
+            />
+            <ChartOptionColor
+              isEnabled
+              error={false}
+              value={props.headerDetails.descriptionColor}
+              default={props.headerDetails.descriptionColor}
+              onChange={(value: string) => {
+                props.setHeaderDetails({
+                  ...props.headerDetails,
+                  descriptionColor: value,
+                });
+              }}
+              label="Description color"
+            />
+          </div>
+        )}
       </div>
     </div>
   );

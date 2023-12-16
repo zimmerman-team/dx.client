@@ -12,7 +12,7 @@ import { RichEditor } from "app/modules/chart-module/routes/text/RichEditor";
 import { ReactComponent as EditIcon } from "app/modules/report-module/asset/editIcon.svg";
 import { ReactComponent as DeleteIcon } from "app/modules/report-module/asset/deleteIcon.svg";
 import { headerBlockcss } from "app/modules/report-module/sub-module/components/headerBlock/style";
-import { ReactComponent as RowFrameHandleAdornment } from "app/modules/report-module/asset/rowFrameHandleAdornment.svg";
+import { ReactComponent as HeaderHandlesvg } from "app/modules/report-module/asset/header-handle.svg";
 import { Tooltip } from "@material-ui/core";
 import useDebounce from "react-use/lib/useDebounce";
 import { ToolbarPluginsType } from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
@@ -163,20 +163,22 @@ export default function HeaderBlock(props: Props) {
       {(handleDisplay || currentView === "editHeader") && (
         <div
           css={`
-            top: 0;
+            top: -2.5px;
             left: 0;
             height: 100%;
             display: flex;
             gap: 4px;
+            z-index: 101;
             position: absolute;
           `}
         >
+          <HeaderHandlesvg />
           <div
             css={`
               width: 22px;
               height: 53px;
               margin: auto;
-              display: flex;
+              display: ${currentView === "editHeader" ? "none" : "flex"};
               margin-left: 10px;
               align-items: center;
               background: #adb5bd;
