@@ -57,7 +57,7 @@ export function ChartModuleToolBox(props: ChartToolBoxProps) {
   );
 
   const stepPaths = [
-    { name: "data", path: `/chart/${page}/data` },
+    { name: "dataset", path: `/chart/${page}/data` },
     { name: "dataset", path: `/chart/${page}/preview-data` },
     { name: "chart", path: `/chart/${page}/chart-type` },
     { name: "mapping", path: `/chart/${page}/mapping` },
@@ -65,7 +65,7 @@ export function ChartModuleToolBox(props: ChartToolBoxProps) {
     { name: "customize", path: `/chart/${page}/customize` },
   ];
 
-  const onNavBtnClick = (name: ToolboxNavType) => {
+  const onNavBtnClick = (name: ToolboxNavType, path: string) => {
     if (
       name === "dataset" ||
       name === "selectDataset" ||
@@ -73,33 +73,32 @@ export function ChartModuleToolBox(props: ChartToolBoxProps) {
       name === "mapping"
     ) {
       if (name === "dataset" && !isEmpty(dataset)) {
-        setActivePanels(name);
+        history.push(`/chart/${page}/preview-data`);
 
         return;
       }
       if (name === "chart" && !isEmpty(dataset)) {
-        setActivePanels(name);
+        history.push(`/chart/${page}/chart-type`);
 
         return;
       }
       if (name === "mapping" && !isEmpty(dataset) && !isEmpty(chartType)) {
-        setActivePanels(name);
+        history.push(`/chart/${page}/mapping`);
 
         return;
       }
     } else if (!isEmpty(props.mappedData)) {
-      setActivePanels(name);
+      history.push(path);
     }
   };
 
-  //TODO: work on function to set active step based on url
-  // React.useEffect(() => {
-  //   const step = stepPaths.find(
-  //     (step) => step.path === location.pathname
-  //   )?.name;
+  React.useEffect(() => {
+    const step = stepPaths.find(
+      (step) => step.path === location.pathname
+    )?.name;
 
-  //   onNavBtnClick(step as ToolboxNavType);
-  // }, [location.pathname]);
+    setActivePanels(step as ToolboxNavType);
+  }, [location.pathname]);
 
   const onMouseOverNavBtn = (name: ToolboxNavType) => {
     //handles state to set cursor types for nav buttons
@@ -222,8 +221,8 @@ export function ChartModuleToolBox(props: ChartToolBoxProps) {
         )}
 
         <ToolboxNav
-          activeStep={activePanels}
-          setActiveStep={setActivePanels}
+          activePanelStep={activePanels}
+          setActivePanelStep={setActivePanels}
           mappedData={props.mappedData}
           stepPaths={stepPaths}
           onNavBtnClick={onNavBtnClick}
@@ -253,6 +252,7 @@ export function ChartModuleToolBox(props: ChartToolBoxProps) {
             isClickable={isClickable}
             setIsClickable={setIsClickable}
             onMouseOverNavBtn={onMouseOverNavBtn}
+            setChartFromAPI={props.setChartFromAPI}
           />
         )}
 

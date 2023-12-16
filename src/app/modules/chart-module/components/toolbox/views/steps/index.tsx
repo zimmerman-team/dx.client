@@ -16,6 +16,7 @@ import { DatasetPanel } from "app/modules/chart-module/components/toolbox/views/
 
 import { isEmpty } from "lodash";
 import { ToolboxNavType } from "./navbar";
+import { ChartRenderedItem } from "app/modules/chart-module/data";
 
 interface ChartToolBoxStepsProps {
   data: { [key: string]: string | number | null }[];
@@ -33,11 +34,14 @@ interface ChartToolBoxStepsProps {
   loadDataset: (endpoint: string) => Promise<boolean>;
   dimensions: any[];
   activeStep: ToolboxNavType;
-  onNavBtnClick: (name: ToolboxNavType) => void;
+  onNavBtnClick: (name: ToolboxNavType, path: string) => void;
   isClickable: boolean;
   setIsClickable: React.Dispatch<React.SetStateAction<boolean>>;
   onMouseOverNavBtn: (name: ToolboxNavType) => void;
   stepPaths: { name: string; path: string }[];
+  setChartFromAPI: (
+    value: React.SetStateAction<ChartRenderedItem | null>
+  ) => void;
 }
 
 export function ChartToolBoxSteps(props: ChartToolBoxStepsProps) {
@@ -66,7 +70,8 @@ export function ChartToolBoxSteps(props: ChartToolBoxStepsProps) {
   );
   const handleNext = () => {
     const nextStep = props.stepPaths[currentPathIndex + 1]?.name;
-    props.onNavBtnClick(nextStep as ToolboxNavType);
+    const nextPath = props.stepPaths[currentPathIndex + 1]?.path;
+    props.onNavBtnClick(nextStep as ToolboxNavType, nextPath);
 
     if (currentPathIndex == 5) {
       handleSave();
@@ -77,10 +82,11 @@ export function ChartToolBoxSteps(props: ChartToolBoxStepsProps) {
 
   const handleBack = () => {
     const prevStep = props.stepPaths[currentPathIndex - 1]?.name;
+    const prevPath = props.stepPaths[currentPathIndex - 1]?.path;
     if (currentPathIndex == 0) {
       return;
     }
-    props.onNavBtnClick(prevStep as ToolboxNavType);
+    props.onNavBtnClick(prevStep as ToolboxNavType, prevPath);
   };
   const handleMouseOverNext = () => {
     const nextStep = props.stepPaths[currentPathIndex + 1]?.name;
@@ -103,6 +109,7 @@ export function ChartToolBoxSteps(props: ChartToolBoxStepsProps) {
           <ChartToolBoxMapping
             dataTypes={props.dataTypes}
             dimensions={props.dimensions}
+            setChartFromAPI={props.setChartFromAPI}
           />
         );
       case "filters":
