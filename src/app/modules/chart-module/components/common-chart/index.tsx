@@ -20,6 +20,7 @@ interface Props {
     | "echartsBarchart"
     | "echartsGeomap"
     | "echartsLinechart"
+    | "echartsAreatimeaxis"
     | "echartsAreastack"
     | "echartsSankey"
     | "echartsTreemap"
@@ -28,6 +29,10 @@ interface Props {
     | "echartsCirculargraph"
     | "echartsCirclepacking"
     | "echartsBubblechart"
+    | "echartsScatterchart"
+    | "echartsHeatmap"
+    | "echartsGraphgl"
+    | "echartsRadarchart"
     | "echartsPiechart";
   inChartWrapper?: boolean;
 }
@@ -105,6 +110,7 @@ export function CommonChart(props: Props) {
               | "echartsBarchart"
               | "echartsGeomap"
               | "echartsLinechart"
+              | "echartsAreatimeaxis"
               | "echartsAreastack"
               | "echartsSankey"
               | "echartsTreemap"
@@ -113,6 +119,10 @@ export function CommonChart(props: Props) {
               | "echartsCirculargraph"
               | "echartsCirclepacking"
               | "echartsBubblechart"
+              | "echartsScatterchart"
+              | "echartsHeatmap"
+              | "echartsGraphgl"
+              | "echartsRadarchart"
               | "echartsPiechart"),
           visualOptions,
           `common-chart-render-container-${props.chartId || "1"}`

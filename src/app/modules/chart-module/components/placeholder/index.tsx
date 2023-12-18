@@ -201,6 +201,91 @@ export default function ChartPlaceholder(props: { loading?: boolean }) {
       ),
     },
     {
+      id: "echartsScatterchart",
+      placeholder: (
+        <div
+          css={`
+            padding-right: 38px;
+
+            svg {
+              width: 100%;
+              height: 100%;
+            }
+          `}
+        >
+          <LinechartPlaceholderImage />
+        </div>
+      ),
+    },
+    {
+      id: "echartsHeatmap",
+      placeholder: (
+        <div
+          css={`
+            padding-right: 38px;
+
+            svg {
+              width: 100%;
+              height: 100%;
+            }
+          `}
+        >
+          <LinechartPlaceholderImage />
+        </div>
+      ),
+    },
+    {
+      id: "echartsAreatimeaxis",
+      placeholder: (
+        <div
+          css={`
+            padding-right: 38px;
+
+            svg {
+              width: 100%;
+              height: 100%;
+            }
+          `}
+        >
+          <LinechartPlaceholderImage />
+        </div>
+      ),
+    },
+    {
+      id: "echartsGraphgl",
+      placeholder: (
+        <div
+          css={`
+            padding-right: 38px;
+
+            svg {
+              width: 100%;
+              height: 100%;
+            }
+          `}
+        >
+          <BarChartPlaceholderImage />
+        </div>
+      ),
+    },
+    {
+      id: "echartsRadarchart",
+      placeholder: (
+        <div
+          css={`
+            padding-right: 38px;
+
+            svg {
+              width: 100%;
+              height: 100%;
+            }
+          `}
+        >
+          <LinechartPlaceholderImage />
+        </div>
+      ),
+    },
+    {
       id: "echartsAreastack",
       placeholder: (
         <div
