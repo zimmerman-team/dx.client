@@ -401,7 +401,7 @@ export function useDataThemesEchart() {
         z: -1,
       },
       tooltip: {
-        trigger: showTooltip ? "item" : "none",
+        trigger: showTooltip ? "axis" : "none",
         position: function (pt: any) {
           return [pt[0], "10%"];
         },
@@ -635,15 +635,24 @@ export function useDataThemesEchart() {
         zlevel: -1,
         z: -1,
       },
-      xAxis: {},
-      yAxis: {},
+      xAxis: [{ type: "value", data: data.map((d: any) => d.x) }],
+      yAxis: [
+        {
+          type: "value",
+          data: data.map((d: any) => d.y),
+        },
+      ],
 
       tooltip: {
         trigger: showTooltip ? "item" : "none",
-        valueFormatter: (value: number | string) =>
-          isMonetaryValue
-            ? formatFinancialValue(parseInt(value.toString(), 10), true)
-            : value,
+        confine: true,
+        formatter: (params: any) => {
+          return `${params.data[1]}: ${
+            isMonetaryValue
+              ? formatFinancialValue(params.value, true)
+              : params.data[0]
+          }`;
+        },
       },
       series: [
         {
@@ -658,6 +667,9 @@ export function useDataThemesEchart() {
 
   function echartsHeatmap(data: any, visualOptions: any) {
     const {
+      //artboard
+      width,
+      height,
       // margin
       marginTop,
       marginRight,
@@ -722,12 +734,6 @@ export function useDataThemesEchart() {
     }
 
     const option = {
-      grid: {
-        top: marginTop,
-        left: marginLeft,
-        right: marginRight,
-        bottom: marginBottom,
-      },
       xAxis: {
         type: "category",
         data: Array.from({ length: gridSize[0] }, (_, index) => index),
@@ -739,10 +745,13 @@ export function useDataThemesEchart() {
       tooltip: {
         trigger: showTooltip ? "item" : "none",
         confine: true,
-        valueFormatter: (value: number | string) =>
-          isMonetaryValue
-            ? formatFinancialValue(parseInt(value.toString(), 10), true)
-            : value,
+        formatter: (params: any) => {
+          return `${params.data[1]}: ${
+            isMonetaryValue
+              ? formatFinancialValue(params.value, true)
+              : params.data[0]
+          }`;
+        },
       },
       visualMap: {
         min: Math.min(
@@ -770,6 +779,12 @@ export function useDataThemesEchart() {
           },
           progressive: 1000,
           animation: false,
+          top: marginTop,
+          left: marginLeft,
+          right: marginRight,
+          bottom: marginBottom,
+          width,
+          height,
         },
       ],
     };
