@@ -6,7 +6,7 @@ import { FilterGroup } from "app/modules/data-themes-module/sub-modules/theme-bu
 import { ExpandedFilterGroup } from "app/modules/data-themes-module/sub-modules/theme-builder/views/filters/components/ExpandedFilterGroup";
 
 interface DataThemesToolBoxFiltersProps {
-  loadDataFromAPI?: (
+  loadChartDataFromAPI?: (
     customAppliedFilters?: [
       [
         {
@@ -40,7 +40,7 @@ export function DataThemesToolBoxFilters(props: DataThemesToolBoxFiltersProps) {
               key={group.name}
               name={group.name}
               options={group.options}
-              loadDataFromAPI={props.loadDataFromAPI}
+              loadChartDataFromAPI={props.loadChartDataFromAPI}
               expandGroup={() => setExpandedGroup(group)}
             />
           ))}
@@ -51,7 +51,7 @@ export function DataThemesToolBoxFilters(props: DataThemesToolBoxFiltersProps) {
           name={expandedGroup.name}
           options={expandedGroup.options}
           goBack={() => setExpandedGroup(null)}
-          loadDataFromAPI={props.loadDataFromAPI}
+          loadChartDataFromAPI={props.loadChartDataFromAPI}
         />
       )}
     </div>

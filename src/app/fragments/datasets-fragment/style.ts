@@ -87,7 +87,7 @@ export const metaDatacss = css`
   h1 {
     font-weight: 500;
     font-size: 48px;
-    font-family: "GothamNarrow-Book";
+    font-family: "Inter", sans-serif;
     margin-top: 6rem;
 
     margin-bottom: 4.5rem;
@@ -105,5 +105,16 @@ export const metaDatacss = css`
     justify-content: center;
     align-items: center;
     cursor: pointer;
+  }
+`;
+
+export const dataSetsCss = css`
+  height: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  a {
+    text-decoration: none;
   }
 `;

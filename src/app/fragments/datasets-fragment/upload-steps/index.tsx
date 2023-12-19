@@ -37,6 +37,8 @@ function DatasetUploadSteps(props: {
     description: "",
     category: "General",
     public: false,
+    source: "",
+    sourceUrl: "",
   });
 
   React.useEffect(() => {

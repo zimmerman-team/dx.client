@@ -11,7 +11,7 @@ export interface DataThemesToolBoxProps {
   textView: boolean;
   visualOptions: any;
   filtersView: boolean;
-  loadDataFromAPI: (
+  loadChartDataFromAPI: (
     customAppliedFilters?: [
       [
         {

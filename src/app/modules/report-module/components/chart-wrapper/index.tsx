@@ -76,17 +76,18 @@ export function ReportChartWrapper(props: Props) {
     }
   }, [loadedChart]);
 
-  const { loadDataFromAPI, loading, notFound, setNotFound } = useChartsRawData({
-    visualOptions,
-    setVisualOptions,
-    setChartFromAPI,
-    chartFromAPI,
-    inChartWrapper: true,
-  });
+  const { loadChartDataFromAPI, loading, notFound, setNotFound } =
+    useChartsRawData({
+      visualOptions,
+      setVisualOptions,
+      setChartFromAPI,
+      chartFromAPI,
+      inChartWrapper: true,
+    });
 
   React.useEffect(() => {
     if (props.id) {
-      loadDataFromAPI(undefined, props.id);
+      loadChartDataFromAPI(undefined, props.id);
     }
   }, [props.id, token]);
 

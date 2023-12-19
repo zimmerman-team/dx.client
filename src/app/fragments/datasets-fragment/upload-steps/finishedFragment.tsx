@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useHistory, useLocation } from "react-router-dom";
-import { dataSetsCss } from "app/modules/datasets-module/style";
+import { dataSetsCss } from "app/fragments/datasets-fragment/style";
 import { PageTopSpacer } from "app/modules/common/page-top-spacer";
 import { useStoreActions } from "app/state/store/hooks";
 import { DatasetDataTable } from "app/fragments/datasets-fragment/component/data-table";
@@ -79,7 +79,6 @@ export default function FinishedFragment(props: Props) {
             font-family: "Inter", sans-serif;
             line-height: 19px;
             margin-bottom: 17px;
-            font-weight: bold;
           `}
         >
           {props.description}

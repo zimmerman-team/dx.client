@@ -8,10 +8,15 @@ import { CommonChart } from "app/modules/chart-module/components/common-chart";
 import { styles as commonStyles } from "app/modules/chart-module/routes/common/styles";
 import { ChartBuilderCustomizeProps } from "app/modules/chart-module/routes/customize/data";
 import { withAuthenticationRequired } from "@auth0/auth0-react";
+import { useStoreState } from "app/state/store/hooks";
+import { useHistory, useParams } from "react-router-dom";
 
 function ChartBuilderCustomize(props: Readonly<ChartBuilderCustomizeProps>) {
   useTitle("DX DataXplorer - Customize");
+  const history = useHistory();
+  const { page } = useParams<{ page: string }>();
   const containerRef = React.useRef<HTMLDivElement>(null);
+  const dataset = useStoreState((state) => state.charts.dataset.value);
   useUpdateEffectOnce(() => {
     if (
       containerRef.current &&
@@ -24,6 +29,12 @@ function ChartBuilderCustomize(props: Readonly<ChartBuilderCustomizeProps>) {
       props.setVisualOptions(tmpVisualOptions);
     }
   }, [containerRef]);
+
+  React.useEffect(() => {
+    if (dataset === null && !props.loading) {
+      history.push(`/chart/${page}/data`);
+    }
+  }, [dataset]);
 
   return (
     <div css={commonStyles.container}>

@@ -3,7 +3,7 @@ import { FilterGroupModel } from "app/components/ToolBoxPanel/components/filters
 export interface DataThemesToolBoxPreviewProps {
   tabIndex: number;
   vizIndex: number;
-  loadDataFromAPI: (
+  loadChartDataFromAPI: (
     customAppliedFilters?: [
       [
         {

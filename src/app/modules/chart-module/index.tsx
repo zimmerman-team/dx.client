@@ -44,6 +44,7 @@ import { NotAuthorizedMessageModule } from "app/modules/common/not-authorized-me
 import { useRecoilState } from "recoil";
 import { loadedDatasetsAtom } from "app/state/recoil/atoms";
 import { isEmpty } from "lodash";
+import { DatasetListItemAPIModel } from "../data-themes-module/sub-modules/list";
 
 export default function ChartModule() {
   const { isLoading, isAuthenticated } = useAuth0();
@@ -73,7 +74,6 @@ export default function ChartModule() {
       get(charts, `[${chartType}].dimensions`, [])
     );
   }, [chartFromAPI, chartType]);
-
   const {
     loading,
     dataTypes,
@@ -81,12 +81,13 @@ export default function ChartModule() {
     sampleData,
     isEditMode,
     loadDataset,
-    loadDataFromAPI,
+    loadChartDataFromAPI,
     error401,
     setDataError,
     setNotFound,
     notFound,
     dataError,
+    dataTypesFromRenderedChart,
   } = useChartsRawData({
     visualOptions,
     setVisualOptions,
@@ -140,6 +141,11 @@ export default function ChartModule() {
   const resetDataset = useStoreActions(
     (actions) => actions.charts.dataset.reset
   );
+  const datasets = useStoreState(
+    (state) =>
+      (state.dataThemes.DatasetGetList.crudData ??
+        []) as DatasetListItemAPIModel[]
+  );
 
   const resetEnabledFilterOptionGroups = useStoreActions(
     (actions) => actions.charts.enabledFilterOptionGroups.clear
@@ -157,10 +163,12 @@ export default function ChartModule() {
     [chartFromAPI]
   );
 
-  const dataTypes2 = React.useMemo(
-    () => get(chartFromAPI, "dataTypes", dataTypes),
-    [chartFromAPI, dataTypes]
-  );
+  const dataTypes2 = React.useMemo(() => {
+    if (isEmpty(dataTypes)) {
+      return dataTypesFromRenderedChart;
+    }
+    return dataTypes;
+  }, [dataTypes, dataTypesFromRenderedChart]);
 
   //empty chart when chart type and dataset types changes
   React.useEffect(() => {
@@ -173,15 +181,10 @@ export default function ChartModule() {
     }
   }, [dataset]);
 
-  //reset filters when dataset types changes
-  React.useEffect(() => {
-    resetAppliedFilters();
-  }, [dataTypes]);
-
   //set chart name to selected dataset if chart name has not been focused
   React.useEffect(() => {
     if (page === "new" && !hasSubHeaderTitleFocused && dataset) {
-      const datasetName = loadedDatasets.find((d) => d.id === dataset)?.name;
+      const datasetName = datasets.find((d) => d.id === dataset)?.name;
       setChartName(datasetName as string);
     }
     if (isEmpty(dataset) && page === "new" && !hasSubHeaderTitleFocused) {
@@ -287,46 +290,15 @@ export default function ChartModule() {
       }
     });
   }
-  const { updRequiredFields, updErrors, updMinValuesFields } =
-    getRequiredFieldsAndErrors(mapping, dimensions);
-  function getForceNextEnabledValue(param?: string) {
-    switch (param) {
-      case "initial":
-        return false;
-      case "data":
-        return dataset !== null;
-      case "preview-data":
-        return dataset !== null;
-      case "chart-type":
-        return chartType !== null;
-      case "export":
-      case "lock":
-      case "customize":
-      case "mapping":
-        return (
-          updRequiredFields.length === 0 &&
-          updErrors.length === 0 &&
-          updMinValuesFields.length === 0
-        );
-      case "filters":
-        return true;
-      default:
-        return false;
-    }
-  }
 
   function getForceEnabledPreviewValue(param?: string) {
     if (param === "preview") {
       return true;
     }
     if (param === "mapping") {
-      const { updRequiredFields, updErrors, updMinValuesFields } =
+      const { updRequiredFields, updMinValuesFields } =
         getRequiredFieldsAndErrors(mapping, dimensions);
-      return (
-        updRequiredFields.length === 0 &&
-        updErrors.length === 0 &&
-        updMinValuesFields.length === 0
-      );
+      return updRequiredFields.length === 0 && updMinValuesFields.length === 0;
     }
     return false;
   }
@@ -401,7 +373,9 @@ export default function ChartModule() {
                   "Sankey is a DAG, the original data has cycle!" && (
                   <>
                     <span>
-                      <button onClick={() => loadDataFromAPI()}>Reload</button>{" "}
+                      <button onClick={() => loadChartDataFromAPI()}>
+                        Reload
+                      </button>{" "}
                     </span>
                     to try again.
                   </>
@@ -459,16 +433,16 @@ export default function ChartModule() {
           visualOptions={visualOptions}
           exportView={config.exportView}
           filtersView={config.filtersView}
-          loadDataFromAPI={loadDataFromAPI}
+          loadChartDataFromAPI={loadChartDataFromAPI}
           setVisualOptions={setVisualOptions}
           loading={loading || isChartLoading}
           filterOptionGroups={filterOptionGroups}
           addVizToLocalStates={addVizToLocalStates}
           previewMode={!isEditMode && page !== "new"}
-          forceNextEnabled={getForceNextEnabledValue(view)}
           openToolbox={toolboxOpen}
           setToolboxOpen={setToolboxOpen}
           dimensions={dimensions}
+          setChartFromAPI={setChartFromAPI}
           setDatasetName={setChartName}
           onClose={() => setToolboxOpen(false)}
           onOpen={() => setToolboxOpen(true)}
@@ -556,7 +530,6 @@ export default function ChartModule() {
                   loading={loading}
                   visualOptions={visualOptions}
                   setVisualOptions={setVisualOptions}
-                  dataTypes={dataTypes2}
                   dimensions={dimensions}
                   renderedChart={content}
                   renderedChartSsr={activeRenderedChartSsr}

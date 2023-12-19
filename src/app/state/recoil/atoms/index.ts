@@ -137,24 +137,14 @@ export const persistedReportStateAtom = atom<{
     descriptionColor: string;
     dateColor: string;
   };
-  appliedHeaderDetails: {
-    title: string;
-    description: string;
-    showHeader: boolean;
-    backgroundColor: string;
-    titleColor: string;
-    descriptionColor: string;
-    dateColor: string;
-  };
+
   framesArray: string;
 }>({
   key: "reportCreateStateAtom",
   default: {
     reportName: "Untitled report",
     headerDetails: {
-      title: JSON.stringify(
-        convertToRaw(EditorState.createEmpty().getCurrentContent())
-      ),
+      title: "",
       description: JSON.stringify(
         convertToRaw(EditorState.createEmpty().getCurrentContent())
       ),
@@ -164,19 +154,7 @@ export const persistedReportStateAtom = atom<{
       descriptionColor: "#ffffff",
       dateColor: "#ffffff",
     },
-    appliedHeaderDetails: {
-      title: JSON.stringify(
-        convertToRaw(EditorState.createEmpty().getCurrentContent())
-      ),
-      description: JSON.stringify(
-        convertToRaw(EditorState.createEmpty().getCurrentContent())
-      ),
-      showHeader: true,
-      backgroundColor: "#252c34",
-      titleColor: "#ffffff",
-      descriptionColor: "#ffffff",
-      dateColor: "#ffffff",
-    },
+
     framesArray: JSON.stringify([]),
   },
   effects_UNSTABLE: [persistAtom],

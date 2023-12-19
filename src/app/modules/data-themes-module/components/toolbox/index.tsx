@@ -279,7 +279,7 @@ export function DataThemesToolBox(props: DataThemesToolBoxProps) {
           <DataThemesToolBoxPreview
             tabIndex={props.tabIndex}
             vizIndex={props.vizIndex}
-            loadDataFromAPI={props.loadDataFromAPI}
+            loadChartDataFromAPI={props.loadChartDataFromAPI}
             filterOptionGroups={props.filterOptionGroups}
           />
           {isSavedEnabled && props.isEditMode && (

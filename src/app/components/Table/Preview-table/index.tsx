@@ -32,36 +32,12 @@ export default function PreviewTable(props: PreviewTableProps) {
     <>
       <div
         css={`
-          height: 100%;
+          width: max-content;
         `}
       >
         <TableContainer
           css={`
-            width: inherit;
-            height: 593px;
-            &::-webkit-scrollbar {
-              height: 12px;
-              border-radius: 23px;
-              width: 12px;
-
-              background: #231d2c;
-            }
-            &::-webkit-scrollbar-track {
-              background: #fff;
-
-              padding: 0 0.5rem;
-            }
-            &::-webkit-scrollbar-track:horizontal {
-              border-right: none;
-            }
-            &::-webkit-scrollbar-thumb {
-              background: #231d2c;
-              border-radius: 23px;
-              border: 3px solid transparent;
-
-              background-clip: content-box;
-            }
-            overflow: auto;
+            border-radius: 19px;
           `}
         >
           <Table css={previewTablecss}>

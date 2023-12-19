@@ -39,9 +39,7 @@ const ReportModule = lazy(() => import("app/modules/report-module"));
 const DatasetUploadSteps = lazy(
   () => import("app/fragments/datasets-fragment/upload-steps")
 );
-const EditMetaData = lazy(
-  () => import("app/modules/datasets-module/editMetaData")
-);
+
 const AuthCallbackModule = lazy(() => import("app/modules/callback-module"));
 const OnboardingModule = lazy(() => import("app/modules/onboarding-module"));
 const UserProfileModule = lazy(() => import("app/modules/user-profile-module"));
@@ -180,7 +178,7 @@ export function MainRoutes() {
             <ChartModule />
           </RouteWithAppBar>
           <RouteWithAppBar exact path="/dataset/:id/edit">
-            <EditMetaData />
+            <></>
           </RouteWithAppBar>
           <RouteWithAppBar path="/onboarding">
             <OnboardingModule />

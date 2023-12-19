@@ -30,11 +30,9 @@ import { ISnackbarState } from "app/fragments/datasets-fragment/upload-steps/pre
 import {
   homeDisplayAtom,
   createChartFromReportAtom,
-  unSavedReportPreviewModeAtom,
   reportRightPanelViewAtom,
 } from "app/state/recoil/atoms";
 import { InfoSnackbar } from "app/modules/common/subheader-toolbar/infoSnackbar";
-import { ReportModel, emptyReport } from "app/modules/report-module/data";
 
 export function SubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
   const history = useHistory();

@@ -8,7 +8,7 @@ import { Container } from "@material-ui/core";
 import { useParams } from "react-router-dom";
 
 export default function DatasetDetail() {
-  const { page, view } = useParams<{ page: string; view?: string }>();
+  const { page } = useParams<{ page: string }>();
 
   const { loadDataset, sampleData, dataTotalCount, dataStats } =
     useChartsRawData({
@@ -17,7 +17,6 @@ export default function DatasetDetail() {
       setChartFromAPI: () => {},
       chartFromAPI: null,
     });
-  const dataset = useStoreState((state) => state.charts.dataset.value);
 
   React.useEffect(() => {
     loadDataset(`chart/sample-data/${page}`);

@@ -27,7 +27,7 @@ interface ExpandedFilterGroupProps extends FilterGroupModel, FilterGroupProps {
   goBack: () => void;
   tabIndex?: number;
   vizIndex?: number;
-  loadDataFromAPI?: (
+  loadChartDataFromAPI?: (
     customAppliedFilters?: [
       [
         {
@@ -187,13 +187,13 @@ export function ExpandedFilterGroup(props: ExpandedFilterGroupProps) {
         key: props.name,
         value: tmpAppliedFilters,
       });
-      if (props.loadDataFromAPI) {
+      if (props.loadChartDataFromAPI) {
         const temp = allAppliedFilters;
         temp[activeTabIndex][activeVizIndex][props.name] = [
           ...get(temp[activeTabIndex][activeVizIndex], `["${props.name}"]`, []),
           ...tmpAppliedFilters,
         ];
-        props.loadDataFromAPI(temp);
+        props.loadChartDataFromAPI(temp);
       }
     }
     props.goBack();
@@ -221,10 +221,10 @@ export function ExpandedFilterGroup(props: ExpandedFilterGroupProps) {
         key: props.name,
         value: [],
       });
-      if (props.loadDataFromAPI) {
+      if (props.loadChartDataFromAPI) {
         const temp = allAppliedFilters;
         temp[activeTabIndex][activeVizIndex][props.name] = [];
-        props.loadDataFromAPI(temp);
+        props.loadChartDataFromAPI(temp);
       }
       setTmpAppliedFilters([]);
     }

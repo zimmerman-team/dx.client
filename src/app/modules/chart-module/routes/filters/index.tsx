@@ -4,7 +4,7 @@ import isEmpty from "lodash/isEmpty";
 import useTitle from "react-use/lib/useTitle";
 import { useHistory, useParams } from "react-router-dom";
 import { withAuthenticationRequired } from "@auth0/auth0-react";
-import { useStoreActions, useStoreState } from "app/state/store/hooks";
+import { useStoreState } from "app/state/store/hooks";
 /* project */
 import { CHART_DEFAULT_WIDTH } from "app/modules/chart-module/data";
 import { useUpdateEffectOnce } from "app/hooks/useUpdateEffectOnce";
@@ -37,10 +37,10 @@ function ChartBuilderFilters(props: ChartBuilderFiltersProps) {
   }, [containerRef]);
 
   React.useEffect(() => {
-    if ((dataset === null && !props.loading) || isEmpty(mapping)) {
+    if (dataset === null && !props.loading) {
       history.push(`/chart/${page}/data`);
     }
-  }, []);
+  }, [dataset]);
 
   return (
     <div css={commonStyles.container}>

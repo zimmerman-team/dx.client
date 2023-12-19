@@ -17,8 +17,6 @@ export interface ReportRightPanelProps {
   isEditorFocused: boolean;
   showHeaderItem: boolean;
   currentView: "initial" | "edit" | "create" | "preview" | "ai-template";
-  appliedHeaderDetails: IHeaderDetails;
-  setAppliedHeaderDetails: React.Dispatch<React.SetStateAction<IHeaderDetails>>;
   headerDetails: IHeaderDetails;
   setHeaderDetails: React.Dispatch<React.SetStateAction<IHeaderDetails>>;
   framesArray: IFramesArray[];

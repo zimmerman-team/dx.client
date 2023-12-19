@@ -1,6 +1,5 @@
 export interface ChartBuilderMappingProps {
   loading: boolean;
-  dataTypes: any[];
   dimensions: any[];
   visualOptions: any;
   renderedChart: string;
@@ -26,7 +25,6 @@ export interface ChartBuilderMappingDimensionProps {
 
 export interface ChartBuilderMappingMessageProps {
   dimensions: any[];
-  errors: string[];
   requiredFields: { id: string; name: string }[];
   minValuesFields: { id: string; name: string; minValues: number }[];
 }

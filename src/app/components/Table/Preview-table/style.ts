@@ -20,5 +20,8 @@ export const previewTablecss = css`
     font-weight: 400;
     font-size: 14px;
     font-family: "GothamNarrow-Book";
+    :last-child {
+      border-bottom-right-radius: 10px;
+    }
   }
 `;

@@ -17,13 +17,20 @@ import CloseIcon from "@material-ui/icons/Close";
 import { mappingStyles } from "../../../styles";
 import SearchIcon from "@material-ui/icons/Search";
 import { useDebounce } from "react-use";
-import { ChartAPIModel, emptyChartAPI } from "app/modules/chart-module/data";
+import {
+  ChartAPIModel,
+  ChartRenderedItem,
+  emptyChartAPI,
+} from "app/modules/chart-module/data";
 import { Dropdown } from "react-bootstrap";
-import Icon from "app/assets/icons/ColoredReportIcon";
+import { reqMappingKeyFromReqDimensionCheck } from "app/hooks/useChartsRawData";
 
 interface ChartToolBoxMappingProps {
   dataTypes: any;
   dimensions: any[];
+  setChartFromAPI: (
+    value: React.SetStateAction<ChartRenderedItem | null>
+  ) => void;
 }
 interface ChartToolBoxMappingItemProps {
   index: number;
@@ -101,6 +108,13 @@ export function ChartToolBoxMapping(props: Readonly<ChartToolBoxMappingProps>) {
     });
 
     setNonStaticDimensions(updatedNonStaticDimensions);
+  }, [mapping]);
+
+  // empty rendered chart when req mapping fields are not filled
+  React.useEffect(() => {
+    if (!reqMappingKeyFromReqDimensionCheck(props.dimensions, mapping)) {
+      props.setChartFromAPI(null);
+    }
   }, [mapping]);
 
   const getValidDataTypes = (dimensionTypes: string[], searchValue: string) => {
@@ -354,7 +368,7 @@ const NonStaticDimensionContainer = (props: {
           {Object.keys(
             props.getValidDataTypes(props.dimension.validTypes, searchValue)
           )?.map((mappingItemValue: string, index: number) => {
-            let type = props.getValidDataTypes(
+            const type = props.getValidDataTypes(
               props.dimension.validTypes,
               searchValue
             )[mappingItemValue];

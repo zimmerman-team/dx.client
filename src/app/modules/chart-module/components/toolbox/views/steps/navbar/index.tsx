@@ -20,11 +20,11 @@ export type ToolboxNavType =
 
 export default function ToolboxNav(
   props: Readonly<{
-    setActiveStep: ActionCreator<ToolboxNavType>;
-    activeStep: string;
+    setActivePanelStep: ActionCreator<ToolboxNavType>;
+    activePanelStep: string;
     mappedData: any;
     stepPaths: { name: string; path: string }[];
-    onNavBtnClick: (name: ToolboxNavType) => void;
+    onNavBtnClick: (name: ToolboxNavType, path: string) => void;
     isClickable: boolean;
     setIsClickable: React.Dispatch<React.SetStateAction<boolean>>;
     onMouseOverNavBtn: (name: ToolboxNavType) => void;
@@ -50,40 +50,46 @@ export default function ToolboxNav(
       const step = props.stepPaths.find(
         (s) => s.path === location.pathname
       )?.name;
-      props.setActiveStep(step as ToolboxNavType);
+      props.setActivePanelStep(step as ToolboxNavType);
     }
     return () => {
       resetActivePanels();
     };
   }, []);
 
-  const handleStepChange = () => {
-    const findStep = props.stepPaths.find(
-      (step) => step.name === props.activeStep
-    );
-    if (findStep) {
-      //replace path with current step path
-      history.replace(findStep.path);
-    }
-  };
+  const navContent: {
+    name: ToolboxNavType;
+    icon: JSX.Element;
+    path: string;
+  }[] = [
+    {
+      name: "dataset",
+      icon: <TableChartIcon />,
+      path: `/chart/${page}/preview-data`,
+    },
+    {
+      name: "chart",
+      icon: <AssessmentIcon />,
+      path: `/chart/${page}/chart-type`,
+    },
+    {
+      name: "mapping",
+      icon: <CloudDoneIcon />,
+      path: `/chart/${page}/mapping`,
+    },
 
-  React.useEffect(() => {
-    handleStepChange();
-  }, [props.activeStep]);
-
-  const navContent: { name: ToolboxNavType; icon: JSX.Element }[] = [
-    { name: "dataset", icon: <TableChartIcon /> },
-    { name: "chart", icon: <AssessmentIcon /> },
-    { name: "mapping", icon: <CloudDoneIcon /> },
-
-    { name: "filters", icon: <TuneIcon /> },
-    { name: "customize", icon: <PaletteIcon /> },
+    { name: "filters", icon: <TuneIcon />, path: `/chart/${page}/filters` },
+    {
+      name: "customize",
+      icon: <PaletteIcon />,
+      path: `/chart/${page}/customize`,
+    },
   ];
 
-  const activeStepIndex =
-    props.activeStep === "selectDataset"
+  const activePanelStepIndex =
+    props.activePanelStep === "selectDataset"
       ? 0
-      : navContent.findIndex((nav) => nav.name === props.activeStep);
+      : navContent.findIndex((nav) => nav.name === props.activePanelStep);
 
   return (
     <div
@@ -96,24 +102,26 @@ export default function ToolboxNav(
         <button
           css={`
             ${stepcss(
-              item.name === props.activeStep || index === activeStepIndex,
+              item.name === props.activePanelStep ||
+                index === activePanelStepIndex,
               props.isClickable
             )}
             ${(() => {
-              if (index === activeStepIndex - 1) {
+              if (index === activePanelStepIndex - 1) {
                 return whiteBackgroundRoundedBottomRight;
-              } else if (index === activeStepIndex) {
+              } else if (index === activePanelStepIndex) {
                 return "background: transparent;";
-              } else if (index === activeStepIndex + 1) {
+              } else if (index === activePanelStepIndex + 1) {
                 return whiteBackgroundRoundedBottomLeft;
               } else {
                 return whiteBackgroundNotRounded;
               }
             })()};
           `}
+          disabled={!props.isClickable}
           key={item.name}
           onClick={() => {
-            props.onNavBtnClick(item.name);
+            props.onNavBtnClick(item.name, item.path);
           }}
           onMouseOver={() => {
             props.onMouseOverNavBtn(item.name);

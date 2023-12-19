@@ -10,6 +10,9 @@ import InputLabel from "@material-ui/core/InputLabel";
 import { withStyles } from "@material-ui/core/styles";
 import FormControl from "@material-ui/core/FormControl";
 import { metaDatacss } from "app/fragments/datasets-fragment/style";
+import { useStoreState } from "app/state/store/hooks";
+import { IDatasetDetail } from "app/modules/dataset-module/routes/edit";
+import { useLocation, useParams } from "react-router-dom";
 
 interface Props {
   onSubmit: (data: IFormDetails) => void;
@@ -19,6 +22,8 @@ interface Props {
     description: string;
     category: string;
     public: boolean;
+    source: string;
+    sourceUrl: string;
   };
   setFormDetails: React.Dispatch<
     React.SetStateAction<{
@@ -26,6 +31,8 @@ interface Props {
       description: string;
       category: string;
       public: boolean;
+      source: string;
+      sourceUrl: string;
     }>
   >;
 }
@@ -178,9 +185,23 @@ const SelectField = (props: {
 );
 
 export default function MetaData(props: Readonly<Props>) {
-  const { register, handleSubmit, getValues } = useForm<IFormDetails>();
-
+  const location = useLocation();
+  const view = location.pathname.split("/")[3];
+  console.log(view, "view");
+  const loadedDataset = useStoreState(
+    (state) => state.dataThemes.DatasetGet.crudData
+  ) as IDatasetDetail;
+  const { register, handleSubmit, reset } = useForm<IFormDetails>({
+    defaultValues: props.formDetails,
+  });
   const [characterCount, setCharacterCount] = React.useState(0);
+
+  React.useEffect(() => {
+    //reset form state when dataset is loaded
+    reset({
+      ...props.formDetails,
+    });
+  }, [loadedDataset]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -199,7 +220,7 @@ export default function MetaData(props: Readonly<Props>) {
   };
 
   React.useEffect(() => {
-    setCharacterCount(props.formDetails.description.length);
+    setCharacterCount(props.formDetails.description?.length);
   }, [props.formDetails.description]);
 
   return (
@@ -220,6 +241,7 @@ export default function MetaData(props: Readonly<Props>) {
                 {...register("name", { required: true })}
                 helperText="Title must be between 6 and 50 characters in length."
                 onChange={handleChange}
+                value={props.formDetails.name}
                 fullWidth
               />
             </Grid>
@@ -242,6 +264,7 @@ export default function MetaData(props: Readonly<Props>) {
                     maxLength: 150,
                   }}
                   onChange={handleChange}
+                  value={props.formDetails.description}
                 />
                 <p
                   css={`
@@ -260,7 +283,7 @@ export default function MetaData(props: Readonly<Props>) {
             <Box height={50} />
             <Grid lg={5} xs={12} md={5} item>
               <SelectField
-                value={getValues().category}
+                value={props.formDetails.category}
                 handleChange={handleSelectChange}
               />
             </Grid>
@@ -272,6 +295,7 @@ export default function MetaData(props: Readonly<Props>) {
                 {...register("source", { required: true })}
                 onChange={handleChange}
                 fullWidth
+                value={props.formDetails.source}
               />
             </Grid>
             <Grid lg={12} xs={12} md={12} item>
@@ -282,6 +306,7 @@ export default function MetaData(props: Readonly<Props>) {
                 {...register("sourceUrl", { required: true })}
                 onChange={handleChange}
                 fullWidth
+                value={props.formDetails.sourceUrl}
               />
             </Grid>
           </Grid>
@@ -305,7 +330,7 @@ export default function MetaData(props: Readonly<Props>) {
                 }
               `}
             >
-              previous
+              {view === "edit" ? "Cancel" : "previous"}
             </button>
             <button
               type="submit"
@@ -320,7 +345,7 @@ export default function MetaData(props: Readonly<Props>) {
                 }
               `}
             >
-              next
+              {view === "edit" ? "Save" : "Next"}
             </button>
           </div>
         </form>

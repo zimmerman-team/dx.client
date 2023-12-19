@@ -178,7 +178,7 @@ export default function AITemplate() {
                 `}
               >
                 You will receive occasional emails from DX. You always have
-                choice to unsubscribe within every Email.
+                choice to unsubscribe within every email.
               </p>
             </div>
           </div>

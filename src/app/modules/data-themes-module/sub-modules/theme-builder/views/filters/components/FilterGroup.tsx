@@ -16,7 +16,7 @@ import {
 
 interface FilterGroupCompProps extends FilterGroupModel {
   expandGroup: () => void;
-  loadDataFromAPI?: (
+  loadChartDataFromAPI?: (
     customAppliedFilters?: [
       [
         {
@@ -58,7 +58,7 @@ export function FilterGroup(props: FilterGroupCompProps) {
       key: props.name,
       value: filter(appliedFilters, (af: string) => af !== option),
     });
-    if (props.loadDataFromAPI) {
+    if (props.loadChartDataFromAPI) {
       const temp = allAppliedFilters;
       temp[activeTabIndex][activeVizIndex][props.name] = filter(
         appliedFilters,
@@ -67,7 +67,7 @@ export function FilterGroup(props: FilterGroupCompProps) {
       if (temp[activeTabIndex][activeVizIndex][props.name].length === 0) {
         delete temp[activeTabIndex][activeVizIndex][props.name];
       }
-      props.loadDataFromAPI(temp);
+      props.loadChartDataFromAPI(temp);
     }
   }
 

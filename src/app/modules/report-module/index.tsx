@@ -130,8 +130,7 @@ export default function ReportModule() {
     descriptionColor: "#ffffff",
     dateColor: "#ffffff",
   });
-  const [appliedHeaderDetails, setAppliedHeaderDetails] =
-    React.useState(headerDetails);
+
   const [stopInitializeFramesWidth, setStopInitializeFramesWidth] =
     React.useState(false);
 
@@ -204,14 +203,7 @@ export default function ReportModule() {
           convertToRaw(headerDetailsRef.current.description.getCurrentContent())
         ),
       },
-      appliedHeaderDetails: {
-        ...AppliedHeaderDetailsRef.current,
-        description: JSON.stringify(
-          convertToRaw(
-            AppliedHeaderDetailsRef.current.description.getCurrentContent()
-          )
-        ),
-      },
+
       framesArray: JSON.stringify(
         framesArrayRef.current.map((frame) => ({
           id: frame.id,
@@ -269,16 +261,6 @@ export default function ReportModule() {
       description: EditorState.createWithContent(
         convertFromRaw(
           JSON.parse(persistedReportState.headerDetails.description)
-        )
-      ),
-    });
-
-    setAppliedHeaderDetails({
-      ...persistedReportState.appliedHeaderDetails,
-
-      description: EditorState.createWithContent(
-        convertFromRaw(
-          JSON.parse(persistedReportState.appliedHeaderDetails.description)
         )
       ),
     });
@@ -403,7 +385,6 @@ export default function ReportModule() {
 
   //get current value of states for handlePersistReportState function
   headerDetailsRef.current = headerDetails;
-  AppliedHeaderDetailsRef.current = appliedHeaderDetails;
   framesArrayRef.current = framesArray;
   reportNameRef.current = reportName;
 
@@ -449,17 +430,7 @@ export default function ReportModule() {
         descriptionColor: "#ffffff",
         dateColor: "#ffffff",
       },
-      appliedHeaderDetails: {
-        title: "",
-        description: JSON.stringify(
-          convertToRaw(EditorState.createEmpty().getCurrentContent())
-        ),
-        showHeader: true,
-        backgroundColor: "#252c34",
-        titleColor: "#ffffff",
-        descriptionColor: "#ffffff",
-        dateColor: "#ffffff",
-      },
+
       framesArray: JSON.stringify([]),
     });
 
@@ -509,10 +480,10 @@ export default function ReportModule() {
             heights: frame.contentHeights,
           },
         })),
-        backgroundColor: appliedHeaderDetails.backgroundColor,
-        titleColor: appliedHeaderDetails.titleColor,
-        descriptionColor: appliedHeaderDetails.descriptionColor,
-        dateColor: appliedHeaderDetails.dateColor,
+        backgroundColor: headerDetails.backgroundColor,
+        titleColor: headerDetails.titleColor,
+        descriptionColor: headerDetails.descriptionColor,
+        dateColor: headerDetails.dateColor,
       },
     });
   };
@@ -563,7 +534,6 @@ export default function ReportModule() {
           forceEnablePreviewSave={isPreviewSaveEnabled}
           name={page !== "new" && !view ? reportGetData.name : reportName}
           reportName={reportName}
-          appliedHeaderDetails={appliedHeaderDetails}
           framesArray={framesArray}
           headerDetails={headerDetails}
           setStopInitializeFramesWidth={setStopInitializeFramesWidth}
@@ -582,8 +552,6 @@ export default function ReportModule() {
             currentView={view}
             headerDetails={headerDetails}
             setHeaderDetails={setHeaderDetails}
-            appliedHeaderDetails={appliedHeaderDetails}
-            setAppliedHeaderDetails={setAppliedHeaderDetails}
             onOpen={() => setRightPanelOpen(true)}
             onClose={() => setRightPanelOpen(false)}
             showHeaderItem={!headerDetails.showHeader}
@@ -639,7 +607,6 @@ export default function ReportModule() {
             headerDetails={headerDetails}
             setFramesArray={setFramesArray}
             setHeaderDetails={setHeaderDetails}
-            setAppliedHeaderDetails={setAppliedHeaderDetails}
             handlePersistReportState={handlePersistReportState}
             handleRowFrameItemResize={handleRowFrameItemResize}
             stopInitializeFramesWidth={stopInitializeFramesWidth}

@@ -38,7 +38,7 @@ function ChartBuilderChartType(props: ChartBuilderChartTypeProps) {
     if (dataset === null && !props.loading) {
       history.push(`/chart/${page}/data`);
     }
-  }, []);
+  }, [dataset]);
 
   return (
     <div css={commonStyles.container}>

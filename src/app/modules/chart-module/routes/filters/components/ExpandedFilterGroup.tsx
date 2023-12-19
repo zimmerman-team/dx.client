@@ -25,7 +25,9 @@ import {
 
 interface ExpandedFilterGroupProps extends FilterGroupModel, FilterGroupProps {
   goBack: () => void;
-  loadDataFromAPI?: (customAppliedFilters?: { [key: string]: any[] }) => void;
+  loadChartDataFromAPI?: (customAppliedFilters?: {
+    [key: string]: any[];
+  }) => void;
 }
 
 export function ExpandedFilterGroup(props: ExpandedFilterGroupProps) {
@@ -171,13 +173,13 @@ export function ExpandedFilterGroup(props: ExpandedFilterGroupProps) {
         key: props.name,
         value: tmpAppliedFilters,
       });
-      if (props.loadDataFromAPI) {
+      if (props.loadChartDataFromAPI) {
         const temp = allAppliedFilters;
         temp[props.name] = [
           ...get(temp, `["${props.name}"]`, []),
           ...tmpAppliedFilters,
         ];
-        props.loadDataFromAPI(temp);
+        props.loadChartDataFromAPI(temp);
       }
     }
     props.goBack();
@@ -291,10 +293,10 @@ export function ExpandedFilterGroup(props: ExpandedFilterGroupProps) {
         key: props.name,
         value: [],
       });
-      if (props.loadDataFromAPI) {
+      if (props.loadChartDataFromAPI) {
         const temp = allAppliedFilters;
         temp[props.name] = [];
-        props.loadDataFromAPI(temp);
+        props.loadChartDataFromAPI(temp);
       }
       setTmpAppliedFilters([]);
     }

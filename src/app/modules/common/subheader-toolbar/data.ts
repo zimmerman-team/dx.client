@@ -33,7 +33,6 @@ export interface ReportSubheaderToolbarProps {
   plugins: ToolbarPluginsType;
   isEditorFocused: boolean;
   headerDetails: IHeaderDetails;
-  appliedHeaderDetails: IHeaderDetails;
   framesArray: IFramesArray[];
   setStopInitializeFramesWidth?: (value: boolean) => void;
   handlePersistReportState?: () => void;

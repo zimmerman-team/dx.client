@@ -126,12 +126,6 @@ export default function DatasetsGrid(props: Props) {
     }
   }, [isObserved]);
 
-  // console.log("loadedDatasets", loadedDatasets);
-  // console.log(offset, "offset");
-  // console.log(datasets, "datasets");
-  // console.log(isObserved, "isObserved");
-  // console.log(datasetLoadSuccess, "datasetLoadSuccess");
-
   React.useEffect(() => {
     if (offset === 0) {
       return;
@@ -210,7 +204,7 @@ export default function DatasetsGrid(props: Props) {
       {!props.tableView && (
         <Grid container spacing={!props.inChartBuilder ? 2 : 1}>
           {props.addCard && <DatasetAddnewCard />}
-          {loadedDatasets.map((data, index) => (
+          {loadedDatasets?.map((data, index) => (
             <Grid
               item
               key={data.id}
@@ -233,11 +227,14 @@ export default function DatasetsGrid(props: Props) {
                     pointer-events: none;
                   }
                   > div {
-                    width: 100%;
-                  
-                    &:hover {
-                      cursor: pointer;
-                      border: 1px solid #6061E5;
+                    >div{
+
+                      width: 100%;
+                    
+                      &:hover {
+                        cursor: pointer;
+                        border: 1px solid #6061E5;
+                      }
                     }
                   }
               `
@@ -245,7 +242,7 @@ export default function DatasetsGrid(props: Props) {
               }
             >
               <ReformedGridItem
-                path={"#"}
+                path={`/dataset/${data.id}/edit`}
                 title={data.name}
                 date={data.createdDate}
                 handleDelete={() => {}}
@@ -265,7 +262,7 @@ export default function DatasetsGrid(props: Props) {
         <HomepageTable
           onItemClick={props.onItemClick}
           inChartBuilder={props.inChartBuilder}
-          data={loadedDatasets.map((data) => ({
+          data={loadedDatasets?.map((data) => ({
             id: data.id,
             name: data.name,
             description: data.description,

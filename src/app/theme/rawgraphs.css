@@ -7485,7 +7485,8 @@ fieldset:disabled .btn {
 }
 
 .align-items-center {
-    align-items: center !important
+    align-items: center !important;
+    font-family: "roboto", sans-serif !important;
 }
 
 .align-items-baseline {
