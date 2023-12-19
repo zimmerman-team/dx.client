@@ -84,16 +84,6 @@ export const echartTypes = (big: boolean) => {
         "Line charts present data by illustrating trends and changes in continuous or sequential data points over time, making them ideal for visualizing patterns, fluctuations, or relationships in data.",
     },
     {
-      id: "echartsAreastack",
-      label: "Area Stack",
-      icon: <LineChartIcon big={big} />,
-      preview: <LineChartPreviewImg />,
-      categories: ["Trends", "changes over time"],
-      ssr: false,
-      description:
-        "Area stack charts present data by illustrating trends and changes in continuous or sequential data points over time, making them ideal for visualizing patterns, fluctuations, or relationships in data.",
-    },
-    {
       id: "echartsSankey",
       label: "Sankey diagram",
       icon: <SankeyChartIcon big={big} />,
@@ -189,20 +179,63 @@ export const echartTypes = (big: boolean) => {
         "The basic layout is a scatter plot, which allows to see correlations among two continuous dimensions. A further quantitative dimension with size and a quantitative or categorical dimension with color.",
     },
     {
-      id: "placeholder7",
-      label: "",
-      icon: <></>,
-      categories: [],
+      id: "echartsHeatmap",
+      label: "Heat map",
+      icon: <BarChartIcon big={big} />,
+      preview: <BarChartPreviewImg />,
+      categories: ["Correlations", "Proportions"],
       ssr: false,
-      description: "",
+      description:
+        "The basic layout is a scatter plot, which allows to see correlations among two continuous dimensions. A further quantitative dimension with size and a quantitative or categorical dimension with color.",
     },
     {
-      id: "placeholder8",
-      label: "",
-      icon: <></>,
-      categories: [],
+      id: "echartsRadarchart",
+      label: "Radar Chart",
+      icon: <BarChartIcon big={big} />,
+      preview: <BarChartPreviewImg />,
+      categories: ["Correlations"],
       ssr: false,
-      description: "",
+      description:
+        "It displays multiple continuous dimensions as axes starting from the same point and by disposing them radially. Each dimension is represented as an axis starting from the center of the cart. The same scale is applied to all the axes.",
+    },
+    {
+      id: "echartsGraphgl",
+      label: "Graph GL Chart",
+      icon: <BarChartIcon big={big} />,
+      preview: <BarChartPreviewImg />,
+      categories: ["Networks"],
+      ssr: false,
+      description: "It represents flows among nodes of a network.",
+    },
+    {
+      id: "echartsAreastack",
+      label: "Area Stack",
+      icon: <LineChartIcon big={big} />,
+      preview: <LineChartPreviewImg />,
+      categories: ["Trends", "changes over time"],
+      ssr: false,
+      description:
+        "Area stack charts present data by illustrating trends and changes in continuous or sequential data points over time, making them ideal for visualizing patterns, fluctuations, or relationships in data.",
+    },
+    {
+      id: "echartsAreatimeaxis",
+      label: "Area Time Axis Chart",
+      icon: <LineChartIcon big={big} />,
+      preview: <LineChartPreviewImg />,
+      categories: ["Time Series", "Correlations"],
+      ssr: false,
+      description:
+        "It displays a quantitative dimension over a continuous interval or time period.",
+    },
+    {
+      id: "echartsScatterchart",
+      label: "Scatter Chart",
+      icon: <BarChartIcon big={big} />,
+      preview: <BarChartPreviewImg />,
+      categories: ["Correlations", "Proportions"],
+      ssr: false,
+      description:
+        "It allows to see correlations among two continuous dimensions.",
     },
     {
       id: "placeholder9",
@@ -256,15 +289,6 @@ export const coloredEchartTypes = () => {
       ssr: false,
       description:
         "It displays a quantitative dimension over a continuous interval or time period. Colour can be optionally used to encode an additional quantitative or categorical dimension.",
-    },
-    {
-      id: "echartsAreastack",
-      label: "Area Stack",
-      icon: <ColoredLineChartIcon />,
-      categories: ["Trends", "changes over time"],
-      ssr: false,
-      description:
-        "Area stack charts present data by illustrating trends and changes in continuous or sequential data points over time, making them ideal for visualizing patterns, fluctuations, or relationships in data.",
     },
     {
       id: "echartsSankey",
@@ -351,6 +375,59 @@ export const coloredEchartTypes = () => {
       ssr: false,
       description:
         "The basic layout is a scatter plot, which allows to see correlations among two continuous dimensions. A further quantitative dimension with size and a quantitative or categorical dimension with color.",
+    },
+    {
+      id: "echartsHeatmap",
+      label: "Heat map",
+      icon: <ColoredBarChartIcon />,
+      categories: ["Correlations", "Proportions"],
+      ssr: false,
+      description:
+        "The basic layout is a scatter plot, which allows to see correlations among two continuous dimensions. A further quantitative dimension with size and a quantitative or categorical dimension with color.",
+    },
+    {
+      id: "echartsRadarchart",
+      label: "Radar Chart",
+      icon: <ColoredBarChartIcon />,
+      categories: ["Correlations"],
+      ssr: false,
+      description:
+        "It displays multiple continuous dimensions as axes starting from the same point and by disposing them radially. Each dimension is represented as an axis starting from the center of the cart. The same scale is applied to all the axes.",
+    },
+    {
+      id: "echartsGraphgl",
+      label: "Graph GL Chart",
+      icon: <ColoredBarChartIcon />,
+      categories: ["Networks"],
+      ssr: false,
+      description: "It represents flows among nodes of a network.",
+    },
+    {
+      id: "echartsAreastack",
+      label: "Area Stack",
+      icon: <ColoredLineChartIcon />,
+      categories: ["Trends", "changes over time"],
+      ssr: false,
+      description:
+        "Area stack charts present data by illustrating trends and changes in continuous or sequential data points over time, making them ideal for visualizing patterns, fluctuations, or relationships in data.",
+    },
+    {
+      id: "echartsAreatimeaxis",
+      label: "Area Time Axis Chart",
+      icon: <ColoredLineChartIcon />,
+      categories: ["Time Series", "Correlations"],
+      ssr: false,
+      description:
+        "It displays a quantitative dimension over a continuous interval or time period.",
+    },
+    {
+      id: "echartsScatterchart",
+      label: "Scatter Chart",
+      icon: <ColoredBarChartIcon />,
+      categories: ["Correlations", "Proportions"],
+      ssr: false,
+      description:
+        "It allows to see correlations among two continuous dimensions.",
     },
   ];
 };

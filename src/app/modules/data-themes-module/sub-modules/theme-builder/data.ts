@@ -43,6 +43,11 @@ import {
   echartsForcegraph,
   echartsCirculargraph,
   echartsBubblechart,
+  echartsScatterchart,
+  echartsHeatmap,
+  echartsGraphgl,
+  echartsRadarchart,
+  echartsAreatimeaxis,
 
   // @ts-ignore
 } from "@rawgraphs/rawgraphs-charts";
@@ -92,6 +97,11 @@ export const charts = {
   echartsForcegraph,
   echartsCirculargraph,
   echartsBubblechart,
+  echartsScatterchart,
+  echartsHeatmap,
+  echartsGraphgl,
+  echartsRadarchart,
+  echartsAreatimeaxis,
 };
 
 export const CHART_DEFAULT_WIDTH = 1000;
@@ -1317,6 +1327,66 @@ export const defaultChartOptions = {
       default: CHART_DEFAULT_HEIGHT,
     },
     ...echartsBubblechart.visualOptions,
+  },
+  echartsScatterchart: {
+    ...baseOptions,
+    width: {
+      ...baseOptions.width,
+      default: CHART_DEFAULT_WIDTH,
+    },
+    height: {
+      ...baseOptions.height,
+      default: CHART_DEFAULT_HEIGHT,
+    },
+    ...echartsScatterchart.visualOptions,
+  },
+  echartsHeatmap: {
+    ...baseOptions,
+    width: {
+      ...baseOptions.width,
+      default: CHART_DEFAULT_WIDTH,
+    },
+    height: {
+      ...baseOptions.height,
+      default: CHART_DEFAULT_HEIGHT,
+    },
+    ...echartsHeatmap.visualOptions,
+  },
+  echartsGraphgl: {
+    ...baseOptions,
+    width: {
+      ...baseOptions.width,
+      default: CHART_DEFAULT_WIDTH,
+    },
+    height: {
+      ...baseOptions.height,
+      default: CHART_DEFAULT_HEIGHT,
+    },
+    ...echartsGraphgl.visualOptions,
+  },
+  echartsRadarchart: {
+    ...baseOptions,
+    width: {
+      ...baseOptions.width,
+      default: CHART_DEFAULT_WIDTH,
+    },
+    height: {
+      ...baseOptions.height,
+      default: CHART_DEFAULT_HEIGHT,
+    },
+    ...echartsRadarchart.visualOptions,
+  },
+  echartsAreatimeaxis: {
+    ...baseOptions,
+    width: {
+      ...baseOptions.width,
+      default: CHART_DEFAULT_WIDTH,
+    },
+    height: {
+      ...baseOptions.height,
+      default: CHART_DEFAULT_HEIGHT,
+    },
+    ...echartsAreatimeaxis.visualOptions,
   },
 };
 

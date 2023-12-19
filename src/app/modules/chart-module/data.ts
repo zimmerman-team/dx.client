@@ -4,6 +4,7 @@ import {
   echartsBarchart,
   echartsGeomap,
   echartsLinechart,
+  echartsAreatimeaxis,
   echartsAreastack,
   echartsSankey,
   echartsTreemap,
@@ -13,6 +14,10 @@ import {
   echartsCirculargraph,
   echartsCirclepacking,
   echartsBubblechart,
+  echartsScatterchart,
+  echartsHeatmap,
+  echartsGraphgl,
+  echartsRadarchart,
   echartsPiechart,
   // @ts-ignore
 } from "@rawgraphs/rawgraphs-charts";
@@ -22,6 +27,7 @@ export const charts = {
   echartsBarchart,
   echartsGeomap,
   echartsLinechart,
+  echartsAreatimeaxis,
   echartsAreastack,
   echartsSankey,
   echartsTreemap,
@@ -31,6 +37,10 @@ export const charts = {
   echartsCirculargraph,
   echartsCirclepacking,
   echartsBubblechart,
+  echartsScatterchart,
+  echartsHeatmap,
+  echartsGraphgl,
+  echartsRadarchart,
   echartsPiechart,
 };
 
@@ -73,6 +83,18 @@ export const defaultChartOptions = {
       default: CHART_DEFAULT_HEIGHT,
     },
     ...echartsLinechart.visualOptions,
+  },
+  echartsAreatimeaxis: {
+    ...baseOptions,
+    width: {
+      ...baseOptions.width,
+      default: CHART_DEFAULT_WIDTH,
+    },
+    height: {
+      ...baseOptions.height,
+      default: CHART_DEFAULT_HEIGHT,
+    },
+    ...echartsAreatimeaxis.visualOptions,
   },
   echartsAreastack: {
     ...baseOptions,
@@ -245,6 +267,54 @@ export const defaultChartOptions = {
       default: CHART_DEFAULT_HEIGHT,
     },
     ...echartsBubblechart.visualOptions,
+  },
+  echartsScatterchart: {
+    ...baseOptions,
+    width: {
+      ...baseOptions.width,
+      default: CHART_DEFAULT_WIDTH,
+    },
+    height: {
+      ...baseOptions.height,
+      default: CHART_DEFAULT_HEIGHT,
+    },
+    ...echartsScatterchart.visualOptions,
+  },
+  echartsHeatmap: {
+    ...baseOptions,
+    width: {
+      ...baseOptions.width,
+      default: CHART_DEFAULT_WIDTH,
+    },
+    height: {
+      ...baseOptions.height,
+      default: CHART_DEFAULT_HEIGHT,
+    },
+    ...echartsHeatmap.visualOptions,
+  },
+  echartsGraphgl: {
+    ...baseOptions,
+    width: {
+      ...baseOptions.width,
+      default: CHART_DEFAULT_WIDTH,
+    },
+    height: {
+      ...baseOptions.height,
+      default: CHART_DEFAULT_HEIGHT,
+    },
+    ...echartsGraphgl.visualOptions,
+  },
+  echartsRadarchart: {
+    ...baseOptions,
+    width: {
+      ...baseOptions.width,
+      default: CHART_DEFAULT_WIDTH,
+    },
+    height: {
+      ...baseOptions.height,
+      default: CHART_DEFAULT_HEIGHT,
+    },
+    ...echartsRadarchart.visualOptions,
   },
   bigNumber: {},
 };

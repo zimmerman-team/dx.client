@@ -16,16 +16,24 @@ import {
   CustomChart,
   GraphChart,
   ScatterChart,
+  RadarChart,
+  HeatmapChart,
 } from "echarts/charts";
+import {
+  GraphGLChart,
+  // @ts-ignore
+} from "echarts-gl/charts";
 import {
   GridComponent,
   LegendComponent,
   TooltipComponent,
   VisualMapComponent,
+  DataZoomComponent,
 } from "echarts/components";
 import { checkLists } from "app/modules/data-themes-module/sub-modules/theme-builder/views/customize/data";
 import { charts } from "app/modules/chart-module/data";
 import { drillDown } from "app/utils/getCirclePackingOption";
+import axios from "axios";
 
 echarts.use([
   BarChart,
@@ -35,13 +43,17 @@ echarts.use([
   GraphChart,
   CustomChart,
   SankeyChart,
+  HeatmapChart,
+  RadarChart,
   TreemapChart,
+  GraphGLChart,
   GridComponent,
   SunburstChart,
   ScatterChart,
   CanvasRenderer,
   LegendComponent,
   TooltipComponent,
+  DataZoomComponent,
   VisualMapComponent,
 ]);
 
@@ -363,6 +375,76 @@ export function useDataThemesEchart() {
     return option;
   }
 
+  function echartsAreatimeaxis(data: any, visualOptions: any) {
+    const {
+      // artboard
+      // margins
+      marginTop,
+      marginRight,
+      marginBottom,
+      marginLeft,
+      // Tooltip
+      showTooltip,
+      isMonetaryValue,
+      dataZoom,
+    } = visualOptions;
+
+    const convertedData = data.map((d: any) => [+new Date(d.x), d.y]);
+
+    const option = {
+      grid: {
+        top: marginTop,
+        left: marginLeft,
+        right: marginRight,
+        bottom: marginBottom,
+        zlevel: -1,
+        z: -1,
+      },
+      tooltip: {
+        trigger: showTooltip ? "axis" : "none",
+        position: function (pt: any) {
+          return [pt[0], "10%"];
+        },
+        valueFormatter: (value: number | string) =>
+          isMonetaryValue
+            ? formatFinancialValue(parseInt(value.toString(), 10), true)
+            : value,
+      },
+      xAxis: {
+        type: "time",
+        boundaryGap: false,
+      },
+      yAxis: {
+        type: "value",
+        boundaryGap: [0, "100%"],
+      },
+      dataZoom: dataZoom
+        ? [
+            {
+              type: "inside",
+              start: 0,
+              end: 20,
+            },
+            {
+              start: 0,
+              end: 20,
+            },
+          ]
+        : null,
+      series: [
+        {
+          type: "line",
+          smooth: true,
+          symbol: "none",
+          areaStyle: {},
+          data: convertedData,
+        },
+      ],
+    };
+
+    return option;
+  }
+
   function echartsAreastack(data: any, visualOptions: any) {
     const {
       // artboard
@@ -529,6 +611,248 @@ export function useDataThemesEchart() {
         },
       })),
     };
+    return option;
+  }
+
+  function echartsScatterchart(data: any, visualOptions: any) {
+    const {
+      // margin
+      marginTop,
+      marginRight,
+      marginBottom,
+      marginLeft,
+      // Tooltip
+      showTooltip,
+      isMonetaryValue,
+    } = visualOptions;
+
+    const option = {
+      grid: {
+        top: marginTop,
+        left: marginLeft,
+        right: marginRight,
+        bottom: marginBottom,
+        zlevel: -1,
+        z: -1,
+      },
+      xAxis: [{ type: "value", data: data.map((d: any) => d.x) }],
+      yAxis: [
+        {
+          type: "value",
+          data: data.map((d: any) => d.y),
+        },
+      ],
+
+      tooltip: {
+        trigger: showTooltip ? "item" : "none",
+        confine: true,
+        formatter: (params: any) => {
+          return `${params.data[1]}: ${
+            isMonetaryValue
+              ? formatFinancialValue(params.value, true)
+              : params.data[0]
+          }`;
+        },
+      },
+      series: [
+        {
+          symbolSize: 5,
+          data: data.map((d: any) => [d.x, d.y]),
+          type: "scatter",
+        },
+      ],
+    };
+    return option;
+  }
+
+  function echartsHeatmap(data: any, visualOptions: any) {
+    const {
+      //artboard
+      width,
+      height,
+      // margin
+      marginTop,
+      marginRight,
+      marginBottom,
+      marginLeft,
+      // Tooltip
+      showTooltip,
+      isMonetaryValue,
+      // Label
+      showLabels,
+      labelFontSize,
+      // Palette
+      palette,
+      gaussian,
+    } = visualOptions;
+
+    let gridSize = [100, 100]; // Adjust the size of the grid as needed
+    let amplitude = 500; // Adjust the amplitude for intensity scaling
+
+    const maxX = Math.max(...data.map((data: any) => data.x));
+    const maxY = Math.max(...data.map((data: any) => data.y));
+
+    const originalData = data.map((d: any) => [d.x, d.y, d.size]);
+
+    const normalData = data.map((d: any) => [
+      (d.x / maxX) * gridSize[1],
+      (d.y / maxY) * gridSize[0],
+      d.size,
+    ]);
+
+    function generateGaussianHeatmapData(
+      data: any,
+      gridSize: number[],
+      amplitude: number
+    ) {
+      let gaussianData = [];
+      for (let x = 0; x < gridSize[0]; x++) {
+        for (let y = 0; y < gridSize[1]; y++) {
+          let intensity = 0;
+          data.forEach(function (point: any) {
+            let dx = x - point[0];
+            let dy = y - point[1];
+            let distanceSquared = dx * dx + dy * dy;
+            intensity += point[2] * Math.exp(-distanceSquared / amplitude);
+          });
+          gaussianData.push([x, y, intensity]);
+        }
+      }
+      return gaussianData;
+    }
+
+    let outputData = [];
+
+    if (gaussian) {
+      outputData = generateGaussianHeatmapData(
+        originalData,
+        gridSize,
+        amplitude
+      );
+    } else {
+      outputData = normalData;
+    }
+
+    const option = {
+      xAxis: {
+        type: "category",
+        data: Array.from({ length: gridSize[0] }, (_, index) => index),
+      },
+      yAxis: {
+        type: "category",
+        data: Array.from({ length: gridSize[1] }, (_, index) => index),
+      },
+      tooltip: {
+        trigger: showTooltip ? "item" : "none",
+        confine: true,
+        formatter: (params: any) => {
+          return `${params.data[1]}: ${
+            isMonetaryValue
+              ? formatFinancialValue(params.value, true)
+              : params.data[0]
+          }`;
+        },
+      },
+      visualMap: {
+        min: Math.min(
+          ...outputData.map((item: number[]) => (item[2] ? item[2] : 0))
+        ),
+        max: Math.max(
+          ...outputData.map((item: number[]) => (item[2] ? item[2] : 0))
+        ),
+        calculable: true,
+        realtime: false,
+        inRange: {
+          color: checkLists.find((item) => item.label === palette)?.value,
+        },
+        show: false,
+      },
+      series: [
+        {
+          type: "heatmap",
+          data: outputData,
+          emphasis: {
+            itemStyle: {
+              borderColor: "#333",
+              borderWidth: 1,
+            },
+          },
+          progressive: 1000,
+          animation: false,
+          top: marginTop,
+          left: marginLeft,
+          right: marginRight,
+          bottom: marginBottom,
+          width,
+          height,
+        },
+      ],
+    };
+    return option;
+  }
+
+  function echartsRadarchart(data: any, visualOptions: any) {
+    const {
+      // margin
+      marginTop,
+      marginRight,
+      marginBottom,
+      marginLeft,
+      // Tooltip
+      showTooltip,
+      isMonetaryValue,
+      // Palette
+      palette,
+    } = visualOptions;
+
+    const option = {
+      grid: {
+        top: marginTop,
+        left: marginLeft,
+        right: marginRight,
+        bottom: marginBottom,
+      },
+      tooltip: {
+        trigger: showTooltip ? "item" : "none",
+        valueFormatter: (value: number | string) =>
+          isMonetaryValue
+            ? formatFinancialValue(parseInt(value.toString(), 10), true)
+            : value,
+      },
+      legend: {
+        type: "scroll",
+        bottom: 10,
+        data: data.colors.map((color: any) => String(color)),
+      },
+      visualMap: {
+        top: "middle",
+        right: 10,
+        color: checkLists.find((item) => item.label === palette)?.value,
+        show: false,
+      },
+      radar: {
+        indicator: data.indicators,
+      },
+      series: data.data.map((item: any) => ({
+        type: "radar",
+        symbol: "none",
+        lineStyle: {
+          width: 1,
+        },
+        emphasis: {
+          areaStyle: {
+            color: "rgba(0,250,0,0.3)",
+          },
+        },
+        data: [
+          {
+            value: item.value,
+            name: String(item.name),
+          },
+        ],
+      })),
+    };
+
     return option;
   }
 
@@ -841,6 +1165,68 @@ export function useDataThemesEchart() {
     return option as any;
   }
 
+  function echartsGraphgl(data: any, visualOptions: any) {
+    const {
+      // artboard
+      width,
+      height,
+      showLegend,
+      // margins
+      marginTop,
+      marginRight,
+      marginBottom,
+      marginLeft,
+      // chart options
+      opacity,
+      // palette
+      palette,
+    } = visualOptions;
+
+    const maxValue = data.nodes?.reduce((prev: number, curr: any) => {
+      return Math.max(prev, curr.value);
+    }, 0);
+
+    data.nodes?.forEach(function (node: any) {
+      node.symbolSize = (node.value / maxValue) * 10; // making the symbol size relative to the max value but max at 10
+    });
+
+    const nodes = uniqBy(data.nodes, "name");
+
+    const option = {
+      color: checkLists.find((item) => item.label === palette)?.value,
+      series: [
+        {
+          width,
+          height,
+          top: marginTop,
+          left: marginLeft,
+          right: marginRight,
+          bottom: marginBottom,
+          type: "graphGL",
+          nodes: nodes,
+          edges: data.links,
+          categories: data.categories,
+          lineStyle: {
+            color: "rgba(0,0,0,0.2)",
+          },
+          itemStyle: {
+            opacity: opacity,
+          },
+          forceAtlas2: {
+            steps: 1,
+            stopThreshold: 1,
+            jitterTolerence: 10,
+            edgeWeight: [0.2, 1],
+            gravity: 0,
+            edgeWeightInfluence: 1,
+            scaling: 0.2,
+          },
+        },
+      ],
+    };
+    return option;
+  }
+
   function echartsTreemap(data: any, visualOptions: any) {
     const {
       // artboard
@@ -1026,6 +1412,7 @@ export function useDataThemesEchart() {
       | "echartsBarchart"
       | "echartsGeomap"
       | "echartsLinechart"
+      | "echartsAreatimeaxis"
       | "echartsAreastack"
       | "echartsSankey"
       | "echartsTreemap"
@@ -1035,6 +1422,10 @@ export function useDataThemesEchart() {
       | "echartsCirculargraph"
       | "echartsPiechart"
       | "echartsBubblechart"
+      | "echartsScatterchart"
+      | "echartsHeatmap"
+      | "echartsGraphgl"
+      | "echartsRadarchart"
       | "echartsCirclepacking",
 
     visualOptions: any,
@@ -1058,6 +1449,7 @@ export function useDataThemesEchart() {
         echartsBarchart: () => echartsBarchart(data, visualOptions),
         echartsGeomap: () => echartsGeomap(data, visualOptions),
         echartsLinechart: () => echartsLinechart(data, visualOptions),
+        echartsAreatimeaxis: () => echartsAreatimeaxis(data, visualOptions),
         echartsAreastack: () => echartsAreastack(data, visualOptions),
         echartsSankey: () => echartsSankey(data, visualOptions),
         echartsTreemap: () => echartsTreemap(data, visualOptions),
@@ -1066,6 +1458,10 @@ export function useDataThemesEchart() {
         echartsCirculargraph: () => echartsCirculargraph(data, visualOptions),
         echartsPiechart: () => echartsPiechart(data, visualOptions),
         echartsBubblechart: () => echartsBubblechart(data, visualOptions),
+        echartsScatterchart: () => echartsScatterchart(data, visualOptions),
+        echartsHeatmap: () => echartsHeatmap(data, visualOptions),
+        echartsGraphgl: () => echartsGraphgl(data, visualOptions),
+        echartsRadarchart: () => echartsRadarchart(data, visualOptions),
         echartsCirclepacking: () =>
           echartsCirclepacking(data, visualOptions, null),
       };
