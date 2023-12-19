@@ -44,6 +44,7 @@ import { NotAuthorizedMessageModule } from "app/modules/common/not-authorized-me
 import { useRecoilState } from "recoil";
 import { loadedDatasetsAtom } from "app/state/recoil/atoms";
 import { isEmpty } from "lodash";
+import { DatasetListItemAPIModel } from "../data-themes-module/sub-modules/list";
 
 export default function ChartModule() {
   const { isLoading, isAuthenticated } = useAuth0();
@@ -140,6 +141,11 @@ export default function ChartModule() {
   const resetDataset = useStoreActions(
     (actions) => actions.charts.dataset.reset
   );
+  const datasets = useStoreState(
+    (state) =>
+      (state.dataThemes.DatasetGetList.crudData ??
+        []) as DatasetListItemAPIModel[]
+  );
 
   const resetEnabledFilterOptionGroups = useStoreActions(
     (actions) => actions.charts.enabledFilterOptionGroups.clear
@@ -178,7 +184,7 @@ export default function ChartModule() {
   //set chart name to selected dataset if chart name has not been focused
   React.useEffect(() => {
     if (page === "new" && !hasSubHeaderTitleFocused && dataset) {
-      const datasetName = loadedDatasets.find((d) => d.id === dataset)?.name;
+      const datasetName = datasets.find((d) => d.id === dataset)?.name;
       setChartName(datasetName as string);
     }
     if (isEmpty(dataset) && page === "new" && !hasSubHeaderTitleFocused) {

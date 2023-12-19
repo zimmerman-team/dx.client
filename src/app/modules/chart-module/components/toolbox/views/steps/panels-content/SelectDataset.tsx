@@ -8,6 +8,7 @@ import { useHistory, useParams } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { loadedDatasetsAtom } from "app/state/recoil/atoms";
 import ToolboxSubHeader from "../sub-header";
+import { DatasetListItemAPIModel } from "app/modules/data-themes-module/sub-modules/list";
 
 export function DatasetPanel() {
   return (
@@ -37,8 +38,11 @@ function ChartToolBoxSelectDataset() {
   const setDataset = useStoreActions(
     (actions) => actions.charts.dataset.setValue
   );
-  const [loadedDatasets, _setLoadedDatasets] =
-    useRecoilState(loadedDatasetsAtom);
+  const datasets = useStoreState(
+    (state) =>
+      (state.dataThemes.DatasetGetList.crudData ??
+        []) as DatasetListItemAPIModel[]
+  );
 
   const deSelectDataset = () => {
     setDataset(null);
@@ -114,7 +118,7 @@ function ChartToolBoxSelectDataset() {
       >
         <span>
           {get(
-            find(loadedDatasets, { id: dataset }),
+            find(datasets, { id: dataset }),
             "name",
             "Select data from the list"
           )}
