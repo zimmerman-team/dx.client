@@ -220,7 +220,7 @@ export default function MetaData(props: Readonly<Props>) {
   };
 
   React.useEffect(() => {
-    setCharacterCount(props.formDetails.description.length);
+    setCharacterCount(props.formDetails.description?.length);
   }, [props.formDetails.description]);
 
   return (

@@ -22,7 +22,6 @@ export const previewTablecss = css`
     font-family: "GothamNarrow-Book";
     :last-child {
       border-bottom-right-radius: 10px;
-      border: rgba(0, 0, 0, 0.12);
     }
   }
 `;
