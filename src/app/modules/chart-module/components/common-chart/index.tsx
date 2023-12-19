@@ -124,7 +124,12 @@ export function CommonChart(props: Props) {
               | "echartsGraphgl"
               | "echartsRadarchart"
               | "echartsPiechart"),
-          visualOptions,
+          {
+            ...visualOptions,
+            height: props.inChartWrapper
+              ? visualOptions.height - 28
+              : visualOptions.height,
+          },
           `common-chart-render-container-${props.chartId || "1"}`
         );
       } catch (e: any) {
@@ -182,7 +187,9 @@ export function CommonChart(props: Props) {
         css={`
           width: 100%;
           overflow: hidden;
-          height: ${props.visualOptions?.height}px;
+          height: ${props.inChartWrapper
+            ? props.visualOptions.height - 28
+            : props.visualOptions.height}px;
           * {
             font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif !important;
           }
@@ -199,6 +206,7 @@ export function CommonChart(props: Props) {
               ${chartType === "bigNumber" &&
               props.inChartWrapper &&
               `
+              
     
       div:nth-child(1) {
         font-size: 9.39px !important;
@@ -226,9 +234,7 @@ export function CommonChart(props: Props) {
 
             
         `}
-              canvas {
-                padding-bottom: 28px !important;
-              }
+
               > svg {
                 height: 100%;
 
