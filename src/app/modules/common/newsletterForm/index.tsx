@@ -17,6 +17,17 @@ export default function NewsletterForm(
     >;
   }>
 ) {
+  const inputRef = React.useRef<HTMLInputElement>(null);
+  const [placeholder, setPlaceholder] = React.useState("Email address");
+  const inputRefFocus = () => {
+    setPlaceholder("");
+  };
+  const inputRefBlur = () => {
+    if (inputRef.current?.value === "") {
+      setPlaceholder("Email address");
+    }
+  };
+
   const {
     register,
     formState: { errors },
@@ -77,10 +88,13 @@ export default function NewsletterForm(
     >
       <input
         type="text"
-        placeholder="Email address"
+        placeholder={placeholder}
         {...register("email", { required: true })}
         onChange={handleEmailChange}
         value={email}
+        ref={inputRef}
+        onFocus={inputRefFocus}
+        onBlur={inputRefBlur}
       />
       <button type="submit">SUBSCRIBE</button>
     </form>
