@@ -72,7 +72,7 @@ export function DataThemesBuilder() {
     sampleData,
     isEditMode,
     loadDataset,
-    loadDataFromAPI,
+    loadChartDataFromAPI,
   } = useDataThemesRawData({
     visualOptions,
     setVisualOptions,
@@ -478,7 +478,7 @@ export function DataThemesBuilder() {
           openPanel={config.openPanel}
           exportView={config.exportView}
           filtersView={config.filtersView}
-          loadDataFromAPI={loadDataFromAPI}
+          loadChartDataFromAPI={loadChartDataFromAPI}
           setVisualOptions={setVisualOptions}
           visualOptions={toolboxVisualOptions}
           loading={loading || isDataThemeLoading}

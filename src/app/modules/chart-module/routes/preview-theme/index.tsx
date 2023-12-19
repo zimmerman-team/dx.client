@@ -49,6 +49,7 @@ export function ChartBuilderPreviewTheme(props: ChartBuilderPreviewThemeProps) {
   const domRef = React.useRef<HTMLDivElement>(null);
   const containerRef = React.useRef<HTMLDivElement>(null);
   const { page } = useParams<{ page: string }>();
+  const dataset = useStoreState((state) => state.charts.dataset.value);
   const history = useHistory();
   const { render } = useDataThemesEchart();
 
@@ -58,6 +59,13 @@ export function ChartBuilderPreviewTheme(props: ChartBuilderPreviewThemeProps) {
   const selectedChartType = useStoreState(
     (state) => state.charts.chartType.value
   );
+
+  React.useEffect(() => {
+    //doing this for only new chart because existing chart will have data (gotten from page id)
+    if (dataset === null && !props.loading && page === "new") {
+      history.push(`/chart/${page}/data`);
+    }
+  }, [dataset]);
 
   useUpdateEffectOnce(() => {
     if (

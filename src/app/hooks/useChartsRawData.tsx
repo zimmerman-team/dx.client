@@ -167,7 +167,7 @@ export function useChartsRawData(props: {
       });
   }
 
-  async function loadDataFromAPI(
+  async function loadChartDataFromAPI(
     customAppliedFilters?: [
       [
         {
@@ -230,7 +230,7 @@ export function useChartsRawData(props: {
       (isEditMode || !props.inChartWrapper) &&
       !isLoading
     ) {
-      loadDataFromAPI();
+      loadChartDataFromAPI();
     }
   }, [page, isEditMode, props.inChartWrapper, isLoading, token]);
 
@@ -328,6 +328,6 @@ export function useChartsRawData(props: {
     isEditMode,
     dataTotalCount,
     loadDataset,
-    loadDataFromAPI,
+    loadChartDataFromAPI,
   };
 }

@@ -51,10 +51,6 @@ function ChartModuleDataView(
     { label: "Name", value: "name" },
   ];
 
-  const setActivePanels = useStoreActions(
-    (state) => state.charts.activePanels.setValue
-  );
-
   const setDataset = useStoreActions(
     (actions) => actions.charts.dataset.setValue
   );

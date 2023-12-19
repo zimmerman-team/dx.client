@@ -80,7 +80,7 @@ export default function ChartModule() {
     sampleData,
     isEditMode,
     loadDataset,
-    loadDataFromAPI,
+    loadChartDataFromAPI,
     error401,
     setDataError,
     setNotFound,
@@ -174,11 +174,6 @@ export default function ChartModule() {
       resetMapping();
     }
   }, [dataset]);
-
-  //reset filters when dataset types changes
-  React.useEffect(() => {
-    resetAppliedFilters();
-  }, [dataTypes]);
 
   //set chart name to selected dataset if chart name has not been focused
   React.useEffect(() => {
@@ -289,33 +284,6 @@ export default function ChartModule() {
       }
     });
   }
-  const { updRequiredFields, updMinValuesFields } = getRequiredFieldsAndErrors(
-    mapping,
-    dimensions
-  );
-  function getForceNextEnabledValue(param?: string) {
-    switch (param) {
-      case "initial":
-        return false;
-      case "data":
-        return dataset !== null;
-      case "preview-data":
-        return dataset !== null;
-      case "chart-type":
-        return chartType !== null;
-      case "export":
-      case "lock":
-      case "customize":
-      case "mapping":
-        return (
-          updRequiredFields.length === 0 && updMinValuesFields.length === 0
-        );
-      case "filters":
-        return true;
-      default:
-        return false;
-    }
-  }
 
   function getForceEnabledPreviewValue(param?: string) {
     if (param === "preview") {
@@ -399,7 +367,9 @@ export default function ChartModule() {
                   "Sankey is a DAG, the original data has cycle!" && (
                   <>
                     <span>
-                      <button onClick={() => loadDataFromAPI()}>Reload</button>{" "}
+                      <button onClick={() => loadChartDataFromAPI()}>
+                        Reload
+                      </button>{" "}
                     </span>
                     to try again.
                   </>
@@ -457,13 +427,12 @@ export default function ChartModule() {
           visualOptions={visualOptions}
           exportView={config.exportView}
           filtersView={config.filtersView}
-          loadDataFromAPI={loadDataFromAPI}
+          loadChartDataFromAPI={loadChartDataFromAPI}
           setVisualOptions={setVisualOptions}
           loading={loading || isChartLoading}
           filterOptionGroups={filterOptionGroups}
           addVizToLocalStates={addVizToLocalStates}
           previewMode={!isEditMode && page !== "new"}
-          forceNextEnabled={getForceNextEnabledValue(view)}
           openToolbox={toolboxOpen}
           setToolboxOpen={setToolboxOpen}
           dimensions={dimensions}

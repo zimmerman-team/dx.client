@@ -19,7 +19,7 @@ export interface ChartToolBoxProps {
   openToolbox: boolean;
   onClose: () => void;
   onOpen: () => void;
-  loadDataFromAPI: (
+  loadChartDataFromAPI: (
     customAppliedFilters?: [
       [
         {
@@ -32,7 +32,6 @@ export interface ChartToolBoxProps {
   rawViz: any;
   dataTypes: any;
   previewMode: boolean;
-  forceNextEnabled: boolean;
   addVizToLocalStates: () => void;
   filterOptionGroups: FilterGroupModel[];
   setVisualOptions: (value: any) => void;

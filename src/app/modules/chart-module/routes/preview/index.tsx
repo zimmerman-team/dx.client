@@ -6,7 +6,8 @@ import { useStoreState } from "app/state/store/hooks";
 import { PageLoader } from "app/modules/common/page-loader";
 import { styles as commonStyles } from "app/modules/chart-module/routes/common/styles";
 import { FilterGroupModel } from "app/components/ToolBoxPanel/components/filters/data";
-import { DataThemesDataTable } from "app/modules/data-themes-module/components/data-table";
+import { DatasetDataTable } from "app/fragments/datasets-fragment/component/data-table";
+import { useHistory, useParams } from "react-router-dom";
 
 interface ChartBuilderPreviewProps {
   loading: boolean;
@@ -24,17 +25,23 @@ interface ChartBuilderPreviewProps {
 
 export function ChartBuilderPreview(props: ChartBuilderPreviewProps) {
   useTitle("DX DataXplorer - Data");
+  const history = useHistory();
+  const { page } = useParams<{ page: string }>();
   const dataset = useStoreState((state) => state.charts.dataset.value);
 
   React.useEffect(() => {
-    props.loadDataset(`chart/sample-data/${dataset}`);
-  }, []);
+    if (dataset === null && !props.loading) {
+      history.push(`/chart/${page}/data`);
+    } else {
+      props.loadDataset(`chart/sample-data/${dataset}`);
+    }
+  }, [dataset]);
 
   return (
     <div css={commonStyles.container}>
       {props.loading && <PageLoader />}
       <div css={commonStyles.innercontainer}>
-        <DataThemesDataTable data={props.data} stats={props.stats} />
+        <DatasetDataTable data={props.data} stats={props.stats} />
       </div>
     </div>
   );

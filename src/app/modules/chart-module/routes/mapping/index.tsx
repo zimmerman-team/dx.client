@@ -45,7 +45,7 @@ function ChartBuilderMapping(props: ChartBuilderMappingProps) {
     if (dataset === null && !props.loading) {
       history.push(`/chart/${page}/data`);
     }
-  }, []);
+  }, [dataset]);
 
   return (
     <div css={commonStyles.container}>

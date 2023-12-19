@@ -67,7 +67,7 @@ export function DataThemesToolBoxPreview(props: DataThemesToolBoxPreviewProps) {
     });
     const temp = appliedFilters;
     temp[props.tabIndex][props.vizIndex] = {};
-    props.loadDataFromAPI(temp);
+    props.loadChartDataFromAPI(temp);
   }
 
   return (
@@ -125,7 +125,7 @@ export function DataThemesToolBoxPreview(props: DataThemesToolBoxPreviewProps) {
                   key={group.name}
                   name={group.name}
                   options={group.options}
-                  loadDataFromAPI={props.loadDataFromAPI}
+                  loadChartDataFromAPI={props.loadChartDataFromAPI}
                   expandGroup={() => setExpandedGroup(group)}
                 />
               ))}
@@ -146,7 +146,7 @@ export function DataThemesToolBoxPreview(props: DataThemesToolBoxPreviewProps) {
             vizIndex={props.vizIndex}
             options={expandedGroup.options}
             goBack={() => setExpandedGroup(null)}
-            loadDataFromAPI={props.loadDataFromAPI}
+            loadChartDataFromAPI={props.loadChartDataFromAPI}
           />
         </div>
       )}

@@ -197,7 +197,7 @@ export function useDataThemesRawData(props: {
       });
   }
 
-  function loadDataFromAPI(
+  function loadChartDataFromAPI(
     customAppliedFilters?: [
       [
         {
@@ -318,7 +318,7 @@ export function useDataThemesRawData(props: {
 
   useMount(() => {
     if (isEditMode && page !== "new") {
-      loadDataFromAPI();
+      loadChartDataFromAPI();
     }
   });
 
@@ -331,7 +331,7 @@ export function useDataThemesRawData(props: {
 
   React.useEffect(() => {
     if (page !== "new" && !isEditMode) {
-      loadDataFromAPI();
+      loadChartDataFromAPI();
     }
   }, [page, isEditMode]);
 
@@ -447,6 +447,6 @@ export function useDataThemesRawData(props: {
     sampleData,
     isEditMode,
     loadDataset,
-    loadDataFromAPI,
+    loadChartDataFromAPI,
   };
 }

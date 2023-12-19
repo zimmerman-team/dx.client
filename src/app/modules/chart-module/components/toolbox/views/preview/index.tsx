@@ -45,7 +45,7 @@ export function ChartToolBoxPreview(props: ChartToolBoxPreviewProps) {
   function onReset(e: React.MouseEvent<HTMLButtonElement>) {
     e.stopPropagation();
     resetAppliedFilters();
-    props.loadDataFromAPI();
+    props.loadChartDataFromAPI();
   }
 
   return (
@@ -103,7 +103,7 @@ export function ChartToolBoxPreview(props: ChartToolBoxPreviewProps) {
                   key={group.name}
                   name={group.name}
                   options={group.options}
-                  loadDataFromAPI={props.loadDataFromAPI}
+                  loadChartDataFromAPI={props.loadChartDataFromAPI}
                   expandGroup={() => setExpandedGroup(group)}
                 />
               ))}
@@ -122,7 +122,7 @@ export function ChartToolBoxPreview(props: ChartToolBoxPreviewProps) {
             name={expandedGroup.name}
             options={expandedGroup.options}
             goBack={() => setExpandedGroup(null)}
-            loadDataFromAPI={props.loadDataFromAPI}
+            loadChartDataFromAPI={props.loadChartDataFromAPI}
           />
         </div>
       )}

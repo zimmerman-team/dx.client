@@ -240,7 +240,6 @@ export function ChartModuleToolBox(props: ChartToolBoxProps) {
             mappedData={props.mappedData}
             loadDataset={props.loadDataset}
             visualOptions={props.visualOptions}
-            forceNextEnabled={props.forceNextEnabled}
             setVisualOptions={props.setVisualOptions}
             filterOptionGroups={props.filterOptionGroups}
             filtersView={props.filtersView}
