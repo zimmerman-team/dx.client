@@ -32,237 +32,237 @@ export default function GridItem(props: Readonly<Props>) {
   };
 
   return (
-    <Link
-      to={`/dataset/${props.id}/detail`}
+    <div
       css={`
-        text-decoration: none;
+        position: relative;
       `}
     >
-      <div
+      <Link
+        to={`/dataset/${props.id}/detail`}
         css={`
-          width: 296px;
-          height: 161.588px;
-          display: flex;
-          color: #262c34;
-          background: #fff;
-          position: relative;
-          flex-direction: column;
-          padding: 12px 8px 4px 12px;
-          justify-content: space-between;
-          box-shadow: 0px 4px 16px 0px rgba(0, 0, 0, 0.05);
-
-          &:hover {
-            box-shadow: 0px 7px 22px 0px rgba(0, 0, 0, 0.1);
-          }
+          text-decoration: none;
         `}
       >
         <div
           css={`
+            width: 296px;
+            height: 161.588px;
             display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
-          `}
-        >
-          <div
-            css={`
-              width: 90%;
-              height: 50px;
-              word-wrap: break-word;
-            `}
-          >
-            <p
-              css={`
-                margin-top: -5px;
-                font-size: 14px;
-                line-height: 22px;
-                font-family: "Gotham Narrow", sans-serif;
-                overflow: hidden;
-                margin-bottom: 2px;
-                white-space: nowrap;
-                text-overflow: ellipsis;
-              `}
-            >
-              <b>{props.title}</b>
-            </p>
-            <p
-              css={`
-                font-size: 10px;
-                line-height: 14px;
-                margin-top: 1px;
-                color: #495057;
-                text-overflow: ellipsis;
-                overflow: hidden;
-                white-space: nowrap;
-              `}
-            >
-              {props.descr}
-            </p>
-          </div>
-          {props.showMenu && (
-            <IconButton
-              css={`
-                position: absolute;
-                right: -2px;
-                top: 0px;
-                cursor: pointer;
+            color: #262c34;
+            background: #fff;
 
-                &:hover {
-                  background: transparent;
-                }
-              `}
-              onClick={showMenuOptions}
-            >
-              <MenuIcon />
-            </IconButton>
-          )}
-        </div>
-        <div
-          css={`
-            display: flex;
-            flex-direction: row;
-            align-items: flex-end;
+            flex-direction: column;
+            padding: 12px 8px 4px 12px;
             justify-content: space-between;
+            box-shadow: 0px 4px 16px 0px rgba(0, 0, 0, 0.05);
+
+            &:hover {
+              box-shadow: 0px 7px 22px 0px rgba(0, 0, 0, 0.1);
+            }
           `}
         >
           <div
             css={`
-              margin-top: 8px;
-              svg {
-                width: 119.084px;
-                height: 69.761px;
-              }
+              display: flex;
+              align-items: flex-start;
+              justify-content: space-between;
             `}
           >
-            <DataCardImg />
+            <div
+              css={`
+                width: 90%;
+                height: 50px;
+                word-wrap: break-word;
+              `}
+            >
+              <p
+                css={`
+                  margin-top: -5px;
+                  font-size: 14px;
+                  line-height: 22px;
+                  font-family: "Gotham Narrow", sans-serif;
+                  overflow: hidden;
+                  margin-bottom: 2px;
+                  white-space: nowrap;
+                  text-overflow: ellipsis;
+                `}
+              >
+                <b>{props.title}</b>
+              </p>
+              <p
+                css={`
+                  font-size: 10px;
+                  line-height: 14px;
+                  margin-top: 1px;
+                  color: #495057;
+                  text-overflow: ellipsis;
+                  overflow: hidden;
+                  white-space: nowrap;
+                `}
+              >
+                {props.descr}
+              </p>
+            </div>
+            {props.showMenu && (
+              <IconButton
+                css={`
+                  position: absolute;
+                  right: -2px;
+                  top: 0px;
+                  cursor: pointer;
+
+                  &:hover {
+                    background: transparent;
+                  }
+                `}
+                onClick={showMenuOptions}
+              >
+                <MenuIcon />
+              </IconButton>
+            )}
           </div>
           <div
             css={`
               display: flex;
-              font-size: 12px;
-              justify-content: flex-end;
-              align-items: center;
-              gap: 3px;
-
-              > p {
-                margin: 0;
-                font-size: 8.814px;
-              }
+              flex-direction: row;
+              align-items: flex-end;
+              justify-content: space-between;
             `}
           >
-            <ClockIcon />
-            <p>{moment(props.date).format("MMMM YYYY")}</p>
-          </div>
-        </div>
-        {menuOptionsDisplay && (
-          <React.Fragment>
             <div
               css={`
-                top: 0;
-                left: 0;
-                z-index: 1;
-                width: 100vw;
-                height: 100vh;
-                position: fixed;
-              `}
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                setMenuOptionsDisplay(false);
-              }}
-            />
-            <div
-              css={`
-                top: 38px;
-
-                gap: 1rem;
-                right: 3%;
-                z-index: 2;
-
-                display: flex;
-                height: 38px;
-                width: 143px;
-                position: absolute;
-                background: #adb5bd;
-                border-radius: 100px;
-                align-items: center;
-                justify-content: center;
-                a {
-                  :hover {
-                    svg {
-                      path {
-                        fill: #fff;
-                      }
-                    }
-                  }
-                }
-                button {
-                  padding: 4px;
-                  :hover {
-                    background: transparent;
-                    svg {
-                      path {
-                        fill: #fff;
-                      }
-                    }
-                  }
+                margin-top: 8px;
+                svg {
+                  width: 119.084px;
+                  height: 69.761px;
                 }
               `}
             >
-              <div>
-                <Tooltip title="Duplicate">
-                  <span>
-                    <IconButton
-                      onClick={() =>
-                        props.handleDuplicate?.(props.id as string)
-                      }
-                      disabled={true}
-                      css={`
-                        svg {
-                          path {
-                            fill: gray;
-                          }
-                        }
-                      `}
-                    >
-                      <DuplicateIcon />
-                    </IconButton>
-                  </span>
-                </Tooltip>
-              </div>
-              <div>
-                <Link to={props.path}>
-                  <Tooltip title="Edit">
-                    <EditIcon
-                      css={`
-                        margin-top: 4px;
-                      `}
-                    />
-                  </Tooltip>
-                </Link>
-              </div>
-              <div>
-                <Tooltip title="Delete">
-                  <span>
-                    <IconButton
-                      onClick={() => props.handleDelete?.(props.id as string)}
-                      disabled={true}
-                      css={`
-                        svg {
-                          path {
-                            fill: gray;
-                          }
-                        }
-                      `}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </span>
-                </Tooltip>
-              </div>
+              <DataCardImg />
             </div>
-          </React.Fragment>
-        )}
-      </div>
-    </Link>
+            <div
+              css={`
+                display: flex;
+                font-size: 12px;
+                justify-content: flex-end;
+                align-items: center;
+                gap: 3px;
+
+                > p {
+                  margin: 0;
+                  font-size: 8.814px;
+                }
+              `}
+            >
+              <ClockIcon />
+              <p>{moment(props.date).format("MMMM YYYY")}</p>
+            </div>
+          </div>
+        </div>
+      </Link>
+      {menuOptionsDisplay && (
+        <React.Fragment>
+          <div
+            onClick={() => setMenuOptionsDisplay(false)}
+            css={`
+              top: 0;
+              left: 0;
+              z-index: 1;
+              width: 100vw;
+              height: 100vh;
+              position: fixed;
+            `}
+          />
+          <div
+            css={`
+              top: 38px;
+
+              gap: 1rem;
+              right: 3%;
+              z-index: 2;
+
+              display: flex;
+              height: 38px;
+              width: 143px;
+              position: absolute;
+              background: #adb5bd;
+              border-radius: 100px;
+              align-items: center;
+              justify-content: center;
+              a {
+                :hover {
+                  svg {
+                    path {
+                      fill: #fff;
+                    }
+                  }
+                }
+              }
+              button {
+                padding: 4px;
+                :hover {
+                  background: transparent;
+                  svg {
+                    path {
+                      fill: #fff;
+                    }
+                  }
+                }
+              }
+            `}
+          >
+            <div>
+              <Tooltip title="Duplicate">
+                <span>
+                  <IconButton
+                    onClick={() => props.handleDuplicate?.(props.id as string)}
+                    disabled={true}
+                    css={`
+                      svg {
+                        path {
+                          fill: gray;
+                        }
+                      }
+                    `}
+                  >
+                    <DuplicateIcon />
+                  </IconButton>
+                </span>
+              </Tooltip>
+            </div>
+            <div>
+              <Link to={props.path}>
+                <Tooltip title="Edit">
+                  <EditIcon
+                    css={`
+                      margin-top: 4px;
+                    `}
+                  />
+                </Tooltip>
+              </Link>
+            </div>
+            <div>
+              <Tooltip title="Delete">
+                <span>
+                  <IconButton
+                    onClick={() => props.handleDelete?.(props.id as string)}
+                    disabled={true}
+                    css={`
+                      svg {
+                        path {
+                          fill: gray;
+                        }
+                      }
+                    `}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </span>
+              </Tooltip>
+            </div>
+          </div>
+        </React.Fragment>
+      )}
+    </div>
   );
 }

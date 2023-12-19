@@ -37,7 +37,6 @@ export default function datasetSubHeaderToolbar(props: { name: string }) {
           <div css={styles.endContainer}>
             <div css={styles.iconbtns}>
               <React.Fragment>
-                <ExportChartButton />
                 {isAuthenticated && (
                   <Tooltip title="Duplicate">
                     <IconButton onClick={handleDuplicate}>
@@ -85,9 +84,11 @@ export default function datasetSubHeaderToolbar(props: { name: string }) {
                   </IconButton>
                 </Tooltip>
                 <Tooltip title="Delete">
-                  <IconButton>
-                    <DeleteIcon htmlColor="#262c34" />
-                  </IconButton>
+                  <span>
+                    <IconButton disabled>
+                      <DeleteIcon htmlColor="#E4E4E4" />
+                    </IconButton>
+                  </span>
                 </Tooltip>
               </React.Fragment>
             </div>
