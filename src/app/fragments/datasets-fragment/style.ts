@@ -87,7 +87,7 @@ export const metaDatacss = css`
   h1 {
     font-weight: 500;
     font-size: 48px;
-    font-family: "GothamNarrow-Book";
+    font-family: "Inter", sans-serif;
     margin-top: 6rem;
 
     margin-bottom: 4.5rem;

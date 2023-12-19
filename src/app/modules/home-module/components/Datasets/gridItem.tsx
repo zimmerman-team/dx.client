@@ -230,7 +230,7 @@ export default function GridItem(props: Readonly<Props>) {
                 </Tooltip>
               </div>
               <div>
-                <Link to="#">
+                <Link to={props.path}>
                   <Tooltip title="Edit">
                     <EditIcon
                       css={`

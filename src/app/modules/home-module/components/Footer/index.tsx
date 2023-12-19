@@ -133,18 +133,20 @@ export default function HomeFooter() {
             >
               Subscribe to our newsletter
             </p>
-            <label
-              css={`
-                font-family: "Inter", sans-serif;
-                font-size: 12px;
-                text-align: left;
-                width: 100%;
-                padding-left: 10px;
-                color: #e75656;
-              `}
-            >
-              {formError.email && "Please enter a valid email address."}
-            </label>
+            {formError.email && (
+              <label
+                css={`
+                  font-family: "Inter", sans-serif;
+                  font-size: 12px;
+                  text-align: left;
+                  width: 100%;
+                  padding-left: 10px;
+                  color: #e75656;
+                `}
+              >
+                Please enter a valid email address.
+              </label>
+            )}
             <div
               css={`
                 border-radius: 40px;
@@ -172,6 +174,7 @@ export default function HomeFooter() {
                   font-size: 14px;
                   width: 30%;
                   font-weight: 700;
+                  cursor: pointer;
                 }
               `}
             >
@@ -185,6 +188,7 @@ export default function HomeFooter() {
               css={`
                 line-height: normal;
                 font-size: 12px;
+                height: 30px;
               `}
             >
               {isSubscribed

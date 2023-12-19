@@ -365,6 +365,7 @@ export interface StoreModel {
     DatasetGetList: ApiCallModel;
     DatasetCount: ApiCallModel;
     DatasetCreate: ApiCallModel;
+    DatasetGet: ApiCallModel;
   };
   charts: {
     ChartGet: ApiCallModel;
