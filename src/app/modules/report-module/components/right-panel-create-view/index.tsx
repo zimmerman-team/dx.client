@@ -2,13 +2,11 @@ import React from "react";
 import find from "lodash/find";
 import { useDrag } from "react-dnd";
 import { useRecoilState } from "recoil";
-import Paper from "@material-ui/core/Paper";
-import { useSessionStorage } from "react-use";
 import MuiButton from "@material-ui/core/Button";
 import MenuItem from "@material-ui/core/MenuItem";
-import { EditorState, convertToRaw } from "draft-js";
-import { SearchIcon } from "app/assets/icons/Search";
+import { EditorState } from "draft-js";
 import { withStyles } from "@material-ui/core/styles";
+import { SearchIcon } from "app/assets/icons/Search";
 import { useHistory, useParams } from "react-router-dom";
 import Menu, { MenuProps } from "@material-ui/core/Menu";
 import TextFieldsIcon from "@material-ui/icons/TextFields";
@@ -16,11 +14,10 @@ import ArrowRightAltIcon from "@material-ui/icons/ArrowRightAlt";
 import HeaderIcon from "app/modules/report-module/asset/HeaderIcon";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
-import GridItem from "app/modules/home-module/components/Charts/rhpGridItem";
 import { IFramesArray } from "app/modules/report-module/views/create/data";
 import EditHeaderIcon from "app/modules/report-module/asset/EditHeaderIcon";
 import TextPreviewImg from "app/modules/report-module/asset/textPreview.svg";
-import { echartTypes } from "app/modules/chart-module/routes/chart-type/data";
+import { coloredEchartTypes } from "app/modules/chart-module/routes/chart-type/data";
 import DividerPreviewImg from "app/modules/report-module/asset/dividerPreview.svg";
 import HeaderPreviewImg from "app/modules/report-module/asset/headerPreviewImg.svg";
 import RowFramePreviewImg from "app/modules/report-module/asset/rowframePreview.svg";
@@ -30,7 +27,6 @@ import ChartOptionColor from "app/modules/chart-module/routes/customize/componen
 import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
 
 import {
-  persistedReportStateAtom,
   reportRightPanelViewAtom,
   createChartFromReportAtom,
   isDividerOrRowFrameDraggingAtom,
@@ -38,6 +34,7 @@ import {
 } from "app/state/recoil/atoms";
 import { Close } from "@material-ui/icons";
 import { IconButton } from "@material-ui/core";
+import ChartCard from "./component/chartCard";
 
 const Button = withStyles(() => ({
   root: {
@@ -618,11 +615,11 @@ function ChartItem(props: {
   }));
 
   const getIcon = (vizType: string) => {
-    const type = find(echartTypes(true), { id: vizType });
+    const type = find(coloredEchartTypes(), { id: vizType });
     if (type) {
       return type.icon;
     }
-    return echartTypes(true)[0].icon;
+    return coloredEchartTypes()[0].icon;
   };
 
   let added = false;
@@ -656,7 +653,7 @@ function ChartItem(props: {
 
         ${!added &&
         `&:hover {
-          border-color: #6061e5;
+          box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.25);
         }`}
 
         > div {
@@ -664,14 +661,12 @@ function ChartItem(props: {
         }
       `}
     >
-      <GridItem
+      <ChartCard
         id={props.id}
-        path={props.name}
         title={props.name}
         date={props.createdDate}
         viz={getIcon(props.vizType)}
         added={added}
-        descr="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
       />
     </div>
   );
