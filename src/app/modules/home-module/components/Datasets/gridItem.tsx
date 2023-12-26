@@ -213,21 +213,11 @@ export default function GridItem(props: Readonly<Props>) {
           >
             <div>
               <Tooltip title="Duplicate">
-                <span>
-                  <IconButton
-                    onClick={() => props.handleDuplicate?.(props.id as string)}
-                    disabled={true}
-                    css={`
-                      svg {
-                        path {
-                          fill: gray;
-                        }
-                      }
-                    `}
-                  >
-                    <DuplicateIcon />
-                  </IconButton>
-                </span>
+                <IconButton
+                  onClick={() => props.handleDuplicate?.(props.id as string)}
+                >
+                  <DuplicateIcon />
+                </IconButton>
               </Tooltip>
             </div>
             <div>
