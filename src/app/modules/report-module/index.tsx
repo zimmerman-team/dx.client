@@ -5,9 +5,7 @@ import isEmpty from "lodash/isEmpty";
 import { DndProvider } from "react-dnd";
 import { useRecoilState } from "recoil";
 import { useAuth0 } from "@auth0/auth0-react";
-import { useSessionStorage } from "react-use";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import { PageLoader } from "app/modules/common/page-loader";
 import { NoMatchPage } from "app/modules/common/no-match-page";
 import { IHeaderDetails } from "./components/right-panel/data";
 import ReportEditView from "app/modules/report-module/views/edit";
@@ -70,9 +68,7 @@ export default function ReportModule() {
   const reportNameRef = React.useRef<string>("");
   const framesArrayRef = React.useRef<IFramesArray[]>([]);
   const headerDetailsRef = React.useRef<IHeaderDetails>({} as IHeaderDetails);
-  const AppliedHeaderDetailsRef = React.useRef<IHeaderDetails>(
-    {} as IHeaderDetails
-  );
+
   const [autoSave, setAutoSave] = React.useState<boolean>(false);
 
   /** static toolbar states */
@@ -119,8 +115,8 @@ export default function ReportModule() {
 
   const [isPreviewSaveEnabled, setIsPreviewSaveEnabled] = React.useState(false);
   const [reportType, setReportType] = React.useState<
-    "basic" | "advanced" | "ai"
-  >("basic");
+    "basic" | "advanced" | "ai" | null
+  >(null);
   const [headerDetails, setHeaderDetails] = React.useState({
     title: "",
     description: EditorState.createEmpty(),
@@ -139,6 +135,9 @@ export default function ReportModule() {
     if (reportName === "" && hasSubHeaderTitleBlurred) {
       setReportName("Untitled report");
     }
+    return () => {
+      setHasSubHeaderTitleBlurred(false);
+    };
   }, [hasSubHeaderTitleBlurred]);
 
   const handleRowFrameItemResize = (
@@ -226,25 +225,96 @@ export default function ReportModule() {
     });
   };
 
-  const id = v4();
-
-  const [framesArray, setFramesArray] = React.useState<IFramesArray[]>([
-    {
-      id,
-      frame: {
-        rowIndex: 0,
-        rowId: id,
-        handlePersistReportState,
-        handleRowFrameItemResize,
-        type: "rowFrame",
+  const basicReportInitialState = () => {
+    const id = v4();
+    return [
+      {
+        id,
+        frame: {
+          rowIndex: 0,
+          rowId: id,
+          handlePersistReportState,
+          handleRowFrameItemResize,
+          type: "rowFrame",
+        },
+        content: [],
+        contentWidths: [],
+        contentHeights: [],
+        contentTypes: [],
+        structure: null,
       },
-      content: [],
-      contentWidths: [],
-      contentHeights: [],
-      contentTypes: [],
-      structure: null,
-    },
-  ]);
+    ] as IFramesArray[];
+  };
+
+  const advancedReportInitialState = () => {
+    const rowOne = v4();
+    const rowTwo = v4();
+
+    const rowFive = v4();
+    return [
+      {
+        id: rowOne,
+        frame: {
+          rowId: rowOne,
+          rowIndex: 0,
+          forceSelectedType: "oneByFive",
+          handlePersistReportState,
+          handleRowFrameItemResize,
+          type: "rowFrame",
+        },
+        content: [null, null, null, null, null],
+        contentWidths: [20, 20, 20, 20, 20],
+        contentHeights: [121, 121, 121, 121, 121],
+        contentTypes: [null, null, null, null, null],
+        structure: "oneByFive",
+      },
+      {
+        id: rowTwo,
+        frame: {
+          rowId: rowTwo,
+          rowIndex: 1,
+          forceSelectedType: "oneByOne",
+          handlePersistReportState,
+          handleRowFrameItemResize,
+          type: "rowFrame",
+        },
+        content: [null],
+        contentWidths: [100],
+        contentHeights: [400],
+        contentTypes: [null],
+        structure: "oneByOne",
+      },
+
+      {
+        id: rowFive,
+        frame: {
+          rowId: rowFive,
+          rowIndex: 2,
+          forceSelectedType: "oneByThree",
+          handlePersistReportState,
+          handleRowFrameItemResize,
+          type: "rowFrame",
+        },
+        content: [null, null, null],
+        contentWidths: [33, 33, 33],
+        contentHeights: [460, 460, 460],
+        contentTypes: [null, null, null],
+        structure: "oneByThree",
+      },
+    ] as IFramesArray[];
+  };
+
+  const initialFramesArray = React.useMemo(() => {
+    if (reportType === "basic") {
+      return basicReportInitialState();
+    } else if (reportType === "advanced") {
+      return advancedReportInitialState();
+    }
+    return [];
+  }, [reportType]);
+
+  const [framesArray, setFramesArray] =
+    React.useState<IFramesArray[]>(initialFramesArray);
 
   React.useEffect(() => {
     if (view === "edit" && !rightPanelOpen) {
@@ -302,23 +372,7 @@ export default function ReportModule() {
               };
             }
           )
-        : [
-            {
-              id,
-              frame: {
-                rowIndex: 0,
-                rowId: id,
-                handlePersistReportState,
-                handleRowFrameItemResize,
-                type: "rowFrame",
-              },
-              content: [],
-              contentWidths: [],
-              contentHeights: [],
-              contentTypes: [],
-              structure: null,
-            },
-          ];
+        : initialFramesArray;
 
     setFramesArray(localFramesArray);
   }, [persistedReportState]);
@@ -388,35 +442,8 @@ export default function ReportModule() {
   framesArrayRef.current = framesArray;
   reportNameRef.current = reportName;
 
-  const handleSetButtonActive = (type: "basic" | "advanced" | "ai") => {
-    setReportType(type);
-    if (type === "ai") {
-      history.push(`/report/${page}/ai-template`);
-    } else {
-      onSave("create");
-    }
-  };
-
   const resetReport = () => {
-    const id = v4();
-    setFramesArray([
-      {
-        id,
-        frame: {
-          rowIndex: 0,
-          rowId: id,
-
-          handlePersistReportState,
-          handleRowFrameItemResize,
-          type: "rowFrame",
-        },
-        content: [],
-        contentWidths: [],
-        contentHeights: [],
-        contentTypes: [],
-        structure: null,
-      },
-    ]);
+    setFramesArray(initialFramesArray);
     setPersistedReportState({
       reportName: "Untitled report",
       headerDetails: {
@@ -447,13 +474,15 @@ export default function ReportModule() {
     setRightPanelView("elements");
     setRightPanelOpen(true);
     setReportPreviewMode(false);
+    // setHasSubHeaderTitleFocused(false);
+    setAutoSave(false);
   };
 
   const onSave = async (type: "create" | "edit") => {
     const action = type === "create" ? reportCreate : reportEdit;
     action({
       token,
-      patchId: page === "new" ? undefined : page,
+      patchId: page === "new" ? "public" : page,
       values: {
         name: reportName,
         authId: user?.sub,
@@ -487,6 +516,26 @@ export default function ReportModule() {
       },
     });
   };
+
+  const handleSetButtonActive = (type: "basic" | "advanced" | "ai") => {
+    if (type === "ai") {
+      history.push(`/report/${page}/ai-template`);
+    } else if (type === "basic") {
+      setFramesArray(basicReportInitialState());
+    } else if (type === "advanced") {
+      setFramesArray(advancedReportInitialState());
+    }
+
+    setReportType(type);
+  };
+  React.useEffect(() => {
+    if (reportType === "advanced" || reportType === "basic") {
+      onSave("create");
+    }
+    return () => {
+      setReportType(null);
+    };
+  }, [reportType]);
 
   useAutosave(
     () => {
@@ -571,7 +620,7 @@ export default function ReportModule() {
         <Route path="/report/:page/initial">
           <ReportInitialView
             resetReport={resetReport}
-            setButtonActive={handleSetButtonActive}
+            handleSetButtonActive={handleSetButtonActive}
           />
         </Route>
         <Route path="/report/:page/ai-template">
@@ -600,7 +649,7 @@ export default function ReportModule() {
         <Route path="/report/:page/edit">
           <ReportEditView
             open={rightPanelOpen}
-            setName={setReportName}
+            setReportName={setReportName}
             reportName={reportName}
             localPickedCharts={localPickedCharts}
             framesArray={framesArray}

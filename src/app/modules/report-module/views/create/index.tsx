@@ -139,7 +139,10 @@ function ReportCreateView(props: Readonly<ReportCreateViewProps>) {
           `}
         >
           <Box height={50} />
-          <TourGuide reportType={props.reportType} toolBoxOpen={props.open} />
+          <TourGuide
+            reportType={props.reportType ?? "basic"}
+            toolBoxOpen={props.open}
+          />
           <ReportOrderContainer
             enabled
             childrenData={props.framesArray}
