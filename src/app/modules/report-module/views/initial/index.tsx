@@ -28,7 +28,7 @@ import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import { useMount, useUpdateEffect } from "react-use";
 import { isEmpty } from "lodash";
 
-export function ReportInitialView(props: ReportInitialViewProps) {
+export function ReportInitialView(props: Readonly<ReportInitialViewProps>) {
   const history = useHistory();
   const { page, view } = useParams<{ page: string; view?: string }>();
 
@@ -71,7 +71,7 @@ export function ReportInitialView(props: ReportInitialViewProps) {
   };
 
   const handleTemplateSelected = (option: ReportTemplateModel) => {
-    props.setButtonActive(option.value);
+    props.handleSetButtonActive(option.value);
   };
 
   const clearPersistedReportState = useResetRecoilState(
@@ -91,7 +91,6 @@ export function ReportInitialView(props: ReportInitialViewProps) {
     clearReportCreate();
     clearReportEdit();
   });
-  const dataset = useStoreState((state) => state.charts.dataset.value);
 
   useUpdateEffect(() => {
     if (reportCreateSuccess && !isEmpty(reportCreateData?.id)) {

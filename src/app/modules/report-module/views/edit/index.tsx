@@ -50,6 +50,9 @@ function ReportEditView(props: ReportEditViewProps) {
     (actions) => actions.reports.ReportGet.fetch
   );
 
+  const clearReportData = useStoreActions(
+    (actions) => actions.reports.ReportGet.clear
+  );
   const reportData = useStoreState(
     (state) => (state.reports.ReportGet.crudData ?? emptyReport) as ReportModel
   );
@@ -73,6 +76,9 @@ function ReportEditView(props: ReportEditViewProps) {
       fetchReportData({ token, getId: page });
     }
     props.setAutoSave(true);
+    return () => {
+      clearReportData();
+    };
   }, [page, token]);
 
   React.useEffect(() => {
@@ -96,7 +102,8 @@ function ReportEditView(props: ReportEditViewProps) {
 
   useUpdateEffect(() => {
     if (JSON.parse(persistedReportState.framesArray || "[]").length < 1) {
-      props.setName(reportData.name);
+      props.setHasSubHeaderTitleFocused(reportData.name !== "Untitled report");
+      props.setReportName(reportData.name);
       props.setHeaderDetails({
         title: reportData.title,
         showHeader: reportData.showHeader,
@@ -173,7 +180,7 @@ function ReportEditView(props: ReportEditViewProps) {
           createdDate: reportData.createdDate,
         }}
         reportName={reportData.name}
-        setReportName={props.setName}
+        setReportName={props.setReportName}
         hasSubHeaderTitleFocused={props.hasSubHeaderTitleFocused}
         setHasSubHeaderTitleFocused={props.setHasSubHeaderTitleFocused}
         setHeaderDetails={props.setHeaderDetails}
