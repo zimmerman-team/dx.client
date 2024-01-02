@@ -65,7 +65,7 @@ export const homeDisplayAtom = atom<"data" | "charts" | "reports">({
 });
 
 export const reportRightPanelViewAtom = atom<
-  "elements" | "charts" | "editHeader"
+  "elements" | "charts" | "media" | "editHeader"
 >({
   key: "reportRightPanelViewAtom",
   default: "elements",
