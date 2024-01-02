@@ -9,7 +9,7 @@ import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import { HomepageTable } from "app/modules/home-module/components/Table";
 import DeleteDatasetDialog from "app/components/Dialogs/deleteDatasetDialog";
 import { DatasetListItemAPIModel } from "app/modules/data-themes-module/sub-modules/list";
-import ReformedGridItem from "app/modules/home-module/components/Datasets/gridItem";
+import GridItem from "app/modules/home-module/components/Datasets/gridItem";
 import DatasetAddnewCard from "app/modules/home-module/components/Datasets/datasetAddNewCard";
 import CircleLoader from "../Loader";
 import { useRecoilState } from "recoil";
@@ -58,7 +58,7 @@ export default function DatasetsGrid(props: Props) {
   const datasetLoadSuccess = useStoreState(
     (state) => state.dataThemes.DatasetGetList.success
   );
-  const getFilterString = (reload?: boolean) => {
+  const getFilterString = (fromZeroOffset?: boolean) => {
     const value =
       props.searchStr?.length > 0
         ? `"where":{"name":{"like":"${props.searchStr}.*","options":"i"}},`
@@ -66,7 +66,7 @@ export default function DatasetsGrid(props: Props) {
 
     return `filter={${value}"order":"${
       props.sortBy
-    } desc","limit":${limit},"offset":${reload ? 0 : offset}}`;
+    } desc","limit":${limit},"offset":${fromZeroOffset ? 0 : offset}}`;
   };
 
   const getWhereString = () => {
@@ -75,25 +75,24 @@ export default function DatasetsGrid(props: Props) {
       : "";
   };
 
-  const loadData = async (reload?: boolean) => {
-    //refrain from loading data if all the data is loaded
+  const loadData = (fromZeroOffset?: boolean) => {
     if (token) {
-      await loadDatasets({
+      loadDatasets({
         token,
         storeInCrudData: true,
-        filterString: getFilterString(reload),
+        filterString: getFilterString(fromZeroOffset),
       });
     } else {
-      await loadDatasets({
+      loadDatasets({
         token,
         nonAuthCall: !token,
         storeInCrudData: true,
-        filterString: getFilterString(reload),
+        filterString: getFilterString(fromZeroOffset),
       });
     }
   };
 
-  const reloadData = async () => {
+  const reloadData = () => {
     if (token) {
       loadDatasetCount({ token, filterString: getWhereString() });
     } else {
@@ -103,16 +102,6 @@ export default function DatasetsGrid(props: Props) {
     setOffset(0);
     loadData(true);
   };
-
-  React.useEffect(() => {
-    if (token) {
-      loadDatasetCount({
-        token,
-      });
-    } else {
-      loadDatasetCount({ nonAuthCall: true, filterString: getWhereString() });
-    }
-  }, [token]);
 
   React.useEffect(() => {
     //load data if intersection observer is triggered
@@ -152,7 +141,7 @@ export default function DatasetsGrid(props: Props) {
     setModalDisplay(true);
   };
 
-  async function deleteDataset(id: string) {
+  function deleteDataset(id: string) {
     axios
       .delete(`${process.env.REACT_APP_API}/datasets/${id}`, {
         headers: {
@@ -241,7 +230,7 @@ export default function DatasetsGrid(props: Props) {
                   : ""
               }
             >
-              <ReformedGridItem
+              <GridItem
                 path={`/dataset/${data.id}/edit`}
                 title={data.name}
                 date={data.createdDate}

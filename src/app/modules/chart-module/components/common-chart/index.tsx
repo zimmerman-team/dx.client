@@ -187,7 +187,7 @@ export function CommonChart(props: Props) {
         css={`
           width: 100%;
           overflow: hidden;
-          height: ${props.inChartWrapper
+          height: ${props.inChartWrapper && chartType !== "bigNumber"
             ? props.visualOptions.height - 28
             : props.visualOptions.height}px;
           * {
