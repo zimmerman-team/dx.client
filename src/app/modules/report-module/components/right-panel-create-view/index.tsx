@@ -24,11 +24,11 @@ import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import PhotoLibraryIcon from "@material-ui/icons/PhotoLibrary";
 /* project */
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
-import GridItem from "app/modules/home-module/components/Charts/rhpGridItem";
+
 import { IFramesArray } from "app/modules/report-module/views/create/data";
 import EditHeaderIcon from "app/modules/report-module/asset/EditHeaderIcon";
 import TextPreviewImg from "app/modules/report-module/asset/textPreview.svg";
-import { echartTypes } from "app/modules/chart-module/routes/chart-type/data";
+import { Charts } from "app/modules/report-module/components/right-panel-create-view/data";
 import DividerPreviewImg from "app/modules/report-module/asset/dividerPreview.svg";
 import HeaderPreviewImg from "app/modules/report-module/asset/headerPreviewImg.svg";
 import RowFramePreviewImg from "app/modules/report-module/asset/rowframePreview.svg";
@@ -43,8 +43,9 @@ import { ReactComponent as ElementsIcon } from "app/modules/report-module/asset/
 import { ReactComponent as VideoIcon } from "app/modules/report-module/asset/video-icon.svg";
 import ChartOptionColor from "app/modules/chart-module/routes/customize/components/ChartOptionColor";
 import { ReactComponent as RowframeIcon } from "app/modules/report-module/asset/rowframe-icon.svg";
-import PanelLabel from "./panelLabel";
-import { elementItemcss } from "./style";
+import PanelLabel from "app/modules/report-module/components/right-panel-create-view/panelLabel";
+import { elementItemcss } from "app/modules/report-module/components/right-panel-create-view/style";
+import GridItem from "app/modules/report-module/components/right-panel-create-view/rhpGridItem";
 
 interface IHeaderDetails {
   title: string;
@@ -453,12 +454,11 @@ function ReportRightPanelCreateViewChartList(
       <div
         css={`
           width: 100%;
+          gap: 8px;
           display: flex;
-          padding: 12px;
+          padding: 12px 23px;
           position: relative;
           flex-direction: row;
-          border-bottom: 1px solid #cfd4da;
-
           > svg {
             top: 17px;
             right: 200px;
@@ -470,7 +470,7 @@ function ReportRightPanelCreateViewChartList(
           type="text"
           onChange={(e) => setSearch(e.target.value)}
           css={`
-            width: 200px;
+            width: 187px;
             height: 35px;
             border-style: none;
             background: #dfe3e6;
@@ -485,27 +485,27 @@ function ReportRightPanelCreateViewChartList(
           css={`
             width: 159px;
             height: 35px;
-            margin-left: 16px;
             border-radius: 24px;
-            background: #dfe3e6;
+            background: #231d2c;
             text-transform: capitalize;
+            padding-left: 16px;
 
             svg {
               margin-left: 10px;
               transition: all 0.2s ease-in-out;
               transform: rotate(${anchorEl ? "180" : "0"}deg);
               > path {
-                fill: #231d2c;
+                fill: #fff;
               }
             }
           `}
         >
           <span
             css={`
-              color: #231d2c;
+              color: #fff;
               font-size: 14px;
               overflow: hidden;
-              font-weight: 400;
+              font-weight: 325;
               white-space: nowrap;
               text-overflow: ellipsis;
               font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
@@ -541,7 +541,10 @@ function ReportRightPanelCreateViewChartList(
           width: 100%;
           display: flex;
           overflow-y: auto;
-          padding: 18px 23px;
+          padding: 0px 23px;
+          margin-top: 8px;
+          margin-bottom: 16px;
+
           flex-direction: column;
 
           height: calc(100vh - 48px - 50px - 52px - 60px);
@@ -770,17 +773,21 @@ function CreateChartCard(props: {
   );
 }
 
-function ChartItem(props: {
-  id: string;
-  chartIndex: number;
-  name: string;
-  vizType: string;
-  datasetId: string;
-  createdDate: string;
-  elementType: "chart" | "bigNumber";
-  framesArray: IFramesArray[];
-}) {
+function ChartItem(
+  props: Readonly<{
+    id: string;
+    chartIndex: number;
+    name: string;
+    vizType: string;
+    datasetId: string;
+    createdDate: string;
+    elementType: "chart" | "bigNumber";
+    framesArray: IFramesArray[];
+  }>
+) {
   const nullRef = React.useRef(null);
+  const [chartPreview, setChartPreview] = React.useState(false);
+
   const [{ isDragging }, drag] = useDrag(() => ({
     type: props.elementType,
     item: {
@@ -793,11 +800,11 @@ function ChartItem(props: {
   }));
 
   const getIcon = (vizType: string) => {
-    const type = find(echartTypes(true), { id: vizType });
+    const type = find(Charts, { id: vizType });
     if (type) {
       return type.icon;
     }
-    return echartTypes(true)[0].icon;
+    return Charts[0].icon;
   };
 
   let added = false;
@@ -819,7 +826,7 @@ function ChartItem(props: {
 
   return (
     <div
-      ref={added ? nullRef : drag}
+      ref={added || chartPreview ? nullRef : drag}
       id={`chart-${props.chartIndex}`}
       css={`
         width: 100%;
@@ -827,11 +834,10 @@ function ChartItem(props: {
         background: #fff;
         user-select: none;
         cursor: ${added ? "auto" : "grab"};
-        border: 1px solid ${isDragging && !added ? "#6061E5" : "#fff"};
 
         ${!added &&
         `&:hover {
-          border-color: #6061e5;
+          box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.25);
         }`}
 
         > div {
@@ -846,6 +852,8 @@ function ChartItem(props: {
         date={props.createdDate}
         viz={getIcon(props.vizType)}
         added={added}
+        chartPreview={chartPreview}
+        setChartPreview={setChartPreview}
         descr="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
       />
     </div>

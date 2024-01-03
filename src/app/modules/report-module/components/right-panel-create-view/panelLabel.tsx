@@ -1,4 +1,7 @@
+/* third-party */
 import React from "react";
+/* project */
+import { ReactComponent as InfoIcon } from "app/modules/report-module/asset/info-icon.svg";
 
 export default function PanelLabel(props: {
   currentView: "charts" | "media" | "elements" | "editHeader";
@@ -9,11 +12,12 @@ export default function PanelLabel(props: {
         display: ${props.currentView === "editHeader" ? "none" : "flex"};
         align-items: center;
         gap: 8px;
+        width: 90%;
+        border-bottom: 1px solid #dfe3e5;
         padding-bottom: 3px;
         padding-top: 4px;
-        border-bottom: 1px solid #dfe3e5;
-        width: 90%;
         margin-left: 5%;
+        margin-bottom: 8px;
         p {
           font-size: 14px;
           font-family: "Gotham Narrow", sans-serif;
@@ -22,34 +26,8 @@ export default function PanelLabel(props: {
         }
       `}
     >
-      <div
-        css={`
-          width: 23px;
-          height: 23px;
-          border-radius: 23px;
-          background: #252c34;
-          color: #fff;
-          font-size: 14px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        `}
-      >
-        {(() => {
-          if (props.currentView === "elements") {
-            return "1";
-          } else if (props.currentView === "charts") {
-            return "2";
-          } else if (props.currentView === "media") {
-            return "3";
-          } else {
-            return "";
-          }
-        })()}
-      </div>
-      <div>
-        <p>{props.currentView}</p>
-      </div>
+      <p>{props.currentView}</p>
+      <InfoIcon />
     </div>
   );
 }

@@ -227,7 +227,6 @@ export const DropZone = (props: DropzoneProps) => {
                     font-size: 18;
                     font-family: " Gotham Narrow", sans-serif;
                     font-weight: bold;
-                    /* background: pink; */
                     display: flex;
                     align-items: center;
                     justify-content: center;

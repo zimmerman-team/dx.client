@@ -15,6 +15,7 @@ import {
 interface Props {
   id: string;
   width: string;
+  chartPreviewInReport?: boolean;
 }
 
 export function ReportChartWrapper(props: Props) {
@@ -58,6 +59,9 @@ export function ReportChartWrapper(props: Props) {
   const renderedChartType = React.useMemo(() => {
     return get(chartFromAPI, "vizType", "echartsBarchart");
   }, [chartFromAPI]);
+
+  const displayChartName =
+    renderedChartType !== "bigNumber" && !props.chartPreviewInReport;
 
   React.useEffect(() => {
     if (token.length > 0) {
@@ -190,7 +194,7 @@ export function ReportChartWrapper(props: Props) {
         <Skeleton animation="wave" variant="rect" width="100%" height="100%" />
       </div>
 
-      {renderedChartType !== "bigNumber" && (
+      {displayChartName && (
         <h4
           css={`
             margin: 0;
