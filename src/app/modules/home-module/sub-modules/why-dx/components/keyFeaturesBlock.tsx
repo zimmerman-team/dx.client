@@ -12,23 +12,25 @@ export default function KeyFeaturesBlock() {
       css={`
         position: relative;
         z-index: 1;
+        padding-top: 114px;
         h3 {
-          font-size: 36px;
+          font-size: 48px;
           line-height: 43px;
           text-align: center;
           color: #000000;
           margin-top: 0;
           margin-bottom: 83px;
         }
-        h4 {
+        p :nth-of-type(1) {
           font-size: 36px;
           line-height: 20px;
+          font-weight: 350;
           font-family: "GothamNarrow-Bold", sans-serif;
           margin-bottom: 25px;
           margin-top: 0;
           color: #231d2c;
         }
-        p {
+        p :nth-of-type(2) {
           font-family: "GothamNarrow", sans-serif;
           font-weight: 350;
           line-height: 30px;
@@ -54,7 +56,7 @@ export default function KeyFeaturesBlock() {
         </Grid>
         <Grid item md={6}>
           <div>
-            <h4>All-in-One Stack</h4>
+            <p>All-in-One Stack</p>
             <p>
               DataXplorer consolidates all your data management needs into a
               single, integrated stack. Whether it's data integration,
@@ -75,7 +77,7 @@ export default function KeyFeaturesBlock() {
       <Grid container spacing={9} alignItems="center">
         <Grid item md={6}>
           <div>
-            <h4>Connect Data with Ease</h4>
+            <p>Connect Data with Ease</p>
             <p>
               DataXplorer simplifies the complex task of data integration,
               enabling you to seamlessly centralize your crucial datasets. Gone
@@ -109,7 +111,7 @@ export default function KeyFeaturesBlock() {
         </Grid>
         <Grid item md={6}>
           <div>
-            <h4>Visualize Your Impact</h4>
+            <p>Visualize Your Impact</p>
             <p>
               Your data is a valuable resource, and DataXplorer empowers you to
               make the most of it. Our AI-driven agents are at your disposal,
@@ -129,7 +131,7 @@ export default function KeyFeaturesBlock() {
       <Grid container spacing={9} alignItems="center">
         <Grid item md={6}>
           <div>
-            <h4>Interactive Reports </h4>
+            <p>Interactive Reports </p>
             <p>
               Transform your data-driven insights into engaging narratives that
               captivate and inform your stakeholders. DataXplorer allows you to
@@ -160,7 +162,7 @@ export default function KeyFeaturesBlock() {
         </Grid>
         <Grid item md={6}>
           <div>
-            <h4>Join The Data Revolution</h4>
+            <p>Join The Data Revolution</p>
             <p>
               Become a pioneer in the realm of data-driven decision-making.
               Embrace the future with DataXplorer and experience the

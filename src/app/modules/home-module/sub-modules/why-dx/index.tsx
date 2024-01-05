@@ -16,16 +16,10 @@ export default function WhyDX() {
         css={`
           background-image: url(${Ellipses});
           background-repeat: no-repeat;
-          background-position: 40% 75%;
+          background-position: 48% 3%;
         `}
       >
         <Container maxWidth="lg">
-          <SimpleStepsBlock />
-          <div
-            css={`
-              height: 132px;
-            `}
-          />
           <KeyFeaturesBlock />
           <div
             css={`
@@ -41,8 +35,8 @@ export default function WhyDX() {
           <TryUsBlock />
         </Container>
       </div>
-      <div css="width: 100%;height: 232px" />
-      <HomeFooter />
+      <div css="width: 100%;height: 36px" />
+      <HomeFooter transparent />
     </>
   );
 }

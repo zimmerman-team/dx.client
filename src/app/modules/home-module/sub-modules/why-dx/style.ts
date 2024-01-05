@@ -6,7 +6,7 @@ export const benefitscss = css`
 
   h2 {
     font-weight: 400;
-    font-size: 36px;
+    font-size: 48px;
     line-height: 43px;
     text-align: center;
     color: #000000;

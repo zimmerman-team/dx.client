@@ -227,7 +227,7 @@ export function AppBar() {
                   justify-content: flex-end;
                 `}
               >
-                <div css={navLinkcss("why-dx", navLocation)}>
+                <div css={navLinkcss("why-dataXplorer", navLocation)}>
                   <NavLink to="/why-dataXplorer">
                     <b>Why DataXplorer?</b>
                   </NavLink>

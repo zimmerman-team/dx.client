@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import NewsletterForm from "app/modules/common/newsletterForm";
 import { FieldErrors } from "react-hook-form";
 
-export default function HomeFooter() {
+export default function HomeFooter(props: { transparent?: boolean }) {
   const [isSubscribed, setIsSubscribed] = React.useState(false);
   const [isSubscriptionFailed, setIsSubscriptionFailed] = React.useState(false);
   const [formError, setFormError] = React.useState<
@@ -17,7 +17,7 @@ export default function HomeFooter() {
     }>
   >({});
   return (
-    <div css={homeFootercss}>
+    <div css={homeFootercss(props.transparent)}>
       <Container
         maxWidth="lg"
         css={`
