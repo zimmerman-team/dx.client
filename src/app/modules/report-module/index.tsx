@@ -117,7 +117,7 @@ export default function ReportModule() {
   const [hasSubHeaderTitleBlurred, setHasSubHeaderTitleBlurred] =
     React.useState(false);
 
-  const [isPreviewSaveEnabled, setIsPreviewSaveEnabled] = React.useState(false);
+  const [isSaveEnabled, setIsSaveEnabled] = React.useState(false);
   const [reportType, setReportType] = React.useState<
     "basic" | "advanced" | "ai"
   >("basic");
@@ -375,14 +375,6 @@ export default function ReportModule() {
     };
   }, []);
 
-  React.useEffect(() => {
-    setCreateChartFromReport({
-      state: false,
-      page: "",
-      view: "",
-    });
-  }, []);
-
   //get current value of states for handlePersistReportState function
   headerDetailsRef.current = headerDetails;
   framesArrayRef.current = framesArray;
@@ -504,7 +496,8 @@ export default function ReportModule() {
   }, [view]);
 
   React.useEffect(() => {
-    let textValue = !(
+    //check if report has any text value (title, description) or any frame content
+    let hasTextValue = !(
       reportName === "Untitled report" &&
       !headerDetails.description.getCurrentContent().hasText() &&
       isEmpty(headerDetails.title) &&
@@ -517,8 +510,8 @@ export default function ReportModule() {
         frame.contentTypes.length !== 0 ||
         frame.structure !== null
     );
-
-    setIsPreviewSaveEnabled(textValue || framesArrayState);
+    //sets save button enabled if report has any text value or any frame content
+    setIsSaveEnabled(hasTextValue || framesArrayState);
   }, [reportName, framesArray, headerDetails]);
 
   return (
@@ -531,7 +524,7 @@ export default function ReportModule() {
           setName={setReportName}
           setHasSubHeaderTitleFocused={setHasSubHeaderTitleFocused}
           setHasSubHeaderTitleBlurred={setHasSubHeaderTitleBlurred}
-          forceEnablePreviewSave={isPreviewSaveEnabled}
+          forceEnablePreviewSave={isSaveEnabled}
           name={page !== "new" && !view ? reportGetData.name : reportName}
           reportName={reportName}
           framesArray={framesArray}

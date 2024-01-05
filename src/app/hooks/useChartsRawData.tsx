@@ -100,6 +100,9 @@ export function useChartsRawData(props: {
   const setAllAppliedFilters = useStoreActions(
     (actions) => actions.charts.appliedFilters.setAll
   );
+  const resetAppliedFilters = useStoreActions(
+    (actions) => actions.charts.appliedFilters.reset
+  );
   const setEnabledFilterOptionGroups = useStoreActions(
     (actions) => actions.charts.enabledFilterOptionGroups.setValue
   );
@@ -232,6 +235,9 @@ export function useChartsRawData(props: {
     ) {
       loadChartDataFromAPI();
     }
+    return () => {
+      resetAppliedFilters();
+    };
   }, [page, isEditMode, props.inChartWrapper, isLoading, token]);
 
   const renderChartFromAPI = () => {

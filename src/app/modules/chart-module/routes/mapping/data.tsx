@@ -1,3 +1,5 @@
+import { ChartType } from "app/modules/chart-module/components/common-chart/";
+
 export interface ChartBuilderMappingProps {
   loading: boolean;
   dimensions: any[];
@@ -8,6 +10,7 @@ export interface ChartBuilderMappingProps {
   setNotFound: React.Dispatch<React.SetStateAction<boolean>>;
   setChartErrorMessage: React.Dispatch<React.SetStateAction<string>>;
   setVisualOptions: (value: any) => void;
+  renderedChartType: ChartType;
 }
 
 export interface ChartBuilderMappingDimensionProps {

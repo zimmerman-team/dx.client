@@ -4,6 +4,25 @@ import { PageLoader } from "app/modules/common/page-loader";
 import { useDataThemesEchart } from "app/hooks/useDataThemesEchart";
 import { useUpdateEffectOnce } from "app/hooks/useUpdateEffectOnce";
 
+export type ChartType =
+  | "echartsBarchart"
+  | "echartsGeomap"
+  | "echartsLinechart"
+  | "echartsAreatimeaxis"
+  | "echartsAreastack"
+  | "echartsSankey"
+  | "echartsTreemap"
+  | "echartsSunburst"
+  | "echartsForcegraph"
+  | "echartsCirculargraph"
+  | "echartsCirclepacking"
+  | "echartsBubblechart"
+  | "echartsScatterchart"
+  | "echartsHeatmap"
+  | "echartsGraphgl"
+  | "echartsRadarchart"
+  | "echartsPiechart"
+  | "bigNumber";
 interface Props {
   visualOptions: any;
   withHeader?: boolean;
@@ -16,28 +35,11 @@ interface Props {
   chartId?: string;
   setNotFound: React.Dispatch<React.SetStateAction<boolean>>;
   setChartErrorMessage: React.Dispatch<React.SetStateAction<string>>;
-  renderedChartType?:
-    | "echartsBarchart"
-    | "echartsGeomap"
-    | "echartsLinechart"
-    | "echartsAreatimeaxis"
-    | "echartsAreastack"
-    | "echartsSankey"
-    | "echartsTreemap"
-    | "echartsSunburst"
-    | "echartsForcegraph"
-    | "echartsCirculargraph"
-    | "echartsCirclepacking"
-    | "echartsBubblechart"
-    | "echartsScatterchart"
-    | "echartsHeatmap"
-    | "echartsGraphgl"
-    | "echartsRadarchart"
-    | "echartsPiechart";
+  renderedChartType?: ChartType;
   inChartWrapper?: boolean;
 }
 
-export function CommonChart(props: Props) {
+export function CommonChart(props: Readonly<Props>) {
   const { render } = useDataThemesEchart();
 
   const domRef = React.useRef<HTMLDivElement>(null);
@@ -123,7 +125,8 @@ export function CommonChart(props: Props) {
               | "echartsHeatmap"
               | "echartsGraphgl"
               | "echartsRadarchart"
-              | "echartsPiechart"),
+              | "echartsPiechart"
+              | "bigNumber"),
           {
             ...visualOptions,
             height: props.inChartWrapper
@@ -153,7 +156,7 @@ export function CommonChart(props: Props) {
     content = (
       <div
         ref={domRef}
-        id={`common-chart-render-container-${props.chartId || "1"}`}
+        id={`common-chart-render-container-${props.chartId ?? "1"}`}
         css={`
           overflow-x: auto;
           margin-top: 40px;
@@ -187,9 +190,10 @@ export function CommonChart(props: Props) {
         css={`
           width: 100%;
           overflow: hidden;
-          height: ${props.inChartWrapper && chartType !== "bigNumber"
-            ? props.visualOptions.height - 28
-            : props.visualOptions.height}px;
+          height: ${props.inChartWrapper &&
+          props.renderedChartType !== "bigNumber"
+            ? props.visualOptions?.height - 28
+            : props.visualOptions?.height}px;
           * {
             font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif !important;
           }
@@ -197,13 +201,13 @@ export function CommonChart(props: Props) {
       >
         <div
           ref={domRef}
-          id={`common-chart-render-container-${props.chartId || "1"}`}
+          id={`common-chart-render-container-${props.chartId ?? "1"}`}
           css={`
             width: auto !important;
             height: 100%;
 
             > div:first-of-type {
-              ${chartType === "bigNumber" &&
+              ${props.renderedChartType === "bigNumber" &&
               props.inChartWrapper &&
               `
               div:nth-child(1) {

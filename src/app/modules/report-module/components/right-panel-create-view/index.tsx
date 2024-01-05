@@ -705,6 +705,7 @@ function CreateChartCard(props: {
       state: true,
       view,
       page,
+      action: "create",
     });
     setDataset(null);
     setLoadedChart(null);
@@ -787,6 +788,9 @@ function ChartItem(
 ) {
   const nullRef = React.useRef(null);
   const [chartPreview, setChartPreview] = React.useState(false);
+  const [_createChartFromReport, setCreateChartFromReport] = useRecoilState(
+    createChartFromReportAtom
+  );
 
   const [{ isDragging }, drag] = useDrag(() => ({
     type: props.elementType,
@@ -798,6 +802,20 @@ function ChartItem(
       isDragging: !!monitor.isDragging(),
     }),
   }));
+
+  React.useEffect(() => {
+    const timeout = setTimeout(() => {
+      setCreateChartFromReport({
+        state: false,
+        page: "",
+        view: "",
+        action: null,
+      });
+    }, 3000);
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, []);
 
   const getIcon = (vizType: string) => {
     const type = find(Charts, { id: vizType });
@@ -828,6 +846,7 @@ function ChartItem(
     <div
       ref={added || chartPreview ? nullRef : drag}
       id={`chart-${props.chartIndex}`}
+      className={props.chartIndex === 0 ? "rhcpCard" : ""}
       css={`
         width: 100%;
         font-size: 12px;

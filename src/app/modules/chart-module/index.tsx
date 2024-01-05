@@ -19,7 +19,7 @@ import { useChartsRawData } from "app/hooks/useChartsRawData";
 import { NoMatchPage } from "app/modules/common/no-match-page";
 import ChartBuilderLock from "app/modules/chart-module/routes/lock";
 import ChartModuleDataView from "app/modules/chart-module/routes/data";
-import { SubheaderToolbar } from "../common/subheader-toolbar";
+import { ChartSubheaderToolbar } from "./components/chartSubheaderToolbar";
 import ChartBuilderExport from "app/modules/chart-module/routes/export";
 import ChartBuilderMapping from "app/modules/chart-module/routes/mapping";
 import ChartBuilderFilters from "app/modules/chart-module/routes/filters";
@@ -45,6 +45,7 @@ import { useRecoilState } from "recoil";
 import { loadedDatasetsAtom } from "app/state/recoil/atoms";
 import { isEmpty } from "lodash";
 import { DatasetListItemAPIModel } from "../data-themes-module/sub-modules/list";
+import { ChartType } from "./components/common-chart";
 
 export default function ChartModule() {
   const { isLoading, isAuthenticated } = useAuth0();
@@ -366,21 +367,7 @@ export default function ChartModule() {
           >
             <ErrorOutlineIcon htmlColor="#E75656" fontSize="large" />
             {notFound ? (
-              <p>
-                {chartErrorMessage}
-                <br />
-                {chartErrorMessage !==
-                  "Sankey is a DAG, the original data has cycle!" && (
-                  <>
-                    <span>
-                      <button onClick={() => loadChartDataFromAPI()}>
-                        Reload
-                      </button>{" "}
-                    </span>
-                    to try again.
-                  </>
-                )}
-              </p>
+              <p>{chartErrorMessage}</p>
             ) : (
               <p>
                 Something went wrong with loading your data!
@@ -405,7 +392,7 @@ export default function ChartModule() {
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <SubheaderToolbar
+      <ChartSubheaderToolbar
         visualOptions={visualOptions}
         name={chartName}
         setName={setChartName}
@@ -480,6 +467,7 @@ export default function ChartModule() {
                   setVisualOptions={setVisualOptions}
                   renderedChartSsr={activeRenderedChartSsr}
                   renderedChartMappedData={renderedChartMappedData}
+                  renderedChartType={chartType as ChartType}
                   setChartErrorMessage={setChartErrorMessage}
                   setNotFound={setNotFound}
                 />
@@ -494,6 +482,7 @@ export default function ChartModule() {
                   setVisualOptions={setVisualOptions}
                   renderedChartSsr={activeRenderedChartSsr}
                   renderedChartMappedData={renderedChartMappedData}
+                  renderedChartType={chartType as ChartType}
                   setChartErrorMessage={setChartErrorMessage}
                   setNotFound={setNotFound}
                 />
@@ -508,6 +497,7 @@ export default function ChartModule() {
                   setVisualOptions={setVisualOptions}
                   renderedChartSsr={activeRenderedChartSsr}
                   renderedChartMappedData={renderedChartMappedData}
+                  renderedChartType={chartType as ChartType}
                   setChartErrorMessage={setChartErrorMessage}
                   setNotFound={setNotFound}
                 />
@@ -521,6 +511,7 @@ export default function ChartModule() {
                   setVisualOptions={setVisualOptions}
                   renderedChartSsr={activeRenderedChartSsr}
                   renderedChartMappedData={renderedChartMappedData}
+                  renderedChartType={chartType as ChartType}
                   setChartErrorMessage={setChartErrorMessage}
                   setNotFound={setNotFound}
                 />
@@ -534,6 +525,7 @@ export default function ChartModule() {
                   renderedChart={content}
                   renderedChartSsr={activeRenderedChartSsr}
                   renderedChartMappedData={renderedChartMappedData}
+                  renderedChartType={chartType as ChartType}
                   setChartErrorMessage={setChartErrorMessage}
                   setNotFound={setNotFound}
                 />

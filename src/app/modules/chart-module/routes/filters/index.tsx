@@ -12,7 +12,7 @@ import { CommonChart } from "app/modules/chart-module/components/common-chart";
 import { styles as commonStyles } from "app/modules/chart-module/routes/common/styles";
 import { ChartBuilderFiltersProps } from "app/modules/chart-module/routes/filters/data";
 
-function ChartBuilderFilters(props: ChartBuilderFiltersProps) {
+function ChartBuilderFilters(props: Readonly<ChartBuilderFiltersProps>) {
   useTitle("DX DataXplorer - Filters");
 
   const history = useHistory();
@@ -61,6 +61,7 @@ function ChartBuilderFilters(props: ChartBuilderFiltersProps) {
             renderedChartMappedData={props.renderedChartMappedData}
             setChartErrorMessage={props.setChartErrorMessage}
             setNotFound={props.setNotFound}
+            renderedChartType={props.renderedChartType}
           />
         </div>
       </div>

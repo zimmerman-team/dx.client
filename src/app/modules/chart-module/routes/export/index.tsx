@@ -10,7 +10,7 @@ import { CommonChart } from "app/modules/chart-module/components/common-chart";
 import { ChartBuilderExportProps } from "app/modules/chart-module/routes/export/data";
 import { styles as commonStyles } from "app/modules/data-themes-module/sub-modules/theme-builder/views/common/styles";
 
-function ChartBuilderExport(props: ChartBuilderExportProps) {
+function ChartBuilderExport(props: Readonly<ChartBuilderExportProps>) {
   useTitle("DX DataXplorer - Export");
 
   const history = useHistory();
@@ -47,6 +47,7 @@ function ChartBuilderExport(props: ChartBuilderExportProps) {
             renderedChartMappedData={props.renderedChartMappedData}
             setChartErrorMessage={props.setChartErrorMessage}
             setNotFound={props.setNotFound}
+            renderedChartType={props.renderedChartType}
           />
         </div>
       </div>

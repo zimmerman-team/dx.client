@@ -55,6 +55,7 @@ function ChartBuilderCustomize(props: Readonly<ChartBuilderCustomizeProps>) {
             renderedChartMappedData={props.renderedChartMappedData}
             setChartErrorMessage={props.setChartErrorMessage}
             setNotFound={props.setNotFound}
+            renderedChartType={props.renderedChartType}
           />
         </div>
       </div>

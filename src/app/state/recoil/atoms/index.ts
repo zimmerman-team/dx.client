@@ -116,12 +116,14 @@ export const createChartFromReportAtom = atom<{
   state: boolean;
   view: string;
   page: string;
+  action: "create" | "edit" | null;
 }>({
   key: "createChartFromReportAtom",
   default: {
     state: false,
     view: "",
     page: "",
+    action: null,
   },
   effects_UNSTABLE: [persistAtom],
 });
