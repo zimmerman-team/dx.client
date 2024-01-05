@@ -37,7 +37,7 @@ export default function HomeFooter(props: { transparent?: boolean }) {
             css={`
               a {
                 font-size: 16px;
-                font-weight: 400;
+                font-weight: 350;
                 text-decoration: none;
                 color: #000;
 
@@ -50,7 +50,11 @@ export default function HomeFooter(props: { transparent?: boolean }) {
                 display: flex;
                 flex-direction: column;
                 gap: 18px;
-                font-weight: bold;
+                li {
+                  font-size: 16px;
+                  font-weight: 350;
+                  color: #000;
+                }
                 li:first-child {
                   margin-bottom: 20px;
                 }

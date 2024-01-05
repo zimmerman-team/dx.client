@@ -16,7 +16,7 @@ export default function WhyDX() {
         css={`
           background-image: url(${Ellipses});
           background-repeat: no-repeat;
-          background-position: 48% 3%;
+          background-position: 44% 4%;
         `}
       >
         <Container maxWidth="lg">

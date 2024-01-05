@@ -11,7 +11,7 @@ export const benefitscss = css`
     text-align: center;
     color: #000000;
     font-family: "Gotham Narrow", sans-serif;
-    margin-bottom: 60px;
+    margin-bottom: 66px;
     margin-top: 0px;
   }
   h3 {
