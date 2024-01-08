@@ -1,8 +1,8 @@
 import { css } from "styled-components/macro";
 
-export const homeFootercss = (transparent?: boolean) => css`
-  width: 100vw;
-  background: ${transparent ? "transparent" : "#fff"};
+export const homeFootercss = css`
+  /* width: 100vw; */
+  background: #fff;
   padding-top: 27px;
 
   ul {

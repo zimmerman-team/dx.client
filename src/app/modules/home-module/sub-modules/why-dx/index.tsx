@@ -36,7 +36,7 @@ export default function WhyDX() {
         </Container>
       </div>
       <div css="width: 100%;height: 36px" />
-      <HomeFooter transparent />
+      <HomeFooter />
     </>
   );
 }

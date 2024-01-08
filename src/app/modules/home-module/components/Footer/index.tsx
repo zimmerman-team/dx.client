@@ -7,6 +7,7 @@ import { ReactComponent as LogoIcon } from "app/modules/home-module/components/F
 import { Link } from "react-router-dom";
 import NewsletterForm from "app/modules/common/newsletterForm";
 import { FieldErrors } from "react-hook-form";
+import moment from "moment";
 
 export default function HomeFooter(props: { transparent?: boolean }) {
   const [isSubscribed, setIsSubscribed] = React.useState(false);
@@ -17,13 +18,8 @@ export default function HomeFooter(props: { transparent?: boolean }) {
     }>
   >({});
   return (
-    <div css={homeFootercss(props.transparent)}>
-      <Container
-        maxWidth="lg"
-        css={`
-          padding: 0;
-        `}
-      >
+    <div css={homeFootercss}>
+      <Container maxWidth="lg">
         <Grid
           container
           alignContent="space-between"
@@ -37,11 +33,9 @@ export default function HomeFooter(props: { transparent?: boolean }) {
             css={`
               a {
                 font-size: 16px;
-                font-weight: 350;
                 text-decoration: none;
                 color: #000;
-
-                font-family: "Gotham Narrow", sans-serif;
+                font-family: "GothamNarrow-Medium", sans-serif;
               }
             `}
           >
@@ -66,7 +60,7 @@ export default function HomeFooter(props: { transparent?: boolean }) {
                 </Link>
               </li>
               <li>
-                <Link to="/why-dataXplorer">Why DataXplorer?</Link>{" "}
+                <Link to="/why-dataXplorer"> Why DataXplorer?</Link>{" "}
               </li>
               <li>
                 <Link to="/explore">Explore</Link>{" "}
@@ -89,13 +83,15 @@ export default function HomeFooter(props: { transparent?: boolean }) {
             css={`
               ul {
                 margin-top: 20px;
+                color: #000;
+                font-weight: 325;
+                font-family: "GothamNarrow-Medium", sans-serif;
               }
               a {
                 text-decoration: none;
+                color: #000;
               }
               li {
-                color: #000;
-                font-family: "Gotham Narrow", sans-serif;
                 font-size: 12px;
                 :nth-child(1),
                 :nth-child(2) {
@@ -103,7 +99,7 @@ export default function HomeFooter(props: { transparent?: boolean }) {
                 }
                 p {
                   margin: 0px;
-                  line-height: 1.1;
+                  line-height: normal;
                 }
               }
             `}
@@ -132,7 +128,7 @@ export default function HomeFooter(props: { transparent?: boolean }) {
                 font-size: 16px;
                 font-weight: 350;
                 color: #000;
-                font-family: "Gotham Narrow", sans-serif;
+                font-family: "GothamNarrow-Medium", sans-serif;
               `}
             >
               Subscribe to our newsletter
@@ -166,6 +162,13 @@ export default function HomeFooter(props: { transparent?: boolean }) {
                   width: 70%;
                   padding-left: 24px;
                   background: #f7f7f7;
+                  font-family: "Roboto", sans-serif;
+                  font-weight: 400;
+                  ::placeholder {
+                    font-family: "Roboto", sans-serif;
+                    font-weight: 400;
+                    color: #000;
+                  }
                 }
                 button {
                   border: none;
@@ -211,6 +214,7 @@ export default function HomeFooter(props: { transparent?: boolean }) {
             border-top: 1px solid #d9d9d9;
             padding-top: 4px;
             padding-bottom: 20px;
+            font-size: 12px;
 
             margin-top: 40px;
             a {
@@ -219,7 +223,13 @@ export default function HomeFooter(props: { transparent?: boolean }) {
             }
           `}
         >
-          <p>
+          <p
+            css={`
+              display: flex;
+              align-items: center;
+              gap: 8px;
+            `}
+          >
             <span
               css={`
                 svg {
@@ -229,7 +239,7 @@ export default function HomeFooter(props: { transparent?: boolean }) {
             >
               <CopyIcon />
             </span>{" "}
-            2023 DataXplorer All Rights Reserved
+            {moment(new Date()).format("YYYY")} DataXplorer All Rights Reserved
           </p>
           <p>
             {" "}
