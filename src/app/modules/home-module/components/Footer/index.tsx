@@ -9,7 +9,7 @@ import NewsletterForm from "app/modules/common/newsletterForm";
 import { FieldErrors } from "react-hook-form";
 import moment from "moment";
 
-export default function HomeFooter(props: { transparent?: boolean }) {
+export default function HomeFooter() {
   const [isSubscribed, setIsSubscribed] = React.useState(false);
   const [isSubscriptionFailed, setIsSubscriptionFailed] = React.useState(false);
   const [formError, setFormError] = React.useState<
