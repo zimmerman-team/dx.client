@@ -788,7 +788,7 @@ function ChartItem(
 ) {
   const nullRef = React.useRef(null);
   const [chartPreview, setChartPreview] = React.useState(false);
-  const [_createChartFromReport, setCreateChartFromReport] = useRecoilState(
+  const [createChartFromReport, setCreateChartFromReport] = useRecoilState(
     createChartFromReportAtom
   );
 
@@ -846,7 +846,11 @@ function ChartItem(
     <div
       ref={added || chartPreview ? nullRef : drag}
       id={`chart-${props.chartIndex}`}
-      className={props.chartIndex === 0 ? "rhcpCard" : ""}
+      className={
+        props.chartIndex === 0 && createChartFromReport.action === "create"
+          ? "rhcpCard"
+          : ""
+      }
       css={`
         width: 100%;
         font-size: 12px;

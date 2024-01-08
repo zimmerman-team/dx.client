@@ -48,6 +48,10 @@ export function ReportChartWrapper(props: Props) {
       : get(chartFromAPI, "content", "");
   }, [chartFromAPI]);
 
+  const resetAppliedFilters = useStoreActions(
+    (actions) => actions.charts.appliedFilters.reset
+  );
+
   const renderedChartMappedData = React.useMemo(() => {
     return get(chartFromAPI, "mappedData", []);
   }, [chartFromAPI]);
@@ -93,6 +97,9 @@ export function ReportChartWrapper(props: Props) {
     if (props.id) {
       loadChartDataFromAPI(undefined, props.id);
     }
+    return () => {
+      resetAppliedFilters();
+    };
   }, [props.id, token]);
 
   React.useEffect(() => {

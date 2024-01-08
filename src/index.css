@@ -178,48 +178,20 @@ input[type="text"] {
   right: 26px !important;
 }
 .rhcpCard{
-  animation-name: cardAnimation;
-  animation-duration: 2s;
+  animation-name: shadow-pulse;
+  animation-duration: 3s;
 }
 
-@keyframes cardAnimation {
+@keyframes shadow-pulse {
   0% {
-    box-shadow: 0px 0px 1px 1px #DADAF8;
-
-  }
-  10% {
-    box-shadow: 0px 0px 1px 2px #DADAF8;
+    box-shadow: 0 0 0 0 rgba(96, 97, 229, 0.2);
     
   }
-  20% {
-    box-shadow: 0px 0px 2px 3px rgba(96, 97, 229, 0.2);
-  }
-  30% {
-    box-shadow: 0px 0px 3px 4px rgba(96, 96, 229, 0.2);
-  }
-  40% {
-    box-shadow: 0px 0px 4px 5px rgba(96, 96, 229, 0.2);
-  }
-  50% {
-    box-shadow: 0px 0px 4px 5px rgba(96, 96, 229, 0.2); 
-
-  }
-  60%{
-    box-shadow: 0px 0px 3px 4px rgba(96, 96, 229, 0.2);
-  }
-  70%{
-    box-shadow: 0px 0px 2px 3px rgba(96, 96, 229, 0.2);
-  }
-  80%{
-    box-shadow: 0px 0px 1.5px 3px rgba(96, 96, 229, 0.2);
-  }
-  90% {
-    box-shadow: 0px 0px 1px 2px #DADAF8;
-    
+  50%{
+    box-shadow: 0 0 0 7px #DADAF8; 
   }
   100% {
-    box-shadow: 0px 0px 1px 1px #DADAF8;
-
+    box-shadow: 0 0 0 0 rgba(96, 97, 229, 0.2);
   }
 }
 

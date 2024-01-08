@@ -41,8 +41,6 @@ import { IHeaderDetails } from "../report-module/components/right-panel/data";
 import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 import { styles as commonStyles } from "app/modules/chart-module/routes/common/styles";
 import { NotAuthorizedMessageModule } from "app/modules/common/not-authorized-message";
-import { useRecoilState } from "recoil";
-import { loadedDatasetsAtom } from "app/state/recoil/atoms";
 import { isEmpty } from "lodash";
 import { DatasetListItemAPIModel } from "../data-themes-module/sub-modules/list";
 import { ChartType } from "./components/common-chart";
@@ -151,9 +149,6 @@ export default function ChartModule() {
   const resetEnabledFilterOptionGroups = useStoreActions(
     (actions) => actions.charts.enabledFilterOptionGroups.clear
   );
-
-  const [loadedDatasets, setLoadedDatasets] =
-    useRecoilState(loadedDatasetsAtom);
 
   const dataset = useStoreState((state) => state.charts.dataset.value);
 
@@ -404,37 +399,35 @@ export default function ChartModule() {
         headerDetails={{} as IHeaderDetails}
         isPreviewView={isPreviewView}
       />
-      {view && (
-        <ChartModuleToolBox
-          rawViz={rawViz}
-          data={sampleData}
-          chartName={chartName}
-          dataTypes={dataTypes2}
-          isEditMode={isEditMode}
-          mappedData={mappedData}
-          loadDataset={loadDataset}
-          textView={config.textView}
-          dataSteps={config.dataSteps}
-          guideView={config.guideView}
-          openPanel={config.openPanel}
-          visualOptions={visualOptions}
-          exportView={config.exportView}
-          filtersView={config.filtersView}
-          loadChartDataFromAPI={loadChartDataFromAPI}
-          setVisualOptions={setVisualOptions}
-          loading={loading || isChartLoading}
-          filterOptionGroups={filterOptionGroups}
-          addVizToLocalStates={addVizToLocalStates}
-          previewMode={!isEditMode && page !== "new"}
-          openToolbox={toolboxOpen}
-          setToolboxOpen={setToolboxOpen}
-          dimensions={dimensions}
-          setChartFromAPI={setChartFromAPI}
-          setDatasetName={setChartName}
-          onClose={() => setToolboxOpen(false)}
-          onOpen={() => setToolboxOpen(true)}
-        />
-      )}
+      <ChartModuleToolBox
+        rawViz={rawViz}
+        data={sampleData}
+        chartName={chartName}
+        dataTypes={dataTypes2}
+        isEditMode={isEditMode}
+        mappedData={mappedData}
+        loadDataset={loadDataset}
+        textView={config.textView}
+        dataSteps={config.dataSteps}
+        guideView={config.guideView}
+        openPanel={config.openPanel}
+        visualOptions={visualOptions}
+        exportView={config.exportView}
+        filtersView={config.filtersView}
+        loadChartDataFromAPI={loadChartDataFromAPI}
+        setVisualOptions={setVisualOptions}
+        loading={loading || isChartLoading}
+        filterOptionGroups={filterOptionGroups}
+        addVizToLocalStates={addVizToLocalStates}
+        previewMode={!isEditMode && page !== "new"}
+        openToolbox={toolboxOpen}
+        setToolboxOpen={setToolboxOpen}
+        dimensions={dimensions}
+        setChartFromAPI={setChartFromAPI}
+        setDatasetName={setChartName}
+        onClose={() => setToolboxOpen(false)}
+        onOpen={() => setToolboxOpen(true)}
+      />
 
       <div
         css={`
