@@ -31,12 +31,12 @@ export default function KeyFeaturesBlock() {
           color: #231d2c;
         }
         p :nth-of-type(2) {
-          font-family: "GothamNarrow", sans-serif;
+          font-family: "GothamNarrow-Medium", sans-serif;
           font-weight: 350;
           line-height: 30px;
           letter-spacing: 0.5px;
           font-size: 20px;
-          color: #231d2c;
+          color: #231d2c;xp
         }
       `}
     >

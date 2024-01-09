@@ -228,17 +228,11 @@ export default function HomeFooter() {
               display: flex;
               align-items: center;
               gap: 8px;
+              margin: 0;
+              padding: 0;
             `}
           >
-            <span
-              css={`
-                svg {
-                  margin-bottom: -2.5px;
-                }
-              `}
-            >
-              <CopyIcon />
-            </span>{" "}
+            <CopyIcon />
             {moment(new Date()).format("YYYY")} DataXplorer All Rights Reserved
           </p>
           <p>

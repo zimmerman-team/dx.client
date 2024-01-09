@@ -28,7 +28,7 @@ export const benefitscss = css`
     font-size: 24px;
     line-height: 29px;
     /* width: 90%; */
-    font-family: "Gotham Narrow Light", sans-serif;
+    font-family: "GothamNarrow-Book", sans-serif;
     margin-top: 14px;
   }
 `;
