@@ -7,6 +7,7 @@ import { ReactComponent as LogoIcon } from "app/modules/home-module/components/F
 import { Link } from "react-router-dom";
 import NewsletterForm from "app/modules/common/newsletterForm";
 import { FieldErrors } from "react-hook-form";
+import moment from "moment";
 
 export default function HomeFooter() {
   const [isSubscribed, setIsSubscribed] = React.useState(false);
@@ -18,12 +19,7 @@ export default function HomeFooter() {
   >({});
   return (
     <div css={homeFootercss}>
-      <Container
-        maxWidth="lg"
-        css={`
-          padding: 0;
-        `}
-      >
+      <Container maxWidth="lg">
         <Grid
           container
           alignContent="space-between"
@@ -37,11 +33,9 @@ export default function HomeFooter() {
             css={`
               a {
                 font-size: 16px;
-                font-weight: 400;
                 text-decoration: none;
                 color: #000;
-
-                font-family: "Gotham Narrow", sans-serif;
+                font-family: "GothamNarrow-Medium", sans-serif;
               }
             `}
           >
@@ -50,7 +44,11 @@ export default function HomeFooter() {
                 display: flex;
                 flex-direction: column;
                 gap: 18px;
-                font-weight: bold;
+                li {
+                  font-size: 16px;
+                  font-weight: 350;
+                  color: #000;
+                }
                 li:first-child {
                   margin-bottom: 20px;
                 }
@@ -62,7 +60,7 @@ export default function HomeFooter() {
                 </Link>
               </li>
               <li>
-                <Link to="/why-dataXplorer">Why DataXplorer?</Link>{" "}
+                <Link to="/why-dataXplorer"> Why DataXplorer?</Link>{" "}
               </li>
               <li>
                 <Link to="/explore">Explore</Link>{" "}
@@ -85,13 +83,15 @@ export default function HomeFooter() {
             css={`
               ul {
                 margin-top: 20px;
+                color: #000;
+                font-weight: 325;
+                font-family: "GothamNarrow-Medium", sans-serif;
               }
               a {
                 text-decoration: none;
+                color: #000;
               }
               li {
-                color: #000;
-                font-family: "Gotham Narrow", sans-serif;
                 font-size: 12px;
                 :nth-child(1),
                 :nth-child(2) {
@@ -99,7 +99,7 @@ export default function HomeFooter() {
                 }
                 p {
                   margin: 0px;
-                  line-height: 1.1;
+                  line-height: normal;
                 }
               }
             `}
@@ -128,7 +128,7 @@ export default function HomeFooter() {
                 font-size: 16px;
                 font-weight: 350;
                 color: #000;
-                font-family: "Gotham Narrow", sans-serif;
+                font-family: "GothamNarrow-Medium", sans-serif;
               `}
             >
               Subscribe to our newsletter
@@ -162,6 +162,13 @@ export default function HomeFooter() {
                   width: 70%;
                   padding-left: 24px;
                   background: #f7f7f7;
+                  font-family: "Roboto", sans-serif;
+                  font-weight: 400;
+                  ::placeholder {
+                    font-family: "Roboto", sans-serif;
+                    font-weight: 400;
+                    color: #000;
+                  }
                 }
                 button {
                   border: none;
@@ -207,6 +214,7 @@ export default function HomeFooter() {
             border-top: 1px solid #d9d9d9;
             padding-top: 4px;
             padding-bottom: 20px;
+            font-size: 12px;
 
             margin-top: 40px;
             a {
@@ -215,17 +223,17 @@ export default function HomeFooter() {
             }
           `}
         >
-          <p>
-            <span
-              css={`
-                svg {
-                  margin-bottom: -2.5px;
-                }
-              `}
-            >
-              <CopyIcon />
-            </span>{" "}
-            2023 DataXplorer All Rights Reserved
+          <p
+            css={`
+              display: flex;
+              align-items: center;
+              gap: 8px;
+              margin: 0;
+              padding: 0;
+            `}
+          >
+            <CopyIcon />
+            {moment(new Date()).format("YYYY")} DataXplorer All Rights Reserved
           </p>
           <p>
             {" "}

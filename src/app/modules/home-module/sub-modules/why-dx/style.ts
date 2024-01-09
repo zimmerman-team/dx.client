@@ -6,12 +6,12 @@ export const benefitscss = css`
 
   h2 {
     font-weight: 400;
-    font-size: 36px;
+    font-size: 48px;
     line-height: 43px;
     text-align: center;
     color: #000000;
     font-family: "Gotham Narrow", sans-serif;
-    margin-bottom: 60px;
+    margin-bottom: 66px;
     margin-top: 0px;
   }
   h3 {
@@ -28,7 +28,7 @@ export const benefitscss = css`
     font-size: 24px;
     line-height: 29px;
     /* width: 90%; */
-    font-family: "Gotham Narrow Light", sans-serif;
+    font-family: "GothamNarrow-Book", sans-serif;
     margin-top: 14px;
   }
 `;
