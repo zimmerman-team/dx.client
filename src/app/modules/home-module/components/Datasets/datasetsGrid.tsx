@@ -9,7 +9,7 @@ import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import { HomepageTable } from "app/modules/home-module/components/Table";
 import DeleteDatasetDialog from "app/components/Dialogs/deleteDatasetDialog";
 import { DatasetListItemAPIModel } from "app/modules/data-themes-module/sub-modules/list";
-import ReformedGridItem from "app/modules/home-module/components/Datasets/gridItem";
+import GridItem from "app/modules/home-module/components/Datasets/gridItem";
 import DatasetAddnewCard from "app/modules/home-module/components/Datasets/datasetAddNewCard";
 import CircleLoader from "../Loader";
 import { useRecoilState } from "recoil";
@@ -147,6 +147,23 @@ export default function DatasetsGrid(props: Props) {
     }
   };
 
+  const handleDuplicate = (index: number) => {
+    const id = loadedDatasets[index].id;
+    if (!id) {
+      return;
+    }
+    axios
+      .get(`${process.env.REACT_APP_API}/dataset/duplicate/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then(() => {
+        reloadData();
+      })
+      .catch((error) => console.log(error));
+  };
+
   const handleModal = (id: string) => {
     setCardId(id);
     setModalDisplay(true);
@@ -241,13 +258,15 @@ export default function DatasetsGrid(props: Props) {
                   : ""
               }
             >
-              <ReformedGridItem
+              <GridItem
                 path={`/dataset/${data.id}/edit`}
                 title={data.name}
                 date={data.createdDate}
                 handleDelete={() => {}}
                 descr={data.description}
-                handleDuplicate={() => {}}
+                handleDuplicate={() => {
+                  handleDuplicate(index);
+                }}
                 showMenu={!props.inChartBuilder}
                 id={data.id}
               />
