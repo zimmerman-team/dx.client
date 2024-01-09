@@ -236,7 +236,6 @@ export function useChartsRawData(props: {
     // useful when coming from report page to edit chart page
     // if in chart wrapper component, loadChartDataFromAPI is called from chart-wrapper component
     if (!props.inChartWrapper && !isEmpty(token)) {
-      console.log("boo");
       loadChartDataFromAPI();
     }
   }, [token]);

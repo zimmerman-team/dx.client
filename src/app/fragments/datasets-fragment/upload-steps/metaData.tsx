@@ -187,7 +187,6 @@ const SelectField = (props: {
 export default function MetaData(props: Readonly<Props>) {
   const location = useLocation();
   const view = location.pathname.split("/")[3];
-  console.log(view, "view");
   const loadedDataset = useStoreState(
     (state) => state.dataThemes.DatasetGet.crudData
   ) as IDatasetDetail;
