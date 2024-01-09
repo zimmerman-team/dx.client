@@ -1299,6 +1299,7 @@ export function useDataThemesEchart() {
     const option = {
       // backgroundColor: background,
       backgroundColor: "transparent",
+      color: checkLists.find((item) => item.label === palette)?.value,
       tooltip: {
         trigger: showTooltip ? "item" : "none",
         formatter: (params: any) => {
@@ -1307,15 +1308,6 @@ export function useDataThemesEchart() {
               ? formatFinancialValue(params.data.value, true)
               : params.data.value
           }`;
-        },
-      },
-      visualMap: {
-        type: "continuous",
-        min: 0,
-        max: Math.max(...data.map((item: any) => item.value)),
-        show: false,
-        inRange: {
-          color: checkLists.find((item) => item.label === palette)?.value,
         },
       },
       series: [
