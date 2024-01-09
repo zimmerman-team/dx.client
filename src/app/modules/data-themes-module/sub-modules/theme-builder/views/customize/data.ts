@@ -34,35 +34,12 @@ export const checkLists = [
     label: "Sprint forest",
     value: ["#2B5B16", "#538137", "#7BA95A", "#A4D37E", "#D0FEA3"],
   },
-];
-
-export const checkListsCirclePacking = [
   {
-    label: "TGF Default",
-
-    value: ["#B1BCC8", "#F1ECEC"],
+    label: "DataXplorer default",
+    value: ["#6061E5", "#73D3CD", "#F6C445", "#E492BD", "#E75656"],
   },
   {
-    label: "Nordic Aurora",
-
-    value: ["#94A8E4", "#E0BAFD"],
-  },
-  {
-    label: "Sunset coast",
-
-    value: ["#FD6565", "#FDA529"],
-  },
-  {
-    label: "Warm tone",
-
-    value: ["#D3A4C5", "#F5DCFE"],
-  },
-  {
-    label: "Sprint forest",
-    value: ["#A4D37E", "#D0FEA3"],
-  },
-  {
-    label: "Echarts Classic",
-    value: ["#006edd", "#e0ffff"],
+    label: "Purple Gradient",
+    value: ["#231D2C", "#655579", "#B194D1", "#DAB5FF", "#DADAF8"],
   },
 ];
