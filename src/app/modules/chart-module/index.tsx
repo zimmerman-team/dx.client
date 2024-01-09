@@ -19,7 +19,7 @@ import { useChartsRawData } from "app/hooks/useChartsRawData";
 import { NoMatchPage } from "app/modules/common/no-match-page";
 import ChartBuilderLock from "app/modules/chart-module/routes/lock";
 import ChartModuleDataView from "app/modules/chart-module/routes/data";
-import { SubheaderToolbar } from "../common/subheader-toolbar";
+import { ChartSubheaderToolbar } from "./components/chartSubheaderToolbar";
 import ChartBuilderExport from "app/modules/chart-module/routes/export";
 import ChartBuilderMapping from "app/modules/chart-module/routes/mapping";
 import ChartBuilderFilters from "app/modules/chart-module/routes/filters";
@@ -41,10 +41,9 @@ import { IHeaderDetails } from "../report-module/components/right-panel/data";
 import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 import { styles as commonStyles } from "app/modules/chart-module/routes/common/styles";
 import { NotAuthorizedMessageModule } from "app/modules/common/not-authorized-message";
-import { useRecoilState } from "recoil";
-import { loadedDatasetsAtom } from "app/state/recoil/atoms";
 import { isEmpty } from "lodash";
 import { DatasetListItemAPIModel } from "../data-themes-module/sub-modules/list";
+import { ChartType } from "./components/common-chart";
 
 export default function ChartModule() {
   const { isLoading, isAuthenticated } = useAuth0();
@@ -79,7 +78,7 @@ export default function ChartModule() {
     dataTypes,
     dataStats,
     sampleData,
-    isEditMode,
+    isPreviewMode,
     loadDataset,
     loadChartDataFromAPI,
     error401,
@@ -151,9 +150,6 @@ export default function ChartModule() {
     (actions) => actions.charts.enabledFilterOptionGroups.clear
   );
 
-  const [loadedDatasets, setLoadedDatasets] =
-    useRecoilState(loadedDatasetsAtom);
-
   const dataset = useStoreState((state) => state.charts.dataset.value);
 
   const config = get(routeToConfig, `["${view}"]`, routeToConfig.preview);
@@ -176,8 +172,10 @@ export default function ChartModule() {
   }, [chartType, dataTypes]);
 
   React.useEffect(() => {
+    //resets mapping and applied filters when dataset becomes null
     if (dataset === null) {
       resetMapping();
+      resetAppliedFilters();
     }
   }, [dataset]);
 
@@ -366,21 +364,7 @@ export default function ChartModule() {
           >
             <ErrorOutlineIcon htmlColor="#E75656" fontSize="large" />
             {notFound ? (
-              <p>
-                {chartErrorMessage}
-                <br />
-                {chartErrorMessage !==
-                  "Sankey is a DAG, the original data has cycle!" && (
-                  <>
-                    <span>
-                      <button onClick={() => loadChartDataFromAPI()}>
-                        Reload
-                      </button>{" "}
-                    </span>
-                    to try again.
-                  </>
-                )}
-              </p>
+              <p>{chartErrorMessage}</p>
             ) : (
               <p>
                 Something went wrong with loading your data!
@@ -405,7 +389,7 @@ export default function ChartModule() {
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <SubheaderToolbar
+      <ChartSubheaderToolbar
         visualOptions={visualOptions}
         name={chartName}
         setName={setChartName}
@@ -417,37 +401,34 @@ export default function ChartModule() {
         headerDetails={{} as IHeaderDetails}
         isPreviewView={isPreviewView}
       />
-      {view && (
-        <ChartModuleToolBox
-          rawViz={rawViz}
-          data={sampleData}
-          chartName={chartName}
-          dataTypes={dataTypes2}
-          isEditMode={isEditMode}
-          mappedData={mappedData}
-          loadDataset={loadDataset}
-          textView={config.textView}
-          dataSteps={config.dataSteps}
-          guideView={config.guideView}
-          openPanel={config.openPanel}
-          visualOptions={visualOptions}
-          exportView={config.exportView}
-          filtersView={config.filtersView}
-          loadChartDataFromAPI={loadChartDataFromAPI}
-          setVisualOptions={setVisualOptions}
-          loading={loading || isChartLoading}
-          filterOptionGroups={filterOptionGroups}
-          addVizToLocalStates={addVizToLocalStates}
-          previewMode={!isEditMode && page !== "new"}
-          openToolbox={toolboxOpen}
-          setToolboxOpen={setToolboxOpen}
-          dimensions={dimensions}
-          setChartFromAPI={setChartFromAPI}
-          setDatasetName={setChartName}
-          onClose={() => setToolboxOpen(false)}
-          onOpen={() => setToolboxOpen(true)}
-        />
-      )}
+      <ChartModuleToolBox
+        rawViz={rawViz}
+        data={sampleData}
+        chartName={chartName}
+        dataTypes={dataTypes2}
+        isEditMode={!isPreviewMode}
+        mappedData={mappedData}
+        loadDataset={loadDataset}
+        textView={config.textView}
+        dataSteps={config.dataSteps}
+        guideView={config.guideView}
+        openPanel={config.openPanel}
+        visualOptions={visualOptions}
+        exportView={config.exportView}
+        filtersView={config.filtersView}
+        loadChartDataFromAPI={loadChartDataFromAPI}
+        setVisualOptions={setVisualOptions}
+        loading={loading || isChartLoading}
+        filterOptionGroups={filterOptionGroups}
+        addVizToLocalStates={addVizToLocalStates}
+        openToolbox={toolboxOpen}
+        setToolboxOpen={setToolboxOpen}
+        dimensions={dimensions}
+        setChartFromAPI={setChartFromAPI}
+        setDatasetName={setChartName}
+        onClose={() => setToolboxOpen(false)}
+        onOpen={() => setToolboxOpen(true)}
+      />
 
       <div
         css={`
@@ -480,6 +461,7 @@ export default function ChartModule() {
                   setVisualOptions={setVisualOptions}
                   renderedChartSsr={activeRenderedChartSsr}
                   renderedChartMappedData={renderedChartMappedData}
+                  renderedChartType={chartType as ChartType}
                   setChartErrorMessage={setChartErrorMessage}
                   setNotFound={setNotFound}
                 />
@@ -494,6 +476,7 @@ export default function ChartModule() {
                   setVisualOptions={setVisualOptions}
                   renderedChartSsr={activeRenderedChartSsr}
                   renderedChartMappedData={renderedChartMappedData}
+                  renderedChartType={chartType as ChartType}
                   setChartErrorMessage={setChartErrorMessage}
                   setNotFound={setNotFound}
                 />
@@ -508,6 +491,7 @@ export default function ChartModule() {
                   setVisualOptions={setVisualOptions}
                   renderedChartSsr={activeRenderedChartSsr}
                   renderedChartMappedData={renderedChartMappedData}
+                  renderedChartType={chartType as ChartType}
                   setChartErrorMessage={setChartErrorMessage}
                   setNotFound={setNotFound}
                 />
@@ -521,6 +505,7 @@ export default function ChartModule() {
                   setVisualOptions={setVisualOptions}
                   renderedChartSsr={activeRenderedChartSsr}
                   renderedChartMappedData={renderedChartMappedData}
+                  renderedChartType={chartType as ChartType}
                   setChartErrorMessage={setChartErrorMessage}
                   setNotFound={setNotFound}
                 />
@@ -534,6 +519,7 @@ export default function ChartModule() {
                   renderedChart={content}
                   renderedChartSsr={activeRenderedChartSsr}
                   renderedChartMappedData={renderedChartMappedData}
+                  renderedChartType={chartType as ChartType}
                   setChartErrorMessage={setChartErrorMessage}
                   setNotFound={setNotFound}
                 />
@@ -564,7 +550,7 @@ export default function ChartModule() {
                   setVisualOptions={setVisualOptions}
                   renderedChartSsr={renderedChartSsr}
                   renderedChartMappedData={renderedChartMappedData}
-                  editable={isEditMode || (page === "new" && !view)}
+                  editable={!isPreviewMode || (page === "new" && !view)}
                   setIsPreviewView={setIsPreviewView}
                 />
               </Route>
@@ -576,7 +562,7 @@ export default function ChartModule() {
                   setVisualOptions={setVisualOptions}
                   renderedChartSsr={renderedChartSsr}
                   renderedChartMappedData={renderedChartMappedData}
-                  editable={isEditMode || (page === "new" && !view)}
+                  editable={!isPreviewMode}
                   setIsPreviewView={setIsPreviewView}
                 />
               </Route>

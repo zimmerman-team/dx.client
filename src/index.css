@@ -177,8 +177,23 @@ input[type="text"] {
 #inline-color-picker-popover{
   right: 26px !important;
 }
+.rhcpCard{
+  animation-name: shadow-pulse;
+  animation-duration: 3s;
+}
 
-
+@keyframes shadow-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(96, 97, 229, 0.2);
+    
+  }
+  50%{
+    box-shadow: 0 0 0 7px #DADAF8; 
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(96, 97, 229, 0.2);
+  }
+}
 
 
 

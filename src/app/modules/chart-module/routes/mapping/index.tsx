@@ -15,7 +15,7 @@ import {
 } from "app/modules/chart-module/routes/mapping/data";
 import ChartPlaceholder from "../../components/placeholder";
 
-function ChartBuilderMapping(props: ChartBuilderMappingProps) {
+function ChartBuilderMapping(props: Readonly<ChartBuilderMappingProps>) {
   useTitle("DX DataXplorer - Mapping");
 
   const history = useHistory();
@@ -70,6 +70,7 @@ function ChartBuilderMapping(props: ChartBuilderMappingProps) {
                 renderedChartMappedData={props.renderedChartMappedData}
                 setChartErrorMessage={props.setChartErrorMessage}
                 setNotFound={props.setNotFound}
+                renderedChartType={props.renderedChartType}
               />
             )}
           </div>

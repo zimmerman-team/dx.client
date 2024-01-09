@@ -19,22 +19,22 @@ import FileCopyIcon from "@material-ui/icons/FileCopy";
 import { PageLoader } from "app/modules/common/page-loader";
 import { Link, useHistory, useParams } from "react-router-dom";
 import SnackbarContent from "@material-ui/core/SnackbarContent";
-import { styles } from "app/modules/common/subheader-toolbar/styles";
+import { styles } from "app/modules/chart-module/components/chartSubheaderToolbar/styles";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import DeleteChartDialog from "app/components/Dialogs/deleteChartDialog";
 import DeleteReportDialog from "app/components/Dialogs/deleteReportDialog";
 import { ChartAPIModel, emptyChartAPI } from "app/modules/chart-module/data";
-import { SubheaderToolbarProps } from "app/modules/common/subheader-toolbar/data";
-import { ExportChartButton } from "app/modules/common/subheader-toolbar/exportButton";
+import { SubheaderToolbarProps } from "app/modules/chart-module/components/chartSubheaderToolbar/data";
+import { ExportChartButton } from "app/modules/chart-module/components/chartSubheaderToolbar/exportButton";
 import { ISnackbarState } from "app/fragments/datasets-fragment/upload-steps/previewFragment";
 import {
   homeDisplayAtom,
   createChartFromReportAtom,
   reportRightPanelViewAtom,
 } from "app/state/recoil/atoms";
-import { InfoSnackbar } from "app/modules/common/subheader-toolbar/infoSnackbar";
+import { InfoSnackbar } from "app/modules/chart-module/components/chartSubheaderToolbar/infoSnackbar";
 
-export function SubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
+export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
   const history = useHistory();
   const { user, isAuthenticated } = useAuth0();
   const token = useStoreState((state) => state.AuthToken.value);
@@ -186,13 +186,7 @@ export function SubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
     ) {
       //returns back to persisted report view
       setRightPanelView("charts");
-      if (createChartFromReport.view === undefined) {
-        history.push(`/report/${createChartFromReport.page}/edit`);
-      } else {
-        history.push(
-          `/report/${createChartFromReport.page}/${createChartFromReport.view}`
-        );
-      }
+      history.push(`/report/${createChartFromReport.page}/edit`);
     } else if (editChartSuccess && !createChartFromReport.state) {
       //returns back to chart detail page
       history.push(`/chart/${page}`);

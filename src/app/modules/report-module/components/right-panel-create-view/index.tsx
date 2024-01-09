@@ -1,43 +1,69 @@
+/* third-party */
 import React from "react";
 import find from "lodash/find";
 import { useDrag } from "react-dnd";
 import { useRecoilState } from "recoil";
-import Paper from "@material-ui/core/Paper";
-import { useSessionStorage } from "react-use";
 import MuiButton from "@material-ui/core/Button";
 import MenuItem from "@material-ui/core/MenuItem";
-import { EditorState, convertToRaw } from "draft-js";
+import { EditorState } from "draft-js";
+import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
 import { SearchIcon } from "app/assets/icons/Search";
 import { withStyles } from "@material-ui/core/styles";
 import { useHistory, useParams } from "react-router-dom";
 import Menu, { MenuProps } from "@material-ui/core/Menu";
 import TextFieldsIcon from "@material-ui/icons/TextFields";
-import ArrowRightAltIcon from "@material-ui/icons/ArrowRightAlt";
-import HeaderIcon from "app/modules/report-module/asset/HeaderIcon";
-import { useStoreActions, useStoreState } from "app/state/store/hooks";
-import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
-import GridItem from "app/modules/home-module/components/Charts/rhpGridItem";
-import { IFramesArray } from "app/modules/report-module/views/create/data";
-import EditHeaderIcon from "app/modules/report-module/asset/EditHeaderIcon";
-import TextPreviewImg from "app/modules/report-module/asset/textPreview.svg";
-import { echartTypes } from "app/modules/chart-module/routes/chart-type/data";
-import DividerPreviewImg from "app/modules/report-module/asset/dividerPreview.svg";
-import HeaderPreviewImg from "app/modules/report-module/asset/headerPreviewImg.svg";
-import RowFramePreviewImg from "app/modules/report-module/asset/rowframePreview.svg";
-import { ReactComponent as AddNewImage } from "app/modules/home-module/assets/add-img.svg";
-import { ReactComponent as DividerIcon } from "app/modules/report-module/asset/dividerIcon.svg";
-import ChartOptionColor from "app/modules/chart-module/routes/customize/components/ChartOptionColor";
-import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
-
 import {
-  persistedReportStateAtom,
   reportRightPanelViewAtom,
   createChartFromReportAtom,
   isDividerOrRowFrameDraggingAtom,
   isChartDraggingAtom,
 } from "app/state/recoil/atoms";
 import { Close } from "@material-ui/icons";
-import { IconButton } from "@material-ui/core";
+import { IconButton, Tooltip } from "@material-ui/core";
+import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
+import PhotoLibraryIcon from "@material-ui/icons/PhotoLibrary";
+/* project */
+import { useStoreActions, useStoreState } from "app/state/store/hooks";
+
+import { IFramesArray } from "app/modules/report-module/views/create/data";
+import EditHeaderIcon from "app/modules/report-module/asset/EditHeaderIcon";
+import TextPreviewImg from "app/modules/report-module/asset/textPreview.svg";
+import { Charts } from "app/modules/report-module/components/right-panel-create-view/data";
+import DividerPreviewImg from "app/modules/report-module/asset/dividerPreview.svg";
+import HeaderPreviewImg from "app/modules/report-module/asset/headerPreviewImg.svg";
+import RowFramePreviewImg from "app/modules/report-module/asset/rowframePreview.svg";
+import { ReactComponent as AddNewImage } from "app/modules/home-module/assets/add-img.svg";
+import { ReactComponent as DividerIcon } from "app/modules/report-module/asset/dividerIcon.svg";
+import { ReactComponent as ActiveChartIcon } from "app/modules/report-module/asset/active-chart-icon.svg";
+import { ReactComponent as ActiveElementsIcon } from "app/modules/report-module/asset/active-elements-icon.svg";
+import { ReactComponent as ActiveMediaIcon } from "app/modules/report-module/asset/active-media-icon.svg";
+import { ReactComponent as ChartIcon } from "app/modules/report-module/asset/chart-icon.svg";
+import { ReactComponent as MediaIcon } from "app/modules/report-module/asset/media-icon.svg";
+import { ReactComponent as ElementsIcon } from "app/modules/report-module/asset/elements-icon.svg";
+import { ReactComponent as VideoIcon } from "app/modules/report-module/asset/video-icon.svg";
+import ChartOptionColor from "app/modules/chart-module/routes/customize/components/ChartOptionColor";
+import { ReactComponent as RowframeIcon } from "app/modules/report-module/asset/rowframe-icon.svg";
+import PanelLabel from "app/modules/report-module/components/right-panel-create-view/panelLabel";
+import { elementItemcss } from "app/modules/report-module/components/right-panel-create-view/style";
+import GridItem from "app/modules/report-module/components/right-panel-create-view/rhpGridItem";
+
+interface IHeaderDetails {
+  title: string;
+  showHeader: boolean;
+  description: EditorState;
+  backgroundColor: string;
+  titleColor: string;
+  descriptionColor: string;
+  dateColor: string;
+}
+interface Props {
+  showHeaderItem: boolean;
+  headerDetails: IHeaderDetails;
+  setHeaderDetails: React.Dispatch<React.SetStateAction<IHeaderDetails>>;
+  framesArray: IFramesArray[];
+  reportName: string;
+  handlePersistReportState: () => void;
+}
 
 const Button = withStyles(() => ({
   root: {
@@ -120,58 +146,96 @@ export const ReportElementsType = {
   HEADER: "header",
   CHART: "chart",
   BIG_NUMBER: "bigNumber",
+  IMAGE: "image",
+  VIDEO: "video",
 };
+const sortByOptions = [
+  { value: "createdDate desc", label: "Recent (DESC)" },
+  { value: "createdDate asc", label: "Recent (ASC)" },
+  { value: "name desc", label: "Name (DESC)" },
+  { value: "name asc", label: "Name (ASC)" },
+];
 
-interface IHeaderDetails {
-  title: string;
-  showHeader: boolean;
-  description: EditorState;
-  backgroundColor: string;
-  titleColor: string;
-  descriptionColor: string;
-  dateColor: string;
-}
-interface Props {
-  showHeaderItem: boolean;
-
-  headerDetails: IHeaderDetails;
-  setHeaderDetails: React.Dispatch<React.SetStateAction<IHeaderDetails>>;
-  framesArray: IFramesArray[];
-  reportName: string;
-  handlePersistReportState: () => void;
-}
-
-export function ReportRightPanelCreateView(props: Props) {
+export function ReportRightPanelCreateView(props: Readonly<Props>) {
   const [currentView, setCurrentView] = useRecoilState(
     reportRightPanelViewAtom
   );
+  const whiteBackgroundOnly = "background-color: #fff;";
+  const whiteBackgroundRoundedBottomRight =
+    whiteBackgroundOnly + " border-radius: 0px 0px 8px 0px;";
+  const whiteBackgroundRoundedBottomLeft =
+    whiteBackgroundOnly + " border-radius: 0px 0px 0px 8px;";
+  const whiteBackgroundNotRounded =
+    whiteBackgroundOnly + " border-radius: 0px 0px 0px 0px";
 
-  const elementItemDetails = [
+  const [elementItemDetails, setElementItemDetails] = React.useState([
     {
       elementType: ReportElementsType.HEADER,
-      leftIcon: <HeaderIcon />,
+      leftIcon: <EditHeaderIcon />,
       previewImg: HeaderPreviewImg,
       name: "Header",
+      description: "Remove or add header to your report",
+      openTooltip: false,
     },
     {
       elementType: ReportElementsType.ROWFRAME,
-      leftIcon: <ArrowRightAltIcon />,
+      leftIcon: <RowframeIcon />,
       previewImg: RowFramePreviewImg,
-      name: "Row Frame",
+      name: "Add row frame",
+      description: "Start adding placeholders to fit with your content",
+      openTooltip: false,
     },
-    {
-      elementType: ReportElementsType.TEXT,
-      leftIcon: <TextFieldsIcon />,
-      previewImg: TextPreviewImg,
-      name: "Text",
-    },
+
     {
       elementType: ReportElementsType.DIVIDER,
       leftIcon: <DividerIcon />,
       previewImg: DividerPreviewImg,
-      name: "Divider",
+      name: "Add divider",
+      description: "Use dividers to separate sections ",
+      openTooltip: false,
     },
-  ];
+  ]);
+
+  const [mediaItemDetails, setMediaItemDetails] = React.useState([
+    {
+      elementType: ReportElementsType.TEXT,
+      leftIcon: (
+        <TextFieldsIcon
+          css={`
+            width: 48px;
+            height: 48px;
+          `}
+        />
+      ),
+      previewImg: TextPreviewImg,
+      name: "Add text box",
+      description: "Include written content to enrich your reports",
+      openTooltip: false,
+    },
+    {
+      elementType: ReportElementsType.IMAGE,
+      leftIcon: (
+        <PhotoLibraryIcon
+          css={`
+            width: 36px;
+            height: 36px;
+          `}
+        />
+      ),
+      previewImg: TextPreviewImg,
+      name: "Add image",
+      description: "Include imagery content to enrich your reports",
+      openTooltip: false,
+    },
+    {
+      elementType: ReportElementsType.VIDEO,
+      leftIcon: <VideoIcon />,
+      previewImg: TextPreviewImg,
+      name: "Add video",
+      description: "Include video content to enrich your report",
+      openTooltip: false,
+    },
+  ]);
 
   React.useEffect(() => {
     if (!props.headerDetails.showHeader && currentView === "editHeader") {
@@ -192,28 +256,103 @@ export function ReportRightPanelCreateView(props: Props) {
       <div
         css={`
           width: 100%;
-          display: flex;
-          flex-direction: row;
-          display: ${currentView === "editHeader" ? "none" : "block"};
+          display: ${currentView === "editHeader" ? "none" : "flex"};
+          height: 67px;
+          background: #f1f3f5;
+          align-items: center;
+          button {
+            padding: 20px;
+            height: 100%;
+            :hover {
+              background: transparent;
+              border-radius: none;
+            }
+          }
         `}
       >
-        <Button
+        <IconButton
+          disableRipple
           onClick={() => setCurrentView("elements")}
           css={`
-            ${currentView === "elements" && "background-color: #70777E;"}
+            ${(() => {
+              if (currentView === "elements") {
+                return "background: transparent;";
+              } else if (currentView === "charts") {
+                return whiteBackgroundRoundedBottomRight;
+              } else if (currentView === "media") {
+                return whiteBackgroundNotRounded;
+              } else {
+                return "";
+              }
+            })()}
           `}
         >
-          Layout elements
-        </Button>
-        <Button
+          {currentView === "elements" ? (
+            <ActiveElementsIcon />
+          ) : (
+            <ElementsIcon />
+          )}
+        </IconButton>
+        <IconButton
+          disableRipple
           onClick={() => setCurrentView("charts")}
           css={`
-            ${currentView === "charts" && "background-color: #70777E;"}
+            ${(() => {
+              if (currentView === "elements") {
+                return whiteBackgroundRoundedBottomLeft;
+              } else if (currentView === "charts") {
+                return "background-color: transparent;";
+              } else if (currentView === "media") {
+                return whiteBackgroundRoundedBottomRight;
+              } else {
+                return "";
+              }
+            })()}
           `}
         >
-          Charts
-        </Button>
+          {currentView === "charts" ? <ActiveChartIcon /> : <ChartIcon />}
+        </IconButton>
+
+        <IconButton
+          disableRipple
+          onClick={() => setCurrentView("media")}
+          css={`
+            ${(() => {
+              if (currentView === "elements") {
+                return whiteBackgroundNotRounded;
+              } else if (currentView === "charts") {
+                return whiteBackgroundRoundedBottomLeft;
+              } else if (currentView === "media") {
+                return "background: transparent;";
+              } else {
+                return "";
+              }
+            })()}
+          `}
+        >
+          {currentView === "media" ? <ActiveMediaIcon /> : <MediaIcon />}
+        </IconButton>
+
+        <div
+          css={`
+            ${(() => {
+              if (currentView === "elements") {
+                return "background-color: #fff;";
+              } else if (currentView === "charts") {
+                return "background-color: #fff;";
+              } else if (currentView === "media") {
+                return whiteBackgroundRoundedBottomLeft;
+              } else {
+                return "";
+              }
+            })()}
+            width: 100%;
+            height: 100%;
+          `}
+        ></div>
       </div>
+
+      <PanelLabel currentView={currentView} />
       {currentView === "elements" && (
         <div
           css={`
@@ -221,21 +360,6 @@ export function ReportRightPanelCreateView(props: Props) {
             display: flex;
             user-select: none;
             flex-direction: column;
-
-            > div {
-              width: 100%;
-              cursor: grab;
-              height: 55px;
-              display: flex;
-              padding: 0 25px;
-              align-items: center;
-              background-color: #f2f7fd;
-              border-bottom: 1px solid #cfd4da;
-
-              > svg {
-                margin-right: 25px;
-              }
-            }
           `}
         >
           {elementItemDetails.map((item) => (
@@ -259,24 +383,44 @@ export function ReportRightPanelCreateView(props: Props) {
           handlePersistReportState={props.handlePersistReportState}
         />
       )}
+      {currentView === "media" && (
+        <div
+          css={`
+            width: 100%;
+            display: flex;
+            user-select: none;
+            flex-direction: column;
+            background: transparent;
+          `}
+        >
+          {mediaItemDetails.map((item, index) => (
+            <ElementItem
+              key={item.elementType}
+              {...item}
+              disabled={
+                item.elementType === ReportElementsType.IMAGE ||
+                item.elementType === ReportElementsType.VIDEO
+              }
+              ItemDetails={mediaItemDetails}
+              setItemDetails={setMediaItemDetails}
+              index={index}
+            />
+          ))}
+        </div>
+      )}
       {currentView === "editHeader" && <EditHeaderPanelView {...props} />}
     </div>
   );
 }
 
-const sortByOptions = [
-  { value: "createdDate desc", label: "Recent (DESC)" },
-  { value: "createdDate asc", label: "Recent (ASC)" },
-  { value: "name desc", label: "Name (DESC)" },
-  { value: "name asc", label: "Name (ASC)" },
-];
-
-function ReportRightPanelCreateViewChartList(props: {
-  headerDetails: IHeaderDetails;
-  framesArray: IFramesArray[];
-  reportName: string;
-  handlePersistReportState: () => void;
-}) {
+function ReportRightPanelCreateViewChartList(
+  props: Readonly<{
+    headerDetails: IHeaderDetails;
+    framesArray: IFramesArray[];
+    reportName: string;
+    handlePersistReportState: () => void;
+  }>
+) {
   const token = useStoreState((state) => state.AuthToken.value);
 
   const [search, setSearch] = React.useState("");
@@ -310,12 +454,11 @@ function ReportRightPanelCreateViewChartList(props: {
       <div
         css={`
           width: 100%;
+          gap: 8px;
           display: flex;
-          padding: 12px;
+          padding: 12px 23px;
           position: relative;
           flex-direction: row;
-          border-bottom: 1px solid #cfd4da;
-
           > svg {
             top: 17px;
             right: 200px;
@@ -327,7 +470,7 @@ function ReportRightPanelCreateViewChartList(props: {
           type="text"
           onChange={(e) => setSearch(e.target.value)}
           css={`
-            width: 200px;
+            width: 187px;
             height: 35px;
             border-style: none;
             background: #dfe3e6;
@@ -342,27 +485,27 @@ function ReportRightPanelCreateViewChartList(props: {
           css={`
             width: 159px;
             height: 35px;
-            margin-left: 16px;
             border-radius: 24px;
-            background: #dfe3e6;
+            background: #231d2c;
             text-transform: capitalize;
+            padding-left: 16px;
 
             svg {
               margin-left: 10px;
               transition: all 0.2s ease-in-out;
               transform: rotate(${anchorEl ? "180" : "0"}deg);
               > path {
-                fill: #231d2c;
+                fill: #fff;
               }
             }
           `}
         >
           <span
             css={`
-              color: #231d2c;
+              color: #fff;
               font-size: 14px;
               overflow: hidden;
-              font-weight: 400;
+              font-weight: 325;
               white-space: nowrap;
               text-overflow: ellipsis;
               font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
@@ -398,7 +541,10 @@ function ReportRightPanelCreateViewChartList(props: {
           width: 100%;
           display: flex;
           overflow-y: auto;
-          padding: 18px 23px;
+          padding: 0px 23px;
+          margin-top: 8px;
+          margin-bottom: 16px;
+
           flex-direction: column;
 
           height: calc(100vh - 48px - 50px - 52px - 60px);
@@ -452,7 +598,15 @@ function ElementItem(props: {
   elementType: string;
   name: string;
   disabled?: boolean;
+  openTooltip?: boolean;
+  setOpenTooltip?: React.Dispatch<React.SetStateAction<boolean>>;
+  ItemDetails?: any[];
+  setItemDetails?: React.Dispatch<React.SetStateAction<any[]>>;
+  index?: number;
+  description: string;
 }) {
+  const nullRef = React.useRef(null);
+
   const [{ isDragging }, drag] = useDrag(() => ({
     type: props.elementType,
     item: {
@@ -478,22 +632,46 @@ function ElementItem(props: {
     }
   }, [isDragging]);
 
+  const isImageElement = props.elementType === ReportElementsType.IMAGE;
+  const isVideoElement = props.elementType === ReportElementsType.VIDEO;
   return (
-    <div
-      ref={drag}
-      id={props.name}
-      css={`
-        border: 1px solid ${isDragging ? "#6061E5" : "transparent"};
-
-        &:hover {
-          border-color: #6061e5;
+    <Tooltip
+      title={"To be implemented"}
+      placement="bottom-end"
+      open={props.openTooltip}
+      onClose={() => {
+        if (props.ItemDetails && props.index) {
+          props.setItemDetails?.((prev) => {
+            const tempPrev = prev.map((item) => ({ ...item }));
+            tempPrev[props.index as number].openTooltip = false;
+            return [...tempPrev];
+          });
         }
-      `}
-      style={props.disabled ? { opacity: 0.5, pointerEvents: "none" } : {}}
+      }}
+      onOpen={() => {
+        if (props.disabled) {
+          if (props.ItemDetails && props.index) {
+            props.setItemDetails?.((prev) => {
+              const tempPrev = prev.map((item) => ({ ...item }));
+              tempPrev[props.index as number].openTooltip = true;
+              return [...tempPrev];
+            });
+          }
+        }
+      }}
     >
-      {props.leftIcon}
-      {props.name}
-    </div>
+      <div
+        ref={isImageElement || isVideoElement ? nullRef : drag}
+        id={props.name}
+        css={elementItemcss(props.disabled as boolean, isDragging)}
+      >
+        {props.leftIcon}
+        <div>
+          <b>{props.name}</b>
+          <p>{props.description}</p>
+        </div>
+      </div>
+    </Tooltip>
   );
 }
 
@@ -527,6 +705,7 @@ function CreateChartCard(props: {
       state: true,
       view,
       page,
+      action: "create",
     });
     setDataset(null);
     setLoadedChart(null);
@@ -595,17 +774,24 @@ function CreateChartCard(props: {
   );
 }
 
-function ChartItem(props: {
-  id: string;
-  chartIndex: number;
-  name: string;
-  vizType: string;
-  datasetId: string;
-  createdDate: string;
-  elementType: "chart" | "bigNumber";
-  framesArray: IFramesArray[];
-}) {
+function ChartItem(
+  props: Readonly<{
+    id: string;
+    chartIndex: number;
+    name: string;
+    vizType: string;
+    datasetId: string;
+    createdDate: string;
+    elementType: "chart" | "bigNumber";
+    framesArray: IFramesArray[];
+  }>
+) {
   const nullRef = React.useRef(null);
+  const [chartPreview, setChartPreview] = React.useState(false);
+  const [createChartFromReport, setCreateChartFromReport] = useRecoilState(
+    createChartFromReportAtom
+  );
+
   const [{ isDragging }, drag] = useDrag(() => ({
     type: props.elementType,
     item: {
@@ -617,12 +803,26 @@ function ChartItem(props: {
     }),
   }));
 
+  React.useEffect(() => {
+    const timeout = setTimeout(() => {
+      setCreateChartFromReport({
+        state: false,
+        page: "",
+        view: "",
+        action: null,
+      });
+    }, 3000);
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, []);
+
   const getIcon = (vizType: string) => {
-    const type = find(echartTypes(true), { id: vizType });
+    const type = find(Charts, { id: vizType });
     if (type) {
       return type.icon;
     }
-    return echartTypes(true)[0].icon;
+    return Charts[0].icon;
   };
 
   let added = false;
@@ -644,19 +844,23 @@ function ChartItem(props: {
 
   return (
     <div
-      ref={added ? nullRef : drag}
+      ref={added || chartPreview ? nullRef : drag}
       id={`chart-${props.chartIndex}`}
+      className={
+        props.chartIndex === 0 && createChartFromReport.action === "create"
+          ? "rhcpCard"
+          : ""
+      }
       css={`
         width: 100%;
         font-size: 12px;
         background: #fff;
         user-select: none;
         cursor: ${added ? "auto" : "grab"};
-        border: 1px solid ${isDragging && !added ? "#6061E5" : "#fff"};
 
         ${!added &&
         `&:hover {
-          border-color: #6061e5;
+          box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.25);
         }`}
 
         > div {
@@ -671,6 +875,8 @@ function ChartItem(props: {
         date={props.createdDate}
         viz={getIcon(props.vizType)}
         added={added}
+        chartPreview={chartPreview}
+        setChartPreview={setChartPreview}
         descr="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
       />
     </div>

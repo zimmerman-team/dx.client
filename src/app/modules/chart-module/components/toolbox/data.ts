@@ -31,7 +31,6 @@ export interface ChartToolBoxProps {
   exportView: boolean;
   rawViz: any;
   dataTypes: any;
-  previewMode: boolean;
   addVizToLocalStates: () => void;
   filterOptionGroups: FilterGroupModel[];
   setVisualOptions: (value: any) => void;

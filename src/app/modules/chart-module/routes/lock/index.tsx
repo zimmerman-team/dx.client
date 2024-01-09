@@ -10,7 +10,7 @@ import { CommonChart } from "app/modules/chart-module/components/common-chart";
 import { ChartBuilderLockProps } from "app/modules/chart-module/routes/lock/data";
 import { styles as commonStyles } from "app/modules/chart-module/routes/common/styles";
 
-function ChartBuilderLock(props: ChartBuilderLockProps) {
+function ChartBuilderLock(props: Readonly<ChartBuilderLockProps>) {
   useTitle("DX DataXplorer - Lock");
 
   const history = useHistory();
@@ -46,6 +46,7 @@ function ChartBuilderLock(props: ChartBuilderLockProps) {
             renderedChartMappedData={props.renderedChartMappedData}
             setChartErrorMessage={props.setChartErrorMessage}
             setNotFound={props.setNotFound}
+            renderedChartType={props.renderedChartType}
           />
         </div>
       </div>

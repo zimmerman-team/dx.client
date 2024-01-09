@@ -1,6 +1,5 @@
 import React from "react";
 import get from "lodash/get";
-import { useSessionStorage } from "react-use";
 import Skeleton from "@material-ui/lab/Skeleton";
 import { useChartsRawData } from "app/hooks/useChartsRawData";
 import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
@@ -15,6 +14,7 @@ import {
 interface Props {
   id: string;
   width: string;
+  chartPreviewInReport?: boolean;
 }
 
 export function ReportChartWrapper(props: Props) {
@@ -47,6 +47,10 @@ export function ReportChartWrapper(props: Props) {
       : get(chartFromAPI, "content", "");
   }, [chartFromAPI]);
 
+  const resetAppliedFilters = useStoreActions(
+    (actions) => actions.charts.appliedFilters.reset
+  );
+
   const renderedChartMappedData = React.useMemo(() => {
     return get(chartFromAPI, "mappedData", []);
   }, [chartFromAPI]);
@@ -58,6 +62,9 @@ export function ReportChartWrapper(props: Props) {
   const renderedChartType = React.useMemo(() => {
     return get(chartFromAPI, "vizType", "echartsBarchart");
   }, [chartFromAPI]);
+
+  const displayChartName =
+    renderedChartType !== "bigNumber" && !props.chartPreviewInReport;
 
   React.useEffect(() => {
     if (token.length > 0) {
@@ -89,6 +96,9 @@ export function ReportChartWrapper(props: Props) {
     if (props.id) {
       loadChartDataFromAPI(undefined, props.id);
     }
+    return () => {
+      resetAppliedFilters();
+    };
   }, [props.id, token]);
 
   React.useEffect(() => {
@@ -190,7 +200,7 @@ export function ReportChartWrapper(props: Props) {
         <Skeleton animation="wave" variant="rect" width="100%" height="100%" />
       </div>
 
-      {renderedChartType !== "bigNumber" && (
+      {displayChartName && (
         <h4
           css={`
             margin: 0;
@@ -213,6 +223,7 @@ export function ReportChartWrapper(props: Props) {
         setChartErrorMessage={setChartErrorMessage}
         setNotFound={setNotFound}
         inChartWrapper={true}
+        chartPreviewInReport={props.chartPreviewInReport}
       />
     </div>
   );

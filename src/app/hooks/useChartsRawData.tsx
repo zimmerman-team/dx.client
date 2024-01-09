@@ -100,6 +100,7 @@ export function useChartsRawData(props: {
   const setAllAppliedFilters = useStoreActions(
     (actions) => actions.charts.appliedFilters.setAll
   );
+
   const setEnabledFilterOptionGroups = useStoreActions(
     (actions) => actions.charts.enabledFilterOptionGroups.setValue
   );
@@ -117,10 +118,10 @@ export function useChartsRawData(props: {
   const setSelectedChartType = useStoreActions(
     (actions) => actions.charts.chartType.setValue
   );
-  const isEditMode = !(
-    (page !== "new" && view === undefined) ||
-    view === "preview"
-  );
+  const chartDetailPage = location.pathname === `/chart/${page}`;
+  const isPreviewMode =
+    location.pathname === `/chart/${page}` ||
+    location.pathname === `/chart/${page}/preview`;
 
   async function loadDataset(endpoint: string) {
     const extraLoader = document.getElementById("extra-loader");
@@ -177,7 +178,7 @@ export function useChartsRawData(props: {
     ],
     chartId?: string
   ) {
-    if ((chartId || page) && !isEmpty(token)) {
+    if ((chartId || page) && page !== "new" && !isEmpty(token)) {
       const body = {
         previewAppliedFilters: customAppliedFilters
           ? customAppliedFilters
@@ -224,15 +225,21 @@ export function useChartsRawData(props: {
   }
 
   React.useEffect(() => {
-    if (
-      !props.inChartWrapper &&
-      page !== "new" &&
-      (isEditMode || !props.inChartWrapper) &&
-      !isLoading
-    ) {
+    // calls loadChartDataFromAPI only in chart detail page
+    if (!props.inChartWrapper && chartDetailPage && !isLoading) {
       loadChartDataFromAPI();
     }
-  }, [page, isEditMode, props.inChartWrapper, isLoading, token]);
+  }, [page, props.inChartWrapper, isLoading, token]);
+
+  React.useEffect(() => {
+    // calls loadChartDataFromAPI  on first render  when token is available or token changes
+    // useful when coming from report page to edit chart page
+    // if in chart wrapper component, loadChartDataFromAPI is called from chart-wrapper component
+    if (!props.inChartWrapper && !isEmpty(token)) {
+      console.log("boo");
+      loadChartDataFromAPI();
+    }
+  }, [token]);
 
   const renderChartFromAPI = () => {
     const extraLoader = document.getElementById("extra-loader");
@@ -295,10 +302,13 @@ export function useChartsRawData(props: {
   };
 
   useUpdateEffect(() => {
+    // calls renderChartFromAPI only in chart editable pages
+    // calls only when token is available
+    // calls only when dataset is not empty and loading state is false
     if (
       !loading &&
       !props.inChartWrapper &&
-      isEditMode &&
+      !isPreviewMode &&
       !isEmpty(dataset) &&
       token
     ) {
@@ -325,7 +335,7 @@ export function useChartsRawData(props: {
     dataTypesFromRenderedChart,
     dataStats,
     sampleData,
-    isEditMode,
+    isPreviewMode,
     dataTotalCount,
     loadDataset,
     loadChartDataFromAPI,

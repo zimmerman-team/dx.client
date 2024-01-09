@@ -1,6 +1,5 @@
 import { Container, IconButton, Popover, Tooltip } from "@material-ui/core";
 import { LinkIcon } from "app/assets/icons/Link";
-import { ExportChartButton } from "app/modules/common/subheader-toolbar/exportButton";
 import FileCopyIcon from "@material-ui/icons/FileCopy";
 import ShareIcon from "@material-ui/icons/Share";
 import EditIcon from "@material-ui/icons/Edit";

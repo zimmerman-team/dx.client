@@ -1,3 +1,4 @@
+/* third party */
 import React from "react";
 import axios from "axios";
 import get from "lodash/get";
@@ -6,6 +7,7 @@ import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import useDebounce from "react-use/lib/useDebounce";
 import { useUpdateEffect } from "react-use";
+/* project */
 import { useInfinityScroll } from "app/hooks/useInfinityScroll";
 import CircleLoader from "app/modules/home-module/components/Loader";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
@@ -56,12 +58,14 @@ export default function ChartsGrid(props: Props) {
     (state) => state.charts.ChartGetList.success
   );
 
-  const getFilterString = () => {
+  const getFilterString = (fromZeroOffset?: boolean) => {
     const value =
       props.searchStr?.length > 0
         ? `"where":{"name":{"like":"${props.searchStr}.*","options":"i"}},`
         : "";
-    return `filter={${value}"order":"${props.sortBy} desc","limit":${limit},"offset":${offset}}`;
+    return `filter={${value}"order":"${
+      props.sortBy
+    } desc","limit":${limit},"offset":${fromZeroOffset ? 0 : offset}}`;
   };
 
   const getWhereString = () => {
@@ -70,47 +74,38 @@ export default function ChartsGrid(props: Props) {
       : "";
   };
 
-  const loadData = async () => {
+  const loadData = (fromZeroOffset?: boolean) => {
     if (token) {
-      await loadCharts({
+      loadCharts({
         token,
         storeInCrudData: true,
-        filterString: getFilterString(),
+        filterString: getFilterString(fromZeroOffset),
       });
     } else {
       loadCharts({
         nonAuthCall: true,
         storeInCrudData: true,
-        filterString: getWhereString(),
+        filterString: getFilterString(fromZeroOffset),
       });
     }
   };
 
-  const reloadData = async () => {
-    setOffset(0);
+  const reloadData = () => {
     if (token) {
       loadChartsCount({ token, filterString: getWhereString() });
     } else {
       loadChartsCount({ nonAuthCall: true, filterString: getWhereString() });
     }
     setLoadedCharts([]);
-    loadData();
-  };
+    setOffset(0);
 
-  React.useEffect(() => {
-    if (token) {
-      loadChartsCount({
-        token,
-      });
-    } else {
-      loadChartsCount({ nonAuthCall: true, filterString: getWhereString() });
-    }
-  }, [token]);
+    loadData(true);
+  };
 
   React.useEffect(() => {
     //load data if intersection observer is triggered
     if (chartsCount > limit) {
-      if (isObserved) {
+      if (isObserved && chartsLoadSuccess) {
         if (loadedCharts.length !== chartsCount) {
           //update the offset value for the next load
           setOffset(offset + limit);
@@ -120,12 +115,11 @@ export default function ChartsGrid(props: Props) {
   }, [isObserved]);
 
   useUpdateEffect(() => {
+    if (offset === 0) {
+      return;
+    }
     loadData();
-  }, [offset]);
-
-  React.useEffect(() => {
-    reloadData();
-  }, [props.sortBy, token]);
+  }, [offset, token]);
 
   const handleDelete = (index?: number) => {
     setModalDisplay(false);
@@ -195,6 +189,10 @@ export default function ChartsGrid(props: Props) {
       return [...prevCharts, ...f];
     });
   }, [chartsLoadSuccess]);
+
+  React.useEffect(() => {
+    reloadData();
+  }, [props.sortBy, token]);
 
   const [,] = useDebounce(
     () => {

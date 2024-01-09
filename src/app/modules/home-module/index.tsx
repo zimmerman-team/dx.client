@@ -95,8 +95,6 @@ export default function HomeModule() {
     setSearchValue(undefined);
   }, [display]);
 
-  console.log(searchValue, "searchValue");
-
   const displayGrid = (searchStr: string, sortByStr: string) => {
     switch (display) {
       case "data":

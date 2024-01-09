@@ -306,6 +306,7 @@ const Box = (props: {
       state: true,
       view,
       page,
+      action: "edit",
     });
     setDataset(null);
     setLoadedChart(null);

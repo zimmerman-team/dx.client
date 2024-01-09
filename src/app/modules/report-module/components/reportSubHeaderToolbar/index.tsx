@@ -28,8 +28,8 @@ import DeleteChartDialog from "app/components/Dialogs/deleteChartDialog";
 import { ReportModel, emptyReport } from "app/modules/report-module/data";
 import DeleteReportDialog from "app/components/Dialogs/deleteReportDialog";
 import { ChartAPIModel, emptyChartAPI } from "app/modules/chart-module/data";
-import { ExportChartButton } from "app/modules/common/subheader-toolbar/exportButton";
-import { ReportSubheaderToolbarProps } from "app/modules/common/subheader-toolbar/data";
+import { ExportChartButton } from "app/modules/chart-module/components/chartSubheaderToolbar/exportButton";
+import { ReportSubheaderToolbarProps } from "app/modules/chart-module/components/chartSubheaderToolbar/data";
 import { ReactComponent as PlayIcon } from "app/modules/report-module/asset/play-icon.svg";
 import { styles } from "app/modules/report-module/components/reportSubHeaderToolbar/styles";
 import { ISnackbarState } from "app/fragments/datasets-fragment/upload-steps/previewFragment";
@@ -133,9 +133,6 @@ export function ReportSubheaderToolbar(props: ReportSubheaderToolbarProps) {
     (state) => (state.reports.ReportGet.crudData ?? emptyReport) as ReportModel
   );
 
-  const loadCharts = useStoreActions(
-    (actions) => actions.charts.ChartGetList.fetch
-  );
   const loadedChart = useStoreState(
     (state) =>
       (state.charts.ChartGet.crudData ?? emptyChartAPI) as ChartAPIModel

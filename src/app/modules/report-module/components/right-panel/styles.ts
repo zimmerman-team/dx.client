@@ -8,7 +8,7 @@ export const styles = {
     width: 400px;
     display: flex;
     position: fixed;
-    background: #f2f7fd;
+    background: #f1f3f5;
     flex-direction: column;
     height: calc(100vh - ${isToolbarVisisble ? "153px" : "98px"});
     transition: all cubic-bezier(0.4, 0, 0.2, 1) 0.2s;

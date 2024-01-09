@@ -167,10 +167,10 @@ export default function PartnersModule() {
                 textColor="primary"
                 className="Home-MuiTabs-flexContainer"
               >
-                <StyledTab label="About" value={0} />
-                <StyledTab label="Grants" value={1} />
-                <StyledTab label="Budgets" value={2} />
-                <StyledTab label="Performance" value={3} />
+                <StyledTab disableTouchRipple label="About" value={0} />
+                <StyledTab disableTouchRipple label="Grants" value={1} />
+                <StyledTab disableTouchRipple label="Budgets" value={2} />
+                <StyledTab disableTouchRipple label="Performance" value={3} />
               </StyledTabs>
             </div>
             <div>

@@ -152,13 +152,7 @@ export function ChartModuleToolBox(props: ChartToolBoxProps) {
         ...createChartFromReport,
         state: false,
       });
-      if (createChartFromReport.view === undefined) {
-        history.push(`/report/${createChartFromReport.page}/edit`);
-      } else {
-        history.push(
-          `/report/${createChartFromReport.page}/${createChartFromReport.view}`
-        );
-      }
+      history.push(`/report/${createChartFromReport.page}/edit`);
     }
   }
 

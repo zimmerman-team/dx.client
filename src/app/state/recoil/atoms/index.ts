@@ -65,7 +65,7 @@ export const homeDisplayAtom = atom<"data" | "charts" | "reports">({
 });
 
 export const reportRightPanelViewAtom = atom<
-  "elements" | "charts" | "editHeader"
+  "elements" | "charts" | "media" | "editHeader"
 >({
   key: "reportRightPanelViewAtom",
   default: "elements",
@@ -116,12 +116,14 @@ export const createChartFromReportAtom = atom<{
   state: boolean;
   view: string;
   page: string;
+  action: "create" | "edit" | null;
 }>({
   key: "createChartFromReportAtom",
   default: {
     state: false,
     view: "",
     page: "",
+    action: null,
   },
   effects_UNSTABLE: [persistAtom],
 });
