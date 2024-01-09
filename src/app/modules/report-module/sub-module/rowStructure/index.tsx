@@ -14,6 +14,7 @@ import { useHistory, useLocation, useParams } from "react-router-dom";
 import { RichEditor } from "app/modules/chart-module/routes/text/RichEditor";
 import { ReportChartWrapper } from "app/modules/report-module/components/chart-wrapper";
 import { ReactComponent as EditIcon } from "app/modules/report-module/asset/editIcon.svg";
+import ZoomOutMapIcon from "@material-ui/icons/ZoomOutMap";
 import { ReactComponent as DeleteIcon } from "app/modules/report-module/asset/deleteIcon.svg";
 import { ReportElementsType } from "app/modules/report-module/components/right-panel-create-view";
 import {
@@ -80,6 +81,46 @@ export default function RowstructureDisplay(props: RowStructureDisplayProps) {
           setHandleDisplay(true);
         },
       };
+  const resetRowSizes = () => {
+    const rowSizes = [
+      {
+        type: "oneByOne",
+        width: [100],
+        height: [400],
+      },
+      {
+        type: "oneByTwo",
+        width: [50, 50],
+        height: [420, 420],
+      },
+      {
+        type: "oneByThree",
+        width: [33.33, 33.33, 33.33],
+        height: [460, 460, 460],
+      },
+      {
+        type: "oneByFour",
+        width: [25, 25, 25, 25],
+        height: [122, 122, 122, 122],
+      },
+      {
+        type: "oneByFive",
+        width: [20, 20, 20, 20, 20],
+        height: [121, 121, 121, 121, 121],
+      },
+    ];
+    props.setFramesArray((prev: IFramesArray[]) => {
+      const tempPrev = prev.map((item) => ({ ...item }));
+      const rowStructure = tempPrev[props.rowIndex].structure;
+      const defaultWidths =
+        rowSizes.find((row) => row.type === rowStructure)?.width ?? [];
+      const defaultHeights =
+        rowSizes.find((row) => row.type === rowStructure)?.height ?? [];
+      tempPrev[props.rowIndex].contentWidths = defaultWidths;
+      tempPrev[props.rowIndex].contentHeights = defaultHeights;
+      return [...tempPrev];
+    });
+  };
 
   useOnClickOutside(ref, () => setHandleDisplay(false));
 
@@ -126,7 +167,7 @@ export default function RowstructureDisplay(props: RowStructureDisplayProps) {
                 css={`
                   background: #adb5bd;
                   border-radius: 100px;
-                  height: 53px;
+                  height: 75px;
                   width: 22px;
                   display: flex;
                   justify-content: space-around;
@@ -147,6 +188,14 @@ export default function RowstructureDisplay(props: RowStructureDisplayProps) {
                   }
                 `}
               >
+                <IconButton onClick={() => resetRowSizes()}>
+                  <Tooltip
+                    title="Go back to default placeholder size"
+                    placement="right"
+                  >
+                    <ZoomOutMapIcon fontSize={"small"} htmlColor="#231D2C" />
+                  </Tooltip>
+                </IconButton>
                 <IconButton
                   onClick={() => {
                     props.setSelectedTypeHistory([
