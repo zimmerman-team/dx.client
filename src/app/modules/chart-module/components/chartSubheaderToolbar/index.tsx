@@ -179,7 +179,6 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
     }
   };
 
-  console.log(createChartFromReport, "createChartFromReport");
   React.useEffect(() => {
     if (
       (editChartSuccess || createChartSuccess) &&

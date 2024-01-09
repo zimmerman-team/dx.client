@@ -78,7 +78,7 @@ export default function ChartModule() {
     dataTypes,
     dataStats,
     sampleData,
-    isEditMode,
+    isPreviewMode,
     loadDataset,
     loadChartDataFromAPI,
     error401,
@@ -172,8 +172,10 @@ export default function ChartModule() {
   }, [chartType, dataTypes]);
 
   React.useEffect(() => {
+    //resets mapping and applied filters when dataset becomes null
     if (dataset === null) {
       resetMapping();
+      resetAppliedFilters();
     }
   }, [dataset]);
 
@@ -404,7 +406,7 @@ export default function ChartModule() {
         data={sampleData}
         chartName={chartName}
         dataTypes={dataTypes2}
-        isEditMode={isEditMode}
+        isEditMode={!isPreviewMode}
         mappedData={mappedData}
         loadDataset={loadDataset}
         textView={config.textView}
@@ -419,7 +421,6 @@ export default function ChartModule() {
         loading={loading || isChartLoading}
         filterOptionGroups={filterOptionGroups}
         addVizToLocalStates={addVizToLocalStates}
-        previewMode={!isEditMode && page !== "new"}
         openToolbox={toolboxOpen}
         setToolboxOpen={setToolboxOpen}
         dimensions={dimensions}
@@ -549,7 +550,7 @@ export default function ChartModule() {
                   setVisualOptions={setVisualOptions}
                   renderedChartSsr={renderedChartSsr}
                   renderedChartMappedData={renderedChartMappedData}
-                  editable={isEditMode || (page === "new" && !view)}
+                  editable={!isPreviewMode || (page === "new" && !view)}
                   setIsPreviewView={setIsPreviewView}
                 />
               </Route>
@@ -561,7 +562,7 @@ export default function ChartModule() {
                   setVisualOptions={setVisualOptions}
                   renderedChartSsr={renderedChartSsr}
                   renderedChartMappedData={renderedChartMappedData}
-                  editable={isEditMode || (page === "new" && !view)}
+                  editable={!isPreviewMode}
                   setIsPreviewView={setIsPreviewView}
                 />
               </Route>

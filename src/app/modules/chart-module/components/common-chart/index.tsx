@@ -37,6 +37,7 @@ interface Props {
   setChartErrorMessage: React.Dispatch<React.SetStateAction<string>>;
   renderedChartType?: ChartType;
   inChartWrapper?: boolean;
+  chartPreviewInReport?: boolean;
 }
 
 export function CommonChart(props: Readonly<Props>) {
@@ -151,6 +152,14 @@ export function CommonChart(props: Readonly<Props>) {
   ]);
 
   let content;
+  let contentHeight;
+  if (!props.chartPreviewInReport) {
+    if (props.renderedChartType === "bigNumber" && props.inChartWrapper) {
+      contentHeight = props.visualOptions?.height - 28;
+    } else {
+      contentHeight = props.visualOptions?.height;
+    }
+  }
 
   if (props.renderedChartSsr) {
     content = (
@@ -190,10 +199,7 @@ export function CommonChart(props: Readonly<Props>) {
         css={`
           width: 100%;
           overflow: hidden;
-          height: ${props.inChartWrapper &&
-          props.renderedChartType !== "bigNumber"
-            ? props.visualOptions?.height - 28
-            : props.visualOptions?.height}px;
+          height: ${contentHeight}px;
           * {
             font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif !important;
           }

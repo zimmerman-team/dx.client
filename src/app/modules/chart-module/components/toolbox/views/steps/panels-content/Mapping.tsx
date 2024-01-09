@@ -226,7 +226,6 @@ const NonStaticDimensionContainer = (props: {
         width: 100%;
         padding: 16px 16px 8px 16px;
         height: 100%;
-        overflow-y: hidden;
         border-radius: 11px;
         background: #dfe3e5;
         margin-top: 16px;
@@ -497,8 +496,7 @@ const DimensionSelect = (props: {
         !!props.dimension?.aggregation &&
         props.dimension.mappedValues.length > 0 &&
         relatedAggregation &&
-        aggregators &&
-        onChangeAggregation && (
+        aggregators && (
           <Dropdown
             className="d-inline-block ml-2 raw-dropdown"
             id="rb-dropdown-menu"
@@ -520,9 +518,6 @@ const DimensionSelect = (props: {
                 padding-right: 16px;
                 background: #cfd4da;
                 box-shadow: none !important;
-                pointer-events: ${props.dimension.mapValuesDisplayed
-                  ? "auto"
-                  : "none"};
 
                 &:hover,
                 &:active,

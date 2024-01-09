@@ -201,9 +201,9 @@ export default function ExploreAssetsModule() {
                 textColor="primary"
                 className="Home-MuiTabs-flexContainer"
               >
-                <StyledTab label="Data" value="data" />
-                <StyledTab label="Charts" value="charts" />
-                <StyledTab label="Reports" value="reports" />
+                <StyledTab disableTouchRipple label="Data" value="data" />
+                <StyledTab disableTouchRipple label="Charts" value="charts" />
+                <StyledTab disableTouchRipple label="Reports" value="reports" />
               </StyledTabs>
             </Grid>
             <Grid item lg={6} md={6} sm={6}>

@@ -1,6 +1,5 @@
 import React from "react";
 import get from "lodash/get";
-import { useSessionStorage } from "react-use";
 import Skeleton from "@material-ui/lab/Skeleton";
 import { useChartsRawData } from "app/hooks/useChartsRawData";
 import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
@@ -224,6 +223,7 @@ export function ReportChartWrapper(props: Props) {
         setChartErrorMessage={setChartErrorMessage}
         setNotFound={setNotFound}
         inChartWrapper={true}
+        chartPreviewInReport={props.chartPreviewInReport}
       />
     </div>
   );
