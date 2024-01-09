@@ -8,6 +8,12 @@ import { ReactComponent as BarChartPlaceholderImage } from "app/modules/chart-mo
 import { ReactComponent as SankeyPlaceholderImage } from "app/modules/chart-module/assets/sankeyPlaceholder.svg";
 import { ReactComponent as TreemapPlaceholderImage } from "app/modules/chart-module/assets/treemapPlaceholder.svg";
 
+import { ReactComponent as SunburstPlaceholderImage } from "app/modules/chart-module/assets/sunburstPlaceholder.svg";
+import { ReactComponent as PieChartPlaceholderImage } from "app/modules/chart-module/assets/pieChartPlaceholder.svg";
+import { ReactComponent as CirclepackingPlaceholderImage } from "app/modules/chart-module/assets/circlepackingPlaceholder.svg";
+import { ReactComponent as ForcegraphPlaceholderImage } from "app/modules/chart-module/assets/forcegraphPlaceholder.svg";
+import { ReactComponent as CirculargraphPlaceholderImage } from "app/modules/chart-module/assets/circulargraphPlaceholder.svg";
+
 export default function ChartPlaceholder(props: { loading?: boolean }) {
   const chartType = useStoreState((state) => state.charts.chartType.value);
   const activePanels = useStoreState(
@@ -110,60 +116,12 @@ export default function ChartPlaceholder(props: { loading?: boolean }) {
           css={`
             padding-right: 38px;
             svg {
-              width: 100%;
-              height: 100%;
+              width: 80%;
+              height: 80%;
             }
           `}
         >
-          <BarChartPlaceholderImage />
-        </div>
-      ),
-    },
-    {
-      id: "echartsForcegraph",
-      placeholder: (
-        <div
-          css={`
-            padding-right: 38px;
-            svg {
-              width: 100%;
-              height: 100%;
-            }
-          `}
-        >
-          <BarChartPlaceholderImage />
-        </div>
-      ),
-    },
-    {
-      id: "echartsCirculargraph",
-      placeholder: (
-        <div
-          css={`
-            padding-right: 38px;
-            svg {
-              width: 100%;
-              height: 100%;
-            }
-          `}
-        >
-          <BarChartPlaceholderImage />
-        </div>
-      ),
-    },
-    {
-      id: "echartsCirclepacking",
-      placeholder: (
-        <div
-          css={`
-            padding-right: 38px;
-            svg {
-              width: 100%;
-              height: 100%;
-            }
-          `}
-        >
-          <BarChartPlaceholderImage />
+          <SunburstPlaceholderImage />
         </div>
       ),
     },
@@ -174,15 +132,64 @@ export default function ChartPlaceholder(props: { loading?: boolean }) {
           css={`
             padding-right: 38px;
             svg {
-              width: 100%;
-              height: 100%;
+              width: 80%;
+              height: 80%;
             }
           `}
         >
-          <BarChartPlaceholderImage />
+          <PieChartPlaceholderImage />
         </div>
       ),
     },
+    {
+      id: "echartsCirclepacking",
+      placeholder: (
+        <div
+          css={`
+            padding-right: 38px;
+            svg {
+              width: 80%;
+              height: 80%;
+            }
+          `}
+        >
+          <CirclepackingPlaceholderImage />
+        </div>
+      ),
+    },
+    {
+      id: "echartsForcegraph",
+      placeholder: (
+        <div
+          css={`
+            padding-right: 38px;
+            svg {
+              width: 80%;
+              height: 80%;
+            }
+          `}
+        >
+          <ForcegraphPlaceholderImage />
+        </div>
+      ),
+    },
+    {
+      id: "echartsCirculargraph",
+      placeholder: (
+        <div
+          css={`
+            padding-right: 38px;
+            svg {
+              width: 80%;
+              height: 80%;
+            }
+          `}
+        >
+          <CirculargraphPlaceholderImage />
+        </div>
+      ),
+    },
+
     {
       id: "echartsBubblechart",
       placeholder: (

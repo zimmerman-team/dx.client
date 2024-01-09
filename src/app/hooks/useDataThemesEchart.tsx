@@ -530,6 +530,8 @@ export function useDataThemesEchart() {
       // Label
       showLabels,
       labelFontSize,
+      // Palette
+      palette,
     } = visualOptions;
     const groups = Object.keys(data);
 
@@ -542,6 +544,7 @@ export function useDataThemesEchart() {
     );
 
     const option = {
+      color: checkLists.find((item) => item.label === palette)?.value,
       legend: {
         right: "10%",
         top: "3%",
@@ -683,83 +686,43 @@ export function useDataThemesEchart() {
       labelFontSize,
       // Palette
       palette,
-      gaussian,
     } = visualOptions;
 
-    let gridSize = [100, 100]; // Adjust the size of the grid as needed
-    let amplitude = 500; // Adjust the amplitude for intensity scaling
+    const xAxisData = data
+      .filter((d: any) => d.x)
+      .map((d: any) => String(d.x))
+      .sort();
+    const yAxisData = data
+      .filter((d: any) => d.y)
+      .map((d: any) => String(d.y))
+      .sort();
 
-    const maxX = Math.max(...data.map((data: any) => data.x));
-    const maxY = Math.max(...data.map((data: any) => data.y));
-
-    const originalData = data.map((d: any) => [d.x, d.y, d.size]);
-
-    const normalData = data.map((d: any) => [
-      (d.x / maxX) * gridSize[1],
-      (d.y / maxY) * gridSize[0],
-      d.size,
+    const seriesData = data.map((item: any) => [
+      String(item.x),
+      String(item.y),
+      item.size,
     ]);
-
-    function generateGaussianHeatmapData(
-      data: any,
-      gridSize: number[],
-      amplitude: number
-    ) {
-      let gaussianData = [];
-      for (let x = 0; x < gridSize[0]; x++) {
-        for (let y = 0; y < gridSize[1]; y++) {
-          let intensity = 0;
-          data.forEach(function (point: any) {
-            let dx = x - point[0];
-            let dy = y - point[1];
-            let distanceSquared = dx * dx + dy * dy;
-            intensity += point[2] * Math.exp(-distanceSquared / amplitude);
-          });
-          gaussianData.push([x, y, intensity]);
-        }
-      }
-      return gaussianData;
-    }
-
-    let outputData = [];
-
-    if (gaussian) {
-      outputData = generateGaussianHeatmapData(
-        originalData,
-        gridSize,
-        amplitude
-      );
-    } else {
-      outputData = normalData;
-    }
 
     const option = {
       xAxis: {
         type: "category",
-        data: Array.from({ length: gridSize[0] }, (_, index) => index),
+        data: uniqBy(xAxisData, (d: any) => d),
       },
       yAxis: {
         type: "category",
-        data: Array.from({ length: gridSize[1] }, (_, index) => index),
+        data: uniqBy(yAxisData, (d: any) => d),
       },
       tooltip: {
         trigger: showTooltip ? "item" : "none",
         confine: true,
-        formatter: (params: any) => {
-          return `${params.data[1]}: ${
-            isMonetaryValue
-              ? formatFinancialValue(params.value, true)
-              : params.data[0]
-          }`;
-        },
+        valueFormatter: (value: number | string) =>
+          isMonetaryValue
+            ? formatFinancialValue(parseInt(value.toString(), 10), true)
+            : value,
       },
       visualMap: {
-        min: Math.min(
-          ...outputData.map((item: number[]) => (item[2] ? item[2] : 0))
-        ),
-        max: Math.max(
-          ...outputData.map((item: number[]) => (item[2] ? item[2] : 0))
-        ),
+        min: Math.min(...data.map((item: any) => item.size)),
+        max: Math.max(...data.map((item: any) => item.size)),
         calculable: true,
         realtime: false,
         inRange: {
@@ -770,7 +733,11 @@ export function useDataThemesEchart() {
       series: [
         {
           type: "heatmap",
-          data: outputData,
+          data: seriesData,
+          label: {
+            show: showLabels,
+            fontSize: labelFontSize,
+          },
           emphasis: {
             itemStyle: {
               borderColor: "#333",
@@ -1306,20 +1273,33 @@ export function useDataThemesEchart() {
       marginRight,
       marginBottom,
       marginLeft,
+      borderRadius,
+      borderWidth,
       // labels
       showLabels,
-      showLabel1,
-      showLabel2,
-      showLabel3,
+      leafLabelPositon,
       labelFontSize,
       // tooltip
       showTooltip,
       isMonetaryValue,
+      // Palette
+      palette,
     } = visualOptions;
+
+    let maxDepth = 0;
+
+    const countDepth = (children: any[]) => {
+      if (children) {
+        maxDepth += 1;
+        countDepth(children[0].children);
+      }
+    };
+    countDepth(data);
 
     const option = {
       // backgroundColor: background,
       backgroundColor: "transparent",
+      color: checkLists.find((item) => item.label === palette)?.value,
       tooltip: {
         trigger: showTooltip ? "item" : "none",
         formatter: (params: any) => {
@@ -1335,43 +1315,24 @@ export function useDataThemesEchart() {
           name: "All",
           type: "sunburst",
           data,
-          radius: [0, "95%"],
+          radius: ["15%", "95%"],
           sort: undefined,
           emphasis: {
             focus: "ancestor",
           },
+          itemStyle: {
+            borderRadius,
+            borderWidth,
+          },
           levels: [
             {},
+            ...Array(maxDepth - 1).fill({}),
             {
-              r0: "15%",
-              r: "35%",
-              itemStyle: {
-                borderWidth: 2,
-              },
               label: {
-                rotate: "tangential",
-                show: showLabels ? showLabel1 : false,
-              },
-            },
-            {
-              r0: "35%",
-              r: "70%",
-              label: {
-                align: "right",
-                show: showLabels ? showLabel2 : false,
-              },
-            },
-            {
-              r0: "70%",
-              r: "72%",
-              label: {
-                position: "outside",
+                position: leafLabelPositon,
                 padding: 3,
                 silent: false,
-                show: showLabels ? showLabel3 : false,
-              },
-              itemStyle: {
-                borderWidth: 3,
+                show: showLabels !== "false",
               },
             },
           ],
@@ -1384,7 +1345,7 @@ export function useDataThemesEchart() {
           bottom: marginBottom,
           leafDepth: 1,
           label: {
-            show: showLabels,
+            show: showLabels === "true",
             fontSize: labelFontSize,
           },
         },

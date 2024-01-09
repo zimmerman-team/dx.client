@@ -16,20 +16,26 @@ import ColoredTreeMapIcon from "app/assets/icons/data-themes-chart-types/colored
 import BigNumberIcon from "app/assets/icons/data-themes-chart-types/bigNumber";
 import ColoredBigNumberIcon from "app/assets/icons/data-themes-chart-types/coloredBigNumber";
 
-// import SunburstIcon from "app/assets/icons/data-themes-chart-types/sunburst";
-// import ColoredSunburstIcon from "app/assets/icons/data-themes-chart-types/coloredSunburst";
+import SunburstIcon from "app/assets/icons/data-themes-chart-types/sunburst";
+import ColoredSunburstIcon from "app/assets/icons/data-themes-chart-types/coloredSunburst";
 
-// import PieIcon from "app/assets/icons/data-themes-chart-types/pie";
-// import ColoredPieIcon from "app/assets/icons/data-themes-chart-types/coloredPie";
+import PieIcon from "app/assets/icons/data-themes-chart-types/pie";
+import ColoredPieIcon from "app/assets/icons/data-themes-chart-types/coloredPie";
 
-// import CirclePackingIcon from "app/assets/icons/data-themes-chart-types/circlepacking";
-// import ColoredCirclePackingIcon from "app/assets/icons/data-themes-chart-types/coloredCirclepacking";
+import CirclePackingIcon from "app/assets/icons/data-themes-chart-types/circlepacking";
+import ColoredCirclePackingIcon from "app/assets/icons/data-themes-chart-types/coloredCirclepacking";
 
-// import ColoredForceGraphIcon from "app/assets/icons/data-themes-chart-types/coloredForcegraph";
-// import ForceGraphIcon from "app/assets/icons/data-themes-chart-types/forcegraph";
+import ColoredForceGraphIcon from "app/assets/icons/data-themes-chart-types/coloredForcegraph";
+import ForceGraphIcon from "app/assets/icons/data-themes-chart-types/forcegraph";
 
-// import ColoredCircularGraphIcon from "app/assets/icons/data-themes-chart-types/coloredCirculargraph";
-// import CircularGraphIcon from "app/assets/icons/data-themes-chart-types/circulargraph";
+import ColoredCircularGraphIcon from "app/assets/icons/data-themes-chart-types/coloredCirculargraph";
+import CircularGraphIcon from "app/assets/icons/data-themes-chart-types/circulargraph";
+
+import AreastackedIcon from "app/assets/icons/data-themes-chart-types/areastacked";
+import ColoredAreastackedIcon from "app/assets/icons/data-themes-chart-types/coloredAreastacked";
+
+import BubblechartIcon from "app/assets/icons/data-themes-chart-types/bubble";
+import ColoredBubblechartIcon from "app/assets/icons/data-themes-chart-types/coloredBubbleChart";
 
 import { ReactComponent as GeomapPreviewImg } from "app/modules/chart-module/assets/geomapPreview.svg";
 import { ReactComponent as BigNumberPreviewImg } from "app/modules/chart-module/assets/bigNumberPreview.svg";
@@ -37,6 +43,14 @@ import { ReactComponent as LineChartPreviewImg } from "app/modules/chart-module/
 import { ReactComponent as TreeMapPreviewImg } from "app/modules/chart-module/assets/treemapPreview.svg";
 import { ReactComponent as SankeyPreviewImg } from "app/modules/chart-module/assets/sankeyPreview.svg";
 import { ReactComponent as BarChartPreviewImg } from "app/modules/chart-module/assets/barChartPreview.svg";
+
+import { ReactComponent as SunburstPreviewImg } from "app/modules/chart-module/assets/sunburstPreview.svg";
+import { ReactComponent as PieChartPreviewImg } from "app/modules/chart-module/assets/pieChartPreview.svg";
+import { ReactComponent as CirclepackingPreviewImg } from "app/modules/chart-module/assets/circlepackingPreview.svg";
+import { ReactComponent as ForcegraphPreviewImg } from "app/modules/chart-module/assets/forcegraphPreview.svg";
+import { ReactComponent as CirculargraphPreviewImg } from "app/modules/chart-module/assets/circulargraphPreview.svg";
+import { ReactComponent as AreastackedPreviewImg } from "app/modules/chart-module/assets/areastackedPreview.svg";
+import { ReactComponent as BubbleChartPreviewImg } from "app/modules/chart-module/assets/bubbleChartPreview.svg";
 
 export interface ChartBuilderChartTypeProps {
   loading: boolean;
@@ -116,9 +130,8 @@ export const echartTypes = (big: boolean) => {
     {
       id: "echartsSunburst",
       label: "Sunburst diagram",
-      icon: <BarChartIcon big={big} />,
-      // icon: <SunburstIcon big={big} />,
-      preview: <BarChartPreviewImg />,
+      icon: <SunburstIcon big={big} />,
+      preview: <SunburstPreviewImg />,
       categories: ["Hierarchies", "Proportions"],
       ssr: false,
       description:
@@ -127,9 +140,8 @@ export const echartTypes = (big: boolean) => {
     {
       id: "echartsPiechart",
       label: "Pie Chart",
-      icon: <BarChartIcon big={big} />,
-      // icon: <PieIcon big={big} />,
-      preview: <BarChartPreviewImg />,
+      icon: <PieIcon big={big} />,
+      preview: <PieChartPreviewImg />,
       categories: ["Proportions"],
       ssr: false,
       description:
@@ -138,9 +150,8 @@ export const echartTypes = (big: boolean) => {
     {
       id: "echartsCirclepacking",
       label: "Circle Packing Chart",
-      icon: <BarChartIcon big={big} />,
-      // icon: <CirclePackingIcon big={big} />,
-      preview: <BarChartPreviewImg />,
+      icon: <CirclePackingIcon big={big} />,
+      preview: <CirclepackingPreviewImg />,
       categories: ["Hierarchies", "Proportions"],
       ssr: false,
       description:
@@ -148,10 +159,9 @@ export const echartTypes = (big: boolean) => {
     },
     {
       id: "echartsForcegraph",
-      label: "Force Layout Graph",
-      icon: <BarChartIcon big={big} />,
-      // icon: <ForceGraphIcon big={big} />,
-      preview: <BarChartPreviewImg />,
+      label: "Network Graph",
+      icon: <ForceGraphIcon big={big} />,
+      preview: <ForcegraphPreviewImg />,
       categories: ["Networks"],
       ssr: false,
       description:
@@ -159,20 +169,29 @@ export const echartTypes = (big: boolean) => {
     },
     {
       id: "echartsCirculargraph",
-      label: "Circular Layout Graph",
-      icon: <BarChartIcon big={big} />,
-      // icon: <CircularGraphIcon big={big} />,
-      preview: <BarChartPreviewImg />,
+      label: "Circular Network Graph",
+      icon: <CircularGraphIcon big={big} />,
+      preview: <CirculargraphPreviewImg />,
       categories: ["Networks"],
       ssr: false,
       description:
         "It represents flows among nodes of a network. Nodes are represented as circles",
     },
     {
+      id: "echartsAreastack",
+      label: "Line Stacked Chart",
+      icon: <AreastackedIcon big={big} />,
+      preview: <AreastackedPreviewImg />,
+      categories: ["Trends", "changes over time"],
+      ssr: false,
+      description:
+        "Line stack charts present data by illustrating trends and changes in continuous or sequential data points over time, making them ideal for visualizing patterns, fluctuations, or relationships in data.",
+    },
+    {
       id: "echartsBubblechart",
       label: "Bubble Chart",
-      icon: <BarChartIcon big={big} />,
-      preview: <BarChartPreviewImg />,
+      icon: <BubblechartIcon big={big} />,
+      preview: <BubbleChartPreviewImg />,
       categories: ["Correlations", "Proportions"],
       ssr: false,
       description:
@@ -207,16 +226,7 @@ export const echartTypes = (big: boolean) => {
       ssr: false,
       description: "It represents flows among nodes of a network.",
     },
-    {
-      id: "echartsAreastack",
-      label: "Area Stack",
-      icon: <LineChartIcon big={big} />,
-      preview: <LineChartPreviewImg />,
-      categories: ["Trends", "changes over time"],
-      ssr: false,
-      description:
-        "Area stack charts present data by illustrating trends and changes in continuous or sequential data points over time, making them ideal for visualizing patterns, fluctuations, or relationships in data.",
-    },
+
     {
       id: "echartsAreatimeaxis",
       label: "Area Time Axis Chart",
@@ -320,8 +330,7 @@ export const coloredEchartTypes = () => {
     {
       id: "echartsSunburst",
       label: "Sunburst diagram",
-      icon: <ColoredBarChartIcon />,
-      // icon: <ColoredSunburstIcon />,
+      icon: <ColoredSunburstIcon />,
       categories: ["Hierarchies", "Proportions"],
       ssr: false,
       description:
@@ -330,8 +339,7 @@ export const coloredEchartTypes = () => {
     {
       id: "echartsPiechart",
       label: "Pie Chart",
-      icon: <ColoredBarChartIcon />,
-      // icon: <ColoredPieIcon />,
+      icon: <ColoredPieIcon />,
       categories: ["Proportions"],
       ssr: false,
       description:
@@ -340,8 +348,7 @@ export const coloredEchartTypes = () => {
     {
       id: "echartsCirclepacking",
       label: "Circle Packing Chart",
-      icon: <ColoredBarChartIcon />,
-      // icon: <ColoredCirclePackingIcon />,
+      icon: <ColoredCirclePackingIcon />,
       categories: ["Hierarchies", "Proportions"],
       ssr: false,
       description:
@@ -349,9 +356,8 @@ export const coloredEchartTypes = () => {
     },
     {
       id: "echartsForcegraph",
-      label: "Force Layout Graph",
-      icon: <ColoredBarChartIcon />,
-      // icon: <ColoredForceGraphIcon />,
+      label: "Network Graph",
+      icon: <ColoredForceGraphIcon />,
       categories: ["Networks"],
       ssr: false,
       description:
@@ -359,18 +365,26 @@ export const coloredEchartTypes = () => {
     },
     {
       id: "echartsCirculargraph",
-      label: "Circular Layout Graph",
-      icon: <ColoredBarChartIcon />,
-      // icon: <ColoredCircularGraphIcon />,
+      label: "Circular Network Graph",
+      icon: <ColoredCircularGraphIcon />,
       categories: ["Networks"],
       ssr: false,
       description:
         "It represents flows among nodes of a network. Nodes are represented as circles",
     },
     {
+      id: "echartsAreastack",
+      label: "Line Stacked Chart",
+      icon: <ColoredAreastackedIcon />,
+      categories: ["Trends", "changes over time"],
+      ssr: false,
+      description:
+        "Line stacked charts present data by illustrating trends and changes in continuous or sequential data points over time, making them ideal for visualizing patterns, fluctuations, or relationships in data.",
+    },
+    {
       id: "echartsBubblechart",
       label: "Bubble Chart",
-      icon: <ColoredBarChartIcon />,
+      icon: <ColoredBubblechartIcon />,
       categories: ["Correlations", "Proportions"],
       ssr: false,
       description:
@@ -402,15 +416,7 @@ export const coloredEchartTypes = () => {
       ssr: false,
       description: "It represents flows among nodes of a network.",
     },
-    {
-      id: "echartsAreastack",
-      label: "Area Stack",
-      icon: <ColoredLineChartIcon />,
-      categories: ["Trends", "changes over time"],
-      ssr: false,
-      description:
-        "Area stack charts present data by illustrating trends and changes in continuous or sequential data points over time, making them ideal for visualizing patterns, fluctuations, or relationships in data.",
-    },
+
     {
       id: "echartsAreatimeaxis",
       label: "Area Time Axis Chart",
