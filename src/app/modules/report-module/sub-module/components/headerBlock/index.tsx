@@ -76,12 +76,6 @@ export default function HeaderBlock(props: Props) {
     inputRef.current?.focus();
   }, []);
 
-  React.useEffect(() => {
-    if (props.reportName !== "Untitled report") {
-      props.setHasSubHeaderTitleFocused?.(true);
-    }
-  }, []);
-
   //handles report name state
   const [,] = useDebounce(
     () => {

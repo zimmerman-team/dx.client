@@ -41,7 +41,7 @@ export interface ReportCreateViewProps {
   view: "initial" | "edit" | "create" | "preview" | "ai-template";
   setReportName: React.Dispatch<React.SetStateAction<string>>;
   reportName: string;
-  reportType: "basic" | "advanced" | "ai";
+  reportType: "basic" | "advanced" | "ai" | null;
   setFramesArray: React.Dispatch<React.SetStateAction<IFramesArray[]>>;
   deleteFrame: (id: string) => void;
   framesArray: IFramesArray[];

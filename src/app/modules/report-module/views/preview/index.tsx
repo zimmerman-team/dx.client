@@ -54,6 +54,9 @@ export function ReportPreviewView(props: {
   const fetchReportData = useStoreActions(
     (actions) => actions.reports.ReportGet.fetch
   );
+  const clearReportData = useStoreActions(
+    (actions) => actions.reports.ReportGet.clear
+  );
 
   const reportEditClear = useStoreActions(
     (actions) => actions.reports.ReportUpdate.clear
@@ -78,6 +81,9 @@ export function ReportPreviewView(props: {
         fetchReportData({ nonAuthCall: true, getId: page });
       }
     }
+    return () => {
+      clearReportData();
+    };
   }, [page, token, isLoading, isAuthenticated]);
 
   React.useEffect(() => {

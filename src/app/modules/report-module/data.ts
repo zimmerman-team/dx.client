@@ -45,7 +45,7 @@ export interface ReportContentHeightsType {
 
 export const emptyReport: ReportModel = {
   id: "",
-  name: "",
+  name: "Untitled report",
   title: "",
   public: false,
   subTitle: convertToRaw(EditorState.createEmpty().getCurrentContent()),
