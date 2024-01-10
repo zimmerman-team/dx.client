@@ -233,21 +233,11 @@ export default function GridItem(props: Readonly<Props>) {
             </div>
             <div>
               <Tooltip title="Delete">
-                <span>
-                  <IconButton
-                    onClick={() => props.handleDelete?.(props.id as string)}
-                    disabled={true}
-                    css={`
-                      svg {
-                        path {
-                          fill: gray;
-                        }
-                      }
-                    `}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                </span>
+                <IconButton
+                  onClick={() => props.handleDelete?.(props.id as string)}
+                >
+                  <DeleteIcon />
+                </IconButton>
               </Tooltip>
             </div>
           </div>

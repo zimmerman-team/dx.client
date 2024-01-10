@@ -6,10 +6,10 @@ import { useStyles } from "./deleteChartDialog";
 interface Props {
   modalDisplay: boolean;
   setModalDisplay: (value: boolean) => void;
-  handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleDelete: (id: string) => void;
   cardId: string;
   enableButton: boolean;
+  setEnableButton: (value: React.SetStateAction<boolean>) => void;
 }
 
 export default function DeleteDatasetDialog(props: Props) {
@@ -18,6 +18,13 @@ export default function DeleteDatasetDialog(props: Props) {
   const onInputEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       props.handleDelete(props.cardId);
+    }
+  };
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.value === "DELETE") {
+      props.setEnableButton(true);
+    } else {
+      props.setEnableButton(false);
     }
   };
 
@@ -76,7 +83,7 @@ export default function DeleteDatasetDialog(props: Props) {
                 <input
                   type="text"
                   placeholder='Type "DELETE" to confirm'
-                  onChange={props.handleInputChange}
+                  onChange={handleInputChange}
                   onKeyPress={onInputEnter}
                   css={`
                     border: 1px solid #231d2c;

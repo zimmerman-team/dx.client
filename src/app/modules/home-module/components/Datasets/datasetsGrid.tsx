@@ -128,14 +128,6 @@ export default function DatasetsGrid(props: Props) {
     setEnableButton(false);
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.value === "DELETE") {
-      setEnableButton(true);
-    } else {
-      setEnableButton(false);
-    }
-  };
-
   const handleDuplicate = (index: number) => {
     const id = loadedDatasets[index].id;
     if (!id) {
@@ -251,7 +243,9 @@ export default function DatasetsGrid(props: Props) {
                 path={`/dataset/${data.id}/edit`}
                 title={data.name}
                 date={data.createdDate}
-                handleDelete={() => {}}
+                handleDelete={() => {
+                  handleModal(data.id);
+                }}
                 descr={data.description}
                 handleDuplicate={() => {
                   handleDuplicate(index);
@@ -291,9 +285,9 @@ export default function DatasetsGrid(props: Props) {
         cardId={cardId}
         enableButton={enableButton}
         handleDelete={handleDelete}
-        handleInputChange={handleInputChange}
         modalDisplay={modalDisplay}
         setModalDisplay={setModalDisplay}
+        setEnableButton={setEnableButton}
       />
     </>
   );

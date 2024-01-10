@@ -406,7 +406,6 @@ export default function ChartModule() {
         data={sampleData}
         chartName={chartName}
         dataTypes={dataTypes2}
-        isEditMode={!isPreviewMode}
         mappedData={mappedData}
         loadDataset={loadDataset}
         textView={config.textView}
