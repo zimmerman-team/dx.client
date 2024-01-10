@@ -14,7 +14,7 @@ import Menu, { MenuProps } from "@material-ui/core/Menu";
 import TextFieldsIcon from "@material-ui/icons/TextFields";
 import {
   reportRightPanelViewAtom,
-  createChartFromReportAtom,
+  chartFromReportAtom,
   isDividerOrRowFrameDraggingAtom,
   isChartDraggingAtom,
 } from "app/state/recoil/atoms";
@@ -636,7 +636,7 @@ function ElementItem(props: {
   const isVideoElement = props.elementType === ReportElementsType.VIDEO;
   return (
     <Tooltip
-      title={"To be implemented"}
+      title={"Available soon"}
       placement="bottom-end"
       open={props.openTooltip}
       onClose={() => {
@@ -698,10 +698,10 @@ function CreateChartCard(props: {
     (state) => state.charts.ChartCreate.setCrudData
   );
 
-  const setCreateChartFromReport = useRecoilState(createChartFromReportAtom)[1];
+  const setChartFromReport = useRecoilState(chartFromReportAtom)[1];
 
   const action = () => {
-    setCreateChartFromReport({
+    setChartFromReport({
       state: true,
       view,
       page,
@@ -788,9 +788,8 @@ function ChartItem(
 ) {
   const nullRef = React.useRef(null);
   const [chartPreview, setChartPreview] = React.useState(false);
-  const [createChartFromReport, setCreateChartFromReport] = useRecoilState(
-    createChartFromReportAtom
-  );
+  const [chartFromReport, setChartFromReport] =
+    useRecoilState(chartFromReportAtom);
 
   const [{ isDragging }, drag] = useDrag(() => ({
     type: props.elementType,
@@ -805,7 +804,7 @@ function ChartItem(
 
   React.useEffect(() => {
     const timeout = setTimeout(() => {
-      setCreateChartFromReport({
+      setChartFromReport({
         state: false,
         page: "",
         view: "",
@@ -847,7 +846,7 @@ function ChartItem(
       ref={added || chartPreview ? nullRef : drag}
       id={`chart-${props.chartIndex}`}
       className={
-        props.chartIndex === 0 && createChartFromReport.action === "create"
+        props.chartIndex === 0 && chartFromReport.action === "create"
           ? "rhcpCard"
           : ""
       }
