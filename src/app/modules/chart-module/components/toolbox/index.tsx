@@ -3,17 +3,24 @@ import React from "react";
 import { useRecoilState } from "recoil";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useHistory, useParams } from "react-router-dom";
-import { createChartFromReportAtom } from "app/state/recoil/atoms";
+import {
+  chartFromReportAtom,
+  reportRightPanelViewAtom,
+} from "app/state/recoil/atoms";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
+import { isEmpty } from "lodash";
+import { Slide, SnackbarContent, useMediaQuery } from "@material-ui/core";
 /* project */
 import { styles } from "app/modules/chart-module/components/toolbox/styles";
 import { ChartExporter } from "app/modules/chart-module/components/exporter";
 import { ChartToolBoxProps } from "app/modules/chart-module/components/toolbox/data";
 import { ChartToolBoxSteps } from "app/modules/chart-module/components/toolbox/views/steps";
-import ToolboxNav, { ToolboxNavType } from "./views/steps/navbar";
-import { Slide, useMediaQuery } from "@material-ui/core";
 import { TriangleXSIcon } from "app/assets/icons/TriangleXS";
-import { isEmpty } from "lodash";
+import { emptyChartAPI, ChartAPIModel } from "app/modules/chart-module/data";
+import ToolboxNav, {
+  ToolboxNavType,
+} from "app/modules/chart-module/components/toolbox/views/steps/navbar";
+import { InfoSnackbar } from "../chartSubheaderToolbar/infoSnackbar";
 
 export function ChartModuleToolBox(props: ChartToolBoxProps) {
   const { page, view } = useParams<{ page: string; view?: string }>();
@@ -22,6 +29,7 @@ export function ChartModuleToolBox(props: ChartToolBoxProps) {
   const token = useStoreState((state) => state.AuthToken.value);
   const isMobile = useMediaQuery("(max-width: 767px)");
   const [isClickable, setIsClickable] = React.useState(false);
+  const setRightPanelView = useRecoilState(reportRightPanelViewAtom)[1];
 
   const mapping = useStoreState((state) => state.charts.mapping.value);
   const dataset = useStoreState((state) => state.charts.dataset.value);
@@ -48,9 +56,19 @@ export function ChartModuleToolBox(props: ChartToolBoxProps) {
   const editChart = useStoreActions(
     (actions) => actions.charts.ChartUpdate.patch
   );
-  const [createChartFromReport, setCreateChartFromReport] = useRecoilState(
-    createChartFromReportAtom
+  const createChartData = useStoreState(
+    (state) =>
+      (state.charts.ChartCreate.crudData ?? emptyChartAPI) as ChartAPIModel
   );
+  const createChartSuccess = useStoreState(
+    (state) => state.charts.ChartCreate.success
+  );
+  const editChartSuccess = useStoreState(
+    (state) => state.charts.ChartUpdate.success
+  );
+  const [showSnackbar, setShowSnackbar] = React.useState<string | null>(null);
+  const [chartFromReport, setChartFromReport] =
+    useRecoilState(chartFromReportAtom);
   const chartType = useStoreState((state) => state.charts.chartType.value);
   const [displayToolbar, setDisplayToolbar] = React.useState<"block" | "none">(
     "block"
@@ -134,7 +152,7 @@ export function ChartModuleToolBox(props: ChartToolBoxProps) {
       appliedFilters,
       enabledFilterOptionGroups,
     };
-    if (props.isEditMode && page !== "new") {
+    if (view !== undefined && page !== "new") {
       editChart({
         token,
         patchId: page,
@@ -146,15 +164,30 @@ export function ChartModuleToolBox(props: ChartToolBoxProps) {
         values: chart,
       });
     }
-    //Completes chart creation , returns to persisted report state
-    if (createChartFromReport.state) {
-      setCreateChartFromReport({
-        ...createChartFromReport,
-        state: false,
-      });
-      history.push(`/report/${createChartFromReport.page}/edit`);
-    }
   }
+
+  //handles what happens after chart is created or edited
+  React.useEffect(() => {
+    if ((editChartSuccess || createChartSuccess) && chartFromReport.state) {
+      //returns back to persisted report view
+      setRightPanelView("charts");
+      history.push(`/report/${chartFromReport.page}/edit`);
+    } else if (editChartSuccess && !chartFromReport.state) {
+      //returns back to chart detail page
+      history.push(`/chart/${page}`);
+    } else if (
+      createChartSuccess &&
+      !chartFromReport.state &&
+      createChartData.id
+    ) {
+      //shows snackbar
+      setShowSnackbar(
+        createChartSuccess ? `Chart created successfully!` : null
+      );
+      //returns back to chart detail page
+      history.push(`/chart/${createChartData.id}`);
+    }
+  }, [editChartSuccess, createChartSuccess, createChartData]);
 
   React.useEffect(() => {
     if (location.pathname === `/chart/${page}` || view == "preview") {
@@ -167,94 +200,121 @@ export function ChartModuleToolBox(props: ChartToolBoxProps) {
   }, [location.pathname]);
 
   return (
-    <Slide
-      direction="left"
-      in={props.openToolbox}
-      style={{ visibility: "visible", display: displayToolbar }}
-    >
-      <div css={styles.container(props.filtersView)}>
-        {!isMobile && (
-          <div
-            role="button"
-            tabIndex={-1}
-            css={`
-              top: calc((100% - 205px) / 2);
-              left: -16px;
-              color: #fff;
-              width: 16px;
-              height: 133px;
-              display: flex;
-              cursor: pointer;
-              position: absolute;
-              background: #231d2c;
-              align-items: center;
-              flex-direction: column;
-              justify-content: center;
-              border-radius: 10px 0px 0px 10px;
-              transition: background 0.2s ease-in-out;
-              &:hover {
-                background: #13183f;
-              }
-              > svg {
-                transform: rotate(${!props.openToolbox ? "-" : ""}90deg);
-                > path {
-                  fill: #fff;
+    <>
+      <Slide
+        direction="left"
+        in={props.openToolbox}
+        style={{ visibility: "visible", display: displayToolbar }}
+      >
+        <div css={styles.container(props.filtersView)}>
+          {!isMobile && (
+            <div
+              role="button"
+              tabIndex={-1}
+              css={`
+                top: calc((100% - 205px) / 2);
+                left: -16px;
+                color: #fff;
+                width: 16px;
+                height: 133px;
+                display: flex;
+                cursor: pointer;
+                position: absolute;
+                background: #231d2c;
+                align-items: center;
+                flex-direction: column;
+                justify-content: center;
+                border-radius: 10px 0px 0px 10px;
+                transition: background 0.2s ease-in-out;
+                &:hover {
+                  background: #13183f;
                 }
-              }
-            `}
-            onClick={() => {
-              if (props.openToolbox) {
-                props.onClose();
-              } else {
-                props.onOpen();
-              }
-            }}
-          >
-            <TriangleXSIcon />
-          </div>
-        )}
+                > svg {
+                  transform: rotate(${!props.openToolbox ? "-" : ""}90deg);
+                  > path {
+                    fill: #fff;
+                  }
+                }
+              `}
+              onClick={() => {
+                if (props.openToolbox) {
+                  props.onClose();
+                } else {
+                  props.onOpen();
+                }
+              }}
+            >
+              <TriangleXSIcon />
+            </div>
+          )}
 
-        <ToolboxNav
-          activePanelStep={activePanels}
-          setActivePanelStep={setActivePanels}
-          mappedData={props.mappedData}
-          stepPaths={stepPaths}
-          onNavBtnClick={onNavBtnClick}
-          isClickable={isClickable}
-          setIsClickable={setIsClickable}
-          onMouseOverNavBtn={onMouseOverNavBtn}
-        />
-        {props.dataSteps && (
-          <ChartToolBoxSteps
-            data={props.data}
-            rawViz={props.rawViz}
-            loading={props.loading}
-            dataTypes={props.dataTypes}
-            openPanel={props.openPanel}
+          <ToolboxNav
+            activePanelStep={activePanels}
+            setActivePanelStep={setActivePanels}
             mappedData={props.mappedData}
-            loadDataset={props.loadDataset}
-            visualOptions={props.visualOptions}
-            setVisualOptions={props.setVisualOptions}
-            filterOptionGroups={props.filterOptionGroups}
-            filtersView={props.filtersView}
-            save={onSave}
-            dimensions={props.dimensions}
-            activeStep={activePanels}
-            onNavBtnClick={onNavBtnClick}
             stepPaths={stepPaths}
+            onNavBtnClick={onNavBtnClick}
             isClickable={isClickable}
             setIsClickable={setIsClickable}
             onMouseOverNavBtn={onMouseOverNavBtn}
-            setChartFromAPI={props.setChartFromAPI}
           />
-        )}
+          {props.dataSteps && (
+            <ChartToolBoxSteps
+              data={props.data}
+              rawViz={props.rawViz}
+              loading={props.loading}
+              dataTypes={props.dataTypes}
+              openPanel={props.openPanel}
+              mappedData={props.mappedData}
+              loadDataset={props.loadDataset}
+              visualOptions={props.visualOptions}
+              setVisualOptions={props.setVisualOptions}
+              filterOptionGroups={props.filterOptionGroups}
+              filtersView={props.filtersView}
+              save={onSave}
+              dimensions={props.dimensions}
+              activeStep={activePanels}
+              onNavBtnClick={onNavBtnClick}
+              stepPaths={stepPaths}
+              isClickable={isClickable}
+              setIsClickable={setIsClickable}
+              onMouseOverNavBtn={onMouseOverNavBtn}
+              setChartFromAPI={props.setChartFromAPI}
+            />
+          )}
 
-        {props.exportView && props.rawViz && (
-          <div css={styles.exportview}>
-            <ChartExporter rawViz={props.rawViz} />
-          </div>
-        )}
-      </div>
-    </Slide>
+          {props.exportView && props.rawViz && (
+            <div css={styles.exportview}>
+              <ChartExporter rawViz={props.rawViz} />
+            </div>
+          )}
+        </div>
+      </Slide>
+      <InfoSnackbar
+        gap={location.pathname.includes("report")}
+        data-testid="create-chart-snackbar"
+        onClose={() => setShowSnackbar(null)}
+        open={showSnackbar !== null && showSnackbar !== ""}
+      >
+        <SnackbarContent
+          message={showSnackbar}
+          aria-describedby="create-chart-snackbar-content"
+          action={
+            <>
+              {!location.pathname.includes("report") && (
+                <button
+                  onClick={() => {
+                    setShowSnackbar(null);
+                    history.push("/report/new/initial");
+                  }}
+                >
+                  CREATE NEW REPORT
+                </button>
+              )}
+            </>
+          }
+        />
+      </InfoSnackbar>
+    </>
   );
 }

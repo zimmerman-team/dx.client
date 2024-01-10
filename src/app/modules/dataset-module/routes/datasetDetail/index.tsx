@@ -44,10 +44,6 @@ export default function DatasetDetail() {
 
   const name = find(datasets, (d: any) => d.id === page)?.name;
   const description = find(datasets, (d: any) => d.id === page)?.description;
-  console.log(
-    find(datasets, (d: any) => d.id === page),
-    "description"
-  );
 
   return (
     <Container maxWidth="lg">

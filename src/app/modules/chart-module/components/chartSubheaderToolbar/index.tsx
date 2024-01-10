@@ -29,7 +29,7 @@ import { ExportChartButton } from "app/modules/chart-module/components/chartSubh
 import { ISnackbarState } from "app/fragments/datasets-fragment/upload-steps/previewFragment";
 import {
   homeDisplayAtom,
-  createChartFromReportAtom,
+  chartFromReportAtom,
   reportRightPanelViewAtom,
 } from "app/state/recoil/atoms";
 import { InfoSnackbar } from "app/modules/chart-module/components/chartSubheaderToolbar/infoSnackbar";
@@ -46,14 +46,13 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
   const [enableButton, setEnableButton] = React.useState<boolean>(false);
 
   const setHomeTab = useRecoilState(homeDisplayAtom)[1];
-  const [createChartFromReport, _setCreateChartFromReport] = useRecoilState(
-    createChartFromReportAtom
-  );
+  const [chartFromReport, _setChartFromReport] =
+    useRecoilState(chartFromReportAtom);
   const setRightPanelView = useRecoilState(reportRightPanelViewAtom)[1];
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
+  const [showSnackbar, setShowSnackbar] = React.useState<string | null>(null);
   const [isSavedEnabled, setIsSavedEnabled] = React.useState(false);
   const [isPreviewEnabled, setIsPreviewEnabled] = React.useState(false);
-  const [showSnackbar, setShowSnackbar] = React.useState<string | null>(null);
   const [duplicatedChartId, setDuplicatedChartId] = React.useState<
     string | null
   >(null);
@@ -178,20 +177,28 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
       });
     }
   };
-
+  //handles what happens after chart is created or edited
   React.useEffect(() => {
-    if (
-      (editChartSuccess || createChartSuccess) &&
-      createChartFromReport.state
-    ) {
+    if ((editChartSuccess || createChartSuccess) && chartFromReport.state) {
       //returns back to persisted report view
       setRightPanelView("charts");
-      history.push(`/report/${createChartFromReport.page}/edit`);
-    } else if (editChartSuccess && !createChartFromReport.state) {
+      history.push(`/report/${chartFromReport.page}/edit`);
+    } else if (editChartSuccess && !chartFromReport.state) {
       //returns back to chart detail page
       history.push(`/chart/${page}`);
+    } else if (
+      createChartSuccess &&
+      !chartFromReport.state &&
+      createChartData.id
+    ) {
+      //shows snackbar
+      setShowSnackbar(
+        createChartSuccess ? `Chart created successfully!` : null
+      );
+      //returns back to chart detail page
+      history.push(`/chart/${createChartData.id}`);
     }
-  }, [editChartSuccess, createChartSuccess]);
+  }, [editChartSuccess, createChartSuccess, createChartData]);
 
   React.useEffect(() => {
     return () => {
@@ -222,22 +229,6 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
     loadedChart.name,
     selectedChartType,
   ]);
-
-  React.useEffect(() => {
-    if (
-      createChartSuccess &&
-      createChartData.id &&
-      createChartData.id.length > 0
-    ) {
-      setShowSnackbar(
-        createChartSuccess ? `Chart created successfully!` : null
-      );
-      const chartId = createChartSuccess ? createChartData.id : page;
-      if (createChartFromReport.view === "" && createChartSuccess) {
-        history.push(`/chart/${chartId}`);
-      }
-    }
-  }, [createChartSuccess, createChartData]);
 
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;

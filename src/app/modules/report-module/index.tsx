@@ -32,7 +32,7 @@ import {
   Redirect,
 } from "react-router-dom";
 import {
-  createChartFromReportAtom,
+  chartFromReportAtom,
   persistedReportStateAtom,
   reportRightPanelViewAtom,
   unSavedReportPreviewModeAtom,
@@ -82,9 +82,8 @@ export default function ReportModule() {
     reportRightPanelViewAtom
   );
 
-  const [_createChartFromReport, setCreateChartFromReport] = useRecoilState(
-    createChartFromReportAtom
-  );
+  const [_chartFromReport, setChartFromReport] =
+    useRecoilState(chartFromReportAtom);
 
   const [_reportPreviewMode, setReportPreviewMode] = useRecoilState(
     unSavedReportPreviewModeAtom
@@ -567,7 +566,7 @@ export default function ReportModule() {
     <DndProvider backend={HTML5Backend}>
       {!reportError401 && view !== "ai-template" && view !== "initial" && (
         <ReportSubheaderToolbar
-          autoSave={autoSave as boolean}
+          autoSave={autoSave}
           setAutoSave={setAutoSave}
           onReportSave={onSave}
           setName={setReportName}
