@@ -310,6 +310,8 @@ export function ExpandedFilterGroup(props: ExpandedFilterGroupProps) {
           flex-direction: row;
           align-items: center;
           justify-content: space-between;
+          height: 24px;
+          margin-top: 16px;
         `}
       >
         <div
@@ -320,6 +322,9 @@ export function ExpandedFilterGroup(props: ExpandedFilterGroupProps) {
 
             > button {
               transform: rotate(-90deg);
+              &:hover {
+                background: transparent;
+              }
             }
           `}
         >
@@ -332,6 +337,7 @@ export function ExpandedFilterGroup(props: ExpandedFilterGroupProps) {
               overflow: hidden;
               white-space: nowrap;
               text-overflow: ellipsis;
+              font-size: 14px;
             `}
           >
             {splitStrBasedOnCapitalLetters(
@@ -360,13 +366,14 @@ export function ExpandedFilterGroup(props: ExpandedFilterGroupProps) {
         css={`
           width: 100%;
           display: flex;
+          align-items: center;
           position: relative;
-          padding: 10px 20px;
+          height: 35px;
+          margin-top: 11.5px;
+          padding: 0px 20px;
           border-radius: 24px;
-          margin-bottom: 18px;
           background: #dfe3e6;
           box-shadow: 0px 0px 10px rgba(152, 161, 170, 0.05);
-
           path {
             fill: #495057;
           }
@@ -381,6 +388,7 @@ export function ExpandedFilterGroup(props: ExpandedFilterGroupProps) {
             font-size: 14px;
             border-style: none;
             background: #dfe3e6;
+            height: 100%;
           `}
           tabIndex={0}
           value={value}
@@ -390,17 +398,19 @@ export function ExpandedFilterGroup(props: ExpandedFilterGroupProps) {
         />
         <SearchIcon />
       </div>
+
       <div
         css={`
           width: 100%;
-          height: 25px;
+          height: 20px;
           border-bottom: 1px solid #dfe3e6;
         `}
       />
       <div
         css={`
           overflow-y: auto;
-          max-height: 350px;
+          max-height: calc(100vh - 452px);
+          height: 100%;
 
           @media (max-width: 767px) {
             max-height: unset;
@@ -408,17 +418,26 @@ export function ExpandedFilterGroup(props: ExpandedFilterGroupProps) {
           }
 
           &::-webkit-scrollbar {
-            width: 4px;
+            width: 5px;
             border-radius: 4px;
-            background: #495057;
+            background: #262c34;
           }
           &::-webkit-scrollbar-track {
             border-radius: 4px;
             background: #f5f5f7;
           }
           &::-webkit-scrollbar-thumb {
-            border-radius: 4px;
-            background: #495057;
+            border-radius: 6px;
+            background: #262c34;
+          }
+          &::-webkit-scrollbar:horizontal {
+            visibility: hidden;
+          }
+          &::-webkit-scrollbar-track:horizontal {
+            visibility: hidden;
+          }
+          &::-webkit-scrollbar-thumb:horizontal {
+            visibility: hidden;
           }
         `}
       >
@@ -438,6 +457,7 @@ export function ExpandedFilterGroup(props: ExpandedFilterGroupProps) {
           />
         ))}
       </div>
+
       <button
         type="button"
         onClick={handleApply}
@@ -445,15 +465,15 @@ export function ExpandedFilterGroup(props: ExpandedFilterGroupProps) {
           color: #fff;
           font-size: 14px;
           cursor: pointer;
-          margin-top: 30px;
-          font-weight: bold;
+          margin-top: 15px;
+          font-weight: 500;
           width: fit-content;
-          padding: 10px 20px;
+          padding: 12px 27px;
           border-style: none;
-          border-radius: 20px;
-          background: #495057;
+          border-radius: 30px;
+          background: #231d2c;
           box-shadow: 0px 0px 10px rgba(152, 161, 170, 0.05);
-          font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
+          font-family: "Inter", sans-serif;
         `}
       >
         Apply
