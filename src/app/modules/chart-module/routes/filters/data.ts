@@ -11,4 +11,5 @@ export interface ChartBuilderFiltersProps {
   setChartErrorMessage: React.Dispatch<React.SetStateAction<string>>;
   setNotFound: React.Dispatch<React.SetStateAction<boolean>>;
   renderedChartType: ChartType;
+  containerRef: React.RefObject<HTMLDivElement>;
 }

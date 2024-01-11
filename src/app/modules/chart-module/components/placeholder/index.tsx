@@ -13,6 +13,7 @@ import { ReactComponent as PieChartPlaceholderImage } from "app/modules/chart-mo
 import { ReactComponent as CirclepackingPlaceholderImage } from "app/modules/chart-module/assets/circlepackingPlaceholder.svg";
 import { ReactComponent as ForcegraphPlaceholderImage } from "app/modules/chart-module/assets/forcegraphPlaceholder.svg";
 import { ReactComponent as CirculargraphPlaceholderImage } from "app/modules/chart-module/assets/circulargraphPlaceholder.svg";
+import { ReactComponent as RadarChartPlaceholderImage } from "app/modules/chart-module/assets/radarChartPlaceholder.svg";
 
 export default function ChartPlaceholder(props: { loading?: boolean }) {
   const chartType = useStoreState((state) => state.charts.chartType.value);
@@ -283,12 +284,12 @@ export default function ChartPlaceholder(props: { loading?: boolean }) {
             padding-right: 38px;
 
             svg {
-              width: 100%;
-              height: 100%;
+              width: 60%;
+              height: 60%;
             }
           `}
         >
-          <LinechartPlaceholderImage />
+          <RadarChartPlaceholderImage />
         </div>
       ),
     },

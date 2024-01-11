@@ -82,7 +82,7 @@ export const BarChartRepresentation = (props: ChartRepresentationProps) => {
           {
             width: 200,
             height: 140,
-            barWidth: 15.84,
+            // removed barwidth here to make it adaptable to the container
             marginBottom: 20,
             showXAxis: true,
             color: "#000000",

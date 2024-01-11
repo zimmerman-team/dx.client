@@ -18,23 +18,21 @@ function ChartBuilderFilters(props: Readonly<ChartBuilderFiltersProps>) {
   const history = useHistory();
   const { page } = useParams<{ page: string }>();
 
-  const containerRef = React.useRef<HTMLDivElement>(null);
-
   const mapping = useStoreState((state) => state.charts.mapping.value);
   const dataset = useStoreState((state) => state.charts.dataset.value);
 
   useUpdateEffectOnce(() => {
     if (
-      containerRef.current &&
+      props.containerRef.current &&
       props.visualOptions?.width === CHART_DEFAULT_WIDTH
     ) {
       const tmpVisualOptions = {
         ...props.visualOptions,
-        width: containerRef.current.clientWidth,
+        width: props.containerRef.current.clientWidth,
       };
       props.setVisualOptions(tmpVisualOptions);
     }
-  }, [containerRef]);
+  }, [props.containerRef]);
 
   React.useEffect(() => {
     if (dataset === null && !props.loading) {
@@ -46,14 +44,13 @@ function ChartBuilderFilters(props: Readonly<ChartBuilderFiltersProps>) {
     <div css={commonStyles.container}>
       <div css={commonStyles.innercontainer}>
         <div
-          ref={containerRef}
+          ref={props.containerRef}
           css={`
             width: calc(100% - 24px);
-            height: calc(100vh - 425px);
           `}
         >
           <CommonChart
-            containerRef={containerRef}
+            containerRef={props.containerRef}
             renderedChart={props.renderedChart}
             visualOptions={props.visualOptions}
             setVisualOptions={props.setVisualOptions}

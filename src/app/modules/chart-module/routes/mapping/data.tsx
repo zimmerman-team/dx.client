@@ -11,6 +11,7 @@ export interface ChartBuilderMappingProps {
   setChartErrorMessage: React.Dispatch<React.SetStateAction<string>>;
   setVisualOptions: (value: any) => void;
   renderedChartType: ChartType;
+  containerRef: React.RefObject<HTMLDivElement>;
 }
 
 export interface ChartBuilderMappingDimensionProps {
