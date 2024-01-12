@@ -6,7 +6,7 @@ import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import { find } from "lodash";
 import { Container } from "@material-ui/core";
 import { useParams } from "react-router-dom";
-import { DatasetListItemAPIModel } from "app/modules/data-themes-module/sub-modules/list";
+import { DatasetListItemAPIModel } from "app/modules/dataset-module/data";
 
 export default function DatasetDetail() {
   const { page } = useParams<{ page: string }>();

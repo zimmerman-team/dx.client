@@ -5,11 +5,11 @@ import React, {
   useCallback,
   useRef,
 } from "react";
-import InilineColorPicker from "./InlineColorPicker";
-import ColorSchemesDropDown from "./ColorSchemesDropDown";
+import InilineColorPicker from "app/modules/chart-module/routes/customize/components/InlineColorPicker";
+import ColorSchemesDropDown from "app/modules/chart-module/routes/customize/components/ColorSchemesDropDown";
 import { Row, Col, Dropdown } from "react-bootstrap";
-import { ResetBtn, InvertBtn, LockBtn } from "./ColorScaleUtils";
-import { SCALES_LABELS } from "../../../constants";
+import { ResetBtn, InvertBtn, LockBtn } from "app/modules/chart-module/routes/customize/components/ColorScaleUtils";
+import { SCALES_LABELS } from "app/modules/chart-module/routes/customize/constants";
 import get from "lodash/get";
 import keyBy from "lodash/keyBy";
 import {

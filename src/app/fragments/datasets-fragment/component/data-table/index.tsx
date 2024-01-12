@@ -4,7 +4,7 @@ import { useUpdateEffect } from "react-use";
 import { SortColumn } from "react-data-grid";
 import PreviewTable from "app/components/Table/Preview-table";
 import { tableToolBoxData } from "app/components/Table/Preview-table/data";
-import { DataThemesDataTableProps } from "app/modules/data-themes-module/components/data-table/data";
+import { DataThemesDataTableProps } from "app/fragments/datasets-fragment/component/data-table/data";
 
 const getColumns = (
   data: { [key: string]: number | string | null | boolean }[]

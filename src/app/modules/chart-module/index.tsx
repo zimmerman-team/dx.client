@@ -20,7 +20,6 @@ import { NoMatchPage } from "app/modules/common/no-match-page";
 import ChartBuilderLock from "app/modules/chart-module/routes/lock";
 import ChartModuleDataView from "app/modules/chart-module/routes/data";
 import { ChartSubheaderToolbar } from "./components/chartSubheaderToolbar";
-import ChartBuilderExport from "app/modules/chart-module/routes/export";
 import ChartBuilderMapping from "app/modules/chart-module/routes/mapping";
 import ChartBuilderFilters from "app/modules/chart-module/routes/filters";
 import ChartBuilderCustomize from "app/modules/chart-module/routes/customize";
@@ -42,8 +41,8 @@ import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 import { styles as commonStyles } from "app/modules/chart-module/routes/common/styles";
 import { NotAuthorizedMessageModule } from "app/modules/common/not-authorized-message";
 import { isEmpty } from "lodash";
-import { DatasetListItemAPIModel } from "app/modules/data-themes-module/sub-modules/list";
 import { ChartType } from "app/modules/chart-module/components/common-chart";
+import { DatasetListItemAPIModel } from "app/modules/dataset-module/data";
 
 export default function ChartModule() {
   const { isLoading, isAuthenticated } = useAuth0();
@@ -451,20 +450,7 @@ export default function ChartModule() {
           ) : (
             <Switch>
               {(isSaveLoading || isChartLoading) && <PageLoader />}
-              <Route path="/chart/:page/export">
-                <ChartBuilderExport
-                  loading={loading}
-                  setRawViz={setRawViz}
-                  renderedChart={content}
-                  visualOptions={visualOptions}
-                  setVisualOptions={setVisualOptions}
-                  renderedChartSsr={activeRenderedChartSsr}
-                  renderedChartMappedData={renderedChartMappedData}
-                  renderedChartType={chartType as ChartType}
-                  setChartErrorMessage={setChartErrorMessage}
-                  setNotFound={setNotFound}
-                />
-              </Route>
+
               <Route path="/chart/:page/customize">
                 <ChartBuilderCustomize
                   loading={loading}

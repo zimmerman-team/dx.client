@@ -1,7 +1,7 @@
 import { atom } from "recoil";
 import { recoilPersist } from "recoil-persist";
 import { convertToRaw, EditorState } from "draft-js";
-import { DatasetListItemAPIModel } from "app/modules/data-themes-module/sub-modules/list";
+import { DatasetListItemAPIModel } from "app/modules/dataset-module/data";
 
 export interface IRowFrameStructure {
   rowType:

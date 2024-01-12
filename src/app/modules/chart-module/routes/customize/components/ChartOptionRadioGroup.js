@@ -3,7 +3,7 @@ import {  Col } from "react-bootstrap";
 
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Radio from '@material-ui/core/Radio';
-import { checkLists } from "app/modules/data-themes-module/sub-modules/theme-builder/views/customize/data";
+import { checkLists } from "app/modules/chart-module/routes/customize/data";
 import RadioGroup from '@material-ui/core/RadioGroup';
 
 

@@ -30,10 +30,9 @@ import {
   VisualMapComponent,
   DataZoomComponent,
 } from "echarts/components";
-import { checkLists } from "app/modules/data-themes-module/sub-modules/theme-builder/views/customize/data";
 import { charts } from "app/modules/chart-module/data";
 import { drillDown } from "app/utils/getCirclePackingOption";
-import axios from "axios";
+import { checkLists } from "app/modules/chart-module/routes/customize/data";
 
 echarts.use([
   BarChart,
