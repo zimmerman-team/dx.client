@@ -37,13 +37,13 @@ import {
   ChartRenderedItem,
   defaultChartOptions,
 } from "app/modules/chart-module/data";
-import { IHeaderDetails } from "../report-module/components/right-panel/data";
+import { IHeaderDetails } from "app/modules/report-module/components/right-panel/data";
 import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 import { styles as commonStyles } from "app/modules/chart-module/routes/common/styles";
 import { NotAuthorizedMessageModule } from "app/modules/common/not-authorized-message";
 import { isEmpty } from "lodash";
-import { DatasetListItemAPIModel } from "../data-themes-module/sub-modules/list";
-import { ChartType } from "./components/common-chart";
+import { DatasetListItemAPIModel } from "app/modules/data-themes-module/sub-modules/list";
+import { ChartType } from "app/modules/chart-module/components/common-chart";
 
 export default function ChartModule() {
   const { isLoading, isAuthenticated } = useAuth0();
