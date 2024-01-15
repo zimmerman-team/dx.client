@@ -12,6 +12,7 @@ export interface ChartBuilderCustomizeProps {
   setChartErrorMessage: React.Dispatch<React.SetStateAction<string>>;
   setNotFound: React.Dispatch<React.SetStateAction<boolean>>;
   renderedChartType: ChartType;
+  containerRef: React.RefObject<HTMLDivElement>;
 }
 
 export const checkLists = [

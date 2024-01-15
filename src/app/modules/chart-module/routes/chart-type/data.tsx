@@ -37,6 +37,10 @@ import ColoredAreastackedIcon from "app/assets/icons/data-themes-chart-types/col
 import BubblechartIcon from "app/assets/icons/data-themes-chart-types/bubble";
 import ColoredBubblechartIcon from "app/assets/icons/data-themes-chart-types/coloredBubbleChart";
 
+import RadarchartIcon from "app/assets/icons/data-themes-chart-types/radar";
+
+import HeatmapIcon from "app/assets/icons/data-themes-chart-types/heatmap";
+
 import { ReactComponent as GeomapPreviewImg } from "app/modules/chart-module/assets/geomapPreview.svg";
 import { ReactComponent as BigNumberPreviewImg } from "app/modules/chart-module/assets/bigNumberPreview.svg";
 import { ReactComponent as LineChartPreviewImg } from "app/modules/chart-module/assets/lineChartPreview.svg";
@@ -51,6 +55,8 @@ import { ReactComponent as ForcegraphPreviewImg } from "app/modules/chart-module
 import { ReactComponent as CirculargraphPreviewImg } from "app/modules/chart-module/assets/circulargraphPreview.svg";
 import { ReactComponent as AreastackedPreviewImg } from "app/modules/chart-module/assets/areastackedPreview.svg";
 import { ReactComponent as BubbleChartPreviewImg } from "app/modules/chart-module/assets/bubbleChartPreview.svg";
+import { ReactComponent as RadarChartPreviewImg } from "app/modules/chart-module/assets/radarChartPreview.svg";
+import { ReactComponent as HeatmapPreviewImg } from "app/modules/chart-module/assets/heatmapPreview.svg";
 
 export interface ChartBuilderChartTypeProps {
   loading: boolean;
@@ -200,8 +206,8 @@ export const echartTypes = (big: boolean) => {
     {
       id: "echartsHeatmap",
       label: "Heat map",
-      icon: <BarChartIcon big={big} />,
-      preview: <BarChartPreviewImg />,
+      icon: <HeatmapIcon big={big} />,
+      preview: <HeatmapPreviewImg />,
       categories: ["Correlations", "Proportions"],
       ssr: false,
       description:
@@ -210,8 +216,8 @@ export const echartTypes = (big: boolean) => {
     {
       id: "echartsRadarchart",
       label: "Radar Chart",
-      icon: <BarChartIcon big={big} />,
-      preview: <BarChartPreviewImg />,
+      icon: <RadarchartIcon big={big} />,
+      preview: <RadarChartPreviewImg />,
       categories: ["Correlations"],
       ssr: false,
       description:

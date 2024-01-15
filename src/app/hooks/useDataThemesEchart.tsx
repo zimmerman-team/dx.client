@@ -2,6 +2,7 @@ import React from "react";
 import get from "lodash/get";
 import filter from "lodash/filter";
 import uniqBy from "lodash/uniqBy";
+import sortBy from "lodash/sortBy";
 import * as echarts from "echarts/core";
 import { CanvasRenderer } from "echarts/renderers";
 import { formatFinancialValue } from "app/utils/formatFinancialValue";
@@ -75,6 +76,7 @@ export function useDataThemesEchart() {
       color,
       splitLineY,
       barRadius,
+      barWidth,
       xAxisLineColor,
       xAxisLabelFontSize,
       focus,
@@ -140,6 +142,7 @@ export function useDataThemesEchart() {
           emphasis: {
             focus,
           },
+          barWidth,
         },
       ],
       tooltip: {
@@ -161,7 +164,6 @@ export function useDataThemesEchart() {
   function echartsPiechart(data: any, visualOptions: any) {
     const {
       // artboard
-      width,
       height,
       marginTop,
       marginRight,
@@ -199,7 +201,6 @@ export function useDataThemesEchart() {
       },
       series: [
         {
-          width,
           height,
           top: marginTop,
           left: marginLeft,
@@ -235,6 +236,7 @@ export function useDataThemesEchart() {
     const {
       // artboard
       height,
+      width,
       background,
       // margins
       marginTop,
@@ -248,9 +250,23 @@ export function useDataThemesEchart() {
       isMonetaryValue,
     } = visualOptions;
 
+    if (!data.geoJSON) return {};
+
     echarts.registerMap("World", data.geoJSON);
 
     const sizes = data.results.map((d: any) => d.value);
+
+    // height to width ratio
+    const sizeRatio = 0.55;
+
+    const responsiveHeight = sizeRatio * width;
+    const responsiveWidth = height * (1 / sizeRatio);
+
+    const newHeight = responsiveHeight > height ? height : responsiveHeight;
+    const newWidth = responsiveHeight > height ? responsiveWidth : width;
+
+    const top = height - newHeight > 0 ? (height - newHeight) / 2 : 0;
+    const left = width - newWidth > 0 ? (width - newWidth) / 2 : 0;
 
     const option = {
       tooltip: {
@@ -277,16 +293,18 @@ export function useDataThemesEchart() {
         },
         text: ["High", "Low"],
         calculable: true,
+        show: false,
       },
       series: [
         {
           type: "map",
-          height,
+          height: newHeight,
+          width: newWidth,
           roam: false,
           map: "World",
           data: data.results,
-          top: marginTop,
-          left: marginLeft,
+          top: marginTop + top,
+          left: marginLeft + left,
           right: marginRight,
           bottom: marginBottom,
           emphasis: {
@@ -697,14 +715,9 @@ export function useDataThemesEchart() {
       palette,
     } = visualOptions;
 
-    const xAxisData = data
-      .filter((d: any) => d.x)
-      .map((d: any) => String(d.x))
-      .sort();
-    const yAxisData = data
-      .filter((d: any) => d.y)
-      .map((d: any) => String(d.y))
-      .sort();
+    const xAxisData = sortBy(data.filter((d: any) => d.x).map((d: any) => d.x));
+
+    const yAxisData = sortBy(data.filter((d: any) => d.y).map((d: any) => d.y));
 
     const seriesData = data.map((item: any) => [
       String(item.x),
@@ -716,10 +729,16 @@ export function useDataThemesEchart() {
       xAxis: {
         type: "category",
         data: uniqBy(xAxisData, (d: any) => d),
+        splitArea: {
+          show: true,
+        },
       },
       yAxis: {
         type: "category",
         data: uniqBy(yAxisData, (d: any) => d),
+        splitArea: {
+          show: true,
+        },
       },
       tooltip: {
         trigger: showTooltip ? "item" : "none",
@@ -751,6 +770,8 @@ export function useDataThemesEchart() {
             itemStyle: {
               borderColor: "#333",
               borderWidth: 1,
+              shadowBlur: 10,
+              shadowColor: "rgba(0, 0, 0, 0.5)",
             },
           },
           progressive: 1000,
@@ -869,7 +890,6 @@ export function useDataThemesEchart() {
     const option = {
       // backgroundColor: background,
       backgroundColor: "transparent",
-
       series: [
         {
           type: "sankey",

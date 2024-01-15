@@ -15,20 +15,19 @@ function ChartBuilderCustomize(props: Readonly<ChartBuilderCustomizeProps>) {
   useTitle("DX DataXplorer - Customize");
   const history = useHistory();
   const { page } = useParams<{ page: string }>();
-  const containerRef = React.useRef<HTMLDivElement>(null);
   const dataset = useStoreState((state) => state.charts.dataset.value);
   useUpdateEffectOnce(() => {
     if (
-      containerRef.current &&
+      props.containerRef.current &&
       props.visualOptions?.width === CHART_DEFAULT_WIDTH
     ) {
       const tmpVisualOptions = {
         ...props.visualOptions,
-        width: containerRef.current.clientWidth,
+        width: props.containerRef.current.clientWidth,
       };
       props.setVisualOptions(tmpVisualOptions);
     }
-  }, [containerRef]);
+  }, [props.containerRef]);
 
   React.useEffect(() => {
     if (dataset === null && !props.loading) {
@@ -40,14 +39,13 @@ function ChartBuilderCustomize(props: Readonly<ChartBuilderCustomizeProps>) {
     <div css={commonStyles.container}>
       <div css={commonStyles.innercontainer}>
         <div
-          ref={containerRef}
+          ref={props.containerRef}
           css={`
             width: calc(100% - 24px);
-            height: calc(100vh - 175px);
           `}
         >
           <CommonChart
-            containerRef={containerRef}
+            containerRef={props.containerRef}
             renderedChart={props.renderedChart}
             visualOptions={props.visualOptions}
             setVisualOptions={props.setVisualOptions}

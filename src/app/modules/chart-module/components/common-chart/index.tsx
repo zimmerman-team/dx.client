@@ -51,7 +51,7 @@ export function CommonChart(props: Readonly<Props>) {
       const tmpVisualOptions = {
         ...props.visualOptions,
         width: props.containerRef.current.clientWidth,
-        height: props.containerRef.current.clientHeight,
+        // height: props.containerRef.current.clientHeight, // removed the setting of visual option height to let user set it in the chart builder
       };
       props.setVisualOptions(tmpVisualOptions);
     }
@@ -91,9 +91,10 @@ export function CommonChart(props: Readonly<Props>) {
       ? {
           ...props.visualOptions,
           width: props.containerRef.current.clientWidth,
-          height:
-            props.containerRef.current.clientHeight -
-            (props.withHeader ? 36 : 0),
+          height: props.inChartWrapper
+            ? props.containerRef.current.clientHeight -
+              (props.withHeader ? 36 : 0)
+            : props.visualOptions.height,
         }
       : props.visualOptions;
     if (

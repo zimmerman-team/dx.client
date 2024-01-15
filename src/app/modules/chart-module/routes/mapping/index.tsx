@@ -21,8 +21,6 @@ function ChartBuilderMapping(props: Readonly<ChartBuilderMappingProps>) {
   const history = useHistory();
   const { page } = useParams<{ page: string }>();
 
-  const containerRef = React.useRef<HTMLDivElement>(null);
-
   const dataset = useStoreState((state) => state.charts.dataset.value);
   const mapping = useStoreState((state) => state.charts.mapping.value);
   const [requiredFields, setRequiredFields] = React.useState<
@@ -54,15 +52,14 @@ function ChartBuilderMapping(props: Readonly<ChartBuilderMappingProps>) {
           <ChartPlaceholder loading={props.loading} />
         ) : (
           <div
-            ref={containerRef}
+            ref={props.containerRef}
             css={`
               width: calc(100% - 24px);
-              height: calc(100vh - 175px);
             `}
           >
             {requiredFields.length === 0 && minValuesFields.length === 0 && (
               <CommonChart
-                containerRef={containerRef}
+                containerRef={props.containerRef}
                 renderedChart={props.renderedChart}
                 visualOptions={props.visualOptions}
                 setVisualOptions={props.setVisualOptions}

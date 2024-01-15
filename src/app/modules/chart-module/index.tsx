@@ -41,6 +41,7 @@ import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 import { styles as commonStyles } from "app/modules/chart-module/routes/common/styles";
 import { NotAuthorizedMessageModule } from "app/modules/common/not-authorized-message";
 import { isEmpty } from "lodash";
+import useResizeObserver from "use-resize-observer";
 import { ChartType } from "app/modules/chart-module/components/common-chart";
 import { DatasetListItemAPIModel } from "app/modules/dataset-module/data";
 
@@ -152,6 +153,8 @@ export default function ChartModule() {
   const dataset = useStoreState((state) => state.charts.dataset.value);
 
   const config = get(routeToConfig, `["${view}"]`, routeToConfig.preview);
+
+  const containerRef = React.useRef<HTMLDivElement>(null);
 
   const content = React.useMemo(
     () => get(chartFromAPI, "renderedContent", ""),
@@ -274,6 +277,24 @@ export default function ChartModule() {
     setDataError(false);
     setNotFound(false);
   }
+
+  React.useEffect(() => {
+    // Updates visual options width when container width changes
+    // This adjusts the width of the chart when the toolbox is open or closed
+    const visualOptionsWidth = get(visualOptions, "width", 0);
+    const containerWidth = containerRef.current?.clientWidth;
+
+    if (containerRef.current && visualOptionsWidth !== containerWidth) {
+      // Sets only when container width is different from visual options width
+      const tmpVisualOptions = {
+        ...visualOptions,
+        width: containerWidth,
+      };
+      setVisualOptions(tmpVisualOptions);
+    }
+  }, [visualOptions, containerRef.current?.clientWidth]);
+
+  const { ref } = useResizeObserver<HTMLDivElement>();
 
   function clearChartBuilder() {
     clear().then(() => {
@@ -444,6 +465,7 @@ export default function ChartModule() {
 
             transition: width 225ms cubic-bezier(0, 0, 0.2, 1) 0ms;
           `}
+          ref={ref}
         >
           {dataError || notFound ? (
             <>{errorComponent()}</>
@@ -456,6 +478,7 @@ export default function ChartModule() {
                   loading={loading}
                   dimensions={dimensions}
                   mappedData={mappedData}
+                  containerRef={containerRef}
                   renderedChart={content}
                   visualOptions={visualOptions}
                   setVisualOptions={setVisualOptions}
@@ -487,6 +510,7 @@ export default function ChartModule() {
                   renderedChart={content}
                   dimensions={dimensions}
                   visualOptions={visualOptions}
+                  containerRef={containerRef}
                   setVisualOptions={setVisualOptions}
                   renderedChartSsr={activeRenderedChartSsr}
                   renderedChartMappedData={renderedChartMappedData}
@@ -502,6 +526,7 @@ export default function ChartModule() {
                   setVisualOptions={setVisualOptions}
                   dimensions={dimensions}
                   renderedChart={content}
+                  containerRef={containerRef}
                   renderedChartSsr={activeRenderedChartSsr}
                   renderedChartMappedData={renderedChartMappedData}
                   renderedChartType={chartType as ChartType}
