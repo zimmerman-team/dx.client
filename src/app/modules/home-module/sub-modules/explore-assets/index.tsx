@@ -14,7 +14,7 @@ import {
 } from "@material-ui/core";
 /* project */
 import {
-  createChartFromReportAtom,
+  chartFromReportAtom,
   homeDisplayAtom,
   persistedReportStateAtom,
   unSavedReportPreviewModeAtom,
@@ -74,16 +74,14 @@ export default function ExploreAssetsModule() {
   const clearPersistedReportState = useResetRecoilState(
     persistedReportStateAtom
   );
-  const clearCreateChartFromReportState = useResetRecoilState(
-    createChartFromReportAtom
-  );
+  const clearChartFromReportState = useResetRecoilState(chartFromReportAtom);
 
   const [_, setReportPreviewMode] = useRecoilState(
     unSavedReportPreviewModeAtom
   );
   React.useEffect(() => {
     clearPersistedReportState();
-    clearCreateChartFromReportState();
+    clearChartFromReportState();
     setReportPreviewMode(false);
   }, []);
   const [category, setCategory] = React.useState("");

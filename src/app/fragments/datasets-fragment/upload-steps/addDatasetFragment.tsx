@@ -87,8 +87,6 @@ export default function AddDatasetFragment(props: Props) {
   useEffect(() => {
     if (acceptedFiles.length > 0) {
       props.setFile(acceptedFiles[0]);
-      console.log("herree", acceptedFiles[0]);
-      // props.handleFileSubmit();
     }
   }, [acceptedFiles]);
 

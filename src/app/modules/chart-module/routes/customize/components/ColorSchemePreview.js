@@ -1,6 +1,6 @@
 import React from "react";
 import get from "lodash/get";
-import { COLOR_SCHEMES_LABELS } from "../../../constants";
+
 
 const ColorSchemePreview = ({ label, scale, numSamples = 150 }) => {
   let samples;

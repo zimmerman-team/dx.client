@@ -154,12 +154,8 @@ export function CommonChart(props: Readonly<Props>) {
 
   let content;
   let contentHeight;
-  if (!props.chartPreviewInReport) {
-    if (props.renderedChartType === "bigNumber" && props.inChartWrapper) {
-      contentHeight = props.visualOptions?.height - 28;
-    } else {
-      contentHeight = props.visualOptions?.height;
-    }
+  if (!props.chartPreviewInReport && props.renderedChartType !== "bigNumber") {
+    contentHeight = props.visualOptions?.height - 28;
   }
 
   if (props.renderedChartSsr) {

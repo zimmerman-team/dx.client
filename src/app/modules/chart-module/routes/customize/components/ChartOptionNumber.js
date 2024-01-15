@@ -1,6 +1,6 @@
 import React from 'react'
 import { Row, Col } from 'react-bootstrap'
-import ChartOptionSelect from './ChartOptionSelect'
+import ChartOptionSelect from 'app/modules/chart-module/routes/customize/components/ChartOptionSelect'
 
 const ChartOptionNumber = ({
   value,

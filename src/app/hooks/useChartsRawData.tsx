@@ -225,21 +225,21 @@ export function useChartsRawData(props: {
   }
 
   React.useEffect(() => {
+    // calls loadChartDataFromAPI  on first render  when token is available or token changes
+    // useful when coming from report page to edit chart page
+    // if in chart wrapper component, loadChartDataFromAPI is called from chart-wrapper component
+    if (!props.inChartWrapper && !isEmpty(token)) {
+      loadChartDataFromAPI();
+    }
+  }, [token]);
+
+  useUpdateEffect(() => {
+    //calls on second render
     // calls loadChartDataFromAPI only in chart detail page
     if (!props.inChartWrapper && chartDetailPage && !isLoading) {
       loadChartDataFromAPI();
     }
   }, [page, props.inChartWrapper, isLoading, token]);
-
-  React.useEffect(() => {
-    // calls loadChartDataFromAPI  on first render  when token is available or token changes
-    // useful when coming from report page to edit chart page
-    // if in chart wrapper component, loadChartDataFromAPI is called from chart-wrapper component
-    if (!props.inChartWrapper && !isEmpty(token)) {
-      console.log("boo");
-      loadChartDataFromAPI();
-    }
-  }, [token]);
 
   const renderChartFromAPI = () => {
     const extraLoader = document.getElementById("extra-loader");

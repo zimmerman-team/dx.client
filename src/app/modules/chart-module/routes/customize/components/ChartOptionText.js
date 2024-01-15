@@ -1,5 +1,5 @@
 import React from 'react'
-import ChartOptionSelect from './ChartOptionSelect'
+import ChartOptionSelect from 'app/modules/chart-module/routes/customize/components/ChartOptionSelect'
 
 const ChartOptionText = ({
   value,

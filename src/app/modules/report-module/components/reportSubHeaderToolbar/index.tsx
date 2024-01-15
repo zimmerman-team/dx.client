@@ -100,7 +100,9 @@ export const useStyles = makeStyles(() =>
   })
 );
 
-export function ReportSubheaderToolbar(props: ReportSubheaderToolbarProps) {
+export function ReportSubheaderToolbar(
+  props: Readonly<ReportSubheaderToolbarProps>
+) {
   const history = useHistory();
   const classes = useStyles();
   const { user, isAuthenticated } = useAuth0();
@@ -125,6 +127,13 @@ export function ReportSubheaderToolbar(props: ReportSubheaderToolbarProps) {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
   );
+  const [snackbarState, setSnackbarState] = React.useState<ISnackbarState>({
+    open: false,
+    vertical: "bottom",
+    horizontal: "center",
+  });
+
+  const [savedChanges, setSavedChanges] = React.useState<boolean>(false);
 
   const loadReports = useStoreActions(
     (actions) => actions.reports.ReportGetList.fetch
@@ -156,14 +165,6 @@ export function ReportSubheaderToolbar(props: ReportSubheaderToolbarProps) {
   const reportEditLoading = useStoreState(
     (state) => state.reports.ReportUpdate.loading
   );
-
-  const [snackbarState, setSnackbarState] = React.useState<ISnackbarState>({
-    open: false,
-    vertical: "bottom",
-    horizontal: "center",
-  });
-
-  const [savedChanges, setSavedChanges] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     // handles saved changes state for autosave

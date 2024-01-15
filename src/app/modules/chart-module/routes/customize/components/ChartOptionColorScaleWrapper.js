@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
-import ChartOptionColorScale from './ChartOptionColorScale'
-import ChartOptionColorScaleDefault from './ChartOptionColorScaleDefault'
+import ChartOptionColorScale from 'app/modules/chart-module/routes/customize/components//ChartOptionColorScale'
+import ChartOptionColorScaleDefault from 'app/modules/chart-module/routes/customize/components//ChartOptionColorScaleDefault'
 
 const ChartOptionColorScaleWrapper = ({
   value,

@@ -2,13 +2,23 @@ import FinishedFragment from "app/fragments/datasets-fragment/upload-steps/finis
 import { useChartsRawData } from "app/hooks/useChartsRawData";
 import React from "react";
 import DatasetSubHeaderToolbar from "../../component/datasetSubHeaderToolbar";
-import { useStoreState } from "app/state/store/hooks";
+import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import { find } from "lodash";
 import { Container } from "@material-ui/core";
 import { useParams } from "react-router-dom";
+import { DatasetListItemAPIModel } from "app/modules/dataset-module/data";
 
 export default function DatasetDetail() {
   const { page } = useParams<{ page: string }>();
+  const token = useStoreState((state) => state.AuthToken.value);
+  const datasets = useStoreState(
+    (state) =>
+      (state.dataThemes.DatasetGetList.crudData ??
+        []) as DatasetListItemAPIModel[]
+  );
+  const loadDatasets = useStoreActions(
+    (actions) => actions.dataThemes.DatasetGetList.fetch
+  );
 
   const { loadDataset, sampleData, dataTotalCount, dataStats } =
     useChartsRawData({
@@ -22,16 +32,22 @@ export default function DatasetDetail() {
     loadDataset(`chart/sample-data/${page}`);
   }, []);
 
-  const datasets = useStoreState(
-    (state) => state.dataThemes.DatasetGetList.crudData as any[]
-  );
+  React.useEffect(() => {
+    if (token) {
+      loadDatasets({
+        token,
+        storeInCrudData: true,
+        filterString: "filter[order]=createdDate desc",
+      });
+    }
+  }, [token, page]);
 
   const name = find(datasets, (d: any) => d.id === page)?.name;
   const description = find(datasets, (d: any) => d.id === page)?.description;
 
   return (
     <Container maxWidth="lg">
-      <DatasetSubHeaderToolbar name={name} />
+      <DatasetSubHeaderToolbar name={name as string} />
       <div
         css={`
           height: 60px;
@@ -42,7 +58,7 @@ export default function DatasetDetail() {
         stats={dataStats}
         datasetId={page}
         dataTotalCount={dataTotalCount}
-        description={description}
+        description={description as string}
       />
     </Container>
   );

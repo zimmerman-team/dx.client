@@ -11,7 +11,7 @@ import {
   VisualMapComponentOption,
 } from "echarts/components";
 import { formatFinancialValue } from "./formatFinancialValue";
-import { checkLists } from "app/modules/data-themes-module/sub-modules/theme-builder/views/customize/data";
+import { checkLists } from "app/modules/chart-module/routes/customize/data";
 
 function convertData(root: d3.HierarchyCircularNode<any>) {
   return root.descendants().map((node) => ({

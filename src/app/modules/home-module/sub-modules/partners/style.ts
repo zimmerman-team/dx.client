@@ -105,7 +105,7 @@ export const quotesEllipseCss = css`
 
 export const useDXcss = css`
   color: #231d2c;
-  width: 60%;
+  width: 100%;
   h2 {
     font-weight: 350;
     font-size: 40px;
