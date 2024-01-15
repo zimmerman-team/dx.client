@@ -7,17 +7,5 @@ export interface ChartBuilderPreviewThemeProps {
   renderedChartMappedData: any;
   setVisualOptions: (value: any) => void;
   setIsPreviewView: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-export interface ChartBuilderPreviewThemePageProps {
-  loading: boolean;
-  visualOptions: any;
-  isEditMode: boolean;
-  validMapping: boolean;
-  renderedCharts: string[][];
-  renderedChartsMappedData: any;
-  renderedChartsSsr: boolean[][];
-  addVizToLocalStates: () => void;
-  setVisualOptions: (value: any) => void;
-  setIsPreviewView: React.Dispatch<React.SetStateAction<boolean>>;
+  containerRef: React.RefObject<HTMLDivElement>;
 }

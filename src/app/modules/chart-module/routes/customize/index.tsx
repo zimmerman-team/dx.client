@@ -16,18 +16,6 @@ function ChartBuilderCustomize(props: Readonly<ChartBuilderCustomizeProps>) {
   const history = useHistory();
   const { page } = useParams<{ page: string }>();
   const dataset = useStoreState((state) => state.charts.dataset.value);
-  useUpdateEffectOnce(() => {
-    if (
-      props.containerRef.current &&
-      props.visualOptions?.width === CHART_DEFAULT_WIDTH
-    ) {
-      const tmpVisualOptions = {
-        ...props.visualOptions,
-        width: props.containerRef.current.clientWidth,
-      };
-      props.setVisualOptions(tmpVisualOptions);
-    }
-  }, [props.containerRef]);
 
   React.useEffect(() => {
     if (dataset === null && !props.loading) {
