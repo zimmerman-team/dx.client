@@ -12,48 +12,19 @@ import { CHART_DEFAULT_WIDTH } from "app/modules/chart-module/data";
 import { useDataThemesEchart } from "app/hooks/useDataThemesEchart";
 import { useUpdateEffectOnce } from "app/hooks/useUpdateEffectOnce";
 import { styles as commonStyles } from "app/modules/chart-module/routes/common/styles";
-import {
-  ChartBuilderPreviewThemeProps,
-  ChartBuilderPreviewThemePageProps,
-} from "app/modules/chart-module/routes/preview-theme/data";
-
-export function ChartBuilderPreviewThemePage(
-  props: ChartBuilderPreviewThemePageProps
-) {
-  if (props.loading) {
-    return <PageLoader />;
-  }
-
-  return (
-    <React.Fragment>
-      {props.renderedCharts[0].map((_, vizIndex) => (
-        <ChartBuilderPreviewTheme
-          key={Math.random().toString(36).substring(7)}
-          editable={props.isEditMode}
-          loading={props.loading}
-          visualOptions={props.visualOptions}
-          setVisualOptions={props.setVisualOptions}
-          renderedChart={props.renderedCharts[0][vizIndex]}
-          renderedChartSsr={props.renderedChartsSsr[0][vizIndex]}
-          renderedChartMappedData={props.renderedChartsMappedData[0][vizIndex]}
-          setIsPreviewView={props.setIsPreviewView}
-        />
-      ))}
-    </React.Fragment>
-  );
-}
+import { ChartBuilderPreviewThemeProps } from "app/modules/chart-module/routes/preview-theme/data";
 
 export function ChartBuilderPreviewTheme(props: ChartBuilderPreviewThemeProps) {
   useTitle("DX DataXplorer - Preview Chart");
 
   const domRef = React.useRef<HTMLDivElement>(null);
-  const containerRef = React.useRef<HTMLDivElement>(null);
+
   const { page } = useParams<{ page: string }>();
   const dataset = useStoreState((state) => state.charts.dataset.value);
   const history = useHistory();
   const { render } = useDataThemesEchart();
 
-  const { visualOptions, setVisualOptions } = props;
+  const { visualOptions } = props;
 
   const mapping = useStoreState((state) => state.charts.mapping.value);
   const selectedChartType = useStoreState(
@@ -66,19 +37,6 @@ export function ChartBuilderPreviewTheme(props: ChartBuilderPreviewThemeProps) {
       history.push(`/chart/${page}/data`);
     }
   }, [dataset]);
-
-  useUpdateEffectOnce(() => {
-    if (
-      containerRef.current &&
-      get(visualOptions, "width", 100) === CHART_DEFAULT_WIDTH
-    ) {
-      const tmpVisualOptions = {
-        ...visualOptions,
-        width: containerRef.current.clientWidth,
-      };
-      setVisualOptions(tmpVisualOptions);
-    }
-  }, [containerRef]);
 
   React.useEffect(() => {
     if (
@@ -216,7 +174,7 @@ export function ChartBuilderPreviewTheme(props: ChartBuilderPreviewThemeProps) {
       />
       <div>
         <div
-          ref={containerRef}
+          ref={props.containerRef}
           css={`
             position: relative;
             width: calc(100% - 24px);

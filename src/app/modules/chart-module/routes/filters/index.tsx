@@ -21,19 +21,6 @@ function ChartBuilderFilters(props: Readonly<ChartBuilderFiltersProps>) {
   const mapping = useStoreState((state) => state.charts.mapping.value);
   const dataset = useStoreState((state) => state.charts.dataset.value);
 
-  useUpdateEffectOnce(() => {
-    if (
-      props.containerRef.current &&
-      props.visualOptions?.width === CHART_DEFAULT_WIDTH
-    ) {
-      const tmpVisualOptions = {
-        ...props.visualOptions,
-        width: props.containerRef.current.clientWidth,
-      };
-      props.setVisualOptions(tmpVisualOptions);
-    }
-  }, [props.containerRef]);
-
   React.useEffect(() => {
     if (dataset === null && !props.loading) {
       history.push(`/chart/${page}/data`);

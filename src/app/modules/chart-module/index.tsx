@@ -250,11 +250,7 @@ export default function ChartModule() {
     tmpVisualOptions = {
       ...defaultOptionsValues,
       ...tmpVisualOptions,
-      width:
-        !visualOptions.width ||
-        visualOptions.width === defaultOptionsValues.width
-          ? defaultOptionsValues.width
-          : visualOptions.width,
+      width: defaultOptionsValues.width,
     };
     setVisualOptions(tmpVisualOptions);
   }
@@ -562,6 +558,7 @@ export default function ChartModule() {
                   renderedChartMappedData={renderedChartMappedData}
                   editable={!isPreviewMode || (page === "new" && !view)}
                   setIsPreviewView={setIsPreviewView}
+                  containerRef={containerRef}
                 />
               </Route>
               <Route path="/chart/:page">
@@ -574,6 +571,7 @@ export default function ChartModule() {
                   renderedChartMappedData={renderedChartMappedData}
                   editable={!isPreviewMode}
                   setIsPreviewView={setIsPreviewView}
+                  containerRef={containerRef}
                 />
               </Route>
               <Route path="*">
