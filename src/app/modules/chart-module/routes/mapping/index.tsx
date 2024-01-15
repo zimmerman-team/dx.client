@@ -57,7 +57,7 @@ function ChartBuilderMapping(props: Readonly<ChartBuilderMappingProps>) {
             ref={containerRef}
             css={`
               width: calc(100% - 24px);
-              height: calc(100vh - 225px);
+              height: calc(100vh - 175px);
             `}
           >
             {requiredFields.length === 0 && minValuesFields.length === 0 && (

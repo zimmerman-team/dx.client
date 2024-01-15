@@ -1,6 +1,6 @@
 import React from "react";
 import { Dropdown } from "react-bootstrap";
-import ColorSchemePreview from "./ColorSchemePreview";
+import ColorSchemePreview from "app/modules/chart-module/routes/customize/components/ColorSchemePreview";
 import {
   colorPresets,
   getColorDomain,

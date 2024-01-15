@@ -49,7 +49,7 @@ function ChartBuilderFilters(props: Readonly<ChartBuilderFiltersProps>) {
           ref={containerRef}
           css={`
             width: calc(100% - 24px);
-            height: calc(100vh - 425px);
+            height: calc(100vh - 175px);
           `}
         >
           <CommonChart

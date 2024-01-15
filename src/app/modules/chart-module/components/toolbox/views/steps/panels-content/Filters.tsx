@@ -46,22 +46,26 @@ export function ChartToolBoxFilters(props: ChartToolBoxFiltersProps) {
       />
       <div
         css={`
-          width: 90%;
+          width: 93%;
           margin: auto;
           display: flex;
           overflow-y: auto;
           flex-direction: column;
           max-height: calc(100vh - 260px);
+          height: 100%;
+          padding-left: 9px;
+          padding-bottom: 33px;
+          position: relative;
           &::-webkit-scrollbar {
             width: 4px;
-            background: #495057;
+            background: #262c34;
           }
           &::-webkit-scrollbar-track {
             background: #f1f3f5;
           }
           &::-webkit-scrollbar-thumb {
             border-radius: 4px;
-            background: #495057;
+            background: #262c34;
           }
         `}
       >

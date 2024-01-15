@@ -136,19 +136,19 @@ export function ChartToolBoxSteps(props: ChartToolBoxStepsProps) {
       <div
         css={`
           width: 400px;
-          overflow-y: scroll;
+          overflow-y: hidden;
           height: calc(100vh - ${!props.filtersView ? 229 : 105}px);
           position: relative;
 
           &::-webkit-scrollbar {
             width: 5px;
-            background: #231d2c;
+            background: #262c34;
           }
           &::-webkit-scrollbar-track {
             background: #f5f5f7;
           }
           &::-webkit-scrollbar-thumb {
-            background: #231d2c;
+            background: #262c34;
           }
         `}
       >

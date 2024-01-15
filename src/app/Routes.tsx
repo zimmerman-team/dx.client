@@ -36,9 +36,6 @@ const ExploreAssetsModule = lazy(
 );
 const ChartModule = lazy(() => import("app/modules/chart-module"));
 const ReportModule = lazy(() => import("app/modules/report-module"));
-const DatasetUploadSteps = lazy(
-  () => import("app/fragments/datasets-fragment/upload-steps")
-);
 
 const AuthCallbackModule = lazy(() => import("app/modules/callback-module"));
 const OnboardingModule = lazy(() => import("app/modules/onboarding-module"));

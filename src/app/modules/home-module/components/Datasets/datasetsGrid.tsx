@@ -8,12 +8,12 @@ import { useInfinityScroll } from "app/hooks/useInfinityScroll";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import { HomepageTable } from "app/modules/home-module/components/Table";
 import DeleteDatasetDialog from "app/components/Dialogs/deleteDatasetDialog";
-import { DatasetListItemAPIModel } from "app/modules/data-themes-module/sub-modules/list";
 import GridItem from "app/modules/home-module/components/Datasets/gridItem";
 import DatasetAddnewCard from "app/modules/home-module/components/Datasets/datasetAddNewCard";
 import CircleLoader from "../Loader";
 import { useRecoilState } from "recoil";
 import { loadedDatasetsAtom } from "app/state/recoil/atoms";
+import { DatasetListItemAPIModel } from "app/modules/dataset-module/data";
 
 interface Props {
   sortBy: string;
@@ -126,14 +126,6 @@ export default function DatasetsGrid(props: Props) {
     deleteDataset(id);
     setModalDisplay(false);
     setEnableButton(false);
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.value === "DELETE") {
-      setEnableButton(true);
-    } else {
-      setEnableButton(false);
-    }
   };
 
   const handleDuplicate = (index: number) => {
@@ -251,7 +243,9 @@ export default function DatasetsGrid(props: Props) {
                 path={`/dataset/${data.id}/edit`}
                 title={data.name}
                 date={data.createdDate}
-                handleDelete={() => {}}
+                handleDelete={() => {
+                  handleModal(data.id);
+                }}
                 descr={data.description}
                 handleDuplicate={() => {
                   handleDuplicate(index);
@@ -291,9 +285,9 @@ export default function DatasetsGrid(props: Props) {
         cardId={cardId}
         enableButton={enableButton}
         handleDelete={handleDelete}
-        handleInputChange={handleInputChange}
         modalDisplay={modalDisplay}
         setModalDisplay={setModalDisplay}
+        setEnableButton={setEnableButton}
       />
     </>
   );

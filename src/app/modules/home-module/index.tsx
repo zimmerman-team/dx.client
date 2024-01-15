@@ -25,7 +25,7 @@ import { ReactComponent as BottomRightEllipse } from "app/modules/home-module/as
 import {
   homeDisplayAtom,
   persistedReportStateAtom,
-  createChartFromReportAtom,
+  chartFromReportAtom,
   unSavedReportPreviewModeAtom,
 } from "app/state/recoil/atoms";
 import {
@@ -50,15 +50,13 @@ export default function HomeModule() {
   const clearPersistedReportState = useResetRecoilState(
     persistedReportStateAtom
   );
-  const clearCreateChartFromReportState = useResetRecoilState(
-    createChartFromReportAtom
-  );
+  const clearChartFromReportState = useResetRecoilState(chartFromReportAtom);
 
   const setReportPreviewMode = useRecoilState(unSavedReportPreviewModeAtom)[1];
 
   React.useEffect(() => {
     clearPersistedReportState();
-    clearCreateChartFromReportState();
+    clearChartFromReportState();
     setReportPreviewMode(false);
   }, []);
 

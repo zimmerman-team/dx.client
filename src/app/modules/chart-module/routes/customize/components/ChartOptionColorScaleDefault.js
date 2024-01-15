@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect, useCallback } from "react";
-import InilineColorPicker from "./InlineColorPicker";
+import InilineColorPicker from "app/modules/chart-module/routes/customize/components/InlineColorPicker";
 import { Col } from "react-bootstrap";
 import get from "lodash/get";
 

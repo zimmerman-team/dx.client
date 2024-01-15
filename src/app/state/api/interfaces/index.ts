@@ -186,95 +186,9 @@ export type CMSApiCallModel = ApiModel<
 export interface CMSApiCallParams {}
 
 export interface StoreModel {
-  // data viz api
-  Documents: ApiCallModel;
-  GrantsList: ApiCallModel;
-  Allocations: ApiCallModel;
-  AllocationsPeriods: ApiCallModel;
-  AllocationsDrilldown: ApiCallModel;
-  AllocationsGeomap: ApiCallModel;
-  AllocationsMCGeomap: ApiCallModel;
-  Eligibility: ApiCallModel;
-  EligibilityYears: ApiCallModel;
-  BudgetsFlow: ApiCallModel;
-  BudgetsFlowDrilldownLevel1: ApiCallModel;
-  BudgetsFlowDrilldownLevel2: ApiCallModel;
-  BudgetsGeomap: ApiCallModel;
-  BudgetsMCGeomap: ApiCallModel;
-  BudgetsTimeCycle: ApiCallModel;
-  BudgetsTimeCycleDrilldownLevel1: ApiCallModel;
-  BudgetsTimeCycleDrilldownLevel2: ApiCallModel;
-  DisbursementsGeomap: ApiCallModel;
-  DisbursementsGeomapMulticountries: ApiCallModel;
-  DisbursementsTreemap: ApiCallModel;
-  DisbursementsTreemapDrilldown: ApiCallModel;
-  DisbursementsTimeCycle: ApiCallModel;
-  DisbursementsTimeCycleDrilldown: ApiCallModel;
-  SignedTreemap: ApiCallModel;
-  SignedTreemapDrilldown: ApiCallModel;
-  SignedTimeCycle: ApiCallModel;
-  SignedTimeCycleDrilldown: ApiCallModel;
-  CommitmentTreemap: ApiCallModel;
-  CommitmentTreemapDrilldown: ApiCallModel;
-  CommitmentTimeCycle: ApiCallModel;
-  CommitmentTimeCycleDrilldown: ApiCallModel;
-  PledgesContributionsGeomap: ApiCallModel;
-  PledgesContributionsTimeCycle: ApiCallModel;
-  PledgesContributionsTimeCycleDrilldown: ApiCallModel;
-  PledgesContributionsTreemap: ApiCallModel;
-  ResultsList: ApiCallModel;
-  ResultsStats: ApiCallModel;
-  ResultsYears: ApiCallModel;
   // global search
   GlobalSearch: ApiCallModel;
-  // grant detail api
-  GrantDetailInfo: ApiCallModel;
-  GrantDetailPeriods: ApiCallModel;
-  GrantDetailPeriodInfo: ApiCallModel;
-  GrantDetailBudgetsFlow: ApiCallModel;
-  GrantDetailBudgetsFlowDrilldownLevel1: ApiCallModel;
-  GrantDetailBudgetsFlowDrilldownLevel2: ApiCallModel;
-  GrantDetailBudgetsTimeCycle: ApiCallModel;
-  GrantDetailBudgetsTimeCycleDrilldownLevel1: ApiCallModel;
-  GrantDetailBudgetsTimeCycleDrilldownLevel2: ApiCallModel;
-  GrantDetailDisbursementsTreemap: ApiCallModel;
-  GrantDetailSignedTreemap: ApiCallModel;
-  GrantDetailCommitmentTreemap: ApiCallModel;
-  GrantDetailDisbursementsTimeCycle: ApiCallModel;
-  GrantDetailSignedTimeCycle: ApiCallModel;
-  GrantDetailCommitmentTimeCycle: ApiCallModel;
-  GrantDetailPerformanceRating: ApiCallModel;
-  GrantDetailPerformanceFramework: ApiCallModel;
-  GrantDetailPerformanceFrameworkExpand: ApiCallModel;
-  GrantDetailDocuments: ApiCallModel;
-  // location detail api
-  LocationDetailInfo: ApiCallModel;
-  EligibilityCountry: ApiCallModel;
-  LocationDetailDisbursementsTreemap: ApiCallModel;
-  LocationDetailSignedTreemap: ApiCallModel;
-  LocationDetailCommitmentTreemap: ApiCallModel;
-  LocationDetailDocuments: ApiCallModel;
-  LocationDetailBudgetsFlow: ApiCallModel;
-  LocationDetailBudgetsFlowDrilldownLevel1: ApiCallModel;
-  LocationDetailBudgetsFlowDrilldownLevel2: ApiCallModel;
-  LocationDetailBudgetsTimeCycle: ApiCallModel;
-  LocationDetailBudgetsTimeCycleDrilldownLevel1: ApiCallModel;
-  LocationDetailBudgetsTimeCycleDrilldownLevel2: ApiCallModel;
-  LocationGrants: ApiCallModel;
-  // partner detail api
-  PartnerDetailInfo: ApiCallModel;
-  PartnerDetailDisbursementsTreemap: ApiCallModel;
-  PartnerDetailDisbursementsTreemapDrilldown: ApiCallModel;
-  PartnerDetailSignedTreemap: ApiCallModel;
-  PartnerDetailSignedTreemapDrilldown: ApiCallModel;
-  PartnerDetailCommitmentTreemap: ApiCallModel;
-  PartnerDetailCommitmentTreemapDrilldown: ApiCallModel;
-  PartnerDetailBudgetsFlow: ApiCallModel;
-  PartnerDetailBudgetsFlowDrilldownLevel1: ApiCallModel;
-  PartnerDetailBudgetsFlowDrilldownLevel2: ApiCallModel;
-  PartnerDetailBudgetsTimeCycle: ApiCallModel;
-  PartnerDetailBudgetsTimeCycleDrilldownLevel1: ApiCallModel;
-  PartnerDetailBudgetsTimeCycleDrilldownLevel2: ApiCallModel;
+
   // filter options api
   LocationFilterOptions: ApiCallModel;
   ComponentFilterOptions: ApiCallModel;
@@ -299,8 +213,8 @@ export interface StoreModel {
   ToolBoxPanelBudgetTimeCycleDrilldownYearSelector: ToolBoxPanelBudgetTimeCycleDrilldownYearSelectorModel;
   // datasource selector
   DataSourceState: DataSourceStateModel;
-  AvailableDatasources: ApiCallModel;
-  MappedDatasets: ApiCallModel;
+  // AvailableDatasources: ApiCallModel;
+  // MappedDatasets: ApiCallModel;
   DataSourceSnackbarVisibility: DataSourceSnackbarVisibilityStateModel;
   // sync data path vars
   DataPathPanelVisibilityState: DataPathPanelVisibilityStateModel;

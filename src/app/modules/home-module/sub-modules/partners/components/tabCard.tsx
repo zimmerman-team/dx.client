@@ -2,7 +2,7 @@ import React from "react";
 import AboutCard from "app/modules/home-module/assets/about-card.png";
 import GrantsCard from "app/modules/home-module/assets/grants-card.png";
 import BudgetsCard from "app/modules/home-module/assets/budgets-card.png";
-import PerfomanceCard from "app/modules/home-module/assets/performance-card.png";
+import PerfomanceCard from "app/modules/home-module/assets/targets-results.png";
 import { TabCardEllipseCss } from "app/modules/home-module/sub-modules/partners/style";
 import { ReactComponent as FullEliipse } from "app/modules/home-module/assets/full-light-ellipse.svg";
 
@@ -192,7 +192,7 @@ export const PerformanceTabCard = () => {
     <TabCard
       src={PerfomanceCard}
       alt="performance_snippet"
-      title="Performance Framework"
+      title="Targets & results"
       description={description}
     />
   );

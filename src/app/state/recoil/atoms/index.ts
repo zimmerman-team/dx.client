@@ -1,7 +1,7 @@
 import { atom } from "recoil";
 import { recoilPersist } from "recoil-persist";
 import { convertToRaw, EditorState } from "draft-js";
-import { DatasetListItemAPIModel } from "app/modules/data-themes-module/sub-modules/list";
+import { DatasetListItemAPIModel } from "app/modules/dataset-module/data";
 
 export interface IRowFrameStructure {
   rowType:
@@ -112,13 +112,13 @@ export const loadedDatasetsAtom = atom<DatasetListItemAPIModel[]>({
   effects_UNSTABLE: [persistAtom],
 });
 
-export const createChartFromReportAtom = atom<{
+export const chartFromReportAtom = atom<{
   state: boolean;
   view: string;
   page: string;
   action: "create" | "edit" | null;
 }>({
-  key: "createChartFromReportAtom",
+  key: "chartFromReportAtom",
   default: {
     state: false,
     view: "",

@@ -1,7 +1,7 @@
 import React from "react";
 import { Col } from "react-bootstrap";
-import InilineColorPicker from "./InlineColorPicker";
-import ChartOptionSelect from "./ChartOptionSelect";
+import InilineColorPicker from "app/modules/chart-module/routes/customize/components/InlineColorPicker/";
+import ChartOptionSelect from "app/modules/chart-module/routes/customize/components/ChartOptionSelect";
 
 const ChartOptionColor = ({
   value,

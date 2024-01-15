@@ -1,19 +1,25 @@
+export interface DatasetListItemAPIModel {
+  id: string;
+  name: string;
+  description: string;
+  public: boolean;
+  category: string;
+  createdDate: Date;
+}
 export const tHeadData = [
   {
     name: "Transaction Ref",
     type: "pound",
-    key: ''
+    key: "",
   },
 
-  { name: "Transaction Sector Narrative", type: "char" , key: ''},
-  { name: "Transaction Sector Code", type: "pound" , key: ''},
-  { name: "Transaction Value", type: "pound",   key: '' },
-  { name: "IATI Identifier", type: "char", key: '' },
-  { name: "Reporting Org Ref", type: "char",  key: '' },
-  { name: "Contact Info Email", type: "char", key: '' },
+  { name: "Transaction Sector Narrative", type: "char", key: "" },
+  { name: "Transaction Sector Code", type: "pound", key: "" },
+  { name: "Transaction Value", type: "pound", key: "" },
+  { name: "IATI Identifier", type: "char", key: "" },
+  { name: "Reporting Org Ref", type: "char", key: "" },
+  { name: "Contact Info Email", type: "char", key: "" },
 ];
-
-
 
 export const dummyDatasetData = [
   {
@@ -29,7 +35,7 @@ export const dummyDatasetData = [
     Ref: "F7157529912C",
     SectorNarrative: "Operating Expenses",
     SectorCode: 91010,
-    TransactionValue: 2-32.92,
+    TransactionValue: 2 - 32.92,
     IATIIdentifier: "US-GOV-1-720202151689",
     OrgRef: "US-GOV-1",
     email: "aidtransparency@usaid.gov",
