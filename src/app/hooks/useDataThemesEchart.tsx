@@ -94,6 +94,7 @@ export function useDataThemesEchart() {
         left: marginLeft,
         right: marginRight,
         bottom: marginBottom,
+        containLabel: true,
       },
       xAxis: {
         data: bars,
@@ -326,6 +327,8 @@ export function useDataThemesEchart() {
         left: marginLeft,
         right: marginRight,
         bottom: marginBottom,
+        containLabel: true,
+
         zlevel: -1,
         z: -1,
       },
@@ -396,6 +399,8 @@ export function useDataThemesEchart() {
         left: marginLeft,
         right: marginRight,
         bottom: marginBottom,
+        containLabel: true,
+
         zlevel: -1,
         z: -1,
       },
@@ -464,6 +469,8 @@ export function useDataThemesEchart() {
         left: marginLeft,
         right: marginRight,
         bottom: marginBottom,
+        containLabel: true,
+
         zlevel: -1,
         z: -1,
       },
@@ -555,6 +562,7 @@ export function useDataThemesEchart() {
         left: marginLeft,
         right: marginRight,
         bottom: marginBottom,
+        containLabel: true,
       },
       xAxis: {
         splitLine: {
@@ -634,6 +642,8 @@ export function useDataThemesEchart() {
         left: marginLeft,
         right: marginRight,
         bottom: marginBottom,
+        containLabel: true,
+
         zlevel: -1,
         z: -1,
       },
@@ -777,6 +787,7 @@ export function useDataThemesEchart() {
         left: marginLeft,
         right: marginRight,
         bottom: marginBottom,
+        containLabel: true,
       },
       tooltip: {
         trigger: showTooltip ? "item" : "none",
@@ -858,6 +869,7 @@ export function useDataThemesEchart() {
     const option = {
       // backgroundColor: background,
       backgroundColor: "transparent",
+
       series: [
         {
           type: "sankey",
@@ -880,19 +892,12 @@ export function useDataThemesEchart() {
             color: "source",
             opacity: linksOpacity,
           },
+
           label: {
             show: showLabels,
             rotate: labelRotate,
             position: labelPosition,
             fontSize: labelFontSize,
-            formatter: (params: any) => {
-              const splits = params.name.split("-");
-              if (splits.length === 1) {
-                return params.name;
-              }
-              const text = splits.slice(1).join("-");
-              return text;
-            },
           },
         },
       ],
