@@ -22,6 +22,11 @@ import {
   FilterGroupProps,
   FilterOptionProps,
 } from "app/components/ToolBoxPanel/components/filters/data";
+import {
+  getAllOptionsCount,
+  multiCheckFilterOptions,
+  multiUnCheckFilterOptions,
+} from "app/modules/chart-module/routes/filters/utils";
 
 interface ExpandedFilterGroupProps extends FilterGroupModel, FilterGroupProps {
   goBack: () => void;
@@ -56,107 +61,120 @@ export function ExpandedFilterGroup(props: ExpandedFilterGroupProps) {
   );
 
   React.useEffect(() => {
-    let allOptionsCount = 0;
-    props.options.forEach((option: FilterGroupOptionModel) => {
-      allOptionsCount += 1;
-      allOptionsCount += option.subOptions ? option.subOptions.length : 0;
-      option.subOptions?.forEach((subOption: FilterGroupOptionModel) => {
-        allOptionsCount += subOption.subOptions
-          ? subOption.subOptions.length
-          : 0;
-        subOption.subOptions?.forEach(
-          (subSubOption: FilterGroupOptionModel) => {
-            allOptionsCount += subSubOption.subOptions
-              ? subSubOption.subOptions.length
-              : 0;
-            subSubOption.subOptions?.forEach(
-              (subSubSubOption: FilterGroupOptionModel) => {
-                allOptionsCount += subSubSubOption.subOptions
-                  ? subSubSubOption.subOptions.length
-                  : 0;
-              }
-            );
-          }
-        );
-      });
-    });
+    //updates the allSelected state when the applied filters change
+    //gets the value of all the options in the filter group
+    const allOptionsCount = getAllOptionsCount(props.options);
+    console.log(allOptionsCount, "allOptionsCount");
+    //checks if the length of the applied filters is equal to the length of the options in the filter group
+    //if yes, then all the options are selected
+    //if no, then not all the options are selected
     setAllSelected(tmpAppliedFilters.length === allOptionsCount);
   }, [tmpAppliedFilters, props.options]);
 
+  console.log(tmpAppliedFilters.length, "tmpAppliedFilters");
   React.useEffect(() => {
     if (value.length === 0) {
       setOptionsToShow(props.options);
     } else {
-      const options: FilterGroupOptionModel[] = [];
-      props.options.forEach((option: FilterGroupOptionModel) => {
-        if (option.label.toLowerCase().indexOf(value.toLowerCase()) > -1) {
-          options.push(option);
-        } else if (option.subOptions) {
-          option.subOptions.forEach((subOption: FilterGroupOptionModel) => {
-            if (
-              subOption.label.toLowerCase().indexOf(value.toLowerCase()) > -1
-            ) {
-              const fParentIndex = findIndex(options, { label: option.label });
-              if (fParentIndex > -1) {
-                options[fParentIndex].subOptions?.push(subOption);
-              } else {
-                options.push({
-                  ...option,
-                  subOptions: [subOption],
-                });
-              }
-            } else if (subOption.subOptions) {
-              subOption.subOptions.forEach(
-                (subSubOption: FilterGroupOptionModel) => {
-                  if (
-                    (subSubOption.label || "")
-                      .toLowerCase()
-                      .indexOf(value.toLowerCase()) > -1
-                  ) {
-                    const fGrandParentIndex = findIndex(options, {
-                      label: option.label,
-                    });
-                    if (fGrandParentIndex > -1) {
-                      const fParentIndex = findIndex(
-                        options[fGrandParentIndex]?.subOptions,
-                        { label: subOption.label }
-                      );
-                      if (fParentIndex > -1) {
-                        // @ts-ignore
-                        options[fGrandParentIndex]?.subOptions[
-                          fParentIndex
-                        ]?.subOptions.push(subSubOption);
-                      } else {
-                        // @ts-ignore
-                        options[fGrandParentIndex]?.subOptions.push({
-                          ...subOption,
-                          subOptions: [subSubOption],
-                        });
-                      }
-                    } else {
-                      options.push({
-                        ...option,
-                        subOptions: [
-                          {
-                            ...subOption,
-                            subOptions: [subSubOption],
-                          },
-                        ],
-                      });
-                    }
-                  }
-                }
-              );
-            }
-          });
-        }
-      });
-      setOptionsToShow(options);
+      const searchOptions = (options: FilterGroupOptionModel[]) => {
+        const newArray: FilterGroupOptionModel[] = [];
+
+        options.forEach((option: FilterGroupOptionModel) => {
+          if (option?.subOptions) {
+            newArray.push({
+              ...option,
+              subOptions: searchOptions(option.subOptions),
+            });
+          } else if (
+            option.label.toLowerCase().indexOf(value.toLowerCase()) > -1
+          ) {
+            newArray.push(option);
+          }
+        });
+
+        return newArray;
+      };
+
+      const searchedOptions = searchOptions(props.options);
+
+      setOptionsToShow(searchedOptions);
     }
   }, [value]);
 
+  // React.useEffect(() => {
+  //   if (value.length === 0) {
+  //     setOptionsToShow(props.options);
+  //   } else {
+  //     const options: FilterGroupOptionModel[] = [];
+  //     props.options.forEach((option: FilterGroupOptionModel) => {
+  //       if (option.label.toLowerCase().indexOf(value.toLowerCase()) > -1) {
+  //         options.push(option);
+  //       } else if (option.subOptions) {
+  //         option.subOptions.forEach((subOption: FilterGroupOptionModel) => {
+  //           if (
+  //             subOption.label.toLowerCase().indexOf(value.toLowerCase()) > -1
+  //           ) {
+  //             const fParentIndex = findIndex(options, { label: option.label });
+  //             if (fParentIndex > -1) {
+  //               options[fParentIndex].subOptions?.push(subOption);
+  //             } else {
+  //               options.push({
+  //                 ...option,
+  //                 subOptions: [subOption],
+  //               });
+  //             }
+  //           } else if (subOption.subOptions) {
+  //             subOption.subOptions.forEach(
+  //               (subSubOption: FilterGroupOptionModel) => {
+  //                 if (
+  //                   (subSubOption.label || "")
+  //                     .toLowerCase()
+  //                     .indexOf(value.toLowerCase()) > -1
+  //                 ) {
+  //                   const fGrandParentIndex = findIndex(options, {
+  //                     label: option.label,
+  //                   });
+  //                   if (fGrandParentIndex > -1) {
+  //                     const fParentIndex = findIndex(
+  //                       options[fGrandParentIndex]?.subOptions,
+  //                       { label: subOption.label }
+  //                     );
+  //                     if (fParentIndex > -1) {
+  //                       // @ts-ignore
+  //                       options[fGrandParentIndex]?.subOptions[
+  //                         fParentIndex
+  //                       ]?.subOptions.push(subSubOption);
+  //                     } else {
+  //                       // @ts-ignore
+  //                       options[fGrandParentIndex]?.subOptions.push({
+  //                         ...subOption,
+  //                         subOptions: [subSubOption],
+  //                       });
+  //                     }
+  //                   } else {
+  //                     options.push({
+  //                       ...option,
+  //                       subOptions: [
+  //                         {
+  //                           ...subOption,
+  //                           subOptions: [subSubOption],
+  //                         },
+  //                       ],
+  //                     });
+  //                   }
+  //                 }
+  //               }
+  //             );
+  //           }
+  //         });
+  //       }
+  //     });
+  //     setOptionsToShow(options);
+  //   }
+  // }, [value]);
+
   function handleChangeAll(event: React.ChangeEvent<HTMLInputElement>) {
-    const tmp = [...tmpAppliedFilters];
+    const tmp: any[] = [];
     if (event.target.checked) {
       props.options.forEach((option: FilterGroupOptionModel) => {
         tmp.push(option.value);
@@ -185,89 +203,34 @@ export function ExpandedFilterGroup(props: ExpandedFilterGroupProps) {
     props.goBack();
   }
 
-  const compareArrays = (subTemp: any[], temp: any[]) => {
-    return subTemp.some((val) => temp.includes(val));
-  };
-
-  const multiCheckFilterOptions = (
-    tmpOptions: any[],
-    optionsValueList: string[],
-    currentPosition: number
-  ) => {
-    if (lastClickedPosition > currentPosition) {
-      //get a slice of the range of options that are between the last clicked position and the current position
-      const subTemp = optionsValueList.slice(
-        currentPosition,
-        lastClickedPosition + 1
-      );
-      //reverse the slice so that the options are in the correct order and push them to the tmpOptions array
-      tmpOptions.push(...subTemp.reverse());
-    } else if (currentPosition > lastClickedPosition) {
-      //get a slice of the range of options that are between the last clicked position and the current position
-      const subTemp = optionsValueList.slice(
-        lastClickedPosition,
-        currentPosition + 1
-      );
-      //push the slice to the tmpOptions array
-      tmpOptions.push(...subTemp);
-    }
-  };
-
-  const multiUnCheckFilterOptions = (
-    tmpOptions: any[],
-    optionsValueList: string[],
-    currentPosition: number
-  ) => {
-    if (lastClickedPosition > currentPosition) {
-      //get a slice of the range of options that are between the last clicked position and the current position
-      const subTemp = optionsValueList.slice(
-        currentPosition,
-        lastClickedPosition + 1
-      );
-      //filter the tmpOptions array to remove the options that are in the slice
-      const filteredTmp = tmpOptions.filter((item) => !subTemp.includes(item));
-
-      //if the slice is in the tmpOptions array, then replace the tmpOptions array with the filteredTmp array,
-      //otherwise return the tmpOptions array
-      tmpOptions = compareArrays(subTemp, tmpOptions)
-        ? filteredTmp
-        : tmpOptions;
-    } else if (currentPosition > lastClickedPosition) {
-      //get a slice of the range of options that are between the last clicked position and the current position
-      const subTemp = optionsValueList.slice(
-        lastClickedPosition,
-        currentPosition + 1
-      );
-      //filter the tmpOptions array to remove the options that are in the slice
-      const filteredTmp = tmpOptions.filter((item) => !subTemp.includes(item));
-      //if the slice is in the tmpOptions array, then replace the tmpOptions array with the filteredTmp array,
-      tmpOptions = compareArrays(subTemp, tmpOptions)
-        ? filteredTmp
-        : tmpOptions;
-    }
-
-    return tmpOptions;
-  };
-
   function onOptionChange(
     checked: boolean,
     option: FilterGroupOptionModel,
-    currentPosition: number,
-    level?: number
+    currentPosition: number
   ) {
     let tmp = [...tmpAppliedFilters];
     const optionsValueList = optionsToShow.map((o) => o.value);
 
     if (shiftKeyDown && checked && tmp.length > 0) {
-      multiCheckFilterOptions(tmp, optionsValueList, currentPosition);
+      multiCheckFilterOptions(
+        tmp,
+        optionsValueList,
+        currentPosition,
+        lastClickedPosition
+      );
     } else if (shiftKeyDown && !checked && tmp.length > 0) {
-      tmp = multiUnCheckFilterOptions(tmp, optionsValueList, currentPosition);
+      tmp = multiUnCheckFilterOptions(
+        tmp,
+        optionsValueList,
+        currentPosition,
+        lastClickedPosition
+      );
     } else if (checked) {
       tmp.push(option.value);
     } else {
       remove(tmp, (o: string) => o === option.value);
     }
-    // used set to remove duplicates
+    // used new Set to remove duplicates
     setTmpAppliedFilters([...new Set(tmp)]);
 
     //update lastClickedPosition
@@ -275,6 +238,8 @@ export function ExpandedFilterGroup(props: ExpandedFilterGroupProps) {
   }
 
   React.useEffect(() => {
+    //listen for shift keydown and keyup events
+    //used for multi-check of filter options
     document.addEventListener("keydown", (event) => {
       if (event.key === "Shift") {
         setShiftKeyDown(true);
@@ -301,6 +266,8 @@ export function ExpandedFilterGroup(props: ExpandedFilterGroupProps) {
       setTmpAppliedFilters([]);
     }
   }
+
+  console.log(allSelected, "all selected");
 
   return (
     <React.Fragment>
