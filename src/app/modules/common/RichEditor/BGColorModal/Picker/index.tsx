@@ -1,6 +1,6 @@
-import { colors } from "app/modules/chart-module/routes/text/RichEditor/ColorModal/Picker/colors";
+import { colors } from "app/modules/common/RichEditor/ColorModal/Picker/colors";
 
-import Picker from "app/modules/chart-module/routes/text/RichEditor/BGColorModal/Picker/picker";
+import Picker from "app/modules/common/RichEditor/BGColorModal/Picker/picker";
 
 const styleMap = {
   "bg-000000": { background: "#000000" },

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { colors } from "app/modules/chart-module/routes/text/RichEditor/ColorModal/Picker/colors";
-import ColorPickerStyles from "app/modules/chart-module/routes/text/RichEditor/ColorModal/Picker/colorPickerStyles.module.css";
+import { colors } from "app/modules/common/RichEditor/ColorModal/Picker/colors";
+import ColorPickerStyles from "app/modules/common/RichEditor/ColorModal/Picker/colorPickerStyles.module.css";
 export default function Picker(props: any) {
   const handleColorChange = (color: string) => {
     props.onSelected(color);

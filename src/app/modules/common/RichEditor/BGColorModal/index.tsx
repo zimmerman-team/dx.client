@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import { EditorState, RichUtils } from "draft-js";
-import Picker from "app/modules/chart-module/routes/text/RichEditor/BGColorModal/Picker";
+import Picker from "app/modules/common/RichEditor/BGColorModal/Picker";
 import { Popper } from "@material-ui/core";
 import { useOnClickOutside } from "usehooks-ts";
 

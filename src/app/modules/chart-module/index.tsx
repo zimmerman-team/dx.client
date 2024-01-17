@@ -17,7 +17,6 @@ import {
 import { PageLoader } from "app/modules/common/page-loader";
 import { useChartsRawData } from "app/hooks/useChartsRawData";
 import { NoMatchPage } from "app/modules/common/no-match-page";
-import ChartBuilderLock from "app/modules/chart-module/routes/lock";
 import ChartModuleDataView from "app/modules/chart-module/routes/data";
 import { ChartSubheaderToolbar } from "./components/chartSubheaderToolbar";
 import ChartBuilderMapping from "app/modules/chart-module/routes/mapping";
@@ -430,7 +429,6 @@ export default function ChartModule() {
         openPanel={config.openPanel}
         visualOptions={visualOptions}
         exportView={config.exportView}
-        filtersView={config.filtersView}
         loadChartDataFromAPI={loadChartDataFromAPI}
         setVisualOptions={setVisualOptions}
         loading={loading || isChartLoading}
@@ -485,21 +483,7 @@ export default function ChartModule() {
                   setNotFound={setNotFound}
                 />
               </Route>
-              <Route path="/chart/:page/lock">
-                <ChartBuilderLock
-                  loading={loading}
-                  setRawViz={setRawViz}
-                  renderedChart={content}
-                  dimensions={dimensions}
-                  visualOptions={visualOptions}
-                  setVisualOptions={setVisualOptions}
-                  renderedChartSsr={activeRenderedChartSsr}
-                  renderedChartMappedData={renderedChartMappedData}
-                  renderedChartType={chartType as ChartType}
-                  setChartErrorMessage={setChartErrorMessage}
-                  setNotFound={setNotFound}
-                />
-              </Route>
+
               <Route path="/chart/:page/filters">
                 <ChartBuilderFilters
                   loading={loading}

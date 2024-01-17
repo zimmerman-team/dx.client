@@ -35,6 +35,7 @@ function ChartBuilderChartType(props: ChartBuilderChartTypeProps) {
     };
 
   React.useEffect(() => {
+    //if dataset is empty and not loading, redirect to data page
     if (dataset === null && !props.loading) {
       history.push(`/chart/${page}/data`);
     }

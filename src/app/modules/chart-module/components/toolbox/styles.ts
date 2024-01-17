@@ -5,7 +5,7 @@ import MuiAccordionDetails from "@material-ui/core/AccordionDetails";
 import { withStyles } from "@material-ui/core/styles";
 
 export const styles = {
-  container: (placeUnderSubHeader?: boolean) => css`
+  container: css`
     right: 0;
     z-index: 99;
     position: fixed;

@@ -6,7 +6,7 @@ import { useHistory, useLocation, useParams } from "react-router-dom";
 import CloudDoneIcon from "@material-ui/icons/CloudDone";
 import TableChartIcon from "@material-ui/icons/TableChart";
 import AssessmentIcon from "@material-ui/icons/Assessment";
-import { stepcss } from "app/modules/chart-module/components/toolbox/views/steps/navbar/style";
+import { stepcss } from "app/modules/chart-module/components/toolbox/steps/navbar/style";
 import { useStoreActions } from "app/state/store/hooks";
 
 export type ToolboxNavType =

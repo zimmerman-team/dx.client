@@ -32,6 +32,7 @@ export function ChartBuilderPreviewTheme(props: ChartBuilderPreviewThemeProps) {
   );
 
   React.useEffect(() => {
+    //if dataset is empty and not loading, redirect to data page
     //doing this for only new chart because existing chart will have data (gotten from page id)
     if (dataset === null && !props.loading && page === "new") {
       history.push(`/chart/${page}/data`);

@@ -12,15 +12,15 @@ import { EmojiPlugin } from "@draft-js-plugins/emoji";
 import { StaticToolBarPlugin } from "@draft-js-plugins/static-toolbar";
 import { TextAlignmentPlugin } from "@draft-js-plugins/text-alignment";
 import { UndoRedoButtonProps } from "@draft-js-plugins/undo";
-import BgColorModal from "app/modules/chart-module/routes/text/RichEditor/BGColorModal";
-import ColorModal from "app/modules/chart-module/routes/text/RichEditor/ColorModal";
+import BgColorModal from "app/modules/common/RichEditor/BGColorModal";
+import ColorModal from "app/modules/common/RichEditor/ColorModal";
 import {
   StrikeThroughButton,
   HiglightPicker,
   BGHiglightPicker,
   HeaderOneButton,
   HeaderTwoButton,
-} from "app/modules/chart-module/routes/text/RichEditor/buttons";
+} from "app/modules/common/RichEditor/buttons";
 import React from "react";
 
 type UndoRedoType = {

@@ -4,7 +4,7 @@ import React from "react";
 import { FilterGroupModel } from "app/components/ToolBoxPanel/components/filters/data";
 import { FilterGroup } from "app/modules/chart-module/routes/filters/components/FilterGroup";
 import { ExpandedFilterGroup } from "app/modules/chart-module/routes/filters/components/ExpandedFilterGroup";
-import ToolboxSubHeader from "app/modules/chart-module/components/toolbox/views/steps/sub-header";
+import ToolboxSubHeader from "app/modules/chart-module/components/toolbox/steps/sub-header";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
 
 interface ChartToolBoxFiltersProps {
@@ -35,6 +35,11 @@ export function ChartToolBoxFilters(props: ChartToolBoxFiltersProps) {
       props.loadChartDataFromAPI(allAppliedFilters);
     }
   }, [allAppliedFilters]);
+
+  const expandGroup = (group: FilterGroupModel) => {
+    console.log(group.options, "group.options");
+    setExpandedGroup(group);
+  };
 
   return (
     <>
@@ -77,7 +82,7 @@ export function ChartToolBoxFilters(props: ChartToolBoxFiltersProps) {
                 name={group.name}
                 options={group.options}
                 loadChartDataFromAPI={props.loadChartDataFromAPI}
-                expandGroup={() => setExpandedGroup(group)}
+                expandGroup={() => expandGroup(group)}
               />
             ))}
           </React.Fragment>

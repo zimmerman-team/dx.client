@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { action, Action } from "easy-peasy";
-import { ToolboxNavType } from "app/modules/chart-module/components/toolbox/views/steps/navbar";
+import { ToolboxNavType } from "app/modules/chart-module/components/toolbox/steps/navbar";
 
 export interface ChartsActivePanelsStateModel {
   value: ToolboxNavType;

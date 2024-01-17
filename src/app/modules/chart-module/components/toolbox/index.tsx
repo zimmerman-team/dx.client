@@ -14,15 +14,15 @@ import { Slide, SnackbarContent, useMediaQuery } from "@material-ui/core";
 import { styles } from "app/modules/chart-module/components/toolbox/styles";
 import { ChartExporter } from "app/modules/chart-module/components/exporter";
 import { ChartToolBoxProps } from "app/modules/chart-module/components/toolbox/data";
-import { ChartToolBoxSteps } from "app/modules/chart-module/components/toolbox/views/steps";
+import { ChartToolBoxSteps } from "app/modules/chart-module/components/toolbox/steps";
 import { TriangleXSIcon } from "app/assets/icons/TriangleXS";
 import { emptyChartAPI, ChartAPIModel } from "app/modules/chart-module/data";
 import ToolboxNav, {
   ToolboxNavType,
-} from "app/modules/chart-module/components/toolbox/views/steps/navbar";
+} from "app/modules/chart-module/components/toolbox/steps/navbar";
 import { InfoSnackbar } from "../chartSubheaderToolbar/infoSnackbar";
 
-export function ChartModuleToolBox(props: ChartToolBoxProps) {
+export function ChartModuleToolBox(props: Readonly<ChartToolBoxProps>) {
   const { page, view } = useParams<{ page: string; view?: string }>();
   const { user } = useAuth0();
   const history = useHistory();
@@ -206,7 +206,7 @@ export function ChartModuleToolBox(props: ChartToolBoxProps) {
         in={props.openToolbox}
         style={{ visibility: "visible", display: displayToolbar }}
       >
-        <div css={styles.container(props.filtersView)}>
+        <div css={styles.container}>
           {!isMobile && (
             <div
               role="button"
@@ -270,7 +270,6 @@ export function ChartModuleToolBox(props: ChartToolBoxProps) {
               visualOptions={props.visualOptions}
               setVisualOptions={props.setVisualOptions}
               filterOptionGroups={props.filterOptionGroups}
-              filtersView={props.filtersView}
               save={onSave}
               dimensions={props.dimensions}
               activeStep={activePanels}

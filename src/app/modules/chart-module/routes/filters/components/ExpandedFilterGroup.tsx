@@ -64,114 +64,84 @@ export function ExpandedFilterGroup(props: ExpandedFilterGroupProps) {
     //updates the allSelected state when the applied filters change
     //gets the value of all the options in the filter group
     const allOptionsCount = getAllOptionsCount(props.options);
-    console.log(allOptionsCount, "allOptionsCount");
+
     //checks if the length of the applied filters is equal to the length of the options in the filter group
     //if yes, then all the options are selected
     //if no, then not all the options are selected
     setAllSelected(tmpAppliedFilters.length === allOptionsCount);
   }, [tmpAppliedFilters, props.options]);
 
-  console.log(tmpAppliedFilters.length, "tmpAppliedFilters");
   React.useEffect(() => {
     if (value.length === 0) {
       setOptionsToShow(props.options);
     } else {
-      const searchOptions = (options: FilterGroupOptionModel[]) => {
-        const newArray: FilterGroupOptionModel[] = [];
-
-        options.forEach((option: FilterGroupOptionModel) => {
-          if (option?.subOptions) {
-            newArray.push({
-              ...option,
-              subOptions: searchOptions(option.subOptions),
-            });
-          } else if (
-            option.label.toLowerCase().indexOf(value.toLowerCase()) > -1
-          ) {
-            newArray.push(option);
-          }
-        });
-
-        return newArray;
-      };
-
-      const searchedOptions = searchOptions(props.options);
-
-      setOptionsToShow(searchedOptions);
+      const options: FilterGroupOptionModel[] = [];
+      props.options.forEach((option: FilterGroupOptionModel) => {
+        if (option.label.toLowerCase().indexOf(value.toLowerCase()) > -1) {
+          options.push(option);
+        } else if (option.subOptions) {
+          option.subOptions.forEach((subOption: FilterGroupOptionModel) => {
+            if (
+              subOption.label.toLowerCase().indexOf(value.toLowerCase()) > -1
+            ) {
+              const fParentIndex = findIndex(options, { label: option.label });
+              if (fParentIndex > -1) {
+                options[fParentIndex].subOptions?.push(subOption);
+              } else {
+                options.push({
+                  ...option,
+                  subOptions: [subOption],
+                });
+              }
+            } else if (subOption.subOptions) {
+              subOption.subOptions.forEach(
+                (subSubOption: FilterGroupOptionModel) => {
+                  if (
+                    (subSubOption.label || "")
+                      .toLowerCase()
+                      .indexOf(value.toLowerCase()) > -1
+                  ) {
+                    const fGrandParentIndex = findIndex(options, {
+                      label: option.label,
+                    });
+                    if (fGrandParentIndex > -1) {
+                      const fParentIndex = findIndex(
+                        options[fGrandParentIndex]?.subOptions,
+                        { label: subOption.label }
+                      );
+                      if (fParentIndex > -1) {
+                        // @ts-ignore
+                        options[fGrandParentIndex]?.subOptions[
+                          fParentIndex
+                        ]?.subOptions.push(subSubOption);
+                      } else {
+                        // @ts-ignore
+                        options[fGrandParentIndex]?.subOptions.push({
+                          ...subOption,
+                          subOptions: [subSubOption],
+                        });
+                      }
+                    } else {
+                      options.push({
+                        ...option,
+                        subOptions: [
+                          {
+                            ...subOption,
+                            subOptions: [subSubOption],
+                          },
+                        ],
+                      });
+                    }
+                  }
+                }
+              );
+            }
+          });
+        }
+      });
+      setOptionsToShow(options);
     }
   }, [value]);
-
-  // React.useEffect(() => {
-  //   if (value.length === 0) {
-  //     setOptionsToShow(props.options);
-  //   } else {
-  //     const options: FilterGroupOptionModel[] = [];
-  //     props.options.forEach((option: FilterGroupOptionModel) => {
-  //       if (option.label.toLowerCase().indexOf(value.toLowerCase()) > -1) {
-  //         options.push(option);
-  //       } else if (option.subOptions) {
-  //         option.subOptions.forEach((subOption: FilterGroupOptionModel) => {
-  //           if (
-  //             subOption.label.toLowerCase().indexOf(value.toLowerCase()) > -1
-  //           ) {
-  //             const fParentIndex = findIndex(options, { label: option.label });
-  //             if (fParentIndex > -1) {
-  //               options[fParentIndex].subOptions?.push(subOption);
-  //             } else {
-  //               options.push({
-  //                 ...option,
-  //                 subOptions: [subOption],
-  //               });
-  //             }
-  //           } else if (subOption.subOptions) {
-  //             subOption.subOptions.forEach(
-  //               (subSubOption: FilterGroupOptionModel) => {
-  //                 if (
-  //                   (subSubOption.label || "")
-  //                     .toLowerCase()
-  //                     .indexOf(value.toLowerCase()) > -1
-  //                 ) {
-  //                   const fGrandParentIndex = findIndex(options, {
-  //                     label: option.label,
-  //                   });
-  //                   if (fGrandParentIndex > -1) {
-  //                     const fParentIndex = findIndex(
-  //                       options[fGrandParentIndex]?.subOptions,
-  //                       { label: subOption.label }
-  //                     );
-  //                     if (fParentIndex > -1) {
-  //                       // @ts-ignore
-  //                       options[fGrandParentIndex]?.subOptions[
-  //                         fParentIndex
-  //                       ]?.subOptions.push(subSubOption);
-  //                     } else {
-  //                       // @ts-ignore
-  //                       options[fGrandParentIndex]?.subOptions.push({
-  //                         ...subOption,
-  //                         subOptions: [subSubOption],
-  //                       });
-  //                     }
-  //                   } else {
-  //                     options.push({
-  //                       ...option,
-  //                       subOptions: [
-  //                         {
-  //                           ...subOption,
-  //                           subOptions: [subSubOption],
-  //                         },
-  //                       ],
-  //                     });
-  //                   }
-  //                 }
-  //               }
-  //             );
-  //           }
-  //         });
-  //       }
-  //     });
-  //     setOptionsToShow(options);
-  //   }
-  // }, [value]);
 
   function handleChangeAll(event: React.ChangeEvent<HTMLInputElement>) {
     const tmp: any[] = [];
@@ -266,8 +236,6 @@ export function ExpandedFilterGroup(props: ExpandedFilterGroupProps) {
       setTmpAppliedFilters([]);
     }
   }
-
-  console.log(allSelected, "all selected");
 
   return (
     <React.Fragment>

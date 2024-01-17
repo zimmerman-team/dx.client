@@ -5,7 +5,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import { useStoreState, useStoreActions } from "app/state/store/hooks";
 import { Box } from "@material-ui/core";
 import { useHistory, useParams } from "react-router-dom";
-import ToolboxSubHeader from "app/modules/chart-module/components/toolbox/views/steps/sub-header";
+import ToolboxSubHeader from "app/modules/chart-module/components/toolbox/steps/sub-header";
 import { DatasetListItemAPIModel } from "app/modules/dataset-module/data";
 
 export function DatasetPanel() {
