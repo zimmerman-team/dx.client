@@ -131,11 +131,9 @@ export function ChartModuleToolBox(props: Readonly<ChartToolBoxProps>) {
       }
       if (name === "chart" && !isEmpty(dataset)) {
         setIsClickable(true);
-        return;
       }
       if (name === "mapping" && !isEmpty(dataset) && !isEmpty(chartType)) {
         setIsClickable(true);
-        return;
       }
     } else if (!isEmpty(props.mappedData)) {
       setIsClickable(true);

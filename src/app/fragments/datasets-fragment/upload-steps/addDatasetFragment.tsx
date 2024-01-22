@@ -20,22 +20,41 @@ import { PickerCallback } from "react-google-drive-picker/dist/typeDefs";
 import axios from "axios";
 import { ReactComponent as ErrorICon } from "app/fragments/datasets-fragment/assets/error-icon.svg";
 import Processing, { ProcessingMetaDataProps } from "./processing";
+import { useStoreState } from "app/state/store/hooks";
 
 interface Props {
   disabled: boolean;
-
   setFile: React.Dispatch<React.SetStateAction<File | null>>;
   uploading: boolean;
   processing: ProcessingMetaDataProps;
   processingError: boolean;
 }
 
+interface DropzoneProps {
+  getRootProps: (props?: DropzoneRootProps) => DropzoneRootProps;
+  getInputProps: (props?: DropzoneInputProps) => DropzoneInputProps;
+  isDragActive: boolean;
+  fileRejections: FileRejection[];
+  acceptedFiles: File[];
+  isFocused?: boolean;
+  isDragAccept?: boolean;
+  isDragReject?: boolean;
+  isFileDialogActive?: boolean;
+  draggedFiles?: File[];
+  rootRef?: React.RefObject<HTMLElement>;
+  inputRef?: React.RefObject<HTMLInputElement>;
+  handleOpenPicker(e: React.MouseEvent<HTMLButtonElement>): void;
+  uploadError: boolean;
+  disabled: boolean;
+}
+
 export default function AddDatasetFragment(props: Props) {
   const [openPicker, authResponse] = useDrivePicker();
   const [fileData, setFileData] = React.useState<PickerCallback | null>(null);
-
+  const token = useStoreState((state) => state.AuthToken.value);
+  const [accessToken, setAccessToken] = React.useState("");
   React.useEffect(() => {
-    if (authResponse?.access_token && fileData?.docs) {
+    if (accessToken && fileData?.docs) {
       const file = fileData?.docs[0];
       axios({
         url: `https://www.googleapis.com/drive/v3/files/${file.id}${
@@ -43,7 +62,7 @@ export default function AddDatasetFragment(props: Props) {
         }`,
         method: "GET",
         headers: {
-          Authorization: `Bearer ${authResponse?.access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
         responseType: "blob", // important
       }).then((response) => {
@@ -56,7 +75,7 @@ export default function AddDatasetFragment(props: Props) {
         props.setFile(gfile);
       });
     }
-  }, [authResponse, fileData]);
+  }, [accessToken, fileData]);
 
   const ACCEPTED_FILES = {
     "text/csv": [".csv"],
@@ -90,26 +109,43 @@ export default function AddDatasetFragment(props: Props) {
     }
   }, [acceptedFiles]);
 
-  function getTokenAndOpenPicker() {
-    openPicker({
-      clientId: process.env.REACT_APP_GOOGLE_API_CLIENT_ID as string,
-      developerKey: process.env.REACT_APP_GOOGLE_API_DEV_KEY as string,
-      viewId: "SPREADSHEETS",
-      supportDrives: true,
-      token: "",
-      setSelectFolderEnabled: true,
-      callbackFunction: (d: PickerCallback) => {
-        if (process.env.NODE_ENV === "development") {
-          console.log(d);
-        }
-        setFileData(d);
-      },
-    });
+  React.useEffect(() => {
+    if (accessToken) {
+      openPicker({
+        clientId: process.env.REACT_APP_GOOGLE_API_CLIENT_ID as string,
+        developerKey: process.env.REACT_APP_GOOGLE_API_DEV_KEY as string,
+        viewId: "SPREADSHEETS",
+        supportDrives: true,
+        token: accessToken,
+        setSelectFolderEnabled: true,
+        callbackFunction: (d: PickerCallback) => {
+          if (process.env.NODE_ENV === "development") {
+            console.log(d);
+          }
+          setFileData(d);
+        },
+      });
+    }
+  }, [accessToken]);
+
+  function getAccessTokenAndOpenPicker() {
+    axios
+      .get(`${process.env.REACT_APP_API}/dataset/google-drive/user-token`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        console.log(res, "res-token");
+        //updates access token which  triggers the useEffect to open google drive picker
+        setAccessToken(res.data);
+      });
   }
 
   function handleOpenPicker(e: React.MouseEvent<HTMLButtonElement>) {
     e.stopPropagation();
-    getTokenAndOpenPicker();
+
+    getAccessTokenAndOpenPicker();
   }
 
   const fileRejectionItems = fileRejections.map(({ file, errors }) => (
@@ -148,25 +184,7 @@ export default function AddDatasetFragment(props: Props) {
   );
 }
 
-interface DropzoneProps {
-  getRootProps: (props?: DropzoneRootProps) => DropzoneRootProps;
-  getInputProps: (props?: DropzoneInputProps) => DropzoneInputProps;
-  isDragActive: boolean;
-  fileRejections: FileRejection[];
-  acceptedFiles: File[];
-  isFocused?: boolean;
-  isDragAccept?: boolean;
-  isDragReject?: boolean;
-  isFileDialogActive?: boolean;
-  draggedFiles?: File[];
-  rootRef?: React.RefObject<HTMLElement>;
-  inputRef?: React.RefObject<HTMLInputElement>;
-  handleOpenPicker(e: React.MouseEvent<HTMLButtonElement>): void;
-  uploadError: boolean;
-  disabled: boolean;
-}
-
-export const DropZone = (props: DropzoneProps) => {
+const DropZone = (props: DropzoneProps) => {
   return (
     <>
       <div css={uploadDatasetcss} {...props.getRootProps()}>
