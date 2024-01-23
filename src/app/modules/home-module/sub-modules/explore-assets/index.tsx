@@ -2,16 +2,7 @@
 import React from "react";
 import useTitle from "react-use/lib/useTitle";
 import { useRecoilState, useResetRecoilState } from "recoil";
-import {
-  Tab,
-  Box,
-  Grid,
-  Tabs,
-  Container,
-  withStyles,
-  IconButton,
-  Popover,
-} from "@material-ui/core";
+import { Tab, Box, Grid, Tabs, Container, withStyles } from "@material-ui/core";
 /* project */
 import {
   chartFromReportAtom,
@@ -19,24 +10,13 @@ import {
   persistedReportStateAtom,
   unSavedReportPreviewModeAtom,
 } from "app/state/recoil/atoms";
-
-import { ReactComponent as SortIcon } from "app/modules/home-module/assets/sort-fill.svg";
-import { ReactComponent as GridIcon } from "app/modules/home-module/assets/grid-fill.svg";
-import { ReactComponent as CloseIcon } from "app/modules/home-module/assets/close-icon.svg";
-import { ReactComponent as SearchIcon } from "app/modules/home-module/assets/search-fill.svg";
-
-import {
-  featuredAssetsCss,
-  iconButtonCss,
-  rowFlexCss,
-  searchInputCss,
-  sortByItemCss,
-} from "app/modules/home-module/style";
+import { featuredAssetsCss } from "app/modules/home-module/style";
 import DatasetsGrid from "app/modules/home-module/components/Datasets/datasetsGrid";
 import ChartsGrid from "app/modules/home-module/components/Charts/chartsGrid";
 import ReportsGrid from "app/modules/home-module/components/Reports/reportsGrid";
-import { datasetCategories } from "app/fragments/datasets-fragment/upload-steps/metaData";
+import { datasetCategories } from "app/modules/dataset-upload-module/upload-steps/metaData";
 import DatasetCategoryList from "app/modules/home-module/components/Datasets/datasetCategoryList";
+import Filter from "app/modules/home-module/components/Filter";
 
 const StyledTab = withStyles(() => ({
   root: {
@@ -90,22 +70,9 @@ export default function ExploreAssetsModule() {
   const [searchValue, setSearchValue] = React.useState<string | undefined>(
     undefined
   );
-  const [openSearch, setOpenSearch] = React.useState(false);
   const [sortValue, setSortValue] = React.useState("createdDate");
-  const [sortPopoverAnchorEl, setSortPopoverAnchorEl] =
-    React.useState<HTMLButtonElement | null>(null);
-
-  const inputRef = React.useRef<HTMLInputElement>(null);
   const exploreViewRef = React.useRef<HTMLDivElement>(null);
-
   const [display, setDisplay] = useRecoilState(homeDisplayAtom);
-
-  const sortOptions = [
-    { label: "Last updated", value: "updatedDate" },
-    { label: "Created date", value: "createdDate" },
-    { label: "Name", value: "name" },
-  ];
-
   const handleChange = (
     event: React.ChangeEvent<{}>,
     newValue: "data" | "charts" | "reports"
@@ -113,9 +80,6 @@ export default function ExploreAssetsModule() {
     setDisplay(newValue);
   };
 
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(e.target.value);
-  };
   React.useEffect(() => {
     setSearchValue(undefined);
   }, [display]);
@@ -155,12 +119,6 @@ export default function ExploreAssetsModule() {
         break;
     }
   };
-
-  const handleCloseSortPopover = () => {
-    setSortPopoverAnchorEl(null);
-  };
-
-  const openSortPopover = Boolean(sortPopoverAnchorEl);
 
   return (
     <React.Fragment>
@@ -205,118 +163,14 @@ export default function ExploreAssetsModule() {
               </StyledTabs>
             </Grid>
             <Grid item lg={6} md={6} sm={6}>
-              <div
-                css={`
-                  ${rowFlexCss}
-                  justify-content: flex-end;
-                  gap: 8px;
-                `}
-              >
-                <div
-                  css={`
-                    display: flex;
-                    align-items: center;
-                    gap: 8px;
-                  `}
-                >
-                  <div css={searchInputCss(openSearch)}>
-                    <input
-                      type="text"
-                      ref={inputRef}
-                      value={searchValue}
-                      placeholder="eg. Kenya"
-                      onChange={handleSearch}
-                    />
-                    <IconButton
-                      onClick={() => {
-                        setSearchValue("");
-                        setOpenSearch(false);
-                      }}
-                      css={`
-                        &:hover {
-                          background: transparent;
-                        }
-                      `}
-                    >
-                      <CloseIcon
-                        css={`
-                          margin-top: 1px;
-                        `}
-                      />
-                    </IconButton>
-                  </div>
-                  <IconButton
-                    onClick={() => {
-                      setOpenSearch(true);
-                      inputRef.current?.focus();
-                    }}
-                    css={iconButtonCss(openSearch)}
-                  >
-                    <SearchIcon />
-                  </IconButton>
-                </div>
-                <IconButton
-                  onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
-                    setSortPopoverAnchorEl(
-                      sortPopoverAnchorEl ? null : event.currentTarget
-                    );
-                  }}
-                  css={iconButtonCss(openSortPopover)}
-                >
-                  <SortIcon />
-                </IconButton>
-                <Popover
-                  open={openSortPopover}
-                  anchorEl={sortPopoverAnchorEl}
-                  onClose={handleCloseSortPopover}
-                  anchorOrigin={{
-                    vertical: "bottom",
-                    horizontal: "left",
-                  }}
-                  transformOrigin={{
-                    vertical: "top",
-                    horizontal: "left",
-                  }}
-                  css={`
-                    .MuiPaper-root {
-                      border-radius: 5px;
-                    }
-                  `}
-                >
-                  <div
-                    css={`
-                      color: #fff;
-                      font-size: 12px;
-                      padding: 8px 22px;
-                      background: #231d2c;
-                      font-family: "GothamNarrow-Bold", "Helvetica Neue",
-                        sans-serif;
-                    `}
-                  >
-                    Sort by
-                  </div>
-                  {sortOptions.map((option) => (
-                    <div
-                      key={option.label}
-                      css={sortByItemCss(sortValue === option.value)}
-                      onClick={() => {
-                        setSortValue(option.value);
-                        handleCloseSortPopover();
-                      }}
-                    >
-                      {option.label}
-                    </div>
-                  ))}
-                </Popover>
-                <IconButton
-                  onClick={() => {
-                    setTableView(!tableView);
-                  }}
-                  css={iconButtonCss(tableView)}
-                >
-                  <GridIcon />
-                </IconButton>
-              </div>
+              <Filter
+                searchValue={searchValue as string}
+                setSearchValue={setSearchValue}
+                setSortValue={setSortValue}
+                setTableView={setTableView}
+                sortValue={sortValue}
+                tableView={tableView}
+              />
             </Grid>
           </Grid>
           <Box height={20} />

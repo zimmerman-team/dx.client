@@ -31,6 +31,9 @@ export const DatasetGetList: ApiCallModel = {
 export const DatasetGet: ApiCallModel = {
   ...APIModel(`${process.env.REACT_APP_API}/datasets`),
 };
+export const ExternalDatasetGet: ApiCallModel = {
+  ...APIModel(`${process.env.REACT_APP_API}/external-sources/search`),
+};
 
 export const DatasetCreate: ApiCallModel = {
   ...APIModel(`${process.env.REACT_APP_API}/datasets`),

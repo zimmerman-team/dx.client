@@ -34,6 +34,10 @@ const WhyDXModule = lazy(
 const ExploreAssetsModule = lazy(
   () => import("app/modules/home-module/sub-modules/explore-assets")
 );
+const ExternalDatasetSearch = lazy(
+  () =>
+    import("app/modules/home-module/sub-modules/explore-assets/externalSearch")
+);
 const ChartModule = lazy(() => import("app/modules/chart-module"));
 const ReportModule = lazy(() => import("app/modules/report-module"));
 
@@ -167,6 +171,9 @@ export function MainRoutes() {
           </RouteWithAppBar>
           <RouteWithAppBar exact path="/dataset/:page/:view?">
             <DatasetModule />
+          </RouteWithAppBar>
+          <RouteWithAppBar exact path="/explore-assets/external-search">
+            <ExternalDatasetSearch />
           </RouteWithAppBar>
           <RouteWithAppBar exact path="/about">
             <AboutModule />

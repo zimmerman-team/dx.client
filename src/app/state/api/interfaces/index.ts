@@ -280,6 +280,7 @@ export interface StoreModel {
     DatasetCount: ApiCallModel;
     DatasetCreate: ApiCallModel;
     DatasetGet: ApiCallModel;
+    ExternalDatasetGet: ApiCallModel;
   };
   charts: {
     ChartGet: ApiCallModel;

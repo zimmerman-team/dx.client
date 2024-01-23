@@ -1,0 +1,266 @@
+/**third party */
+import React, { useCallback, useEffect } from "react";
+import Box from "@material-ui/core/Box";
+import {
+  DropzoneRootProps,
+  DropzoneInputProps,
+  FileRejection,
+  useDropzone,
+} from "react-dropzone";
+import SearchIcon from "@material-ui/icons/Search";
+import useDrivePicker from "react-google-drive-picker";
+import { PickerCallback } from "react-google-drive-picker/dist/typeDefs";
+import axios from "axios";
+/** project */
+import {
+  uploadAreacss,
+  uploadDatasetcss,
+} from "app/modules/dataset-upload-module/style";
+import { ReactComponent as UploadIcon } from "app/modules/dataset-upload-module/assets/upload.svg";
+import { ReactComponent as LocalUploadIcon } from "app/modules/dataset-upload-module/assets/local-upload.svg";
+import { ReactComponent as GoogleDriveIcon } from "app/modules/dataset-upload-module/assets/google-drive.svg";
+
+import { formatBytes } from "app/utils/formatBytes";
+import { ReactComponent as ErrorICon } from "app/modules/dataset-upload-module/assets/error-icon.svg";
+import Processing, {
+  ProcessingMetaDataProps,
+} from "app/modules/dataset-upload-module/upload-steps/processing";
+import { useHistory } from "react-router-dom";
+
+interface Props {
+  disabled: boolean;
+
+  setFile: React.Dispatch<React.SetStateAction<File | null>>;
+  uploading: boolean;
+  processing: ProcessingMetaDataProps;
+  processingError: boolean;
+}
+
+export default function AddDatasetFragment(props: Props) {
+  const [openPicker, authResponse] = useDrivePicker();
+  const [fileData, setFileData] = React.useState<PickerCallback | null>(null);
+
+  React.useEffect(() => {
+    if (authResponse?.access_token && fileData?.docs) {
+      const file = fileData?.docs[0];
+      axios({
+        url: `https://www.googleapis.com/drive/v3/files/${file.id}${
+          file.type === "file" ? "?alt=media" : "/export?mimeType=text/csv"
+        }`,
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${authResponse?.access_token}`,
+        },
+        responseType: "blob", // important
+      }).then((response) => {
+        if (process.env.NODE_ENV === "development") {
+          console.log("response", response);
+        }
+        const b = response.data;
+        const gfile = new File([b], file.name, { type: "text/csv" });
+
+        props.setFile(gfile);
+      });
+    }
+  }, [authResponse, fileData]);
+
+  const ACCEPTED_FILES = {
+    "text/csv": [".csv"],
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": [
+      ".xlsx",
+    ],
+    "application/xml": [".xml"],
+    "application/vnd.ms-excel": [".xls"],
+    "application/xhtml+xml": [".xhtml"],
+  };
+
+  const onDrop = useCallback((acceptedFiles: File[]) => {
+    acceptedFiles.forEach((file: File) => {
+      const reader = new FileReader();
+
+      reader.readAsArrayBuffer(file);
+    });
+  }, []);
+
+  const {
+    getRootProps,
+    getInputProps,
+    isDragActive,
+    acceptedFiles,
+    fileRejections,
+  } = useDropzone({ onDrop, accept: ACCEPTED_FILES });
+
+  useEffect(() => {
+    if (acceptedFiles.length > 0) {
+      props.setFile(acceptedFiles[0]);
+    }
+  }, [acceptedFiles]);
+
+  function getTokenAndOpenPicker() {
+    openPicker({
+      clientId: process.env.REACT_APP_GOOGLE_API_CLIENT_ID as string,
+      developerKey: process.env.REACT_APP_GOOGLE_API_DEV_KEY as string,
+      viewId: "SPREADSHEETS",
+      supportDrives: true,
+      token: "",
+      setSelectFolderEnabled: true,
+      callbackFunction: (d: PickerCallback) => {
+        if (process.env.NODE_ENV === "development") {
+          console.log(d);
+        }
+        setFileData(d);
+      },
+    });
+  }
+
+  function handleOpenPicker(e: React.MouseEvent<HTMLButtonElement>) {
+    e.stopPropagation();
+    getTokenAndOpenPicker();
+  }
+
+  const fileRejectionItems = fileRejections.map(({ file, errors }) => (
+    <li key={file.name}>
+      {file.name} - {formatBytes(file.size)}
+      <ul>
+        {errors.map((e) => (
+          <li key={e.code}>{e.message}</li>
+        ))}
+      </ul>
+    </li>
+  ));
+
+  return (
+    <>
+      {props.uploading ? (
+        <Processing {...props.processing} />
+      ) : (
+        <>
+          <DropZone
+            disabled={props.disabled}
+            getRootProps={getRootProps}
+            getInputProps={getInputProps}
+            isDragActive={isDragActive}
+            fileRejections={fileRejections}
+            acceptedFiles={acceptedFiles}
+            handleOpenPicker={handleOpenPicker}
+            uploadError={props.processingError}
+          />
+          {fileRejections.length > 0 && fileRejectionItems}
+        </>
+      )}
+    </>
+  );
+}
+
+interface DropzoneProps {
+  getRootProps: (props?: DropzoneRootProps) => DropzoneRootProps;
+  getInputProps: (props?: DropzoneInputProps) => DropzoneInputProps;
+  isDragActive: boolean;
+  fileRejections: FileRejection[];
+  acceptedFiles: File[];
+  isFocused?: boolean;
+  isDragAccept?: boolean;
+  isDragReject?: boolean;
+  isFileDialogActive?: boolean;
+  draggedFiles?: File[];
+  rootRef?: React.RefObject<HTMLElement>;
+  inputRef?: React.RefObject<HTMLInputElement>;
+  handleOpenPicker(e: React.MouseEvent<HTMLButtonElement>): void;
+  uploadError: boolean;
+  disabled: boolean;
+}
+
+export const DropZone = (props: DropzoneProps) => {
+  const history = useHistory();
+  const handleExternalSearch = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    history.push("/explore-assets/external-search");
+  };
+  return (
+    <div css={uploadDatasetcss} {...props.getRootProps()}>
+      <div>
+        <p>Add your file</p>
+      </div>
+      <div css={uploadAreacss(props.isDragActive)}>
+        <input {...props.getInputProps()} />
+        {!props.isDragActive && (
+          <>
+            <UploadIcon
+              css={`
+                margin-top: 2rem;
+              `}
+            />
+            <p
+              css={`
+                font-weight: 500;
+                font-size: 12px;
+                color: #231d2c;
+                margin-top: 5px;
+              `}
+            >
+              Supports: XLSX, CSV
+            </p>
+            <p
+              css={`
+                font-size: 20px;
+                line-height: 24px;
+                font-style: normal;
+              `}
+            >
+              Drag and Drop Spreadsheets File here <br /> or connect to Google
+              Drive
+            </p>
+            <Box height={30} />
+            <div
+              css={`
+                display: flex;
+                gap: 1rem;
+              `}
+            >
+              <button onClick={handleExternalSearch}>
+                <SearchIcon color="secondary" /> <p>External search</p>
+              </button>
+              <button>
+                <LocalUploadIcon /> <p>Local upload</p>
+              </button>
+
+              <button type="button" onClick={props.handleOpenPicker}>
+                <GoogleDriveIcon /> <p>Connect to google drive</p>
+              </button>
+            </div>
+            <Box height={40} />
+            {props.uploadError && (
+              <div
+                css={`
+                  color: #e75656;
+                  font-size: 18;
+                  font-family: " Gotham Narrow", sans-serif;
+                  font-weight: bold;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  flex-direction: column;
+                  p {
+                    display: flex;
+                    align-items: center;
+                    gap: 13px;
+                    margin: 0;
+                  }
+                  small {
+                    text-align: center;
+                  }
+                `}
+              >
+                <p>
+                  <ErrorICon />{" "}
+                  <span>Unable to upload your file. Please try again!</span>
+                </p>
+                <span>Error</span>
+              </div>
+            )}
+          </>
+        )}
+      </div>
+    </div>
+  );
+};
