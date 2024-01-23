@@ -1,11 +1,11 @@
+/** third party */
 import React from "react";
-import { ReactComponent as ClockIcon } from "../../../../fragments/datasets-fragment/assets/clock-icon.svg";
-import { ReactComponent as CloseIcon } from "../../../../fragments/datasets-fragment/assets/close-icon.svg";
-
-import { statisticalTableToolBoxStyle } from "./style";
+/** project */
 import { IconButton } from "@material-ui/core";
-import StatisticDisplay from "app/components/Table/Preview-table/statisticDisplay";
-import { ChartRepresentationProps } from "app/components/Table/Preview-table/StatisticalRepresentations";
+import { ReactComponent as ClockIcon } from "app/modules/dataset-upload-module/assets/clock-icon.svg";
+import { ReactComponent as CloseIcon } from "app/modules/dataset-upload-module/assets/close-icon.svg";
+
+import { statisticalTableToolBoxStyle } from "app/components/Table/Preview-table/StatisticalTableToolBox/style";
 import { barChartdata } from "app/components/Table/Preview-table/data";
 
 export interface ColumnDetailsProps {
@@ -32,7 +32,7 @@ interface Props {
   }[];
 }
 
-export default function StatisticalTableToolBox(props: Props) {
+export default function StatisticalTableToolBox(props: Readonly<Props>) {
   const domRef = React.useRef<HTMLDivElement>(null);
   const [renderedChartMappedData, setRenderedChartMappedData] =
     React.useState<{ bars: string; size: string }[]>(barChartdata);

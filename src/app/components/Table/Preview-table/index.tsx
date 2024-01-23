@@ -1,3 +1,4 @@
+/** third party */
 import React from "react";
 import Table from "@material-ui/core/Table";
 import TableRow from "@material-ui/core/TableRow";
@@ -6,9 +7,10 @@ import TableHead from "@material-ui/core/TableHead";
 import TableCell from "@material-ui/core/TableCell";
 import IconButton from "@material-ui/core/IconButton";
 import TableContainer from "@material-ui/core/TableContainer";
+/** project */
 import { previewTablecss } from "app/components/Table/Preview-table/style";
 import StatisticDisplay from "app/components/Table/Preview-table/statisticDisplay";
-import { ReactComponent as SortIcon } from "app/fragments/datasets-fragment/assets/sort.svg";
+import { ReactComponent as SortIcon } from "app/modules/dataset-upload-module/assets/sort.svg";
 import StatisticalTableToolBox, {
   ColumnDetailsProps,
 } from "app/components/Table/Preview-table/StatisticalTableToolBox";

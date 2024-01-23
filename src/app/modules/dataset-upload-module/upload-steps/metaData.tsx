@@ -9,7 +9,7 @@ import TextField from "@material-ui/core/TextField";
 import InputLabel from "@material-ui/core/InputLabel";
 import { withStyles } from "@material-ui/core/styles";
 import FormControl from "@material-ui/core/FormControl";
-import { metaDatacss } from "app/fragments/datasets-fragment/style";
+import { metaDatacss } from "app/modules/dataset-upload-module/style";
 import { useStoreState } from "app/state/store/hooks";
 import { IDatasetDetail } from "app/modules/dataset-module/routes/edit";
 import { useLocation, useParams } from "react-router-dom";

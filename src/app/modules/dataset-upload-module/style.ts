@@ -53,8 +53,13 @@ export const uploadAreacss = (isDragActive: boolean, disabled?: boolean) => css`
   p {
     text-align: center;
   }
-  button,
-  label {
+  button:nth-of-type(1) {
+    background: #e492bd;
+    p {
+      font-weight: 700;
+    }
+  }
+  button {
     border: none;
     outline: none;
     background: #231d2c;
@@ -71,7 +76,7 @@ export const uploadAreacss = (isDragActive: boolean, disabled?: boolean) => css`
     p {
       font-weight: 500;
       font-size: 14px;
-      font-family: "GothamNarrow-Book";
+      font-family: "Inter", sans-serif;
       text-transform: uppercase;
     }
   }

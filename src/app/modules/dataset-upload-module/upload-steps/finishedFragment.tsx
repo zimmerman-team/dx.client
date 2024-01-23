@@ -1,9 +1,9 @@
 import React from "react";
 import { Link, useHistory, useLocation } from "react-router-dom";
-import { dataSetsCss } from "app/fragments/datasets-fragment/style";
+import { dataSetsCss } from "app/modules/dataset-upload-module/style";
 import { PageTopSpacer } from "app/modules/common/page-top-spacer";
 import { useStoreActions } from "app/state/store/hooks";
-import { DatasetDataTable } from "app/fragments/datasets-fragment/component/data-table";
+import { DatasetDataTable } from "app/modules/dataset-upload-module/component/data-table";
 import { CssSnackbar, ISnackbarState } from "./previewFragment";
 
 interface Props {
