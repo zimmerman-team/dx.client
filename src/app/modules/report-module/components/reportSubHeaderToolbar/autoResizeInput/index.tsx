@@ -83,7 +83,6 @@ export default function AutoResizeInput(props: InputProps) {
       />
       {!props.autoResize || (
         <span
-          className="auto-resize-span"
           ref={spanAutoResize}
           css={`
             ${styles.autoResizeSpan}

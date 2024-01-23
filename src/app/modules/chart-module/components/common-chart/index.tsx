@@ -155,7 +155,9 @@ export function CommonChart(props: Readonly<Props>) {
   let content;
   let contentHeight;
   if (!props.chartPreviewInReport && props.renderedChartType !== "bigNumber") {
-    contentHeight = props.visualOptions?.height - 28;
+    contentHeight = props.visualOptions?.height - 28 + "px";
+  } else {
+    contentHeight = "auto";
   }
 
   if (props.renderedChartSsr) {
@@ -196,7 +198,7 @@ export function CommonChart(props: Readonly<Props>) {
         css={`
           width: 100%;
           overflow: hidden;
-          height: ${contentHeight}px;
+          height: ${contentHeight};
           * {
             font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif !important;
           }
@@ -216,9 +218,12 @@ export function CommonChart(props: Readonly<Props>) {
               div:nth-child(1) {
               font-size: 9.39px !important;
               padding-bottom: 0px !important;
+              font-family: "GothamNarrow-Medium", "Helvetica Neue", sans-serif !important;
+        
               }
               div:nth-child(2) {
-                font-size: 45.834px !important;
+                font-size: 45.07px !important;
+                font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif !important;
                 line-height: normal !important;
                 height: 0px !important;
                 margin-top: 29px !important;
@@ -228,11 +233,15 @@ export function CommonChart(props: Readonly<Props>) {
                 font-size: 9.39px !important;
                 padding-bottom: 0px !important;
                 padding-top: 0px !important;
+              font-family: "GothamNarrow-Medium", "Helvetica Neue", sans-serif !important;
+
               }
               div:nth-child(4) {
                 font-size: 7.572px !important;
                 margin-top: 0px !important;
                 line-height: 16px !important;
+                font-weight: 325 !important;
+                font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif !important;
               }
         `}
 

@@ -205,6 +205,9 @@ export function ReportChartWrapper(props: Props) {
           css={`
             margin: 0;
             margin-bottom: 12px;
+            font-family: "GothamNarrow-bold", sans-serif;
+            font-size: 17.652px;
+            color: #231d2c;
           `}
         >
           {chartName}

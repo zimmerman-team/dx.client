@@ -103,7 +103,7 @@ export const styles = {
     border-style: none;
     background: transparent;
     transition: background 0.2s ease-in-out;
-    font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
+    font-family: "Inter", sans-serif;
     overflow-x: visible;
     padding-left: 0px;
     outline: none;
@@ -134,6 +134,8 @@ export const styles = {
 
   autoResizeSpan: css`
     visibility: hidden;
+    font-family: "Inter", sans-serif;
+    font-size: 24px;
     position: fixed;
     left: 0;
     padding: 5px;
