@@ -13,7 +13,7 @@ import {
   searchInputCss,
   sortByItemCss,
 } from "app/modules/home-module/style";
-import { datasetCategories } from "app/fragments/datasets-fragment/upload-steps/metaData";
+import { datasetCategories } from "app/modules/dataset-upload-module/upload-steps/metaData";
 import DatasetsGrid from "app/modules/home-module/components/Datasets/datasetsGrid";
 import { styles as commonStyles } from "app/modules/chart-module/routes/common/styles";
 import { ReactComponent as SortIcon } from "app/modules/home-module/assets/sort-fill.svg";

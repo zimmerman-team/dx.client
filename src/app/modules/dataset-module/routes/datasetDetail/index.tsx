@@ -1,4 +1,4 @@
-import FinishedFragment from "app/fragments/datasets-fragment/upload-steps/finishedFragment";
+import FinishedFragment from "app/modules/dataset-upload-module/upload-steps/finishedFragment";
 import { useChartsRawData } from "app/hooks/useChartsRawData";
 import React from "react";
 import DatasetSubHeaderToolbar from "../../component/datasetSubHeaderToolbar";

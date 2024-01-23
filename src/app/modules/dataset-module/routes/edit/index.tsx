@@ -1,5 +1,5 @@
 import { Container } from "@material-ui/core";
-import MetaData from "app/fragments/datasets-fragment/upload-steps/metaData";
+import MetaData from "app/modules/dataset-upload-module/upload-steps/metaData";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import axios from "axios";
 import React from "react";

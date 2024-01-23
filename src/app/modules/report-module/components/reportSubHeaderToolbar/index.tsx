@@ -4,7 +4,6 @@ import { useRecoilState } from "recoil";
 import styled from "styled-components/macro";
 import { useAuth0 } from "@auth0/auth0-react";
 import Button from "@material-ui/core/Button";
-import { useSessionStorage } from "react-use";
 import SaveIcon from "@material-ui/icons/Save";
 import EditIcon from "@material-ui/icons/Edit";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -32,7 +31,7 @@ import { ExportChartButton } from "app/modules/chart-module/components/chartSubh
 import { ReportSubheaderToolbarProps } from "app/modules/chart-module/components/chartSubheaderToolbar/data";
 import { ReactComponent as PlayIcon } from "app/modules/report-module/asset/play-icon.svg";
 import { styles } from "app/modules/report-module/components/reportSubHeaderToolbar/styles";
-import { ISnackbarState } from "app/fragments/datasets-fragment/upload-steps/previewFragment";
+import { ISnackbarState } from "app/modules/dataset-upload-module/upload-steps/previewFragment";
 import StaticToolbar from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
 import AutoSaveSwitch from "app/modules/report-module/components/reportSubHeaderToolbar/autoSaveSwitch";
 import AutoResizeInput from "app/modules/report-module/components/reportSubHeaderToolbar/autoResizeInput";
