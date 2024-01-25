@@ -1,17 +1,23 @@
+/** third party */
 import React from "react";
+import ArrowRightAltIcon from "@material-ui/icons/ArrowRightAlt";
+/** project */
 import WHOLogo from "app/modules/home-module/assets/WHO-logo.svg";
 import KaggleLogo from "app/modules/home-module/assets/kaggle-logo.svg";
 import WorldBankLogo from "app/modules/home-module/assets/world-bank-logo.svg";
 import { ReactComponent as ClockIcon } from "app/modules/home-module/assets/clock-icon.svg";
 
 import moment from "moment";
-export default function ExternalDatasetCard(
+import { IExternalDataset } from "app/modules/dataset-upload-module/upload-steps/externalSearch";
+export default function IExternalDatasetCard(
   props: Readonly<{
     name: string;
     description: string;
     url: string;
     source: string;
     publishedDate: string;
+    handleDownload: (dataset: IExternalDataset) => void;
+    dataset: IExternalDataset;
   }>
 ) {
   const sourceLogo = (source: string) => {
@@ -26,14 +32,18 @@ export default function ExternalDatasetCard(
         return <div />;
     }
   };
+  const [showButton, setShowButton] = React.useState<boolean>(false);
 
   return (
     <div
+      onMouseEnter={() => setShowButton(true)}
+      onMouseLeave={() => setShowButton(false)}
       css={`
         width: 296px;
         height: 162px;
         box-shadow: 0px 7px 16px 0px rgba(0, 0, 0, 0.05);
         padding-left: 11.7px;
+        padding-right: 12px;
         padding-top: 16.2px;
         background: #fff;
         position: relative;
@@ -44,6 +54,9 @@ export default function ExternalDatasetCard(
           margin: 0;
           margin-bottom: 4.05px;
           line-height: normal;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
         }
         p:nth-of-type(2) {
           color: #495057;
@@ -75,14 +88,51 @@ export default function ExternalDatasetCard(
             color: inherit;
           }
         }
-        img {
-          object-fit: cover;
-        }
         div {
-          p:nth-of-type(1) {
-            color: #231d2c;
-            font-family: "GothamNarrow-Book";
-            font-size: 8.814px;
+          height: 62px;
+          margin: 0;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          img {
+            object-fit: cover;
+          }
+          button {
+            outline: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 5.959px;
+            padding: 7.15px 10px;
+            border-radius: 17.876px;
+            background: #231d2c;
+            text-transform: uppercase;
+            color: #fff;
+            font-family: "GothamNarrow-Bold";
+            font-size: 12px;
+            svg {
+              width: 9px;
+              height: 9px;
+            }
+          }
+        }
+        p:nth-of-type(4) {
+          color: #231d2c;
+          font-family: "GothamNarrow-Book";
+          font-size: 8.814px;
+          display: flex;
+          justify-content: flex-end;
+          align-items: center;
+          gap: 5px;
+          position: absolute;
+          right: 11.7px;
+          bottom: 0px;
+          margin: 0;
+          svg {
+            width: 12px;
+            height: 12px;
           }
         }
       `}
@@ -94,32 +144,27 @@ export default function ExternalDatasetCard(
           Link to data source.
         </a>
       </p>
-      <p
+      <div
         css={`
           height: 62px;
           margin: 0;
+          display: flex;
+          align-items: center;
         `}
       >
         {sourceLogo(props.source)}
-      </p>
-      <div
-        css={`
-          display: flex;
-          justify-content: flex-end;
-          align-items: center;
-          gap: 5px;
-          position: absolute;
-          right: 11.7px;
-          bottom: 4.2px;
-          svg {
-            width: 12px;
-            height: 12px;
-          }
-        `}
-      >
-        <ClockIcon />
-        <p>{moment(props.publishedDate).format("MMMM YYYY")}</p>
+        {showButton && (
+          <button onClick={() => props.handleDownload(props.dataset)}>
+            import to dx <ArrowRightAltIcon color="inherit" />
+          </button>
+        )}
       </div>
+
+      <p>
+        {" "}
+        <ClockIcon />
+        {moment(props.publishedDate).format("MMMM YYYY")}
+      </p>
     </div>
   );
 }

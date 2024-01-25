@@ -22,18 +22,14 @@ import { ReactComponent as GoogleDriveIcon } from "app/modules/dataset-upload-mo
 
 import { formatBytes } from "app/utils/formatBytes";
 import { ReactComponent as ErrorICon } from "app/modules/dataset-upload-module/assets/error-icon.svg";
-import Processing, {
-  ProcessingMetaDataProps,
-} from "app/modules/dataset-upload-module/upload-steps/processing";
-import { useHistory } from "react-router-dom";
 
 interface Props {
   disabled: boolean;
 
   setFile: React.Dispatch<React.SetStateAction<File | null>>;
-  uploading: boolean;
-  processing: ProcessingMetaDataProps;
+
   processingError: boolean;
+  setIsExternalSearch: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function AddDatasetFragment(props: Props) {
@@ -131,23 +127,18 @@ export default function AddDatasetFragment(props: Props) {
 
   return (
     <>
-      {props.uploading ? (
-        <Processing {...props.processing} />
-      ) : (
-        <>
-          <DropZone
-            disabled={props.disabled}
-            getRootProps={getRootProps}
-            getInputProps={getInputProps}
-            isDragActive={isDragActive}
-            fileRejections={fileRejections}
-            acceptedFiles={acceptedFiles}
-            handleOpenPicker={handleOpenPicker}
-            uploadError={props.processingError}
-          />
-          {fileRejections.length > 0 && fileRejectionItems}
-        </>
-      )}
+      <DropZone
+        disabled={props.disabled}
+        getRootProps={getRootProps}
+        getInputProps={getInputProps}
+        isDragActive={isDragActive}
+        fileRejections={fileRejections}
+        acceptedFiles={acceptedFiles}
+        handleOpenPicker={handleOpenPicker}
+        uploadError={props.processingError}
+        setIsExternalSearch={props.setIsExternalSearch}
+      />
+      {fileRejections.length > 0 && fileRejectionItems}
     </>
   );
 }
@@ -168,13 +159,13 @@ interface DropzoneProps {
   handleOpenPicker(e: React.MouseEvent<HTMLButtonElement>): void;
   uploadError: boolean;
   disabled: boolean;
+  setIsExternalSearch: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const DropZone = (props: DropzoneProps) => {
-  const history = useHistory();
   const handleExternalSearch = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    history.push("/explore-assets/external-search");
+    props.setIsExternalSearch(true);
   };
   return (
     <div css={uploadDatasetcss} {...props.getRootProps()}>
