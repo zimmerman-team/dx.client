@@ -50,6 +50,7 @@ interface DropzoneProps {
 
 export default function AddDatasetFragment(props: Props) {
   const [openPicker, authResponse] = useDrivePicker();
+  const [isPickerOpen, setIsPickerOpen] = React.useState(false);
   const [fileData, setFileData] = React.useState<PickerCallback | null>(null);
   const token = useStoreState((state) => state.AuthToken.value);
   const [accessToken, setAccessToken] = React.useState("");
@@ -110,7 +111,7 @@ export default function AddDatasetFragment(props: Props) {
   }, [acceptedFiles]);
 
   React.useEffect(() => {
-    if (accessToken) {
+    if (accessToken && isPickerOpen) {
       openPicker({
         clientId: process.env.REACT_APP_GOOGLE_API_CLIENT_ID as string,
         developerKey: process.env.REACT_APP_GOOGLE_API_DEV_KEY as string,
@@ -123,10 +124,13 @@ export default function AddDatasetFragment(props: Props) {
             console.log(d);
           }
           setFileData(d);
+          if (d.action === "cancel") {
+            setIsPickerOpen(false);
+          }
         },
       });
     }
-  }, [accessToken]);
+  }, [accessToken, isPickerOpen]);
 
   function getAccessTokenAndOpenPicker() {
     axios
@@ -144,7 +148,7 @@ export default function AddDatasetFragment(props: Props) {
 
   function handleOpenPicker(e: React.MouseEvent<HTMLButtonElement>) {
     e.stopPropagation();
-
+    setIsPickerOpen(true);
     getAccessTokenAndOpenPicker();
   }
 
