@@ -1,2 +1,5 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
+Disallow:
+Disallow: /src/
+Sitemap: https://dataxplorer.org/sitemap.xml
