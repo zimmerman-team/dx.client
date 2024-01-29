@@ -38,8 +38,19 @@ import BubblechartIcon from "app/assets/icons/data-themes-chart-types/bubble";
 import ColoredBubblechartIcon from "app/assets/icons/data-themes-chart-types/coloredBubbleChart";
 
 import RadarchartIcon from "app/assets/icons/data-themes-chart-types/radar";
+import ColoredRadarchartIcon from "app/assets/icons/data-themes-chart-types/coloredRadarChart";
 
 import HeatmapIcon from "app/assets/icons/data-themes-chart-types/heatmap";
+import ColoredHeatmapIcon from "app/assets/icons/data-themes-chart-types/coloredHeatmap";
+
+import ScatterIcon from "app/assets/icons/data-themes-chart-types/scatter";
+import ColoredScatterIcon from "app/assets/icons/data-themes-chart-types/coloredScatterChart";
+
+import AreaTimeAxisIcon from "app/assets/icons/data-themes-chart-types/areatimeaxis";
+import ColoredAreaTimeAxisIcon from "app/assets/icons/data-themes-chart-types/coloredAreatimeaxis";
+
+import GraphGLIcon from "app/assets/icons/data-themes-chart-types/graphgl";
+import ColoredGraphGLIcon from "app/assets/icons/data-themes-chart-types/coloredGraphGl";
 
 import { ReactComponent as GeomapPreviewImg } from "app/modules/chart-module/assets/geomapPreview.svg";
 import { ReactComponent as BigNumberPreviewImg } from "app/modules/chart-module/assets/bigNumberPreview.svg";
@@ -57,6 +68,9 @@ import { ReactComponent as AreastackedPreviewImg } from "app/modules/chart-modul
 import { ReactComponent as BubbleChartPreviewImg } from "app/modules/chart-module/assets/bubbleChartPreview.svg";
 import { ReactComponent as RadarChartPreviewImg } from "app/modules/chart-module/assets/radarChartPreview.svg";
 import { ReactComponent as HeatmapPreviewImg } from "app/modules/chart-module/assets/heatmapPreview.svg";
+import { ReactComponent as ScatterChartPreviewImg } from "app/modules/chart-module/assets/scatterChartPreview.svg";
+import { ReactComponent as GraphGlPreviewImg } from "app/modules/chart-module/assets/graphglPreview.svg";
+import { ReactComponent as AreatimeaxisPreviewImg } from "app/modules/chart-module/assets/lineChartPreview.svg";
 
 export interface ChartBuilderChartTypeProps {
   loading: boolean;
@@ -141,7 +155,7 @@ export const echartTypes = (big: boolean) => {
       categories: ["Hierarchies", "Proportions"],
       ssr: false,
       description:
-        "It displays hierarchically structured data and a related quantitative dimension using concentric circles. The circle in the center represents the root node, with the hierarchies moving outward from the center. The angle of each arc corresponds to the qualitative dimension.",
+        "Sunburst charts visualize hierarchical data using a circular layout. The innermost circle represents the main category, while the subsequent circles represent subcategories.",
     },
     {
       id: "echartsPiechart",
@@ -151,7 +165,7 @@ export const echartTypes = (big: boolean) => {
       categories: ["Proportions"],
       ssr: false,
       description:
-        "It allows you to see the proportions between values that make up a whole, by using arcs composing a circle.",
+        "Pie charts display data as slices of a circular pie, where each slice represents a category or value.",
     },
     {
       id: "echartsCirclepacking",
@@ -161,7 +175,7 @@ export const echartTypes = (big: boolean) => {
       categories: ["Hierarchies", "Proportions"],
       ssr: false,
       description:
-        "It displays values of leaf nodes of a hierarchical structure by using circles areas. The hierarchical structure is depicted using nested circles. A further quantitative dimension with size and a quantitative or categorical dimension with color.",
+        "Circle Packing chart present hierarchical data structures by visually depicting the relative proportions and relationships among different categories or subcategories.",
     },
     {
       id: "echartsForcegraph",
@@ -171,7 +185,7 @@ export const echartTypes = (big: boolean) => {
       categories: ["Networks"],
       ssr: false,
       description:
-        "It represents flows among nodes of a network. Nodes are represented as circles",
+        "Network graphs illustrate relationships between nodes in a network. Nodes are represented as points, and connections between nodes are depicted as lines",
     },
     {
       id: "echartsCirculargraph",
@@ -181,7 +195,7 @@ export const echartTypes = (big: boolean) => {
       categories: ["Networks"],
       ssr: false,
       description:
-        "It represents flows among nodes of a network. Nodes are represented as circles",
+        "Network graphs illustrate relationships between nodes in a network. Nodes are represented as points, and connections between nodes are depicted as lines",
     },
     {
       id: "echartsAreastack",
@@ -191,7 +205,7 @@ export const echartTypes = (big: boolean) => {
       categories: ["Trends", "changes over time"],
       ssr: false,
       description:
-        "Line stack charts present data by illustrating trends and changes in continuous or sequential data points over time, making them ideal for visualizing patterns, fluctuations, or relationships in data.",
+        "Line stacked charts present data by illustrating trends and changes in continuous or sequential data points over time, making them ideal for visualizing patterns, fluctuations, or relationships in data.",
     },
     {
       id: "echartsBubblechart",
@@ -201,7 +215,7 @@ export const echartTypes = (big: boolean) => {
       categories: ["Correlations", "Proportions"],
       ssr: false,
       description:
-        "The basic layout is a scatter plot, which allows to see correlations among two continuous dimensions. A further quantitative dimension with size and a quantitative or categorical dimension with color.",
+        "Bubble charts are used to display three dimensions of data on a two-dimensional plot. Each bubble represents a data point and is positioned based on its x and y values.",
     },
     {
       id: "echartsHeatmap",
@@ -211,7 +225,7 @@ export const echartTypes = (big: boolean) => {
       categories: ["Correlations", "Proportions"],
       ssr: false,
       description:
-        "The basic layout is a scatter plot, which allows to see correlations among two continuous dimensions. A further quantitative dimension with size and a quantitative or categorical dimension with color.",
+        "Heatmaps visualize data using color-coded cells in a tabular format. Each cell represents a specific combination of two variables, typically displayed as rows and columns.",
     },
     {
       id: "echartsRadarchart",
@@ -221,23 +235,24 @@ export const echartTypes = (big: boolean) => {
       categories: ["Correlations"],
       ssr: false,
       description:
-        "It displays multiple continuous dimensions as axes starting from the same point and by disposing them radially. Each dimension is represented as an axis starting from the center of the cart. The same scale is applied to all the axes.",
+        "Radar charts are particularly useful for assessing and comparing the strengths and weaknesses of different data points or individuals across various attributes.",
     },
     {
       id: "echartsGraphgl",
       label: "Graph GL Chart",
-      icon: <BarChartIcon big={big} />,
-      preview: <BarChartPreviewImg />,
+      icon: <GraphGLIcon big={big} />,
+      preview: <GraphGlPreviewImg />,
       categories: ["Networks"],
       ssr: false,
-      description: "It represents flows among nodes of a network.",
+      description:
+        "Network graphs illustrate relationships between nodes in a network. Nodes are represented as points, and connections between nodes are depicted as lines",
     },
 
     {
       id: "echartsAreatimeaxis",
       label: "Area Time Axis Chart",
-      icon: <LineChartIcon big={big} />,
-      preview: <LineChartPreviewImg />,
+      icon: <AreaTimeAxisIcon big={big} />,
+      preview: <AreatimeaxisPreviewImg />,
       categories: ["Time Series", "Correlations"],
       ssr: false,
       description:
@@ -246,12 +261,12 @@ export const echartTypes = (big: boolean) => {
     {
       id: "echartsScatterchart",
       label: "Scatter Chart",
-      icon: <BarChartIcon big={big} />,
-      preview: <BarChartPreviewImg />,
+      icon: <ScatterIcon big={big} />,
+      preview: <ScatterChartPreviewImg />,
       categories: ["Correlations", "Proportions"],
       ssr: false,
       description:
-        "It allows to see correlations among two continuous dimensions.",
+        "Scatter plot is a graphical representation of data points in a two-dimensional space. Scatter plots are used to analyze the relationship or correlation between two variables and identify any patterns or trends.",
     },
     {
       id: "placeholder9",
@@ -340,7 +355,7 @@ export const coloredEchartTypes = () => {
       categories: ["Hierarchies", "Proportions"],
       ssr: false,
       description:
-        "It displays hierarchically structured data and a related quantitative dimension using concentric circles. The circle in the center represents the root node, with the hierarchies moving outward from the center. The angle of each arc corresponds to the qualitative dimension.",
+        "Sunburst charts visualize hierarchical data using a circular layout. The innermost circle represents the main category, while the subsequent circles represent subcategories.",
     },
     {
       id: "echartsPiechart",
@@ -349,7 +364,7 @@ export const coloredEchartTypes = () => {
       categories: ["Proportions"],
       ssr: false,
       description:
-        "It allows you to see the proportions between values that make up a whole, by using arcs composing a circle.",
+        "Pie charts display data as slices of a circular pie, where each slice represents a category or value.",
     },
     {
       id: "echartsCirclepacking",
@@ -358,7 +373,7 @@ export const coloredEchartTypes = () => {
       categories: ["Hierarchies", "Proportions"],
       ssr: false,
       description:
-        "It displays values of leaf nodes of a hierarchical structure by using circles areas. The hierarchical structure is depicted using nested circles. A further quantitative dimension with size and a quantitative or categorical dimension with color.",
+        "Circle Packing chart present hierarchical data structures by visually depicting the relative proportions and relationships among different categories or subcategories.",
     },
     {
       id: "echartsForcegraph",
@@ -367,7 +382,7 @@ export const coloredEchartTypes = () => {
       categories: ["Networks"],
       ssr: false,
       description:
-        "It represents flows among nodes of a network. Nodes are represented as circles, the size represents their value. Flows are represented with straight lines whose width is proportional to their value.",
+        "Network graphs illustrate relationships between nodes in a network. Nodes are represented as points, and connections between nodes are depicted as lines",
     },
     {
       id: "echartsCirculargraph",
@@ -376,7 +391,7 @@ export const coloredEchartTypes = () => {
       categories: ["Networks"],
       ssr: false,
       description:
-        "It represents flows among nodes of a network. Nodes are represented as circles",
+        "Network graphs illustrate relationships between nodes in a network. Nodes are represented as points, and connections between nodes are depicted as lines",
     },
     {
       id: "echartsAreastack",
@@ -394,39 +409,40 @@ export const coloredEchartTypes = () => {
       categories: ["Correlations", "Proportions"],
       ssr: false,
       description:
-        "The basic layout is a scatter plot, which allows to see correlations among two continuous dimensions. A further quantitative dimension with size and a quantitative or categorical dimension with color.",
+        "Bubble charts are used to display three dimensions of data on a two-dimensional plot. Each bubble represents a data point and is positioned based on its x and y values.",
     },
     {
       id: "echartsHeatmap",
       label: "Heat map",
-      icon: <ColoredBarChartIcon />,
+      icon: <ColoredHeatmapIcon />,
       categories: ["Correlations", "Proportions"],
       ssr: false,
       description:
-        "The basic layout is a scatter plot, which allows to see correlations among two continuous dimensions. A further quantitative dimension with size and a quantitative or categorical dimension with color.",
+        "Heatmaps visualize data using color-coded cells in a tabular format. Each cell represents a specific combination of two variables, typically displayed as rows and columns.",
     },
     {
       id: "echartsRadarchart",
       label: "Radar Chart",
-      icon: <ColoredBarChartIcon />,
+      icon: <ColoredRadarchartIcon />,
       categories: ["Correlations"],
       ssr: false,
       description:
-        "It displays multiple continuous dimensions as axes starting from the same point and by disposing them radially. Each dimension is represented as an axis starting from the center of the cart. The same scale is applied to all the axes.",
+        "Radar charts are particularly useful for assessing and comparing the strengths and weaknesses of different data points or individuals across various attributes.",
     },
     {
       id: "echartsGraphgl",
       label: "Graph GL Chart",
-      icon: <ColoredBarChartIcon />,
+      icon: <ColoredGraphGLIcon />,
       categories: ["Networks"],
       ssr: false,
-      description: "It represents flows among nodes of a network.",
+      description:
+        "Network graphs illustrate relationships between nodes in a network. Nodes are represented as points, and connections between nodes are depicted as lines",
     },
 
     {
       id: "echartsAreatimeaxis",
       label: "Area Time Axis Chart",
-      icon: <ColoredLineChartIcon />,
+      icon: <ColoredAreaTimeAxisIcon />,
       categories: ["Time Series", "Correlations"],
       ssr: false,
       description:
@@ -435,11 +451,11 @@ export const coloredEchartTypes = () => {
     {
       id: "echartsScatterchart",
       label: "Scatter Chart",
-      icon: <ColoredBarChartIcon />,
+      icon: <ColoredScatterIcon />,
       categories: ["Correlations", "Proportions"],
       ssr: false,
       description:
-        "It allows to see correlations among two continuous dimensions.",
+        "Scatter plot is a graphical representation of data points in a two-dimensional space. Scatter plots are used to analyze the relationship or correlation between two variables and identify any patterns or trends.",
     },
   ];
 };

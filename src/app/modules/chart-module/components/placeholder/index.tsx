@@ -14,6 +14,11 @@ import { ReactComponent as CirclepackingPlaceholderImage } from "app/modules/cha
 import { ReactComponent as ForcegraphPlaceholderImage } from "app/modules/chart-module/assets/forcegraphPlaceholder.svg";
 import { ReactComponent as CirculargraphPlaceholderImage } from "app/modules/chart-module/assets/circulargraphPlaceholder.svg";
 import { ReactComponent as RadarChartPlaceholderImage } from "app/modules/chart-module/assets/radarChartPlaceholder.svg";
+import { ReactComponent as ScatterChartPlaceholderImage } from "app/modules/chart-module/assets/scatterChartPlaceholder.svg";
+import { ReactComponent as GraphglPlaceholderImage } from "app/modules/chart-module/assets/graphglPlaceholder.svg";
+import { ReactComponent as HeatmapPlaceholderImage } from "app/modules/chart-module/assets/heatmapPlaceholder.svg";
+import { ReactComponent as AreatimeaxisPlaceholderImage } from "app/modules/chart-module/assets/areatimeaxisPlaceholder.svg";
+import { CHART_DEFAULT_HEIGHT } from "../../data";
 
 export default function ChartPlaceholder(props: { loading?: boolean }) {
   const chartType = useStoreState((state) => state.charts.chartType.value);
@@ -28,6 +33,7 @@ export default function ChartPlaceholder(props: { loading?: boolean }) {
         <div
           css={`
             padding-right: 38px;
+            height: 100%;
             svg {
               width: 100%;
               height: 100%;
@@ -48,7 +54,7 @@ export default function ChartPlaceholder(props: { loading?: boolean }) {
         <div
           css={`
             padding-right: 38px;
-
+            height: 100%;
             svg {
               width: 100%;
               height: 100%;
@@ -65,6 +71,7 @@ export default function ChartPlaceholder(props: { loading?: boolean }) {
         <div
           css={`
             padding-right: 38px;
+            height: 100%;
 
             svg {
               width: 100%;
@@ -82,6 +89,7 @@ export default function ChartPlaceholder(props: { loading?: boolean }) {
         <div
           css={`
             padding-right: 38px;
+            height: 100%;
 
             svg {
               width: 100%;
@@ -116,9 +124,10 @@ export default function ChartPlaceholder(props: { loading?: boolean }) {
         <div
           css={`
             padding-right: 38px;
+            height: 100%;
             svg {
-              width: 80%;
-              height: 80%;
+              width: 100%;
+              height: 100%;
             }
           `}
         >
@@ -132,9 +141,10 @@ export default function ChartPlaceholder(props: { loading?: boolean }) {
         <div
           css={`
             padding-right: 38px;
+            height: 100%;
             svg {
-              width: 80%;
-              height: 80%;
+              width: 100%;
+              height: 100%;
             }
           `}
         >
@@ -148,9 +158,10 @@ export default function ChartPlaceholder(props: { loading?: boolean }) {
         <div
           css={`
             padding-right: 38px;
+            height: 100%;
             svg {
-              width: 80%;
-              height: 80%;
+              width: 100%;
+              height: 100%;
             }
           `}
         >
@@ -164,9 +175,10 @@ export default function ChartPlaceholder(props: { loading?: boolean }) {
         <div
           css={`
             padding-right: 38px;
+            height: 100%;
             svg {
-              width: 80%;
-              height: 80%;
+              width: 100%;
+              height: 100%;
             }
           `}
         >
@@ -180,9 +192,10 @@ export default function ChartPlaceholder(props: { loading?: boolean }) {
         <div
           css={`
             padding-right: 38px;
+            height: 100%;
             svg {
-              width: 80%;
-              height: 80%;
+              width: 100%;
+              height: 100%;
             }
           `}
         >
@@ -197,7 +210,7 @@ export default function ChartPlaceholder(props: { loading?: boolean }) {
         <div
           css={`
             padding-right: 38px;
-
+            height: 100%;
             svg {
               width: 100%;
               height: 100%;
@@ -214,6 +227,7 @@ export default function ChartPlaceholder(props: { loading?: boolean }) {
         <div
           css={`
             padding-right: 38px;
+            height: 100%;
 
             svg {
               width: 100%;
@@ -221,7 +235,7 @@ export default function ChartPlaceholder(props: { loading?: boolean }) {
             }
           `}
         >
-          <LinechartPlaceholderImage />
+          <ScatterChartPlaceholderImage />
         </div>
       ),
     },
@@ -231,14 +245,14 @@ export default function ChartPlaceholder(props: { loading?: boolean }) {
         <div
           css={`
             padding-right: 38px;
-
+            height: 100%;
             svg {
               width: 100%;
               height: 100%;
             }
           `}
         >
-          <LinechartPlaceholderImage />
+          <HeatmapPlaceholderImage />
         </div>
       ),
     },
@@ -248,6 +262,7 @@ export default function ChartPlaceholder(props: { loading?: boolean }) {
         <div
           css={`
             padding-right: 38px;
+            height: 100%;
 
             svg {
               width: 100%;
@@ -255,7 +270,7 @@ export default function ChartPlaceholder(props: { loading?: boolean }) {
             }
           `}
         >
-          <LinechartPlaceholderImage />
+          <AreatimeaxisPlaceholderImage />
         </div>
       ),
     },
@@ -266,13 +281,14 @@ export default function ChartPlaceholder(props: { loading?: boolean }) {
           css={`
             padding-right: 38px;
 
+            height: 100%;
             svg {
               width: 100%;
               height: 100%;
             }
           `}
         >
-          <BarChartPlaceholderImage />
+          <GraphglPlaceholderImage />
         </div>
       ),
     },
@@ -282,10 +298,10 @@ export default function ChartPlaceholder(props: { loading?: boolean }) {
         <div
           css={`
             padding-right: 38px;
-
+            height: 100%;
             svg {
-              width: 60%;
-              height: 60%;
+              width: 100%;
+              height: 100%;
             }
           `}
         >
@@ -299,7 +315,7 @@ export default function ChartPlaceholder(props: { loading?: boolean }) {
         <div
           css={`
             padding-right: 38px;
-
+            height: 100%;
             svg {
               width: 100%;
               height: 100%;
@@ -328,7 +344,15 @@ export default function ChartPlaceholder(props: { loading?: boolean }) {
               position: relative;
             `}
           >
-            {!props.loading && <div>{getChartPlaceholder()}</div>}
+            {!props.loading && (
+              <div
+                css={`
+                  height: ${CHART_DEFAULT_HEIGHT}px;
+                `}
+              >
+                {getChartPlaceholder()}
+              </div>
+            )}
           </div>
         );
       default:
