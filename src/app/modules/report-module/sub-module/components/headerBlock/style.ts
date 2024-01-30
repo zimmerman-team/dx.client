@@ -15,7 +15,8 @@ export const headerBlockcss = {
     border: none;
     outline: none;
     font-size: 28.9px;
-    font-weight: 700;
+    font-weight: 400;
+    font-family: "GothamNarrow-Bold", sans-serif;
     line-height: 48px;
     background: inherit;
     padding-left: 0px;
