@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+      
+            <url>
+              <loc>https://dataxplorer.org/</loc>
+              <lastmod>2024-01-16T14:49:10.167Z</lastmod>
+              <changefreq>monthly</changefreq>
+              <priority>1.0</priority>
+            </url>
+          
+            <url>
+              <loc>https://dataxplorer.org/partners</loc>
+              <lastmod>2024-01-16T14:49:10.175Z</lastmod>
+              <changefreq>monthly</changefreq>
+              <priority>1.0</priority>
+            </url>
+
+              <url>
+              <loc>https://dataxplorer.org/contact</loc>
+              <lastmod>2024-01-16T14:49:10.175Z</lastmod>
+              <changefreq>monthly</changefreq>
+              <priority>1.0</priority>
+            </url>
+                <url>
+              <loc>https://dataxplorer.org/why-dataXplorer</loc>
+              <lastmod>2024-01-16T14:49:10.175Z</lastmod>
+              <changefreq>monthly</changefreq>
+              <priority>1.0</priority>
+            </url>
+                <url>
+              <loc>https://dataxplorer.org/explore</loc>
+              <lastmod>2024-01-16T14:49:10.175Z</lastmod>
+              <changefreq>monthly</changefreq>
+              <priority>1.0</priority>
+            </url>
+                            <url>
+              <loc>https://dataxplorer.org/about</loc>
+              <lastmod>2024-01-16T14:49:10.175Z</lastmod>
+              <changefreq>monthly</changefreq>
+              <priority>1.0</priority>
+            </url>
+
+                           <url>
+              <loc>https://dataxplorer.org/chart/new/data</loc>
+              <lastmod>2024-01-16T14:49:10.175Z</lastmod>
+              <changefreq>monthly</changefreq>
+              <priority>1.0</priority>
+            </url>
+
+  <url>
+              <loc>https://dataxplorer.org/chart/new/chart-type</loc>
+              <lastmod>2024-01-16T14:49:10.175Z</lastmod>
+              <changefreq>monthly</changefreq>
+              <priority>1.0</priority>
+            </url>
+
+              <url>
+              <loc>https://dataxplorer.org/chart/new/mapping</loc>
+              <lastmod>2024-01-16T14:49:10.175Z</lastmod>
+              <changefreq>monthly</changefreq>
+              <priority>1.0</priority>
+            </url>
+
+              <url>
+              <loc>https://dataxplorer.org/chart/new/filters</loc>
+              <lastmod>2024-01-16T14:49:10.175Z</lastmod>
+              <changefreq>monthly</changefreq>
+              <priority>1.0</priority>
+            </url>
+
+              <url>
+              <loc>https://dataxplorer.org/chart/new/customize</loc>
+              <lastmod>2024-01-16T14:49:10.175Z</lastmod>
+              <changefreq>monthly</changefreq>
+              <priority>1.0</priority>
+            </url>
+
+              <url>
+              <loc>https://dataxplorer.org/chart/new/preview</loc>
+              <lastmod>2024-01-16T14:49:10.175Z</lastmod>
+              <changefreq>monthly</changefreq>
+              <priority>1.0</priority>
+            </url>
+
+
+                <url>
+              <loc>https://dataxplorer.org/report/new/initial</loc>
+              <lastmod>2024-01-16T14:49:10.175Z</lastmod>
+              <changefreq>monthly</changefreq>
+              <priority>1.0</priority>
+            </url>
+                 <url>
+              <loc>https://dataxplorer.org/dataset/new/upload</loc>
+              <lastmod>2024-01-16T14:49:10.175Z</lastmod>
+              <changefreq>monthly</changefreq>
+              <priority>1.0</priority>
+            </url>
+
+                            <url>
+              <loc>https://dataxplorer.org/onboarding</loc>
+              <lastmod>2024-01-16T14:49:10.175Z</lastmod>
+              <changefreq>monthly</changefreq>
+              <priority>1.0</priority>
+            </url>
+                                    <url>
+              <loc>https://dataxplorer.org/onboarding/signup</loc>
+              <lastmod>2024-01-16T14:49:10.175Z</lastmod>
+              <changefreq>monthly</changefreq>
+              <priority>1.0</priority>
+            </url>
+                                    <url>
+              <loc>https://dataxplorer.org/onboarding/login</loc>
+              <lastmod>2024-01-16T14:49:10.175Z</lastmod>
+              <changefreq>monthly</changefreq>
+              <priority>1.0</priority>
+            </url>
+    </urlset>
+  
