@@ -22,10 +22,10 @@ import { ReactComponent as GoogleDriveIcon } from "app/modules/dataset-upload-mo
 
 import { formatBytes } from "app/utils/formatBytes";
 import { ReactComponent as ErrorICon } from "app/modules/dataset-upload-module/assets/error-icon.svg";
+import { useStoreState } from "app/state/store/hooks";
 
 interface Props {
   disabled: boolean;
-
   setFile: React.Dispatch<React.SetStateAction<File | null>>;
 
   processingError: boolean;
@@ -34,10 +34,12 @@ interface Props {
 
 export default function AddDatasetFragment(props: Props) {
   const [openPicker, authResponse] = useDrivePicker();
+  const [isPickerOpen, setIsPickerOpen] = React.useState(false);
   const [fileData, setFileData] = React.useState<PickerCallback | null>(null);
-
+  const token = useStoreState((state) => state.AuthToken.value);
+  const [accessToken, setAccessToken] = React.useState("");
   React.useEffect(() => {
-    if (authResponse?.access_token && fileData?.docs) {
+    if (accessToken && fileData?.docs) {
       const file = fileData?.docs[0];
       axios({
         url: `https://www.googleapis.com/drive/v3/files/${file.id}${
@@ -45,7 +47,7 @@ export default function AddDatasetFragment(props: Props) {
         }`,
         method: "GET",
         headers: {
-          Authorization: `Bearer ${authResponse?.access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
         responseType: "blob", // important
       }).then((response) => {
@@ -58,7 +60,7 @@ export default function AddDatasetFragment(props: Props) {
         props.setFile(gfile);
       });
     }
-  }, [authResponse, fileData]);
+  }, [accessToken, fileData]);
 
   const ACCEPTED_FILES = {
     "text/csv": [".csv"],
@@ -92,26 +94,46 @@ export default function AddDatasetFragment(props: Props) {
     }
   }, [acceptedFiles]);
 
-  function getTokenAndOpenPicker() {
-    openPicker({
-      clientId: process.env.REACT_APP_GOOGLE_API_CLIENT_ID as string,
-      developerKey: process.env.REACT_APP_GOOGLE_API_DEV_KEY as string,
-      viewId: "SPREADSHEETS",
-      supportDrives: true,
-      token: "",
-      setSelectFolderEnabled: true,
-      callbackFunction: (d: PickerCallback) => {
-        if (process.env.NODE_ENV === "development") {
-          console.log(d);
-        }
-        setFileData(d);
-      },
-    });
+  React.useEffect(() => {
+    if (accessToken && isPickerOpen) {
+      openPicker({
+        clientId: process.env.REACT_APP_GOOGLE_API_CLIENT_ID as string,
+        developerKey: process.env.REACT_APP_GOOGLE_API_DEV_KEY as string,
+        viewId: "SPREADSHEETS",
+        supportDrives: true,
+        token: accessToken,
+        setSelectFolderEnabled: true,
+        callbackFunction: (d: PickerCallback) => {
+          if (process.env.NODE_ENV === "development") {
+            console.log(d);
+          }
+          setFileData(d);
+          if (d.action === "cancel") {
+            setIsPickerOpen(false);
+          }
+        },
+      });
+    }
+  }, [accessToken, isPickerOpen]);
+
+  function getAccessTokenAndOpenPicker() {
+    axios
+      .get(`${process.env.REACT_APP_API}/dataset/google-drive/user-token`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        console.log(res, "res-token");
+        //updates access token which  triggers the useEffect to open google drive picker
+        setAccessToken(res.data);
+      });
   }
 
   function handleOpenPicker(e: React.MouseEvent<HTMLButtonElement>) {
     e.stopPropagation();
-    getTokenAndOpenPicker();
+    setIsPickerOpen(true);
+    getAccessTokenAndOpenPicker();
   }
 
   const fileRejectionItems = fileRejections.map(({ file, errors }) => (
