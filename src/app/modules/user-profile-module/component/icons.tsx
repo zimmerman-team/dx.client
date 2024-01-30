@@ -20,9 +20,6 @@ export const LogOutIcon = ({ active }: RightIconProps) => {
     <svg
       width="18"
       height="18"
-      css={`
-        margin-right: -3px;
-      `}
       viewBox="0 0 18 18"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

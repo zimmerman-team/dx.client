@@ -10,7 +10,12 @@ function AuthCallbackModule() {
 
   React.useEffect(() => {
     if (isAuthenticated) {
-      history.replace("/");
+      if (localStorage.getItem("signup-state") == "true") {
+        history.replace("/report/new/initial");
+        localStorage.removeItem("signup-state");
+      } else {
+        history.replace("/");
+      }
     } else {
       getAccessTokenSilently();
     }
