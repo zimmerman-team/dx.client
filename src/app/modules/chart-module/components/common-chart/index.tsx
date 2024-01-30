@@ -216,30 +216,33 @@ export function CommonChart(props: Readonly<Props>) {
               props.inChartWrapper &&
               `
               div:nth-child(1) {
-              font-size: 9.39px !important;
-              padding-bottom: 0px !important;
+              font-size: 12px !important;
+              padding-bottom: 6px !important;
+              padding-top: 6px !important;
+              line-height: 14.4px !important;
               font-family: "GothamNarrow-Medium", "Helvetica Neue", sans-serif !important;
         
               }
               div:nth-child(2) {
-                font-size: 45.07px !important;
+                font-size: 48px !important;
                 font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif !important;
-                line-height: normal !important;
-                height: 0px !important;
-                margin-top: 29px !important;
-                margin-bottom: 25px  !important;
+                height: 58px !important;
+                margin-top: 8px !important;
+                margin-bottom: 8px  !important;
               }
               div:nth-child(3) {
-                font-size: 9.39px !important;
-                padding-bottom: 0px !important;
+                font-size: 12px !important;
+                padding-bottom: 6px !important;
                 padding-top: 0px !important;
+                line-height: 14.4px !important;
               font-family: "GothamNarrow-Medium", "Helvetica Neue", sans-serif !important;
 
               }
               div:nth-child(4) {
-                font-size: 7.572px !important;
+                font-size: 10px !important;
                 margin-top: 0px !important;
-                line-height: 16px !important;
+              padding-top: 6px !important;
+                line-height: 12px !important;
                 font-weight: 325 !important;
                 font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif !important;
               }

@@ -108,7 +108,7 @@ export const RichEditor = (props: {
         ${!props.fullWidth && "max-width: 800px !important;"}
 
         font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
-        line-height: 15px;
+        line-height: normal;
         font-weight: 12px;
         h1,
         h2 {
@@ -147,6 +147,7 @@ export const RichEditor = (props: {
             fontFamily: "GothamNarrow-Bold",
             fontWeight: "bold",
             fontSize: "14px",
+            lineHeight: "normal",
           },
         }}
         editorKey="RichEditor"

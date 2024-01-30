@@ -7,7 +7,7 @@ import { useParams } from "react-router-dom";
 import useResizeObserver from "use-resize-observer";
 import Container from "@material-ui/core/Container";
 import { EditorState, RawDraftContentState, convertFromRaw } from "draft-js";
-import { useSessionStorage, useUpdateEffect } from "react-use";
+import { useUpdateEffect } from "react-use";
 import { withAuthenticationRequired } from "@auth0/auth0-react";
 import { PlaceHolder } from "app/modules/report-module/views/create";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
@@ -26,7 +26,7 @@ import {
   reportContentContainerWidth,
 } from "app/state/recoil/atoms";
 import { IFramesArray } from "../create/data";
-import RowFrame from "../../sub-module/rowStructure/rowFrame";
+import RowFrame from "../../sub-module/rowStructure";
 
 function ReportEditView(props: ReportEditViewProps) {
   const { page } = useParams<{ page: string }>();
