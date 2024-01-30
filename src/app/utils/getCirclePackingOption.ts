@@ -30,11 +30,6 @@ function convertData(root: d3.HierarchyCircularNode<any>) {
 
 function getOptionForCirclepacking(data: any[], visualOptions: any) {
   const {
-    // margin
-    marginTop,
-    marginRight,
-    marginBottom,
-    marginLeft,
     // Color Palette
     palette,
     // Tooltip
@@ -132,10 +127,6 @@ function getOptionForCirclepacking(data: any[], visualOptions: any) {
     },
 
     hoverLayerThreshold: Infinity,
-    top: marginTop,
-    left: marginLeft,
-    right: marginRight,
-    bottom: marginBottom,
     series: {
       type: "custom",
       renderItem: renderItem,
@@ -181,10 +172,16 @@ export const drillDown = (
     width,
     height,
     nodeClick,
+    // margin
+    marginTop,
+    marginRight,
+    marginBottom,
+    marginLeft,
   } = visualOptions;
 
-  const chartWidth = width;
-  const chartHeight = height;
+  // removing margins here because they don't apply to the series
+  const chartWidth = width - marginLeft - marginRight;
+  const chartHeight = height * 0.95 - marginTop - marginBottom; // removing 5% because chart is cutting off by default
   if (nodeClick == "zoomToNode") {
     if (targetId !== null) {
       let y = root.descendants().find((node) => {

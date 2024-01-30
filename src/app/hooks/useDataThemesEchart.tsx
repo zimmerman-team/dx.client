@@ -176,13 +176,18 @@ export function useDataThemesEchart() {
       // chart
       drawDonut,
       arcThickness,
+      // Palette
+      palette,
     } = visualOptions;
     const defaultRadius = 80;
 
     const thicknessPercent =
       defaultRadius - (arcThickness / 100) * defaultRadius;
 
+    const sizes = data.map((d: any) => d.value);
+
     const option = {
+      color: checkLists.find((item) => item.label === palette)?.value,
       tooltip: {
         trigger: showTooltip ? "item" : "none",
         confine: true,
@@ -407,11 +412,14 @@ export function useDataThemesEchart() {
       showTooltip,
       isMonetaryValue,
       dataZoom,
+      // Palette
+      palette,
     } = visualOptions;
 
     const convertedData = data.map((d: any) => [+new Date(d.x), d.y]);
 
     const option = {
+      color: checkLists.find((item) => item.label === palette)?.value,
       grid: {
         top: marginTop,
         left: marginLeft,
@@ -480,8 +488,11 @@ export function useDataThemesEchart() {
       // Tooltip
       showTooltip,
       isMonetaryValue,
+      // Palette
+      palette,
     } = visualOptions;
     const option = {
+      color: checkLists.find((item) => item.label === palette)?.value,
       grid: {
         top: marginTop,
         left: marginLeft,
@@ -652,9 +663,12 @@ export function useDataThemesEchart() {
       // Tooltip
       showTooltip,
       isMonetaryValue,
+      // Palette
+      palette,
     } = visualOptions;
 
     const option = {
+      color: checkLists.find((item) => item.label === palette)?.value,
       grid: {
         top: marginTop,
         left: marginLeft,
@@ -895,12 +909,20 @@ export function useDataThemesEchart() {
           type: "sankey",
           data: nodes,
           links: data,
-          height,
+          height: height * 0.9,
           orient,
           nodeAlign,
-          top: marginTop,
-          left: marginLeft,
-          right: marginRight,
+          top: marginTop + height * 0.05,
+          left: showLabels
+            ? labelPosition === "left"
+              ? `${marginLeft + 15}%`
+              : `${marginLeft}%`
+            : `${marginLeft}%`,
+          right: showLabels
+            ? labelPosition === "right"
+              ? `${marginRight + 15}%`
+              : `${marginRight}%`
+            : `${marginRight}%`,
           bottom: marginBottom,
           nodeGap: nodesPadding,
           nodeWidth: nodesWidth,
@@ -977,7 +999,7 @@ export function useDataThemesEchart() {
       marginLeft,
       // chart options
       linksOpacity,
-      draggable,
+      roam,
       // Tooltip
       showTooltip,
       isMonetaryValue,
@@ -987,6 +1009,8 @@ export function useDataThemesEchart() {
       // chart
       nodeSize,
       forceRepulsion,
+      // Palette
+      palette,
     } = visualOptions;
 
     const nodes = uniqBy(data.nodes, "name");
@@ -1002,6 +1026,7 @@ export function useDataThemesEchart() {
     });
 
     const option = {
+      color: checkLists.find((item) => item.label === palette)?.value,
       legend: [
         {
           data: data.categories?.map(function (a: { name: string }) {
@@ -1033,7 +1058,7 @@ export function useDataThemesEchart() {
           bottom: marginBottom,
           width,
           height,
-          roam: draggable,
+          roam: !!roam,
           label: {
             position: "right",
             show: showLabels,
@@ -1061,7 +1086,7 @@ export function useDataThemesEchart() {
       marginLeft,
       // chart options
       linksOpacity,
-      draggable,
+      roam,
       linksCurveness,
       // Tooltip
       showTooltip,
@@ -1070,6 +1095,8 @@ export function useDataThemesEchart() {
       showLabels,
       labelFontSize,
       rotateLabel,
+      // Palette
+      palette,
     } = visualOptions;
 
     const maxValue = data.nodes?.reduce((prev: number, curr: any) => {
@@ -1098,6 +1125,7 @@ export function useDataThemesEchart() {
     const nodes = uniqBy(data.nodes, "name");
 
     const option = {
+      color: checkLists.find((item) => item.label === palette)?.value,
       legend: [
         {
           data: data.categories?.map(function (a: { name: string }) {
@@ -1130,21 +1158,22 @@ export function useDataThemesEchart() {
           data: nodes,
           links: data.links,
           categories: data.categories,
-          top: marginTop,
+          top: marginTop + height * 0.05,
           left: marginLeft,
           right: marginRight,
           bottom: marginBottom,
           width,
-          height: 0.8 * height - marginTop - marginBottom, // Default height from echarts is overflowing so I had to remove .5 percent from the height to fit
-          roam: draggable as boolean,
+          height: height * 0.9 - marginTop - marginBottom, // Default height from echarts is overflowing so I had to remove .5 percent from the height to fit
+          roam: !!roam,
           force: {
             repulsion: 100,
           },
           label: {
             position: "right",
             formatter: "{b}",
-            show: showLabels,
             fontSize: labelFontSize,
+            // width: 50,
+            overflow: "truncate",
           },
           lineStyle: {
             color: "source",
@@ -1178,7 +1207,7 @@ export function useDataThemesEchart() {
     }, 0);
 
     data.nodes?.forEach(function (node: any) {
-      node.symbolSize = (node.value / maxValue) * 10; // making the symbol size relative to the max value but max at 10
+      node.symbolSize = (node.value / maxValue) * 10; // making the symbol size relative to the max value but max at 50
     });
 
     const nodes = uniqBy(data.nodes, "name");
@@ -1198,7 +1227,7 @@ export function useDataThemesEchart() {
           edges: data.links,
           categories: data.categories,
           lineStyle: {
-            color: "rgba(0,0,0,0.2)",
+            color: "rgba(255,255,255,0.2)",
           },
           itemStyle: {
             opacity: opacity,

@@ -50,7 +50,12 @@ function ChartBuilderMapping(props: Readonly<ChartBuilderMappingProps>) {
     <div css={commonStyles.container}>
       <div css={commonStyles.innercontainer}>
         {isEmpty(props.renderedChartMappedData) ? (
-          <ChartPlaceholder loading={props.loading} />
+          <ChartPlaceholder
+            loading={props.loading}
+            css={`
+              width: calc(100% - 24px);
+            `}
+          />
         ) : (
           <div
             ref={props.containerRef}
