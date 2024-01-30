@@ -26,7 +26,7 @@ import DeleteReportDialog from "app/components/Dialogs/deleteReportDialog";
 import { ChartAPIModel, emptyChartAPI } from "app/modules/chart-module/data";
 import { SubheaderToolbarProps } from "app/modules/chart-module/components/chartSubheaderToolbar/data";
 import { ExportChartButton } from "app/modules/chart-module/components/chartSubheaderToolbar/exportButton";
-import { ISnackbarState } from "app/fragments/datasets-fragment/upload-steps/previewFragment";
+import { ISnackbarState } from "app/modules/dataset-upload-module/upload-steps/previewFragment";
 import {
   homeDisplayAtom,
   chartFromReportAtom,

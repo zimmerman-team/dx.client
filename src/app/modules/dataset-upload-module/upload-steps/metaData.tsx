@@ -2,17 +2,18 @@ import React from "react";
 import Box from "@material-ui/core/Box";
 import findIndex from "lodash/findIndex";
 import Grid from "@material-ui/core/Grid";
-import { useForm } from "react-hook-form";
-import Select from "@material-ui/core/Select";
+import { Control, Controller, UseFormRegister, useForm } from "react-hook-form";
 import MenuItem from "@material-ui/core/MenuItem";
-import TextField from "@material-ui/core/TextField";
 import InputLabel from "@material-ui/core/InputLabel";
-import { withStyles } from "@material-ui/core/styles";
 import FormControl from "@material-ui/core/FormControl";
-import { metaDatacss } from "app/fragments/datasets-fragment/style";
+import {
+  CssSelectField,
+  CssTextField,
+  metaDatacss,
+} from "app/modules/dataset-upload-module/style";
 import { useStoreState } from "app/state/store/hooks";
 import { IDatasetDetail } from "app/modules/dataset-module/routes/edit";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 interface Props {
   onSubmit: (data: IFormDetails) => void;
@@ -41,53 +42,10 @@ export interface IFormDetails {
   name: string;
   source: string;
   category: string;
-  public?: boolean;
+  public: boolean;
   sourceUrl: string;
   description: string;
 }
-
-export const CssTextField = withStyles({
-  root: {
-    "& label.Mui-focused": {
-      color: "#231D2C",
-    },
-    "&.MuiInputLabel-outlined": {
-      fontSize: "16px",
-      fontFamily: "'GothamNarrow-Book', sans-serif",
-      color: "#231D2C",
-    },
-    "& .MuiOutlinedInput-input": {
-      padding: "2px 14px",
-      height: "48px",
-      backgroundColor: "#Fff",
-    },
-    "& .MuiFormHelperText-root": {
-      color: "#231D2C",
-      fontSize: "12px",
-      fontWeight: 400,
-      marginLeft: "0px",
-    },
-    "& .MuiInput-underline:after": {
-      borderBottomColor: "#231D2C",
-    },
-    "& .MuiOutlinedInput-multiline ": {
-      backgroundColor: "#Fff",
-    },
-    "& .MuiOutlinedInput-root": {
-      "& fieldset": {
-        borderColor: "#231D2C",
-        borderRadius: "10px",
-        paddingBottom: "4px",
-      },
-      "&:hover fieldset": {
-        borderColor: "#231D2C",
-      },
-      "&.Mui-focused fieldset": {
-        borderColor: "#231D2C",
-      },
-    },
-  },
-})(TextField);
 
 export const datasetCategories = [
   "Arts and Culture",
@@ -99,88 +57,68 @@ export const datasetCategories = [
   "Social",
 ];
 
-const CssSelectField = withStyles({
-  root: {
-    "& label.Mui-focused": {
-      color: "#231D2C",
-    },
-    "&.MuiInputLabel-outlined": {
-      fontSize: "16px",
-      fontFamily: "'GothamNarrow-Book', sans-serif",
-      color: "#231D2C",
-    },
-    "&.MuiSelect-outlined": {
-      padding: "2px 14px",
-      height: "48px",
-      background: "#fff",
-      display: "flex",
-      alignItems: "center",
-    },
-    "&.MuiFormHelperText-root": {
-      color: "#231D2C",
-      fontSize: "12px",
-      fontWeight: 400,
-      marginLeft: "0px",
-    },
-    "&.MuiInput-underline:after": {
-      borderBottomColor: "#231D2C",
-    },
-    "& .MuiOutlinedInput-root": {
-      "& fieldset": {
-        borderColor: "#231D2C",
-        borderRadius: "10px",
-        paddingBottom: "4px",
-      },
-      "&:hover fieldset": {
-        borderColor: "#231D2C",
-      },
-      "&.Mui-focused fieldset": {
-        borderColor: "#231D2C",
-      },
-    },
-  },
-})(Select);
-
 const SelectField = (props: {
   value: string;
-  handleChange: (event: React.ChangeEvent<{ value: unknown }>) => void;
+  register: UseFormRegister<IFormDetails>;
+  control: Control<IFormDetails, any>;
+  setFormDetails: React.Dispatch<React.SetStateAction<IFormDetails>>;
+  formDetails: IFormDetails;
 }) => (
   <FormControl variant="outlined" fullWidth>
     <InputLabel id="select-label">Data category</InputLabel>
-    <CssSelectField
-      fullWidth
-      id="select"
-      value={props.value}
-      label="Data category"
-      labelId="select-label"
-      onChange={props.handleChange}
-      MenuProps={{
-        PaperProps: {
-          style: {
-            borderRadius: "20px",
-            marginTop: `${
-              (findIndex(datasetCategories, props.value) + 1) * 60
-            }px`,
-          },
-        },
+    <Controller
+      render={({ field }) => {
+        React.useEffect(() => {
+          // component is being updated by react-hook-form controller
+          // update formDetails state with category value when field.value changes
+          props.setFormDetails({
+            ...props.formDetails,
+            category: field.value,
+          });
+        }, [field.value]);
+        return (
+          <CssSelectField
+            {...field}
+            fullWidth
+            id="select"
+            value={field.value}
+            label="Data category"
+            labelId="select-label"
+            onChange={field.onChange}
+            MenuProps={{
+              PaperProps: {
+                style: {
+                  borderRadius: "20px",
+                  marginTop: `${
+                    (findIndex(datasetCategories, props.value) + 1) * 60
+                  }px`,
+                },
+              },
+            }}
+            css={`
+              fieldset {
+                border-radius: 10px;
+                padding-bottom: 4px;
+                border-color: #231d2c !important;
+              }
+            `}
+          >
+            <MenuItem value="">
+              <em>None</em>
+            </MenuItem>
+            {datasetCategories.map((category) => (
+              <MenuItem key={category} value={category}>
+                {category}
+              </MenuItem>
+            ))}
+          </CssSelectField>
+        );
       }}
-      css={`
-        fieldset {
-          border-radius: 10px;
-          padding-bottom: 4px;
-          border-color: #231d2c !important;
-        }
-      `}
-    >
-      <MenuItem value="">
-        <em>None</em>
-      </MenuItem>
-      {datasetCategories.map((category) => (
-        <MenuItem key={category} value={category}>
-          {category}
-        </MenuItem>
-      ))}
-    </CssSelectField>
+      control={props.control}
+      rules={{ required: true }}
+      name="category"
+      defaultValue={props.value}
+    />
   </FormControl>
 );
 
@@ -190,13 +128,19 @@ export default function MetaData(props: Readonly<Props>) {
   const loadedDataset = useStoreState(
     (state) => state.dataThemes.DatasetGet.crudData
   ) as IDatasetDetail;
-  const { register, handleSubmit, reset } = useForm<IFormDetails>({
+  const {
+    register,
+    handleSubmit,
+    reset,
+    control,
+    formState: { errors },
+  } = useForm<IFormDetails>({
     defaultValues: props.formDetails,
   });
   const [characterCount, setCharacterCount] = React.useState(0);
 
   React.useEffect(() => {
-    //reset form state when dataset is loaded
+    //reset form state to formDetails state when dataset is loaded
     reset({
       ...props.formDetails,
     });
@@ -210,15 +154,8 @@ export default function MetaData(props: Readonly<Props>) {
     });
   };
 
-  const handleSelectChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    const { value } = event.target;
-    props.setFormDetails({
-      ...props.formDetails,
-      category: value as string,
-    });
-  };
-
   React.useEffect(() => {
+    //get character count from description length
     setCharacterCount(props.formDetails.description?.length);
   }, [props.formDetails.description]);
 
@@ -283,7 +220,10 @@ export default function MetaData(props: Readonly<Props>) {
             <Grid lg={5} xs={12} md={5} item>
               <SelectField
                 value={props.formDetails.category}
-                handleChange={handleSelectChange}
+                register={register}
+                control={control}
+                setFormDetails={props.setFormDetails}
+                formDetails={props.formDetails}
               />
             </Grid>
             <Grid lg={7} xs={12} md={7} item>

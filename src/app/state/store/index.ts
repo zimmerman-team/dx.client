@@ -88,6 +88,8 @@ import {
   DatasetCreate,
   DatasetCount,
   DatasetGet,
+  ExternalDatasetGet,
+  ExternalDatasetDownload,
 } from "app/state/api/action-reducers/data-themes";
 import countrySummary from "../api/action-reducers/cms/countrySummary";
 import notesAndDisclaimers from "../api/action-reducers/cms/notesAndDisclaimers";
@@ -227,7 +229,8 @@ const storeContent: StoreModel = {
     DataThemeGetList: persist(DataThemeGetList),
     DatasetGetList: DatasetGetList,
     DatasetGet: persist(DatasetGet),
-
+    ExternalDatasetGet: persist(ExternalDatasetGet),
+    ExternalDatasetDownload: persist(ExternalDatasetDownload),
     DatasetCount: persist(DatasetCount),
     DatasetCreate: persist(DatasetCreate),
   },

@@ -25,7 +25,7 @@ interface Props {
   onItemClick?: (v: string) => void;
 }
 
-export default function DatasetsGrid(props: Props) {
+export default function DatasetsGrid(props: Readonly<Props>) {
   const observerTarget = React.useRef(null);
   const [cardId, setCardId] = React.useState<string>("");
   const [enableButton, setEnableButton] = React.useState<boolean>(false);

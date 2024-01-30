@@ -34,6 +34,7 @@ const WhyDXModule = lazy(
 const ExploreAssetsModule = lazy(
   () => import("app/modules/home-module/sub-modules/explore-assets")
 );
+
 const ChartModule = lazy(() => import("app/modules/chart-module"));
 const ReportModule = lazy(() => import("app/modules/report-module"));
 
