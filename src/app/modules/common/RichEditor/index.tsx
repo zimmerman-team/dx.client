@@ -1,6 +1,6 @@
 import React, { ReactElement, useMemo, useRef } from "react";
-import picker from "app/modules/chart-module/routes/text/RichEditor/ColorModal/Picker";
-import bgPicker from "app/modules/chart-module/routes/text/RichEditor/BGColorModal/Picker";
+import picker from "app/modules/common/RichEditor/ColorModal/Picker";
+import bgPicker from "app/modules/common/RichEditor/BGColorModal/Picker";
 import { ToolbarPluginsType } from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
 
 /*plugins */

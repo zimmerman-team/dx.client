@@ -18,10 +18,10 @@ function ChartBuilderFilters(props: Readonly<ChartBuilderFiltersProps>) {
   const history = useHistory();
   const { page } = useParams<{ page: string }>();
 
-  const mapping = useStoreState((state) => state.charts.mapping.value);
   const dataset = useStoreState((state) => state.charts.dataset.value);
 
   React.useEffect(() => {
+    //if dataset is empty and not loading, redirect to data page
     if (dataset === null && !props.loading) {
       history.push(`/chart/${page}/data`);
     }

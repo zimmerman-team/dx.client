@@ -8,11 +8,11 @@ import useUpdateEffect from "react-use/lib/useUpdateEffect";
 
 /* project */
 import { FilterGroupModel } from "app/components/ToolBoxPanel/components/filters/data";
-import { ChartToolBoxMapping } from "app/modules/chart-module/components/toolbox/views/steps/panels-content/Mapping";
-import { ChartToolBoxFilters } from "app/modules/chart-module/components/toolbox/views/steps/panels-content/Filters";
-import { ChartToolBoxChartType } from "app/modules/chart-module/components/toolbox/views/steps/panels-content/ChartType";
-import { ChartToolBoxCustomize } from "app/modules/chart-module/components/toolbox/views/steps/panels-content/Customize";
-import { DatasetPanel } from "app/modules/chart-module/components/toolbox/views/steps/panels-content/SelectDataset";
+import { ChartToolBoxMapping } from "app/modules/chart-module/components/toolbox/steps/panels-content/Mapping";
+import { ChartToolBoxFilters } from "app/modules/chart-module/components/toolbox/steps/panels-content/Filters";
+import { ChartToolBoxChartType } from "app/modules/chart-module/components/toolbox/steps/panels-content/ChartType";
+import { ChartToolBoxCustomize } from "app/modules/chart-module/components/toolbox/steps/panels-content/Customize";
+import { DatasetPanel } from "app/modules/chart-module/components/toolbox/steps/panels-content/SelectDataset";
 
 import { isEmpty } from "lodash";
 import { ToolboxNavType } from "./navbar";
@@ -26,7 +26,6 @@ interface ChartToolBoxStepsProps {
   dataTypes: any;
   visualOptions?: any;
   forceNextEnabled?: boolean;
-  filtersView?: boolean;
   rawViz?: any;
   save: () => void;
   filterOptionGroups: FilterGroupModel[];
@@ -137,7 +136,7 @@ export function ChartToolBoxSteps(props: ChartToolBoxStepsProps) {
         css={`
           width: 400px;
           overflow-y: hidden;
-          height: calc(100vh - ${!props.filtersView ? 229 : 105}px);
+          height: calc(100vh - 229px);
           position: relative;
 
           &::-webkit-scrollbar {

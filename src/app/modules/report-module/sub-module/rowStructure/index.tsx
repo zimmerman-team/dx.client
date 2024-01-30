@@ -11,7 +11,7 @@ import { EditorState } from "draft-js";
 import { useStoreActions } from "app/state/store/hooks";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { useHistory, useLocation, useParams } from "react-router-dom";
-import { RichEditor } from "app/modules/chart-module/routes/text/RichEditor";
+import { RichEditor } from "app/modules/common/RichEditor";
 import { ReportChartWrapper } from "app/modules/report-module/components/chart-wrapper";
 import { ReactComponent as EditIcon } from "app/modules/report-module/asset/editIcon.svg";
 import ZoomOutMapIcon from "@material-ui/icons/ZoomOutMap";

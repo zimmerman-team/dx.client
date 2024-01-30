@@ -15,7 +15,7 @@ import {
   getPartialMapping,
   WrapControlComponent,
 } from "app/modules/chart-module/routes/customize/utils";
-import ToolboxSubHeader from "app/modules/chart-module/components/toolbox/views/steps/sub-header";
+import ToolboxSubHeader from "app/modules/chart-module/components/toolbox/steps/sub-header";
 
 interface ChartToolBoxCustomizeProps {
   dataTypes?: any;

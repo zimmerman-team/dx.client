@@ -11,10 +11,10 @@ import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import { uniqueId, filter, set } from "lodash";
 import { Button, IconButton } from "@material-ui/core";
-import ToolboxSubheader from "app/modules/chart-module/components/toolbox/views/steps/sub-header";
+import ToolboxSubheader from "app/modules/chart-module/components/toolbox/steps/sub-header";
 import { ReactComponent as DateIcon } from "app/modules/chart-module/assets/date.svg";
 import CloseIcon from "@material-ui/icons/Close";
-import { mappingStyles } from "../../../styles";
+import { mappingStyles } from "../../styles";
 import SearchIcon from "@material-ui/icons/Search";
 import { useDebounce } from "react-use";
 import {
@@ -23,7 +23,7 @@ import {
   emptyChartAPI,
 } from "app/modules/chart-module/data";
 import { Dropdown } from "react-bootstrap";
-import { reqMappingKeyFromReqDimensionCheck } from "app/hooks/useChartsRawData";
+import { areAllRequiredDimensionsMapped } from "app/hooks/useChartsRawData";
 
 interface ChartToolBoxMappingProps {
   dataTypes: any;
@@ -112,7 +112,7 @@ export function ChartToolBoxMapping(props: Readonly<ChartToolBoxMappingProps>) {
 
   // empty rendered chart when req mapping fields are not filled
   React.useEffect(() => {
-    if (!reqMappingKeyFromReqDimensionCheck(props.dimensions, mapping)) {
+    if (!areAllRequiredDimensionsMapped(props.dimensions, mapping)) {
       props.setChartFromAPI(null);
     }
   }, [mapping]);

@@ -22,6 +22,11 @@ import {
   FilterGroupProps,
   FilterOptionProps,
 } from "app/components/ToolBoxPanel/components/filters/data";
+import {
+  getAllOptionsCount,
+  multiCheckFilterOptions,
+  multiUnCheckFilterOptions,
+} from "app/modules/chart-module/routes/filters/utils";
 
 interface ExpandedFilterGroupProps extends FilterGroupModel, FilterGroupProps {
   goBack: () => void;
@@ -56,30 +61,13 @@ export function ExpandedFilterGroup(props: ExpandedFilterGroupProps) {
   );
 
   React.useEffect(() => {
-    let allOptionsCount = 0;
-    props.options.forEach((option: FilterGroupOptionModel) => {
-      allOptionsCount += 1;
-      allOptionsCount += option.subOptions ? option.subOptions.length : 0;
-      option.subOptions?.forEach((subOption: FilterGroupOptionModel) => {
-        allOptionsCount += subOption.subOptions
-          ? subOption.subOptions.length
-          : 0;
-        subOption.subOptions?.forEach(
-          (subSubOption: FilterGroupOptionModel) => {
-            allOptionsCount += subSubOption.subOptions
-              ? subSubOption.subOptions.length
-              : 0;
-            subSubOption.subOptions?.forEach(
-              (subSubSubOption: FilterGroupOptionModel) => {
-                allOptionsCount += subSubSubOption.subOptions
-                  ? subSubSubOption.subOptions.length
-                  : 0;
-              }
-            );
-          }
-        );
-      });
-    });
+    //updates the allSelected state when the applied filters change
+    //gets the value of all the options in the filter group
+    const allOptionsCount = getAllOptionsCount(props.options);
+
+    //checks if the length of the applied filters is equal to the length of the options in the filter group
+    //if yes, then all the options are selected
+    //if no, then not all the options are selected
     setAllSelected(tmpAppliedFilters.length === allOptionsCount);
   }, [tmpAppliedFilters, props.options]);
 
@@ -156,7 +144,7 @@ export function ExpandedFilterGroup(props: ExpandedFilterGroupProps) {
   }, [value]);
 
   function handleChangeAll(event: React.ChangeEvent<HTMLInputElement>) {
-    const tmp = [...tmpAppliedFilters];
+    const tmp: any[] = [];
     if (event.target.checked) {
       props.options.forEach((option: FilterGroupOptionModel) => {
         tmp.push(option.value);
@@ -185,89 +173,34 @@ export function ExpandedFilterGroup(props: ExpandedFilterGroupProps) {
     props.goBack();
   }
 
-  const compareArrays = (subTemp: any[], temp: any[]) => {
-    return subTemp.some((val) => temp.includes(val));
-  };
-
-  const multiCheckFilterOptions = (
-    tmpOptions: any[],
-    optionsValueList: string[],
-    currentPosition: number
-  ) => {
-    if (lastClickedPosition > currentPosition) {
-      //get a slice of the range of options that are between the last clicked position and the current position
-      const subTemp = optionsValueList.slice(
-        currentPosition,
-        lastClickedPosition + 1
-      );
-      //reverse the slice so that the options are in the correct order and push them to the tmpOptions array
-      tmpOptions.push(...subTemp.reverse());
-    } else if (currentPosition > lastClickedPosition) {
-      //get a slice of the range of options that are between the last clicked position and the current position
-      const subTemp = optionsValueList.slice(
-        lastClickedPosition,
-        currentPosition + 1
-      );
-      //push the slice to the tmpOptions array
-      tmpOptions.push(...subTemp);
-    }
-  };
-
-  const multiUnCheckFilterOptions = (
-    tmpOptions: any[],
-    optionsValueList: string[],
-    currentPosition: number
-  ) => {
-    if (lastClickedPosition > currentPosition) {
-      //get a slice of the range of options that are between the last clicked position and the current position
-      const subTemp = optionsValueList.slice(
-        currentPosition,
-        lastClickedPosition + 1
-      );
-      //filter the tmpOptions array to remove the options that are in the slice
-      const filteredTmp = tmpOptions.filter((item) => !subTemp.includes(item));
-
-      //if the slice is in the tmpOptions array, then replace the tmpOptions array with the filteredTmp array,
-      //otherwise return the tmpOptions array
-      tmpOptions = compareArrays(subTemp, tmpOptions)
-        ? filteredTmp
-        : tmpOptions;
-    } else if (currentPosition > lastClickedPosition) {
-      //get a slice of the range of options that are between the last clicked position and the current position
-      const subTemp = optionsValueList.slice(
-        lastClickedPosition,
-        currentPosition + 1
-      );
-      //filter the tmpOptions array to remove the options that are in the slice
-      const filteredTmp = tmpOptions.filter((item) => !subTemp.includes(item));
-      //if the slice is in the tmpOptions array, then replace the tmpOptions array with the filteredTmp array,
-      tmpOptions = compareArrays(subTemp, tmpOptions)
-        ? filteredTmp
-        : tmpOptions;
-    }
-
-    return tmpOptions;
-  };
-
   function onOptionChange(
     checked: boolean,
     option: FilterGroupOptionModel,
-    currentPosition: number,
-    level?: number
+    currentPosition: number
   ) {
     let tmp = [...tmpAppliedFilters];
     const optionsValueList = optionsToShow.map((o) => o.value);
 
     if (shiftKeyDown && checked && tmp.length > 0) {
-      multiCheckFilterOptions(tmp, optionsValueList, currentPosition);
+      multiCheckFilterOptions(
+        tmp,
+        optionsValueList,
+        currentPosition,
+        lastClickedPosition
+      );
     } else if (shiftKeyDown && !checked && tmp.length > 0) {
-      tmp = multiUnCheckFilterOptions(tmp, optionsValueList, currentPosition);
+      tmp = multiUnCheckFilterOptions(
+        tmp,
+        optionsValueList,
+        currentPosition,
+        lastClickedPosition
+      );
     } else if (checked) {
       tmp.push(option.value);
     } else {
       remove(tmp, (o: string) => o === option.value);
     }
-    // used set to remove duplicates
+    // used new Set to remove duplicates
     setTmpAppliedFilters([...new Set(tmp)]);
 
     //update lastClickedPosition
@@ -275,6 +208,8 @@ export function ExpandedFilterGroup(props: ExpandedFilterGroupProps) {
   }
 
   React.useEffect(() => {
+    //listen for shift keydown and keyup events
+    //used for multi-check of filter options
     document.addEventListener("keydown", (event) => {
       if (event.key === "Shift") {
         setShiftKeyDown(true);

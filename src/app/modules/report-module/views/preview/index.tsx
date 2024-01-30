@@ -19,7 +19,7 @@ import {
   reportContentContainerWidth,
   unSavedReportPreviewModeAtom,
 } from "app/state/recoil/atoms";
-import { linkDecorator } from "app/modules/chart-module/routes/text/RichEditor/decorators";
+import { linkDecorator } from "app/modules/common/RichEditor/decorators";
 
 export function ReportPreviewView(props: {
   setIsPreviewView: React.Dispatch<React.SetStateAction<boolean>>;

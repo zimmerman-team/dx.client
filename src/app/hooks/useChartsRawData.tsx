@@ -36,17 +36,18 @@ const getValidMapping = (
   return validMapping;
 };
 
-export const reqMappingKeyFromReqDimensionCheck = (
+export const areAllRequiredDimensionsMapped = (
   dimensions: any,
   mapping: {
     [key: string]: any;
   }
-) => {
+): boolean => {
   //get required dimensions
   const requiredDimensions = dimensions.filter(
     (dimension: any) => dimension.required
   );
-
+  //if required dimesions are empty or mapping is empty,
+  //then req dimesions are not mapped, so return false
   if (isEmpty(requiredDimensions) || isEmpty(mapping)) {
     return false;
   }
@@ -245,7 +246,7 @@ export function useChartsRawData(props: {
     const extraLoader = document.getElementById("extra-loader");
 
     const validMapping = getValidMapping(chartFromAPI, mapping);
-    const requiredMappingKey = reqMappingKeyFromReqDimensionCheck(
+    const requiredMappingKey = areAllRequiredDimensionsMapped(
       props.dimensions,
       mapping
     );

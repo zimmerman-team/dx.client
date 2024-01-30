@@ -8,7 +8,7 @@ import Container from "@material-ui/core/Container";
 import IconButton from "@material-ui/core/IconButton";
 import { useLocation, useParams } from "react-router-dom";
 import { reportRightPanelViewAtom } from "app/state/recoil/atoms";
-import { RichEditor } from "app/modules/chart-module/routes/text/RichEditor";
+import { RichEditor } from "app/modules/common/RichEditor";
 import { ReactComponent as EditIcon } from "app/modules/report-module/asset/editIcon.svg";
 import { ReactComponent as DeleteIcon } from "app/modules/report-module/asset/deleteIcon.svg";
 import { headerBlockcss } from "app/modules/report-module/sub-module/components/headerBlock/style";
