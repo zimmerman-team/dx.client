@@ -12,7 +12,7 @@ type InputProps = React.DetailedHTMLProps<
   setName: (name: string) => void;
 };
 export default function AutoResizeInput(props: InputProps) {
-  const spanAutoResize = useRef<HTMLSpanElement | null>(null);
+  const spanRef = useRef<HTMLSpanElement | null>(null);
 
   const { minWidth } = props;
   const [autoResizeInputWidth, setAutoResizeInputWidth] =
@@ -26,10 +26,8 @@ export default function AutoResizeInput(props: InputProps) {
 
   const handleAutoResize = () => {
     let spanAutoResizeWidth = 0;
-    if (spanAutoResize) {
-      spanAutoResizeWidth = spanAutoResize.current
-        ? spanAutoResize.current.offsetWidth
-        : 0;
+    if (spanRef) {
+      spanAutoResizeWidth = spanRef.current ? spanRef.current.offsetWidth : 0;
     }
 
     const autoResizeInputWidth =
@@ -39,6 +37,8 @@ export default function AutoResizeInput(props: InputProps) {
 
     if (autoResizeInputWidth < props.maxWidth) {
       setAutoResizeInputWidth(autoResizeInputWidth);
+    } else {
+      setAutoResizeInputWidth(props.maxWidth);
     }
   };
 
@@ -84,7 +84,7 @@ export default function AutoResizeInput(props: InputProps) {
       {!props.autoResize || (
         <span
           className="auto-resize-span"
-          ref={spanAutoResize}
+          ref={spanRef}
           css={`
             ${styles.autoResizeSpan}
           `}
