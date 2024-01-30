@@ -179,8 +179,6 @@ export const drillDown = (
     marginLeft,
   } = visualOptions;
 
-  console.log(width, height);
-
   // removing margins here because they don't apply to the series
   const chartWidth = width - marginLeft - marginRight;
   const chartHeight = height * 0.95 - marginTop - marginBottom; // removing 5% because chart is cutting off by default

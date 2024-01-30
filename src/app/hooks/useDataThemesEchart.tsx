@@ -186,8 +186,6 @@ export function useDataThemesEchart() {
 
     const sizes = data.map((d: any) => d.value);
 
-    console.log(data);
-
     const option = {
       color: checkLists.find((item) => item.label === palette)?.value,
       tooltip: {
