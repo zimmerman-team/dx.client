@@ -68,7 +68,7 @@ export default function UserProfileLayout(props: UserProfileLayoutProps) {
                 {user?.family_name?.slice(0, 1)}
               </p>
             </div>
-            <Box height={60} />
+            <Box height={109} />
             <div>
               {props.tabstate.map((tab, index) => (
                 <div key={tab.title}>

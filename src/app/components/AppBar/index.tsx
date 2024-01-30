@@ -294,7 +294,7 @@ const ActionMenu = () => {
             font-family: "Inter", sans-serif;
 
             :nth-child(1) {
-              width: 146px;
+              width: ${isAuthenticated ? "146px" : "110px"};
               height: 34px;
               border-radius: ${isAuthenticated ? "24px 0px 0px 24px" : "24px"};
               &:hover {
@@ -319,7 +319,7 @@ const ActionMenu = () => {
         <Link
           to={isAuthenticated ? "/report/new/initial" : "/onboarding/login"}
         >
-          <button>{isAuthenticated ? "Create report" : "Login"}</button>
+          <button>{isAuthenticated ? "Create report" : "Log in"}</button>
         </Link>
         {isAuthenticated && (
           <button

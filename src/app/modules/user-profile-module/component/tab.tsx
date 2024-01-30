@@ -12,7 +12,13 @@ export default function Tab(props: TabProps) {
   return (
     <div onClick={props.handleClick} css={tabcss(props.active)}>
       <p>{props.title}</p>
-      <p>{props.component()}</p>
+      <div
+        css={`
+          line-height: 0;
+        `}
+      >
+        {props.component()}
+      </div>
     </div>
   );
 }

@@ -13,14 +13,30 @@ export default function SplitBar(props: Props) {
     history.push(`/onboarding/${value}`);
   };
   return (
-    <div>
-      <Slider.Container>
+    <div
+      css={`
+        /* margin-top: 30px; */
+      `}
+    >
+      <Slider.Container
+        css={`
+          padding: 0;
+          margin: 0;
+          margin-top: 29px;
+        `}
+      >
         <Slider.Left
           active={location.pathname.includes("login") ? "#6061E5" : "#ADB5BD"}
           onClick={() => handleClick("login")}
         >
           <div className="title">
-            <div>{props.leftLabel}</div>
+            <div
+              css={`
+                font-family: "GothamNarrow-Bold";
+              `}
+            >
+              {props.leftLabel}
+            </div>
           </div>
         </Slider.Left>
 
@@ -30,7 +46,13 @@ export default function SplitBar(props: Props) {
           blue={location.pathname.includes("signup") ? " #6061E5 " : "#ADB5BD"}
         >
           <div className="title">
-            <div>{props.rightLabel}</div>
+            <div
+              css={`
+                font-family: "GothamNarrow-Bold";
+              `}
+            >
+              {props.rightLabel}
+            </div>
           </div>
         </Slider.Right>
       </Slider.Container>
