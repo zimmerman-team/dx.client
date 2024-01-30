@@ -76,7 +76,7 @@ export default function FinishedFragment(props: Props) {
           css={`
             color: #231d2c;
             font-size: 16px;
-            font-family: "Inter", sans-serif;
+            font-family: "GothamNarrow-Bold", sans-serif;
             line-height: 19px;
             margin-bottom: 17px;
           `}

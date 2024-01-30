@@ -64,6 +64,7 @@ export default function ChartModule() {
 
   const chartType = useStoreState((state) => state.charts.chartType.value);
   const mapping = useStoreState((state) => state.charts.mapping.value);
+  const dataset = useStoreState((state) => state.charts.dataset.value);
 
   const dimensions = React.useMemo(() => {
     return get(
@@ -149,8 +150,6 @@ export default function ChartModule() {
     (actions) => actions.charts.enabledFilterOptionGroups.clear
   );
 
-  const dataset = useStoreState((state) => state.charts.dataset.value);
-
   const config = get(routeToConfig, `["${view}"]`, routeToConfig.preview);
 
   const containerRef = React.useRef<HTMLDivElement>(null);
@@ -167,7 +166,7 @@ export default function ChartModule() {
     return dataTypes;
   }, [dataTypes, dataTypesFromRenderedChart]);
 
-  //empty chart when chart type and dataset types changes
+  //empty chart when chart type and or  dataset types changes
   React.useEffect(() => {
     setChartFromAPI(null);
   }, [chartType, dataTypes]);

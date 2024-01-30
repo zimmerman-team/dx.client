@@ -281,6 +281,7 @@ export interface StoreModel {
     DatasetCreate: ApiCallModel;
     DatasetGet: ApiCallModel;
     ExternalDatasetGet: ApiCallModel;
+    ExternalDatasetDownload: ApiCallModel;
   };
   charts: {
     ChartGet: ApiCallModel;
