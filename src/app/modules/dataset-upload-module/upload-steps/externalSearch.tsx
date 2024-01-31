@@ -31,6 +31,9 @@ export default function ExternalSearch(props: {
   setProcessingError: React.Dispatch<React.SetStateAction<boolean>>;
   setActiveStep: React.Dispatch<React.SetStateAction<number>>;
 }) {
+  const defautlSearchTerms = ["climate", "air", "woman", "animal", "money"];
+  const randomSearchTerm =
+    defautlSearchTerms[Math.floor(Math.random() * defautlSearchTerms.length)];
   const [tableView, setTableView] = React.useState(false);
   const [searchValue, setSearchValue] = React.useState<string | undefined>("");
   const [sortValue, setSortValue] = React.useState("createdDate");
@@ -55,7 +58,7 @@ export default function ExternalSearch(props: {
     () => {
       if (token) {
         loadDatasets({
-          filterString: `q=${searchValue}`,
+          filterString: `q=${searchValue || randomSearchTerm}`,
           token,
           storeInCrudData: true,
         });
