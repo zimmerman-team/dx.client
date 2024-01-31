@@ -93,7 +93,7 @@ export function ReportChartWrapper(props: Props) {
     });
 
   React.useEffect(() => {
-    if (props.id) {
+    if (props.id && token) {
       loadChartDataFromAPI(undefined, props.id);
     }
     return () => {

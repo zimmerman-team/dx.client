@@ -1,6 +1,5 @@
 import React from "react";
 import { v4 } from "uuid";
-import get from "lodash/get";
 import Box from "@material-ui/core/Box";
 import { useRecoilState } from "recoil";
 import { useParams } from "react-router-dom";
