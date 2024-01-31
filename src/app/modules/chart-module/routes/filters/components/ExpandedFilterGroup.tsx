@@ -27,6 +27,7 @@ import {
   multiCheckFilterOptions,
   multiUnCheckFilterOptions,
 } from "app/modules/chart-module/routes/filters/utils";
+import { isEmpty } from "lodash";
 
 interface ExpandedFilterGroupProps extends FilterGroupModel, FilterGroupProps {
   goBack: () => void;
@@ -236,6 +237,12 @@ export function ExpandedFilterGroup(props: ExpandedFilterGroupProps) {
       setTmpAppliedFilters([]);
     }
   }
+  React.useEffect(() => {
+    //when all applied filters are removed, reset the tmpAppliedFilters
+    if (isEmpty(allAppliedFilters)) {
+      setTmpAppliedFilters([]);
+    }
+  }, [appliedFilters]);
 
   return (
     <React.Fragment>
