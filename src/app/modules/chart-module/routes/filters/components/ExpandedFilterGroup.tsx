@@ -242,7 +242,7 @@ export function ExpandedFilterGroup(props: ExpandedFilterGroupProps) {
     if (isEmpty(allAppliedFilters)) {
       setTmpAppliedFilters([]);
     }
-  }, [appliedFilters]);
+  }, [allAppliedFilters]);
 
   return (
     <React.Fragment>
