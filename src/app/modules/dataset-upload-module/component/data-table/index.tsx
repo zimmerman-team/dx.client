@@ -7,13 +7,16 @@ import { tableToolBoxData } from "app/components/Table/Preview-table/data";
 import { DataThemesDataTableProps } from "app/modules/dataset-upload-module/component/data-table/data";
 
 const getColumns = (
-  data: { [key: string]: number | string | null | boolean }[]
+  data: {
+    name: string;
+    type: "percentage" | "bar" | "unique";
+    data: {
+      name: string;
+      value: number;
+    }[];
+  }[]
 ) => {
-  let columns = [];
-  for (let key in data?.[0]) {
-    columns.push({ key: key, type: typeof data[0][key] });
-  }
-  return columns;
+  return data.map((d) => d.name);
 };
 
 export function DatasetDataTable(props: DataThemesDataTableProps) {
@@ -87,7 +90,7 @@ export function DatasetDataTable(props: DataThemesDataTableProps) {
         tableData={data}
         placeUnderSubHeader
         dataStats={props.stats}
-        columns={getColumns(data)}
+        columns={getColumns(props.stats)}
         columnDetails={columnDetails}
       />
     </div>

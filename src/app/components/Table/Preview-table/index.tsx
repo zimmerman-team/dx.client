@@ -18,7 +18,7 @@ import StatisticalTableToolBox, {
 interface PreviewTableProps {
   placeUnderSubHeader?: boolean;
   columnDetails: ColumnDetailsProps;
-  columns: { [key: string]: string }[];
+  columns: string[];
   tableData: { [key: string]: number | string | null | boolean }[];
   dataStats: {
     name: string;
@@ -58,7 +58,7 @@ export default function PreviewTable(props: PreviewTableProps) {
                 {props.columns.map((val, index) => {
                   return (
                     <TableCell
-                      key={val.key}
+                      key={val}
                       css={`
                         border-left: ${index == 0 ? "none" : "auto"};
                         border-top-left-radius: ${index == 0 ? "5px" : "0"};
@@ -84,7 +84,7 @@ export default function PreviewTable(props: PreviewTableProps) {
                             background: #ffffff;
                           `}
                         >
-                          {val.type === "string" ? "Aa" : "#"}
+                          {val === "string" ? "Aa" : "#"}
                         </div>
                         <p
                           css={`
@@ -97,7 +97,7 @@ export default function PreviewTable(props: PreviewTableProps) {
                             text-overflow: ellipsis;
                           `}
                         >
-                          <b>{val.key}</b>
+                          <b>{val}</b>
                         </p>
                         <IconButton>
                           <SortIcon />
@@ -139,15 +139,15 @@ export default function PreviewTable(props: PreviewTableProps) {
                   </TableCell>
                 ))}
               </TableRow>
-              {props.tableData.map((data) => (
+              {props.dataStats.map((data, rowIndex) => (
                 <TableRow
                   key={Object.values(data).join("-")}
                   css={`
                     background: #fff;
                   `}
                 >
-                  {props.columns.map((val, index) => (
-                    <TableCell key={val.key}>
+                  {props.columns.map((val, cellIndex) => (
+                    <TableCell key={val}>
                       <p
                         css={`
                           margin: 0;
@@ -155,11 +155,11 @@ export default function PreviewTable(props: PreviewTableProps) {
                           max-width: 220px;
                           white-space: nowrap;
                           text-overflow: ellipsis;
-                          min-width: ${index === 0 ? "30px" : "auto"};
-                          text-align: ${index === 0 ? "center" : "left"};
+                          min-width: ${cellIndex === 0 ? "30px" : "auto"};
+                          text-align: ${cellIndex === 0 ? "center" : "left"};
                         `}
                       >
-                        {data[val.key]}
+                        {props.tableData?.[rowIndex]?.[val] ?? ""}
                       </p>
                     </TableCell>
                   ))}
