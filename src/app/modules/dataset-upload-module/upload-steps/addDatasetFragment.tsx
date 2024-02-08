@@ -195,7 +195,7 @@ export const DropZone = (props: DropzoneProps) => {
         <p>Add your file</p>
       </div>
       <div css={uploadAreacss(props.isDragActive)}>
-        <input {...props.getInputProps()} />
+        <input {...props.getInputProps()} data-testid="local-upload" />
         {!props.isDragActive && (
           <>
             <UploadIcon
@@ -237,7 +237,11 @@ export const DropZone = (props: DropzoneProps) => {
                 <LocalUploadIcon /> <p>Local upload</p>
               </button>
 
-              <button type="button" onClick={props.handleOpenPicker}>
+              <button
+                type="button"
+                onClick={props.handleOpenPicker}
+                data-testid="google-drive-button"
+              >
                 <GoogleDriveIcon /> <p>Connect to google drive</p>
               </button>
             </div>

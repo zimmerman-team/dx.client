@@ -57,7 +57,7 @@ export const datasetCategories = [
   "Social",
 ];
 
-const SelectField = (props: {
+export const SelectCategoryField = (props: {
   value: string;
   register: UseFormRegister<IFormDetails>;
   control: Control<IFormDetails, any>;
@@ -198,6 +198,7 @@ export default function MetaData(props: Readonly<Props>) {
                   minRows={3}
                   inputProps={{
                     maxLength: 150,
+                    "data-testid": "description",
                   }}
                   onChange={handleChange}
                   value={props.formDetails.description}
@@ -218,7 +219,7 @@ export default function MetaData(props: Readonly<Props>) {
             </Grid>
             <Box height={50} />
             <Grid lg={5} xs={12} md={5} item>
-              <SelectField
+              <SelectCategoryField
                 value={props.formDetails.category}
                 register={register}
                 control={control}
@@ -234,6 +235,9 @@ export default function MetaData(props: Readonly<Props>) {
                 {...register("source", { required: true })}
                 onChange={handleChange}
                 fullWidth
+                inputProps={{
+                  "data-testid": "Source-of-the-data",
+                }}
                 value={props.formDetails.source}
               />
             </Grid>
@@ -245,10 +249,29 @@ export default function MetaData(props: Readonly<Props>) {
                 {...register("sourceUrl", { required: true })}
                 onChange={handleChange}
                 fullWidth
+                inputProps={{
+                  "data-testid": "Link-to-data-source",
+                }}
                 value={props.formDetails.sourceUrl}
               />
             </Grid>
           </Grid>
+          <div data-testid="errors-container">
+            {errors.name && <p data-testid="error">{errors.name.message}</p>}
+            {errors.description && (
+              <p data-testid="error">{errors.description.message}</p>
+            )}
+            {errors.category && (
+              <p data-testid="error">{errors.category.message}</p>
+            )}
+            {errors.source && (
+              <p data-testid="error">{errors.source.message}</p>
+            )}
+            {errors.sourceUrl && (
+              <p data-testid="error">{errors.sourceUrl.message}</p>
+            )}
+          </div>
+
           <div
             css={`
               display: flex;
