@@ -8,6 +8,8 @@ import { useHistory } from "react-router-dom";
 import useDebounce from "react-use/lib/useDebounce";
 import CircleLoader from "app/modules/home-module/components/Loader";
 
+import axios from "axios";
+
 export interface IExternalDataset {
   name: string;
   description: string;
@@ -39,29 +41,73 @@ export default function ExternalSearch(props: {
   const [sortValue, setSortValue] = React.useState("createdDate");
   const token = useStoreState((state) => state.AuthToken.value);
   const history = useHistory();
-  const loadDatasets = useStoreActions(
-    (actions) => actions.dataThemes.ExternalDatasetGet.fetch
-  );
-  const datasetDownload = useStoreActions(
-    (actions) => actions.dataThemes.ExternalDatasetDownload.post
-  );
-  const datasets = useStoreState(
-    (state) =>
-      (state.dataThemes.ExternalDatasetGet.crudData ?? []) as IExternalDataset[]
+  const loading = true;
+
+  const [totalDatasets, setTotalDatasets] = React.useState<IExternalDataset[]>(
+    []
   );
 
-  const loading = useStoreState(
-    (state) => state.dataThemes.ExternalDatasetGet.loading
-  );
+  const limit = 3;
+  const handleLimitedSearch = () => {
+    //kaggle search
+    const loadKaggleSearch = async (offset: number) => {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_API}/external-sources/search-limited?q=${
+            searchValue || randomSearchTerm
+          }&limit=${limit}&offset=${offset}&source=Kaggle`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const data = response.data;
+
+        if (data.length > 0) {
+          console.log("here");
+          setTotalDatasets((prev) => [...prev, ...data]);
+
+          loadKaggleSearch(offset + limit);
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    loadKaggleSearch(0);
+
+    //worldbank search
+    const loadWorldBankSearch = async (offset: number) => {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_API}/external-sources/search-limited?q=${
+            searchValue || randomSearchTerm
+          }&limit=${limit}&offset=${offset}&source=World Bank`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const data = response.data;
+
+        if (data.length > 0) {
+          setTotalDatasets((prev) => [...prev, ...data]);
+
+          loadWorldBankSearch(offset + limit);
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    loadWorldBankSearch(0);
+  };
 
   const [,] = useDebounce(
     () => {
       if (token) {
-        loadDatasets({
-          filterString: `q=${searchValue || randomSearchTerm}`,
-          token,
-          storeInCrudData: true,
-        });
+        setTotalDatasets([]);
+        handleLimitedSearch();
       }
     },
     500,
@@ -133,27 +179,28 @@ export default function ExternalSearch(props: {
           <CircleLoader />
         ) : (
           <Grid container spacing={2}>
-            {datasets?.map((dataset, index) => (
-              <Grid
-                item
-                lg={3}
-                md={4}
-                sm={6}
-                xs={12}
-                key={`${dataset.name}-${index}`}
-              >
-                <ExternalDatasetCard
-                  description={dataset.description}
-                  name={dataset.name}
-                  publishedDate={dataset.datePublished}
-                  source={dataset.source}
-                  url={dataset.url}
-                  handleDownload={() => props.handleDownload(dataset)}
-                  dataset={dataset}
-                />
-                <Box height={16} />
-              </Grid>
-            ))}
+            {totalDatasets &&
+              totalDatasets?.map((dataset, index) => (
+                <Grid
+                  item
+                  lg={3}
+                  md={4}
+                  sm={6}
+                  xs={12}
+                  key={`${dataset.name}-${index}`}
+                >
+                  <ExternalDatasetCard
+                    description={dataset.description}
+                    name={dataset.name}
+                    publishedDate={dataset.datePublished}
+                    source={dataset.source}
+                    url={dataset.url}
+                    handleDownload={() => props.handleDownload(dataset)}
+                    dataset={dataset}
+                  />
+                  <Box height={16} />
+                </Grid>
+              ))}
           </Grid>
         )}
       </Container>
