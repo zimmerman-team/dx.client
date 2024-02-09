@@ -190,11 +190,11 @@
   },
   "jest": {
     "coverageThreshold": {
-        "global": {
-            "lines": 80
-        }
+      "global": {
+        "lines": 80
+      }
     }
-},
+  },
   "husky": {
     "hooks": {
       "pre-commit": "pretty-quick --staged"
