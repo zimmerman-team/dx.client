@@ -85,13 +85,6 @@ function DatasetUploadSteps(props: Props) {
     };
   }, [estUploadTime]);
 
-  React.useEffect(() => {
-    if (selectedFile) {
-      //if file is selected, submit file
-      onFileSubmit();
-    }
-  }, [selectedFile]);
-
   const handleNext = () => {
     //handles stepper navigation
     const newActiveStep = activeStep + 1;
@@ -151,7 +144,8 @@ function DatasetUploadSteps(props: Props) {
       });
   };
 
-  const onFileSubmit = () => {
+  const onFileSubmit = (file: File) => {
+    setSelectedFile(file);
     const formData = new FormData();
     //set active step to processing
     handleNext();
@@ -162,7 +156,7 @@ function DatasetUploadSteps(props: Props) {
     props.setDatasetId(id);
     //append file to form data
     let fieldname = "dx" + id;
-    formData.append(fieldname, selectedFile as File);
+    formData.append(fieldname, file as File);
     axios
       .post(`${process.env.REACT_APP_API}/files`, formData, {
         headers: {
@@ -226,7 +220,7 @@ function DatasetUploadSteps(props: Props) {
       case 0:
         return (
           <AddDatasetFragment
-            setFile={setSelectedFile}
+            onFileSubmit={onFileSubmit}
             disabled={false}
             processingError={processingError}
             setIsExternalSearch={setIsExternalSearch}
@@ -267,7 +261,7 @@ function DatasetUploadSteps(props: Props) {
       default:
         return (
           <AddDatasetFragment
-            setFile={setSelectedFile}
+            onFileSubmit={onFileSubmit}
             disabled={false}
             processingError={processingError}
             setIsExternalSearch={setIsExternalSearch}

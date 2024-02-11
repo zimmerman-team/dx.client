@@ -7,7 +7,7 @@ import {
   waitForElementToBeRemoved,
 } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { mockFormDetails } from "__test__/mock-data";
+import { mockFormDetails } from "app/modules/dataset-upload-module/__test__/mock-data";
 import MetaData, {
   SelectCategoryField,
 } from "app/modules/dataset-upload-module/upload-steps/metaData";

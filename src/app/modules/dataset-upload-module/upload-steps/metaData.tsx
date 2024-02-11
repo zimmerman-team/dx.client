@@ -137,8 +137,7 @@ export default function MetaData(props: Readonly<Props>) {
   } = useForm<IFormDetails>({
     defaultValues: props.formDetails,
   });
-  const [characterCount, setCharacterCount] = React.useState(0);
-
+  const characterCount = props.formDetails.description?.length;
   React.useEffect(() => {
     //reset form state to formDetails state when dataset is loaded
     reset({
@@ -153,11 +152,6 @@ export default function MetaData(props: Readonly<Props>) {
       [name]: value,
     });
   };
-
-  React.useEffect(() => {
-    //get character count from description length
-    setCharacterCount(props.formDetails.description?.length);
-  }, [props.formDetails.description]);
 
   return (
     <div css={metaDatacss}>
