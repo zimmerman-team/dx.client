@@ -146,6 +146,7 @@ export default function MetaData(props: Readonly<Props>) {
   }, [loadedDataset]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log("caling?");
     const { name, value } = event.target;
     props.setFormDetails({
       ...props.formDetails,
@@ -166,7 +167,7 @@ export default function MetaData(props: Readonly<Props>) {
             <Grid lg={12} xs={12} md={12} item>
               <CssTextField
                 id="outlined-basic"
-                label="Data title "
+                label="Data title"
                 variant="outlined"
                 {...register("name", { required: true })}
                 helperText="Title must be between 6 and 50 characters in length."
@@ -250,7 +251,7 @@ export default function MetaData(props: Readonly<Props>) {
               />
             </Grid>
           </Grid>
-          <div data-testid="errors-container">
+          {/* <div data-testid="errors-container">
             {errors.name && <p data-testid="error">{errors.name.message}</p>}
             {errors.description && (
               <p data-testid="error">{errors.description.message}</p>
@@ -264,7 +265,7 @@ export default function MetaData(props: Readonly<Props>) {
             {errors.sourceUrl && (
               <p data-testid="error">{errors.sourceUrl.message}</p>
             )}
-          </div>
+          </div> */}
 
           <div
             css={`

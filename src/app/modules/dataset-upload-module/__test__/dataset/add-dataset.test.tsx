@@ -102,7 +102,7 @@ test("google drive button", async () => {
     callbackFunction: expect.any(Function),
   });
 
-  // await waitFor(() => {
-  //   expect(mockSetSelectedFile).toHaveBeenCalled();
-  // });
+  await waitFor(() => {
+    expect(mockSetSelectedFile).toHaveBeenCalled();
+  });
 });

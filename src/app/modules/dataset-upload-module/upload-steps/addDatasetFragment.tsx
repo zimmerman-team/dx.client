@@ -23,30 +23,34 @@ export default function AddDatasetFragment(props: Props) {
   const [openPicker] = useDrivePicker();
   const token = useStoreState((state) => state.AuthToken.value);
 
-  const handleGoogleDriveFilePicker = (
+  const handleGoogleDriveFilePicker = async (
     file: CallbackDoc,
     accessToken: string
   ) => {
-    axios({
-      url: `https://www.googleapis.com/drive/v3/files/${file.id}${
-        file.type === "file" ? "?alt=media" : "/export?mimeType=text/csv"
-      }`,
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-      responseType: "blob", // important
-    }).then((response) => {
+    try {
+      const response = await axios({
+        url: `https://www.googleapis.com/drive/v3/files/${file.id}${
+          file.type === "file" ? "?alt=media" : "/export?mimeType=text/csv"
+        }`,
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        responseType: "blob", // important
+      });
+
       console.log("called??");
 
       if (process.env.NODE_ENV === "development") {
         console.log("response", response);
       }
-      const b = response.data;
+      const b = response?.data;
       const gfile = new File([b], file.name, { type: "text/csv" });
 
       props.onFileSubmit(gfile);
-    });
+    } catch (e) {
+      console.log(e, "handleGoogleDriveFilePicker error");
+    }
   };
 
   const ACCEPTED_FILES = {
@@ -63,10 +67,6 @@ export default function AddDatasetFragment(props: Props) {
     if (acceptedFiles.length > 0) {
       props.onFileSubmit(acceptedFiles[0]);
     }
-    // acceptedFiles.forEach((file: File) => {
-    //   const reader = new FileReader();
-    //   reader.readAsArrayBuffer(file);
-    // });
   }, []);
 
   const {
