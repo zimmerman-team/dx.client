@@ -128,6 +128,7 @@ export default function MetaData(props: Readonly<Props>) {
   const loadedDataset = useStoreState(
     (state) => state.dataThemes.DatasetGet.crudData
   ) as IDatasetDetail;
+
   const {
     register,
     handleSubmit,
@@ -137,6 +138,7 @@ export default function MetaData(props: Readonly<Props>) {
   } = useForm<IFormDetails>({
     defaultValues: props.formDetails,
   });
+
   const characterCount = props.formDetails.description?.length;
   React.useEffect(() => {
     //reset form state to formDetails state when dataset is loaded
@@ -251,7 +253,7 @@ export default function MetaData(props: Readonly<Props>) {
               />
             </Grid>
           </Grid>
-          {/* <div data-testid="errors-container">
+          <div data-testid="errors-container">
             {errors.name && <p data-testid="error">{errors.name.message}</p>}
             {errors.description && (
               <p data-testid="error">{errors.description.message}</p>
@@ -265,7 +267,7 @@ export default function MetaData(props: Readonly<Props>) {
             {errors.sourceUrl && (
               <p data-testid="error">{errors.sourceUrl.message}</p>
             )}
-          </div> */}
+          </div>
 
           <div
             css={`

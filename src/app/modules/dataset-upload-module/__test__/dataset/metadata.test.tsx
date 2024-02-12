@@ -4,24 +4,8 @@ import { mockFormDetails } from "app/modules/dataset-upload-module/__test__/mock
 import MetaData from "app/modules/dataset-upload-module/upload-steps/metaData";
 import { DatasetGet } from "app/state/api/action-reducers/data-themes";
 import { StoreProvider, createStore } from "easy-peasy";
-import { MemoryRouter } from "react-router-dom";
-import { CssTextField } from "../../style";
-
-// jest.mock("react-hook-form", () => {
-//   const reactHookFormModule = jest.requireActual("react-hook-form");
-//   return {
-//     ...reactHookFormModule,
-//     useForm: () => ({
-//       register: jest.fn(),
-//       handleSubmit: jest.fn(),
-//       formState: {
-//         errors: {},
-//       },
-//       reset: jest.fn(),
-//       control: jest.fn(),
-//     }),
-//   };
-// });
+import { MemoryRouter, Router, Switch } from "react-router-dom";
+import { createMemoryHistory } from "history";
 
 test("add meta data", async () => {
   const user = userEvent.setup();
@@ -29,7 +13,7 @@ test("add meta data", async () => {
   const mockStore = createStore({
     dataThemes: { DatasetGet: DatasetGet },
   });
-  const mockProps = {
+  const formResponse = {
     formDetails: {
       name: "Moc Dataset",
       source: "Mock source",
@@ -38,16 +22,27 @@ test("add meta data", async () => {
       sourceUrl: "https://example.com/mock-source",
       description: "",
     },
-    setFormDetails: jest.fn(),
+  };
+  const mockProps = {
+    formDetails: formResponse.formDetails,
+    setFormDetails: jest.fn((newFormDetails) => {
+      formResponse.formDetails = newFormDetails;
+    }),
     onSubmit: jest.fn(),
     handleBack: jest.fn(),
   };
 
+  const datasetTestId = "testid";
+  const history = createMemoryHistory({
+    initialEntries: ["/dataset/new/upload"],
+  });
   render(
     <StoreProvider store={mockStore}>
-      <MemoryRouter initialEntries={[{ pathname: "/dataset-upload" }]}>
-        <MetaData {...mockProps} />
-      </MemoryRouter>
+      <Router history={history}>
+        <Switch>
+          <MetaData {...mockProps} />
+        </Switch>
+      </Router>
     </StoreProvider>
   );
 
@@ -71,7 +66,6 @@ test("add meta data", async () => {
     /data category/i
   ) as HTMLInputElement;
   expect(categorySelect).toBeInTheDocument();
-  // expect(categorySelect).toHaveValue(mockProps.formDetails.category);
 
   const sourceInput = screen.getByTestId(
     "Source-of-the-data"
@@ -87,38 +81,38 @@ test("add meta data", async () => {
 
   // Simulate user input
   fireEvent.change(titleInput, { target: { value: "Test Dataset Title" } });
+  expect(formResponse.formDetails.name).toBe("Test Dataset Title");
 
-  user.type(
-    screen.getByLabelText("Brief description of your dataset*"),
+  fireEvent.change(descriptionInput, {
+    target: { value: "This is a test description." },
+  });
+  expect(formResponse.formDetails.description).toBe(
     "This is a test description."
   );
-  user.type(screen.getByLabelText("Source of the data"), "Test Source");
-  user.type(
-    screen.getByLabelText("Link to data source"),
-    "http://test-source.com"
-  );
 
-  expect(screen.getByTestId("span-name")).toContain("Test Dataset Title");
+  fireEvent.change(sourceInput, { target: { value: "Test Source" } });
+  expect(formResponse.formDetails.source).toBe("Test Source");
 
-  // Check if form elements reflect user input
-  expect(titleInput.value).toBe("Test Dataset Title");
-  expect(descriptionInput).toHaveValue("This is a test description.");
-  expect(sourceInput).toHaveValue("Test Source");
-  expect(sourceUrlInput).toHaveValue("http://test-source.com");
-
-  // Check if default values change
-  expect(mockProps.setFormDetails).toHaveBeenCalledWith({
-    name: "Test Dataset Title",
-    description: "This is a test description.",
-    category: "",
-    source: "Test Source",
-    sourceUrl: "http://test-source.com",
+  fireEvent.change(sourceUrlInput, {
+    target: { value: "http://test-source.com" },
   });
+  expect(formResponse.formDetails.sourceUrl).toBe("http://test-source.com");
+
+  fireEvent.click(categorySelect);
+  const educationOption = screen.getByText(/education/i);
+  fireEvent.click(educationOption);
+  expect(formResponse.formDetails.category).toBe("Education");
 
   // Simulate form submission
-  fireEvent.submit(screen.getByRole("button", { name: "Next" }));
 
-  await waitFor(() => {
-    expect(mockProps.onSubmit).toHaveBeenCalled();
-  });
+  user.click(screen.getByRole("button", { name: "Next" }));
+  const error = screen.queryAllByTestId("error");
+  expect(error).toHaveLength(0);
+
+  expect(mockProps.onSubmit).toHaveBeenCalled();
+  history.push(`/dataset/${datasetTestId}/edit`);
+  const backButton = screen.getByRole("button", { name: "Cancel" });
+  expect(backButton).toBeInTheDocument();
+  user.click(backButton);
+  expect(mockProps.handleBack).toHaveBeenCalled();
 });
