@@ -44,6 +44,7 @@ export default function Processing(props: ProcessingMetaDataProps) {
               font-size: 18px;
               text-align: center;
             `}
+            data-testid="error-message"
           >
             <b>
               Data could not be processed, please try again <br /> or contact
@@ -92,6 +93,7 @@ export default function Processing(props: ProcessingMetaDataProps) {
                 {props.fileName}
               </p>
               <div
+                data-testid="progress-bar"
                 css={`
                   display: flex;
                   flex-wrap: wrap;

@@ -49,11 +49,11 @@ test("local upload of dataset", async () => {
   const file = new File(["(⌐□_□)"], "chucknorris.csv", { type: "text/csv" });
   const dndText = screen.getByText(/drag and drop/i);
   expect(dndText).toBeInTheDocument();
-  const uploadButton = screen.getByTestId("local-upload") as HTMLInputElement;
+  const uploadInput = screen.getByTestId("local-upload") as HTMLInputElement;
 
-  Object.defineProperty(uploadButton, "files", { value: [file] });
+  Object.defineProperty(uploadInput, "files", { value: [file] });
 
-  fireEvent.drop(uploadButton);
+  fireEvent.drop(uploadInput);
 
   await waitFor(() => {
     expect(mockSetSelectedFile).toHaveBeenCalledWith(file);
