@@ -1,12 +1,11 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import { render, screen } from "@testing-library/react";
 import Processing from "../upload-steps/processing";
 test("data should be processing", async () => {
   const mockSetProcessingError = jest.fn();
 
   render(
     <Processing
-      estimatedUploadTime={100}
+      estimatedUploadTime={120}
       fileName="file.csv"
       loaded="100kb"
       percentageLoaded={100}
@@ -17,16 +16,52 @@ test("data should be processing", async () => {
 
   const processingText = screen.getByText("Data is being processed...");
   const progressBar = screen.getByTestId("progress-bar");
+  const estimatedTime = screen.getByTestId("estimated-time");
+  expect(estimatedTime).toHaveTextContent("seconds (estimated)");
   expect(processingText).toBeInTheDocument();
   expect(progressBar).toBeInTheDocument();
 });
 
-test("renders processing message when processingError is false", async () => {
+test("when estimated times <=0, it should display 'finishing up...'", async () => {
   const mockSetProcessingError = jest.fn();
 
   render(
     <Processing
-      estimatedUploadTime={100}
+      estimatedUploadTime={0}
+      fileName="file.csv"
+      loaded="100kb"
+      percentageLoaded={100}
+      processingError={false}
+      setProcessingError={mockSetProcessingError}
+    />
+  );
+  const estimatedTime = screen.getByTestId("estimated-time");
+  expect(estimatedTime).toHaveTextContent("Finishing up...");
+});
+
+test('when estimated times > 60, it should display "minutes and seconds (estimated)"', async () => {
+  const mockSetProcessingError = jest.fn();
+
+  render(
+    <Processing
+      estimatedUploadTime={4200}
+      fileName="file.csv"
+      loaded="100kb"
+      percentageLoaded={100}
+      processingError={false}
+      setProcessingError={mockSetProcessingError}
+    />
+  );
+  const estimatedTime = screen.getByTestId("estimated-time");
+  expect(estimatedTime).toHaveTextContent("minutes and ");
+});
+
+test("renders processing message when processingError is true", async () => {
+  const mockSetProcessingError = jest.fn();
+
+  render(
+    <Processing
+      estimatedUploadTime={50}
       fileName="file.csv"
       loaded="100kb"
       percentageLoaded={100}

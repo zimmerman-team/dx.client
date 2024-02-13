@@ -16,7 +16,7 @@ export default function Processing(props: ProcessingMetaDataProps) {
     const se = " seconds (estimated)";
     let ret = mft + se;
     if (mft <= 0) ret = "Finishing up...";
-    if (mft > 60) ret = +" minutes and " + Math.floor(time % 60) + se;
+    if (mft > 60) ret = mft + " minutes and " + Math.floor(time % 60) + se;
     return ret;
   };
 
@@ -132,7 +132,9 @@ export default function Processing(props: ProcessingMetaDataProps) {
                   />
                 </div>
                 <p>{props.loaded}</p>
-                <p>{getTimeInHoursnMins(props.estimatedUploadTime)}</p>
+                <p data-testid="estimated-time">
+                  {getTimeInHoursnMins(props.estimatedUploadTime)}
+                </p>
               </div>
             </div>
           </div>
