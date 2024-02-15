@@ -167,22 +167,22 @@ export function ChartModuleToolBox(props: Readonly<ChartToolBoxProps>) {
   //handles what happens after chart is created or edited
   React.useEffect(() => {
     if ((editChartSuccess || createChartSuccess) && chartFromReport.state) {
-      //returns back to persisted report view
+      //return to persisted report view
       setRightPanelView("charts");
       history.push(`/report/${chartFromReport.page}/edit`);
     } else if (editChartSuccess && !chartFromReport.state) {
-      //returns back to chart detail page
+      //return to chart detail page
       history.push(`/chart/${page}`);
     } else if (
       createChartSuccess &&
       !chartFromReport.state &&
       createChartData.id
     ) {
-      //shows snackbar
+      //show snackbar
       setShowSnackbar(
         createChartSuccess ? `Chart created successfully!` : null
       );
-      //returns back to chart detail page
+      //return to chart detail page
       history.push(`/chart/${createChartData.id}`);
     }
   }, [editChartSuccess, createChartSuccess, createChartData]);
@@ -247,9 +247,6 @@ export function ChartModuleToolBox(props: Readonly<ChartToolBoxProps>) {
           )}
 
           <ToolboxNav
-            activePanelStep={activePanels}
-            setActivePanelStep={setActivePanels}
-            mappedData={props.mappedData}
             stepPaths={stepPaths}
             onNavBtnClick={onNavBtnClick}
             isClickable={isClickable}

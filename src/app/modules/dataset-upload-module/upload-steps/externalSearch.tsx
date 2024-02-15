@@ -68,72 +68,72 @@ export default function ExternalSearch(props: {
     [searchValue, token]
   );
   return (
-    <>
-      <Container maxWidth="lg">
+    <Container maxWidth="lg">
+      <div
+        css={`
+          display: flex;
+          gap: 80px;
+          align-items: start;
+          padding-top: 97px;
+          button {
+            cursor: pointer;
+            padding: 0px;
+            &:hover {
+              background-color: transparent;
+            }
+          }
+        `}
+      >
+        <IconButton onClick={() => history.goBack()}>
+          <ArrowBackIcon htmlColor="#000" />
+        </IconButton>
         <div
           css={`
-            display: flex;
-            gap: 80px;
-            align-items: start;
-            padding-top: 97px;
-            button {
-              cursor: pointer;
-              padding: 0px;
-              &:hover {
-                background-color: transparent;
-              }
+            h1 {
+              font-family: "Inter", sans-serif;
+              font-size: 24px;
+              font-weight: 700;
+              color: #231d2c;
+              margin: 0px;
+            }
+            p {
+              color: #231d2c;
+              font-family: "GothamNarrow-Book";
+              font-size: 14px;
+              font-weight: 325;
+              line-height: 20px;
+              letter-spacing: 0.5px;
             }
           `}
         >
-          <IconButton onClick={() => history.goBack()}>
-            <ArrowBackIcon htmlColor="#000" />
-          </IconButton>
-          <div
-            css={`
-              h1 {
-                font-family: "Inter", sans-serif;
-                font-size: 24px;
-                font-weight: 700;
-                color: #231d2c;
-                margin: 0px;
-              }
-              p {
-                color: #231d2c;
-                font-family: "GothamNarrow-Book";
-                font-size: 14px;
-                font-weight: 325;
-                line-height: 20px;
-                letter-spacing: 0.5px;
-              }
-            `}
-          >
-            <h1>External Search</h1>
-            <p>
-              Connect to your favourite data sources effortlessly in
-              DataXplorer, and with just a few clicks, import datasets without
-              the hassle of downloading, enabling you to visualize and analyse
-              diverse data like never before.
-            </p>
-          </div>
+          <h1>External Search</h1>
+          <p>
+            Connect to your favourite data sources effortlessly in DataXplorer,
+            and with just a few clicks, import datasets without the hassle of
+            downloading, enabling you to visualize and analyse diverse data like
+            never before.
+          </p>
         </div>
-        <Grid container justifyContent="flex-end">
-          <Grid item lg={6} md={6} sm={6}>
-            <Filter
-              searchValue={searchValue as string}
-              setSearchValue={setSearchValue}
-              setSortValue={setSortValue}
-              setTableView={setTableView}
-              sortValue={sortValue}
-              tableView={tableView}
-            />
-          </Grid>
+      </div>
+      <Grid container justifyContent="flex-end">
+        <Grid item lg={6} md={6} sm={6}>
+          <Filter
+            searchValue={searchValue as string}
+            setSearchValue={setSearchValue}
+            setSortValue={setSortValue}
+            setTableView={setTableView}
+            sortValue={sortValue}
+            tableView={tableView}
+          />
         </Grid>
-        <Box height={62} />
-        {loading ? (
-          <CircleLoader />
-        ) : (
-          <Grid container spacing={2}>
-            {datasets?.map((dataset, index) => (
+      </Grid>
+      <Box height={62} />
+      {loading ? (
+        <CircleLoader />
+      ) : (
+        <Grid container spacing={2}>
+          {datasets &&
+            datasets?.map((dataset, index) => (
               <Grid
                 item
                 lg={3}
@@ -154,9 +154,8 @@ export default function ExternalSearch(props: {
                 <Box height={16} />
               </Grid>
             ))}
-          </Grid>
-        )}
-      </Container>
-    </>
+        </Grid>
+      )}
+    </Container>
   );
 }

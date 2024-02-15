@@ -124,7 +124,8 @@ export const SelectCategoryField = (props: {
 
 export default function MetaData(props: Readonly<Props>) {
   const location = useLocation();
-  const view = location.pathname.split("/")[3];
+  const view = location.pathname?.split("/")[3];
+
   const loadedDataset = useStoreState(
     (state) => state.dataThemes.DatasetGet.crudData
   ) as IDatasetDetail;
@@ -253,21 +254,6 @@ export default function MetaData(props: Readonly<Props>) {
               />
             </Grid>
           </Grid>
-          <div data-testid="errors-container">
-            {errors.name && <p data-testid="error">{errors.name.message}</p>}
-            {errors.description && (
-              <p data-testid="error">{errors.description.message}</p>
-            )}
-            {errors.category && (
-              <p data-testid="error">{errors.category.message}</p>
-            )}
-            {errors.source && (
-              <p data-testid="error">{errors.source.message}</p>
-            )}
-            {errors.sourceUrl && (
-              <p data-testid="error">{errors.sourceUrl.message}</p>
-            )}
-          </div>
 
           <div
             css={`

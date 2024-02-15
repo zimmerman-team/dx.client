@@ -25,7 +25,7 @@ const appFn = (
   mockSetIsExternalSearch: jest.Mock<any, any, any>
 ) => {
   const mockStore = createStore({
-    AuthToken: AuthTokenState as AuthTokenModel,
+    AuthToken: AuthTokenState,
   });
 
   return (

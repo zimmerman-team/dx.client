@@ -1,57 +1,73 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { mockFormDetails } from "app/modules/dataset-upload-module/__test__/mock-data";
 import MetaData from "app/modules/dataset-upload-module/upload-steps/metaData";
 import { DatasetGet } from "app/state/api/action-reducers/data-themes";
 import { StoreProvider, createStore } from "easy-peasy";
-import { MemoryRouter, Router, Switch } from "react-router-dom";
+import { Router, Switch } from "react-router-dom";
 import { createMemoryHistory } from "history";
+import { mockFormDetails } from "./mock-data";
 
-test("add meta data", async () => {
-  const user = userEvent.setup();
-
-  const mockStore = createStore({
-    dataThemes: { DatasetGet: DatasetGet },
-  });
-  const formResponse = {
-    formDetails: {
-      name: "Moc Dataset",
-      source: "Mock source",
-      category: "Education",
-      public: false,
-      sourceUrl: "https://example.com/mock-source",
-      description: "",
-    },
+interface MockProps {
+  formDetails: {
+    name: string;
+    source: string;
+    category: string;
+    public: boolean;
+    sourceUrl: string;
+    description: string;
   };
-  const mockProps = {
+  setFormDetails: jest.Mock<any, any>;
+  onSubmit: jest.Mock<any, any>;
+  handleBack: jest.Mock<any, any>;
+}
+const formResponse = {
+  formDetails: mockFormDetails,
+};
+const defaultProps = (props: Partial<MockProps> = {}): MockProps => {
+  return {
     formDetails: formResponse.formDetails,
     setFormDetails: jest.fn((newFormDetails) => {
       formResponse.formDetails = newFormDetails;
     }),
     onSubmit: jest.fn(),
     handleBack: jest.fn(),
+    ...props,
   };
+};
 
-  const datasetTestId = "testid";
-  const history = createMemoryHistory({
-    initialEntries: ["/dataset/new/upload"],
+const appSetup = (path: string) => {
+  const mockStore = createStore({
+    dataThemes: { DatasetGet: DatasetGet },
   });
-  render(
-    <StoreProvider store={mockStore}>
+  const history = createMemoryHistory({
+    initialEntries: [path],
+  });
+  const mockProps = defaultProps();
+
+  return {
+    app: (
       <Router history={history}>
-        <Switch>
-          <MetaData {...mockProps} />
-        </Switch>
+        <StoreProvider store={mockStore}>
+          <Switch>
+            <MetaData {...mockProps} />
+          </Switch>
+        </StoreProvider>
       </Router>
-    </StoreProvider>
-  );
+    ),
+    mockProps,
+  };
+};
+test("add meta data", async () => {
+  const user = userEvent.setup();
+
+  const { app, mockProps } = appSetup("/dataset/new/upload");
+  render(app);
 
   //confirm title is in the document
   const title = screen.getByText(/Describe your data/i);
   expect(title).toBeInTheDocument();
 
   //test the form fields
-
   const titleInput = screen.getByLabelText(/data title/i) as HTMLInputElement;
   expect(titleInput).toBeInTheDocument();
   expect(titleInput).toHaveValue(mockProps.formDetails.name);
@@ -105,14 +121,18 @@ test("add meta data", async () => {
 
   // Simulate form submission
 
-  user.click(screen.getByRole("button", { name: "Next" }));
-  const error = screen.queryAllByTestId("error");
-  expect(error).toHaveLength(0);
-
+  await user.click(screen.getByRole("button", { name: "Next" }));
   expect(mockProps.onSubmit).toHaveBeenCalled();
-  history.push(`/dataset/${datasetTestId}/edit`);
-  const backButton = screen.getByRole("button", { name: "Cancel" });
+});
+
+test("when in edit mode, the cancel button should be displayed", async () => {
+  const user = userEvent.setup();
+
+  const { app, mockProps } = appSetup(`/dataset/1234/edit`);
+  render(app);
+
+  const backButton = await screen.findByRole("button", { name: "Cancel" });
   expect(backButton).toBeInTheDocument();
-  user.click(backButton);
+  await user.click(backButton);
   expect(mockProps.handleBack).toHaveBeenCalled();
 });

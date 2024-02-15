@@ -22,5 +22,5 @@ export const mockFormDetails = {
   category: "Education",
   public: false,
   sourceUrl: "https://example.com/mock-source",
-  description: "Mock description",
+  description: "description of the mock dataset",
 };
