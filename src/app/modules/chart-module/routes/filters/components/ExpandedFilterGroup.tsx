@@ -37,7 +37,7 @@ interface ExpandedFilterGroupProps extends FilterGroupModel, FilterGroupProps {
 }
 
 export function ExpandedFilterGroup(props: ExpandedFilterGroupProps) {
-  const [value, setValue] = React.useState("");
+  const [searchValue, setSearchValue] = React.useState("");
   const [allSelected, setAllSelected] = React.useState(false);
   const [optionsToShow, setOptionsToShow] = React.useState(props.options);
 
@@ -47,7 +47,7 @@ export function ExpandedFilterGroup(props: ExpandedFilterGroupProps) {
   const appliedFilters = useStoreState((state) =>
     get(state.charts.appliedFilters.value, props.name, [])
   );
-  const setAppliedFilters = useStoreActions(
+  const setAllAppliedFilters = useStoreActions(
     (actions) => actions.charts.appliedFilters.setValue
   );
 
@@ -72,7 +72,7 @@ export function ExpandedFilterGroup(props: ExpandedFilterGroupProps) {
     setAllSelected(tmpAppliedFilters.length === allOptionsCount);
   }, [tmpAppliedFilters, props.options]);
 
-  React.useEffect(() => {
+  const handleSearch = (value: string) => {
     if (value.length === 0) {
       setOptionsToShow(props.options);
     } else {
@@ -142,7 +142,7 @@ export function ExpandedFilterGroup(props: ExpandedFilterGroupProps) {
       });
       setOptionsToShow(options);
     }
-  }, [value]);
+  };
 
   function handleChangeAll(event: React.ChangeEvent<HTMLInputElement>) {
     const tmp: any[] = [];
@@ -158,7 +158,7 @@ export function ExpandedFilterGroup(props: ExpandedFilterGroupProps) {
 
   function handleApply() {
     if (!isEqual(appliedFilters, tmpAppliedFilters)) {
-      setAppliedFilters({
+      setAllAppliedFilters({
         key: props.name,
         value: tmpAppliedFilters,
       });
@@ -225,7 +225,7 @@ export function ExpandedFilterGroup(props: ExpandedFilterGroupProps) {
 
   function resetFilters() {
     if (appliedFilters.length > 0) {
-      setAppliedFilters({
+      setAllAppliedFilters({
         key: props.name,
         value: [],
       });
@@ -270,7 +270,7 @@ export function ExpandedFilterGroup(props: ExpandedFilterGroupProps) {
             }
           `}
         >
-          <IconButton onClick={props.goBack}>
+          <IconButton onClick={props.goBack} aria-label="expanded-filter-close">
             <TriangleXSIcon />
           </IconButton>
           <div
@@ -294,12 +294,12 @@ export function ExpandedFilterGroup(props: ExpandedFilterGroupProps) {
                 color="primary"
                 checked={allSelected}
                 onChange={handleChangeAll}
-                disabled={value.length > 0}
+                disabled={searchValue.length > 0}
               />
             }
             label="Select all"
           />
-          <IconButton onClick={resetFilters}>
+          <IconButton onClick={resetFilters} aria-label="reset-button">
             <ResetIcon />
           </IconButton>
         </div>
@@ -322,7 +322,8 @@ export function ExpandedFilterGroup(props: ExpandedFilterGroupProps) {
         `}
       >
         <input
-          type="text"
+          type="search"
+          name="search-input"
           css={`
             width: 100%;
             outline: none;
@@ -333,10 +334,11 @@ export function ExpandedFilterGroup(props: ExpandedFilterGroupProps) {
             height: 100%;
           `}
           tabIndex={0}
-          value={value}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setValue(e.target.value)
-          }
+          value={searchValue}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            setSearchValue(e.target.value);
+            handleSearch(e.target.value);
+          }}
         />
         <SearchIcon />
       </div>
@@ -389,7 +391,7 @@ export function ExpandedFilterGroup(props: ExpandedFilterGroupProps) {
             level={1}
             position={index}
             key={option.value}
-            forceExpand={value.length > 0}
+            forceExpand={searchValue.length > 0}
             onOptionChange={(e) => onOptionChange(e, option, index)}
             selectedOptions={tmpAppliedFilters}
             selected={
@@ -476,6 +478,7 @@ function FilterOption(props: FilterOptionProps) {
             <Checkbox
               color="primary"
               checked={props.selected}
+              data-testid="filter-option-checkbox"
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 props.onOptionChange(
                   e.target.checked,

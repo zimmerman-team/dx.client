@@ -15,7 +15,8 @@ import { ChartToolBoxCustomize } from "app/modules/chart-module/components/toolb
 import { DatasetPanel } from "app/modules/chart-module/components/toolbox/steps/panels-content/SelectDataset";
 
 import { isEmpty } from "lodash";
-import { ToolboxNavType } from "./navbar";
+import { ToolboxNavType } from "app/modules/chart-module/components/toolbox/data";
+
 import { ChartRenderedItem } from "app/modules/chart-module/data";
 
 interface ChartToolBoxStepsProps {

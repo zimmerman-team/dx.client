@@ -37,7 +37,6 @@ export function ChartToolBoxFilters(props: ChartToolBoxFiltersProps) {
   }, [allAppliedFilters]);
 
   const expandGroup = (group: FilterGroupModel) => {
-    console.log(group.options, "group.options");
     setExpandedGroup(group);
   };
 

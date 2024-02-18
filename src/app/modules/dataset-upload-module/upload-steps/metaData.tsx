@@ -149,7 +149,6 @@ export default function MetaData(props: Readonly<Props>) {
   }, [loadedDataset]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("caling?");
     const { name, value } = event.target;
     props.setFormDetails({
       ...props.formDetails,

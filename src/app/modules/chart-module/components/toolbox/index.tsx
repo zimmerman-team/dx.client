@@ -13,13 +13,14 @@ import { Slide, SnackbarContent, useMediaQuery } from "@material-ui/core";
 /* project */
 import { styles } from "app/modules/chart-module/components/toolbox/styles";
 import { ChartExporter } from "app/modules/chart-module/components/exporter";
-import { ChartToolBoxProps } from "app/modules/chart-module/components/toolbox/data";
+import {
+  ChartToolBoxProps,
+  ToolboxNavType,
+} from "app/modules/chart-module/components/toolbox/data";
 import { ChartToolBoxSteps } from "app/modules/chart-module/components/toolbox/steps";
 import { TriangleXSIcon } from "app/assets/icons/TriangleXS";
 import { emptyChartAPI, ChartAPIModel } from "app/modules/chart-module/data";
-import ToolboxNav, {
-  ToolboxNavType,
-} from "app/modules/chart-module/components/toolbox/steps/navbar";
+import ToolboxNav from "app/modules/chart-module/components/toolbox/steps/navbar";
 import { InfoSnackbar } from "../chartSubheaderToolbar/infoSnackbar";
 
 export function ChartModuleToolBox(props: Readonly<ChartToolBoxProps>) {

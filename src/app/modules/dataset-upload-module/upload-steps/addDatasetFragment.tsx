@@ -39,8 +39,6 @@ export default function AddDatasetFragment(props: Props) {
         responseType: "blob", // important
       });
 
-      console.log("called??");
-
       if (process.env.NODE_ENV === "development") {
         console.log("response", response);
       }
@@ -92,7 +90,6 @@ export default function AddDatasetFragment(props: Props) {
     try {
       const res = await getAccessToken();
 
-      console.log(res, "res-token");
       //opens google drive picker
       openPicker({
         clientId: process.env.REACT_APP_GOOGLE_API_CLIENT_ID as string,
