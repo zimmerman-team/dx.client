@@ -146,10 +146,17 @@ export function ExpandedFilterGroup(props: ExpandedFilterGroupProps) {
 
   function handleChangeAll(event: React.ChangeEvent<HTMLInputElement>) {
     const tmp: any[] = [];
-    if (event.target.checked) {
-      props.options.forEach((option: FilterGroupOptionModel) => {
+    const getAllValues = (options: FilterGroupOptionModel[]) => {
+      options.forEach((option: FilterGroupOptionModel) => {
         tmp.push(option.value);
+        if (option.subOptions) {
+          getAllValues(option.subOptions);
+        }
       });
+    };
+
+    if (event.target.checked) {
+      getAllValues(props.options);
       setTmpAppliedFilters(tmp);
     } else {
       setTmpAppliedFilters([]);
@@ -497,6 +504,7 @@ function FilterOption(props: FilterOptionProps) {
         {props.subOptions && (
           <React.Fragment>
             <div
+              data-testid="expand-filter-option-overlay"
               css={`
                 top: 0;
                 left: 0;
@@ -508,12 +516,16 @@ function FilterOption(props: FilterOptionProps) {
               `}
               onClick={() => setShowSubOptions(!showSubOptions)}
             />
-            <IconButton onClick={() => setShowSubOptions(!showSubOptions)}>
+            <IconButton
+              onClick={() => setShowSubOptions(!showSubOptions)}
+              data-testid="expand-filter-option-button"
+            >
               <TriangleXSIcon />
             </IconButton>
           </React.Fragment>
         )}
       </div>
+
       {props.subOptions && showSubOptions && (
         <div
           css={`
@@ -532,6 +544,7 @@ function FilterOption(props: FilterOptionProps) {
               }
             }
           `}
+          data-testid="filter-sub-options"
         >
           {props.subOptions.map(
             (option: FilterGroupOptionModel, index: number) => (

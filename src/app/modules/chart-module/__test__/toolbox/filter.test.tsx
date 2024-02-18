@@ -1,9 +1,10 @@
-import { getByTestId, render, screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { StoreProvider, createStore } from "easy-peasy";
 import userEvent from "@testing-library/user-event";
 import { FilterGroup } from "app/modules/chart-module/routes/filters/components/FilterGroup";
 import { ChartsAppliedFiltersState } from "app/state/api/action-reducers/sync/charts/filters";
 import { ExpandedFilterGroup } from "app/modules/chart-module/routes/filters/components/ExpandedFilterGroup";
+import { FilterGroupOptionModel } from "app/components/ToolBoxPanel/components/filters/data";
 
 interface MockProps {
   key: string;
@@ -13,27 +14,19 @@ interface MockProps {
   expandGroup: jest.Mock<any, any, any>;
   goBack: jest.Mock<any, any, any>;
 }
-
-const defaultProps = (props: Partial<MockProps> = {}): MockProps => {
-  return {
-    loadChartDataFromAPI: jest.fn(),
-    expandGroup: jest.fn(),
-    goBack: jest.fn(),
-    key: "1",
-    name: "AlcoholUseDisorders",
-    options: [
-      {
-        label: "1",
-        value: "1",
-      },
-      {
-        label: "10",
-        value: "10",
-      },
-      {
-        label: "100",
-        value: "100",
-      },
+const optionsWithSubOptions = [
+  {
+    label: "1",
+    value: "1",
+  },
+  {
+    label: "10",
+    value: "10",
+  },
+  {
+    label: "100",
+    value: "100",
+    subOptions: [
       {
         label: "1000",
         value: "1000",
@@ -51,6 +44,47 @@ const defaultProps = (props: Partial<MockProps> = {}): MockProps => {
         value: "1005",
       },
     ],
+  },
+];
+
+const defaultProps = (props: Partial<MockProps> = {}): MockProps => {
+  return {
+    loadChartDataFromAPI: jest.fn(),
+    expandGroup: jest.fn(),
+    goBack: jest.fn(),
+    key: "1",
+    name: "AlcoholUseDisorders",
+    // options: [
+    //   {
+    //     label: "1",
+    //     value: "1",
+    //   },
+    //   {
+    //     label: "10",
+    //     value: "10",
+    //   },
+    //   {
+    //     label: "100",
+    //     value: "100",
+    //   },
+    //   {
+    //     label: "1000",
+    //     value: "1000",
+    //   },
+    //   {
+    //     label: "10016",
+    //     value: "10016",
+    //   },
+    //   {
+    //     label: "10033",
+    //     value: "10033",
+    //   },
+    //   {
+    //     label: "1005",
+    //     value: "1005",
+    //   },
+    // ],
+    options: optionsWithSubOptions,
     ...props,
   };
 };
@@ -60,6 +94,36 @@ const defaultStoreValue = (name: string) => ({
 });
 
 const emptyStoreValue = () => ({});
+
+const checkIfAllOptionsAreChecked = (options: FilterGroupOptionModel[]) => {
+  const isOptionExpanded = screen.queryByTestId("filter-sub-options");
+  //check if all options are checked including suboptions
+  options.forEach((option: FilterGroupOptionModel) => {
+    expect(
+      screen.getByRole("checkbox", {
+        name: option.label,
+      })
+    ).toBeChecked();
+    if (option.subOptions && isOptionExpanded) {
+      checkIfAllOptionsAreChecked(option.subOptions);
+    }
+  });
+};
+
+const checkIfAllOptionsAreUnchecked = (options: FilterGroupOptionModel[]) => {
+  const isOptionExpanded = screen.queryByTestId("filter-sub-options");
+  //check if all options are checked including suboptions
+  options.forEach((option: FilterGroupOptionModel) => {
+    expect(
+      screen.getByRole("checkbox", {
+        name: option.label,
+      })
+    ).not.toBeChecked();
+    if (option.subOptions && isOptionExpanded) {
+      checkIfAllOptionsAreUnchecked(option.subOptions);
+    }
+  });
+};
 
 const appSetup = (
   app: React.ReactNode,
@@ -155,6 +219,30 @@ test("expanded filter group should close when back button is clicked", async () 
   expect(props.goBack).toHaveBeenCalled();
 });
 
+test("clicking expand button should expand suboptions", async () => {
+  const user = userEvent.setup();
+  const props = defaultProps();
+  const { app } = appSetup(
+    <ExpandedFilterGroup
+      name={props.name}
+      options={props.options}
+      goBack={props.goBack}
+      loadChartDataFromAPI={props.loadChartDataFromAPI}
+    />,
+    props.name,
+    emptyStoreValue()
+  );
+  render(app);
+
+  const expandButton = screen.getByTestId("expand-filter-option-button");
+  expect(expandButton).toBeInTheDocument();
+  await user.click(expandButton);
+  expect(screen.getByTestId("filter-sub-options")).toBeInTheDocument();
+  const toggleOverlay = screen.getByTestId("expand-filter-option-overlay");
+  await user.click(toggleOverlay);
+  expect(screen.queryByTestId("filter-sub-options")).not.toBeInTheDocument();
+});
+
 test("checking 'select all' checkbox should select all filter options", async () => {
   const user = userEvent.setup();
   const props = defaultProps();
@@ -177,13 +265,7 @@ test("checking 'select all' checkbox should select all filter options", async ()
   await user.click(selectAllCheckbox);
   expect(selectAllCheckbox).toBeChecked();
 
-  props.options.forEach((option: any) => {
-    expect(
-      screen.getByRole("checkbox", {
-        name: option.label,
-      })
-    ).toBeChecked();
-  });
+  checkIfAllOptionsAreChecked(props.options);
 
   const applyButton = screen.getByRole("button", {
     name: "Apply",
@@ -217,6 +299,7 @@ test("unchecking 'select all' checkbox should unselect all filter options", asyn
   expect(selectAllCheckbox).toBeInTheDocument();
   await user.click(selectAllCheckbox);
   expect(selectAllCheckbox).not.toBeChecked();
+  checkIfAllOptionsAreUnchecked(props.options);
 });
 
 test("applied filters should be removed when reset button is clicked", async () => {
@@ -239,13 +322,8 @@ test("applied filters should be removed when reset button is clicked", async () 
   });
   expect(resetButton).toBeInTheDocument();
   await user.click(resetButton);
-  props.options.forEach((option: any) => {
-    expect(
-      screen.getByRole("checkbox", {
-        name: option.label,
-      })
-    ).not.toBeChecked();
-  });
+  checkIfAllOptionsAreUnchecked(props.options);
+
   expect(mockStore.getState().charts.appliedFilters.value).toEqual({});
   expect(props.loadChartDataFromAPI).toHaveBeenCalled();
 });
@@ -278,7 +356,7 @@ test("search input should filter options", async () => {
 
   //delete search input
   await user.clear(searchInput);
-  expect(screen.getAllByTestId("filter-option-checkbox").length).toBe(7);
+  expect(screen.getAllByTestId("filter-option-checkbox").length).toBe(3);
   props.options.forEach((option: any) => {
     expect(screen.getByLabelText(option.label)).toBeInTheDocument();
   });
@@ -302,11 +380,11 @@ test("should multi check and uncheck filter options", async () => {
   props.options.forEach((option: any) => {
     checkboxList.push(screen.getByRole("checkbox", { name: option.label }));
   });
-  expect(checkboxList.length).toBe(7);
+  expect(checkboxList.length).toBe(3);
   //multi check filte options
   await user.click(checkboxList[0]);
   await user.keyboard("{Shift>}");
-  await user.click(checkboxList[6]);
+  await user.click(checkboxList[2]);
   await user.keyboard("{/Shift}");
 
   checkboxList.forEach((checkBox: HTMLElement) => {
@@ -314,7 +392,7 @@ test("should multi check and uncheck filter options", async () => {
   });
 
   //multi uncheck filte options
-  await user.click(checkboxList[6]);
+  await user.click(checkboxList[2]);
   await user.keyboard("{Shift>}");
   await user.click(checkboxList[0]);
 
