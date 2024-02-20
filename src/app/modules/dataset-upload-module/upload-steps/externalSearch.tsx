@@ -31,9 +31,9 @@ export default function ExternalSearch(props: {
   setProcessingError: React.Dispatch<React.SetStateAction<boolean>>;
   setActiveStep: React.Dispatch<React.SetStateAction<number>>;
 }) {
-  const defautlSearchTerms = ["climate", "air", "woman", "animal", "money"];
+  const defaultSearchTerms = ["climate", "air", "woman", "animal", "money"];
   const randomSearchTerm =
-    defautlSearchTerms[Math.floor(Math.random() * defautlSearchTerms.length)];
+    defaultSearchTerms[Math.floor(Math.random() * defaultSearchTerms.length)];
   const [tableView, setTableView] = React.useState(false);
   const [searchValue, setSearchValue] = React.useState<string | undefined>("");
   const [sortValue, setSortValue] = React.useState("createdDate");
@@ -52,13 +52,13 @@ export default function ExternalSearch(props: {
   const handleLimitedSearch = () => {
     setIsFetching(true);
     //kaggle search
-    const loadKaggleSearch = async (offset: number) => {
+    const loadSearch = async (offset: number) => {
       try {
         setLoading(true);
         const response = await axios.get(
           `${process.env.REACT_APP_API}/external-sources/search-limited?q=${
             searchValue || randomSearchTerm
-          }&limit=${limit}&offset=${offset}&source=Kaggle`,
+          }&limit=${limit}&offset=${offset}`,
           {
             signal: controller.signal,
             headers: {
@@ -67,74 +67,17 @@ export default function ExternalSearch(props: {
           }
         );
         const data = response.data;
-
+        setLoading(false);
         if (data.length > 0) {
-          setLoading(false);
           setTotalDatasets((prev) => [...prev, ...data]);
-          loadKaggleSearch(offset + limit);
+          loadSearch(offset + limit);
         }
       } catch (e) {
         setLoading(false);
         console.log(e);
       }
     };
-    loadKaggleSearch(0);
-
-    //worldbank search
-    const loadWorldBankSearch = async (offset: number) => {
-      try {
-        setLoading(true);
-        const response = await axios.get(
-          `${process.env.REACT_APP_API}/external-sources/search-limited?q=${
-            searchValue || randomSearchTerm
-          }&limit=${limit}&offset=${offset}&source=World Bank`,
-          {
-            signal: controller.signal,
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        const data = response.data;
-        if (data.length > 0) {
-          setLoading(false);
-          setTotalDatasets((prev) => [...prev, ...data]);
-          loadWorldBankSearch(offset + limit);
-        }
-      } catch (e) {
-        setLoading(false);
-        console.log(e);
-      }
-    };
-    loadWorldBankSearch(0);
-
-    //who search
-    const loadWhoSearch = async (offset: number) => {
-      try {
-        setLoading(true);
-        const response = await axios.get(
-          `${process.env.REACT_APP_API}/external-sources/search-limited?q=${
-            searchValue || randomSearchTerm
-          }&limit=${limit}&offset=${offset}&source=WHO`,
-          {
-            signal: controller.signal,
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        const data = response.data;
-        if (data.length > 0) {
-          setLoading(false);
-          setTotalDatasets((prev) => [...prev, ...data]);
-          loadWhoSearch(offset + limit);
-        }
-      } catch (e) {
-        setLoading(false);
-        console.log(e);
-      }
-    };
-    loadWhoSearch(0);
+    loadSearch(0);
   };
 
   const [,] = useDebounce(
