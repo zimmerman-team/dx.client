@@ -166,6 +166,24 @@ export function ChartToolBoxMapping(props: Readonly<ChartToolBoxMappingProps>) {
         css={`
           width: 90%;
           margin: auto;
+          overflow-y: auto;
+          height: 100%;
+          padding-bottom: 40px;
+          max-height: calc(100vh - 260px);
+          &::-webkit-scrollbar {
+            width: 4px;
+            visibility: hidden;
+            background: #262c34;
+          }
+          &::-webkit-scrollbar-track {
+            background: #f1f3f5;
+            visibility: hidden;
+          }
+          &::-webkit-scrollbar-thumb {
+            border-radius: 4px;
+            background: #262c34;
+            visibility: hidden;
+          }
         `}
       >
         <div
@@ -812,8 +830,8 @@ const StaticDimensionContainer = (props: { dimension: any }) => {
             setValue(e.target.value);
             setValueCount(e.target.value.length);
           }}
-          maxLength={50}
-          minLength={6}
+          maxLength={props.dimension.id === "mainKPImetric" ? 6 : 50}
+          minLength={props.dimension.id === "mainKPImetric" ? 1 : 6}
           css={`
             width: 100%;
             min-height: 40px;
@@ -831,7 +849,7 @@ const StaticDimensionContainer = (props: { dimension: any }) => {
             font-size: 12px;
           `}
         >
-          {valueCount}/50
+          {valueCount}/{props.dimension.id === "mainKPImetric" ? "6" : "50"}
         </span>
       </div>
       <div
@@ -843,8 +861,10 @@ const StaticDimensionContainer = (props: { dimension: any }) => {
           line-height: 15px;
         `}
       >
-        The {props.dimension.name} must be between 6 and 50 characters in
-        length.
+        {props.dimension.id === "mainKPImetric"
+          ? "The main KPI metric must be between 0 and 6 characters in length. Main KPI metric will overwrite content from the dataset."
+          : `The ${props.dimension.name} must be between 6 and 50 characters in
+        length.`}
       </div>
     </div>
   );
