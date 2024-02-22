@@ -11,11 +11,25 @@ import {
 import ChartBuilderChartType from "app/modules/chart-module/routes/chart-type";
 import { ChartTypeModel, echartTypes } from "../routes/chart-type/data";
 import { createMemoryHistory } from "history";
+import { Auth0Provider } from "@auth0/auth0-react";
+import { mockUseAuth0 } from "app/utils/mockAuth0";
 
 jest.mock("react-router-dom", () => ({
   ...jest.requireActual("react-router-dom"),
   useParams: jest.fn(),
 }));
+let mockLoginStatus = true;
+jest.mock("@auth0/auth0-react", () => {
+  const originalModule = jest.requireActual("@auth0/auth0-react");
+  return {
+    __esModule: true,
+    ...originalModule,
+    useAuth0: () => mockUseAuth0(mockLoginStatus),
+    Auth0Provider: ({ children }: { children: React.ReactNode }) => (
+      <div>{children}</div>
+    ),
+  };
+});
 
 const history = createMemoryHistory({
   initialEntries: ["/chart/new/type"],
@@ -50,9 +64,11 @@ const appSetup = (chartType: string | null, dataset: string | null) => {
   return {
     app: (
       <Router.Router history={history}>
-        <StoreProvider store={mockStore}>
-          <ChartBuilderChartType loading={false} />
-        </StoreProvider>
+        <Auth0Provider clientId="__test_client_id__" domain="__test_domain__">
+          <StoreProvider store={mockStore}>
+            <ChartBuilderChartType loading={false} />
+          </StoreProvider>
+        </Auth0Provider>
       </Router.Router>
     ),
     mockStore,

@@ -16,7 +16,10 @@ import {
 } from "app/state/api/action-reducers/sync/charts";
 import { ChartSubheaderToolbar } from "app/modules/chart-module/components/chartSubheaderToolbar/";
 import { AuthTokenState } from "app/state/api/action-reducers/sync";
-import { mockMappingValue } from "app/modules/chart-module/__test__/data";
+import {
+  mockChartList,
+  mockMappingValue,
+} from "app/modules/chart-module/__test__/data";
 import { RecoilObserver } from "app/utils/recoilObserver";
 import {
   homeDisplayAtom,
@@ -161,8 +164,6 @@ const appSetup = (params: Params, newProps: Partial<MockProps> = {}) => {
 //test cases
 
 test("buttons should not be clickable when mapping and chart type are empty", async () => {
-  mockLoginStatus = true;
-
   jest
     .spyOn(Router, "useParams")
     .mockReturnValue({ page: "new", view: "mapping" });
@@ -183,8 +184,6 @@ test("buttons should not be clickable when mapping and chart type are empty", as
 });
 
 test("buttons should be clickable when mapping and chart type are not empty", async () => {
-  mockLoginStatus = true;
-
   jest
     .spyOn(Router, "useParams")
     .mockReturnValue({ page: "new", view: "mapping" });
@@ -205,8 +204,6 @@ test("buttons should be clickable when mapping and chart type are not empty", as
 });
 
 test("clicking preview button should reroute to preview page", async () => {
-  mockLoginStatus = true;
-
   const user = userEvent.setup();
   jest
     .spyOn(Router, "useParams")
@@ -228,8 +225,6 @@ test("clicking preview button should reroute to preview page", async () => {
 });
 
 test("clicking save button should create chart", async () => {
-  mockLoginStatus = true;
-
   const user = userEvent.setup();
   jest
     .spyOn(Router, "useParams")
@@ -260,8 +255,6 @@ test("clicking save button should create chart", async () => {
 });
 
 test("all buttons should be visible and active when page is not new", async () => {
-  mockLoginStatus = true;
-
   jest
     .spyOn(Router, "useParams")
     .mockReturnValue({ page: "chartid", view: undefined });
@@ -290,60 +283,59 @@ test("all buttons should be visible and active when page is not new", async () =
   expect(screen.getByRole("button", { name: "share-button" })).toBeVisible();
 });
 
-// test("clicking delete button should display delete modal", async () => {
-//   mockLoginStatus = true;
-//   const user = userEvent.setup();
-//   // Mocking the Axios request
-//   const mockedAxios = axios.delete as jest.Mock;
-//   mockedAxios.mockResolvedValueOnce({ data: [] } as AxiosResponse<any>);
-//   jest
-//     .spyOn(Router, "useParams")
-//     .mockReturnValue({ page: "chartid", view: undefined });
+test("clicking delete button should display delete modal", async () => {
+  const user = userEvent.setup();
+  // Mocking the Axios request
+  const mockedAxios = axios.delete as jest.Mock;
+  const mockGetAxios = axios.get as jest.Mock;
+  mockedAxios.mockResolvedValueOnce({ data: [] } as AxiosResponse<any>);
+  mockGetAxios.mockResolvedValueOnce({
+    data: mockChartList,
+  } as AxiosResponse<any>);
+  jest
+    .spyOn(Router, "useParams")
+    .mockReturnValue({ page: "chartid", view: undefined });
 
-//   const { app, mockStore } = appSetup({
-//     dataset: "12345",
-//     mapping: mockMappingValue,
-//     chartType: "echartsBarchart",
-//     mockActions: false,
-//   });
+  const { app, mockStore } = appSetup({
+    dataset: "12345",
+    mapping: mockMappingValue,
+    chartType: "echartsBarchart",
+    mockActions: false,
+  });
 
-//   render(app);
+  render(app);
 
-//   act(() => {
-//     mockStore.getActions().charts.ChartGet.setCrudData({
-//       id: "12345",
-//       name: "test",
-//       owner: "auth0|123",
-//     });
-//   });
+  act(() => {
+    mockStore.getActions().charts.ChartGet.setCrudData({
+      id: "12345",
+      name: "test",
+      owner: "auth0|123",
+    });
+  });
 
-//   expect(screen.getByRole("button", { name: "delete-button" })).toBeVisible();
-
-//   //click delete button
-//   await user.click(screen.getByRole("button", { name: "delete-button" }));
-//   // assert modal is visible
-//   expect(screen.getByRole("form")).toBeInTheDocument();
-//   expect(
-//     screen.getByText("Absolutely sure you want to delete the chart(s)?")
-//   ).toBeVisible();
-//   //type DELETE
-//   const input = screen.getByPlaceholderText('Type "DELETE" to confirm');
-//   await user.type(input, "DELETE");
-//   //delete chart
-//   expect(input).toHaveValue("DELETE");
-//   expect(screen.getByRole("button", { name: "Delete" })).toBeEnabled();
-//   fireEvent.submit(screen.getByRole("form"));
-//   expect(mockedAxios).toHaveBeenCalled();
-// });
+  expect(screen.getByRole("button", { name: "delete-button" })).toBeVisible();
+  await user.click(screen.getByRole("button", { name: "delete-button" }));
+  expect(screen.getByRole("form")).toBeInTheDocument();
+  expect(
+    screen.getByText("Absolutely sure you want to delete the chart(s)?")
+  ).toBeVisible();
+  const input = screen.getByPlaceholderText('Type "DELETE" to confirm');
+  await user.type(input, "DELETE");
+  expect(input).toHaveValue("DELETE");
+  expect(screen.getByRole("button", { name: "Delete" })).toBeEnabled();
+  fireEvent.submit(screen.getByRole("form"));
+  expect(mockedAxios).toHaveBeenCalled();
+});
 
 test("clicking duplicate button should duplicate chart", async () => {
   const user = userEvent.setup();
-  mockLoginStatus = true;
   // Mocking the Axios request
   const mockedAxios = axios.get as jest.Mock;
-  mockedAxios.mockResolvedValueOnce({
-    data: { id: "chart-id" },
-  } as AxiosResponse<any>);
+  mockedAxios
+    .mockResolvedValueOnce({
+      data: { id: "chart-id" },
+    } as AxiosResponse<any>)
+    .mockResolvedValueOnce({ data: mockChartList });
   jest
     .spyOn(Router, "useParams")
     .mockReturnValue({ page: "chartid", view: undefined });
@@ -357,5 +349,4 @@ test("clicking duplicate button should duplicate chart", async () => {
 
   await user.click(screen.getByRole("button", { name: "duplicate-button" }));
   expect(mockedAxios).toHaveBeenCalled();
-  // axios.get = jest.fn().mockResolvedValueOnce({ data: [] });
 });
