@@ -724,12 +724,26 @@ const StaticDimensionContainer = (props: { dimension: any }) => {
     `mapping.${props.dimension.id}.value[0]`,
     ""
   );
+  const mainKPImetric = props.dimension.id === "mainKPImetric";
   const [valueCount, setValueCount] = React.useState(0);
   const [value, setValue] = React.useState(
     //for the case of BNC, mapping doesn't come with complete values, hence we fallback to the loaded chart mapping.
     //TODO: replace loadedChartMappingValue with ""  when mapping for BNC is fixed
     get(mapping, `${props.dimension.id}.value[0]`, loadedChartMappingValue)
   );
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    if (mainKPImetric) {
+      const re = /^[0-9\b+-]+$/;
+      if (e.target.value === "" || re.test(e.target.value)) {
+        setValue(e.target.value);
+        setValueCount(e.target.value.length);
+      }
+    } else {
+      setValue(e.target.value);
+      setValueCount(e.target.value.length);
+    }
+  };
 
   const onValueChange = (value: string) => {
     const mappingFromStorage = get(
@@ -749,7 +763,7 @@ const StaticDimensionContainer = (props: { dimension: any }) => {
         ids: (localDimensionMapping.ids || []).concat(uniqueId()),
         value: [value],
         isValid: true,
-        mappedType: "string",
+        mappedType: mainKPImetric ? "number" : "string",
       },
     });
   };
@@ -795,7 +809,7 @@ const StaticDimensionContainer = (props: { dimension: any }) => {
               }
             `}
           >
-            <p>{typeIcon["string"]}</p>
+            <p>{mainKPImetric ? typeIcon["number"] : typeIcon["string"]}</p>
           </div>
           <div
             css={`
@@ -826,12 +840,9 @@ const StaticDimensionContainer = (props: { dimension: any }) => {
       >
         <textarea
           value={value}
-          onChange={(e) => {
-            setValue(e.target.value);
-            setValueCount(e.target.value.length);
-          }}
-          maxLength={props.dimension.id === "mainKPImetric" ? 6 : 50}
-          minLength={props.dimension.id === "mainKPImetric" ? 1 : 6}
+          onChange={handleInputChange}
+          maxLength={mainKPImetric ? 6 : 50}
+          minLength={mainKPImetric ? 1 : 6}
           css={`
             width: 100%;
             min-height: 40px;
@@ -849,7 +860,7 @@ const StaticDimensionContainer = (props: { dimension: any }) => {
             font-size: 12px;
           `}
         >
-          {valueCount}/{props.dimension.id === "mainKPImetric" ? "6" : "50"}
+          {valueCount}/{mainKPImetric ? "6" : "50"}
         </span>
       </div>
       <div
@@ -861,7 +872,7 @@ const StaticDimensionContainer = (props: { dimension: any }) => {
           line-height: 15px;
         `}
       >
-        {props.dimension.id === "mainKPImetric"
+        {mainKPImetric
           ? "The main KPI metric must be between 0 and 6 characters in length. Main KPI metric will overwrite content from the dataset."
           : `The ${props.dimension.name} must be between 6 and 50 characters in
         length.`}
