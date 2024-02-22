@@ -7,6 +7,7 @@ import { useStoreState } from "app/state/store/hooks";
 import { useHistory } from "react-router-dom";
 import useDebounce from "react-use/lib/useDebounce";
 import axios from "axios";
+import CircleLoader from "app/modules/home-module/components/Loader";
 
 export interface IExternalDataset {
   name: string;
@@ -31,9 +32,6 @@ export default function ExternalSearch(props: {
   setProcessingError: React.Dispatch<React.SetStateAction<boolean>>;
   setActiveStep: React.Dispatch<React.SetStateAction<number>>;
 }) {
-  const defaultSearchTerms = ["climate", "air", "woman", "animal", "money"];
-  const randomSearchTerm =
-    defaultSearchTerms[Math.floor(Math.random() * defaultSearchTerms.length)];
   const [tableView, setTableView] = React.useState(false);
   const [searchValue, setSearchValue] = React.useState<string | undefined>("");
   const [sortValue, setSortValue] = React.useState("createdDate");
@@ -46,19 +44,16 @@ export default function ExternalSearch(props: {
   );
   const [isFetching, setIsFetching] = React.useState(false);
   const controller = new AbortController();
-  console.log(searchValue, "searchValue");
 
   const limit = 3;
   const handleLimitedSearch = () => {
     setIsFetching(true);
     //kaggle search
-    const loadSearch = async (offset: number) => {
+    const loadSearch = async (offset: number, count: number) => {
       try {
         setLoading(true);
         const response = await axios.get(
-          `${process.env.REACT_APP_API}/external-sources/search-limited?q=${
-            searchValue || randomSearchTerm
-          }&limit=${limit}&offset=${offset}`,
+          `${process.env.REACT_APP_API}/external-sources/search-limited?q=${searchValue}&limit=${limit}&offset=${offset}`,
           {
             signal: controller.signal,
             headers: {
@@ -68,16 +63,16 @@ export default function ExternalSearch(props: {
         );
         const data = response.data;
         setLoading(false);
-        if (data.length > 0) {
+        if (data.length > 0 && count < 96) {
           setTotalDatasets((prev) => [...prev, ...data]);
-          loadSearch(offset + limit);
+          loadSearch(offset + limit, count + data.length);
         }
       } catch (e) {
         setLoading(false);
         console.log(e);
       }
     };
-    loadSearch(0);
+    loadSearch(0, 0);
   };
 
   const [,] = useDebounce(
@@ -180,14 +175,7 @@ export default function ExternalSearch(props: {
           ))}
       </Grid>
       <Box display={"flex"} justifyContent={"center"}>
-        <p
-          css={`
-            font-family: "GothamNarrow-Bold", sans-serif;
-            color: #e0e0e0;
-          `}
-        >
-          {loading && "Loading..."}
-        </p>
+        {loading && <CircleLoader />}
       </Box>
     </Container>
   );
