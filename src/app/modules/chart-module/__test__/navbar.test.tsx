@@ -1,8 +1,10 @@
+/** third party */
 import { render, screen } from "@testing-library/react";
-import ToolboxNav from "../../components/toolbox/steps/navbar";
 import { StoreProvider, createStore } from "easy-peasy";
 import userEvent from "@testing-library/user-event";
 import Router from "react-router-dom";
+/** project */
+import ToolboxNav from "app/modules/chart-module/components/toolbox/steps/navbar";
 import { ChartsActivePanelsState } from "app/state/api/action-reducers/sync/charts";
 
 interface MockProps {
@@ -82,7 +84,7 @@ test("navigations should be clickable, and should call onNavBtnClick function", 
   expect(props.setIsClickable).toHaveBeenCalledWith(false);
 });
 
-test("navigations should not be clickable", async () => {
+test("navigations should not be clickable when isClickable is false", async () => {
   const user = userEvent.setup();
   const props = defaultProps({ isClickable: false });
   const { app } = appSetup(props, "new", "/chart/new/data");

@@ -1,6 +1,7 @@
 // cc:application base#;application routes
 
 // base
+
 import React, { Suspense, lazy } from "react";
 import { socialAuth } from "app/utils/socialAuth";
 import { useScrollToTop } from "app/hooks/useScrollToTop";
@@ -109,6 +110,8 @@ const OneTapLoginComponent = () => {
     googleAccountConfigs: {
       client_id: process.env.REACT_APP_GOOGLE_API_CLIENT_ID!,
       cancel_on_tap_outside: false,
+      // @ts-ignore
+      use_fedcm_for_prompt: true,
     },
   });
 

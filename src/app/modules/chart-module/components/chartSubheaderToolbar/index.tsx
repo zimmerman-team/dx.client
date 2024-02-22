@@ -33,6 +33,7 @@ import {
   reportRightPanelViewAtom,
 } from "app/state/recoil/atoms";
 import { InfoSnackbar } from "app/modules/chart-module/components/chartSubheaderToolbar/infoSnackbar";
+import { getRequiredFieldsAndErrors } from "../../routes/mapping/utils";
 
 export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
   const history = useHistory();
@@ -43,6 +44,7 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
     report: false,
     chart: false,
   });
+
   const [enableButton, setEnableButton] = React.useState<boolean>(false);
 
   const setHomeTab = useRecoilState(homeDisplayAtom)[1];
@@ -51,8 +53,6 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
   const setRightPanelView = useRecoilState(reportRightPanelViewAtom)[1];
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
   const [showSnackbar, setShowSnackbar] = React.useState<string | null>(null);
-  const [isSavedEnabled, setIsSavedEnabled] = React.useState(false);
-  const [isPreviewEnabled, setIsPreviewEnabled] = React.useState(false);
   const [duplicatedChartId, setDuplicatedChartId] = React.useState<
     string | null
   >(null);
@@ -61,6 +61,13 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
   );
 
   const mapping = useStoreState((state) => state.charts.mapping.value);
+  const { updRequiredFields, updMinValuesFields } = getRequiredFieldsAndErrors(
+    mapping,
+    props.dimensions
+  );
+  const isMappingValid =
+    updRequiredFields.length === 0 && updMinValuesFields.length === 0;
+
   const dataset = useStoreState((state) => state.charts.dataset.value);
   const appliedFilters = useStoreState(
     (state) => state.charts.appliedFilters.value
@@ -206,21 +213,17 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
     };
   }, []);
 
-  React.useEffect(() => {
-    const newValue = !isEmpty(selectedChartType) && !isEmpty(mapping);
-
-    if (newValue !== isPreviewEnabled) {
-      setIsPreviewEnabled(newValue);
-    }
+  const isPreviewDisabled: boolean = React.useMemo(() => {
+    const newValue = isEmpty(selectedChartType) || !isMappingValid;
+    return newValue;
   }, [selectedChartType, mapping]);
 
-  React.useEffect(() => {
+  const isSavedDisabled: boolean = React.useMemo(() => {
     const newValue =
-      (!isEmpty(selectedChartType) && !isEmpty(mapping)) ||
+      isEmpty(selectedChartType) ||
+      !isMappingValid ||
       (view !== undefined && page !== "new" && props.name !== loadedChart.name);
-    if (newValue !== isSavedEnabled) {
-      setIsSavedEnabled(newValue);
-    }
+    return newValue;
   }, [
     view,
     props.name,
@@ -381,11 +384,8 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
                       <span>
                         <IconButton
                           onClick={handlePreviewMode}
-                          disabled={
-                            props.forceEnablePreviewSave
-                              ? !props.forceEnablePreviewSave
-                              : !isPreviewEnabled
-                          }
+                          aria-label="preview-button"
+                          disabled={isPreviewDisabled}
                           css={`
                             :disabled {
                               opacity: 0.5;
@@ -411,11 +411,8 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
                       <span>
                         <IconButton
                           onClick={onSave}
-                          disabled={
-                            props.forceEnablePreviewSave
-                              ? !props.forceEnablePreviewSave
-                              : !isSavedEnabled
-                          }
+                          aria-label="save-button"
+                          disabled={isSavedDisabled}
                           css={`
                             :disabled {
                               opacity: 0.5;
@@ -433,13 +430,19 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
                     <ExportChartButton />
                     {isAuthenticated && (
                       <Tooltip title="Duplicate">
-                        <IconButton onClick={handleDuplicate}>
+                        <IconButton
+                          onClick={handleDuplicate}
+                          aria-label="duplicate-button"
+                        >
                           <FileCopyIcon htmlColor="#262c34" />
                         </IconButton>
                       </Tooltip>
                     )}
                     <Tooltip title="Share">
-                      <IconButton onClick={handleClick}>
+                      <IconButton
+                        onClick={handleClick}
+                        aria-label="share-button"
+                      >
                         <ShareIcon htmlColor="#262c34" />
                       </IconButton>
                     </Tooltip>
@@ -477,6 +480,7 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
                         <IconButton
                           component={Link}
                           to={`/chart/${page}/customize`}
+                          aria-label="edit-button"
                         >
                           <EditIcon htmlColor="#262c34" />
                         </IconButton>
@@ -484,7 +488,10 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
                     )}
                     {canChartEditDelete && (
                       <Tooltip title="Delete">
-                        <IconButton onClick={handleModalDisplay}>
+                        <IconButton
+                          onClick={handleModalDisplay}
+                          aria-label="delete-button"
+                        >
                           <DeleteIcon htmlColor="#262c34" />
                         </IconButton>
                       </Tooltip>

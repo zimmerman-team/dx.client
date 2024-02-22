@@ -51,7 +51,10 @@ export default function DeleteChartDialog(props: Props) {
       onClose={() => props.setModalDisplay(false)}
     >
       <div className={classes.paper}>
-        <form onSubmit={() => props.handleDelete(props.cardId as number)}>
+        <form
+          onSubmit={() => props.handleDelete(props.cardId as number)}
+          aria-label="form"
+        >
           <div
             css={`
               width: 80%;

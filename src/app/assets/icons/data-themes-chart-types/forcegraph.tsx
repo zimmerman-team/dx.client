@@ -30,7 +30,7 @@ export default function Icon(props: Props) {
         x2="31.75"
         y2="16"
         stroke="#252C34"
-        stroke-width="2.5"
+        strokeWidth="2.5"
       />
       <line
         x1="11.2832"
@@ -38,7 +38,7 @@ export default function Icon(props: Props) {
         x2="31.2832"
         y2="15.976"
         stroke="#252C34"
-        stroke-width="2.5"
+        strokeWidth="2.5"
       />
       <line
         x1="10.58"
@@ -46,7 +46,7 @@ export default function Icon(props: Props) {
         x2="31.58"
         y2="39.8927"
         stroke="#252C34"
-        stroke-width="2.5"
+        strokeWidth="2.5"
       />
     </svg>
   );

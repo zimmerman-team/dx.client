@@ -39,9 +39,6 @@ export default function AddDatasetFragment(props: Props) {
         responseType: "blob", // important
       });
 
-      if (process.env.NODE_ENV === "development") {
-        console.log("response", response);
-      }
       const b = response?.data;
       const gfile = new File([b], file.name, { type: "text/csv" });
 
@@ -99,9 +96,6 @@ export default function AddDatasetFragment(props: Props) {
         token: res.data,
         setSelectFolderEnabled: true,
         callbackFunction: (d: PickerCallback) => {
-          if (process.env.NODE_ENV === "development") {
-            console.log(d.docs[0]);
-          }
           handleGoogleDriveFilePicker(d.docs[0], res.data);
         },
       });

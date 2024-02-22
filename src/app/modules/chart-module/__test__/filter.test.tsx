@@ -1,6 +1,8 @@
+/** third party */
 import { render, screen } from "@testing-library/react";
 import { StoreProvider, createStore } from "easy-peasy";
 import userEvent from "@testing-library/user-event";
+/** project */
 import { FilterGroup } from "app/modules/chart-module/routes/filters/components/FilterGroup";
 import { ChartsAppliedFiltersState } from "app/state/api/action-reducers/sync/charts/filters";
 import { ExpandedFilterGroup } from "app/modules/chart-module/routes/filters/components/ExpandedFilterGroup";
@@ -154,6 +156,8 @@ const appSetup = (
     mockStore,
   };
 };
+
+//test cases
 
 test("filter group should be expandable when clicked", async () => {
   const user = userEvent.setup();
@@ -343,7 +347,7 @@ test("search input should filter options", async () => {
   );
   render(app);
 
-  const searchInput = screen.getByRole("searchbox");
+  const searchInput = screen.getByRole("textbox");
   expect(searchInput).toBeInTheDocument();
 
   //search for 100

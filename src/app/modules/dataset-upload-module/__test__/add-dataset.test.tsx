@@ -2,10 +2,7 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import AddDatasetFragment from "app/modules/dataset-upload-module/upload-steps/addDatasetFragment";
 import userEvent from "@testing-library/user-event";
 import { StoreProvider, createStore } from "easy-peasy";
-import {
-  AuthTokenModel,
-  AuthTokenState,
-} from "app/state/api/action-reducers/sync";
+import { AuthTokenState } from "app/state/api/action-reducers/sync";
 import axios from "axios";
 
 const mockOpenPicker = jest.fn();

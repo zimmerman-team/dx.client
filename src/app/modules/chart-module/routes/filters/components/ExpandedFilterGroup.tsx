@@ -329,7 +329,7 @@ export function ExpandedFilterGroup(props: ExpandedFilterGroupProps) {
         `}
       >
         <input
-          type="search"
+          type="text"
           name="search-input"
           css={`
             width: 100%;

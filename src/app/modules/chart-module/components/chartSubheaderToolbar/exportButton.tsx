@@ -36,7 +36,7 @@ export function ExportChartButton() {
   return (
     <>
       <Tooltip title="Export">
-        <IconButton onClick={handleClick}>
+        <IconButton onClick={handleClick} aria-label="export-button">
           <SaveAlt htmlColor="#262c34" />
         </IconButton>
       </Tooltip>
