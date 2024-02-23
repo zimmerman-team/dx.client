@@ -1,5 +1,5 @@
 /** third party */
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { StoreProvider, createStore } from "easy-peasy";
 import userEvent from "@testing-library/user-event";
 /** project */
@@ -176,7 +176,7 @@ test("filter group should be expandable when clicked", async () => {
 test("applied filters list should decrease by 1 when an applied filter is clickecd", async () => {
   const user = userEvent.setup();
   const props = defaultProps();
-  const { app } = appSetup(
+  const { app, mockStore } = appSetup(
     <FilterGroup {...props} />,
     props.name,
     defaultStoreValue(props.name)
@@ -196,6 +196,12 @@ test("applied filters list should decrease by 1 when an applied filter is clicke
   expect(screen.getAllByTestId("remove-applied-filter").length).toBe(6);
   await user.click(screen.getAllByTestId("remove-applied-filter")[0]);
   expect(screen.getAllByTestId("remove-applied-filter").length).toBe(5);
+
+  screen.getAllByTestId("remove-applied-filter").forEach((appliedFilter) => {
+    expect(appliedFilter).toBeInTheDocument();
+    fireEvent.click(appliedFilter);
+  });
+  expect(mockStore.getState().charts.appliedFilters.value[props.name]).toBeNull;
 
   expect(props.loadChartDataFromAPI).toHaveBeenCalled();
 });
