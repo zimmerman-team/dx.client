@@ -234,7 +234,7 @@ test("clicking save button should create chart", async () => {
     dataset: "12345",
     mapping: mockMappingValue,
     chartType: "echartsBarchart",
-    mockActions: true,
+    mockActions: false,
   });
   render(app);
   // click save button
@@ -242,16 +242,8 @@ test("clicking save button should create chart", async () => {
   expect(saveButton).toBeEnabled();
   axios.post = jest.fn().mockResolvedValueOnce({ data: { id: "12345" } });
   await user.click(saveButton);
-  expect(
-    mockStore
-      .getMockedActions()
-      .find((d) => d.type === "@thunk.charts.ChartCreate.post(start)")?.payload
-      .values
-  ).toMatchObject({
-    datasetId: "12345",
-    mapping: mockMappingValue,
-    vizType: "echartsBarchart",
-  });
+  expect(mockStore.getState().charts.ChartCreate.success).toBeTruthy();
+  expect(history.location.pathname).toBe("/chart/12345");
 });
 
 test("all buttons should be visible and active when page is not new", async () => {
@@ -339,7 +331,8 @@ test("clicking duplicate button should duplicate chart", async () => {
   jest
     .spyOn(Router, "useParams")
     .mockReturnValue({ page: "chartid", view: undefined });
-  const { app, mockStore } = appSetup({
+
+  const { app } = appSetup({
     dataset: "12345",
     mapping: mockMappingValue,
     chartType: "echartsBarchart",
@@ -349,4 +342,65 @@ test("clicking duplicate button should duplicate chart", async () => {
 
   await user.click(screen.getByRole("button", { name: "duplicate-button" }));
   expect(mockedAxios).toHaveBeenCalled();
+});
+
+test("clicking edit button should reroute to edit page", async () => {
+  const user = userEvent.setup();
+  jest
+    .spyOn(Router, "useParams")
+    .mockReturnValue({ page: "chartid", view: undefined });
+
+  const { app, mockStore } = appSetup({
+    dataset: "12345",
+    mapping: mockMappingValue,
+    chartType: "echartsBarchart",
+    mockActions: false,
+  });
+  render(app);
+
+  act(() => {
+    mockStore.getActions().charts.ChartGet.setCrudData({
+      id: "12345",
+      name: "test",
+      owner: "auth0|123",
+    });
+  });
+
+  expect(screen.getByRole("button", { name: "edit-button" })).toBeVisible();
+
+  await user.click(screen.getByRole("button", { name: "edit-button" }));
+  expect(history.location.pathname).toBe("/chart/chartid/customize");
+});
+
+test("clicking share button should display share popover", async () => {
+  const user = userEvent.setup();
+  jest
+    .spyOn(Router, "useParams")
+    .mockReturnValue({ page: "chartid", view: undefined });
+
+  const { app, mockStore } = appSetup({
+    dataset: "12345",
+    mapping: mockMappingValue,
+    chartType: "echartsBarchart",
+    mockActions: false,
+  });
+  render(app);
+
+  act(() => {
+    mockStore.getActions().charts.ChartGet.setCrudData({
+      id: "12345",
+      name: "test",
+      owner: "auth0|123",
+    });
+  });
+
+  expect(screen.getByRole("button", { name: "share-button" })).toBeVisible();
+  await user.click(screen.getByRole("button", { name: "share-button" }));
+  expect(screen.getByLabelText("copy-link-popover")).toBeVisible();
+  expect(screen.getByRole("button", { name: "Copy link" })).toBeVisible();
+  await user.click(screen.getByRole("button", { name: "Copy link" }));
+
+  expect(screen.getByText("Link copied to clipboard")).toBeVisible();
+  //test that link exists in clipboard
+  expect(navigator.clipboard.readText()).toBe("http://localhost/chart/chartid");
 });

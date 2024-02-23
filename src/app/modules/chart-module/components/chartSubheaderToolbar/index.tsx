@@ -37,6 +37,7 @@ import { getRequiredFieldsAndErrors } from "../../routes/mapping/utils";
 
 export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
   const history = useHistory();
+
   const { user, isAuthenticated } = useAuth0();
   const token = useStoreState((state) => state.AuthToken.value);
   const { page, view } = useParams<{ page: string; view?: string }>();
@@ -199,9 +200,7 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
       createChartData.id
     ) {
       //shows snackbar
-      setShowSnackbar(
-        createChartSuccess ? `Chart created successfully!` : null
-      );
+      setShowSnackbar(`Chart created successfully!`);
       //returns back to chart detail page
       history.push(`/chart/${createChartData.id}`);
     }
@@ -465,10 +464,14 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
                           background: #495057;
                         }
                       `}
+                      aria-label="copy-link-popover"
                     >
-                      <div css={styles.sharePopup}>
+                      <div
+                        css={styles.sharePopup}
+                        data-testid="copy-link-action"
+                      >
                         <CopyToClipboard
-                          text={window.location.href}
+                          text={history.location.pathname}
                           onCopy={handleCopy}
                         >
                           <Button startIcon={<LinkIcon />}>Copy link</Button>
