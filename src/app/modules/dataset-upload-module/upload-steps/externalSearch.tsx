@@ -45,7 +45,7 @@ export default function ExternalSearch(props: {
   const [isFetching, setIsFetching] = React.useState(false);
   const controller = new AbortController();
 
-  const limit = 3;
+  const limit = 2;
   const handleLimitedSearch = () => {
     setIsFetching(true);
     //kaggle search
