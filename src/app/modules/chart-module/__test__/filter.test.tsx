@@ -158,7 +158,6 @@ const appSetup = (
 };
 
 //test cases
-
 test("filter group should be expandable when clicked", async () => {
   const user = userEvent.setup();
   const props = defaultProps();

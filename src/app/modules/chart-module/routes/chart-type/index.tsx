@@ -117,4 +117,4 @@ function ChartBuilderChartType(props: ChartBuilderChartTypeProps) {
   );
 }
 
-export default withAuthenticationRequired(ChartBuilderChartType);
+export default ChartBuilderChartType;
