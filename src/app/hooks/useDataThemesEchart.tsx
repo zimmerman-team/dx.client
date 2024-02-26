@@ -1410,9 +1410,10 @@ export function useDataThemesEchart() {
   function bigNumberRender(data: any, node: HTMLElement) {
     const formatedData = {
       ...data,
-      description: data?.description?.value[0],
-      title: data?.title?.value[0],
-      subtitle: data?.subtitle?.value[0],
+      metric: data?.mainKPImetric?.value[0] || data.metric,
+      unitofmeasurement: data?.unitofmeasurement?.value[0],
+      header: data?.header?.value[0],
+      subheader: data?.subheader?.value[0],
     };
 
     const renderBigNumber = charts["bigNumber"].render;
