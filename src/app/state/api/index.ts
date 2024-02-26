@@ -80,7 +80,7 @@ export const APIModel = <QueryModel, ResponseModel>(
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization,
+            Authorization: Authorization as string,
           },
         }
       )
