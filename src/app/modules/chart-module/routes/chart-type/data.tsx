@@ -70,7 +70,7 @@ import { ReactComponent as RadarChartPreviewImg } from "app/modules/chart-module
 import { ReactComponent as HeatmapPreviewImg } from "app/modules/chart-module/assets/heatmapPreview.svg";
 import { ReactComponent as ScatterChartPreviewImg } from "app/modules/chart-module/assets/scatterChartPreview.svg";
 import { ReactComponent as GraphGlPreviewImg } from "app/modules/chart-module/assets/graphglPreview.svg";
-import { ReactComponent as AreatimeaxisPreviewImg } from "app/modules/chart-module/assets/lineChartPreview.svg";
+import { ReactComponent as AreatimeaxisPreviewImg } from "app/modules/chart-module/assets/areastackedPreview.svg";
 
 export interface ChartBuilderChartTypeProps {
   loading: boolean;
@@ -253,10 +253,10 @@ export const echartTypes = (big: boolean) => {
       label: "Area Time Axis Chart",
       icon: <AreaTimeAxisIcon big={big} />,
       preview: <AreatimeaxisPreviewImg />,
-      categories: ["Time Series", "Correlations"],
+      categories: ["Trends", "changes over time"],
       ssr: false,
       description:
-        "It displays a quantitative dimension over a continuous interval or time period.",
+        "Area time Axis charts present data by illustrating trends and changes in continuous or sequential data points over time, making them ideal for visualizing patterns, fluctuations, or relationships in data.",
     },
     {
       id: "echartsScatterchart",
@@ -443,10 +443,10 @@ export const coloredEchartTypes = () => {
       id: "echartsAreatimeaxis",
       label: "Area Time Axis Chart",
       icon: <ColoredAreaTimeAxisIcon />,
-      categories: ["Time Series", "Correlations"],
+      categories: ["Trends", "changes over time"],
       ssr: false,
       description:
-        "It displays a quantitative dimension over a continuous interval or time period.",
+        "Area time Axis charts present data by illustrating trends and changes in continuous or sequential data points over time, making them ideal for visualizing patterns, fluctuations, or relationships in data.",
     },
     {
       id: "echartsScatterchart",
