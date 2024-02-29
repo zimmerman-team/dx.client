@@ -8,7 +8,7 @@ import { useHistory, useParams } from "react-router-dom";
 import ToolboxSubHeader from "app/modules/chart-module/components/toolbox/steps/sub-header";
 import { DatasetListItemAPIModel } from "app/modules/dataset-module/data";
 
-export function DatasetPanel() {
+export function DatasetPanel(props: { deselectDataset: () => void }) {
   return (
     <>
       <ToolboxSubHeader name="Select Dataset" level={1} />
@@ -21,7 +21,7 @@ export function DatasetPanel() {
           align-items: center;
         `}
       >
-        <ChartToolBoxSelectDataset />
+        <ChartToolBoxSelectDataset deselectDataset={props.deselectDataset} />
         <Box height={16} />
         <ConnectData />
       </div>
@@ -29,24 +29,20 @@ export function DatasetPanel() {
   );
 }
 
-function ChartToolBoxSelectDataset() {
+function ChartToolBoxSelectDataset(props: { deselectDataset: () => void }) {
   const { page } = useParams<{ page: string }>();
   const history = useHistory();
   const dataset = useStoreState((state) => state.charts.dataset.value);
-  const setDataset = useStoreActions(
-    (actions) => actions.charts.dataset.setValue
-  );
   const datasets = useStoreState(
     (state) =>
       (state.dataThemes.DatasetGetList.crudData ??
         []) as DatasetListItemAPIModel[]
   );
 
-  const deSelectDataset = () => {
-    setDataset(null);
+  const handleDeselectDataset = () => {
+    props.deselectDataset();
     history.push(`/chart/${page}/data`);
   };
-
   return (
     <div
       css={`
@@ -122,7 +118,7 @@ function ChartToolBoxSelectDataset() {
           )}
         </span>
         <span
-          onClick={deSelectDataset}
+          onClick={handleDeselectDataset}
           css={`
             margin-top: 2px;
             cursor: pointer;
