@@ -277,6 +277,7 @@ export function ChartModuleToolBox(props: Readonly<ChartToolBoxProps>) {
               setIsClickable={setIsClickable}
               onMouseOverNavBtn={onMouseOverNavBtn}
               setChartFromAPI={props.setChartFromAPI}
+              loadChartDataFromAPI={props.loadChartDataFromAPI}
             />
           )}
 

@@ -7,14 +7,15 @@ import {
   // @ts-ignore
 } from "@rawgraphs/rawgraphs-core";
 import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
-
+import Checkbox from "@material-ui/core/Checkbox";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
-import { uniqueId, filter, set } from "lodash";
-import { Button, IconButton } from "@material-ui/core";
+import { uniqueId, filter, set, isEmpty, debounce } from "lodash";
+import { Button, IconButton, Tooltip } from "@material-ui/core";
 import ToolboxSubheader from "app/modules/chart-module/components/toolbox/steps/sub-header";
 import { ReactComponent as DateIcon } from "app/modules/chart-module/assets/date.svg";
 import CloseIcon from "@material-ui/icons/Close";
-import { mappingStyles } from "../../styles";
+import { mappingStyles } from "app/modules/chart-module/components/toolbox/styles";
 import SearchIcon from "@material-ui/icons/Search";
 import { useDebounce } from "react-use";
 import {
@@ -24,6 +25,9 @@ import {
 } from "app/modules/chart-module/data";
 import { Dropdown } from "react-bootstrap";
 import { areAllRequiredDimensionsMapped } from "app/hooks/useChartsRawData";
+import { FilterGroupModel } from "app/components/ToolBoxPanel/components/filters/data";
+import { getRequiredFieldsAndErrors } from "app/modules/chart-module/routes/mapping/utils";
+import { ChartType } from "../../../common-chart";
 
 interface ChartToolBoxMappingProps {
   dataTypes: any;
@@ -31,6 +35,7 @@ interface ChartToolBoxMappingProps {
   setChartFromAPI: (
     value: React.SetStateAction<ChartRenderedItem | null>
   ) => void;
+  filterOptionGroups: FilterGroupModel[];
 }
 interface ChartToolBoxMappingItemProps {
   index: number;
@@ -192,6 +197,10 @@ export function ChartToolBoxMapping(props: Readonly<ChartToolBoxMappingProps>) {
             position: relative;
           `}
         >
+          <ResultsShownContainer
+            dimensions={props.dimensions}
+            filterOptionGroups={props.filterOptionGroups}
+          />
           {nonStaticDimensions?.map(
             (dimension: any, dimensionIndex: number) => (
               <NonStaticDimensionContainer
@@ -291,18 +300,7 @@ const NonStaticDimensionContainer = (props: {
           >
             <b> {props.dimension.name}</b>
           </div>
-          <div
-            css={`
-              width: 72px;
-              color: #ef1320;
-              font-size: 32px;
-              text-align: right;
-              margin-bottom: -12px;
-              visibility: ${props.dimension.required ? "visible" : "hidden"};
-            `}
-          >
-            *
-          </div>
+          <div css={mappingStyles.asterisk(props.dimension.required)}>*</div>
         </div>
 
         {!!props.dimension?.multiple &&
@@ -877,6 +875,278 @@ const StaticDimensionContainer = (props: { dimension: any }) => {
           : `The ${props.dimension.name} must be between 6 and 50 characters in
         length.`}
       </div>
+    </div>
+  );
+};
+
+const ResultsShownContainer = (props: {
+  dimensions: any;
+  filterOptionGroups: FilterGroupModel[];
+}) => {
+  const chartType = useStoreState((state) => state.charts.chartType.value);
+  const allAppliedFilters = useStoreState(
+    (state) => state.charts.appliedFilters.value
+  );
+  const setAppliedFilters = useStoreActions(
+    (actions) => actions.charts.appliedFilters.setValue
+  );
+  const mapping = useStoreState((state) => state.charts.mapping.value);
+  const { updRequiredFields, updMinValuesFields } = getRequiredFieldsAndErrors(
+    mapping,
+    props.dimensions
+  );
+  const isMappingValid =
+    updRequiredFields.length === 0 && updMinValuesFields.length === 0;
+  const [activeButton, setActiveButton] = React.useState<"top" | "bottom">(
+    "top"
+  );
+  const [optionSelected, setOptionSelected] = React.useState<null | string>(
+    null
+  );
+  const [customInputValue, setCustomInputValue] = React.useState("");
+  const options = [
+    {
+      label: "10 Results (Default)",
+      name: "10",
+    },
+    {
+      label: "All results",
+      name: "all",
+    },
+    {
+      label: "Custom amount",
+      name: "custom",
+    },
+  ];
+  const dimensiontoFilterBasedOnChartType = {
+    echartsBarchart: "bars",
+    echartsLinechart: "x",
+    echartsAreatimeaxis: "x",
+    echartsAreastack: "x",
+    echartsSankey: "steps",
+    echartsTreemap: "hierarchy",
+    echartsSunburst: "hierarchy",
+    echartsForcegraph: "categories",
+    echartsCirculargraph: "categories",
+    echartsCirclepacking: "hierarchy",
+    echartsBubblechart: "x",
+    echartsScatterchart: "x",
+    echartsHeatmap: "x",
+    echartsGraphgl: "categories",
+    echartsRadarchart: "spokes",
+    echartsPiechart: "arcs",
+    echartsGeomap: null,
+    bigNumber: null,
+  };
+
+  const handleSelectChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.name) setOptionSelected(e.target.name);
+  };
+  const handleCustomInputchange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const re = /^[0-9\b+-]+$/;
+    if (e.target.value === "" || re.test(e.target.value)) {
+      setCustomInputValue(e.target.value);
+    }
+    // console.log(e.target.value);
+  };
+
+  const debouncedChangeHandler = React.useCallback(
+    debounce(handleCustomInputchange, 500),
+    []
+  );
+
+  const getMappedVariables = (): string[] => {
+    const dimension = dimensiontoFilterBasedOnChartType[chartType as ChartType];
+    console.log(dimension, "dimension");
+    if (isMappingValid && dimension && !isEmpty(mapping)) {
+      console.log(mapping, "mapping in");
+      return mapping[dimension]?.value;
+    }
+    return [];
+  };
+  const getFilterList = () => {
+    const filterList: FilterGroupModel[] = [];
+
+    props.filterOptionGroups.forEach((f, index) => {
+      if (getMappedVariables().includes(f.name)) {
+        filterList.push(f);
+      }
+    });
+    return filterList;
+  };
+
+  const handleFilter = (resultType: string) => {
+    const getResults = (arrLength: number) => {
+      if (resultType === "all") {
+        return arrLength;
+      } else if (resultType === "custom") {
+        return Number(customInputValue);
+      } else {
+        return 10;
+      }
+    };
+    console.log(getFilterList(), "filterlist");
+
+    getFilterList().forEach((f) => {
+      const results = getResults(f.options.length);
+      let tmpAppliedFilters: string[] = [];
+      if (activeButton === "top") {
+        tmpAppliedFilters = f.options.slice(0, results).map((o) => o.value);
+      } else {
+        tmpAppliedFilters = f.options.slice(-results).map((o) => o.value);
+      }
+      setAppliedFilters({
+        key: f.name,
+        value: tmpAppliedFilters,
+      });
+    });
+  };
+
+  React.useEffect(() => {
+    if (optionSelected === "custom") {
+      handleFilter("custom");
+    } else {
+      handleFilter(optionSelected as string);
+    }
+  }, [optionSelected, activeButton, customInputValue, mapping]);
+
+  return (
+    <div
+      css={`
+        margin-top: 16px;
+
+        /* width: 351px; */
+        background: #dfe3e5;
+        border-radius: 11px;
+        padding: 16px;
+        height: ${isMappingValid ? "230.5px" : "52px"};
+        transition: height 0.3s ease-in-out;
+        font-family: "GothamNarrow-Bold", sans-serif;
+        color: #231d2c;
+        p {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          line-height: 20px;
+          margin: 0px;
+          > span:nth-of-type(1) {
+            width: 72px;
+          }
+          > span:nth-of-type(2) {
+            text-align: center;
+            font-size: 14px;
+            font-family: "GothamNarrow-Bold", sans-serif;
+            line-height: 20px;
+            letter-spacing: 0.5px;
+            color: ${isMappingValid ? "#231d2c" : "#231D2C40"};
+          }
+        }
+      `}
+    >
+      <p>
+        <span />
+        <span> Results Shown</span>{" "}
+        <Tooltip
+          placement="bottom-end"
+          title="Select dimensions before choosing amount of results"
+        >
+          <span css={mappingStyles.asterisk(!isMappingValid)}>*</span>
+        </Tooltip>{" "}
+      </p>
+      {isMappingValid && (
+        <>
+          <div
+            css={`
+              gap: 12px;
+              display: flex;
+              justify-content: space-between;
+              margin-top: 10px;
+              margin-bottom: 20px;
+              button {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+                border: none;
+                outline: none;
+                padding: 6px 8px;
+                color: #fff;
+                font-size: 14px;
+                line-height: normal;
+                border-radius: 25px;
+                cursor: pointer;
+                :nth-of-type(1) {
+                  color: ${activeButton === "top" ? "#fff" : "#495057"};
+                  background: ${activeButton === "top" ? "#231d2c" : "#fff"};
+                  font-family: ${activeButton === "top"
+                    ? '"GothamNarrow-Bold", sans-serif;'
+                    : "Roboto"};
+                }
+                :nth-of-type(2) {
+                  color: ${activeButton === "bottom" ? "#fff" : "#495057"};
+                  background: ${activeButton === "bottom" ? "#231d2c" : "#fff"};
+                  font-family: ${activeButton === "bottom"
+                    ? '"GothamNarrow-Bold", sans-serif;'
+                    : '"Roboto"'};
+                }
+              }
+            `}
+          >
+            <button onClick={() => setActiveButton("top")}>Top Results</button>
+            <button onClick={() => setActiveButton("bottom")}>
+              Bottom Results
+            </button>
+          </div>
+          {options.map((o, index) => (
+            <div
+              key={o.label}
+              css={`
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+              `}
+            >
+              <FormControlLabel
+                css={`
+                  && {
+                    z-index: 3;
+
+                    span {
+                      font-size: 14px;
+                    }
+                  }
+                `}
+                control={
+                  <Checkbox
+                    color="primary"
+                    onChange={handleSelectChange}
+                    name={o.name}
+                  />
+                }
+                label={o.label}
+              />
+              {index === 2 ? (
+                <input
+                  type="text"
+                  disabled={optionSelected !== "custom"}
+                  onChange={debouncedChangeHandler}
+                  // value={customInputValue}
+                  css={`
+                    border-radius: 5px;
+                    background: #fff;
+                    box-shadow: 0px 0px 10px 0px rgba(152, 161, 170, 0.1);
+                    outline: none;
+                    border: none;
+                    width: 77.279px;
+                    height: 25px;
+                    padding-left: 5px;
+                  `}
+                />
+              ) : null}
+            </div>
+          ))}
+        </>
+      )}
     </div>
   );
 };

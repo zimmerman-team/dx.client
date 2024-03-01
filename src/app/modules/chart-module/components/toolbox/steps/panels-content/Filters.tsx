@@ -14,7 +14,7 @@ interface ChartToolBoxFiltersProps {
   }) => void;
 }
 
-export function ChartToolBoxFilters(props: ChartToolBoxFiltersProps) {
+export function ChartToolBoxFilters(props: Readonly<ChartToolBoxFiltersProps>) {
   const { filterOptionGroups } = props;
   const [expandedGroup, setExpandedGroup] =
     React.useState<FilterGroupModel | null>(null);
@@ -37,7 +37,6 @@ export function ChartToolBoxFilters(props: ChartToolBoxFiltersProps) {
   }, [allAppliedFilters]);
 
   const expandGroup = (group: FilterGroupModel) => {
-    console.log(group.options, "group.options");
     setExpandedGroup(group);
   };
 

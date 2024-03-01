@@ -36,7 +36,7 @@ interface ExpandedFilterGroupProps extends FilterGroupModel, FilterGroupProps {
   }) => void;
 }
 
-export function ExpandedFilterGroup(props: ExpandedFilterGroupProps) {
+export function ExpandedFilterGroup(props: Readonly<ExpandedFilterGroupProps>) {
   const [value, setValue] = React.useState("");
   const [allSelected, setAllSelected] = React.useState(false);
   const [optionsToShow, setOptionsToShow] = React.useState(props.options);

@@ -199,6 +199,15 @@ export const mappingStyles = {
     }
     cursor: pointer;
   `,
+  asterisk: (required: boolean) => css`
+    width: 72px;
+    color: #ef1320;
+    font-size: 32px;
+    text-align: right;
+    margin-bottom: -12px;
+    /* height: 1px; */
+    visibility: ${required ? "visible" : "hidden"};
+  `,
 };
 
 export const Accordion = withStyles({

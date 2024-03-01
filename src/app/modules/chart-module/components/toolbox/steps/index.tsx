@@ -41,6 +41,15 @@ interface ChartToolBoxStepsProps {
   setChartFromAPI: (
     value: React.SetStateAction<ChartRenderedItem | null>
   ) => void;
+  loadChartDataFromAPI: (
+    customAppliedFilters?: [
+      [
+        {
+          [key: string]: any[];
+        }
+      ]
+    ]
+  ) => void;
 }
 
 export function ChartToolBoxSteps(props: ChartToolBoxStepsProps) {
@@ -109,6 +118,7 @@ export function ChartToolBoxSteps(props: ChartToolBoxStepsProps) {
             dataTypes={props.dataTypes}
             dimensions={props.dimensions}
             setChartFromAPI={props.setChartFromAPI}
+            filterOptionGroups={props.filterOptionGroups}
           />
         );
       case "filters":

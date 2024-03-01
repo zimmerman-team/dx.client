@@ -214,6 +214,7 @@ export default function ChartModule() {
     () => get(chartFromAPI, "filterOptionGroups", []),
     [chartFromAPI]
   );
+  console.log(filterOptionGroups, "filterOptionGroups");
 
   const renderedChart = React.useMemo(() => {
     return chartFromAPI
