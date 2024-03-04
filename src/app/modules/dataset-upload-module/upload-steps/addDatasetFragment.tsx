@@ -195,7 +195,7 @@ export const DropZone = (props: DropzoneProps) => {
         <p>Add your file</p>
       </div>
       <div css={uploadAreacss(props.isDragActive)}>
-        <input {...props.getInputProps()} />
+        <input {...props.getInputProps()} data-cy="local-upload-input" />
         {!props.isDragActive && (
           <>
             <UploadIcon
@@ -230,7 +230,10 @@ export const DropZone = (props: DropzoneProps) => {
                 gap: 1rem;
               `}
             >
-              <button onClick={handleExternalSearch}>
+              <button
+                onClick={handleExternalSearch}
+                data-cy="external-search-button"
+              >
                 <SearchIcon color="secondary" /> <p>External search</p>
               </button>
               <button>

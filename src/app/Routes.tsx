@@ -72,7 +72,15 @@ const Auth0ProviderWithRedirectCallback = (props: {
   };
 
   return (
-    <Auth0Provider onRedirectCallback={onRedirectCallback} {...props}>
+    <Auth0Provider
+      cacheLocation={
+        process.env.REACT_APP_CYPRESS_TEST === "true"
+          ? "localstorage"
+          : "memory"
+      }
+      onRedirectCallback={onRedirectCallback}
+      {...props}
+    >
       {props.children}
     </Auth0Provider>
   );

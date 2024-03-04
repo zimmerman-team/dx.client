@@ -340,7 +340,11 @@ export function ReportSubheaderToolbar(
               />
             </div>
             {view === "edit" && (
-              <button css={styles.viewReportBtn} onClick={handleViewReport}>
+              <button
+                css={styles.viewReportBtn}
+                onClick={handleViewReport}
+                data-cy="view-report-button"
+              >
                 <PlayIcon />
                 View Report
               </button>
@@ -449,6 +453,7 @@ export function ReportSubheaderToolbar(
                             opacity: 0.5;
                           }
                         `}
+                        data-cy="save-report-button"
                       >
                         <SaveIcon htmlColor="#262c34" />
                       </IconButton>

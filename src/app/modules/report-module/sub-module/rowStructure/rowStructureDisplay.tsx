@@ -235,6 +235,7 @@ export default function RowstructureDisplay(props: RowStructureDisplayProps) {
               height={get(props.rowContentHeights, `[${index}]`, props.height)}
               itemIndex={index}
               rowId={props.rowId}
+              rowIndex={props.rowIndex}
               rowType={row.rowType}
               onRowBoxItemResize={props.onRowBoxItemResize}
               setFramesArray={props.setFramesArray}
@@ -256,6 +257,7 @@ const Box = (props: {
   width: number;
   height: number;
   rowId: string;
+  rowIndex: number;
   itemIndex: number;
   handlePersistReportState: () => void;
   rowType: string;
@@ -361,7 +363,7 @@ const Box = (props: {
       get(location.pathname.split("/"), "[3]", "") !== "edit") ||
     reportPreviewMode;
 
-  const [{ isOver }, drop] = useDrop(() => ({
+  const [{ isOver, canDrop, item }, drop] = useDrop(() => ({
     accept:
       props.rowType === "oneByFive"
         ? [ReportElementsType.TEXT, ReportElementsType.BIG_NUMBER]
@@ -372,6 +374,7 @@ const Box = (props: {
       item: monitor.getItem(),
     }),
     drop: (item: any, monitor) => {
+      console.log("here");
       if (item.type === ReportElementsType.TEXT) {
         handleRowFrameItemAddition(
           props.rowId,
@@ -398,6 +401,10 @@ const Box = (props: {
       }
     },
   }));
+
+  console.log(isOver, "isOver");
+  console.log(canDrop, "canDrop");
+  console.log(item, "item");
 
   const [,] = useDebounce(
     () => {
@@ -673,6 +680,7 @@ const Box = (props: {
           height: ${props.height}px;
         `}
         ref={drop}
+        data-cy={`row-frame-item-drop-zone-${props.rowIndex}-${props.itemIndex}`}
       >
         <p
           css={`

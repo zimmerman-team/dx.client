@@ -58,6 +58,7 @@ function ChartBuilderChartType(props: ChartBuilderChartTypeProps) {
                   onClick={
                     ct.label === "" ? () => {} : onChartTypeChange(ct.id)
                   }
+                  data-cy="chart-type-item"
                   css={`
                     width: 100%;
                     height: 64px;

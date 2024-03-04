@@ -129,6 +129,7 @@ export default function ToolboxNav(
           onMouseOut={() => {
             props.setIsClickable(false);
           }}
+          data-cy={`chart-toolbox-${item.name}-tab`}
         >
           {item.icon}
         </button>

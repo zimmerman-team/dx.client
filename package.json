@@ -7,6 +7,7 @@
     "url": "https://github.com/zimmerman-team/dx.client.git"
   },
   "dependencies": {
+    "@4tw/cypress-drag-drop": "^2.2.5",
     "@auth0/auth0-react": "^2.2.1",
     "@craco/craco": "^6.4.3",
     "@devhammed/use-cookie": "^1.1.1",
@@ -70,6 +71,7 @@
     "i18next-browser-languagedetector": "^6.1.0",
     "immutability-helper": "^3.1.1",
     "json-loader": "^0.5.7",
+    "jwt-decode": "^4.0.0",
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
     "plyr": "^3.7.8",
@@ -134,6 +136,8 @@
     "babel-plugin-macros": "^3.0.1",
     "babel-plugin-react-data-testid": "^0.2.0",
     "babel-plugin-styled-components": "^1.12.0",
+    "cypress": "^13.6.6",
+    "cypress-file-upload": "^5.0.8",
     "cypress-shadow-dom": "^1.4.1",
     "depcheck": "^1.4.0",
     "eslint-config-airbnb-typescript-prettier": "^4.2.0",

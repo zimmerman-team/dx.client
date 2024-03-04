@@ -153,6 +153,7 @@ export default function HeaderBlock(props: Props) {
     <div
       css={headerBlockcss.container(props.headerDetails.backgroundColor)}
       {...handlers}
+      data-cy="report-header-block"
     >
       {(handleDisplay || currentView === "editHeader") && (
         <div
@@ -221,6 +222,7 @@ export default function HeaderBlock(props: Props) {
               disabled={props.previewMode}
               value={props.headerDetails.title}
               css={headerBlockcss.inputStyle(props.headerDetails.titleColor)}
+              data-cy="report-header-block-title-input"
             />
           </div>
 

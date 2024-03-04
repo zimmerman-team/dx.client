@@ -165,6 +165,7 @@ export function CommonChart(props: Readonly<Props>) {
       <div
         ref={domRef}
         id={`common-chart-render-container-${props.chartId ?? "1"}`}
+        data-cy="common-chart-container-ssr"
         css={`
           overflow-x: auto;
           margin-top: 40px;
@@ -207,6 +208,7 @@ export function CommonChart(props: Readonly<Props>) {
         <div
           ref={domRef}
           id={`common-chart-render-container-${props.chartId ?? "1"}`}
+          data-cy="common-chart-container"
           css={`
             width: auto !important;
             height: 100%;

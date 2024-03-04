@@ -85,6 +85,7 @@ const SelectField = (props: {
             label="Data category"
             labelId="select-label"
             onChange={field.onChange}
+            data-cy="dataset-metadata-category"
             MenuProps={{
               PaperProps: {
                 style: {
@@ -167,7 +168,10 @@ export default function MetaData(props: Readonly<Props>) {
           width: 100%;
         `}
       >
-        <form onSubmit={handleSubmit(props.onSubmit)}>
+        <form
+          onSubmit={handleSubmit(props.onSubmit)}
+          data-cy="dataset-metadata-form"
+        >
           <Grid container spacing={6}>
             <Grid lg={12} xs={12} md={12} item>
               <CssTextField
@@ -179,6 +183,7 @@ export default function MetaData(props: Readonly<Props>) {
                 onChange={handleChange}
                 value={props.formDetails.name}
                 fullWidth
+                data-cy="dataset-metadata-title"
               />
             </Grid>
             <Box height={50} />
@@ -201,6 +206,7 @@ export default function MetaData(props: Readonly<Props>) {
                   }}
                   onChange={handleChange}
                   value={props.formDetails.description}
+                  data-cy="dataset-metadata-description"
                 />
                 <p
                   css={`
@@ -235,6 +241,7 @@ export default function MetaData(props: Readonly<Props>) {
                 onChange={handleChange}
                 fullWidth
                 value={props.formDetails.source}
+                data-cy="dataset-metadata-source"
               />
             </Grid>
             <Grid lg={12} xs={12} md={12} item>
@@ -246,6 +253,7 @@ export default function MetaData(props: Readonly<Props>) {
                 onChange={handleChange}
                 fullWidth
                 value={props.formDetails.sourceUrl}
+                data-cy="dataset-metadata-link"
               />
             </Grid>
           </Grid>
@@ -283,6 +291,7 @@ export default function MetaData(props: Readonly<Props>) {
                   opacity: 0.8;
                 }
               `}
+              data-cy="dataset-metadata-submit"
             >
               {view === "edit" ? "Save" : "Next"}
             </button>

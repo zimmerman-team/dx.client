@@ -38,6 +38,7 @@ export default function IExternalDatasetCard(
     <div
       onMouseEnter={() => setShowButton(true)}
       onMouseLeave={() => setShowButton(false)}
+      data-cy="external-search-card"
       css={`
         width: 296px;
         height: 162px;

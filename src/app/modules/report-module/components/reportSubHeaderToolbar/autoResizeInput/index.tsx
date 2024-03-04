@@ -80,6 +80,7 @@ export default function AutoResizeInput(props: InputProps) {
         value={props.name}
         onChange={(e) => onChange(e.target.value)}
         style={getInputStyle()}
+        data-cy="report-sub-header-title-input"
       />
       {!props.autoResize || (
         <span
