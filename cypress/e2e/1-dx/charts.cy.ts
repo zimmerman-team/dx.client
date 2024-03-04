@@ -9,13 +9,13 @@
 - Duplicate Chart - Done
 
 */
-const DATASET_TITLE = "Football Players";
-const CHART_TITLE = "Football Players";
+
 describe("Testing create chart on DX", () => {
   const apiUrl = Cypress.env("api_url");
+  const baseUrl = Cypress.env("base_url");
   beforeEach(() => {
     cy.restoreLocalStorageCache();
-    cy.visit("http://localhost:3000");
+    cy.visit(baseUrl);
 
     cy.get('[data-cy="cookie-btn"]').click();
 
@@ -78,7 +78,7 @@ describe("Testing create chart on DX", () => {
 
     cy.wait("@saveChart");
 
-    cy.visit("http://localhost:3000");
+    cy.visit(baseUrl);
 
     cy.intercept("GET", `${apiUrl}/charts*`).as("fetchCharts");
 
@@ -86,7 +86,7 @@ describe("Testing create chart on DX", () => {
 
     cy.wait("@fetchCharts");
 
-    cy.get('[data-cy="chart-grid-item"]')
+    cy.get('[data-cy="chart-grid-item-echartsBarchart"]')
       .contains("Football Players")
       .should("be.visible");
   });
@@ -136,7 +136,7 @@ describe("Testing create chart on DX", () => {
 
     cy.wait("@saveChart");
 
-    cy.visit("http://localhost:3000");
+    cy.visit(baseUrl);
 
     cy.intercept("GET", `${apiUrl}/charts*`).as("fetchCharts");
 
@@ -144,7 +144,7 @@ describe("Testing create chart on DX", () => {
 
     cy.wait("@fetchCharts");
 
-    cy.get('[data-cy="chart-grid-item"]')
+    cy.get('[data-cy="chart-grid-item-echartsLinechart"]')
       .contains("Football Players")
       .should("be.visible");
   });
@@ -152,9 +152,10 @@ describe("Testing create chart on DX", () => {
 
 describe("Edit, duplicate and delete chart", () => {
   const apiUrl = Cypress.env("api_url");
+  const baseUrl = Cypress.env("base_url");
   beforeEach(() => {
     cy.restoreLocalStorageCache();
-    cy.visit("http://localhost:3000");
+    cy.visit(baseUrl);
 
     cy.get('[data-cy="cookie-btn"]').click();
 
@@ -166,7 +167,10 @@ describe("Edit, duplicate and delete chart", () => {
   });
 
   it("Edit chart", () => {
-    cy.contains('[data-cy="chart-grid-item"]', "Football Players")
+    cy.contains(
+      '[data-cy="chart-grid-item-echartsBarchart"]',
+      "Football Players"
+    )
       .first()
       .scrollIntoView()
       .within(() => {
@@ -187,7 +191,7 @@ describe("Edit, duplicate and delete chart", () => {
     cy.wait("@renderChart");
     cy.wait("@renderChart2");
 
-    cy.get('[data-cy="chart-toolbox-mapping-tab"]');
+    cy.get('[data-cy="chart-toolbox-mapping-tab"]').click();
 
     cy.contains('[data-cy="nonstatic-dimension-container"]', "Bars").within(
       () => {
@@ -215,7 +219,10 @@ describe("Edit, duplicate and delete chart", () => {
   });
 
   it("Duplicate chart", () => {
-    cy.contains('[data-cy="chart-grid-item"]', "Football Players")
+    cy.contains(
+      '[data-cy="chart-grid-item-echartsBarchart"]',
+      "Football Players"
+    )
       .first()
       .scrollIntoView()
       .within(() => {
@@ -226,13 +233,16 @@ describe("Edit, duplicate and delete chart", () => {
 
     cy.wait("@fetchCharts");
 
-    cy.get('[data-cy="chart-grid-item"]')
+    cy.get('[data-cy="chart-grid-item-echartsBarchart"]')
       .contains("Football Players (Copy)")
       .should("be.visible");
   });
 
   it("Delete chart", () => {
-    cy.contains('[data-cy="chart-grid-item"]', "Football Players (Copy)")
+    cy.contains(
+      '[data-cy="chart-grid-item-echartsBarchart"]',
+      "Football Players (Copy)"
+    )
       .first()
       .scrollIntoView()
       .within(() => {
@@ -250,7 +260,7 @@ describe("Edit, duplicate and delete chart", () => {
 
     cy.wait("@fetchCharts");
 
-    cy.get('[data-cy="chart-grid-item"]')
+    cy.get('[data-cy="chart-grid-item-echartsBarchart"]')
       .contains("Football Players (Copy)")
       .should("not.exist");
   });

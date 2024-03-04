@@ -218,6 +218,7 @@ export default function ChartsGrid(props: Props) {
                 date={c.createdDate}
                 path={`/chart/${c.id}`}
                 viz={getIcon(c.vizType)}
+                vizType={c.vizType}
                 handleDelete={() => handleModal(index)}
                 handleDuplicate={() => handleDuplicate(index)}
               />

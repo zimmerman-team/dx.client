@@ -11,12 +11,13 @@
 
 describe("Testing reports on DX", () => {
   const apiUrl = Cypress.env("api_url");
+  const baseUrl = Cypress.env("base_url");
   beforeEach(() => {
     // restoring login cache
     cy.restoreLocalStorageCache();
 
     // Navigating to dx home page
-    cy.visit("http://localhost:3000");
+    cy.visit(baseUrl);
 
     cy.get('[data-cy="cookie-btn"]').click();
   });
@@ -104,7 +105,7 @@ describe("Testing reports on DX", () => {
 
     cy.wait("@fetchReport");
 
-    cy.visit("http://localhost:3000");
+    cy.visit(baseUrl);
     cy.get('[data-cy="home-charts-tab"]').scrollIntoView().click();
 
     cy.get('[data-cy="home-reports-tab"]').scrollIntoView().click();
@@ -117,9 +118,11 @@ describe("Testing reports on DX", () => {
 
 describe("Edit, duplicate and delete report", () => {
   const apiUrl = Cypress.env("api_url");
+  const baseUrl = Cypress.env("base_url");
+
   beforeEach(() => {
     cy.restoreLocalStorageCache();
-    cy.visit("http://localhost:3000");
+    cy.visit(baseUrl);
 
     cy.get('[data-cy="cookie-btn"]').click();
 
@@ -162,7 +165,7 @@ describe("Edit, duplicate and delete report", () => {
 
     cy.wait("@fetchReport");
 
-    cy.visit("http://localhost:3000");
+    cy.visit(baseUrl);
     cy.get('[data-cy="home-charts-tab"]').scrollIntoView().click();
 
     cy.get('[data-cy="home-reports-tab"]').scrollIntoView().click();

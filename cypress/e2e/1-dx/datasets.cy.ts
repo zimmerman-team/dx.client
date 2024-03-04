@@ -14,9 +14,10 @@
 
 describe("Testing connecting data on DX", () => {
   const apiUrl = Cypress.env("api_url");
+  const baseUrl = Cypress.env("base_url");
   beforeEach(() => {
     cy.restoreLocalStorageCache();
-    cy.visit("http://localhost:3000");
+    cy.visit(baseUrl);
     cy.get('[data-cy="create-report-dropdown"]').click();
     cy.get('[data-cy="appbar-connect-data"]').click();
   });
@@ -76,9 +77,11 @@ describe("Testing connecting data on DX", () => {
 
 describe("Edit, Delete and Duplicate Dataset", () => {
   const apiUrl = Cypress.env("api_url");
+  const baseUrl = Cypress.env("base_url");
+
   beforeEach(() => {
     cy.restoreLocalStorageCache();
-    cy.visit("http://localhost:3000");
+    cy.visit(baseUrl);
     cy.get('[data-cy="cookie-btn"]').click();
 
     cy.intercept("GET", `${apiUrl}/datasets?filter=*`).as("fetchDatasets");

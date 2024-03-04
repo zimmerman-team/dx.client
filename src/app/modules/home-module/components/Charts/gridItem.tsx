@@ -14,6 +14,7 @@ interface Props {
   path: string;
   title: string;
   date: string;
+  vizType: string;
   public: boolean;
   viz: React.ReactNode;
   handleDelete?: (id: string) => void;
@@ -23,6 +24,7 @@ interface Props {
 export default function gridItem(props: Props) {
   const { isAuthenticated } = useAuth0();
   const [menuOptionsDisplay, setMenuOptionsDisplay] = React.useState(false);
+  console.log(props.vizType);
 
   const showMenuOptions = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -56,7 +58,7 @@ export default function gridItem(props: Props) {
             box-shadow: 0px 7px 22px 0px rgba(0, 0, 0, 0.1);
           }
         `}
-        data-cy="chart-grid-item"
+        data-cy={`chart-grid-item-${props.vizType}`}
       >
         <div
           css={`

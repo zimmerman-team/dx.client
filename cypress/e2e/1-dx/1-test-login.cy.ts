@@ -1,10 +1,11 @@
 /// <reference types="cypress" />
 
 describe("Login for a test user on DX", () => {
+  const baseUrl = Cypress.env("base_url");
   beforeEach(() => {
     cy.login();
     cy.saveLocalStorageCache();
-    cy.visit("http://localhost:3000");
+    cy.visit(baseUrl);
     cy.get('[data-cy="cookie-btn"]').click();
   });
 

@@ -19,6 +19,7 @@ export default defineConfig({
       auth0_client_id: process.env.REACT_APP_AUTH0_CLIENT,
       auth0_client_secret: process.env.AUTH0_CLIENT_SECRET,
       api_url: process.env.REACT_APP_API,
+      base_url: process.env.REACT_APP_BASE_URL,
     },
   },
 });
