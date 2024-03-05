@@ -24,7 +24,6 @@ interface Props {
 export default function gridItem(props: Props) {
   const { isAuthenticated } = useAuth0();
   const [menuOptionsDisplay, setMenuOptionsDisplay] = React.useState(false);
-  console.log(props.vizType);
 
   const showMenuOptions = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();

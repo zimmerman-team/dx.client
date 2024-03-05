@@ -62,7 +62,6 @@ Cypress.Commands.add("login", (overrides = {}) => {
       client_secret: Cypress.env("auth0_client_secret"),
     },
   };
-  console.log(Cypress.env("auth0_scope"));
   cy.request(options)
     .then((resp) => {
       return resp.body;

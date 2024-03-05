@@ -374,7 +374,6 @@ const Box = (props: {
       item: monitor.getItem(),
     }),
     drop: (item: any, monitor) => {
-      console.log("here");
       if (item.type === ReportElementsType.TEXT) {
         handleRowFrameItemAddition(
           props.rowId,
@@ -401,10 +400,6 @@ const Box = (props: {
       }
     },
   }));
-
-  console.log(isOver, "isOver");
-  console.log(canDrop, "canDrop");
-  console.log(item, "item");
 
   const [,] = useDebounce(
     () => {
