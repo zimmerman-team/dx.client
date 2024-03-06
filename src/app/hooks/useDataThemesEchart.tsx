@@ -491,6 +491,7 @@ export function useDataThemesEchart() {
       // Palette
       palette,
     } = visualOptions;
+
     const option = {
       color: checkLists.find((item) => item.label === palette)?.value,
       grid: {
@@ -505,6 +506,7 @@ export function useDataThemesEchart() {
       },
       xAxis: {
         type: "category",
+        boundaryGap: false,
         data: data.xAxisValues || [],
         zlevel: -1,
         z: -1,
@@ -679,29 +681,20 @@ export function useDataThemesEchart() {
         zlevel: -1,
         z: -1,
       },
-      xAxis: [{ type: "value", data: data.map((d: any) => d.x) }],
-      yAxis: [
-        {
-          type: "value",
-          data: data.map((d: any) => d.y),
-        },
-      ],
-
+      xAxis: [{ data: data.map((d: any) => d.x) }],
+      yAxis: {},
       tooltip: {
         trigger: showTooltip ? "item" : "none",
         confine: true,
-        formatter: (params: any) => {
-          return `${params.data[1]}: ${
-            isMonetaryValue
-              ? formatFinancialValue(params.value, true)
-              : params.data[0]
-          }`;
-        },
+        valueFormatter: (value: number | string) =>
+          isMonetaryValue
+            ? formatFinancialValue(parseInt(value.toString(), 10), true)
+            : value,
       },
       series: [
         {
           symbolSize: 5,
-          data: data.map((d: any) => [d.x, d.y]),
+          data: data.map((d: any) => d.y),
           type: "scatter",
         },
       ],
