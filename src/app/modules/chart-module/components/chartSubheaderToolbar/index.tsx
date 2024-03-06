@@ -10,7 +10,6 @@ import Tooltip from "@material-ui/core/Tooltip";
 import Popover from "@material-ui/core/Popover";
 import ShareIcon from "@material-ui/icons/Share";
 import { LinkIcon } from "app/assets/icons/Link";
-import Snackbar from "@material-ui/core/Snackbar";
 import DeleteIcon from "@material-ui/icons/Delete";
 import Container from "@material-ui/core/Container";
 import IconButton from "@material-ui/core/IconButton";
@@ -18,6 +17,7 @@ import CopyToClipboard from "react-copy-to-clipboard";
 import FileCopyIcon from "@material-ui/icons/FileCopy";
 import { PageLoader } from "app/modules/common/page-loader";
 import { Link, useHistory, useParams } from "react-router-dom";
+import Snackbar from "@material-ui/core/Snackbar";
 import SnackbarContent from "@material-ui/core/SnackbarContent";
 import { styles } from "app/modules/chart-module/components/chartSubheaderToolbar/styles";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
@@ -135,7 +135,6 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
   const onNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     props.setName(event.target.value);
   };
-
   const handleDeleteModalInputChange = (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -231,7 +230,7 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
     loadedChart.name,
     selectedChartType,
   ]);
-
+  // console.log(loadedChart.name, props.name, "propsname");
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
 
@@ -336,6 +335,7 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
         autoHideDuration={5000}
         onClose={handleCloseSnackbar}
         message="Link copied to clipboard"
+        data-testid="copied-link-snackbar"
       />
       <Container maxWidth="lg">
         <div css={styles.innercontainer}>
@@ -350,7 +350,7 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
             }}
             onBlur={() => props.setHasSubHeaderTitleBlurred?.(true)}
             onClick={(e) => {
-              if (props.name === "Untitled report") {
+              if (props.name === "Untitled Chart") {
                 e.currentTarget.value = "";
               }
             }}
@@ -364,146 +364,133 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
             }
           />
 
-          {view !== "initial" && (
-            <div css={styles.endContainer}>
-              {view === "preview" && (
-                <button
-                  onClick={handleBackToEdit}
-                  css={styles.backToEdit}
-                  type="button"
-                >
-                  <EditIcon htmlColor="#fff" />
-                  Go back to editing
-                </button>
-              )}
-              <div css={styles.iconbtns}>
-                {(page === "new" || view) && (
-                  <React.Fragment>
-                    <Tooltip title="Preview">
-                      <span>
-                        <IconButton
-                          onClick={handlePreviewMode}
-                          aria-label="preview-button"
-                          disabled={isPreviewDisabled}
-                          css={`
-                            :disabled {
-                              opacity: 0.5;
-                            }
-                          `}
-                        >
-                          <svg width="20" height="19" viewBox="0 0 20 19">
-                            <rect
-                              width="20"
-                              height="19"
-                              rx="3"
-                              fill="#262C34"
-                            />
-                            <path
-                              fill="#EFEFEF"
-                              d="M14 9L6.5 13.3301L6.5 4.66987L14 9Z"
-                            />
-                          </svg>
-                        </IconButton>
-                      </span>
-                    </Tooltip>
-                    <Tooltip title="Save">
-                      <span>
-                        <IconButton
-                          onClick={onSave}
-                          aria-label="save-button"
-                          disabled={isSavedDisabled}
-                          css={`
-                            :disabled {
-                              opacity: 0.5;
-                            }
-                          `}
-                        >
-                          <SaveIcon htmlColor="#262c34" />
-                        </IconButton>
-                      </span>
-                    </Tooltip>
-                  </React.Fragment>
-                )}
-                {page !== "new" && !view && (
-                  <React.Fragment>
-                    <ExportChartButton />
-                    {isAuthenticated && (
-                      <Tooltip title="Duplicate">
-                        <IconButton
-                          onClick={handleDuplicate}
-                          aria-label="duplicate-button"
-                        >
-                          <FileCopyIcon htmlColor="#262c34" />
-                        </IconButton>
-                      </Tooltip>
-                    )}
-                    <Tooltip title="Share">
+          <div css={styles.endContainer}>
+            {view === "preview" && (
+              <button
+                onClick={handleBackToEdit}
+                css={styles.backToEdit}
+                type="button"
+              >
+                <EditIcon htmlColor="#fff" />
+                Go back to editing
+              </button>
+            )}
+            <div css={styles.iconbtns}>
+              {(page === "new" || view) && (
+                <React.Fragment>
+                  <Tooltip title="Preview">
+                    <span>
                       <IconButton
-                        onClick={handleClick}
-                        aria-label="share-button"
+                        onClick={handlePreviewMode}
+                        aria-label="preview-button"
+                        disabled={isPreviewDisabled}
+                        css={`
+                          :disabled {
+                            opacity: 0.5;
+                          }
+                        `}
                       >
-                        <ShareIcon htmlColor="#262c34" />
+                        <svg width="20" height="19" viewBox="0 0 20 19">
+                          <rect width="20" height="19" rx="3" fill="#262C34" />
+                          <path
+                            fill="#EFEFEF"
+                            d="M14 9L6.5 13.3301L6.5 4.66987L14 9Z"
+                          />
+                        </svg>
+                      </IconButton>
+                    </span>
+                  </Tooltip>
+                  <Tooltip title="Save">
+                    <span>
+                      <IconButton
+                        onClick={onSave}
+                        aria-label="save-button"
+                        disabled={isSavedDisabled}
+                        css={`
+                          :disabled {
+                            opacity: 0.5;
+                          }
+                        `}
+                      >
+                        <SaveIcon htmlColor="#262c34" />
+                      </IconButton>
+                    </span>
+                  </Tooltip>
+                </React.Fragment>
+              )}
+              {page !== "new" && !view && (
+                <React.Fragment>
+                  <ExportChartButton />
+                  {isAuthenticated && (
+                    <Tooltip title="Duplicate">
+                      <IconButton
+                        onClick={handleDuplicate}
+                        aria-label="duplicate-button"
+                      >
+                        <FileCopyIcon htmlColor="#262c34" />
                       </IconButton>
                     </Tooltip>
-                    <Popover
-                      id={id}
-                      open={open}
-                      anchorEl={anchorEl}
-                      onClose={handleClose}
-                      anchorOrigin={{
-                        vertical: "bottom",
-                        horizontal: "right",
-                      }}
-                      transformOrigin={{
-                        vertical: "top",
-                        horizontal: "right",
-                      }}
-                      css={`
-                        .MuiPaper-root {
-                          border-radius: 10px;
-                          background: #495057;
-                        }
-                      `}
-                      aria-label="copy-link-popover"
-                    >
-                      <div
-                        css={styles.sharePopup}
-                        data-testid="copy-link-action"
+                  )}
+                  <Tooltip title="Share">
+                    <IconButton onClick={handleClick} aria-label="share-button">
+                      <ShareIcon htmlColor="#262c34" />
+                    </IconButton>
+                  </Tooltip>
+                  <Popover
+                    id={id}
+                    open={open}
+                    anchorEl={anchorEl}
+                    onClose={handleClose}
+                    anchorOrigin={{
+                      vertical: "bottom",
+                      horizontal: "right",
+                    }}
+                    transformOrigin={{
+                      vertical: "top",
+                      horizontal: "right",
+                    }}
+                    css={`
+                      .MuiPaper-root {
+                        border-radius: 10px;
+                        background: #495057;
+                      }
+                    `}
+                    aria-label="copy-link-popover"
+                  >
+                    <div css={styles.sharePopup} data-testid="copy-link-action">
+                      <CopyToClipboard
+                        text={window.location.href}
+                        onCopy={handleCopy}
                       >
-                        <CopyToClipboard
-                          text={history.location.pathname}
-                          onCopy={handleCopy}
-                        >
-                          <Button startIcon={<LinkIcon />}>Copy link</Button>
-                        </CopyToClipboard>
-                      </div>
-                    </Popover>
-                    {canChartEditDelete && (
-                      <Tooltip title="Edit">
-                        <IconButton
-                          component={Link}
-                          to={`/chart/${page}/customize`}
-                          aria-label="edit-button"
-                        >
-                          <EditIcon htmlColor="#262c34" />
-                        </IconButton>
-                      </Tooltip>
-                    )}
-                    {canChartEditDelete && (
-                      <Tooltip title="Delete">
-                        <IconButton
-                          onClick={handleModalDisplay}
-                          aria-label="delete-button"
-                        >
-                          <DeleteIcon htmlColor="#262c34" />
-                        </IconButton>
-                      </Tooltip>
-                    )}
-                  </React.Fragment>
-                )}
-              </div>
+                        <Button startIcon={<LinkIcon />}>Copy link</Button>
+                      </CopyToClipboard>
+                    </div>
+                  </Popover>
+                  {canChartEditDelete && (
+                    <Tooltip title="Edit">
+                      <IconButton
+                        component={Link}
+                        to={`/chart/${page}/customize`}
+                        aria-label="edit-button"
+                      >
+                        <EditIcon htmlColor="#262c34" />
+                      </IconButton>
+                    </Tooltip>
+                  )}
+                  {canChartEditDelete && (
+                    <Tooltip title="Delete">
+                      <IconButton
+                        onClick={handleModalDisplay}
+                        aria-label="delete-button"
+                      >
+                        <DeleteIcon htmlColor="#262c34" />
+                      </IconButton>
+                    </Tooltip>
+                  )}
+                </React.Fragment>
+              )}
             </div>
-          )}
+          </div>
         </div>
       </Container>
       <InfoSnackbar
@@ -511,6 +498,7 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
           vertical: snackbarState.vertical,
           horizontal: snackbarState.horizontal,
         }}
+        data-testid="duplicated-chart-snackbar"
         open={snackbarState.open}
         onClose={() => setSnackbarState({ ...snackbarState, open: false })}
         message={`Chart has been duplicated successfully!`}

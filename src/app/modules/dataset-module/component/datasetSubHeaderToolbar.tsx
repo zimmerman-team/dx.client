@@ -22,9 +22,9 @@ import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import { styles } from "app/modules/dataset-module/component/styles";
 import DeleteDatasetDialog from "app/components/Dialogs/deleteDatasetDialog";
 import { ISnackbarState } from "app/modules/dataset-upload-module/upload-steps/previewFragment";
-import { InfoSnackbar } from "app/modules/report-module/components/reportSubHeaderToolbar";
 import { homeDisplayAtom } from "app/state/recoil/atoms";
 import { useRecoilState } from "recoil";
+import { InfoSnackbar } from "app/modules/report-module/components/reportSubHeaderToolbar/infosnackbar";
 
 export default function DatasetSubHeaderToolbar(
   props: Readonly<{ name: string }>

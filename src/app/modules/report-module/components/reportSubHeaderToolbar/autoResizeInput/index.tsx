@@ -1,20 +1,21 @@
 import React, { useRef } from "react";
 import { styles } from "app/modules/report-module/components/reportSubHeaderToolbar/styles";
 
-type InputProps = React.DetailedHTMLProps<
-  React.InputHTMLAttributes<HTMLInputElement>,
-  HTMLInputElement
-> & {
+interface InputProps
+  extends React.DetailedHTMLProps<
+    React.InputHTMLAttributes<HTMLInputElement>,
+    HTMLInputElement
+  > {
   autoResize: boolean;
   minWidth: number;
   maxWidth: number;
   name: string;
   setName: (name: string) => void;
-};
+}
 export default function AutoResizeInput(props: InputProps) {
+  const { autoResize, minWidth, maxWidth, name, setName, ...rest } = props;
   const spanRef = useRef<HTMLSpanElement | null>(null);
 
-  const { minWidth } = props;
   const [autoResizeInputWidth, setAutoResizeInputWidth] =
     React.useState<number>(100);
 
@@ -22,7 +23,7 @@ export default function AutoResizeInput(props: InputProps) {
     if (props.autoResize) {
       handleAutoResize();
     }
-  }, [props.name, props.autoResize]);
+  }, [name, props.autoResize]);
 
   const handleAutoResize = () => {
     let spanAutoResizeWidth = 0;
@@ -43,8 +44,6 @@ export default function AutoResizeInput(props: InputProps) {
   };
 
   function getInputStyle() {
-    const { autoResize, minWidth, maxWidth } = props;
-
     const style = {
       minWidth: 0,
       maxWidth: 0,
@@ -67,17 +66,17 @@ export default function AutoResizeInput(props: InputProps) {
   }
 
   function onChange(value: string) {
-    props.setName(value);
+    setName(value);
   }
 
   return (
     <div>
       <input
-        {...props}
+        {...rest}
         css={`
           ${styles.nameInput};
         `}
-        value={props.name}
+        value={name}
         onChange={(e) => onChange(e.target.value)}
         style={getInputStyle()}
       />
@@ -89,7 +88,7 @@ export default function AutoResizeInput(props: InputProps) {
             ${styles.autoResizeSpan}
           `}
         >
-          {` ${props.name}`}
+          {` ${name}`}
         </span>
       )}
     </div>

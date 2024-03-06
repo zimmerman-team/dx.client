@@ -17,13 +17,12 @@ export interface SubheaderToolbarProps {
 export interface ReportSubheaderToolbarProps {
   name: string;
   autoSave: boolean;
-  setAutoSave: React.Dispatch<React.SetStateAction<boolean>>;
+  setAutoSave: (value: boolean) => void;
   visualOptions?: any;
   onReportSave: (type: "create" | "edit") => Promise<void>;
   setName: (name: string) => void;
-  forceEnablePreviewSave?: boolean;
+  isSaveEnabled?: boolean;
   rawViz?: any;
-  reportName: string;
   setHasSubHeaderTitleFocused?: (value: boolean) => void;
   setHasSubHeaderTitleBlurred?: (value: boolean) => void;
   plugins: ToolbarPluginsType;
