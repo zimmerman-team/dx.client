@@ -26,6 +26,8 @@ export function ReportChartWrapper(props: Props) {
   );
 
   const loadChart = useStoreActions((actions) => actions.charts.ChartGet.fetch);
+  const chartError = useStoreState((state) => state.charts.ChartGet.errorData);
+
   const loadedChart = useStoreState(
     (state) =>
       (state.charts.ChartGet.crudData ?? emptyChartAPI) as ChartAPIModel
@@ -34,7 +36,6 @@ export function ReportChartWrapper(props: Props) {
     (actions) => actions.charts.ChartGet.clear
   );
 
-  const [chartName, setChartName] = React.useState<string>("");
   const [rawViz, setRawViz] = React.useState<any>(null);
   const [visualOptions, setVisualOptions] = React.useState({});
 
@@ -66,21 +67,13 @@ export function ReportChartWrapper(props: Props) {
   const displayChartName =
     renderedChartType !== "bigNumber" && !props.chartPreviewInReport;
 
-  React.useEffect(() => {
-    if (token.length > 0) {
-      loadChart({ token, getId: props.id });
-    }
-    return () => {
-      clearChart();
-    };
-  }, [props.id, token]);
-
-  React.useEffect(() => {
+  const chartName = React.useMemo(() => {
     if (loadedChart && loadedChart.id !== "" && loadedChart.id === props.id) {
       if (loadedChart.name.length > 0) {
-        setChartName(loadedChart.name);
+        return loadedChart.name;
       }
     }
+    return "";
   }, [loadedChart]);
 
   const { loadChartDataFromAPI, loading, notFound, setNotFound } =
@@ -91,6 +84,23 @@ export function ReportChartWrapper(props: Props) {
       chartFromAPI,
       inChartWrapper: true,
     });
+
+  React.useEffect(() => {
+    if (token.length > 0) {
+      loadChart({ token, getId: props.id });
+    }
+    return () => {
+      clearChart();
+    };
+  }, [props.id, token]);
+
+  React.useEffect(() => {
+    if (chartError) {
+      if ((chartError.data as any).error.code === "ENTITY_NOT_FOUND") {
+        setChartErrorMessage("This chart is no longer available.");
+      }
+    }
+  }, [chartError]);
 
   React.useEffect(() => {
     if (props.id && token) {

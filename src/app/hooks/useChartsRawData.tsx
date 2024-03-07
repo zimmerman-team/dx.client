@@ -202,6 +202,8 @@ export function useChartsRawData(props: {
           }
         )
         .then((response) => {
+          console.log("here?");
+
           const chart = response.data || {};
           setLoading(false);
           if (!isEmpty(chart)) {
@@ -217,7 +219,7 @@ export function useChartsRawData(props: {
           }
         })
         .catch((error) => {
-          console.log("API call error: " + error.message);
+          console.log("API call error: " + error);
           setLoading(false);
           setNotFound(true);
           setError401(error.response?.status === 401);
@@ -278,6 +280,7 @@ export function useChartsRawData(props: {
           },
         })
         .then((response) => {
+          console.log("here?");
           if (extraLoader) {
             extraLoader.style.display = "none";
           }
