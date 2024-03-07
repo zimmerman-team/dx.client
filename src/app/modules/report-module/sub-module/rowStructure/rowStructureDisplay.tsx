@@ -227,6 +227,7 @@ export default function RowstructureDisplay(props: RowStructureDisplayProps) {
             gap: ${props.gap};
             border: ${border};
           `}
+          data-cy={`row-frame-${props.rowIndex}`}
         >
           {props.rowStructureDetailItems.map((row, index) => (
             <Box

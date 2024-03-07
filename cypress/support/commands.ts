@@ -1,7 +1,6 @@
 /// <reference types="cypress" />
 import { jwtDecode } from "jwt-decode";
 import "cypress-file-upload";
-import "@4tw/cypress-drag-drop";
 
 // ***********************************************
 // This example commands.ts shows you how to
@@ -134,4 +133,12 @@ Cypress.on("uncaught:exception", (err, runnable) => {
   ) {
     return false;
   }
+});
+
+Cypress.Commands.add("drag", { prevSubject: true }, (subject) => {
+  cy.wrap(subject).trigger("dragstart").trigger("dragleave");
+});
+
+Cypress.Commands.add("drop", { prevSubject: true }, (subject) => {
+  cy.wrap(subject).trigger("dragenter").trigger("dragover").trigger("drop");
 });

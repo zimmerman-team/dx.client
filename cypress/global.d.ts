@@ -4,5 +4,7 @@ declare namespace Cypress {
     saveLocalStorageCache: () => {};
     restoreLocalStorageCache: () => {};
     hover: () => {};
+    drag: () => {};
+    drop: () => {};
   }
 }
