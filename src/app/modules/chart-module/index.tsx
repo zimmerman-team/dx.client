@@ -145,6 +145,9 @@ export default function ChartModule() {
       (state.dataThemes.DatasetGetList.crudData ??
         []) as DatasetListItemAPIModel[]
   );
+  const setDataset = useStoreActions(
+    (actions) => actions.charts.dataset.setValue
+  );
 
   const resetEnabledFilterOptionGroups = useStoreActions(
     (actions) => actions.charts.enabledFilterOptionGroups.clear
@@ -165,6 +168,12 @@ export default function ChartModule() {
     }
     return dataTypes;
   }, [dataTypes, dataTypesFromRenderedChart]);
+
+  const deselectDataset = () => {
+    setDataset(null);
+    setDataError(false);
+    setNotFound(false);
+  };
 
   //empty chart when chart type and or  dataset types changes
   React.useEffect(() => {
@@ -440,6 +449,7 @@ export default function ChartModule() {
         setDatasetName={setChartName}
         onClose={() => setToolboxOpen(false)}
         onOpen={() => setToolboxOpen(true)}
+        deselectDataset={deselectDataset}
       />
 
       <div

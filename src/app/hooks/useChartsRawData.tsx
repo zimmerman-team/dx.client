@@ -151,6 +151,7 @@ export function useChartsRawData(props: {
           setDataTypes(response.data.dataTypes);
           setDataTotalCount(response.data.count);
           setEnabledFilterOptionGroups(response.data.filterOptionGroups);
+          setDataError(false);
         }
 
         return response.data?.sample;
@@ -202,11 +203,14 @@ export function useChartsRawData(props: {
           }
         )
         .then((response) => {
-          console.log("here?");
-
+          console.log(response.data, "response.data 1");
           const chart = response.data || {};
           setLoading(false);
-          if (!isEmpty(chart)) {
+          if (isEmpty(chart)) {
+            setNotFound(true);
+          } else if (response.data.error) {
+            setDataError(true);
+          } else {
             setAllAppliedFilters(chart.appliedFilters || {});
             setEnabledFilterOptionGroups(chart.enabledFilterOptionGroups);
             setVisualOptions(chart.vizOptions);
@@ -214,8 +218,7 @@ export function useChartsRawData(props: {
             setSelectedChartType(chart.vizType);
             setDataset(chart.datasetId);
             setChartFromAPI(chart);
-          } else {
-            setNotFound(true);
+            setDataError(false);
           }
         })
         .catch((error) => {
@@ -284,12 +287,17 @@ export function useChartsRawData(props: {
           if (extraLoader) {
             extraLoader.style.display = "none";
           }
+          console.log(response.data, "response.data");
+
           const chart = response.data || {};
           if (isEmpty(chart)) {
             setNotFound(true);
+          } else if (response.data.error) {
+            setDataError(true);
           } else {
             setChartFromAPI(chart);
             setDataTypesFromRenderedChart(chart.dataTypes);
+            setDataError(false);
           }
           setLoading(false);
         })

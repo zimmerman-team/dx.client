@@ -41,6 +41,7 @@ interface ChartToolBoxStepsProps {
   setChartFromAPI: (
     value: React.SetStateAction<ChartRenderedItem | null>
   ) => void;
+  deselectDataset: () => void;
 }
 
 export function ChartToolBoxSteps(props: ChartToolBoxStepsProps) {
@@ -100,7 +101,7 @@ export function ChartToolBoxSteps(props: ChartToolBoxStepsProps) {
     switch (props.activeStep) {
       case "dataset":
       case "selectDataset":
-        return <DatasetPanel />;
+        return <DatasetPanel deselectDataset={props.deselectDataset} />;
       case "chart":
         return <ChartToolBoxChartType />;
       case "mapping":
@@ -124,7 +125,7 @@ export function ChartToolBoxSteps(props: ChartToolBoxStepsProps) {
         );
 
       default:
-        return <DatasetPanel />;
+        return <DatasetPanel deselectDataset={props.deselectDataset} />;
     }
   };
 
