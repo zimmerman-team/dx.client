@@ -279,8 +279,7 @@ const Box = (props: {
   const setDataset = useStoreActions(
     (actions) => actions.charts.dataset.setValue
   );
-  const chartError = useStoreState((state) => state.charts.ChartGet.errorData);
-
+  const [chartError, setChartError] = React.useState(false);
   const setLoadedChart = useStoreActions(
     (state) => state.charts.ChartGet.setCrudData
   );
@@ -592,10 +591,7 @@ const Box = (props: {
                     z-index: 1;
                     right: 39px;
                     position: absolute;
-                    visibility: ${(chartError?.data as any)?.error?.code ===
-                    "ENTITY_NOT_FOUND"
-                      ? "hidden"
-                      : "visible"};
+                    visibility: ${chartError ? "hidden" : "visible"};
                     padding: 4px;
                     width: 22px;
                     height: 22px;
@@ -617,7 +613,12 @@ const Box = (props: {
                 </IconButton>
               </div>
             )}
-            <ReportChartWrapper id={chartId} width={width.slice(0, -2)} />
+            <ReportChartWrapper
+              id={chartId}
+              width={width.slice(0, -2)}
+              error={chartError}
+              setError={setChartError}
+            />
           </div>
         </Resizable>
       );

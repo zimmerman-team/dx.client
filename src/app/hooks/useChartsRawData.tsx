@@ -94,6 +94,9 @@ export function useChartsRawData(props: {
   const [error401, setError401] = React.useState(false);
   const [dataError, setDataError] = React.useState(false);
   const [dataTotalCount, setDataTotalCount] = React.useState(0);
+  const [chartErrorMessage, setChartErrorMessage] = React.useState<string>(
+    "Something went wrong with loading your chart! Check your chart settings or data."
+  );
   const appliedFilters = useStoreState(
     (state) => state.charts.appliedFilters.value
   );
@@ -203,12 +206,12 @@ export function useChartsRawData(props: {
           }
         )
         .then((response) => {
-          console.log(response.data, "response.data 1");
           const chart = response.data || {};
           setLoading(false);
           if (isEmpty(chart)) {
             setNotFound(true);
           } else if (response.data.error) {
+            setChartErrorMessage(response.data.error);
             setDataError(true);
           } else {
             setAllAppliedFilters(chart.appliedFilters || {});
@@ -283,11 +286,9 @@ export function useChartsRawData(props: {
           },
         })
         .then((response) => {
-          console.log("here?");
           if (extraLoader) {
             extraLoader.style.display = "none";
           }
-          console.log(response.data, "response.data");
 
           const chart = response.data || {};
           if (isEmpty(chart)) {
@@ -351,5 +352,7 @@ export function useChartsRawData(props: {
     dataTotalCount,
     loadDataset,
     loadChartDataFromAPI,
+    chartErrorMessage,
+    setChartErrorMessage,
   };
 }

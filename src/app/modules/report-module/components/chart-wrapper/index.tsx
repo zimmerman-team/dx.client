@@ -15,15 +15,14 @@ interface Props {
   id: string;
   width: string;
   chartPreviewInReport?: boolean;
+  setError: React.Dispatch<React.SetStateAction<boolean>>;
+  error: boolean;
 }
 
 export function ReportChartWrapper(props: Props) {
   const token = useStoreState((state) => state.AuthToken.value);
 
   const containerRef = React.useRef<HTMLDivElement>(null);
-  const [chartErrorMessage, setChartErrorMessage] = React.useState<string>(
-    "Something went wrong with loading your chart! Check your chart settings or data."
-  );
 
   const loadChart = useStoreActions((actions) => actions.charts.ChartGet.fetch);
   const chartError = useStoreState((state) => state.charts.ChartGet.errorData);
@@ -76,14 +75,21 @@ export function ReportChartWrapper(props: Props) {
     return "";
   }, [loadedChart]);
 
-  const { loadChartDataFromAPI, loading, notFound, setNotFound } =
-    useChartsRawData({
-      visualOptions,
-      setVisualOptions,
-      setChartFromAPI,
-      chartFromAPI,
-      inChartWrapper: true,
-    });
+  const {
+    loadChartDataFromAPI,
+    loading,
+    notFound,
+    setNotFound,
+    dataError,
+    chartErrorMessage,
+    setChartErrorMessage,
+  } = useChartsRawData({
+    visualOptions,
+    setVisualOptions,
+    setChartFromAPI,
+    chartFromAPI,
+    inChartWrapper: true,
+  });
 
   React.useEffect(() => {
     if (token.length > 0) {
@@ -96,11 +102,15 @@ export function ReportChartWrapper(props: Props) {
 
   React.useEffect(() => {
     if (chartError) {
+      props.setError(true);
       if ((chartError.data as any).error.code === "ENTITY_NOT_FOUND") {
         setChartErrorMessage("This chart is no longer available.");
       }
     }
-  }, [chartError]);
+    if (dataError) {
+      props.setError(true);
+    }
+  }, [chartError, dataError]);
 
   React.useEffect(() => {
     if (props.id && token) {
@@ -135,7 +145,7 @@ export function ReportChartWrapper(props: Props) {
     containerRef.current?.clientHeight,
   ]);
 
-  if (notFound) {
+  if (notFound || dataError) {
     return (
       <div
         css={`

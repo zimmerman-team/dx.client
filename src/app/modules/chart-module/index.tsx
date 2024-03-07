@@ -87,6 +87,8 @@ export default function ChartModule() {
     notFound,
     dataError,
     dataTypesFromRenderedChart,
+    chartErrorMessage,
+    setChartErrorMessage,
   } = useChartsRawData({
     visualOptions,
     setVisualOptions,
@@ -94,9 +96,7 @@ export default function ChartModule() {
     chartFromAPI,
     dimensions,
   });
-  const [chartErrorMessage, setChartErrorMessage] = React.useState(
-    "Something went wrong with rendering your chart!"
-  );
+
   const isSaveLoading = useStoreState(
     (state) => state.charts.ChartCreate.loading
   );
@@ -386,15 +386,7 @@ export default function ChartModule() {
             `}
           >
             <ErrorOutlineIcon htmlColor="#E75656" fontSize="large" />
-            {notFound ? (
-              <p>{chartErrorMessage}</p>
-            ) : (
-              <p>
-                Something went wrong with loading your data!
-                <br />
-                Choose another dataset or upload new.
-              </p>
-            )}
+            {notFound || (dataError && <p>{chartErrorMessage}</p>)}
           </div>
         </div>
       </div>
