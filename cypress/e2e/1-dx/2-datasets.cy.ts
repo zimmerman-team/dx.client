@@ -18,6 +18,9 @@ describe("Testing connecting data on DX", () => {
   beforeEach(() => {
     cy.restoreLocalStorageCache();
     cy.visit(baseUrl);
+
+    cy.get('[data-cy="cookie-btn"]').click();
+
     cy.get('[data-cy="create-report-dropdown"]').click();
     cy.get('[data-cy="appbar-connect-data"]').click();
   });

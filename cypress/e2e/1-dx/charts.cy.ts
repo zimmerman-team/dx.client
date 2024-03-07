@@ -26,7 +26,7 @@ describe("Testing create chart on DX", () => {
 
     cy.intercept("GET", `${apiUrl}/chart/sample-data/*`).as("getDataset");
 
-    cy.contains('[data-cy="dataset-grid-item"]', "Football Players")
+    cy.contains('[data-cy="dataset-grid-item"]', "Soccer Players")
       .first()
       .click();
 
@@ -35,7 +35,7 @@ describe("Testing create chart on DX", () => {
     cy.contains("Please select data from Dx");
 
     cy.get('[data-cy="toolbox-selected-dataset"]')
-      .contains("Football Players")
+      .contains("Soccer Players")
       .should("be.visible");
 
     cy.get('[data-cy="toolbox-chart-next"]').click();
@@ -87,7 +87,7 @@ describe("Testing create chart on DX", () => {
     cy.wait("@fetchCharts");
 
     cy.get('[data-cy="chart-grid-item-echartsBarchart"]')
-      .contains("Football Players")
+      .contains("Soccer Players")
       .should("be.visible");
   });
 
@@ -145,7 +145,7 @@ describe("Testing create chart on DX", () => {
     cy.wait("@fetchCharts");
 
     cy.get('[data-cy="chart-grid-item-echartsLinechart"]')
-      .contains("Football Players")
+      .contains("Soccer Players")
       .should("be.visible");
   });
 });
@@ -167,28 +167,26 @@ describe("Edit, duplicate and delete chart", () => {
   });
 
   it("Edit chart", () => {
-    cy.contains(
-      '[data-cy="chart-grid-item-echartsBarchart"]',
-      "Football Players"
-    )
+    cy.contains('[data-cy="chart-grid-item-echartsBarchart"]', "Soccer Players")
       .first()
       .scrollIntoView()
       .within(() => {
         cy.get('[data-cy="chart-grid-item-menu-btn"]').click();
       });
 
-    cy.get('[data-cy="chart-grid-item-edit-btn"]').click();
-
-    cy.wait("@fetchCharts");
     cy.intercept(`${apiUrl}/chart/*`).as("renderChart");
     cy.intercept(`${apiUrl}/chart/*/render`).as("renderChart2");
+
+    cy.get('[data-cy="chart-grid-item-edit-btn"]').click();
+
+    cy.wait("@renderChart");
+    cy.wait("@renderChart2");
 
     cy.get('[data-cy="chart-toolbox-mapping-tab"]')
       .invoke("attr", "disabled", false)
       .trigger("mouseover")
       .click();
 
-    cy.wait("@renderChart");
     cy.wait("@renderChart2");
 
     cy.get('[data-cy="chart-toolbox-mapping-tab"]').click();
@@ -219,10 +217,7 @@ describe("Edit, duplicate and delete chart", () => {
   });
 
   it("Duplicate chart", () => {
-    cy.contains(
-      '[data-cy="chart-grid-item-echartsBarchart"]',
-      "Football Players"
-    )
+    cy.contains('[data-cy="chart-grid-item-echartsBarchart"]', "Soccer Players")
       .first()
       .scrollIntoView()
       .within(() => {
@@ -234,14 +229,14 @@ describe("Edit, duplicate and delete chart", () => {
     cy.wait("@fetchCharts");
 
     cy.get('[data-cy="chart-grid-item-echartsBarchart"]')
-      .contains("Football Players (Copy)")
+      .contains("Soccer Players (Copy)")
       .should("be.visible");
   });
 
   it("Delete chart", () => {
     cy.contains(
       '[data-cy="chart-grid-item-echartsBarchart"]',
-      "Football Players (Copy)"
+      "Soccer Players (Copy)"
     )
       .first()
       .scrollIntoView()
@@ -261,7 +256,7 @@ describe("Edit, duplicate and delete chart", () => {
     cy.wait("@fetchCharts");
 
     cy.get('[data-cy="chart-grid-item-echartsBarchart"]')
-      .contains("Football Players (Copy)")
+      .contains("Soccer Players (Copy)")
       .should("not.exist");
   });
 });
