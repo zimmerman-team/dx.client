@@ -616,8 +616,8 @@ export function useDataThemesEchart() {
         formatter: (params: any) => {
           return `${params.data[3]}: ${
             isMonetaryValue
-              ? formatFinancialValue(params.value, true)
-              : params.data[2]
+              ? formatFinancialValue((params.data[2] / 50) * maxSize, true)
+              : (params.data[2] / 50) * maxSize
           }`;
         },
       },
@@ -665,6 +665,8 @@ export function useDataThemesEchart() {
       // Tooltip
       showTooltip,
       isMonetaryValue,
+      //chart
+      symbolSize,
       // Palette
       palette,
     } = visualOptions;
@@ -681,7 +683,11 @@ export function useDataThemesEchart() {
         zlevel: -1,
         z: -1,
       },
-      xAxis: [{ data: data.map((d: any) => d.x) }],
+      xAxis: [
+        {
+          data: uniqBy(sortBy(data.map((d: any) => d.x)), (d: any) => d),
+        },
+      ],
       yAxis: {},
       tooltip: {
         trigger: showTooltip ? "item" : "none",
@@ -693,7 +699,7 @@ export function useDataThemesEchart() {
       },
       series: [
         {
-          symbolSize: 5,
+          symbolSize: symbolSize,
           data: data.map((d: any) => d.y),
           type: "scatter",
         },
@@ -724,11 +730,25 @@ export function useDataThemesEchart() {
 
     const xAxisData = sortBy(data.filter((d: any) => d.x).map((d: any) => d.x));
 
+    const isXAxisYear = xAxisData.every((d: any) => {
+      if (isNaN(d)) {
+        return false;
+      }
+      return d > 1000 && d <= new Date().getFullYear();
+    });
+
     const yAxisData = sortBy(data.filter((d: any) => d.y).map((d: any) => d.y));
 
+    const isYAxisYear = yAxisData.every((d: any) => {
+      if (isNaN(d)) {
+        return false;
+      }
+      return d > 1000 && d <= new Date().getFullYear();
+    });
+
     const seriesData = data.map((item: any) => [
-      String(item.x),
-      String(item.y),
+      isXAxisYear ? String(item.x) : item.x,
+      isYAxisYear ? String(item.y) : item.y,
       item.size,
     ]);
 
