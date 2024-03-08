@@ -113,7 +113,7 @@ describe("Testing reports on DX", () => {
 
     cy.wait("@fetchReports");
 
-    cy.contains("Football Players Report").should("be.visible");
+    cy.contains("The football players report").should("be.visible");
   });
 });
 
