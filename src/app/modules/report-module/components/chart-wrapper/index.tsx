@@ -15,17 +15,18 @@ interface Props {
   id: string;
   width: string;
   chartPreviewInReport?: boolean;
+  setError: React.Dispatch<React.SetStateAction<boolean>>;
+  error: boolean;
 }
 
 export function ReportChartWrapper(props: Props) {
   const token = useStoreState((state) => state.AuthToken.value);
 
   const containerRef = React.useRef<HTMLDivElement>(null);
-  const [chartErrorMessage, setChartErrorMessage] = React.useState<string>(
-    "Something went wrong with loading your chart! Check your chart settings or data."
-  );
 
   const loadChart = useStoreActions((actions) => actions.charts.ChartGet.fetch);
+  const chartError = useStoreState((state) => state.charts.ChartGet.errorData);
+
   const loadedChart = useStoreState(
     (state) =>
       (state.charts.ChartGet.crudData ?? emptyChartAPI) as ChartAPIModel
@@ -34,7 +35,6 @@ export function ReportChartWrapper(props: Props) {
     (actions) => actions.charts.ChartGet.clear
   );
 
-  const [chartName, setChartName] = React.useState<string>("");
   const [rawViz, setRawViz] = React.useState<any>(null);
   const [visualOptions, setVisualOptions] = React.useState({});
 
@@ -66,6 +66,31 @@ export function ReportChartWrapper(props: Props) {
   const displayChartName =
     renderedChartType !== "bigNumber" && !props.chartPreviewInReport;
 
+  const chartName = React.useMemo(() => {
+    if (loadedChart && loadedChart.id !== "" && loadedChart.id === props.id) {
+      if (loadedChart.name.length > 0) {
+        return loadedChart.name;
+      }
+    }
+    return "";
+  }, [loadedChart]);
+
+  const {
+    loadChartDataFromAPI,
+    loading,
+    notFound,
+    setNotFound,
+    dataError,
+    chartErrorMessage,
+    setChartErrorMessage,
+  } = useChartsRawData({
+    visualOptions,
+    setVisualOptions,
+    setChartFromAPI,
+    chartFromAPI,
+    inChartWrapper: true,
+  });
+
   React.useEffect(() => {
     if (token.length > 0) {
       loadChart({ token, getId: props.id });
@@ -76,21 +101,16 @@ export function ReportChartWrapper(props: Props) {
   }, [props.id, token]);
 
   React.useEffect(() => {
-    if (loadedChart && loadedChart.id !== "" && loadedChart.id === props.id) {
-      if (loadedChart.name.length > 0) {
-        setChartName(loadedChart.name);
+    if (chartError) {
+      props.setError(true);
+      if ((chartError.data as any).error.code === "ENTITY_NOT_FOUND") {
+        setChartErrorMessage("This chart is no longer available.");
       }
     }
-  }, [loadedChart]);
-
-  const { loadChartDataFromAPI, loading, notFound, setNotFound } =
-    useChartsRawData({
-      visualOptions,
-      setVisualOptions,
-      setChartFromAPI,
-      chartFromAPI,
-      inChartWrapper: true,
-    });
+    if (dataError) {
+      props.setError(true);
+    }
+  }, [chartError, dataError]);
 
   React.useEffect(() => {
     if (props.id && token) {
@@ -125,7 +145,7 @@ export function ReportChartWrapper(props: Props) {
     containerRef.current?.clientHeight,
   ]);
 
-  if (notFound) {
+  if (notFound || dataError) {
     return (
       <div
         css={`

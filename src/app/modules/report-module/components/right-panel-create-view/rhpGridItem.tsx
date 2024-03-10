@@ -22,6 +22,8 @@ interface Props {
 }
 
 export default function GridItem(props: Props) {
+  const [chartError, setChartError] = React.useState(false);
+
   return (
     <div
       css={`
@@ -110,6 +112,8 @@ export default function GridItem(props: Props) {
             id={props.id}
             width={"100"}
             chartPreviewInReport={true}
+            error={chartError}
+            setError={setChartError}
           />
         ) : (
           <div>{props.viz}</div>

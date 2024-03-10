@@ -94,6 +94,9 @@ export function useChartsRawData(props: {
   const [error401, setError401] = React.useState(false);
   const [dataError, setDataError] = React.useState(false);
   const [dataTotalCount, setDataTotalCount] = React.useState(0);
+  const [chartErrorMessage, setChartErrorMessage] = React.useState<string>(
+    "Something went wrong with loading your chart! Check your chart settings or data."
+  );
   const appliedFilters = useStoreState(
     (state) => state.charts.appliedFilters.value
   );
@@ -151,6 +154,7 @@ export function useChartsRawData(props: {
           setDataTypes(response.data.dataTypes);
           setDataTotalCount(response.data.count);
           setEnabledFilterOptionGroups(response.data.filterOptionGroups);
+          setDataError(false);
         }
 
         return response.data?.sample;
@@ -204,7 +208,12 @@ export function useChartsRawData(props: {
         .then((response) => {
           const chart = response.data || {};
           setLoading(false);
-          if (!isEmpty(chart)) {
+          if (isEmpty(chart)) {
+            setNotFound(true);
+          } else if (response.data.error) {
+            setChartErrorMessage(response.data.error);
+            setDataError(true);
+          } else {
             setAllAppliedFilters(chart.appliedFilters || {});
             setEnabledFilterOptionGroups(chart.enabledFilterOptionGroups);
             setVisualOptions(chart.vizOptions);
@@ -212,12 +221,11 @@ export function useChartsRawData(props: {
             setSelectedChartType(chart.vizType);
             setDataset(chart.datasetId);
             setChartFromAPI(chart);
-          } else {
-            setNotFound(true);
+            setDataError(false);
           }
         })
         .catch((error) => {
-          console.log("API call error: " + error.message);
+          console.log("API call error: " + error);
           setLoading(false);
           setNotFound(true);
           setError401(error.response?.status === 401);
@@ -281,12 +289,16 @@ export function useChartsRawData(props: {
           if (extraLoader) {
             extraLoader.style.display = "none";
           }
+
           const chart = response.data || {};
           if (isEmpty(chart)) {
             setNotFound(true);
+          } else if (response.data.error) {
+            setDataError(true);
           } else {
             setChartFromAPI(chart);
             setDataTypesFromRenderedChart(chart.dataTypes);
+            setDataError(false);
           }
           setLoading(false);
         })
@@ -340,5 +352,7 @@ export function useChartsRawData(props: {
     dataTotalCount,
     loadDataset,
     loadChartDataFromAPI,
+    chartErrorMessage,
+    setChartErrorMessage,
   };
 }
