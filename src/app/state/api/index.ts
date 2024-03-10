@@ -89,9 +89,7 @@ export const APIModel = <QueryModel, ResponseModel>(
           query.getId || query.storeInCrudData
             ? actions.onSuccessCrudData(resp.data)
             : actions.onSuccess({ ...resp.data, addOnData: false }),
-        (error: any) => {
-          actions.onError(error.response);
-        }
+        (error: any) => actions.onError(error.response)
       );
   }),
   setData: action((state, payload: any) => {
