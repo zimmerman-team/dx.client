@@ -8,7 +8,7 @@ import { NumberSize, Resizable } from "re-resizable";
 import { Direction } from "re-resizable/lib/resizer";
 import IconButton from "@material-ui/core/IconButton";
 import { EditorState } from "draft-js";
-import { useStoreActions } from "app/state/store/hooks";
+import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { useHistory, useLocation, useParams } from "react-router-dom";
 import { RichEditor } from "app/modules/common/RichEditor";
@@ -279,6 +279,7 @@ const Box = (props: {
   const setDataset = useStoreActions(
     (actions) => actions.charts.dataset.setValue
   );
+  const [chartError, setChartError] = React.useState(false);
   const setLoadedChart = useStoreActions(
     (state) => state.charts.ChartGet.setCrudData
   );
@@ -590,6 +591,7 @@ const Box = (props: {
                     z-index: 1;
                     right: 39px;
                     position: absolute;
+                    visibility: ${chartError ? "hidden" : "visible"};
                     padding: 4px;
                     width: 22px;
                     height: 22px;
@@ -611,7 +613,12 @@ const Box = (props: {
                 </IconButton>
               </div>
             )}
-            <ReportChartWrapper id={chartId} width={width.slice(0, -2)} />
+            <ReportChartWrapper
+              id={chartId}
+              width={width.slice(0, -2)}
+              error={chartError}
+              setError={setChartError}
+            />
           </div>
         </Resizable>
       );

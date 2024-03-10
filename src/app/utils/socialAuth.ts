@@ -15,6 +15,9 @@ export function socialAuth(
     connection,
     login_hint,
     responseType: "token",
-    connection_scope: "https://www.googleapis.com/auth/drive.readonly",
+    connection_scope:
+      connection === "google-oauth2"
+        ? "https://www.googleapis.com/auth/drive.readonly"
+        : "",
   });
 }

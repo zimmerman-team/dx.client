@@ -491,6 +491,7 @@ export function useDataThemesEchart() {
       // Palette
       palette,
     } = visualOptions;
+
     const option = {
       color: checkLists.find((item) => item.label === palette)?.value,
       grid: {
@@ -505,6 +506,7 @@ export function useDataThemesEchart() {
       },
       xAxis: {
         type: "category",
+        boundaryGap: false,
         data: data.xAxisValues || [],
         zlevel: -1,
         z: -1,
@@ -614,8 +616,8 @@ export function useDataThemesEchart() {
         formatter: (params: any) => {
           return `${params.data[3]}: ${
             isMonetaryValue
-              ? formatFinancialValue(params.value, true)
-              : params.data[2]
+              ? formatFinancialValue((params.data[2] / 50) * maxSize, true)
+              : (params.data[2] / 50) * maxSize
           }`;
         },
       },
@@ -663,6 +665,8 @@ export function useDataThemesEchart() {
       // Tooltip
       showTooltip,
       isMonetaryValue,
+      //chart
+      symbolSize,
       // Palette
       palette,
     } = visualOptions;
@@ -679,29 +683,24 @@ export function useDataThemesEchart() {
         zlevel: -1,
         z: -1,
       },
-      xAxis: [{ type: "value", data: data.map((d: any) => d.x) }],
-      yAxis: [
+      xAxis: [
         {
-          type: "value",
-          data: data.map((d: any) => d.y),
+          data: uniqBy(sortBy(data.map((d: any) => d.x)), (d: any) => d),
         },
       ],
-
+      yAxis: {},
       tooltip: {
         trigger: showTooltip ? "item" : "none",
         confine: true,
-        formatter: (params: any) => {
-          return `${params.data[1]}: ${
-            isMonetaryValue
-              ? formatFinancialValue(params.value, true)
-              : params.data[0]
-          }`;
-        },
+        valueFormatter: (value: number | string) =>
+          isMonetaryValue
+            ? formatFinancialValue(parseInt(value.toString(), 10), true)
+            : value,
       },
       series: [
         {
-          symbolSize: 5,
-          data: data.map((d: any) => [d.x, d.y]),
+          symbolSize: symbolSize,
+          data: data.map((d: any) => d.y),
           type: "scatter",
         },
       ],
@@ -731,11 +730,25 @@ export function useDataThemesEchart() {
 
     const xAxisData = sortBy(data.filter((d: any) => d.x).map((d: any) => d.x));
 
+    const isXAxisYear = xAxisData.every((d: any) => {
+      if (isNaN(d)) {
+        return false;
+      }
+      return d > 1000 && d <= new Date().getFullYear();
+    });
+
     const yAxisData = sortBy(data.filter((d: any) => d.y).map((d: any) => d.y));
 
+    const isYAxisYear = yAxisData.every((d: any) => {
+      if (isNaN(d)) {
+        return false;
+      }
+      return d > 1000 && d <= new Date().getFullYear();
+    });
+
     const seriesData = data.map((item: any) => [
-      String(item.x),
-      String(item.y),
+      isXAxisYear ? String(item.x) : item.x,
+      isYAxisYear ? String(item.y) : item.y,
       item.size,
     ]);
 
@@ -1410,9 +1423,10 @@ export function useDataThemesEchart() {
   function bigNumberRender(data: any, node: HTMLElement) {
     const formatedData = {
       ...data,
-      description: data?.description?.value[0],
-      title: data?.title?.value[0],
-      subtitle: data?.subtitle?.value[0],
+      metric: data?.mainKPImetric?.value[0] || data.metric,
+      unitofmeasurement: data?.unitofmeasurement?.value[0],
+      header: data?.header?.value[0],
+      subheader: data?.subheader?.value[0],
     };
 
     const renderBigNumber = charts["bigNumber"].render;

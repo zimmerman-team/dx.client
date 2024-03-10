@@ -53,13 +53,13 @@ export function ChartToolBoxFilters(props: ChartToolBoxFiltersProps) {
           width: 93%;
           margin: auto;
           display: flex;
-          overflow-y: auto;
           flex-direction: column;
-          max-height: calc(100vh - 260px);
           height: 100%;
           padding-left: 9px;
           padding-bottom: 33px;
           position: relative;
+          overflow-y: auto;
+          max-height: calc(100vh - 260px);
           &::-webkit-scrollbar {
             width: 4px;
             background: #262c34;

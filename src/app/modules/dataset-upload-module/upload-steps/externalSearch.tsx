@@ -3,9 +3,10 @@ import { Box, Container, Grid, IconButton } from "@material-ui/core";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import Filter from "app/modules/home-module/components/Filter";
 import ExternalDatasetCard from "app/modules/home-module/components/Datasets/externalDatasetCard";
-import { useStoreActions, useStoreState } from "app/state/store/hooks";
+import { useStoreState } from "app/state/store/hooks";
 import { useHistory } from "react-router-dom";
 import useDebounce from "react-use/lib/useDebounce";
+import axios from "axios";
 import CircleLoader from "app/modules/home-module/components/Loader";
 
 export interface IExternalDataset {
@@ -31,37 +32,58 @@ export default function ExternalSearch(props: {
   setProcessingError: React.Dispatch<React.SetStateAction<boolean>>;
   setActiveStep: React.Dispatch<React.SetStateAction<number>>;
 }) {
-  const defautlSearchTerms = ["climate", "air", "woman", "animal", "money"];
-  const randomSearchTerm =
-    defautlSearchTerms[Math.floor(Math.random() * defautlSearchTerms.length)];
   const [tableView, setTableView] = React.useState(false);
   const [searchValue, setSearchValue] = React.useState<string | undefined>("");
   const [sortValue, setSortValue] = React.useState("createdDate");
   const token = useStoreState((state) => state.AuthToken.value);
   const history = useHistory();
-  const loadDatasets = useStoreActions(
-    (actions) => actions.dataThemes.ExternalDatasetGet.fetch
-  );
-  const datasetDownload = useStoreActions(
-    (actions) => actions.dataThemes.ExternalDatasetDownload.post
-  );
-  const datasets = useStoreState(
-    (state) =>
-      (state.dataThemes.ExternalDatasetGet.crudData ?? []) as IExternalDataset[]
-  );
+  const [loading, setLoading] = React.useState(false);
 
-  const loading = useStoreState(
-    (state) => state.dataThemes.ExternalDatasetGet.loading
+  const [totalDatasets, setTotalDatasets] = React.useState<IExternalDataset[]>(
+    []
   );
+  const [isFetching, setIsFetching] = React.useState(false);
+  const controller = new AbortController();
+
+  const limit = 2;
+  const handleLimitedSearch = () => {
+    setIsFetching(true);
+    //kaggle search
+    const loadSearch = async (offset: number, count: number) => {
+      try {
+        setLoading(true);
+        const response = await axios.get(
+          `${process.env.REACT_APP_API}/external-sources/search-limited?q=${searchValue}&limit=${limit}&offset=${offset}`,
+          {
+            signal: controller.signal,
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const data = response.data;
+        setLoading(false);
+        if (data.length > 0 && count < 96) {
+          setTotalDatasets((prev) => [...prev, ...data]);
+          loadSearch(offset + limit, count + data.length);
+        }
+      } catch (e) {
+        setLoading(false);
+        console.log(e);
+      }
+    };
+    loadSearch(0, 0);
+  };
 
   const [,] = useDebounce(
     () => {
       if (token) {
-        loadDatasets({
-          filterString: `q=${searchValue || randomSearchTerm}`,
-          token,
-          storeInCrudData: true,
-        });
+        // if (isFetching) {
+        //   controller.abort();
+        //   setIsFetching(false);
+        // }
+        setTotalDatasets([]);
+        handleLimitedSearch();
       }
     },
     500,
@@ -128,34 +150,33 @@ export default function ExternalSearch(props: {
         </Grid>
       </Grid>
       <Box height={62} />
-      {loading ? (
-        <CircleLoader />
-      ) : (
-        <Grid container spacing={2}>
-          {datasets &&
-            datasets?.map((dataset, index) => (
-              <Grid
-                item
-                lg={3}
-                md={4}
-                sm={6}
-                xs={12}
-                key={`${dataset.name}-${index}`}
-              >
-                <ExternalDatasetCard
-                  description={dataset.description}
-                  name={dataset.name}
-                  publishedDate={dataset.datePublished}
-                  source={dataset.source}
-                  url={dataset.url}
-                  handleDownload={() => props.handleDownload(dataset)}
-                  dataset={dataset}
-                />
-                <Box height={16} />
-              </Grid>
-            ))}
-        </Grid>
-      )}
+      <Grid container spacing={2}>
+        {totalDatasets &&
+          totalDatasets?.map((dataset, index) => (
+            <Grid
+              item
+              lg={3}
+              md={4}
+              sm={6}
+              xs={12}
+              key={`${dataset.name}-${index}`}
+            >
+              <ExternalDatasetCard
+                description={dataset.description}
+                name={dataset.name}
+                publishedDate={dataset.datePublished}
+                source={dataset.source}
+                url={dataset.url}
+                handleDownload={() => props.handleDownload(dataset)}
+                dataset={dataset}
+              />
+              <Box height={16} />
+            </Grid>
+          ))}
+      </Grid>
+      <Box display={"flex"} justifyContent={"center"}>
+        {loading && <CircleLoader />}
+      </Box>
     </Container>
   );
 }

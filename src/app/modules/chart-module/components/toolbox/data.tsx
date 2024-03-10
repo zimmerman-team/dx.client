@@ -41,6 +41,7 @@ export interface ChartToolBoxProps {
   setChartFromAPI: (
     value: React.SetStateAction<ChartRenderedItem | null>
   ) => void;
+  deselectDataset: () => void;
 }
 
 export type ToolboxNavType =
