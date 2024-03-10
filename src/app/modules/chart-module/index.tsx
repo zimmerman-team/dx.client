@@ -312,18 +312,6 @@ export default function ChartModule() {
     });
   }
 
-  function getForceEnabledPreviewValue(param?: string) {
-    if (param === "preview") {
-      return true;
-    }
-    if (param === "mapping") {
-      const { updRequiredFields, updMinValuesFields } =
-        getRequiredFieldsAndErrors(mapping, dimensions);
-      return updRequiredFields.length === 0 && updMinValuesFields.length === 0;
-    }
-    return false;
-  }
-
   React.useEffect(() => {
     if (!loading && chartType) {
       setVisualOptionsOnChange();
@@ -408,13 +396,9 @@ export default function ChartModule() {
         visualOptions={visualOptions}
         name={chartName}
         setName={setChartName}
-        rawViz={rawViz}
         setHasSubHeaderTitleFocused={setHasSubHeaderTitleFocused}
-        forceEnablePreviewSave={getForceEnabledPreviewValue(view)}
-        appliedHeaderDetails={{} as IHeaderDetails}
-        framesArray={[]}
-        headerDetails={{} as IHeaderDetails}
         isPreviewView={isPreviewView}
+        dimensions={dimensions}
       />
       <ChartModuleToolBox
         rawViz={rawViz}

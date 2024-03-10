@@ -16,38 +16,24 @@ import {
 
 interface FilterGroupCompProps extends FilterGroupModel {
   expandGroup: () => void;
-  loadChartDataFromAPI?: (customAppliedFilters?: {
-    [key: string]: any[];
-  }) => void;
 }
 
 export function FilterGroup(props: FilterGroupCompProps) {
-  const [flattenOptions, setFlattenOptions] = React.useState<
-    FilterGroupOptionModel[]
-  >([]);
   const allAppliedFilters = useStoreState(
     (state) => state.charts.appliedFilters.value
   );
   const appliedFilters = useStoreState((state) =>
     get(state.charts.appliedFilters.value, props.name, [])
   );
-  const setAppliedFilters = useStoreActions(
+  const setAllAppliedFilters = useStoreActions(
     (actions) => actions.charts.appliedFilters.setValue
   );
 
   function onFilterRemove(option: string) {
-    setAppliedFilters({
+    setAllAppliedFilters({
       key: props.name,
       value: filter(appliedFilters, (af: string) => af !== option),
     });
-    if (props.loadChartDataFromAPI) {
-      const temp = allAppliedFilters;
-      temp[props.name] = filter(appliedFilters, (af: string) => af !== option);
-      if (temp[props.name].length === 0) {
-        delete temp[props.name];
-      }
-      props.loadChartDataFromAPI(temp);
-    }
   }
 
   function traverseOptions(
@@ -65,10 +51,10 @@ export function FilterGroup(props: FilterGroupCompProps) {
     });
   }
 
-  React.useEffect(() => {
+  const flattenOptions: FilterGroupOptionModel[] = React.useMemo(() => {
     const opts: FilterGroupOptionModel[] = [];
     traverseOptions(props.options, opts);
-    setFlattenOptions(opts);
+    return opts;
   }, [props.options]);
 
   return (
@@ -92,6 +78,7 @@ export function FilterGroup(props: FilterGroupCompProps) {
     >
       <div
         onClick={props.expandGroup}
+        data-testid="filter-group"
         css={`
           width: 100%;
           display: flex;
@@ -116,6 +103,7 @@ export function FilterGroup(props: FilterGroupCompProps) {
       </div>
       {appliedFilters.length > 0 && (
         <div
+          data-testid="applied-filters"
           css={`
             gap: 6px;
             width: 100%;
@@ -187,6 +175,7 @@ export function FilterGroup(props: FilterGroupCompProps) {
               >
                 <div>{fOption ? fOption.label : option}</div>
                 <CloseIcon
+                  data-testid={`remove-applied-filter`}
                   role="button"
                   onClick={() => onFilterRemove(option)}
                 />

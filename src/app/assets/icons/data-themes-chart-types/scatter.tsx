@@ -123,14 +123,14 @@ export default function Icon(props: Props) {
       <path
         d="M25 6L25 41"
         stroke="#252C34"
-        stroke-width="2"
-        stroke-linecap="round"
+        strokeWidth="2"
+        strokeLinecap="round"
       />
       <path
         d="M42 24L7 24"
         stroke="#252C34"
-        stroke-width="2"
-        stroke-linecap="round"
+        strokeWidth="2"
+        strokeLinecap="round"
       />
     </svg>
   );

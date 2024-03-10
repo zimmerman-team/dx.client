@@ -80,6 +80,7 @@ function ChartBuilderChartType(props: ChartBuilderChartTypeProps) {
                       border-color: #262c34;
                     }
                   `}
+                  data-testid={ct.id}
                 >
                   {ct.icon}
                   <div
@@ -116,4 +117,4 @@ function ChartBuilderChartType(props: ChartBuilderChartTypeProps) {
   );
 }
 
-export default withAuthenticationRequired(ChartBuilderChartType);
+export default ChartBuilderChartType;

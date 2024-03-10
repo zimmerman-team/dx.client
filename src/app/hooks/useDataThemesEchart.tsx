@@ -699,7 +699,7 @@ export function useDataThemesEchart() {
       },
       series: [
         {
-          symbolSize: symbolSize,
+          symbolSize: symbolSize ?? 4,
           data: data.map((d: any) => d.y),
           type: "scatter",
         },

@@ -49,7 +49,7 @@ const StyledSpan = styled.span<Props>`
 
 const AutoSaveSwitch = (props: {
   checked: boolean;
-  setAutoSave: React.Dispatch<React.SetStateAction<boolean>>;
+  setAutoSave: (value: boolean) => void;
 }) => {
   return (
     <StyledLabel checked={props.checked}>
@@ -57,7 +57,11 @@ const AutoSaveSwitch = (props: {
       <StyledInput
         type="checkbox"
         checked={props.checked}
-        onChange={(e) => props.setAutoSave(e.target.checked)}
+        onChange={(e) => {
+          console.log("calling?", e.target.checked);
+          props.setAutoSave(e.target.checked);
+        }}
+        data-testid={"auto-save-switch"}
       />
       <StyledSpan checked={props.checked} />
     </StyledLabel>

@@ -39,6 +39,6 @@
     "e2e",
     "etc",
     "public",
-    ".git"
+    ".git",
   ]
 }

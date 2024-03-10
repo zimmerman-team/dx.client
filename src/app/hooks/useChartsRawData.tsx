@@ -183,7 +183,7 @@ export function useChartsRawData(props: {
     ],
     chartId?: string
   ) {
-    if ((chartId || page) && page !== "new" && !isEmpty(token)) {
+    if ((chartId || page) && page !== "new") {
       const body = {
         previewAppliedFilters: customAppliedFilters
           ? customAppliedFilters
@@ -237,7 +237,7 @@ export function useChartsRawData(props: {
     // calls loadChartDataFromAPI  on first render  when token is available or token changes
     // useful when coming from report page to edit chart page
     // if in chart wrapper component, loadChartDataFromAPI is called from chart-wrapper component
-    if (!props.inChartWrapper && !isEmpty(token)) {
+    if (!props.inChartWrapper) {
       loadChartDataFromAPI();
     }
   }, [token]);
@@ -279,12 +279,18 @@ export function useChartsRawData(props: {
         extraLoader.style.display = "block";
       }
       axios
-        .post(`${process.env.REACT_APP_API}/chart/${page}/render`, body, {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        })
+        .post(
+          `${process.env.REACT_APP_API}/chart/${page}/render${
+            token === "" ? "/public" : ""
+          }`,
+          body,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
         .then((response) => {
           if (extraLoader) {
             extraLoader.style.display = "none";
@@ -322,8 +328,7 @@ export function useChartsRawData(props: {
       !loading &&
       !props.inChartWrapper &&
       !isPreviewMode &&
-      !isEmpty(dataset) &&
-      token
+      !isEmpty(dataset)
     ) {
       renderChartFromAPI();
     }

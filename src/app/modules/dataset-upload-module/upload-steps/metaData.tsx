@@ -57,7 +57,7 @@ export const datasetCategories = [
   "Social",
 ];
 
-const SelectField = (props: {
+export const SelectCategoryField = (props: {
   value: string;
   register: UseFormRegister<IFormDetails>;
   control: Control<IFormDetails, any>;
@@ -124,10 +124,12 @@ const SelectField = (props: {
 
 export default function MetaData(props: Readonly<Props>) {
   const location = useLocation();
-  const view = location.pathname.split("/")[3];
+  const view = location.pathname?.split("/")[3];
+
   const loadedDataset = useStoreState(
     (state) => state.dataThemes.DatasetGet.crudData
   ) as IDatasetDetail;
+
   const {
     register,
     handleSubmit,
@@ -137,8 +139,8 @@ export default function MetaData(props: Readonly<Props>) {
   } = useForm<IFormDetails>({
     defaultValues: props.formDetails,
   });
-  const [characterCount, setCharacterCount] = React.useState(0);
 
+  const characterCount = props.formDetails.description?.length;
   React.useEffect(() => {
     //reset form state to formDetails state when dataset is loaded
     reset({
@@ -154,11 +156,6 @@ export default function MetaData(props: Readonly<Props>) {
     });
   };
 
-  React.useEffect(() => {
-    //get character count from description length
-    setCharacterCount(props.formDetails.description?.length);
-  }, [props.formDetails.description]);
-
   return (
     <div css={metaDatacss}>
       <h1>Describe your data</h1>
@@ -172,7 +169,7 @@ export default function MetaData(props: Readonly<Props>) {
             <Grid lg={12} xs={12} md={12} item>
               <CssTextField
                 id="outlined-basic"
-                label="Data title "
+                label="Data title"
                 variant="outlined"
                 {...register("name", { required: true })}
                 helperText="Title must be between 6 and 50 characters in length."
@@ -198,6 +195,7 @@ export default function MetaData(props: Readonly<Props>) {
                   minRows={3}
                   inputProps={{
                     maxLength: 150,
+                    "data-testid": "description",
                   }}
                   onChange={handleChange}
                   value={props.formDetails.description}
@@ -218,7 +216,7 @@ export default function MetaData(props: Readonly<Props>) {
             </Grid>
             <Box height={50} />
             <Grid lg={5} xs={12} md={5} item>
-              <SelectField
+              <SelectCategoryField
                 value={props.formDetails.category}
                 register={register}
                 control={control}
@@ -234,6 +232,9 @@ export default function MetaData(props: Readonly<Props>) {
                 {...register("source", { required: true })}
                 onChange={handleChange}
                 fullWidth
+                inputProps={{
+                  "data-testid": "Source-of-the-data",
+                }}
                 value={props.formDetails.source}
               />
             </Grid>
@@ -245,10 +246,14 @@ export default function MetaData(props: Readonly<Props>) {
                 {...register("sourceUrl", { required: true })}
                 onChange={handleChange}
                 fullWidth
+                inputProps={{
+                  "data-testid": "Link-to-data-source",
+                }}
                 value={props.formDetails.sourceUrl}
               />
             </Grid>
           </Grid>
+
           <div
             css={`
               display: flex;
