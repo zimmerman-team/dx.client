@@ -31,9 +31,6 @@ import { isEmpty } from "lodash";
 
 interface ExpandedFilterGroupProps extends FilterGroupModel, FilterGroupProps {
   goBack: () => void;
-  loadChartDataFromAPI?: (customAppliedFilters?: {
-    [key: string]: any[];
-  }) => void;
 }
 
 export function ExpandedFilterGroup(props: ExpandedFilterGroupProps) {
@@ -169,14 +166,6 @@ export function ExpandedFilterGroup(props: ExpandedFilterGroupProps) {
         key: props.name,
         value: tmpAppliedFilters,
       });
-      if (props.loadChartDataFromAPI) {
-        const temp = allAppliedFilters;
-        temp[props.name] = [
-          ...get(temp, `["${props.name}"]`, []),
-          ...tmpAppliedFilters,
-        ];
-        props.loadChartDataFromAPI(temp);
-      }
     }
     props.goBack();
   }
@@ -236,11 +225,7 @@ export function ExpandedFilterGroup(props: ExpandedFilterGroupProps) {
         key: props.name,
         value: [],
       });
-      if (props.loadChartDataFromAPI) {
-        const temp = allAppliedFilters;
-        temp[props.name] = [];
-        props.loadChartDataFromAPI(temp);
-      }
+
       setTmpAppliedFilters([]);
     }
   }

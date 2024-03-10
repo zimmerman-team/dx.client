@@ -213,7 +213,6 @@ test("expanded filter group should close when back button is clicked", async () 
       name={props.name}
       options={props.options}
       goBack={props.goBack}
-      loadChartDataFromAPI={props.loadChartDataFromAPI}
     />,
     props.name,
     defaultStoreValue(props.name)
@@ -236,7 +235,6 @@ test("clicking expand button should expand suboptions", async () => {
       name={props.name}
       options={props.options}
       goBack={props.goBack}
-      loadChartDataFromAPI={props.loadChartDataFromAPI}
     />,
     props.name,
     emptyStoreValue()
@@ -260,7 +258,6 @@ test("checking 'select all' checkbox should select all filter options", async ()
       name={props.name}
       options={props.options}
       goBack={props.goBack}
-      loadChartDataFromAPI={props.loadChartDataFromAPI}
     />,
     props.name,
     emptyStoreValue()
@@ -295,7 +292,6 @@ test("unchecking 'select all' checkbox should unselect all filter options", asyn
       name={props.name}
       options={props.options}
       goBack={props.goBack}
-      loadChartDataFromAPI={props.loadChartDataFromAPI}
     />,
     props.name,
     defaultStoreValue(props.name)
@@ -319,7 +315,6 @@ test("applied filters should be removed when reset button is clicked", async () 
       name={props.name}
       options={props.options}
       goBack={props.goBack}
-      loadChartDataFromAPI={props.loadChartDataFromAPI}
     />,
     props.name,
     defaultStoreValue(props.name)
@@ -345,7 +340,6 @@ test("search input should filter options", async () => {
       name={props.name}
       options={props.options}
       goBack={props.goBack}
-      loadChartDataFromAPI={props.loadChartDataFromAPI}
     />,
     props.name,
     emptyStoreValue()
@@ -379,7 +373,6 @@ test("should multi check and uncheck filter options", async () => {
       name={props.name}
       options={props.options}
       goBack={props.goBack}
-      loadChartDataFromAPI={props.loadChartDataFromAPI}
     />,
     props.name,
     emptyStoreValue()

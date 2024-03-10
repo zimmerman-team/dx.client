@@ -23,7 +23,7 @@ export function ReportChartWrapper(props: Props) {
   const token = useStoreState((state) => state.AuthToken.value);
 
   const containerRef = React.useRef<HTMLDivElement>(null);
-
+  const [chartName, setChartName] = React.useState<string>("");
   const loadChart = useStoreActions((actions) => actions.charts.ChartGet.fetch);
   const chartError = useStoreState((state) => state.charts.ChartGet.errorData);
 
@@ -66,13 +66,12 @@ export function ReportChartWrapper(props: Props) {
   const displayChartName =
     renderedChartType !== "bigNumber" && !props.chartPreviewInReport;
 
-  const chartName = React.useMemo(() => {
+  React.useEffect(() => {
     if (loadedChart && loadedChart.id !== "" && loadedChart.id === props.id) {
       if (loadedChart.name.length > 0) {
-        return loadedChart.name;
+        setChartName(loadedChart.name);
       }
     }
-    return "";
   }, [loadedChart]);
 
   const {
@@ -113,7 +112,7 @@ export function ReportChartWrapper(props: Props) {
   }, [chartError, dataError]);
 
   React.useEffect(() => {
-    if (props.id && token) {
+    if (props.id) {
       loadChartDataFromAPI(undefined, props.id);
     }
     return () => {

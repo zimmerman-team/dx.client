@@ -212,24 +212,17 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
   }, []);
 
   const isPreviewDisabled: boolean = React.useMemo(() => {
-    const newValue = isEmpty(selectedChartType) || !isMappingValid;
+    const newValue =
+      isEmpty(selectedChartType) || !isMappingValid || view === "preview";
     return newValue;
-  }, [selectedChartType, mapping]);
+  }, [selectedChartType, mapping, view]);
 
   const isSavedDisabled: boolean = React.useMemo(() => {
-    const newValue =
-      isEmpty(selectedChartType) ||
-      !isMappingValid ||
-      (view !== undefined && page !== "new" && props.name !== loadedChart.name);
+    const newValue = isEmpty(selectedChartType) || !isMappingValid;
+    // (view !== undefined && page !== "new" && props.name !== loadedChart.name);
     return newValue;
-  }, [
-    view,
-    props.name,
-    mapping,
-    activePanels,
-    loadedChart.name,
-    selectedChartType,
-  ]);
+  }, [mapping, selectedChartType]);
+
   // console.log(loadedChart.name, props.name, "propsname");
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
