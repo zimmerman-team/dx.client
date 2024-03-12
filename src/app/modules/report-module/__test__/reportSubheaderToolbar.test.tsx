@@ -315,6 +315,7 @@ test("savedChanges state should be true after edit success", async () => {
     { mockActions: false },
     { isSaveEnabled: true }
   );
+
   jest
     .spyOn(Router, "useParams")
     .mockReturnValue({ page: "65dcb26aaf4c8500693f1ab7", view: "edit" });
@@ -325,6 +326,8 @@ test("savedChanges state should be true after edit success", async () => {
 
   expect(mockStore.getState().reports.ReportUpdate.success).toBeTruthy();
   expect(screen.getByText(/All changes saved/)).toBeVisible();
+
+  // expect(setTimeout).toHaveBeenCalledWith(expect.any(Function), 3000);
 });
 
 test("export, duplicate, share, edit, delete buttons should be visible in report detail mode", async () => {
@@ -396,14 +399,14 @@ test("clicking on export button should open export menu", async () => {
 test("clicking on duplicate button should open duplicate dialog", async () => {
   const user = userEvent.setup();
   const { app, mockStore } = appSetup(
-    { mockActions: true },
+    { mockActions: false },
     { isSaveEnabled: false, isPreviewView: true }
   );
   const axiosMock = axios.get as jest.Mock;
 
   axiosMock
-    .mockResolvedValue({ data: { id: "12345" } } as AxiosResponse<any>)
-    .mockResolvedValue({ data: [] });
+    .mockResolvedValueOnce({ data: { id: "12345" } } as AxiosResponse<any>)
+    .mockResolvedValueOnce({ data: [] });
   jest
     .spyOn(Router, "useParams")
     .mockReturnValue({ page: "12345", view: undefined });
@@ -416,6 +419,8 @@ test("clicking on duplicate button should open duplicate dialog", async () => {
   });
   render(app);
   await user.click(screen.getByTestId("duplicate-button"));
+  expect(axiosMock).toHaveBeenCalled();
+
   expect(
     screen.getByText("Report has been duplicated successfully!")
   ).toBeVisible();
@@ -427,4 +432,97 @@ test("clicking on duplicate button should open duplicate dialog", async () => {
   ).not.toBeVisible();
 
   expect(history.location.pathname).toBe("/report/12345");
+});
+
+test("clicking on share button should open share dialog", async () => {
+  const user = userEvent.setup();
+  const { app, mockStore } = appSetup(
+    { mockActions: false },
+    { isSaveEnabled: false, isPreviewView: true }
+  );
+  const axiosMock = axios.get as jest.Mock;
+
+  axiosMock
+    .mockResolvedValueOnce({ data: { id: "12345" } } as AxiosResponse<any>)
+    .mockResolvedValueOnce({ data: [] });
+  jest.spyOn(window, "prompt").mockImplementation((message) => "Link copied");
+
+  jest
+    .spyOn(Router, "useParams")
+    .mockReturnValue({ page: "12345", view: undefined });
+  act(() => {
+    mockStore.getActions().reports.ReportGet.setCrudData({
+      id: "12345",
+      name: "test",
+      owner: "auth0|123",
+    });
+  });
+  render(app);
+  await user.click(screen.getByTestId("share-button"));
+  expect(screen.getByRole("button", { name: "Copy link" })).toBeVisible();
+  await user.click(screen.getByRole("button", { name: "Copy link" }));
+  expect(screen.getByText("Link copied to clipboard")).toBeVisible();
+});
+
+test("clicking on edit button should redirect to report edit page", async () => {
+  const user = userEvent.setup();
+  const { app, mockStore } = appSetup(
+    { mockActions: false },
+    { isSaveEnabled: false, isPreviewView: true }
+  );
+  jest
+    .spyOn(Router, "useParams")
+    .mockReturnValue({ page: "12345", view: undefined });
+  act(() => {
+    mockStore.getActions().reports.ReportGet.setCrudData({
+      id: "12345",
+      name: "test",
+      owner: "auth0|123",
+    });
+  });
+  render(app);
+  await user.click(screen.getByTestId("edit-button"));
+  expect(history.location.pathname).toBe("/report/12345/edit");
+});
+
+test("clicking on delete button should open delete dialog", async () => {
+  const user = userEvent.setup();
+  const { app, mockStore } = appSetup(
+    { mockActions: false },
+    { isSaveEnabled: false, isPreviewView: true }
+  );
+
+  const axiosMock = axios.delete as jest.Mock;
+  const axiosGetMock = axios.get as jest.Mock;
+  axiosGetMock.mockResolvedValueOnce({
+    data: [],
+  } as AxiosResponse<any>);
+
+  axiosMock.mockResolvedValueOnce({
+    data: { id: "12345" },
+  } as AxiosResponse<any>);
+  jest
+    .spyOn(Router, "useParams")
+    .mockReturnValue({ page: "12345", view: undefined });
+  act(() => {
+    mockStore.getActions().reports.ReportGet.setCrudData({
+      id: "12345",
+      name: "test",
+      owner: "auth0|123",
+    });
+  });
+  render(app);
+  await user.click(screen.getByTestId("delete-button"));
+  expect(screen.getByRole("button", { name: "Delete" })).toBeVisible();
+  await user.click(screen.getByRole("button", { name: "Delete" }));
+  expect(screen.getByRole("form")).toBeInTheDocument();
+  expect(
+    screen.getByText("Absolutely sure you want to delete the report(s)?")
+  ).toBeVisible();
+  const input = screen.getByPlaceholderText('Type "DELETE" to confirm');
+  await user.type(input, "DELETE");
+  expect(input).toHaveValue("DELETE");
+  expect(screen.getByRole("button", { name: "Delete" })).toBeEnabled();
+  fireEvent.submit(screen.getByRole("form"));
+  expect(axiosMock).toHaveBeenCalled();
 });

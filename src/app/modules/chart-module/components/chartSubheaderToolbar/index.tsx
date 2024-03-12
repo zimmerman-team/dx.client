@@ -22,7 +22,6 @@ import SnackbarContent from "@material-ui/core/SnackbarContent";
 import { styles } from "app/modules/chart-module/components/chartSubheaderToolbar/styles";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import DeleteChartDialog from "app/components/Dialogs/deleteChartDialog";
-import DeleteReportDialog from "app/components/Dialogs/deleteReportDialog";
 import { ChartAPIModel, emptyChartAPI } from "app/modules/chart-module/data";
 import { SubheaderToolbarProps } from "app/modules/chart-module/components/chartSubheaderToolbar/data";
 import { ExportChartButton } from "app/modules/chart-module/components/chartSubheaderToolbar/exportButton";
@@ -41,10 +40,7 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
   const { user, isAuthenticated } = useAuth0();
   const token = useStoreState((state) => state.AuthToken.value);
   const { page, view } = useParams<{ page: string; view?: string }>();
-  const [modalDisplay, setModalDisplay] = React.useState({
-    report: false,
-    chart: false,
-  });
+  const [showDeleteDialog, setShowDeleteDialog] = React.useState(false);
 
   const [enableButton, setEnableButton] = React.useState<boolean>(false);
 
@@ -228,19 +224,13 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
   const id = open ? "simple-popover" : undefined;
 
   const handleModalDisplay = () => {
-    setModalDisplay({
-      ...modalDisplay,
-      chart: true,
-    });
+    setShowDeleteDialog(true);
   };
 
   const handleDelete = () => {
     setEnableButton(false);
 
-    setModalDisplay({
-      ...modalDisplay,
-      chart: false,
-    });
+    setShowDeleteDialog(false);
     axios
       .delete(`${process.env.REACT_APP_API}/chart/${page}`, {
         headers: {
@@ -509,18 +499,12 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
           </button>
         }
       />
-      <DeleteReportDialog
-        modalDisplay={modalDisplay.report}
-        enableButton={enableButton}
-        handleDelete={handleDelete}
-        setModalDisplay={setModalDisplay}
-        handleInputChange={handleDeleteModalInputChange}
-      />
+
       <DeleteChartDialog
-        modalDisplay={modalDisplay.chart}
+        modalDisplay={showDeleteDialog}
         enableButton={enableButton}
         handleDelete={handleDelete}
-        setModalDisplay={setModalDisplay}
+        setModalDisplay={setShowDeleteDialog}
         handleInputChange={handleDeleteModalInputChange}
       />
     </div>
