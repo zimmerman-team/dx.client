@@ -192,7 +192,7 @@ export function ReportSubheaderToolbar(
         loadReports({
           token,
           storeInCrudData: true,
-          filterString: "filter[order]=createdDate desc",
+          filterString: "filter[order]=updatedDate desc",
         });
       })
       .catch((error) => console.log(error));
@@ -212,7 +212,7 @@ export function ReportSubheaderToolbar(
         loadReports({
           token,
           storeInCrudData: true,
-          filterString: "filter[order]=createdDate desc",
+          filterString: "filter[order]=updatedDate desc",
         });
         setDuplicatedReportId(response.data.id);
         setSnackbarState({

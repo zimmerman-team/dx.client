@@ -101,7 +101,7 @@ export default function DatasetSubHeaderToolbar(
         loadDatasets({
           token,
           storeInCrudData: true,
-          filterString: "filter[order]=createdDate desc",
+          filterString: "filter[order]=updatedDate desc",
         });
       })
       .catch((error) => console.log(error));

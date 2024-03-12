@@ -241,7 +241,7 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
         loadCharts({
           token,
           storeInCrudData: true,
-          filterString: "filter[order]=createdDate desc",
+          filterString: "filter[order]=updatedDate desc",
         });
       })
       .catch((error) => console.log(error));
@@ -261,7 +261,7 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
         loadCharts({
           token,
           storeInCrudData: true,
-          filterString: "filter[order]=createdDate desc",
+          filterString: "filter[order]=updatedDate desc",
         });
         setDuplicatedChartId(response.data.id);
         setSnackbarState({

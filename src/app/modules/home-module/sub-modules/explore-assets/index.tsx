@@ -70,7 +70,7 @@ export default function ExploreAssetsModule() {
   const [searchValue, setSearchValue] = React.useState<string | undefined>(
     undefined
   );
-  const [sortValue, setSortValue] = React.useState("createdDate");
+  const [sortValue, setSortValue] = React.useState("updatedDate");
   const exploreViewRef = React.useRef<HTMLDivElement>(null);
   const [display, setDisplay] = useRecoilState(homeDisplayAtom);
   const handleChange = (
