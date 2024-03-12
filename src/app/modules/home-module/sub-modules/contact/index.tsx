@@ -145,7 +145,7 @@ export default function ContactModule() {
               height: 100%;
               margin: auto;
               h4 {
-                font-family: "Gotham Narrow Bold", sans-serif;
+                font-family: "GothamNarrow-Bold", sans-serif;
                 font-size: 36px;
                 line-height: 43px;
                 color: #231d2c;

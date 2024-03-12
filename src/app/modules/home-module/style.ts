@@ -9,7 +9,7 @@ export const turnsDataCss = css`
   }
 
   h1 {
-    font-family: "Gotham Narrow Bold", sans-serif;
+    font-family: "GothamNarrow-Bold", sans-serif;
     font-weight: 700;
     font-size: 40px;
     line-height: 48px;
@@ -21,7 +21,7 @@ export const turnsDataCss = css`
 
   p {
     color: #495057;
-    font-family: "Gotham Narrow Bold", sans-serif;
+    font-family: "GothamNarrow-Bold", sans-serif;
     font-size: 18px;
     line-height: 22px;
     text-align: center;
@@ -54,7 +54,7 @@ export const turnsDataCss = css`
 export const featuredAssetsCss = css`
   h3 {
     font-size: 24px;
-    font-family: "Gotham Narrow Bold", sans-serif;
+    font-family: "GothamNarrow-Bold", sans-serif;
     line-height: 29px;
     color: #000000;
     margin: 0;

@@ -24,7 +24,7 @@ export default function TabCard(props: {
           display: flex;
           justify-content: center;
           gap: 39px;
-          font-family: "Gotham Narrow Bold", sans-serif;
+          font-family: "GothamNarrow-Bold", sans-serif;
           padding: 72px 40px 100px 88px;
           color: #231d2c;
 
@@ -50,7 +50,7 @@ export default function TabCard(props: {
             margin-bottom: 11px;
           }
           p {
-            font-family: "Gotham Narrow Light", sans-serif;
+            font-family: "GothamNarrow-Light", sans-serif;
             white-space: pre-line;
             font-weight: 400;
             line-height: 19px;
