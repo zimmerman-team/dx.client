@@ -21,7 +21,9 @@ export const Tab = {
     position: relative;
     color: ${(props) => (props.active ? "#6061E5" : "#000000")};
     font-weight: ${(props) => (props.active ? "bold" : "normal")};
-    font-family: "Gotham Narrow", sans-serif;
+    font-family: ${(props) =>
+        props.active ? "GothamNarrow-Bold" : "GothamNarrow-Book"},
+      sans-serif;
 
     ::after {
       content: "";
@@ -41,7 +43,9 @@ export const Tab = {
     position: relative;
     color: ${(props) => (props.active ? "#6061E5" : "#000000")};
     font-weight: ${(props) => (props.active ? "bold" : "normal")};
-    font-family: "Gotham Narrow", sans-serif;
+    font-family: ${(props) =>
+        props.active ? "GothamNarrow-Bold" : "GothamNarrow-Book"},
+      sans-serif;
 
     ::after {
       content: "";
@@ -64,7 +68,9 @@ export const Tab = {
     position: relative;
     color: ${(props) => (props.active ? "#6061E5" : "#000000")};
     font-weight: ${(props) => (props.active ? "700" : "normal")};
-    font-family: "Gotham Narrow", sans-serif;
+    font-family: ${(props) =>
+        props.active ? "GothamNarrow-Bold" : "GothamNarrow-Book"},
+      sans-serif;
 
     ::after {
       content: "";

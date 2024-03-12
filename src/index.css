@@ -59,7 +59,7 @@
 @font-face {
   font-family: "GothamNarrow-Bold";
   src: url("app/assets/fonts/subset-GothamNarrow-Bold.eot");
-  /*src: local('Gotham Narrow Bold'), local('GothamNarrow-Bold'),*/
+  /*src: local('GothamNarrow-Bold'), local('GothamNarrow-Bold'),*/
   src: url("app/assets/fonts/subset-GothamNarrow-Bold.eot?#iefix")
       format("embedded-opentype"),
     url("app/assets/fonts/subset-GothamNarrow-Bold.woff2") format("woff2"),
@@ -79,9 +79,7 @@ body {
   transition: background 0.2s ease-in-out;
   font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #f2f7fd 100%);
-  
 }
-
 
 #root {
   width: 100vw;
@@ -172,12 +170,10 @@ input[type="text"] {
   background: #f1f3f5;
 }
 
-
-
-#inline-color-picker-popover{
+#inline-color-picker-popover {
   right: 26px !important;
 }
-.rhcpCard{
+.rhcpCard {
   animation-name: shadow-pulse;
   animation-duration: 3s;
 }
@@ -185,19 +181,11 @@ input[type="text"] {
 @keyframes shadow-pulse {
   0% {
     box-shadow: 0 0 0 0 rgba(96, 97, 229, 0.2);
-    
   }
-  50%{
-    box-shadow: 0 0 0 7px #DADAF8; 
+  50% {
+    box-shadow: 0 0 0 7px #dadaf8;
   }
   100% {
     box-shadow: 0 0 0 0 rgba(96, 97, 229, 0.2);
   }
 }
-
-
-
-
-
-
-

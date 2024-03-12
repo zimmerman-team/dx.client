@@ -153,6 +153,7 @@ export default function HeaderBlock(props: Props) {
     <div
       css={headerBlockcss.container(props.headerDetails.backgroundColor)}
       {...handlers}
+      data-testid="header-block"
     >
       {(handleDisplay || currentView === "editHeader") && (
         <div
@@ -196,12 +197,20 @@ export default function HeaderBlock(props: Props) {
               }
             `}
           >
-            <IconButton onClick={onEdit} id="edit-header-icon">
+            <IconButton
+              onClick={onEdit}
+              id="edit-header-icon"
+              data-testid="edit-header-button"
+            >
               <Tooltip title="Edit" placement="right">
                 <EditIcon />
               </Tooltip>
             </IconButton>
-            <IconButton onClick={onRemove} id="delete-header-icon">
+            <IconButton
+              onClick={onRemove}
+              id="delete-header-icon"
+              data-testid="delete-header-button"
+            >
               <Tooltip title="Remove header" placement="right">
                 <DeleteIcon />
               </Tooltip>

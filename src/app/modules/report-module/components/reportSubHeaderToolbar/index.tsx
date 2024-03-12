@@ -22,7 +22,6 @@ import { PageLoader } from "app/modules/common/page-loader";
 import { createStyles, makeStyles } from "@material-ui/core";
 import { Link, useHistory, useParams } from "react-router-dom";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
-import DeleteChartDialog from "app/components/Dialogs/deleteChartDialog";
 import { ReportModel, emptyReport } from "app/modules/report-module/data";
 import DeleteReportDialog from "app/components/Dialogs/deleteReportDialog";
 import { ChartAPIModel, emptyChartAPI } from "app/modules/chart-module/data";
@@ -60,10 +59,8 @@ export function ReportSubheaderToolbar(
   const { user, isAuthenticated } = useAuth0();
   const { page, view } = useParams<{ page: string; view?: string }>();
   const token = useStoreState((state) => state.AuthToken.value);
-  const [modalDisplay, setModalDisplay] = React.useState({
-    report: false,
-    chart: false,
-  });
+  const [showDeleteDialog, setShowDeleteDialog] = React.useState(false);
+
   const [enableButton, setEnableButton] = React.useState<boolean>(false);
 
   const setHomeTab = useRecoilState(homeDisplayAtom)[1];
@@ -150,7 +147,7 @@ export function ReportSubheaderToolbar(
   };
 
   const handleCopy = (text: string, result: boolean) => {
-    setOpenSnackbar(result);
+    setOpenSnackbar(true);
   };
 
   const handleCloseSnackbar = () => {
@@ -178,18 +175,13 @@ export function ReportSubheaderToolbar(
   const id = open ? "simple-popover" : undefined;
 
   const handleModalDisplay = () => {
-    setModalDisplay({
-      ...modalDisplay,
-      report: true,
-    });
+    setShowDeleteDialog(true);
   };
 
   const handleDelete = () => {
     setEnableButton(false);
-    setModalDisplay({
-      ...modalDisplay,
-      report: false,
-    });
+    setShowDeleteDialog(false);
+
     axios
       .delete(`${process.env.REACT_APP_API}/report/${page}`, {
         headers: {
@@ -200,7 +192,7 @@ export function ReportSubheaderToolbar(
         loadReports({
           token,
           storeInCrudData: true,
-          filterString: "filter[order]=createdDate desc",
+          filterString: "filter[order]=updatedDate desc",
         });
       })
       .catch((error) => console.log(error));
@@ -220,7 +212,7 @@ export function ReportSubheaderToolbar(
         loadReports({
           token,
           storeInCrudData: true,
-          filterString: "filter[order]=createdDate desc",
+          filterString: "filter[order]=updatedDate desc",
         });
         setDuplicatedReportId(response.data.id);
         setSnackbarState({
@@ -230,7 +222,6 @@ export function ReportSubheaderToolbar(
       })
       .catch((error) => console.log(error));
   };
-  console.log(duplicatedReportId, "duplicatedReportId");
 
   const canChartEditDelete = React.useMemo(() => {
     return isAuthenticated && loadedReport && loadedReport.owner === user?.sub;
@@ -517,17 +508,10 @@ export function ReportSubheaderToolbar(
         }
       />
       <DeleteReportDialog
-        modalDisplay={modalDisplay.report}
+        modalDisplay={showDeleteDialog}
         enableButton={enableButton}
         handleDelete={handleDelete}
-        setModalDisplay={setModalDisplay}
-        handleInputChange={handleDeleteModalInputChange}
-      />
-      <DeleteChartDialog
-        modalDisplay={modalDisplay.chart}
-        enableButton={enableButton}
-        handleDelete={handleDelete}
-        setModalDisplay={setModalDisplay}
+        setModalDisplay={setShowDeleteDialog}
         handleInputChange={handleDeleteModalInputChange}
       />
     </div>
