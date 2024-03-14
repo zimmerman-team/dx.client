@@ -112,7 +112,7 @@ const appSetup = (params: Params, newProps: Partial<MockProps> = {}) => {
       charts: {
         dataset: ChartsDatasetState,
         mapping: ChartsMappingState,
-        chaerType: ChartsChartTypeState,
+        charType: ChartsChartTypeState,
         appliedFilters: ChartsAppliedFiltersState,
         enabledFilterOptionGroups: ChartsEnabledFilterOptionGroupsState,
         activePanels: ChartsActivePanelsState,

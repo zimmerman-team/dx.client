@@ -10,14 +10,12 @@ import HeaderBlock from "app/modules/report-module/sub-module/components/headerB
 import { EditorState } from "draft-js";
 import { ToolbarPluginsType } from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
 import Router from "react-router-dom";
-import { Auth0Provider } from "@auth0/auth0-react";
 import { MutableSnapshot, RecoilRoot } from "recoil";
 import { RecoilObserver } from "app/utils/recoilObserver";
 import { createMemoryHistory } from "history";
 import { reportRightPanelViewAtom } from "app/state/recoil/atoms";
-import { DndProvider } from "react-dnd";
+import { DndProvider, useDrag } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import createEmojiPlugin from "@draft-js-plugins/emoji";
 
 interface MockProps {
   previewMode: boolean;
@@ -48,6 +46,7 @@ const headerDetailsResult = {
     titleColor: "",
     descriptionColor: "",
     dateColor: "",
+    createdDate: new Date(),
   },
 };
 const mockCreateEmojiPlugin = jest.fn();
@@ -59,6 +58,10 @@ jest.mock("@draft-js-plugins/emoji", () => {
     },
   };
 });
+jest.mock("react-router-dom", () => ({
+  ...jest.requireActual("react-router-dom"),
+  useParams: jest.fn(),
+}));
 
 const defaultProps = (props: Partial<MockProps>): MockProps => {
   return {
@@ -88,15 +91,38 @@ const defaultProps = (props: Partial<MockProps>): MockProps => {
   };
 };
 
+const dragAndDrop = (source: string, target: string) => {
+  fireEvent.dragStart(screen.getByTestId(source));
+  fireEvent.dragLeave(screen.getByTestId(source));
+  fireEvent.dragEnter(screen.getByTestId(target));
+  fireEvent.dragOver(screen.getByTestId(target));
+  fireEvent.drop(screen.getByTestId(target));
+};
+
 const history = createMemoryHistory({
   initialEntries: ["/chart/new/mapping"],
 });
+const reportRightPanelViewChange = jest.fn();
+
 const appSetup = (newProps: Partial<MockProps> = {}) => {
   const props = defaultProps(newProps);
-  const reportRightPanelViewChange = jest.fn();
 
   const initialRecoilState = (snap: MutableSnapshot) => {
     snap.set(reportRightPanelViewAtom, "elements");
+  };
+
+  const Draggable = () => {
+    const [_, drag] = useDrag(() => ({
+      type: "header",
+      item: {
+        type: "header",
+        value: "",
+      },
+      collect: (monitor) => ({
+        isDragging: !!monitor.isDragging(),
+      }),
+    }));
+    return <div ref={drag} data-testid="drag-item" />;
   };
 
   return {
@@ -109,6 +135,7 @@ const appSetup = (newProps: Partial<MockProps> = {}) => {
           />
           <DndProvider backend={HTML5Backend}>
             <HeaderBlock {...props} />
+            <Draggable />
           </DndProvider>
         </RecoilRoot>
       </Router.Router>
@@ -119,21 +146,36 @@ const appSetup = (newProps: Partial<MockProps> = {}) => {
 };
 
 test("title input should be visible and editable", async () => {
-  const user = userEvent.setup();
+  jest
+    .spyOn(Router, "useParams")
+    .mockReturnValue({ page: "12345", view: "edit" });
+
+  jest.spyOn(Router, "useLocation").mockReturnValue({
+    pathname: "/report/12345/edit",
+  } as any);
   //spy on window alert
   jest.spyOn(window, "scrollTo").mockImplementation(() => {});
-  const { app } = appSetup();
+  const { app, props } = appSetup();
   render(app);
   expect(screen.getByPlaceholderText("Add a header title")).toBeEnabled();
   fireEvent.change(screen.getByPlaceholderText("Add a header title"), {
-    target: { value: "Test Title" },
+    target: { value: "Test Tite" },
   });
-  expect(headerDetailsResult.headerDetails.title).toBe("Test Title");
+  expect(props.setHeaderDetails).toHaveBeenCalledWith(
+    expect.objectContaining({ title: "Test Tite" })
+  );
+  expect(headerDetailsResult.headerDetails.title).toBe("Test Tite");
 });
 
 test("focusing on description input should clear placeholder", async () => {
   const user = userEvent.setup();
+  jest
+    .spyOn(Router, "useParams")
+    .mockReturnValue({ page: "12345", view: "edit" });
 
+  jest.spyOn(Router, "useLocation").mockReturnValue({
+    pathname: "/report/12345/edit",
+  } as any);
   const { app } = appSetup();
   render(app);
   expect(screen.getByText("Add a header description")).toBeEnabled();
@@ -144,7 +186,13 @@ test("focusing on description input should clear placeholder", async () => {
 
 test("focusing on description input should call setIsEditorFocused", async () => {
   const user = userEvent.setup();
+  jest
+    .spyOn(Router, "useParams")
+    .mockReturnValue({ page: "12345", view: "edit" });
 
+  jest.spyOn(Router, "useLocation").mockReturnValue({
+    pathname: "/report/12345/edit",
+  } as any);
   const { app, props } = appSetup();
   render(app);
   await user.click(screen.getByText("Add a header description"));
@@ -167,14 +215,79 @@ test("focusing on description input should call setIsEditorFocused", async () =>
 //   ).toBe("Test Description");
 // });
 
-test("hovering should show the edit and delete buttons", async () => {
+test("hovering and unhovering should show and hide the edit and delete buttons", async () => {
   const user = userEvent.setup();
+  jest
+    .spyOn(Router, "useParams")
+    .mockReturnValue({ page: "12345", view: "edit" });
 
+  jest.spyOn(Router, "useLocation").mockReturnValue({
+    pathname: "/report/12345/edit",
+  } as any);
   const { app } = appSetup();
   render(app);
   await user.hover(screen.getByTestId("header-block"));
-  //   expect(screen.getByText("B")).toBeVisible();
-  //   expect(screen.getByText("I")).toBeVisible();
-  //   expect(screen.getByText("U")).toBeVisible();
-  //   expect(screen.getByText("Emoji")).toBeVisible();
+  expect(screen.getByTestId("edit-header-button")).toBeEnabled();
+  expect(screen.getByTestId("delete-header-button")).toBeEnabled();
+  await user.unhover(screen.getByTestId("header-block"));
+  expect(screen.queryByTestId("edit-header-button")).toBeNull();
+  expect(screen.queryByTestId("delete-header-button")).toBeNull();
+});
+test("hovering should show the edit and delete buttons", async () => {
+  const user = userEvent.setup();
+  jest
+    .spyOn(Router, "useParams")
+    .mockReturnValue({ page: "12345", view: "edit" });
+
+  jest.spyOn(Router, "useLocation").mockReturnValue({
+    pathname: "/report/12345/edit",
+  } as any);
+  const { app, props } = appSetup();
+  render(app);
+  await user.hover(screen.getByTestId("header-block"));
+  expect(screen.getByTestId("edit-header-button")).toBeEnabled();
+  expect(screen.getByTestId("delete-header-button")).toBeEnabled();
+
+  fireEvent.click(screen.getByTestId("edit-header-button"));
+  expect(reportRightPanelViewChange).toHaveBeenCalledWith("editHeader");
+
+  fireEvent.click(screen.getByTestId("delete-header-button"));
+  expect(props.setHeaderDetails).toHaveBeenCalledWith({
+    ...props.headerDetails,
+    showHeader: false,
+  });
+});
+
+test("drop area should be visible when showHeader is false", async () => {
+  jest
+    .spyOn(Router, "useParams")
+    .mockReturnValue({ page: "12345", view: "edit" });
+
+  jest.spyOn(Router, "useLocation").mockReturnValue({
+    pathname: "/report/12345/edit",
+  } as any);
+  const { app } = appSetup({
+    headerDetails: { ...headerDetailsResult.headerDetails, showHeader: false },
+  });
+  render(app);
+  expect(screen.getByTestId("drop-area")).toBeEnabled();
+});
+
+test("drop area should call setHeaderDetails when dropped", async () => {
+  jest
+    .spyOn(Router, "useParams")
+    .mockReturnValue({ page: "12345", view: "edit" });
+
+  jest.spyOn(Router, "useLocation").mockReturnValue({
+    pathname: "/report/12345/edit",
+  } as any);
+  const { app, props } = appSetup({
+    headerDetails: { ...headerDetailsResult.headerDetails, showHeader: false },
+  });
+  render(app);
+  dragAndDrop("drag-item", "drop-area");
+  expect(props.setHeaderDetails).toHaveBeenCalledWith({
+    ...props.headerDetails,
+    showHeader: true,
+  });
 });

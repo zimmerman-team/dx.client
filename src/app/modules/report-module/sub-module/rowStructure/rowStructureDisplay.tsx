@@ -279,6 +279,7 @@ const Box = (props: {
   const setDataset = useStoreActions(
     (actions) => actions.charts.dataset.setValue
   );
+
   const [chartError, setChartError] = React.useState(false);
   const setLoadedChart = useStoreActions(
     (state) => state.charts.ChartGet.setCrudData
@@ -634,6 +635,7 @@ const Box = (props: {
     displayBoxIcons,
     width,
     props.height,
+    chartError,
   ]);
 
   React.useEffect(() => {

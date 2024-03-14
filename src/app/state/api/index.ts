@@ -23,6 +23,11 @@ export const APIModel = <QueryModel, ResponseModel>(
   onError: action((state, payload: Errors) => {
     state.loading = false;
     state.errorData = payload;
+    state.data = {
+      count: 0,
+      data: [],
+    };
+    state.crudData = null;
   }),
   onSuccess: action((state, payload: ResponseData<ResponseModel>) => {
     const { addOnData, isUpdateCrudData, ...actualPayload } = payload;

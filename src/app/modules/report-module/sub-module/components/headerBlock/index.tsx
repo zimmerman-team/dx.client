@@ -72,6 +72,7 @@ export default function HeaderBlock(props: Props) {
         onMouseEnter: () => setHandleDisplay(true),
         onMouseLeave: () => setHandleDisplay(false),
       };
+
   React.useEffect(() => {
     inputRef.current?.focus();
   }, []);
@@ -138,6 +139,7 @@ export default function HeaderBlock(props: Props) {
     return (
       <div
         ref={drop}
+        data-testid="drop-area"
         css={`
           z-index: 1;
           width: 100%;
