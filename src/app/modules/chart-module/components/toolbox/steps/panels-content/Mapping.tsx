@@ -9,7 +9,7 @@ import {
 import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
 
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
-import { uniqueId, filter, set } from "lodash";
+import { uniqueId, filter, isEmpty } from "lodash";
 import { Button, IconButton } from "@material-ui/core";
 import ToolboxSubheader from "app/modules/chart-module/components/toolbox/steps/sub-header";
 import { ReactComponent as DateIcon } from "app/modules/chart-module/assets/date.svg";
@@ -46,6 +46,8 @@ interface ChartToolBoxMappingItemProps {
   setNonStaticDimensions: React.Dispatch<React.SetStateAction<any[]>>;
   nonStaticDimensions: any[];
   displayCloseButton?: boolean;
+  showAggregation: boolean;
+  handleButtonToggle?: (id: string) => void;
 }
 
 const typeIcon = {
@@ -159,6 +161,7 @@ export function ChartToolBoxMapping(props: Readonly<ChartToolBoxMappingProps>) {
         display: flex;
         flex-direction: column;
         margin-bottom: 30px;
+        height: 100%;
       `}
     >
       <ToolboxSubheader name="Mapping" level={3} />
@@ -236,6 +239,11 @@ const NonStaticDimensionContainer = (props: {
   handleButtonToggle: (id: string) => void;
 }) => {
   const [searchValue, setSearchValue] = React.useState("");
+  const selectedDimensions = Object.keys(
+    props.getValidDataTypes(props.dimension.validTypes, searchValue)
+  )?.filter((mappingItemValue: string) =>
+    props.dimension.mappedValues.includes(mappingItemValue)
+  );
 
   return (
     <div
@@ -305,37 +313,30 @@ const NonStaticDimensionContainer = (props: {
           </div>
         </div>
 
-        {!!props.dimension?.multiple &&
-          Object.keys(
-            props.getValidDataTypes(props.dimension.validTypes, searchValue)
-          )
-            ?.filter((mappingItemValue: string) =>
-              props.dimension.mappedValues.includes(mappingItemValue)
-            )
-            .map((mappingItemValue: string, index: number) => {
-              let type = props.getValidDataTypes(
-                props.dimension.validTypes,
-                ""
-              )[mappingItemValue];
-              return (
-                <ChartToolBoxMappingItem
-                  key={mappingItemValue}
-                  testId={`mapping-item-${mappingItemValue}`}
-                  type={type}
-                  index={index}
-                  marginBottom="16px"
-                  mappingItemValue={mappingItemValue}
-                  dimension={props.dimension}
-                  setNonStaticDimensions={props.setNonStaticDimensions}
-                  dataTypes={props.dataTypes}
-                  nonStaticDimensionsId={props.dimension.id}
-                  nonStaticDimensionsIndex={props.dimensionIndex}
-                  nonStaticDimensions={props.nonStaticDimensions}
-                  displayCloseButton
-                />
-              );
-            })}
-
+        {selectedDimensions.map((mappingItemValue: string, index: number) => {
+          let type = props.getValidDataTypes(props.dimension.validTypes, "")[
+            mappingItemValue
+          ];
+          return (
+            <ChartToolBoxMappingItem
+              key={mappingItemValue}
+              testId={`mapping-item-${mappingItemValue}`}
+              type={type}
+              index={index}
+              marginBottom="16px"
+              mappingItemValue={mappingItemValue}
+              dimension={props.dimension}
+              setNonStaticDimensions={props.setNonStaticDimensions}
+              dataTypes={props.dataTypes}
+              nonStaticDimensionsId={props.dimension.id}
+              nonStaticDimensionsIndex={props.dimensionIndex}
+              nonStaticDimensions={props.nonStaticDimensions}
+              displayCloseButton
+              showAggregation
+              handleButtonToggle={props.handleButtonToggle}
+            />
+          );
+        })}
         <DimensionSelect
           dimension={props.dimension}
           getSelectButtonLabel={props.getSelectButtonLabel}
@@ -404,6 +405,7 @@ const NonStaticDimensionContainer = (props: {
                 nonStaticDimensionsId={props.dimension.id}
                 nonStaticDimensionsIndex={props.dimensionIndex}
                 nonStaticDimensions={props.nonStaticDimensions}
+                showAggregation={false}
               />
             );
           })}
@@ -422,161 +424,37 @@ const DimensionSelect = (props: {
   handleButtonToggle: (id: string) => void;
   index: number;
 }) => {
-  const mapping = useStoreState((state) => state.charts.mapping.value);
-  const setMapping = useStoreActions(
-    (actions) => actions.charts.mapping.setValue
-  );
-  const aggregators = getAggregatorNames();
-  const removeMappingValue = useStoreActions(
-    (state) => state.charts.mapping.removeMappingValue
-  );
-
-  let aggregationsMappedHere = get(mapping, "config.aggregation", []);
-  const dimensionMapping = get(mapping, props.dimension.id, {});
-  const setAggregation = React.useCallback(
-    (newAggregations) => {
-      setMapping({
-        [props.dimension.id]: {
-          ...dimensionMapping,
-          config: {
-            aggregation: [...newAggregations],
-          },
-        },
-      });
-    },
-    [mapping, setMapping, dimensionMapping]
-  );
-  const onChangeAggregation = React.useCallback(
-    (i, aggregatorName) => {
-      const newAggregations = [...aggregationsMappedHere];
-      newAggregations[i] = aggregatorName;
-      setAggregation(newAggregations);
-    },
-    [aggregationsMappedHere, setAggregation]
-  );
-  const relatedAggregation = React.useMemo(() => {
-    if (props.dimension?.aggregation) {
-      return dimensionMapping.config?.aggregation[props.index] || "sum";
-    } else {
-      return null;
-    }
-  }, [props.dimension, props.index, dimensionMapping]);
-
-  const onDeleteItem = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    e.preventDefault();
-    e.stopPropagation();
-    removeMappingValue({
-      id: props.dimension.id,
-      value: props.dimension.mappedValues[0],
-    });
-  };
-
   return (
-    <div
-      css={`
-        > span {
-          font-size: 14px;
-        }
-        position: relative;
-      `}
-    >
-      <Button
-        disableTouchRipple
-        onClick={() => props.handleButtonToggle(props.dimension.id)}
-        css={mappingStyles.selectedButtoncss(props.dimension)}
-      >
-        <span>
-          {props.getSelectButtonLabel(
-            props.dimension.mappedValues,
-            !!props.dimension?.multiple
-          )}
-        </span>
-        {!props.dimension.multiple &&
-        props.dimension.mappedValues.length > 0 ? (
-          <span
-            onClick={onDeleteItem}
-            css={`
-              margin-top: 6px;
-              margin-right: -4px;
-            `}
+    <>
+      {!!props.dimension?.multiple || isEmpty(props.dimension.mappedValues) ? (
+        <div
+          css={`
+            > span {
+              font-size: 14px;
+            }
+            position: relative;
+          `}
+        >
+          <Button
+            disableTouchRipple
+            onClick={() => props.handleButtonToggle(props.dimension.id)}
+            css={mappingStyles.selectedButtoncss(props.dimension)}
           >
-            <CloseIcon fontSize="small" />
-          </span>
-        ) : (
-          <ArrowDropUpIcon
-            css={`
-              margin-right: -7px;
-            `}
-          />
-        )}
-      </Button>
-      {props.dimension &&
-        !!props.dimension?.aggregation &&
-        props.dimension.mappedValues.length > 0 &&
-        relatedAggregation &&
-        aggregators && (
-          <Dropdown
-            className="d-inline-block ml-2 raw-dropdown"
-            id="rb-dropdown-menu"
-            css={`
-              margin-right: -7px;
-              position: absolute;
-              right: 55px;
-              top: 2px;
-              z-index: 2;
-            `}
-          >
-            <Dropdown.Toggle
+            <span>
+              {props.getSelectButtonLabel(
+                props.dimension.mappedValues,
+                !!props.dimension?.multiple
+              )}
+            </span>
+            <ArrowDropUpIcon
               css={`
-                width: 110px;
-                color: #262c34;
-                font-size: 14px;
-                border-style: none;
-                border-radius: 26px;
-                padding-right: 16px;
-                background: #cfd4da;
-                box-shadow: none !important;
-
-                &:hover,
-                &:active,
-                &:focus {
-                  color: #262c34;
-                  background: #cfd4da;
-                }
+                margin-right: -7px;
               `}
-            >
-              {get(AGGREGATIONS_LABELS, relatedAggregation, relatedAggregation)}
-            </Dropdown.Toggle>
-            <Dropdown.Menu
-              css={`
-                min-width: 110px;
-                background: #dfe3e6;
-                border-radius: 13px;
-                box-shadow: none !important;
-                overflow: scroll;
-              `}
-            >
-              {aggregators.map((aggregatorName: string) => (
-                <Dropdown.Item
-                  key={aggregatorName}
-                  onClick={() =>
-                    onChangeAggregation &&
-                    onChangeAggregation(props.index, aggregatorName)
-                  }
-                  css={`
-                    color: #262c34;
-                    font-size: 14px;
-                    padding: 6px 12px !important;
-                    border-bottom: 1px solid rgba(173, 181, 189, 0.5);
-                  `}
-                >
-                  {get(AGGREGATIONS_LABELS, aggregatorName, aggregatorName)}
-                </Dropdown.Item>
-              ))}
-            </Dropdown.Menu>
-          </Dropdown>
-        )}
-    </div>
+            />
+          </Button>
+        </div>
+      ) : null}
+    </>
   );
 };
 
@@ -588,6 +466,7 @@ function ChartToolBoxMappingItem(
   const setMapping = useStoreActions(
     (actions) => actions.charts.mapping.setValue
   );
+  const mapping = useStoreState((state) => state.charts.mapping.value);
 
   const removeMappingValue = useStoreActions(
     (state) => state.charts.mapping.removeMappingValue
@@ -602,6 +481,11 @@ function ChartToolBoxMappingItem(
   const columnDataType = getTypeName(dataTypes[item.id as any]);
 
   const handleClick = () => {
+    //checking for props.aggregation cos it's only true for selected dimesions
+    if (props.showAggregation) {
+      props.handleButtonToggle?.(props.dimension?.id);
+      return;
+    }
     const isValid =
       dimension.validTypes?.length === 0 ||
       dimension.validTypes?.includes(columnDataType);
@@ -679,6 +563,44 @@ function ChartToolBoxMappingItem(
     removeMappingValue({ id: dimension.id, value: props.mappingItemValue });
   };
 
+  const aggregators = getAggregatorNames();
+
+  const dimensionMapping = get(mapping, props.dimension.id, {});
+  const setAggregation = React.useCallback(
+    (newAggregations) => {
+      setMapping({
+        [props.dimension.id]: {
+          ...dimensionMapping,
+          config: {
+            aggregation: [...newAggregations],
+          },
+        },
+      });
+    },
+    [mapping, setMapping, dimensionMapping]
+  );
+
+  const onChangeAggregation = React.useCallback(
+    (i, aggregatorName) => {
+      const aggregationsMappedHere = get(
+        mapping,
+        `${props.dimension.id}.config.aggregation`,
+        []
+      );
+      const newAggregations = [...aggregationsMappedHere];
+      newAggregations[i] = aggregatorName;
+      setAggregation(newAggregations);
+    },
+    [mapping, setAggregation]
+  );
+  const relatedAggregation = React.useMemo(() => {
+    if (props.dimension?.aggregation) {
+      return dimensionMapping.config?.aggregation[props.index] || "sum";
+    } else {
+      return null;
+    }
+  }, [props.dimension, props.index, dimensionMapping]);
+
   return (
     <div
       key={props.mappingItemValue}
@@ -686,19 +608,21 @@ function ChartToolBoxMappingItem(
       css={mappingStyles.mappingItemcss(props)}
       onClick={handleClick}
     >
-      <p>{typeIcon[props.type]}</p>
+      <div>
+        <p>{typeIcon[props.type]}</p>
 
-      <div
-        css={`
-          overflow: clip;
-          font-size: 14px;
-          white-space: nowrap;
-          text-overflow: ellipsis;
-          width: calc(100% - 40px);
-          text-transform: capitalize;
-        `}
-      >
-        {props.mappingItemValue}
+        <p
+          css={`
+            overflow: clip;
+            font-size: 14px;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            width: calc(100% - 40px);
+            text-transform: capitalize;
+          `}
+        >
+          {props.mappingItemValue}
+        </p>
       </div>
 
       {props.displayCloseButton && (
@@ -706,6 +630,85 @@ function ChartToolBoxMappingItem(
           <CloseIcon htmlColor="#fff" fontSize="small" />
         </IconButton>
       )}
+
+      {props.showAggregation &&
+        props.dimension &&
+        !!props.dimension?.aggregation &&
+        props.dimension.mappedValues.length > 0 &&
+        relatedAggregation &&
+        aggregators && (
+          <div
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+          >
+            <Dropdown
+              className="d-inline-block ml-2 raw-dropdown"
+              id="rb-dropdown-menu"
+              css={`
+                margin-right: -7px;
+                position: absolute;
+                right: 55px;
+                top: 2px;
+                z-index: 2;
+              `}
+            >
+              <Dropdown.Toggle
+                css={`
+                  width: 110px;
+                  color: #262c34;
+                  font-size: 14px;
+                  border-style: none;
+                  border-radius: 26px;
+                  padding-right: 16px;
+                  background: #cfd4da;
+                  box-shadow: none !important;
+
+                  &:hover,
+                  &:active,
+                  &:focus {
+                    color: #262c34;
+                    background: #cfd4da;
+                  }
+                `}
+              >
+                {get(
+                  AGGREGATIONS_LABELS,
+                  relatedAggregation,
+                  relatedAggregation
+                )}
+              </Dropdown.Toggle>
+
+              <Dropdown.Menu
+                css={`
+                  min-width: 110px;
+                  background: #dfe3e6;
+                  border-radius: 13px;
+                  box-shadow: none !important;
+                  overflow: scroll;
+                `}
+              >
+                {aggregators.map((aggregatorName: string) => (
+                  <Dropdown.Item
+                    key={aggregatorName}
+                    onClick={() =>
+                      onChangeAggregation &&
+                      onChangeAggregation(props.index, aggregatorName)
+                    }
+                    css={`
+                      color: #262c34;
+                      font-size: 14px;
+                      padding: 6px 12px !important;
+                      border-bottom: 1px solid rgba(173, 181, 189, 0.5);
+                    `}
+                  >
+                    {get(AGGREGATIONS_LABELS, aggregatorName, aggregatorName)}
+                  </Dropdown.Item>
+                ))}
+              </Dropdown.Menu>
+            </Dropdown>
+          </div>
+        )}
     </div>
   );
 }
