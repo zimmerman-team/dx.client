@@ -239,8 +239,12 @@ const NonStaticDimensionContainer = (props: {
   handleButtonToggle: (id: string) => void;
 }) => {
   const [searchValue, setSearchValue] = React.useState("");
-  const selectedDimensions = Object.keys(
+  const validTypes = Object.keys(
     props.getValidDataTypes(props.dimension.validTypes, searchValue)
+  );
+
+  const selectedDimensions = Object.keys(
+    props.getValidDataTypes(props.dimension.validTypes, "")
   )?.filter((mappingItemValue: string) =>
     props.dimension.mappedValues.includes(mappingItemValue)
   );
@@ -380,12 +384,12 @@ const NonStaticDimensionContainer = (props: {
             <input
               type="text"
               onChange={(e) => setSearchValue(e.target.value)}
+              value={searchValue}
             />
             <SearchIcon htmlColor="#868E96" />
           </div>
-          {Object.keys(
-            props.getValidDataTypes(props.dimension.validTypes, searchValue)
-          )?.map((mappingItemValue: string, index: number) => {
+
+          {validTypes?.map((mappingItemValue: string, index: number) => {
             const type = props.getValidDataTypes(
               props.dimension.validTypes,
               searchValue
