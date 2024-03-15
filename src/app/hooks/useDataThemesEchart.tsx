@@ -1507,7 +1507,7 @@ export function useDataThemesEchart() {
           echartsCirclepacking(data, visualOptions, null),
       };
 
-      chart.setOption(CHART_TYPE_TO_COMPONENT[chartType]());
+      chart.setOption(CHART_TYPE_TO_COMPONENT[chartType](), true);
 
       window.addEventListener("resize", () => onResize(chart, id));
       if (chartType === "echartsCirclepacking") {
