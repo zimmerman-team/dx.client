@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Box, Container, Grid, IconButton } from "@material-ui/core";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import Filter from "app/modules/home-module/components/Filter";
@@ -42,20 +42,17 @@ export default function ExternalSearch(props: {
   const [totalDatasets, setTotalDatasets] = React.useState<IExternalDataset[]>(
     []
   );
-  const [isFetching, setIsFetching] = React.useState(false);
-  const controller = new AbortController();
+  const abortControllerRef = useRef<AbortController>(new AbortController());
 
   const limit = 2;
   const handleLimitedSearch = () => {
-    setIsFetching(true);
-    //kaggle search
     const loadSearch = async (offset: number, count: number) => {
       try {
         setLoading(true);
         const response = await axios.get(
           `${process.env.REACT_APP_API}/external-sources/search-limited?q=${searchValue}&limit=${limit}&offset=${offset}`,
           {
-            signal: controller.signal,
+            signal: abortControllerRef.current.signal,
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -75,13 +72,16 @@ export default function ExternalSearch(props: {
     loadSearch(0, 0);
   };
 
+  React.useEffect(() => {
+    const controller = abortControllerRef.current;
+    return () => {
+      controller.abort();
+    };
+  }, []);
+
   const [,] = useDebounce(
     () => {
       if (token) {
-        // if (isFetching) {
-        //   controller.abort();
-        //   setIsFetching(false);
-        // }
         setTotalDatasets([]);
         handleLimitedSearch();
       }
