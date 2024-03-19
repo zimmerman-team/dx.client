@@ -9,9 +9,6 @@ import { useStoreActions, useStoreState } from "app/state/store/hooks";
 
 interface ChartToolBoxFiltersProps {
   filterOptionGroups: FilterGroupModel[];
-  loadChartDataFromAPI?: (customAppliedFilters?: {
-    [key: string]: any[];
-  }) => void;
 }
 
 export function ChartToolBoxFilters(props: ChartToolBoxFiltersProps) {
@@ -30,14 +27,7 @@ export function ChartToolBoxFilters(props: ChartToolBoxFiltersProps) {
     resetAppliedFilters();
   };
 
-  React.useEffect(() => {
-    if (props.loadChartDataFromAPI) {
-      props.loadChartDataFromAPI(allAppliedFilters);
-    }
-  }, [allAppliedFilters]);
-
   const expandGroup = (group: FilterGroupModel) => {
-    console.log(group.options, "group.options");
     setExpandedGroup(group);
   };
 
@@ -81,7 +71,6 @@ export function ChartToolBoxFilters(props: ChartToolBoxFiltersProps) {
                 key={group.name}
                 name={group.name}
                 options={group.options}
-                loadChartDataFromAPI={props.loadChartDataFromAPI}
                 expandGroup={() => expandGroup(group)}
               />
             ))}
@@ -92,7 +81,6 @@ export function ChartToolBoxFilters(props: ChartToolBoxFiltersProps) {
             name={expandedGroup.name}
             options={expandedGroup.options}
             goBack={() => setExpandedGroup(null)}
-            loadChartDataFromAPI={props.loadChartDataFromAPI}
           />
         )}
       </div>

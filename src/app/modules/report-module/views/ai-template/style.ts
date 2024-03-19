@@ -20,7 +20,7 @@ export const newsletterIllustrationcss = css`
   }
   p {
     font-size: 18px;
-    font-family: "Gotham Narrow Bold", sans-serif;
+    font-family: "GothamNarrow-Bold", sans-serif;
     color: #231d2c;
     margin-top: 44px;
     margin-bottom: 24px;

@@ -112,7 +112,6 @@ export default function ReportModule() {
   const [hasSubHeaderTitleBlurred, setHasSubHeaderTitleBlurred] =
     React.useState(false);
 
-  const [isSaveEnabled, setIsSaveEnabled] = React.useState(false);
   const [reportType, setReportType] = React.useState<
     "basic" | "advanced" | "ai" | null
   >(null);
@@ -543,8 +542,7 @@ export default function ReportModule() {
     }
   }, [view]);
 
-  React.useEffect(() => {
-    //check if report has any text value (title, description) or any frame content
+  const isSaveEnabled = React.useMemo(() => {
     let hasTextValue = !(
       reportName === "Untitled report" &&
       !headerDetails.description.getCurrentContent().hasText() &&
@@ -558,8 +556,7 @@ export default function ReportModule() {
         frame.contentTypes.length !== 0 ||
         frame.structure !== null
     );
-    //sets save button enabled if report has any text value or any frame content
-    setIsSaveEnabled(hasTextValue || framesArrayState);
+    return hasTextValue || framesArrayState;
   }, [reportName, framesArray, headerDetails]);
 
   return (
@@ -572,9 +569,8 @@ export default function ReportModule() {
           setName={setReportName}
           setHasSubHeaderTitleFocused={setHasSubHeaderTitleFocused}
           setHasSubHeaderTitleBlurred={setHasSubHeaderTitleBlurred}
-          forceEnablePreviewSave={isSaveEnabled}
+          isSaveEnabled={isSaveEnabled}
           name={page !== "new" && !view ? reportGetData.name : reportName}
-          reportName={reportName}
           framesArray={framesArray}
           headerDetails={headerDetails}
           setStopInitializeFramesWidth={setStopInitializeFramesWidth}

@@ -104,6 +104,7 @@ export interface Errors {
   status: number | null;
   statusText: string | null;
   result: object | null;
+  data: object | null;
 }
 
 export interface ApiModel<QueryModel, ResponseModel> {
@@ -281,6 +282,8 @@ export interface StoreModel {
     DatasetCreate: ApiCallModel;
     DatasetGet: ApiCallModel;
     ExternalDatasetGet: ApiCallModel;
+    ExternalDatasetGetLimited: ApiCallModel;
+
     ExternalDatasetDownload: ApiCallModel;
   };
   charts: {

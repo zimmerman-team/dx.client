@@ -12,7 +12,7 @@ export const subParagraphcss = css`
     font-family: "Gotham Narrow", sans-serif;
   }
   p {
-    font-family: "Gotham Narrow Light", sans-serif;
+    font-family: "GothamNarrow-Light", sans-serif;
     font-style: normal;
     font-weight: 325;
     font-size: 24px;

@@ -38,7 +38,7 @@ export default function BestDecisionBlock() {
               color: #ffffff;
               font-size: 40px;
               line-height: 48px;
-              font-family: "Gotham Narrow Bold", sans-serif;
+              font-family: "GothamNarrow-Bold", sans-serif;
               margin: 0;
             `}
           >
@@ -49,7 +49,7 @@ export default function BestDecisionBlock() {
               font-weight: 325;
               font-size: 24px;
               color: #f4f4f4;
-              font-family: "Gotham Narrow Light", sans-serif;
+              font-family: "GothamNarrow-Light", sans-serif;
             `}
           >
             DataXplorer turns data into impact in minutes 

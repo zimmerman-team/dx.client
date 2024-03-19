@@ -15,7 +15,8 @@ import { ChartToolBoxCustomize } from "app/modules/chart-module/components/toolb
 import { DatasetPanel } from "app/modules/chart-module/components/toolbox/steps/panels-content/SelectDataset";
 
 import { isEmpty } from "lodash";
-import { ToolboxNavType } from "./navbar";
+import { ToolboxNavType } from "app/modules/chart-module/components/toolbox/data";
+
 import { ChartRenderedItem } from "app/modules/chart-module/data";
 
 interface ChartToolBoxStepsProps {
@@ -41,6 +42,7 @@ interface ChartToolBoxStepsProps {
   setChartFromAPI: (
     value: React.SetStateAction<ChartRenderedItem | null>
   ) => void;
+  deselectDataset: () => void;
 }
 
 export function ChartToolBoxSteps(props: ChartToolBoxStepsProps) {
@@ -100,7 +102,7 @@ export function ChartToolBoxSteps(props: ChartToolBoxStepsProps) {
     switch (props.activeStep) {
       case "dataset":
       case "selectDataset":
-        return <DatasetPanel />;
+        return <DatasetPanel deselectDataset={props.deselectDataset} />;
       case "chart":
         return <ChartToolBoxChartType />;
       case "mapping":
@@ -124,7 +126,7 @@ export function ChartToolBoxSteps(props: ChartToolBoxStepsProps) {
         );
 
       default:
-        return <DatasetPanel />;
+        return <DatasetPanel deselectDataset={props.deselectDataset} />;
     }
   };
 

@@ -8,7 +8,7 @@ export const empowercss = css`
   flex-direction: column;
   justify-content: center;
   padding: 113px 0 55px 0;
-  font-family: "Gotham Narrow Bold", sans-serif;
+  font-family: "GothamNarrow-Bold", sans-serif;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #f2f7fd 100%);
   a {
     text-decoration: none;
@@ -22,7 +22,7 @@ export const empowercss = css`
     white-space: pre-line;
     text-align: center;
     margin-bottom: 36px;
-    font-family: "Gotham Narrow Bold", sans-serif;
+    font-family: "GothamNarrow-Bold", sans-serif;
   }
   p {
     margin: 0;
@@ -30,7 +30,7 @@ export const empowercss = css`
     font-size: 18px;
     line-height: 22px;
     text-align: center;
-    font-family: "Gotham Narrow Bold", sans-serif;
+    font-family: "GothamNarrow-Bold", sans-serif;
   }
   div {
     gap: 34px;
@@ -116,7 +116,7 @@ export const useDXcss = css`
   h3 {
     font-size: 24px;
     line-height: 29px;
-    font-family: "Gotham Narrow Bold", sans-serif;
+    font-family: "GothamNarrow-Bold", sans-serif;
     text-align: center;
     margin-bottom: 0;
   }
@@ -169,7 +169,7 @@ export const bestDecisioncss = css`
     font-size: 48px;
     line-height: 58px;
     text-align: center;
-    font-family: "Gotham Narrow Bold", sans-serif;
+    font-family: "GothamNarrow-Bold", sans-serif;
     color: #231d2c;
     margin: 0;
     margin-bottom: 36px;

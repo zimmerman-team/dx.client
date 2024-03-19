@@ -1,47 +1,34 @@
 /**third party */
-import React, { useCallback, useEffect } from "react";
-import Box from "@material-ui/core/Box";
-import {
-  DropzoneRootProps,
-  DropzoneInputProps,
-  FileRejection,
-  useDropzone,
-} from "react-dropzone";
-import SearchIcon from "@material-ui/icons/Search";
+import React, { useCallback } from "react";
+import { useDropzone } from "react-dropzone";
 import useDrivePicker from "react-google-drive-picker";
-import { PickerCallback } from "react-google-drive-picker/dist/typeDefs";
+import {
+  CallbackDoc,
+  PickerCallback,
+} from "react-google-drive-picker/dist/typeDefs";
 import axios from "axios";
 /** project */
-import {
-  uploadAreacss,
-  uploadDatasetcss,
-} from "app/modules/dataset-upload-module/style";
-import { ReactComponent as UploadIcon } from "app/modules/dataset-upload-module/assets/upload.svg";
-import { ReactComponent as LocalUploadIcon } from "app/modules/dataset-upload-module/assets/local-upload.svg";
-import { ReactComponent as GoogleDriveIcon } from "app/modules/dataset-upload-module/assets/google-drive.svg";
-
 import { formatBytes } from "app/utils/formatBytes";
-import { ReactComponent as ErrorICon } from "app/modules/dataset-upload-module/assets/error-icon.svg";
 import { useStoreState } from "app/state/store/hooks";
+import { DropZone } from "app/modules/dataset-upload-module/component/dropzone/";
 
 interface Props {
   disabled: boolean;
-  setFile: React.Dispatch<React.SetStateAction<File | null>>;
-
+  onFileSubmit: (file: File) => void;
   processingError: boolean;
   setIsExternalSearch: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function AddDatasetFragment(props: Props) {
-  const [openPicker, authResponse] = useDrivePicker();
-  const [isPickerOpen, setIsPickerOpen] = React.useState(false);
-  const [fileData, setFileData] = React.useState<PickerCallback | null>(null);
+  const [openPicker] = useDrivePicker();
   const token = useStoreState((state) => state.AuthToken.value);
-  const [accessToken, setAccessToken] = React.useState("");
-  React.useEffect(() => {
-    if (accessToken && fileData?.docs) {
-      const file = fileData?.docs[0];
-      axios({
+
+  const handleGoogleDriveFilePicker = async (
+    file: CallbackDoc,
+    accessToken: string
+  ) => {
+    try {
+      const response = await axios({
         url: `https://www.googleapis.com/drive/v3/files/${file.id}${
           file.type === "file" ? "?alt=media" : "/export?mimeType=text/csv"
         }`,
@@ -50,17 +37,16 @@ export default function AddDatasetFragment(props: Props) {
           Authorization: `Bearer ${accessToken}`,
         },
         responseType: "blob", // important
-      }).then((response) => {
-        if (process.env.NODE_ENV === "development") {
-          console.log("response", response);
-        }
-        const b = response.data;
-        const gfile = new File([b], file.name, { type: "text/csv" });
-
-        props.setFile(gfile);
       });
+
+      const b = response?.data;
+      const gfile = new File([b], file.name, { type: "text/csv" });
+
+      props.onFileSubmit(gfile);
+    } catch (e) {
+      console.log(e, "handleGoogleDriveFilePicker error");
     }
-  }, [accessToken, fileData]);
+  };
 
   const ACCEPTED_FILES = {
     "text/csv": [".csv"],
@@ -73,11 +59,9 @@ export default function AddDatasetFragment(props: Props) {
   };
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
-    acceptedFiles.forEach((file: File) => {
-      const reader = new FileReader();
-
-      reader.readAsArrayBuffer(file);
-    });
+    if (acceptedFiles.length > 0) {
+      props.onFileSubmit(acceptedFiles[0]);
+    }
   }, []);
 
   const {
@@ -88,51 +72,40 @@ export default function AddDatasetFragment(props: Props) {
     fileRejections,
   } = useDropzone({ onDrop, accept: ACCEPTED_FILES });
 
-  useEffect(() => {
-    if (acceptedFiles.length > 0) {
-      props.setFile(acceptedFiles[0]);
-    }
-  }, [acceptedFiles]);
+  const getAccessToken = () => {
+    return axios.get(
+      `${process.env.REACT_APP_API}/dataset/google-drive/user-token`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+  };
 
-  React.useEffect(() => {
-    if (accessToken && isPickerOpen) {
+  const getAccessTokenAndOpenPicker = async () => {
+    try {
+      const res = await getAccessToken();
+
+      //opens google drive picker
       openPicker({
         clientId: process.env.REACT_APP_GOOGLE_API_CLIENT_ID as string,
         developerKey: process.env.REACT_APP_GOOGLE_API_DEV_KEY as string,
         viewId: "SPREADSHEETS",
         supportDrives: true,
-        token: accessToken,
+        token: res.data,
         setSelectFolderEnabled: true,
         callbackFunction: (d: PickerCallback) => {
-          if (process.env.NODE_ENV === "development") {
-            console.log(d);
-          }
-          setFileData(d);
-          if (d.action === "cancel") {
-            setIsPickerOpen(false);
-          }
+          handleGoogleDriveFilePicker(d.docs[0], res.data);
         },
       });
+    } catch (e) {
+      console.log(e, "error");
     }
-  }, [accessToken, isPickerOpen]);
-
-  function getAccessTokenAndOpenPicker() {
-    axios
-      .get(`${process.env.REACT_APP_API}/dataset/google-drive/user-token`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((res) => {
-        console.log(res, "res-token");
-        //updates access token which  triggers the useEffect to open google drive picker
-        setAccessToken(res.data);
-      });
-  }
+  };
 
   function handleOpenPicker(e: React.MouseEvent<HTMLButtonElement>) {
     e.stopPropagation();
-    setIsPickerOpen(true);
     getAccessTokenAndOpenPicker();
   }
 
@@ -164,119 +137,3 @@ export default function AddDatasetFragment(props: Props) {
     </>
   );
 }
-
-interface DropzoneProps {
-  getRootProps: (props?: DropzoneRootProps) => DropzoneRootProps;
-  getInputProps: (props?: DropzoneInputProps) => DropzoneInputProps;
-  isDragActive: boolean;
-  fileRejections: FileRejection[];
-  acceptedFiles: File[];
-  isFocused?: boolean;
-  isDragAccept?: boolean;
-  isDragReject?: boolean;
-  isFileDialogActive?: boolean;
-  draggedFiles?: File[];
-  rootRef?: React.RefObject<HTMLElement>;
-  inputRef?: React.RefObject<HTMLInputElement>;
-  handleOpenPicker(e: React.MouseEvent<HTMLButtonElement>): void;
-  uploadError: boolean;
-  disabled: boolean;
-  setIsExternalSearch: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-export const DropZone = (props: DropzoneProps) => {
-  const handleExternalSearch = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
-    props.setIsExternalSearch(true);
-  };
-  return (
-    <div css={uploadDatasetcss} {...props.getRootProps()}>
-      <div>
-        <p>Add your file</p>
-      </div>
-      <div css={uploadAreacss(props.isDragActive)}>
-        <input {...props.getInputProps()} data-cy="local-upload-input" />
-        {!props.isDragActive && (
-          <>
-            <UploadIcon
-              css={`
-                margin-top: 2rem;
-              `}
-            />
-            <p
-              css={`
-                font-weight: 500;
-                font-size: 12px;
-                color: #231d2c;
-                margin-top: 5px;
-              `}
-            >
-              Supports: XLSX, CSV
-            </p>
-            <p
-              css={`
-                font-size: 20px;
-                line-height: 24px;
-                font-style: normal;
-              `}
-            >
-              Drag and Drop Spreadsheets File here <br /> or connect to Google
-              Drive
-            </p>
-            <Box height={30} />
-            <div
-              css={`
-                display: flex;
-                gap: 1rem;
-              `}
-            >
-              <button
-                onClick={handleExternalSearch}
-                data-cy="external-search-button"
-              >
-                <SearchIcon color="secondary" /> <p>External search</p>
-              </button>
-              <button>
-                <LocalUploadIcon /> <p>Local upload</p>
-              </button>
-
-              <button type="button" onClick={props.handleOpenPicker}>
-                <GoogleDriveIcon /> <p>Connect to google drive</p>
-              </button>
-            </div>
-            <Box height={40} />
-            {props.uploadError && (
-              <div
-                css={`
-                  color: #e75656;
-                  font-size: 18;
-                  font-family: " Gotham Narrow", sans-serif;
-                  font-weight: bold;
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                  flex-direction: column;
-                  p {
-                    display: flex;
-                    align-items: center;
-                    gap: 13px;
-                    margin: 0;
-                  }
-                  small {
-                    text-align: center;
-                  }
-                `}
-              >
-                <p>
-                  <ErrorICon />{" "}
-                  <span>Unable to upload your file. Please try again!</span>
-                </p>
-                <span>Error</span>
-              </div>
-            )}
-          </>
-        )}
-      </div>
-    </div>
-  );
-};

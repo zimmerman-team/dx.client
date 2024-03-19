@@ -13,13 +13,14 @@ import { Slide, SnackbarContent, useMediaQuery } from "@material-ui/core";
 /* project */
 import { styles } from "app/modules/chart-module/components/toolbox/styles";
 import { ChartExporter } from "app/modules/chart-module/components/exporter";
-import { ChartToolBoxProps } from "app/modules/chart-module/components/toolbox/data";
+import {
+  ChartToolBoxProps,
+  ToolboxNavType,
+} from "app/modules/chart-module/components/toolbox/data";
 import { ChartToolBoxSteps } from "app/modules/chart-module/components/toolbox/steps";
 import { TriangleXSIcon } from "app/assets/icons/TriangleXS";
 import { emptyChartAPI, ChartAPIModel } from "app/modules/chart-module/data";
-import ToolboxNav, {
-  ToolboxNavType,
-} from "app/modules/chart-module/components/toolbox/steps/navbar";
+import ToolboxNav from "app/modules/chart-module/components/toolbox/steps/navbar";
 import { InfoSnackbar } from "../chartSubheaderToolbar/infoSnackbar";
 
 export function ChartModuleToolBox(props: Readonly<ChartToolBoxProps>) {
@@ -167,22 +168,22 @@ export function ChartModuleToolBox(props: Readonly<ChartToolBoxProps>) {
   //handles what happens after chart is created or edited
   React.useEffect(() => {
     if ((editChartSuccess || createChartSuccess) && chartFromReport.state) {
-      //returns back to persisted report view
+      //return to persisted report view
       setRightPanelView("charts");
       history.push(`/report/${chartFromReport.page}/edit`);
     } else if (editChartSuccess && !chartFromReport.state) {
-      //returns back to chart detail page
+      //return to chart detail page
       history.push(`/chart/${page}`);
     } else if (
       createChartSuccess &&
       !chartFromReport.state &&
       createChartData.id
     ) {
-      //shows snackbar
+      //show snackbar
       setShowSnackbar(
         createChartSuccess ? `Chart created successfully!` : null
       );
-      //returns back to chart detail page
+      //return to chart detail page
       history.push(`/chart/${createChartData.id}`);
     }
   }, [editChartSuccess, createChartSuccess, createChartData]);
@@ -247,9 +248,6 @@ export function ChartModuleToolBox(props: Readonly<ChartToolBoxProps>) {
           )}
 
           <ToolboxNav
-            activePanelStep={activePanels}
-            setActivePanelStep={setActivePanels}
-            mappedData={props.mappedData}
             stepPaths={stepPaths}
             onNavBtnClick={onNavBtnClick}
             isClickable={isClickable}
@@ -277,6 +275,7 @@ export function ChartModuleToolBox(props: Readonly<ChartToolBoxProps>) {
               setIsClickable={setIsClickable}
               onMouseOverNavBtn={onMouseOverNavBtn}
               setChartFromAPI={props.setChartFromAPI}
+              deselectDataset={props.deselectDataset}
             />
           )}
 

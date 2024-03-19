@@ -16,7 +16,7 @@ export default function Processing(props: ProcessingMetaDataProps) {
     const se = " seconds (estimated)";
     let ret = mft + se;
     if (mft <= 0) ret = "Finishing up...";
-    if (mft > 60) ret = +" minutes and " + Math.floor(time % 60) + se;
+    if (mft > 60) ret = mft + " minutes and " + Math.floor(time % 60) + se;
     return ret;
   };
 
@@ -44,6 +44,7 @@ export default function Processing(props: ProcessingMetaDataProps) {
               font-size: 18px;
               text-align: center;
             `}
+            data-testid="error-message"
           >
             <b>
               Data could not be processed, please try again <br /> or contact
@@ -92,6 +93,7 @@ export default function Processing(props: ProcessingMetaDataProps) {
                 {props.fileName}
               </p>
               <div
+                data-testid="progress-bar"
                 css={`
                   display: flex;
                   flex-wrap: wrap;
@@ -130,7 +132,9 @@ export default function Processing(props: ProcessingMetaDataProps) {
                   />
                 </div>
                 <p>{props.loaded}</p>
-                <p>{getTimeInHoursnMins(props.estimatedUploadTime)}</p>
+                <p data-testid="estimated-time">
+                  {getTimeInHoursnMins(props.estimatedUploadTime)}
+                </p>
               </div>
             </div>
           </div>

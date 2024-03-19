@@ -79,7 +79,7 @@ export default function gridItem(props: Props) {
             <p
               css={`
                 font-size: 14px;
-                font-family: "Gotham Narrow Bold", sans-serif;
+                font-family: "GothamNarrow-Bold", sans-serif;
                 margin-top: 6px;
                 overflow: hidden;
                 margin-bottom: 0;

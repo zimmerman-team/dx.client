@@ -54,6 +54,7 @@ export default function DeleteChartDialog(props: Props) {
         <form
           onSubmit={() => props.handleDelete(props.cardId as number)}
           data-cy="delete-chart-item-form"
+          aria-label="form"
         >
           <div
             css={`

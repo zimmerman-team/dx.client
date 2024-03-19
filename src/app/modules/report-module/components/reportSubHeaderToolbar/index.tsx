@@ -1,7 +1,6 @@
 import React from "react";
 import axios from "axios";
 import { useRecoilState } from "recoil";
-import styled from "styled-components/macro";
 import { useAuth0 } from "@auth0/auth0-react";
 import Button from "@material-ui/core/Button";
 import SaveIcon from "@material-ui/icons/Save";
@@ -23,7 +22,6 @@ import { PageLoader } from "app/modules/common/page-loader";
 import { createStyles, makeStyles } from "@material-ui/core";
 import { Link, useHistory, useParams } from "react-router-dom";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
-import DeleteChartDialog from "app/components/Dialogs/deleteChartDialog";
 import { ReportModel, emptyReport } from "app/modules/report-module/data";
 import DeleteReportDialog from "app/components/Dialogs/deleteReportDialog";
 import { ChartAPIModel, emptyChartAPI } from "app/modules/chart-module/data";
@@ -35,53 +33,7 @@ import { ISnackbarState } from "app/modules/dataset-upload-module/upload-steps/p
 import StaticToolbar from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
 import AutoSaveSwitch from "app/modules/report-module/components/reportSubHeaderToolbar/autoSaveSwitch";
 import AutoResizeInput from "app/modules/report-module/components/reportSubHeaderToolbar/autoResizeInput";
-
-export const InfoSnackbar = styled((props) => <Snackbar {...props} />)`
-  && {
-    bottom: 40px;
-  }
-
-  & [class*="MuiSnackbarContent-root"] {
-    width: 100%;
-    display: flex;
-    padding: 0 78px;
-    background: #fff;
-    flex-wrap: nowrap;
-    border-radius: 12px;
-    gap: ${(props) => (props.gap ? "0px" : "84px")};
-    justify-content: center;
-    box-shadow: 0 8px 17px -4px rgba(130, 142, 148, 0.35),
-      0 0 4px 0 rgba(130, 142, 148, 0.16), 0 0 2px 0 rgba(130, 142, 148, 0.12);
-
-    @media (max-width: 550px) {
-      width: calc(100% - 16px);
-    }
-  }
-
-  & [class*="MuiSnackbarContent-message"] {
-    color: #000;
-    font-size: 18px;
-    padding: 16px 0;
-    font-weight: 700;
-    font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
-  }
-
-  & [class*="MuiSnackbarContent-action"] {
-    > button {
-      color: #fff;
-      cursor: pointer;
-      font-size: 14px;
-      border-style: none;
-      padding: 12px 27px;
-      background: #262c34;
-      border-radius: 20px;
-    }
-  }
-
-  & [class*="MuiSnackbarContent-action"] {
-    padding: 16px 0;
-  }
-`;
+import { InfoSnackbar } from "app/modules/report-module/components/reportSubHeaderToolbar/infosnackbar";
 
 export const useStyles = makeStyles(() =>
   createStyles({
@@ -107,10 +59,8 @@ export function ReportSubheaderToolbar(
   const { user, isAuthenticated } = useAuth0();
   const { page, view } = useParams<{ page: string; view?: string }>();
   const token = useStoreState((state) => state.AuthToken.value);
-  const [modalDisplay, setModalDisplay] = React.useState({
-    report: false,
-    chart: false,
-  });
+  const [showDeleteDialog, setShowDeleteDialog] = React.useState(false);
+
   const [enableButton, setEnableButton] = React.useState<boolean>(false);
 
   const setHomeTab = useRecoilState(homeDisplayAtom)[1];
@@ -118,7 +68,6 @@ export function ReportSubheaderToolbar(
   const [autoResizeInput, _setAutoResizeInput] = React.useState<boolean>(true);
 
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
-  const [isSavedEnabled, _setIsSavedEnabled] = React.useState(false);
   const [duplicatedReportId, setDuplicatedReportId] = React.useState<
     string | null
   >(null);
@@ -198,7 +147,7 @@ export function ReportSubheaderToolbar(
   };
 
   const handleCopy = (text: string, result: boolean) => {
-    setOpenSnackbar(result);
+    setOpenSnackbar(true);
   };
 
   const handleCloseSnackbar = () => {
@@ -226,18 +175,13 @@ export function ReportSubheaderToolbar(
   const id = open ? "simple-popover" : undefined;
 
   const handleModalDisplay = () => {
-    setModalDisplay({
-      ...modalDisplay,
-      report: true,
-    });
+    setShowDeleteDialog(true);
   };
 
   const handleDelete = () => {
     setEnableButton(false);
-    setModalDisplay({
-      ...modalDisplay,
-      report: false,
-    });
+    setShowDeleteDialog(false);
+
     axios
       .delete(`${process.env.REACT_APP_API}/report/${page}`, {
         headers: {
@@ -248,7 +192,7 @@ export function ReportSubheaderToolbar(
         loadReports({
           token,
           storeInCrudData: true,
-          filterString: "filter[order]=createdDate desc",
+          filterString: "filter[order]=updatedDate desc",
         });
       })
       .catch((error) => console.log(error));
@@ -268,7 +212,7 @@ export function ReportSubheaderToolbar(
         loadReports({
           token,
           storeInCrudData: true,
-          filterString: "filter[order]=createdDate desc",
+          filterString: "filter[order]=updatedDate desc",
         });
         setDuplicatedReportId(response.data.id);
         setSnackbarState({
@@ -344,6 +288,7 @@ export function ReportSubheaderToolbar(
                 css={styles.viewReportBtn}
                 onClick={handleViewReport}
                 data-cy="view-report-button"
+                aria-label="view report button"
               >
                 <PlayIcon />
                 View Report
@@ -442,11 +387,8 @@ export function ReportSubheaderToolbar(
                     <span>
                       <IconButton
                         onClick={onSave}
-                        disabled={
-                          props.forceEnablePreviewSave
-                            ? !props.forceEnablePreviewSave
-                            : !isSavedEnabled
-                        }
+                        disabled={!props.isSaveEnabled}
+                        aria-label="save button"
                         css={`
                           padding: 4px;
                           :disabled {
@@ -466,13 +408,19 @@ export function ReportSubheaderToolbar(
                   <ExportChartButton />
                   {isAuthenticated && (
                     <Tooltip title="Duplicate">
-                      <IconButton onClick={handleDuplicate}>
+                      <IconButton
+                        onClick={handleDuplicate}
+                        data-testid="duplicate-button"
+                      >
                         <FileCopyIcon htmlColor="#262c34" />
                       </IconButton>
                     </Tooltip>
                   )}
                   <Tooltip title="Share">
-                    <IconButton onClick={handleClick}>
+                    <IconButton
+                      onClick={handleClick}
+                      data-testid="share-button"
+                    >
                       <ShareIcon htmlColor="#262c34" />
                     </IconButton>
                   </Tooltip>
@@ -507,14 +455,21 @@ export function ReportSubheaderToolbar(
                   </Popover>
                   {canChartEditDelete && (
                     <Tooltip title="Edit">
-                      <IconButton component={Link} to={`/report/${page}/edit`}>
+                      <IconButton
+                        component={Link}
+                        to={`/report/${page}/edit`}
+                        data-testid="edit-button"
+                      >
                         <EditIcon htmlColor="#262c34" />
                       </IconButton>
                     </Tooltip>
                   )}
                   {canChartEditDelete && (
                     <Tooltip title="Delete">
-                      <IconButton onClick={handleModalDisplay}>
+                      <IconButton
+                        onClick={handleModalDisplay}
+                        data-testid="delete-button"
+                      >
                         <DeleteIcon htmlColor="#262c34" />
                       </IconButton>
                     </Tooltip>
@@ -555,17 +510,10 @@ export function ReportSubheaderToolbar(
         }
       />
       <DeleteReportDialog
-        modalDisplay={modalDisplay.report}
+        modalDisplay={showDeleteDialog}
         enableButton={enableButton}
         handleDelete={handleDelete}
-        setModalDisplay={setModalDisplay}
-        handleInputChange={handleDeleteModalInputChange}
-      />
-      <DeleteChartDialog
-        modalDisplay={modalDisplay.chart}
-        enableButton={enableButton}
-        handleDelete={handleDelete}
-        setModalDisplay={setModalDisplay}
+        setModalDisplay={setShowDeleteDialog}
         handleInputChange={handleDeleteModalInputChange}
       />
     </div>

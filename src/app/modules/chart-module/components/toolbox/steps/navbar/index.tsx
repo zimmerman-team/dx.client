@@ -1,28 +1,14 @@
 import React from "react";
-import { ActionCreator } from "easy-peasy";
-import TuneIcon from "@material-ui/icons/Tune";
-import PaletteIcon from "@material-ui/icons/Palette";
-import { useHistory, useLocation, useParams } from "react-router-dom";
-import CloudDoneIcon from "@material-ui/icons/CloudDone";
-import TableChartIcon from "@material-ui/icons/TableChart";
-import AssessmentIcon from "@material-ui/icons/Assessment";
+import { useLocation, useParams } from "react-router-dom";
 import { stepcss } from "app/modules/chart-module/components/toolbox/steps/navbar/style";
-import { useStoreActions } from "app/state/store/hooks";
-
-export type ToolboxNavType =
-  | "dataset"
-  | "mapping"
-  | "lock"
-  | "customize"
-  | "filters"
-  | "chart"
-  | "selectDataset";
+import { useStoreActions, useStoreState } from "app/state/store/hooks";
+import {
+  ToolboxNavType,
+  toolboxNavContent,
+} from "app/modules/chart-module/components/toolbox/data";
 
 export default function ToolboxNav(
   props: Readonly<{
-    setActivePanelStep: ActionCreator<ToolboxNavType>;
-    activePanelStep: string;
-    mappedData: any;
     stepPaths: { name: string; path: string }[];
     onNavBtnClick: (name: ToolboxNavType, path: string) => void;
     isClickable: boolean;
@@ -31,10 +17,17 @@ export default function ToolboxNav(
   }>
 ) {
   const { page } = useParams<{ page: string }>();
-  const history = useHistory();
   const location = useLocation();
+
+  const activePanelStep = useStoreState(
+    (state) => state.charts.activePanels.value
+  );
   const resetActivePanels = useStoreActions(
     (actions) => actions.charts.activePanels.reset
+  );
+
+  const setActivePanelStep = useStoreActions(
+    (state) => state.charts.activePanels.setValue
   );
   const whiteBackgroundOnly = "background-color: #fff;";
   const whiteBackgroundRoundedBottomRight =
@@ -50,46 +43,18 @@ export default function ToolboxNav(
       const step = props.stepPaths.find(
         (s) => s.path === location.pathname
       )?.name;
-      props.setActivePanelStep(step as ToolboxNavType);
+      setActivePanelStep(step as ToolboxNavType);
     }
     return () => {
       resetActivePanels();
     };
   }, []);
 
-  const navContent: {
-    name: ToolboxNavType;
-    icon: JSX.Element;
-    path: string;
-  }[] = [
-    {
-      name: "dataset",
-      icon: <TableChartIcon />,
-      path: `/chart/${page}/preview-data`,
-    },
-    {
-      name: "chart",
-      icon: <AssessmentIcon />,
-      path: `/chart/${page}/chart-type`,
-    },
-    {
-      name: "mapping",
-      icon: <CloudDoneIcon />,
-      path: `/chart/${page}/mapping`,
-    },
-
-    { name: "filters", icon: <TuneIcon />, path: `/chart/${page}/filters` },
-    {
-      name: "customize",
-      icon: <PaletteIcon />,
-      path: `/chart/${page}/customize`,
-    },
-  ];
-
+  const navContent = toolboxNavContent(page);
   const activePanelStepIndex =
-    props.activePanelStep === "selectDataset"
+    activePanelStep === "selectDataset"
       ? 0
-      : navContent.findIndex((nav) => nav.name === props.activePanelStep);
+      : navContent.findIndex((nav) => nav.name === activePanelStep);
 
   return (
     <div
@@ -102,9 +67,7 @@ export default function ToolboxNav(
         <button
           css={`
             ${stepcss(
-              item.name === props.activePanelStep ||
-                index === activePanelStepIndex,
-              props.isClickable
+              item.name === activePanelStep || index === activePanelStepIndex
             )}
             ${(() => {
               if (index === activePanelStepIndex - 1) {
@@ -118,8 +81,10 @@ export default function ToolboxNav(
               }
             })()};
           `}
+          aria-label={item.name}
           disabled={!props.isClickable}
           key={item.name}
+          name={item.name}
           onClick={() => {
             props.onNavBtnClick(item.name, item.path);
           }}

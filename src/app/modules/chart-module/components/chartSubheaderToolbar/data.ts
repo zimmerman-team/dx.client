@@ -5,14 +5,10 @@ import { ToolbarPluginsType } from "app/modules/report-module/components/reportS
 export interface SubheaderToolbarProps {
   name: string;
   visualOptions?: any;
+  dimensions: any;
   setName: (name: string) => void;
-  forceEnablePreviewSave?: boolean;
-  rawViz?: any;
   setHasSubHeaderTitleFocused?: (value: boolean) => void;
   setHasSubHeaderTitleBlurred?: (value: boolean) => void;
-  headerDetails: IHeaderDetails;
-  appliedHeaderDetails: IHeaderDetails;
-  framesArray: IFramesArray[];
   setStopInitializeFramesWidth?: (value: boolean) => void;
   handlePersistReportState?: () => void;
   isPreviewView: boolean;
@@ -21,13 +17,12 @@ export interface SubheaderToolbarProps {
 export interface ReportSubheaderToolbarProps {
   name: string;
   autoSave: boolean;
-  setAutoSave: React.Dispatch<React.SetStateAction<boolean>>;
+  setAutoSave: (value: boolean) => void;
   visualOptions?: any;
   onReportSave: (type: "create" | "edit") => Promise<void>;
   setName: (name: string) => void;
-  forceEnablePreviewSave?: boolean;
+  isSaveEnabled?: boolean;
   rawViz?: any;
-  reportName: string;
   setHasSubHeaderTitleFocused?: (value: boolean) => void;
   setHasSubHeaderTitleBlurred?: (value: boolean) => void;
   plugins: ToolbarPluginsType;

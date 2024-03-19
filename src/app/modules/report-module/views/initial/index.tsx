@@ -37,7 +37,7 @@ export function ReportInitialView(props: Readonly<ReportInitialViewProps>) {
     undefined
   );
   const [openSearch, setOpenSearch] = React.useState(false);
-  const [sortValue, setSortValue] = React.useState("createdDate");
+  const [sortValue, setSortValue] = React.useState("updatedDate");
   const [sortPopoverAnchorEl, setSortPopoverAnchorEl] =
     React.useState<HTMLButtonElement | null>(null);
 

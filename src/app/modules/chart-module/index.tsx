@@ -87,6 +87,8 @@ export default function ChartModule() {
     notFound,
     dataError,
     dataTypesFromRenderedChart,
+    chartErrorMessage,
+    setChartErrorMessage,
   } = useChartsRawData({
     visualOptions,
     setVisualOptions,
@@ -94,9 +96,7 @@ export default function ChartModule() {
     chartFromAPI,
     dimensions,
   });
-  const [chartErrorMessage, setChartErrorMessage] = React.useState(
-    "Something went wrong with rendering your chart!"
-  );
+
   const isSaveLoading = useStoreState(
     (state) => state.charts.ChartCreate.loading
   );
@@ -145,6 +145,9 @@ export default function ChartModule() {
       (state.dataThemes.DatasetGetList.crudData ??
         []) as DatasetListItemAPIModel[]
   );
+  const setDataset = useStoreActions(
+    (actions) => actions.charts.dataset.setValue
+  );
 
   const resetEnabledFilterOptionGroups = useStoreActions(
     (actions) => actions.charts.enabledFilterOptionGroups.clear
@@ -165,6 +168,12 @@ export default function ChartModule() {
     }
     return dataTypes;
   }, [dataTypes, dataTypesFromRenderedChart]);
+
+  const deselectDataset = () => {
+    setDataset(null);
+    setDataError(false);
+    setNotFound(false);
+  };
 
   //empty chart when chart type and or  dataset types changes
   React.useEffect(() => {
@@ -303,18 +312,6 @@ export default function ChartModule() {
     });
   }
 
-  function getForceEnabledPreviewValue(param?: string) {
-    if (param === "preview") {
-      return true;
-    }
-    if (param === "mapping") {
-      const { updRequiredFields, updMinValuesFields } =
-        getRequiredFieldsAndErrors(mapping, dimensions);
-      return updRequiredFields.length === 0 && updMinValuesFields.length === 0;
-    }
-    return false;
-  }
-
   React.useEffect(() => {
     if (!loading && chartType) {
       setVisualOptionsOnChange();
@@ -377,15 +374,7 @@ export default function ChartModule() {
             `}
           >
             <ErrorOutlineIcon htmlColor="#E75656" fontSize="large" />
-            {notFound ? (
-              <p>{chartErrorMessage}</p>
-            ) : (
-              <p>
-                Something went wrong with loading your data!
-                <br />
-                Choose another dataset or upload new.
-              </p>
-            )}
+            {notFound || (dataError && <p>{chartErrorMessage}</p>)}
           </div>
         </div>
       </div>
@@ -407,13 +396,9 @@ export default function ChartModule() {
         visualOptions={visualOptions}
         name={chartName}
         setName={setChartName}
-        rawViz={rawViz}
         setHasSubHeaderTitleFocused={setHasSubHeaderTitleFocused}
-        forceEnablePreviewSave={getForceEnabledPreviewValue(view)}
-        appliedHeaderDetails={{} as IHeaderDetails}
-        framesArray={[]}
-        headerDetails={{} as IHeaderDetails}
         isPreviewView={isPreviewView}
+        dimensions={dimensions}
       />
       <ChartModuleToolBox
         rawViz={rawViz}
@@ -440,6 +425,7 @@ export default function ChartModule() {
         setDatasetName={setChartName}
         onClose={() => setToolboxOpen(false)}
         onOpen={() => setToolboxOpen(true)}
+        deselectDataset={deselectDataset}
       />
 
       <div

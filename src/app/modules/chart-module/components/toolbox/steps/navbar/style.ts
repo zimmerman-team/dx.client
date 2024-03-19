@@ -1,6 +1,6 @@
 import { css } from "styled-components";
 
-export const stepcss = (activeStep: boolean, isClickable: boolean) => css`
+export const stepcss = (activeStep: boolean) => css`
   width: 79px;
   height: 67px;
   display: flex;
