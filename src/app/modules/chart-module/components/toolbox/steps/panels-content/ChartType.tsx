@@ -111,9 +111,10 @@ export function ChartToolBoxChartType() {
                         font-size: 14px;
                         margin: 0px;
                         line-height: 20px;
+                        font-family: "GothamNarrow-Bold", sans-serif;
                       `}
                     >
-                      <b> {fChartType.label}</b>
+                      {fChartType.label}
                     </p>
 
                     <p
@@ -152,7 +153,7 @@ export function ChartToolBoxChartType() {
                   />
                   <p
                     css={`
-                      font-family: "Gotham Narrow", sans-serif;
+                      font-family: "GothamNarrow-Book", sans-serif;
                       font-size: 10px;
                       line-height: normal;
                       padding-bottom: 17px;

@@ -249,11 +249,12 @@ export function ExpandedFilterGroup(props: ExpandedFilterGroupProps) {
         `}
       >
         <div
+          onClick={props.goBack}
           css={`
             display: flex;
             flex-direction: row;
             align-items: center;
-
+            cursor: pointer;
             > button {
               transform: rotate(-90deg);
               &:hover {
@@ -262,7 +263,7 @@ export function ExpandedFilterGroup(props: ExpandedFilterGroupProps) {
             }
           `}
         >
-          <IconButton onClick={props.goBack} aria-label="expanded-filter-close">
+          <IconButton aria-label="expanded-filter-close">
             <TriangleXSIcon />
           </IconButton>
           <div

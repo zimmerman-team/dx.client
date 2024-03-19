@@ -16,9 +16,6 @@ export function ChartToolBoxFilters(props: ChartToolBoxFiltersProps) {
   const [expandedGroup, setExpandedGroup] =
     React.useState<FilterGroupModel | null>(null);
 
-  const allAppliedFilters = useStoreState(
-    (state) => state.charts.appliedFilters.value
-  );
   const resetAppliedFilters = useStoreActions(
     (state) => state.charts.appliedFilters.reset
   );

@@ -163,7 +163,7 @@ const TeamCard = (props: {
           /* margin: 0px; */
           margin-top: 25px;
           margin-bottom: 5px;
-          font-family: "Gotham Narrow", sans-serif;
+          font-family: "GothamNarrow-Bold", sans-serif;
           display: flex;
           align-items: center;
           gap: 16px;

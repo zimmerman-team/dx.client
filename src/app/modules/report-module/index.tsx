@@ -637,6 +637,7 @@ export default function ReportModule() {
         <Route path="/report/:page/edit">
           <ReportEditView
             open={rightPanelOpen}
+            reportType={reportType}
             setReportName={setReportName}
             reportName={reportName}
             localPickedCharts={localPickedCharts}

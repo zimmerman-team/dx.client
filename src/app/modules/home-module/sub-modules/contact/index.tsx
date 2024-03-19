@@ -156,7 +156,7 @@ export default function ContactModule() {
                 font-size: 24px;
                 line-height: 29px;
                 text-align: center;
-                font-family: "Gotham Narrow", sans-serif;
+                font-family: "GothamNarrow-Medium", sans-serif;
                 margin-top: 0;
               }
               .MuiFormControl-root {
@@ -263,7 +263,7 @@ export default function ContactModule() {
             <p
               css={`
                 color: #fff;
-                font-family: "Gotham Narrow", sans-serif;
+                font-family: "GothamNarrow-Bold", sans-serif;
                 font-size: 40px;
                 font-style: normal;
                 font-weight: 400;
@@ -289,7 +289,7 @@ export default function ContactModule() {
             <p
               css={`
                 color: #fff;
-                font-family: "Gotham Narrow", sans-serif;
+                font-family: "GothamNarrow-Medium", sans-serif;
                 font-size: 22px;
                 font-style: normal;
                 font-weight: 350;
@@ -369,7 +369,7 @@ export default function ContactModule() {
             line-height: 29px;
             text-align: center;
             color: #231d2c;
-            font-family: "Gotham Narrow", sans-serif;
+            font-family: "GothamNarrow-Medium", sans-serif;
 
             a {
               color: #231d2c;
