@@ -26,6 +26,7 @@ import {
 } from "app/state/recoil/atoms";
 import { IFramesArray } from "../create/data";
 import RowFrame from "../../sub-module/rowStructure";
+import TourGuide from "app/components/Dialogs/TourGuide";
 
 function ReportEditView(props: ReportEditViewProps) {
   const { page } = useParams<{ page: string }>();
@@ -202,6 +203,10 @@ function ReportEditView(props: ReportEditViewProps) {
           `}
         >
           <Box height={50} />
+          <TourGuide
+            reportType={props.reportType ?? "basic"}
+            toolBoxOpen={props.open}
+          />
           <ReportOrderContainer
             enabled
             childrenData={props.framesArray}

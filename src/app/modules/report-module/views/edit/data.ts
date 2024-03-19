@@ -4,6 +4,8 @@ import { ToolbarPluginsType } from "app/modules/report-module/components/reportS
 
 export interface ReportEditViewProps {
   open: boolean;
+  reportType: "basic" | "advanced" | "ai" | null;
+
   view: "initial" | "edit" | "create" | "preview" | "ai-template";
   hasSubHeaderTitleFocused: boolean;
   setHasSubHeaderTitleFocused: React.Dispatch<React.SetStateAction<boolean>>;
