@@ -11,9 +11,6 @@ jobs:
     #   matrix:
     #     containers: [1, 2] # Uses 2 parallel instances
     steps:
-      - uses: actions/setup-node@v2
-        with:
-            node-version: '16'
       - name: Checkout
         uses: actions/checkout@v4
       - name: Cypress run
@@ -23,7 +20,7 @@ jobs:
           # Starts web server for E2E tests - replace with your own server invocation
           # https://docs.cypress.io/guides/continuous-integration/introduction#Boot-your-server
           start: npm start
-          wait-on: ${{ secrets.REACT_APP_BASE_URL }} # Waits for above
+          wait-on: "http://127.0.0.1:3000" # Waits for above
           # Records to Cypress Cloud
           # https://docs.cypress.io/guides/cloud/projects#Set-up-a-project-to-record
           record: true
