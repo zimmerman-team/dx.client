@@ -14,10 +14,10 @@
 
 describe("Testing connecting data on DX", () => {
   const apiUrl = Cypress.env("api_url");
-  const baseUrl = Cypress.env("base_url");
+
   beforeEach(() => {
     cy.restoreLocalStorageCache();
-    cy.visit(baseUrl);
+    cy.visit("/");
 
     cy.get('[data-cy="cookie-btn"]').click();
 
@@ -80,11 +80,10 @@ describe("Testing connecting data on DX", () => {
 
 describe("Edit, Delete and Duplicate Dataset", () => {
   const apiUrl = Cypress.env("api_url");
-  const baseUrl = Cypress.env("base_url");
 
   beforeEach(() => {
     cy.restoreLocalStorageCache();
-    cy.visit(baseUrl);
+    cy.visit("/");
     cy.get('[data-cy="cookie-btn"]').click();
 
     cy.intercept("GET", `${apiUrl}/datasets?filter=*`).as("fetchDatasets");

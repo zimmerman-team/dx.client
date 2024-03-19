@@ -1,5 +1,4 @@
 /// <reference types="cypress" />
-import { jwtDecode } from "jwt-decode";
 import "cypress-file-upload";
 
 // ***********************************************
@@ -39,75 +38,6 @@ import "cypress-file-upload";
 //   }
 // }
 
-Cypress.Commands.add("login", (overrides = {}) => {
-  Cypress.log({
-    name: "loginViaAuth0",
-  });
-
-  const client_id = Cypress.env("auth0_client_id");
-  const scope = Cypress.env("auth0_scope");
-  const audience = Cypress.env("auth0_audience");
-
-  const options = {
-    method: "POST",
-    url: `https://${Cypress.env("auth0_domain")}/oauth/token`,
-    body: {
-      grant_type: "password",
-      username: Cypress.env("auth0_username"),
-      password: Cypress.env("auth0_password"),
-      audience,
-      scope,
-      client_id,
-      client_secret: Cypress.env("auth0_client_secret"),
-    },
-  };
-  cy.request(options)
-    .then((resp) => {
-      return resp.body;
-    })
-    .then((body: any) => {
-      const { access_token, expires_in, id_token, token_type } = body;
-      const [header, payload, signature] = id_token.split(".");
-      const tokenData = jwtDecode(id_token);
-      const key = `@@auth0spajs@@::${client_id}::${audience}::${scope}`;
-      const userKey = `@@auth0spajs@@::${client_id}::@@user@@`;
-
-      const auth0Cache = {
-        body: {
-          client_id,
-          access_token,
-          audience,
-          id_token,
-          scope,
-          expires_in,
-          token_type,
-          decodedToken: {
-            user: jwtDecode(id_token),
-          },
-        },
-        expiresAt: Math.floor(Date.now() / 1000) + expires_in,
-      };
-
-      const auth0UserCache = {
-        decodedToken: {
-          encoded: { header, payload, signature },
-          header: {
-            alg: "RS256",
-            typ: "JWT",
-          },
-          claims: {
-            __raw: payload,
-            ...tokenData,
-          },
-          user: tokenData,
-        },
-        id_token,
-      };
-      window.localStorage.setItem(key, JSON.stringify(auth0Cache));
-      window.localStorage.setItem(userKey, JSON.stringify(auth0UserCache));
-    });
-});
-
 let LOCAL_STORAGE_MEMORY = {};
 
 Cypress.Commands.add("saveLocalStorageCache", (overrides = {}) => {
@@ -129,7 +59,8 @@ Cypress.on("uncaught:exception", (err, runnable) => {
   if (
     err.message.includes(
       "ResizeObserver loop completed with undelivered notifications"
-    )
+    ) ||
+    err.message.includes("Error: Consent required")
   ) {
     return false;
   }
@@ -141,4 +72,55 @@ Cypress.Commands.add("drag", { prevSubject: true }, (subject) => {
 
 Cypress.Commands.add("drop", { prevSubject: true }, (subject) => {
   cy.wrap(subject).trigger("dragenter").trigger("dragover").trigger("drop");
+});
+
+function loginViaAuth0Ui(username: string, password: string) {
+  // App landing page redirects to Auth0.
+  cy.visit("/");
+  cy.visit(
+    `https://${Cypress.env(
+      "auth0_domain"
+    )}/authorize?response_type=token&client_id=${Cypress.env(
+      "auth0_client_id"
+    )}&audience=${Cypress.env(
+      "auth0_audience"
+    )}&scope=openid%20profile%20email&redirect_uri=${Cypress.env(
+      "base_url"
+    )}/callback`
+  );
+  cy.intercept("/callback**").as("callback");
+
+  // Login on Auth0.
+  cy.origin(
+    Cypress.env("auth0_domain"),
+    { args: { username, password } },
+    ({ username, password }) => {
+      cy.get("input#username").type(username);
+      cy.get("input#password").type(password, { log: false });
+      cy.contains("button[value=default]", "Continue").click();
+
+      cy.url().then((url) => {
+        if (url.includes("auth0.com")) {
+          cy.contains("button[value=accept]", "Accept").click();
+        }
+      });
+    }
+  );
+
+  cy.wait("@callback");
+}
+
+Cypress.Commands.add("loginToAuth0", (username: string, password: string) => {
+  const log = Cypress.log({
+    displayName: "AUTH0 LOGIN",
+    message: [`🔐 Authenticating | ${username}`],
+    // @ts-ignore
+    autoEnd: false,
+  });
+  log.snapshot("before");
+
+  loginViaAuth0Ui(username, password);
+
+  log.snapshot("after");
+  log.end();
 });

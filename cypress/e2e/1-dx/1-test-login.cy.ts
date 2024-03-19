@@ -1,11 +1,14 @@
 /// <reference types="cypress" />
 
 describe("Login for a test user on DX", () => {
-  const baseUrl = Cypress.env("base_url");
   beforeEach(() => {
-    cy.login();
+    // cy.login();
+    cy.loginToAuth0(
+      Cypress.env("auth0_username"),
+      Cypress.env("auth0_password")
+    );
     cy.saveLocalStorageCache();
-    cy.visit(baseUrl);
+    cy.visit("/");
     cy.get('[data-cy="cookie-btn"]').click();
   });
 

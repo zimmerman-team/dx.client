@@ -42,7 +42,6 @@ jobs:
           REACT_APP_AUTH0_DOMAIN: ${{ secrets.REACT_APP_AUTH0_DOMAIN }}
           REACT_APP_AUTH0_AUDIENCE: ${{ secrets.REACT_APP_AUTH0_AUDIENCE }}
           REACT_APP_AUTH0_CLIENT: ${{ secrets.REACT_APP_AUTH0_CLIENT }}
-          REACT_APP_AUTH0_SCOPE: ${{ secrets.REACT_APP_AUTH0_SCOPE }}
 
           # API
           REACT_APP_API: ${{ secrets.REACT_APP_API }}

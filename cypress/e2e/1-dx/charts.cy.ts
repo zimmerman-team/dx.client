@@ -12,10 +12,10 @@
 
 describe("Testing create chart on DX", () => {
   const apiUrl = Cypress.env("api_url");
-  const baseUrl = Cypress.env("base_url");
+
   beforeEach(() => {
     cy.restoreLocalStorageCache();
-    cy.visit(baseUrl);
+    cy.visit("/");
 
     cy.get('[data-cy="cookie-btn"]').click();
 
@@ -78,7 +78,7 @@ describe("Testing create chart on DX", () => {
 
     cy.wait("@saveChart");
 
-    cy.visit(baseUrl);
+    cy.visit("/");
 
     cy.intercept("GET", `${apiUrl}/charts*`).as("fetchCharts");
 
@@ -136,7 +136,7 @@ describe("Testing create chart on DX", () => {
 
     cy.wait("@saveChart");
 
-    cy.visit(baseUrl);
+    cy.visit("/");
 
     cy.intercept("GET", `${apiUrl}/charts*`).as("fetchCharts");
 
@@ -152,10 +152,9 @@ describe("Testing create chart on DX", () => {
 
 describe("Edit, duplicate and delete chart", () => {
   const apiUrl = Cypress.env("api_url");
-  const baseUrl = Cypress.env("base_url");
   beforeEach(() => {
     cy.restoreLocalStorageCache();
-    cy.visit(baseUrl);
+    cy.visit("/");
 
     cy.get('[data-cy="cookie-btn"]').click();
 

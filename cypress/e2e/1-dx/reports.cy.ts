@@ -11,13 +11,12 @@
 
 describe("Testing reports on DX", () => {
   const apiUrl = Cypress.env("api_url");
-  const baseUrl = Cypress.env("base_url");
   beforeEach(() => {
     // restoring login cache
     cy.restoreLocalStorageCache();
 
     // Navigating to dx home page
-    cy.visit(baseUrl);
+    cy.visit("/");
 
     cy.get('[data-cy="cookie-btn"]').click();
   });
@@ -106,7 +105,7 @@ describe("Testing reports on DX", () => {
 
     cy.wait("@fetchReport");
 
-    cy.visit(baseUrl);
+    cy.visit("/");
     cy.get('[data-cy="home-charts-tab"]').scrollIntoView().click();
 
     cy.get('[data-cy="home-reports-tab"]').scrollIntoView().click();
@@ -117,133 +116,132 @@ describe("Testing reports on DX", () => {
   });
 });
 
-// describe("Edit, duplicate and delete report", () => {
-//   const apiUrl = Cypress.env("api_url");
-//   const baseUrl = Cypress.env("base_url");
+describe("Edit, duplicate and delete report", () => {
+  const apiUrl = Cypress.env("api_url");
 
-//   beforeEach(() => {
-//     cy.restoreLocalStorageCache();
-//     cy.visit(baseUrl);
+  beforeEach(() => {
+    cy.restoreLocalStorageCache();
+    cy.visit("/");
 
-//     cy.get('[data-cy="cookie-btn"]').click();
+    cy.get('[data-cy="cookie-btn"]').click();
 
-//     cy.intercept(`${apiUrl}/reports?filter=*`).as("fetchReports");
+    cy.intercept(`${apiUrl}/reports?filter=*`).as("fetchReports");
 
-//     cy.get('[data-cy="home-charts-tab"]').scrollIntoView().click();
-//     cy.get('[data-cy="home-reports-tab"]').scrollIntoView().click();
+    cy.get('[data-cy="home-charts-tab"]').scrollIntoView().click();
+    cy.get('[data-cy="home-reports-tab"]').scrollIntoView().click();
 
-//     cy.wait("@fetchReports");
-//   });
+    cy.wait("@fetchReports");
+  });
 
-//   it("Edit report", () => {
-//     cy.contains('[data-cy="report-grid-item"]', "Football Players Report")
-//       .first()
-//       .scrollIntoView()
-//       .within(() => {
-//         cy.get('[data-cy="report-grid-item-menu-btn"]').click();
-//       });
+  it("Edit report", () => {
+    cy.contains('[data-cy="report-grid-item"]', "The football players report")
+      .first()
+      .scrollIntoView()
+      .within(() => {
+        cy.get('[data-cy="report-grid-item-menu-btn"]').click();
+      });
 
-//     cy.intercept(`${apiUrl}/report/*`).as("fetchReport");
-//     cy.intercept("PATCH", `${apiUrl}/report/*`).as("patchReport");
+    cy.intercept(`${apiUrl}/report/*`).as("fetchReport");
+    cy.intercept("PATCH", `${apiUrl}/report/*`).as("patchReport");
 
-//     cy.get('[data-cy="report-grid-item-edit-btn"]').click();
+    cy.get('[data-cy="report-grid-item-edit-btn"]').click();
 
-//     cy.wait("@fetchReport");
+    cy.wait("@fetchReport");
 
-//     cy.get('[data-cy="report-sub-header-title-input"]').type(" - Edited");
+    cy.get('[data-cy="report-sub-header-title-input"]').type(" - Edited");
 
-//     cy.get('[data-cy="report-header-block"]').within(() => {
-//       cy.get('[data-cy="report-header-block-title-input"]').type(" - Edited");
-//       cy.get('[data-cy="rich-text-editor-container"]').click();
-//       cy.get('[data-testid="rich-text-editor"]').type(" - Edited");
-//     });
+    cy.get('[data-cy="report-header-block"]').within(() => {
+      cy.get('[data-cy="report-header-block-title-input"]').type(" - Edited");
+      cy.get('[data-cy="rich-text-editor-container"]').click();
+      cy.get('[data-testid="rich-text-editor"]').type(" - Edited");
+    });
 
-//     cy.get('[data-cy="save-report-button"]').click();
+    cy.get('[data-cy="save-report-button"]').click();
 
-//     cy.wait("@patchReport");
+    cy.wait("@patchReport");
 
-//     cy.get('[data-cy="view-report-button"]').click();
+    cy.get('[data-cy="view-report-button"]').click();
 
-//     cy.wait("@fetchReport");
+    cy.wait("@fetchReport");
 
-//     cy.visit(baseUrl);
-//     cy.get('[data-cy="home-charts-tab"]').scrollIntoView().click();
+    cy.visit("/");
+    cy.get('[data-cy="home-charts-tab"]').scrollIntoView().click();
 
-//     cy.get('[data-cy="home-reports-tab"]').scrollIntoView().click();
+    cy.get('[data-cy="home-reports-tab"]').scrollIntoView().click();
 
-//     cy.wait("@fetchReports");
+    cy.wait("@fetchReports");
 
-//     cy.contains("Football Players Report - Edited").should("be.visible");
-//   });
+    cy.contains("The football players report - Edited").should("be.visible");
+  });
 
-//   it("Duplicate report", () => {
-//     cy.contains(
-//       '[data-cy="report-grid-item"]',
-//       "Football Players Report - Edited"
-//     )
-//       .first()
-//       .scrollIntoView()
-//       .within(() => {
-//         cy.get('[data-cy="report-grid-item-menu-btn"]').click();
-//       });
+  it("Duplicate report", () => {
+    cy.contains(
+      '[data-cy="report-grid-item"]',
+      "The football players report - Edited"
+    )
+      .first()
+      .scrollIntoView()
+      .within(() => {
+        cy.get('[data-cy="report-grid-item-menu-btn"]').click();
+      });
 
-//     cy.get('[data-cy="report-grid-item-duplicate-btn"]').click();
+    cy.get('[data-cy="report-grid-item-duplicate-btn"]').click();
 
-//     cy.wait("@fetchReports");
+    cy.wait("@fetchReports");
 
-//     cy.get('[data-cy="report-grid-item"]')
-//       .contains("Football Players Report - Edited (Copy)")
-//       .should("be.visible");
-//   });
+    cy.get('[data-cy="report-grid-item"]')
+      .contains("The football players report - Edited (Copy)")
+      .should("be.visible");
+  });
 
-//   it("Delete report", () => {
-//     cy.intercept("DELETE", `${apiUrl}/report/*`).as("deleteReport");
+  it("Delete report", () => {
+    cy.intercept("DELETE", `${apiUrl}/report/*`).as("deleteReport");
 
-//     cy.contains(
-//       '[data-cy="report-grid-item"]',
-//       "Football Players Report - Edited (Copy)"
-//     )
-//       .first()
-//       .scrollIntoView()
-//       .within(() => {
-//         cy.get('[data-cy="report-grid-item-menu-btn"]').click();
-//       });
+    cy.contains(
+      '[data-cy="report-grid-item"]',
+      "The football players report - Edited (Copy)"
+    )
+      .first()
+      .scrollIntoView()
+      .within(() => {
+        cy.get('[data-cy="report-grid-item-menu-btn"]').click();
+      });
 
-//     cy.get('[data-cy="report-grid-item-delete-btn"]').click();
+    cy.get('[data-cy="report-grid-item-delete-btn"]').click();
 
-//     cy.get('[data-cy="delete-report-item-form"]').within(() => {
-//       cy.get('[data-cy="delete-report-item-input"]').type("DELETE {enter}");
-//     });
+    cy.get('[data-cy="delete-report-item-form"]').within(() => {
+      cy.get('[data-cy="delete-report-item-input"]').type("DELETE {enter}");
+    });
 
-//     cy.wait("@deleteReport");
+    cy.wait("@deleteReport");
 
-//     cy.wait("@fetchReports");
+    cy.wait("@fetchReports");
 
-//     cy.get('[data-cy="report-grid-item"]')
-//       .contains("Football Players Report - Edited (Copy)")
-//       .should("not.exist");
+    cy.get('[data-cy="report-grid-item"]')
+      .contains("The football players report - Edited (Copy)")
+      .should("not.exist");
 
-//     // Delete the edited report
-//     cy.contains(
-//       '[data-cy="report-grid-item"]',
-//       "Football Players Report - Edited"
-//     )
-//       .first()
-//       .scrollIntoView()
-//       .within(() => {
-//         cy.get('[data-cy="report-grid-item-menu-btn"]').click();
-//       });
+    // Delete the edited report
+    cy.contains(
+      '[data-cy="report-grid-item"]',
+      "The football players report - Edited"
+    )
+      .first()
+      .scrollIntoView()
+      .within(() => {
+        cy.get('[data-cy="report-grid-item-menu-btn"]').click();
+      });
 
-//     cy.get('[data-cy="report-grid-item-delete-btn"]').click();
+    cy.get('[data-cy="report-grid-item-delete-btn"]').click();
 
-//     cy.get('[data-cy="delete-report-item-form"]').within(() => {
-//       cy.get('[data-cy="delete-report-item-input"]').type("DELETE {enter}");
-//     });
+    cy.get('[data-cy="delete-report-item-form"]').within(() => {
+      cy.get('[data-cy="delete-report-item-input"]').type("DELETE {enter}");
+    });
 
-//     cy.wait("@deleteReport");
+    cy.wait("@deleteReport");
 
-//     cy.wait("@fetchReports");
+    cy.wait("@fetchReports");
 
-//     cy.contains("Football Players Report - Edited").should("not.exist");
-//   });
-// });
+    cy.contains("The football players report - Edited").should("not.exist");
+  });
+});
