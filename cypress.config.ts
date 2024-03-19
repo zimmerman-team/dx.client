@@ -5,11 +5,11 @@ require("dotenv").config();
 export default defineConfig({
   viewportHeight: 820,
   viewportWidth: 1440,
+  projectId: process.env.CYPRESS_PROJECT_ID,
   e2e: {
     setupNodeEvents(on, config) {
       // implement node event listeners here
     },
-
     env: {
       auth0_username: process.env.AUTH0_USERNAME,
       auth0_password: process.env.AUTH0_PASSWORD,
