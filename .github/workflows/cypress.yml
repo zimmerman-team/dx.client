@@ -6,11 +6,14 @@ jobs:
     # Runs tests in parallel with matrix strategy https://docs.cypress.io/guides/guides/parallelization
     # https://docs.github.com/en/actions/using-jobs/using-a-matrix-for-your-jobs
     # Also see warning here https://github.com/cypress-io/github-action#parallel
-    strategy:
-      fail-fast: false # https://github.com/cypress-io/github-action/issues/48
-      matrix:
-        containers: [1, 2] # Uses 2 parallel instances
+    # strategy:
+    #   fail-fast: false # https://github.com/cypress-io/github-action/issues/48
+    #   matrix:
+    #     containers: [1, 2] # Uses 2 parallel instances
     steps:
+      - uses: actions/setup-node@v2
+        with:
+            node-version: '16'
       - name: Checkout
         uses: actions/checkout@v4
       - name: Cypress run
@@ -24,7 +27,7 @@ jobs:
           # Records to Cypress Cloud
           # https://docs.cypress.io/guides/cloud/projects#Set-up-a-project-to-record
           record: true
-          parallel: true # Runs test in parallel using settings above
+          # parallel: true # Runs test in parallel using settings above
         env:
           # For recording and parallelization to work you must set your CYPRESS_RECORD_KEY
           # in GitHub repo → Settings → Secrets → Actions
