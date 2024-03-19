@@ -211,6 +211,7 @@ export function useChartsRawData(props: {
           if (isEmpty(chart)) {
             setNotFound(true);
           } else if (response.data.error) {
+            console.log("hereei");
             setChartErrorMessage(response.data.error);
             setDataError(true);
           } else {

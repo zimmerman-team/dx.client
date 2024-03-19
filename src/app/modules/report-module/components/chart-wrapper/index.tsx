@@ -100,13 +100,13 @@ export function ReportChartWrapper(props: Props) {
   }, [props.id, token]);
 
   React.useEffect(() => {
-    if (notFound) {
+    if (notFound || dataError) {
       props.setError(true);
       if ((chartError?.data as any)?.error?.code === "ENTITY_NOT_FOUND") {
         setChartErrorMessage("This chart is no longer available.");
       }
     }
-  }, [notFound]);
+  }, [notFound, dataError]);
 
   React.useEffect(() => {
     if (props.id) {
