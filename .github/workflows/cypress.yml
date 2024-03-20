@@ -58,4 +58,5 @@ jobs:
           REACT_APP_GOOGLE_API_DEV_KEY: ${{ secrets.REACT_APP_GOOGLE_API_DEV_KEY }}
           REACT_APP_CYPRESS_TEST: "true"
           CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
+          GENERATE_SOURCEMAP: false
 
