@@ -258,7 +258,6 @@ const NonStaticDimensionContainer = (props: {
             flex-direction: row;
             align-items: center;
             justify-content: space-between;
-            font-family: "Gotham Narrow", sans-serif; ;
           `}
         >
           <div
@@ -286,10 +285,12 @@ const NonStaticDimensionContainer = (props: {
           <div
             css={`
               font-size: 14px;
+              font-family: "GothamNarrow-Bold", sans-serif;
+
               color: #262c34;
             `}
           >
-            <b> {props.dimension.name}</b>
+            {props.dimension.name}
           </div>
           <div
             css={`
@@ -790,7 +791,6 @@ const StaticDimensionContainer = (props: { dimension: any }) => {
             flex-direction: row;
             align-items: center;
             justify-content: space-between;
-            font-family: "Gotham Narrow", sans-serif; ;
           `}
         >
           <div
@@ -815,9 +815,10 @@ const StaticDimensionContainer = (props: { dimension: any }) => {
             css={`
               font-size: 14px;
               color: #262c34;
+              font-family: "GothamNarrow-Bold", sans-serif; ;
             `}
           >
-            <b> {props.dimension.name}</b>
+            {props.dimension.name}
           </div>
           <div
             css={`

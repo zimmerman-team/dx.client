@@ -17,7 +17,6 @@ export default function TryUsBlock() {
           font-family: "GothamNarrow-Bold", sans-serif;
           font-size: 48px;
           font-style: normal;
-          font-weight: 400;
           line-height: normal;
           margin-bottom: 34px;
           margin-top: 0;
@@ -53,7 +52,6 @@ export default function TryUsBlock() {
           </p>{" "}
           <p
             css={`
-              font-weight: 325;
               font-size: 24px;
               color: #f4f4f4;
               font-family: "GothamNarrow-Bold", sans-serif;

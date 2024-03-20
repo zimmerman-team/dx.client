@@ -152,15 +152,17 @@ export default function ContactModule() {
                 text-align: center;
               }
               p {
-                font-weight: 325;
-                font-size: 24px;
-                line-height: 29px;
+                font-size: 20px;
+                line-height: 24px;
                 text-align: center;
                 font-family: "GothamNarrow-Medium", sans-serif;
                 margin-top: 0;
               }
               .MuiFormControl-root {
                 margin-top: 20px;
+              }
+              input {
+                font-family: "Inter", sans-serif;
               }
             `}
           >
@@ -214,6 +216,8 @@ export default function ContactModule() {
               fullWidth
               required
               name="message"
+              multiline
+              minRows={5}
               value={contactFormDetails[4].value}
               onChange={handleContactFormChange}
             />
@@ -256,7 +260,10 @@ export default function ContactModule() {
             height: 270px;
             display: flex;
             align-items: center;
-            gap: 50px;
+            gap: 40px;
+            div:nth-child(1) {
+              width: 60%;
+            }
           `}
         >
           <div>
@@ -268,6 +275,7 @@ export default function ContactModule() {
                 font-style: normal;
                 font-weight: 400;
                 line-height: normal;
+                margin: 0;
               `}
             >
               Want to stay up to date with new releases?{" "}
@@ -275,17 +283,23 @@ export default function ContactModule() {
             <p
               css={`
                 color: #fff;
-                font-family: Gotham Narrow;
+                font-family: "GothamNarrow-Book", sans-serif;
                 font-size: 20px;
                 font-style: normal;
                 font-weight: 325;
+                margin: 0;
+                margin-top: 15px;
               `}
             >
               Stay informed with exclusive updates, offers, and exclusive
               content delivered straight to your inbox!
             </p>
           </div>
-          <div>
+          <div
+            css={`
+              margin-top: 25px;
+            `}
+          >
             <p
               css={`
                 color: #fff;
@@ -294,22 +308,27 @@ export default function ContactModule() {
                 font-style: normal;
                 font-weight: 350;
                 line-height: normal;
+                margin-top: 0;
+                margin-bottom: 16px;
               `}
             >
               Subscribe to our newsletter
             </p>
-            <label
-              css={`
-                font-family: "Inter", sans-serif;
-                font-size: 12px;
-                text-align: left;
-                width: 100%;
-                padding-left: 10px;
-                color: #e75656;
-              `}
-            >
-              {formError.email && "Please enter a valid email address."}
-            </label>
+
+            {formError.email && (
+              <label
+                css={`
+                  font-family: "Inter", sans-serif;
+                  font-size: 12px;
+                  text-align: left;
+                  width: 100%;
+                  padding-left: 10px;
+                  color: #e75656;
+                `}
+              >
+                {"Please enter a valid email address."}
+              </label>
+            )}
             <div
               css={`
                 border-radius: 40px;
@@ -364,17 +383,20 @@ export default function ContactModule() {
             margin: auto;
             margin-top: 213px;
             text-align: center;
-            font-weight: 325;
-            font-size: 24px;
-            line-height: 29px;
+            p {
+              font-size: 20px;
+              line-height: 29px;
+              font-family: "GothamNarrow-Medium", sans-serif;
+              a {
+                color: #231d2c;
+                text-decoration: none;
+                font-family: "GothamNarrow-Medium", sans-serif;
+                font-size: 20px;
+              }
+            }
+
             text-align: center;
             color: #231d2c;
-            font-family: "GothamNarrow-Medium", sans-serif;
-
-            a {
-              color: #231d2c;
-              text-decoration: none;
-            }
           `}
         >
           {DXLogo}

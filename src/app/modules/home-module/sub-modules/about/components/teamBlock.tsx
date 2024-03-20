@@ -22,9 +22,7 @@ export default function TeamBlock() {
           margin-bottom: 80px;
         `}
       >
-        <h3>
-          <b>Team</b>
-        </h3>
+        <h3>Team</h3>
         <p>
           With over two decades of expertise in data and global health
           development, we empower organizations to enhance their communication

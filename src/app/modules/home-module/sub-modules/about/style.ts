@@ -9,14 +9,13 @@ export const subParagraphcss = css`
     line-height: 43px;
     text-align: center;
     color: #231d2c;
-    font-family: "Gotham Narrow", sans-serif;
+    font-family: "GothamNarrow-Bold", sans-serif;
   }
   p {
-    font-family: "GothamNarrow-Light", sans-serif;
+    font-family: "GothamNarrow-Medium", sans-serif;
     font-style: normal;
-    font-weight: 325;
-    font-size: 24px;
-    line-height: 29px;
+    font-size: 20px;
+    line-height: 24px;
     color: #231d2c;
     text-align: left;
   }

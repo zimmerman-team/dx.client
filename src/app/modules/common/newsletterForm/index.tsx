@@ -75,6 +75,7 @@ export default function NewsletterForm(
   };
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    props.setFormError({});
     setEmail(event.target.value);
   };
 
@@ -83,6 +84,12 @@ export default function NewsletterForm(
       css={`
         width: 100%;
         display: flex;
+        input {
+          font-family: "Roboto", sans-serif;
+        }
+        button {
+          cursor: pointer;
+        }
       `}
       onSubmit={handleSubmit(handleSubscribeAction)}
     >

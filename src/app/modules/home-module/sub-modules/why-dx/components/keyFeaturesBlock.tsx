@@ -25,7 +25,7 @@ export default function KeyFeaturesBlock() {
           font-size: 36px;
           line-height: 20px;
           font-weight: 350;
-          font-family: "GothamNarrow-Bold", sans-serif;
+          font-family: "GothamNarrow-Medium", sans-serif;
           margin-bottom: 25px;
           margin-top: 0;
           color: #231d2c;

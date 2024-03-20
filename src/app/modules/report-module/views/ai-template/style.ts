@@ -54,10 +54,10 @@ export const subscribedcss = css`
       font-size: 18px;
       line-height: 22px;
       color: #231d2c;
-      font-family: "Gotham Narrow", sans-serif;
+      font-family: "GothamNarrow-Bold", sans-serif;
     }
     p {
-      font-family: "Gotham Narrow", sans-serif;
+      font-family: "GothamNarrow-Bold", sans-serif;
 
       text-align: center;
     }
@@ -89,7 +89,7 @@ export const notSubscribedcss = (error: boolean) => css`
     font-weight: 325;
     font-size: 14px;
     line-height: 17px;
-    font-family: "Gotham Narrow", sans-serif;
+    font-family: "GothamNarrow-Book", sans-serif;
   }
   input {
     background: #f7f7f7;
