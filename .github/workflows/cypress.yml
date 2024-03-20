@@ -15,7 +15,16 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install rawgraphs-charts
-        run: yarn add "https://github.com/zimmerman-team/rawgraphs-charts.git#3da650c" && yarn link '@rawgraphs/rawgraphs-charts'
+        run: yarn add "https://github.com/zimmerman-team/rawgraphs-charts.git#3da650c" 
+      - name: Build package
+        run: |
+          if [ -d "node_modules/@rawgraphs/rawgraphs-charts" ]; then
+            cd node_modules/@rawgraphs/rawgraphs-charts
+            yarn 
+            yarn build
+          else
+            echo "Package directory not found"
+          fi
 
       - name: Cypress run
         # Uses the official Cypress GitHub action https://github.com/cypress-io/github-action

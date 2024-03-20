@@ -32,7 +32,6 @@
     "@nivo/sankey": "^0.68.0",
     "@nivo/scatterplot": "^0.69.1",
     "@nivo/treemap": "^0.68.0",
-    "@rawgraphs/rawgraphs-charts": "https://github.com/zimmerman-team/rawgraphs-charts.git#3da650c",
     "@rawgraphs/rawgraphs-core": "^1.0.0-beta.17",
     "@testing-library/jest-dom": "^6.4.2",
     "@testing-library/react": "12.0.0",
