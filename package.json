@@ -39,7 +39,6 @@
     "@turf/bezier-spline": "^6.3.0",
     "@turf/center": "^6.3.0",
     "@turf/helpers": "^6.3.0",
-    "@types/": "rawgraphs/rawgraphs-charts",
     "@types/auth0-js": "^9.21.5",
     "@types/d3-shape": "^3.0.2",
     "@types/detect-it": "^4.0.1",
@@ -194,10 +193,8 @@
   },
   "jest": {
     "transformIgnorePatterns": [
-
       "/node_modules/(?!|d3|d3-array|internmap|delaunator|robust-predicates)"
- 
-  ],
+    ],
     "coverageThreshold": {
       "global": {
         "lines": 80
