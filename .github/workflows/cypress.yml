@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install rawgraphs-charts
-        run: npm install "https://github.com/zimmerman-team/rawgraphs-charts.git#3da650c"
+        run: npm install "https://github.com/zimmerman-team/rawgraphs-charts.git#3da650c" --legacy-peer-deps
       - name: Cypress run
         # Uses the official Cypress GitHub action https://github.com/cypress-io/github-action
         uses: cypress-io/github-action@v6
