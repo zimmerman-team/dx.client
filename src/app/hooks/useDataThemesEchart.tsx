@@ -416,7 +416,10 @@ export function useDataThemesEchart() {
       palette,
     } = visualOptions;
 
-    const convertedData = data.map((d: any) => [+new Date(d.x), d.y]);
+    const convertedData = sortBy(data, (d) => d.x).map((d: any) => [
+      +new Date(d.x),
+      d.y,
+    ]);
 
     const option = {
       color: checkLists.find((item) => item.label === palette)?.value,
