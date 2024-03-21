@@ -656,6 +656,7 @@ export default function ReportModule() {
             setIsEditorFocused={setIsEditorFocused}
             setPlugins={setPlugins}
             setAutoSave={setAutoSave}
+            isSaveEnabled={isSaveEnabled}
           />
         </Route>
         <Route path="/report/:page/preview">

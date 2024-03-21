@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import get from "lodash/get";
-import { SetterOrUpdater, useRecoilState } from "recoil";
+import { SetterOrUpdater, useRecoilState, useResetRecoilState } from "recoil";
 import { useUpdateEffect } from "react-use";
 import IconButton from "@material-ui/core/IconButton";
 import { useHistory, useLocation, useParams } from "react-router-dom";
@@ -8,7 +8,6 @@ import { itemSpacing, containerGap } from "app/modules/report-module/data";
 import RowstructureDisplay from "app/modules/report-module/sub-module/rowStructure/rowStructureDisplay";
 import { ReactComponent as CloseIcon } from "app/modules/report-module/asset/closeIcon.svg";
 import { ReactComponent as DeleteIcon } from "app/modules/report-module/asset/deleteIcon.svg";
-import { ReactComponent as RowFrameHandleAdornment } from "app/modules/report-module/asset/rowFrameHandleAdornment.svg";
 import { reportCreationTourStepAtom } from "app/state/recoil/atoms";
 import {
   blockcss,
@@ -136,6 +135,7 @@ export interface RowFrameProps {
   setPlugins: React.Dispatch<React.SetStateAction<ToolbarPluginsType>>;
   isEditorFocused: boolean;
   setIsEditorFocused: React.Dispatch<React.SetStateAction<boolean>>;
+  endReportTour: () => void;
 }
 
 export interface IRowStructureType {
@@ -143,6 +143,7 @@ export interface IRowStructureType {
   setSelectedType: React.Dispatch<React.SetStateAction<string>>;
   tourStep: number;
   setTourStep: SetterOrUpdater<number>;
+  endReportTour: () => void;
 }
 
 export default function RowFrame(props: RowFrameProps) {
@@ -152,6 +153,10 @@ export default function RowFrame(props: RowFrameProps) {
     props.forceSelectedType ?? ""
   );
   const [reportCreationTourStep, setReportCreationTourStep] = useRecoilState(
+    reportCreationTourStepAtom
+  );
+
+  const clearReportCreationTourStep = useResetRecoilState(
     reportCreationTourStepAtom
   );
 
@@ -338,6 +343,20 @@ export default function RowFrame(props: RowFrameProps) {
   }, []);
 
   React.useEffect(() => {
+    // Add event listener for page exit or component unmount
+    const handlePageExit = () => {
+      clearReportCreationTourStep();
+    };
+
+    window.addEventListener("beforeunload", handlePageExit);
+
+    return () => {
+      window.removeEventListener("beforeunload", handlePageExit);
+      clearReportCreationTourStep(); // Reset state when component unmounts
+    };
+  }, []);
+
+  React.useEffect(() => {
     if (props.forceSelectedType) {
       setSelectedType(props.forceSelectedType);
     }
@@ -513,6 +532,12 @@ export default function RowFrame(props: RowFrameProps) {
                   position: absolute;
                 `}
                 onClick={() => {
+                  if (
+                    reportCreationTourStep !== 0 &&
+                    reportCreationTourStep !== 3
+                  ) {
+                    props.endReportTour();
+                  }
                   deleteFrame(props.rowId);
                 }}
               >
@@ -534,30 +559,35 @@ export default function RowFrame(props: RowFrameProps) {
                   setSelectedType={setSelectedType}
                   tourStep={reportCreationTourStep}
                   setTourStep={setReportCreationTourStep}
+                  endReportTour={props.endReportTour}
                 />
                 <OneByTwo
                   selectedType={selectedType}
                   setSelectedType={setSelectedType}
                   tourStep={reportCreationTourStep}
                   setTourStep={setReportCreationTourStep}
+                  endReportTour={props.endReportTour}
                 />
                 <OneByThree
                   selectedType={selectedType}
                   setSelectedType={setSelectedType}
                   tourStep={reportCreationTourStep}
                   setTourStep={setReportCreationTourStep}
+                  endReportTour={props.endReportTour}
                 />
                 <OneByFour
                   selectedType={selectedType}
                   setSelectedType={setSelectedType}
                   tourStep={reportCreationTourStep}
                   setTourStep={setReportCreationTourStep}
+                  endReportTour={props.endReportTour}
                 />
                 <OneByFive
                   selectedType={selectedType}
                   setSelectedType={setSelectedType}
                   tourStep={reportCreationTourStep}
                   setTourStep={setReportCreationTourStep}
+                  endReportTour={props.endReportTour}
                 />
               </div>
             </div>
@@ -574,8 +604,10 @@ const OneByOne = (props: IRowStructureType) => {
   const handleClick = () => {
     if (props.tourStep === 2) {
       props.setTourStep(3);
+    } else {
+      props.endReportTour();
+      props.setSelectedType("oneByOne");
     }
-    props.setSelectedType("oneByOne");
   };
   return (
     <div css={blockcss} onClick={handleClick}>
@@ -597,8 +629,11 @@ const OneByTwo = (props: IRowStructureType) => {
   const handleClick = () => {
     if (props.tourStep === 2) {
       props.setTourStep(3);
+    } else {
+      props.endReportTour();
+
+      props.setSelectedType("oneByTwo");
     }
-    props.setSelectedType("oneByTwo");
   };
   return (
     <div css={blockcss} onClick={handleClick}>
@@ -626,8 +661,10 @@ const OneByThree = (props: IRowStructureType) => {
   const handleClick = () => {
     if (props.tourStep === 2) {
       props.setTourStep(3);
+    } else {
+      props.endReportTour();
+      props.setSelectedType("oneByThree");
     }
-    props.setSelectedType("oneByThree");
   };
   return (
     <div css={blockcss} onClick={handleClick}>
@@ -656,8 +693,10 @@ const OneByFour = (props: IRowStructureType) => {
   const handleClick = () => {
     if (props.tourStep === 2) {
       props.setTourStep(3);
+    } else {
+      props.endReportTour();
+      props.setSelectedType("oneByFour");
     }
-    props.setSelectedType("oneByFour");
   };
   return (
     <div css={blockcss} onClick={handleClick}>
@@ -687,8 +726,10 @@ const OneByFive = (props: IRowStructureType) => {
   const handleClick = () => {
     if (props.tourStep === 2) {
       props.setTourStep(3);
+    } else {
+      props.endReportTour();
+      props.setSelectedType("oneByFive");
     }
-    props.setSelectedType("oneByFive");
   };
   return (
     <div css={blockcss} onClick={handleClick}>
