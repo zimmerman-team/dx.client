@@ -243,6 +243,8 @@ export function useDataThemesEchart() {
       height,
       width,
       background,
+      // chart
+      showAntarctica,
       // margins
       marginTop,
       marginRight,
@@ -256,13 +258,24 @@ export function useDataThemesEchart() {
     } = visualOptions;
 
     if (!data.geoJSON) return {};
+    let geoJSON = null;
+    if (!showAntarctica) {
+      geoJSON = {
+        ...data.geoJSON,
+        features: data.geoJSON.features.filter(
+          (feature: any) => feature.id !== "ATA"
+        ),
+      };
+    } else {
+      geoJSON = data.geoJSON;
+    }
 
-    echarts.registerMap("World", data.geoJSON);
+    echarts.registerMap("World", geoJSON);
 
     const sizes = data.results.map((d: any) => d.value);
 
     // height to width ratio
-    const sizeRatio = 0.55;
+    const sizeRatio = showAntarctica ? 0.55 : 0.45;
 
     const responsiveHeight = sizeRatio * width;
     const responsiveWidth = height * (1 / sizeRatio);
@@ -1497,7 +1510,7 @@ export function useDataThemesEchart() {
           echartsCirclepacking(data, visualOptions, null),
       };
 
-      chart.setOption(CHART_TYPE_TO_COMPONENT[chartType]());
+      chart.setOption(CHART_TYPE_TO_COMPONENT[chartType](), true);
 
       window.addEventListener("resize", () => onResize(chart, id));
       if (chartType === "echartsCirclepacking") {
