@@ -89,6 +89,9 @@ function loginViaAuth0Ui(username: string, password: string) {
     )}/callback`
   );
   cy.intercept("/callback**").as("callback");
+  cy.intercept(`https://${Cypress.env("auth0_domain")}/oauth/token`).as(
+    `auth0`
+  );
 
   // Login on Auth0.
   cy.origin(
@@ -104,10 +107,11 @@ function loginViaAuth0Ui(username: string, password: string) {
           cy.contains("button[value=accept]", "Accept").click();
         }
       });
+
+      cy.wait("@callback");
+      cy.wait("@auth0");
     }
   );
-
-  cy.wait("@callback");
 }
 
 Cypress.Commands.add("loginToAuth0", (username: string, password: string) => {
