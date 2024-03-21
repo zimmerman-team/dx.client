@@ -7,8 +7,6 @@ import { PageLoader } from "app/modules/common/page-loader";
 function AuthCallbackModule() {
   const history = useHistory();
   const { error, isAuthenticated, getAccessTokenSilently } = useAuth0();
-  console.log(isAuthenticated, "isAuthenticated");
-  console.log(error, "auth error");
 
   React.useEffect(() => {
     if (isAuthenticated) {
