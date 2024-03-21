@@ -193,8 +193,8 @@
     "transformIgnorePatterns": [
 
       "/node_modules/(?!|d3|d3-array|internmap|delaunator|robust-predicates)"
- 
-  ],
+
+    ],
     "coverageThreshold": {
       "global": {
         "lines": 80
