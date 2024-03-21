@@ -5,7 +5,7 @@ import moment from "moment";
 import { ReactComponent as ClockIcon } from "app/modules/report-module/asset/clock-img.svg";
 import { ReactComponent as ExpandIcon } from "app/modules/report-module/asset/expand-icon.svg";
 import { IconButton } from "@material-ui/core";
-import { ReportChartWrapper } from "../chart-wrapper";
+import { ReportChartWrapper } from "app/modules/report-module/components/chart-wrapper/";
 
 interface Props {
   id: string;
@@ -95,6 +95,7 @@ export default function GridItem(props: Props) {
           ) : (
             <IconButton
               onClick={() => props.setChartPreview(!props.chartPreview)}
+              data-testid="expand-chart-button"
               css={`
                 padding: 4px;
                 &:hover {

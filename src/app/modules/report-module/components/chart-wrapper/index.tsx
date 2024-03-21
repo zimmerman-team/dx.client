@@ -100,16 +100,13 @@ export function ReportChartWrapper(props: Props) {
   }, [props.id, token]);
 
   React.useEffect(() => {
-    if (chartError) {
+    if (notFound || dataError) {
       props.setError(true);
-      if ((chartError.data as any).error.code === "ENTITY_NOT_FOUND") {
+      if ((chartError?.data as any)?.error?.code === "ENTITY_NOT_FOUND") {
         setChartErrorMessage("This chart is no longer available.");
       }
     }
-    if (dataError) {
-      props.setError(true);
-    }
-  }, [chartError, dataError]);
+  }, [notFound, dataError]);
 
   React.useEffect(() => {
     if (props.id) {
@@ -187,6 +184,7 @@ export function ReportChartWrapper(props: Props) {
   return (
     <div
       ref={containerRef}
+      data-testid="chart-wrapper"
       css={`
         width: 100%;
         height: 100%;
