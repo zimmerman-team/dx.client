@@ -97,8 +97,8 @@ export const TabCardEllipseCss = css`
 `;
 
 export const quotesEllipseCss = css`
-  top: 3%;
-  left: -5.1%;
+  top: 0%;
+  left: -8.1%;
   z-index: -1;
   position: absolute;
 `;
@@ -106,12 +106,13 @@ export const quotesEllipseCss = css`
 export const useDXcss = css`
   color: #231d2c;
   width: 100%;
-  h2 {
-    font-weight: 350;
+  margin-top: 40px;
+  p:nth-of-type(1) {
     font-size: 40px;
-    line-height: 58px;
+    line-height: 48px;
     text-align: center;
-    font-weight: bold;
+    font-family: "GothamNarrow-Medium", sans-serif;
+    margin-top: 0;
   }
   h3 {
     font-size: 24px;
@@ -119,12 +120,15 @@ export const useDXcss = css`
     font-family: "GothamNarrow-Bold", sans-serif;
     text-align: center;
     margin-bottom: 0;
+    margin-top: 48px;
   }
   p {
-    font-size: 16px;
-    line-height: 19px;
+    font-size: 20px;
+    line-height: 24px;
     text-align: center;
-    margin-top: 8px;
+    font-family: "GothamNarrow-Medium", sans-serif;
+    width: 85%;
+    margin: 16px auto 0 auto;
   }
 `;
 
@@ -137,11 +141,10 @@ export const quotecss = css`
   padding: 20px 0;
   width: 78%;
   p {
-    font-weight: 500;
     font-size: 40px;
-    line-height: 58px;
+    line-height: 48px;
     text-align: center;
-    font-family: "Inter", sans-serif;
+    font-family: "GothamNarrow-Medium", sans-serif;
 
     margin: 0;
   }
@@ -159,7 +162,7 @@ export const quotecss = css`
       font-size: 16px;
       line-height: 19px;
       text-align: center;
-      font-family: "Inter", sans-serif !important;
+      font-family: "GothamNarrow-Bold", sans-serif;
     }
   }
 `;

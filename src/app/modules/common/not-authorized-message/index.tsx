@@ -16,8 +16,7 @@ export function NotAuthorizedMessageModule(props: {
         color: #e75656;
         font-size: 24px;
         line-height: 15px;
-        font-weight: bold;
-        font-family: "Gotham Narrow", sans-serif;
+        font-family: "GothamNarrow-Bold", sans-serif;
         text-align: center;
       `}
     >

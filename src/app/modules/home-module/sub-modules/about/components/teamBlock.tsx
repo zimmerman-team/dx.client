@@ -22,9 +22,7 @@ export default function TeamBlock() {
           margin-bottom: 80px;
         `}
       >
-        <h3>
-          <b>Team</b>
-        </h3>
+        <h3>Team</h3>
         <p>
           With over two decades of expertise in data and global health
           development, we empower organizations to enhance their communication
@@ -163,7 +161,7 @@ const TeamCard = (props: {
           /* margin: 0px; */
           margin-top: 25px;
           margin-bottom: 5px;
-          font-family: "Gotham Narrow", sans-serif;
+          font-family: "GothamNarrow-Bold", sans-serif;
           display: flex;
           align-items: center;
           gap: 16px;

@@ -14,7 +14,6 @@ export const Tab = {
     gap: 40px;
     cursor: pointer;
     position: relative;
-    font-family: "Gotham Narrow", sans-serif;
   `,
   Left: styled.div<ITab>`
     text-align: center;

@@ -142,6 +142,8 @@ function ReportCreateView(props: Readonly<ReportCreateViewProps>) {
           <TourGuide
             reportType={props.reportType ?? "basic"}
             toolBoxOpen={props.open}
+            handleClose={() => {}}
+            open
           />
           <ReportOrderContainer
             enabled
@@ -169,6 +171,7 @@ function ReportCreateView(props: Readonly<ReportCreateViewProps>) {
                       isEditorFocused={props.isEditorFocused}
                       setIsEditorFocused={props.setIsEditorFocused}
                       setPlugins={props.setPlugins}
+                      endReportTour={() => {}}
                     />
                   </div>
                   <Box height={38} />
@@ -193,6 +196,7 @@ function ReportCreateView(props: Readonly<ReportCreateViewProps>) {
               setRowStructureType={setRowStructuretype}
               handlePersistReportState={props.handlePersistReportState}
               handleRowFrameItemResize={props.handleRowFrameItemResize}
+              endTour={() => {}}
             />
           }
           <Box height={45} />

@@ -155,7 +155,7 @@ export function ReportChartWrapper(props: Props) {
           font-size: ${parseInt(props.width) > 250 ? "14px" : "10px"};
           line-height: 15px;
           font-weight: bold;
-          font-family: "Gotham Narrow", sans-serif;
+          font-family: "GothamNarrow-Bold", sans-serif;
           text-align: center;
         `}
       >

@@ -42,7 +42,7 @@ export default function TourEnd({
           border-radius: 8px;
           background: #231d2c;
           color: #fff;
-          font-family: "Gotham Narrow", sans-serif;
+          font-family: "GothamNarrow-Medium", sans-serif;
           font-style: normal;
           font-weight: 350;
           line-height: 16px;

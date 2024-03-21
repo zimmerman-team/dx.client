@@ -115,7 +115,7 @@
 #button-13 .knobs:after {
   content: "OFF";
   right: 4px;
-  font-family: "Gotham Narrow", sans-serif;
+  font-family: "GothamNarrow-Light", sans-serif;
 }
 
 #button-13 .knobs span {

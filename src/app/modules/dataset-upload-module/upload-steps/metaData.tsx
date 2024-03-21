@@ -2,7 +2,6 @@ import React from "react";
 import Box from "@material-ui/core/Box";
 import findIndex from "lodash/findIndex";
 import Grid from "@material-ui/core/Grid";
-import { Control, Controller, UseFormRegister, useForm } from "react-hook-form";
 import MenuItem from "@material-ui/core/MenuItem";
 import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
@@ -11,8 +10,6 @@ import {
   CssTextField,
   metaDatacss,
 } from "app/modules/dataset-upload-module/style";
-import { useStoreState } from "app/state/store/hooks";
-import { IDatasetDetail } from "app/modules/dataset-module/routes/edit";
 import { useLocation } from "react-router-dom";
 
 interface Props {
@@ -58,67 +55,51 @@ export const datasetCategories = [
 ];
 
 export const SelectCategoryField = (props: {
-  value: string;
-  register: UseFormRegister<IFormDetails>;
-  control: Control<IFormDetails, any>;
   setFormDetails: React.Dispatch<React.SetStateAction<IFormDetails>>;
   formDetails: IFormDetails;
+  error: boolean;
+  onChange: any;
 }) => (
   <FormControl variant="outlined" fullWidth>
     <InputLabel id="select-label">Data category</InputLabel>
-    <Controller
-      render={({ field }) => {
-        React.useEffect(() => {
-          // component is being updated by react-hook-form controller
-          // update formDetails state with category value when field.value changes
-          props.setFormDetails({
-            ...props.formDetails,
-            category: field.value,
-          });
-        }, [field.value]);
-        return (
-          <CssSelectField
-            {...field}
-            fullWidth
-            id="select"
-            value={field.value}
-            label="Data category"
-            labelId="select-label"
-            onChange={field.onChange}
-            MenuProps={{
-              PaperProps: {
-                style: {
-                  borderRadius: "20px",
-                  marginTop: `${
-                    (findIndex(datasetCategories, props.value) + 1) * 60
-                  }px`,
-                },
-              },
-            }}
-            css={`
-              fieldset {
-                border-radius: 10px;
-                padding-bottom: 4px;
-                border-color: #231d2c !important;
-              }
-            `}
-          >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            {datasetCategories.map((category) => (
-              <MenuItem key={category} value={category}>
-                {category}
-              </MenuItem>
-            ))}
-          </CssSelectField>
-        );
-      }}
-      control={props.control}
-      rules={{ required: true }}
+    <CssSelectField
+      fullWidth
+      id="select"
+      value={props.formDetails.category}
+      defaultValue={""}
       name="category"
-      defaultValue={props.value}
-    />
+      label="Data category"
+      labelId="select-label"
+      onChange={props.onChange}
+      inputRef={(input) => input && props.error && input.focus()}
+      MenuProps={{
+        PaperProps: {
+          style: {
+            borderRadius: "20px",
+            marginTop: `${
+              (findIndex(datasetCategories, props.formDetails.category) + 1) *
+              60
+            }px`,
+          },
+        },
+      }}
+      css={`
+        fieldset {
+          border-radius: 10px;
+          padding-bottom: 4px;
+          border-color: #231d2c !important;
+        }
+      `}
+    >
+      <MenuItem value="">
+        <em>None</em>
+      </MenuItem>
+      {datasetCategories.map((category) => (
+        <MenuItem key={category} value={category}>
+          {category}
+        </MenuItem>
+      ))}
+    </CssSelectField>
   </FormControl>
 );
 
@@ -126,34 +107,50 @@ export default function MetaData(props: Readonly<Props>) {
   const location = useLocation();
   const view = location.pathname?.split("/")[3];
 
-  const loadedDataset = useStoreState(
-    (state) => state.dataThemes.DatasetGet.crudData
-  ) as IDatasetDetail;
-
-  const {
-    register,
-    handleSubmit,
-    reset,
-    control,
-    formState: { errors },
-  } = useForm<IFormDetails>({
-    defaultValues: props.formDetails,
-  });
-
   const characterCount = props.formDetails.description?.length;
-  React.useEffect(() => {
-    //reset form state to formDetails state when dataset is loaded
-    reset({
-      ...props.formDetails,
-    });
-  }, [loadedDataset]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { public: isPublic, ...rest } = props.formDetails;
+    //reset error state to release focus on input field before typing new value
+    if (Object.values(errorState).some((value) => value === true)) {
+      for (const key in rest) {
+        setErrorState((prev) => ({ ...prev, [key]: false }));
+      }
+    }
     const { name, value } = event.target;
     props.setFormDetails({
       ...props.formDetails,
       [name]: value,
     });
+  };
+
+  const [errorState, setErrorState] = React.useState({
+    name: false,
+    description: false,
+    category: false,
+    source: false,
+    sourceUrl: false,
+  });
+
+  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault();
+    const { public: isPublic, ...rest } = props.formDetails;
+    //form validation before submitting
+    for (const key in rest) {
+      if (rest[key as keyof typeof rest] === "") {
+        setErrorState((prev) => ({ ...prev, [key]: true }));
+        return;
+      } else {
+        setErrorState((prev) => ({ ...prev, [key]: false }));
+      }
+    }
+    //if every key in errorState is false, then submit form
+    if (Object.values(rest).every((value) => value !== "")) {
+      console.log("submitting form");
+      props.onSubmit(props.formDetails);
+    } else {
+      console.log("form errors");
+    }
   };
 
   return (
@@ -164,135 +161,141 @@ export default function MetaData(props: Readonly<Props>) {
           width: 100%;
         `}
       >
-        <form onSubmit={handleSubmit(props.onSubmit)}>
-          <Grid container spacing={6}>
-            <Grid lg={12} xs={12} md={12} item>
+        <Grid container spacing={6}>
+          <Grid lg={12} xs={12} md={12} item>
+            <CssTextField
+              id="outlined-basic"
+              label="Data title"
+              variant="outlined"
+              helperText="Title must be between 6 and 50 characters in length."
+              onChange={handleChange}
+              name="name"
+              value={props.formDetails.name}
+              fullWidth
+              inputRef={(input) => input && errorState.name && input.focus()}
+            />
+          </Grid>
+          <Box height={50} />
+          <Grid lg={12} xs={12} md={12} item>
+            <div
+              css={`
+                position: relative;
+              `}
+            >
               <CssTextField
                 id="outlined-basic"
-                label="Data title"
+                label="Brief description of your dataset*  "
                 variant="outlined"
-                {...register("name", { required: true })}
-                helperText="Title must be between 6 and 50 characters in length."
-                onChange={handleChange}
-                value={props.formDetails.name}
                 fullWidth
+                multiline
+                minRows={3}
+                inputProps={{
+                  maxLength: 150,
+                  "data-testid": "description",
+                }}
+                onChange={handleChange}
+                name="description"
+                value={props.formDetails.description}
+                inputRef={(input) =>
+                  input && errorState.description && input.focus()
+                }
               />
-            </Grid>
-            <Box height={50} />
-            <Grid lg={12} xs={12} md={12} item>
-              <div
+              <p
                 css={`
-                  position: relative;
+                  position: absolute;
+                  bottom: -12px;
+                  right: 20px;
+                  font-weight: 325;
+                  font-size: 12px;
+                  color: #231d2c;
                 `}
               >
-                <CssTextField
-                  id="outlined-basic"
-                  label="Brief description of your dataset*  "
-                  variant="outlined"
-                  {...register("description", { required: true })}
-                  fullWidth
-                  multiline
-                  minRows={3}
-                  inputProps={{
-                    maxLength: 150,
-                    "data-testid": "description",
-                  }}
-                  onChange={handleChange}
-                  value={props.formDetails.description}
-                />
-                <p
-                  css={`
-                    position: absolute;
-                    bottom: -12px;
-                    right: 20px;
-                    font-weight: 325;
-                    font-size: 12px;
-                    color: #231d2c;
-                  `}
-                >
-                  {characterCount}/150
-                </p>
-              </div>
-            </Grid>
-            <Box height={50} />
-            <Grid lg={5} xs={12} md={5} item>
-              <SelectCategoryField
-                value={props.formDetails.category}
-                register={register}
-                control={control}
-                setFormDetails={props.setFormDetails}
-                formDetails={props.formDetails}
-              />
-            </Grid>
-            <Grid lg={7} xs={12} md={7} item>
-              <CssTextField
-                id="outlined-basic"
-                label="Source of the data"
-                variant="outlined"
-                {...register("source", { required: true })}
-                onChange={handleChange}
-                fullWidth
-                inputProps={{
-                  "data-testid": "Source-of-the-data",
-                }}
-                value={props.formDetails.source}
-              />
-            </Grid>
-            <Grid lg={12} xs={12} md={12} item>
-              <CssTextField
-                id="outlined-basic"
-                label="Link to data source"
-                variant="outlined"
-                {...register("sourceUrl", { required: true })}
-                onChange={handleChange}
-                fullWidth
-                inputProps={{
-                  "data-testid": "Link-to-data-source",
-                }}
-                value={props.formDetails.sourceUrl}
-              />
-            </Grid>
+                {characterCount}/150
+              </p>
+            </div>
           </Grid>
+          <Box height={50} />
+          <Grid lg={5} xs={12} md={5} item>
+            <SelectCategoryField
+              onChange={handleChange}
+              setFormDetails={props.setFormDetails}
+              formDetails={props.formDetails}
+              error={errorState.category}
+            />
+          </Grid>
+          <Grid lg={7} xs={12} md={7} item>
+            <CssTextField
+              id="outlined-basic"
+              label="Source of the data"
+              variant="outlined"
+              onChange={handleChange}
+              name="source"
+              fullWidth
+              inputProps={{
+                "data-testid": "Source-of-the-data",
+              }}
+              inputRef={(input) => input && errorState.source && input.focus()}
+              value={props.formDetails.source}
+            />
+          </Grid>
+          <Grid lg={12} xs={12} md={12} item>
+            <CssTextField
+              id="outlined-basic"
+              label="Link to data source"
+              variant="outlined"
+              onChange={handleChange}
+              name="sourceUrl"
+              fullWidth
+              inputProps={{
+                "data-testid": "Link-to-data-source",
+              }}
+              inputRef={(input) =>
+                input && errorState.sourceUrl && input.focus()
+              }
+              value={props.formDetails.sourceUrl}
+            />
+          </Grid>
+        </Grid>
 
-          <div
+        <div
+          css={`
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 12rem;
+            gap: 1rem;
+          `}
+        >
+          <button
+            onClick={props.handleBack}
             css={`
-              display: flex;
-              justify-content: flex-end;
-              margin-top: 12rem;
-              gap: 1rem;
+              color: #231d2c;
+              text-transform: uppercase;
+              width: 125px;
+
+              :hover {
+                opacity: 0.5;
+              }
             `}
           >
-            <button
-              onClick={props.handleBack}
-              css={`
-                color: #231d2c;
-                text-transform: uppercase;
-                width: 125px;
-
-                :hover {
-                  opacity: 0.5;
-                }
-              `}
-            >
-              {view === "edit" ? "Cancel" : "previous"}
-            </button>
-            <button
-              type="submit"
-              css={`
-                color: #231d2c;
-                text-transform: uppercase;
-                width: 125px;
-                background: #231d2c;
-                color: #fff;
-                :hover {
-                  opacity: 0.8;
-                }
-              `}
-            >
-              {view === "edit" ? "Save" : "Next"}
-            </button>
-          </div>
-        </form>
+            {view === "edit" ? "Cancel" : "previous"}
+          </button>
+          <button
+            type="button"
+            onClick={handleSubmit}
+            css={`
+              color: #231d2c;
+              text-transform: uppercase;
+              width: 125px;
+              background: #231d2c;
+              color: #fff;
+              :hover {
+                opacity: 0.8;
+              }
+            `}
+          >
+            {view === "edit" ? "Save" : "Next"}
+          </button>
+        </div>
       </div>
     </div>
   );

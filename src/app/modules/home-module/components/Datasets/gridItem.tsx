@@ -80,7 +80,7 @@ export default function GridItem(props: Readonly<Props>) {
                   margin-top: -5px;
                   font-size: 14px;
                   line-height: 22px;
-                  font-family: "Gotham Narrow", sans-serif;
+                  font-family: "GothamNarrow-Bold", sans-serif;
                   overflow: hidden;
                   margin-bottom: 2px;
                   white-space: nowrap;

@@ -34,7 +34,7 @@ export default function ToolboxSubHeader(
           align-items: center;
         }
         p:nth-child(1) {
-          font-family: "Gotham Narrow", sans-serif;
+          font-family: "GothamNarrow-Bold", sans-serif;
           font-size: 14px;
           font-weight: 700;
         }

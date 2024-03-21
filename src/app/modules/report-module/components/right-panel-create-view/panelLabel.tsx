@@ -20,7 +20,7 @@ export default function PanelLabel(props: {
         margin-bottom: 8px;
         p {
           font-size: 14px;
-          font-family: "Gotham Narrow", sans-serif;
+          font-family: "GothamNarrow-Bold", sans-serif;
           color: #262c34;
           text-transform: capitalize;
         }

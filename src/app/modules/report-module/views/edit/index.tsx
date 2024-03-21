@@ -23,15 +23,23 @@ import {
   IRowFrameStructure,
   persistedReportStateAtom,
   reportContentContainerWidth,
+  reportCreationTourStepAtom,
 } from "app/state/recoil/atoms";
 import { IFramesArray } from "../create/data";
 import RowFrame from "../../sub-module/rowStructure";
+import TourGuide from "app/components/Dialogs/TourGuide";
+import useCookie from "@devhammed/use-cookie";
 
 function ReportEditView(props: ReportEditViewProps) {
   const { page } = useParams<{ page: string }>();
   const token = useStoreState((state) => state.AuthToken.value);
 
   const { ref, width } = useResizeObserver<HTMLDivElement>();
+
+  const [tourCookie, setTourCookie] = useCookie("tourGuide", "true");
+  const [openTour, setOpenTour] = React.useState(
+    tourCookie && !props.isSaveEnabled
+  );
 
   const [containerWidth, setContainerWidth] = useRecoilState(
     reportContentContainerWidth
@@ -98,6 +106,19 @@ function ReportEditView(props: ReportEditViewProps) {
       setContainerWidth(width);
     }
   }, [width]);
+
+  function handleEndReportTour() {
+    setTourCookie("false", {
+      expires: 31536000 * 20,
+      domain: "",
+      path: "",
+      secure: false,
+      httpOnly: false,
+      maxAge: 0,
+      sameSite: "",
+    });
+    setOpenTour(false);
+  }
 
   useUpdateEffect(() => {
     if (JSON.parse(persistedReportState.framesArray || "[]").length < 1) {
@@ -196,12 +217,19 @@ function ReportEditView(props: ReportEditViewProps) {
             width: ${props.open
               ? "calc(100vw - ((100vw - 1280px) / 2) - 400px - 50px)"
               : "100%"};
+            position: relative;
             @media (max-width: 1280px) {
               width: calc(100vw - 400px);
             }
           `}
         >
           <Box height={50} />
+          <TourGuide
+            reportType={props.reportType ?? "basic"}
+            toolBoxOpen={props.open}
+            handleClose={handleEndReportTour}
+            open={openTour}
+          />
           <ReportOrderContainer
             enabled
             childrenData={props.framesArray}
@@ -231,6 +259,7 @@ function ReportEditView(props: ReportEditViewProps) {
                     isEditorFocused={props.isEditorFocused}
                     setIsEditorFocused={props.setIsEditorFocused}
                     setPlugins={props.setPlugins}
+                    endReportTour={handleEndReportTour}
                   />
                   <Box height={38} />
 
@@ -253,6 +282,7 @@ function ReportEditView(props: ReportEditViewProps) {
             setRowStructureType={setRowStructuretype}
             handlePersistReportState={props.handlePersistReportState}
             handleRowFrameItemResize={props.handleRowFrameItemResize}
+            endTour={handleEndReportTour}
           />
           <Box height={45} />
           <GridColumns />
