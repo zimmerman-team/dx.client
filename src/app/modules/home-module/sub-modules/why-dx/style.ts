@@ -5,30 +5,27 @@ export const benefitscss = css`
   z-index: 1;
 
   h2 {
-    font-weight: 400;
     font-size: 48px;
     line-height: 43px;
     text-align: center;
     color: #000000;
-    font-family: "Gotham Narrow", sans-serif;
+    font-family: "GothamNarrow-Bold", sans-serif;
     margin-bottom: 66px;
     margin-top: 0px;
   }
   h3 {
-    font-family: "Gotham Narrow", sans-serif;
+    font-family: "GothamNarrow-Bold", sans-serif;
     font-weight: 400;
     font-size: 40px;
     line-height: 48px;
-
     margin: 0;
   }
 
   p {
-    font-weight: 325;
-    font-size: 24px;
-    line-height: 29px;
+    font-size: 20px;
+    line-height: 24px;
     /* width: 90%; */
-    font-family: "GothamNarrow-Book", sans-serif;
+    font-family: "GothamNarrow-Medium", sans-serif;
     margin-top: 14px;
   }
 `;
@@ -162,9 +159,8 @@ export const simpleStepsCss = css`
   /**end**/
   h2 {
     color: #231d2c;
-    font-weight: 400;
     font-size: 40px;
-    font-family: "Gotham Narrow", sans-serif;
+    font-family: "GothamNarrow-Bold", sans-serif;
     text-align: center;
     margin: 0;
     margin-bottom: 73px;
@@ -181,10 +177,9 @@ export const simpleStepsCss = css`
     p:nth-of-type(1) {
       color: #000;
       text-align: center;
-      font-family: "Gotham Narrow", sans-serif;
+      font-family: "GothamNarrow-Book", sans-serif;
       font-size: 14px;
       font-style: normal;
-      font-weight: 325;
       line-height: 20px;
       letter-spacing: 0.5px;
       margin: 0px;
@@ -192,10 +187,9 @@ export const simpleStepsCss = css`
     p:nth-child(2) {
       color: #000;
       text-align: center;
-      font-family: "Gotham Narrow", sans-serif;
+      font-family: "GothamNarrow-Bold", sans-serif;
       font-size: 24px;
       font-style: normal;
-      font-weight: 400;
       line-height: 20px;
       letter-spacing: 0.5px;
       margin: 10px 0;
@@ -203,12 +197,10 @@ export const simpleStepsCss = css`
     }
     p:nth-of-type(3) {
       color: #000;
-
       text-align: center;
-      font-family: "Gotham Narrow", sans-serif;
+      font-family: "GothamNarrow-Bold", sans-serif;
       font-size: 16px;
       font-style: normal;
-      font-weight: 400;
       line-height: 20px; /* 125% */
       letter-spacing: 0.5px;
       margin: 0px;

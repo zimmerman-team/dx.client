@@ -175,7 +175,7 @@ export function ChartToolBoxSteps(props: ChartToolBoxStepsProps) {
             align-items: center;
             justify-content: center;
             font-size: 14px;
-            font-family: "Gotham Narrow", sans-serif;
+            font-family: "GothamNarrow-Bold", sans-serif;
             cursor: ${props.isClickable ? "pointer" : "not-allowed"};
             /* pointer-events: ${props.isClickable ? "auto" : "none"}; */
             :nth-child(1) {

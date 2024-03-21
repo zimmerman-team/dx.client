@@ -71,7 +71,7 @@ describe("Testing connecting data on DX", () => {
     cy.get('[data-value="Social"]').click();
     cy.get('[data-cy="dataset-metadata-submit"]').scrollIntoView();
     cy.intercept(`${apiUrl}/datasets`).as("submitData");
-    cy.get('[data-cy="dataset-metadata-form"]').submit();
+    cy.get('[data-cy="dataset-metadata-submit"]').click();
 
     cy.wait("@submitData");
     cy.contains("Football Players").should("be.visible");
@@ -121,7 +121,7 @@ describe("Edit, Delete and Duplicate Dataset", () => {
     cy.get('[data-value="Social"]').click();
     cy.get('[data-cy="dataset-metadata-submit"]').scrollIntoView();
     cy.intercept("PATCH", `${apiUrl}/datasets/*`).as("editData");
-    cy.get('[data-cy="dataset-metadata-form"]').submit();
+    cy.get('[data-cy="dataset-metadata-submit"]').click();
 
     cy.wait("@editData");
 

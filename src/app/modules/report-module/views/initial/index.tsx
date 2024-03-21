@@ -163,10 +163,10 @@ export function ReportInitialView(props: Readonly<ReportInitialViewProps>) {
               font-size: 18px;
               line-height: 22px;
               color: #000000;
-              font-family: "Gotham Narrow", sans-serif;
+              font-family: "GothamNarrow-Bold", sans-serif;
             `}
           >
-            Or explore and duplicate one of the ready reports
+            Explore or duplicate reports
           </h4>
         </Grid>
         <Grid item lg={6} md={6} sm={6}>

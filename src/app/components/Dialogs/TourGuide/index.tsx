@@ -10,25 +10,12 @@ import useCookie from "@devhammed/use-cookie";
 export default function TourGuide(props: {
   reportType: "basic" | "advanced" | "ai";
   toolBoxOpen: boolean;
+  handleClose: () => void;
+  open: boolean;
 }) {
   const [reportCreationTourStep, setReportCreationTourStep] = useRecoilState(
     reportCreationTourStepAtom
   );
-  const [cookie, setCookie] = useCookie("tourGuide", "true");
-  const [open, setOpen] = React.useState(cookie);
-
-  function handleClose() {
-    setCookie("false", {
-      expires: 31536000 * 20,
-      domain: "",
-      path: "",
-      secure: false,
-      httpOnly: false,
-      maxAge: 0,
-      sameSite: "",
-    });
-    setOpen(!open);
-  }
 
   const displayBasicReportTourStep = () => {
     switch (reportCreationTourStep) {
@@ -36,16 +23,16 @@ export default function TourGuide(props: {
         return (
           <TourStart
             setStep={setReportCreationTourStep}
-            open={open}
-            handleClose={handleClose}
+            open={props.open}
+            handleClose={props.handleClose}
           />
         );
       case 1:
         return (
           <RowFrameIntro
             setStep={setReportCreationTourStep}
-            handleClose={handleClose}
-            open={open}
+            handleClose={props.handleClose}
+            open={props.open}
             toolBoxOpen={props.toolBoxOpen}
             reportType={props.reportType}
           />
@@ -53,16 +40,16 @@ export default function TourGuide(props: {
       case 2:
         return (
           <SelectStructure
-            handleClose={handleClose}
-            open={open}
+            handleClose={props.handleClose}
+            open={props.open}
             toolBoxOpen={props.toolBoxOpen}
           />
         );
       case 3:
         return (
           <TourEnd
-            handleClose={handleClose}
-            open={open}
+            handleClose={props.handleClose}
+            open={props.open}
             reportType={props.reportType}
             toolBoxOpen={props.toolBoxOpen}
           />
@@ -77,16 +64,16 @@ export default function TourGuide(props: {
         return (
           <TourStart
             setStep={setReportCreationTourStep}
-            open={open}
-            handleClose={handleClose}
+            open={props.open}
+            handleClose={props.handleClose}
           />
         );
       case 1:
         return (
           <RowFrameIntro
             setStep={setReportCreationTourStep}
-            handleClose={handleClose}
-            open={open}
+            handleClose={props.handleClose}
+            open={props.open}
             toolBoxOpen={props.toolBoxOpen}
             reportType={props.reportType}
           />
@@ -94,8 +81,8 @@ export default function TourGuide(props: {
       case 2:
         return (
           <TourEnd
-            handleClose={handleClose}
-            open={open}
+            handleClose={props.handleClose}
+            open={props.open}
             reportType={props.reportType}
             toolBoxOpen={props.toolBoxOpen}
           />

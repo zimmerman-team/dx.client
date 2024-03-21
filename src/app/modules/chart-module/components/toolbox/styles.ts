@@ -132,25 +132,26 @@ export const mappingStyles = {
   mappingItemcss: (props: any) => css`
     height: 31px;
     display: flex;
-    gap: 13px;
+    justify-content: space-between;
     min-height: 31px;
     position: relative;
     padding-left: 16px;
     align-items: center;
     border-radius: 25px;
-    /* z-index: 10; */
-    transform: translate(0px, 0px);
     margin-bottom: ${props.marginBottom};
     color: #262c34;
     background: ${props.backgroundColor ?? "#cfd4da"};
     ${props.dimension.mappedValues.includes(props.mappingItemValue) &&
     "background: #262c34; color: #fff;"}
+    >div:nth-of-type(1) {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      width: 100%;
+    }
     p {
       font-family: "Roboto", sans-serif;
       font-size: 14px;
-    }
-    &:last-child {
-      margin-bottom: 0px;
     }
     &:hover {
       background: #262c34;

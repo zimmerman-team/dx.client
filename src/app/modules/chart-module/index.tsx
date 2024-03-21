@@ -359,7 +359,7 @@ export default function ChartModule() {
               font-size: 14px;
               line-height: 20px;
               font-weight: bold;
-              font-family: "Gotham Narrow", sans-serif;
+              font-family: "GothamNarrow-Bold", sans-serif;
               text-align: center;
               button {
                 outline: none;
