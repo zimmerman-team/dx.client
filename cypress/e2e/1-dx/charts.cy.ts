@@ -102,21 +102,19 @@ describe("Testing create chart on DX", () => {
 
     cy.contains('[data-cy="nonstatic-dimension-container"]', "X Axis").within(
       () => {
-        cy.get('[data-cy="chart-dimension-select"]').click();
-      }
-    );
-
-    cy.get('[data-cy="chart-dimension-mapping-item"]').first().click();
-
-    cy.contains('[data-cy="nonstatic-dimension-container"]', "Y Axis").within(
-      () => {
-        cy.get('[data-cy="chart-dimension-select"]').click();
+        cy.get('[data-cy="chart-dimension-select"]').first().click();
+        cy.get('[data-cy="chart-dimension-mapping-item"]').first().click();
       }
     );
 
     cy.intercept(`${apiUrl}/chart/new/render`).as("renderChart");
+    cy.contains('[data-cy="nonstatic-dimension-container"]', "Y Axis").within(
+      () => {
+        cy.get('[data-cy="chart-dimension-select"]').first().click();
 
-    cy.get('[data-cy="chart-dimension-mapping-item"]').first().click();
+        cy.get('[data-cy="chart-dimension-mapping-item"]').first().click();
+      }
+    );
 
     cy.wait("@renderChart");
 
@@ -192,7 +190,7 @@ describe("Edit, duplicate and delete chart", () => {
 
     cy.contains('[data-cy="nonstatic-dimension-container"]', "Bars").within(
       () => {
-        cy.get('[data-cy="chart-dimension-select"]').click();
+        cy.get('[data-cy="chart-dimension-mapping-item"]').click();
       }
     );
 

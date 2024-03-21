@@ -33,6 +33,8 @@ describe("Testing reports on DX", () => {
 
     cy.contains("Untitled report", { timeout: 2000 }).should("be.hidden");
 
+    cy.get('[data-cy="skip-tour-button"]').click();
+
     cy.get('[data-cy="report-sub-header-title-input"]').type(
       "Football Players Report"
     );
