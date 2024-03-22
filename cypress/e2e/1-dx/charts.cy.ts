@@ -214,6 +214,8 @@ describe("Edit, duplicate and delete chart", () => {
   });
 
   it("Duplicate chart", () => {
+    cy.intercept(`${apiUrl}/chart/duplicate/*`).as("duplicateChart");
+
     cy.contains('[data-cy="chart-grid-item-echartsBarchart"]', "Soccer Players")
       .first()
       .scrollIntoView()
@@ -222,11 +224,16 @@ describe("Edit, duplicate and delete chart", () => {
       });
 
     cy.get('[data-cy="chart-grid-item-duplicate-btn"]').click();
+    cy.wait("@duplicateChart");
 
     cy.wait("@fetchCharts");
+    cy.wait("@fetchCharts");
 
-    cy.get('[data-cy="chart-grid-item-echartsBarchart"]')
-      .contains("Soccer Players (Copy)")
+    cy.contains(
+      '[data-cy="chart-grid-item-echartsBarchart"]',
+      "Soccer Players (Copy)"
+    )
+      .scrollIntoView()
       .should("be.visible");
   });
 
