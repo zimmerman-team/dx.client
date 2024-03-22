@@ -275,6 +275,7 @@ export function ReportRightPanelCreateView(props: Readonly<Props>) {
           disableRipple
           data-testid="elements-button"
           onClick={() => setCurrentView("elements")}
+          data-cy="report-panel-elements-tab"
           css={`
             ${(() => {
               if (currentView === "elements") {
@@ -296,6 +297,7 @@ export function ReportRightPanelCreateView(props: Readonly<Props>) {
           )}
         </IconButton>
         <IconButton
+          data-cy="report-panel-chart-tab"
           disableRipple
           onClick={() => setCurrentView("charts")}
           data-testid="charts-button"
@@ -319,6 +321,7 @@ export function ReportRightPanelCreateView(props: Readonly<Props>) {
         <IconButton
           disableRipple
           onClick={() => setCurrentView("media")}
+          data-cy="report-panel-media-tab"
           data-testid="media-button"
           css={`
             ${(() => {
@@ -668,6 +671,7 @@ function ElementItem(props: {
         ref={isImageElement || isVideoElement ? nullRef : drag}
         id={props.name}
         css={elementItemcss(props.disabled as boolean, isDragging)}
+        data-cy={`report-panel-${props.elementType}-item`}
         data-testid={props.name}
       >
         {props.leftIcon}
@@ -872,6 +876,7 @@ function ChartItem(
           width: 100%;
         }
       `}
+      data-cy="report-panel-chart-item"
     >
       <GridItem
         id={props.id}

@@ -260,6 +260,7 @@ const NonStaticDimensionContainer = (props: {
         background: #dfe3e5;
         margin-top: 16px;
       `}
+      data-cy="nonstatic-dimension-container"
     >
       <div>
         <div
@@ -444,6 +445,7 @@ const DimensionSelect = (props: {
             disableTouchRipple
             onClick={() => props.handleButtonToggle(props.dimension.id)}
             css={mappingStyles.selectedButtoncss(props.dimension)}
+            data-cy="chart-dimension-select"
           >
             <span>
               {props.getSelectButtonLabel(
@@ -612,6 +614,7 @@ function ChartToolBoxMappingItem(
       id={props.testId}
       css={mappingStyles.mappingItemcss(props)}
       onClick={handleClick}
+      data-cy="chart-dimension-mapping-item"
     >
       <div>
         <p>{typeIcon[props.type]}</p>

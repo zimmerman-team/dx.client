@@ -319,7 +319,9 @@ const ActionMenu = () => {
         <Link
           to={isAuthenticated ? "/report/new/initial" : "/onboarding/login"}
         >
-          <button>{isAuthenticated ? "Create report" : "Log in"}</button>
+          <button data-cy="appbar-create-report/login">
+            {isAuthenticated ? "Create report" : "Log in"}
+          </button>
         </Link>
         {isAuthenticated && (
           <button
@@ -328,6 +330,7 @@ const ActionMenu = () => {
                 actionPopoverAnchorEl ? null : event.currentTarget
               );
             }}
+            data-cy="create-report-dropdown"
           >
             <KeyboardArrowDownIcon />
           </button>
@@ -346,8 +349,10 @@ const ActionMenu = () => {
               justify-content: center;
             `}
           >
-            {user?.given_name?.slice(0, 1)}
-            {user?.family_name?.slice(0, 1)}
+            {user?.given_name?.slice(0, 1) ??
+              user?.name?.split(" ")[0]?.slice(0, 1)}
+            {user?.family_name?.slice(0, 1) ??
+              user?.name?.split(" ")[1]?.slice(0, 1)}
           </button>
         )}
       </div>
@@ -420,11 +425,11 @@ const ActionMenu = () => {
           `}
         >
           <Link to="/dataset/new/upload" onClick={handleCloseActionPopover}>
-            <button>Connect Data</button>
+            <button data-cy="appbar-connect-data">Connect Data</button>
           </Link>
 
           <Link to="/chart/new/data" onClick={handleCloseActionPopover}>
-            <button>Create Chart</button>
+            <button data-cy="appbar-create-chart">Create Chart</button>
           </Link>
         </div>
       </Popover>

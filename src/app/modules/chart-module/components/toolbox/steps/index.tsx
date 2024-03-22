@@ -213,6 +213,7 @@ export function ChartToolBoxSteps(props: ChartToolBoxStepsProps) {
           onBlur={() => {
             props.setIsClickable(false);
           }}
+          data-cy="toolbox-chart-next"
         >
           {currentPathIndex < 5 ? "Next" : "Save"}
         </button>

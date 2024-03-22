@@ -517,7 +517,7 @@ export default function RowFrame(props: RowFrameProps) {
               }
             </>
           ) : (
-            <div css={containercss}>
+            <div css={containercss} data-cy="empty-row-frame">
               <p
                 css={`
                   margin-bottom: 0;
@@ -636,7 +636,7 @@ const OneByTwo = (props: IRowStructureType) => {
     }
   };
   return (
-    <div css={blockcss} onClick={handleClick}>
+    <div css={blockcss} onClick={handleClick} data-cy="one-by-two-type">
       <p>1/2</p>
       <div
         css={`

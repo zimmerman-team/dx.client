@@ -254,6 +254,7 @@ export const PlaceHolder = (props: PlaceholderProps) => {
 
   return (
     <div
+      data-cy="report-row-placeholder"
       ref={drop}
       css={`
         width: 100%;

@@ -88,6 +88,7 @@ export function ChartToolBoxChartType() {
 
                   color: #231d2c;
                 `}
+                data-cy="chart-type-preview"
               >
                 <div
                   css={`

@@ -109,7 +109,7 @@ function ChartToolBoxSelectDataset(props: { deselectDataset: () => void }) {
           }
         `}
       >
-        <span>
+        <span data-cy="toolbox-selected-dataset">
           {get(
             find(datasets, { id: dataset }),
             "name",

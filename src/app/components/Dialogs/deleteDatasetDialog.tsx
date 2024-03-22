@@ -38,7 +38,10 @@ export default function DeleteDatasetDialog(props: Props) {
         aria-describedby="simple-modal-description"
       >
         <div className={classes.paper}>
-          <form onSubmit={() => props.handleDelete(props.cardId)}>
+          <form
+            onSubmit={() => props.handleDelete(props.cardId)}
+            data-cy="delete-dataset-item-form"
+          >
             <div
               css={`
                 width: 80%;
@@ -98,6 +101,7 @@ export default function DeleteDatasetDialog(props: Props) {
                       outline: 1px solid #6061e5;
                     }
                   `}
+                  data-cy="delete-dataset-item-input"
                 />
               </div>
             </div>

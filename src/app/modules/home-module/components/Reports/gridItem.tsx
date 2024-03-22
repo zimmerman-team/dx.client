@@ -61,6 +61,7 @@ export default function gridItem(props: Props) {
             box-shadow: 0px 7px 22px 0px rgba(0, 0, 0, 0.1);
           }
         `}
+        data-cy="report-grid-item"
       >
         <div
           css={`
@@ -124,6 +125,7 @@ export default function gridItem(props: Props) {
               }
             `}
             onClick={showMenuOptions}
+            data-cy="report-grid-item-menu-btn"
           >
             <MenuIcon />
           </IconButton>
@@ -230,7 +232,10 @@ export default function gridItem(props: Props) {
                   setMenuOptionsDisplay(false);
                 }}
               >
-                <Tooltip title="Duplicate">
+                <Tooltip
+                  title="Duplicate"
+                  data-cy="report-grid-item-duplicate-btn"
+                >
                   <DuplicateIcon />
                 </Tooltip>
               </IconButton>
@@ -243,7 +248,7 @@ export default function gridItem(props: Props) {
               }
             >
               <Link to={`/report/${props.id}/edit`}>
-                <Tooltip title="Edit">
+                <Tooltip title="Edit" data-cy="report-grid-item-edit-btn">
                   <EditIcon
                     css={`
                       margin-top: 4px;
@@ -262,7 +267,7 @@ export default function gridItem(props: Props) {
               <IconButton
                 onClick={() => props.handleDelete?.(props.id as string)}
               >
-                <Tooltip title="Delete">
+                <Tooltip title="Delete" data-cy="report-grid-item-delete-btn">
                   <DeleteIcon />
                 </Tooltip>
               </IconButton>

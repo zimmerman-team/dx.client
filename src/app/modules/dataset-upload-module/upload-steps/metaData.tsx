@@ -70,6 +70,7 @@ export const SelectCategoryField = (props: {
       name="category"
       label="Data category"
       labelId="select-label"
+      data-cy="dataset-metadata-category"
       onChange={props.onChange}
       inputRef={(input) => input && props.error && input.focus()}
       MenuProps={{
@@ -172,6 +173,7 @@ export default function MetaData(props: Readonly<Props>) {
               name="name"
               value={props.formDetails.name}
               fullWidth
+              data-cy="dataset-metadata-title"
               inputRef={(input) => input && errorState.name && input.focus()}
             />
           </Grid>
@@ -187,6 +189,7 @@ export default function MetaData(props: Readonly<Props>) {
                 label="Brief description of your dataset*  "
                 variant="outlined"
                 fullWidth
+                data-cy="dataset-metadata-description"
                 multiline
                 minRows={3}
                 inputProps={{
@@ -231,6 +234,7 @@ export default function MetaData(props: Readonly<Props>) {
               onChange={handleChange}
               name="source"
               fullWidth
+              data-cy="dataset-metadata-source"
               inputProps={{
                 "data-testid": "Source-of-the-data",
               }}
@@ -246,6 +250,7 @@ export default function MetaData(props: Readonly<Props>) {
               onChange={handleChange}
               name="sourceUrl"
               fullWidth
+              data-cy="dataset-metadata-link"
               inputProps={{
                 "data-testid": "Link-to-data-source",
               }}
@@ -282,6 +287,7 @@ export default function MetaData(props: Readonly<Props>) {
           <button
             type="button"
             onClick={handleSubmit}
+            data-cy="dataset-metadata-submit"
             css={`
               color: #231d2c;
               text-transform: uppercase;
