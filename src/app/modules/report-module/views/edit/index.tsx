@@ -29,6 +29,7 @@ import { IFramesArray } from "../create/data";
 import RowFrame from "../../sub-module/rowStructure";
 import TourGuide from "app/components/Dialogs/TourGuide";
 import useCookie from "@devhammed/use-cookie";
+import { get } from "lodash";
 
 function ReportEditView(props: ReportEditViewProps) {
   const { page } = useParams<{ page: string }>();
@@ -144,7 +145,15 @@ function ReportEditView(props: ReportEditViewProps) {
             if (item === null) {
               return null;
             }
-            return typeof item === "object" ? "text" : "chart";
+            if (get(item, "embedUrl", null)) {
+              return "video";
+            } else if (get(item, "imageUrl", null)) {
+              return "image";
+            } else if (item === "string") {
+              return "chart";
+            } else {
+              return "text";
+            }
           });
           const content = rowFrame.items.map((item, index) => {
             return contentTypes[index] === "text"

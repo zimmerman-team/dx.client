@@ -154,7 +154,15 @@ export function ReportPreviewView(props: {
               if (item === null) {
                 return null;
               }
-              return typeof item === "object" ? "text" : "chart";
+              if (get(item, "embedUrl", null)) {
+                return "video";
+              } else if (get(item, "imageUrl", null)) {
+                return "image";
+              } else if (item === "string") {
+                return "chart";
+              } else {
+                return "text";
+              }
             });
             if (
               rowFrame.items &&
