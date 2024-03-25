@@ -149,10 +149,10 @@ function ReportEditView(props: ReportEditViewProps) {
               return "video";
             } else if (get(item, "imageUrl", null)) {
               return "image";
-            } else if (item === "string") {
-              return "chart";
-            } else {
+            } else if (typeof item === "object") {
               return "text";
+            } else {
+              return "chart";
             }
           });
           const content = rowFrame.items.map((item, index) => {

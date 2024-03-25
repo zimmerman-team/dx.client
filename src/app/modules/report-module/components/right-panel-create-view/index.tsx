@@ -1,5 +1,5 @@
 /* third-party */
-import React from "react";
+import React, { useState } from "react";
 import find from "lodash/find";
 import { useDrag } from "react-dnd";
 import { useRecoilState } from "recoil";
@@ -29,6 +29,7 @@ import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import { IFramesArray } from "app/modules/report-module/views/create/data";
 import EditHeaderIcon from "app/modules/report-module/asset/EditHeaderIcon";
 import TextPreviewImg from "app/modules/report-module/asset/textPreview.svg";
+import { ReactComponent as YoutubeIcon } from "app/modules/report-module/asset/youtube-icon.svg";
 import YoutubeGradient from "app/modules/report-module/asset/youtube-gradient.png";
 import { Charts } from "app/modules/report-module/components/right-panel-create-view/data";
 import DividerPreviewImg from "app/modules/report-module/asset/dividerPreview.svg";
@@ -51,8 +52,8 @@ import GridItem from "app/modules/report-module/components/right-panel-create-vi
 import { css } from "styled-components";
 import { get } from "lodash";
 import { useSearchMediaSources } from "app/hooks/useSearchMediaSources";
-import CircleLoader from "app/modules/home-module/components/Loader";
 import { useDebounce } from "react-use";
+import Skeleton from "@material-ui/lab/Skeleton";
 
 interface IHeaderDetails {
   title: string;
@@ -166,7 +167,10 @@ const sortByOptions = [
 
 const videoSources = [{ value: "youtube", label: "Youtube" }];
 
-const imageSources = [{ value: "shutterstock", label: "Shutterstock" }];
+const imageSources = [
+  { value: "unsplash", label: "Unsplash" },
+  { value: "shutterstock", label: "Shutterstock" },
+];
 
 export function ReportRightPanelCreateView(props: Readonly<Props>) {
   const [currentView, setCurrentView] = useRecoilState(
@@ -231,6 +235,7 @@ export function ReportRightPanelCreateView(props: Readonly<Props>) {
           css={`
             width: 36px;
             height: 36px;
+            margin: 6px;
           `}
         />
       ),
@@ -632,6 +637,8 @@ function VideoFrame(props: {
     }),
   }));
 
+  const [play, setPlay] = useState(false);
+
   return (
     <div
       css={css`
@@ -645,35 +652,58 @@ function VideoFrame(props: {
         background-size: contain, cover;
       `}
       ref={drag}
+      onClick={() => setPlay(!play)}
     >
-      {/* <iframe
-        src={props.embedUrl}
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        allowFullScreen
-        css={css`
-          position: absolute;
-          width: 100%;
-          height: 100%;
-          top: 0;
-          left: 0;
-          border: none;
-          box-shadow: none;
-        `}
-      ></iframe> */}
-
-      <div
-        css={css`
-          position: absolute;
-          left: 0;
-          top: 0;
-        `}
-      >
+      {play ? (
+        <>
+          {" "}
+          <iframe
+            src={props.embedUrl + "?autoplay=1"}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+            css={css`
+              position: absolute;
+              width: 100%;
+              height: 100%;
+              top: 0;
+              left: 0;
+              border: none;
+              box-shadow: none;
+              pointer-events: none;
+            `}
+          ></iframe>{" "}
+          <div
+            css={css`
+              position: absolute;
+              left: 0;
+              top: 0;
+              width: 100%;
+              height: 100%;
+            `}
+          ></div>
+        </>
+      ) : (
         <div
           css={css`
-            margin: 7.11px 0 0 7.11px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            display: flex;
+            width: 100%;
+            height: 100%;
+            justify-content: center;
+            align-items: center;
           `}
         >
-          <div css={css``}>
+          <div
+            css={css`
+              position: absolute;
+              top: 7.11px;
+              left: 7.11px;
+              display: flex;
+              column-gap: 6px;
+            `}
+          >
             <div
               css={css`
                 width: 24px;
@@ -697,14 +727,23 @@ function VideoFrame(props: {
                 white-space: nowrap;
                 text-overflow: ellipsis;
                 overflow: hidden;
-                width: 40%;
+                width: 70%;
+                color: white;
+                font-size: 10.662px;
+                font-family: Roboto;
               `}
-            >
-              {props.snippet.title}
-            </div>
+              dangerouslySetInnerHTML={{ __html: props.snippet.title }}
+            ></div>
+          </div>
+          <div
+            css={`
+              cursor: pointer;
+            `}
+          >
+            <YoutubeIcon />
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
@@ -712,7 +751,7 @@ function VideoFrame(props: {
 function ImageFrame(props: {
   imageId: string;
   imageUrl: string;
-  source: "shutterstock";
+  source: "shutterstock" | "unsplash";
   thumbnail: string;
 }) {
   const [{ isDragging }, drag] = useDrag(() => ({
@@ -994,46 +1033,48 @@ function ElementItem(props: {
                   )}
                 </StyledMenu>
               </div>
-              {loading ? (
-                <div
-                  css={`
-                    margin-top: 21px;
-                  `}
-                >
-                  <CircleLoader />
-                </div>
-              ) : (
-                <div
-                  css={css`
-                    margin-top: 21px;
-                    display: grid;
-                    row-gap: 25.75px;
-                    max-height: 40vh;
-                    overflow-y: scroll;
-                    padding-bottom: 15px;
-                  `}
-                >
-                  {data.map((d, i) =>
-                    props.elementType === "video" ? (
-                      <VideoFrame
-                        embedUrl={d.embedUrl}
-                        videoId={d.videoId}
-                        key={d.videoId}
-                        snippet={d.snippet}
-                        source={d.source}
-                      />
-                    ) : (
-                      <ImageFrame
-                        imageUrl={d.imageUrl}
-                        imageId={d.imageId}
-                        key={d.imageId}
-                        thumbnail={d.thumbnail}
-                        source={d.source}
-                      />
-                    )
-                  )}
-                </div>
-              )}
+
+              <div
+                css={css`
+                  margin-top: 21px;
+                  display: grid;
+                  row-gap: 25.75px;
+                  max-height: 40vh;
+                  overflow-y: scroll;
+                  padding-bottom: 15px;
+                `}
+              >
+                {loading
+                  ? Array(4)
+                      .fill(null)
+                      .map(() => (
+                        <Skeleton
+                          animation="wave"
+                          variant="rect"
+                          width="100%"
+                          height="173.25px"
+                        />
+                      ))
+                  : data.map((d, i) =>
+                      props.elementType === "video" ? (
+                        <VideoFrame
+                          embedUrl={d.embedUrl}
+                          videoId={d.videoId}
+                          key={d.videoId}
+                          snippet={d.snippet}
+                          source={d.source}
+                        />
+                      ) : (
+                        <ImageFrame
+                          imageUrl={d.imageUrl}
+                          imageId={d.imageId}
+                          key={d.imageId}
+                          thumbnail={d.thumbnail}
+                          source={d.source}
+                        />
+                      )
+                    )}
+              </div>
             </div>
           ) : null}
         </>

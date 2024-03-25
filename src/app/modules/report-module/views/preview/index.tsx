@@ -19,6 +19,7 @@ import {
   unSavedReportPreviewModeAtom,
 } from "app/state/recoil/atoms";
 import { linkDecorator } from "app/modules/common/RichEditor/decorators";
+import { object } from "yup";
 
 export function ReportPreviewView(props: {
   setIsPreviewView: React.Dispatch<React.SetStateAction<boolean>>;
@@ -158,10 +159,10 @@ export function ReportPreviewView(props: {
                 return "video";
               } else if (get(item, "imageUrl", null)) {
                 return "image";
-              } else if (item === "string") {
-                return "chart";
-              } else {
+              } else if (typeof item === "object") {
                 return "text";
+              } else {
+                return "chart";
               }
             });
             if (

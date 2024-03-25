@@ -103,13 +103,56 @@ export function useSearchMediaSources(source: string, elementType: string) {
         }
       })
       .catch(async (error) => {
-        console.log("getYoutubeSource error: " + error);
+        console.log("getShutterstock error: " + error);
+      });
+  };
+
+  const getUnsplashImages = async (q: string, nextPage: boolean) => {
+    await axios
+      .get(
+        `${process.env.REACT_APP_API}/unsplash/image/search?query=${
+          q ? q : "figma"
+        }&perPage=${pageSize}&page=${nextPage ? page + 1 : "1"}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then(async (response) => {
+        setPage(nextPage ? page + 1 : 1);
+        const imageData = get(response.data, "results", []);
+
+        if (nextPage) {
+          setData((prev) => [
+            ...prev,
+            ...imageData.map((item: any) => ({
+              imageUrl: item.urls.full,
+              imageId: item.id,
+              source: "unsplash",
+              thumbnail: item.urls.small,
+            })),
+          ]);
+        } else {
+          setData([
+            ...imageData.map((item: any) => ({
+              imageUrl: item.urls.full,
+              imageId: item.id,
+              source: "unsplash",
+              thumbnail: item.urls.thumb,
+            })),
+          ]);
+        }
+      })
+      .catch(async (error) => {
+        console.log("getUnsplash error: " + error);
       });
   };
 
   const sourceGetter = {
     video: { youtube: getYoutubeVideos },
-    image: { shutterstock: getShutterstockImages },
+    image: { shutterstock: getShutterstockImages, unsplash: getUnsplashImages },
   };
 
   const search = async (q: string, nextPage: boolean = false) => {
