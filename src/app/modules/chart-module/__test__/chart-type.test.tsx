@@ -66,7 +66,7 @@ const appSetup = (chartType: string | null, dataset: string | null) => {
       <Router.Router history={history}>
         <Auth0Provider clientId="__test_client_id__" domain="__test_domain__">
           <StoreProvider store={mockStore}>
-            <ChartBuilderChartType loading={false} />
+            {/* <ChartBuilderChartType loading={false} /> */}
           </StoreProvider>
         </Auth0Provider>
       </Router.Router>

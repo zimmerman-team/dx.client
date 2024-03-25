@@ -500,7 +500,10 @@ export default function ChartModule() {
                 />
               </Route>
               <Route path="/chart/:page/chart-type">
-                <ChartBuilderChartType loading={loading} />
+                <ChartBuilderChartType
+                  loading={loading}
+                  loadDataset={loadDataset}
+                />
               </Route>
               <Route path="/chart/:page/preview-data">
                 <ChartBuilderPreview
