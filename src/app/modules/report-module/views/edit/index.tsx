@@ -82,7 +82,7 @@ function ReportEditView(props: ReportEditViewProps) {
     if (token) {
       fetchReportData({ token, getId: page });
     }
-    props.setAutoSave(true);
+    props.setAutoSave({ isAutoSaveEnabled: true });
     return () => {
       clearReportData();
     };

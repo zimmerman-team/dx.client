@@ -28,6 +28,13 @@ import { areAllRequiredDimensionsMapped } from "app/hooks/useChartsRawData";
 interface ChartToolBoxMappingProps {
   dataTypes: any;
   dimensions: any[];
+  setAutoSaveState: React.Dispatch<
+    React.SetStateAction<{
+      showAutoSaveSwitch: boolean;
+      isAutoSaveEnabled: boolean;
+    }>
+  >;
+  showAutoSaveSwitch: boolean;
   setChartFromAPI: (
     value: React.SetStateAction<ChartRenderedItem | null>
   ) => void;
@@ -48,6 +55,13 @@ interface ChartToolBoxMappingItemProps {
   displayCloseButton?: boolean;
   showAggregation: boolean;
   handleButtonToggle?: (id: string) => void;
+  setAutoSaveState: React.Dispatch<
+    React.SetStateAction<{
+      showAutoSaveSwitch: boolean;
+      isAutoSaveEnabled: boolean;
+    }>
+  >;
+  showAutoSaveSwitch: boolean;
 }
 
 const typeIcon = {
@@ -208,6 +222,8 @@ export function ChartToolBoxMapping(props: Readonly<ChartToolBoxMappingProps>) {
                 getValidDataTypes={getValidDataTypes}
                 getSelectButtonLabel={getSelectButtonLabel}
                 handleButtonToggle={handleButtonToggle}
+                setAutoSaveState={props.setAutoSaveState}
+                showAutoSaveSwitch={props.showAutoSaveSwitch}
               />
             )
           )}
@@ -237,6 +253,13 @@ const NonStaticDimensionContainer = (props: {
     multiple: boolean
   ) => any;
   handleButtonToggle: (id: string) => void;
+  setAutoSaveState: React.Dispatch<
+    React.SetStateAction<{
+      showAutoSaveSwitch: boolean;
+      isAutoSaveEnabled: boolean;
+    }>
+  >;
+  showAutoSaveSwitch: boolean;
 }) => {
   const [searchValue, setSearchValue] = React.useState("");
   const validTypes = Object.keys(
@@ -340,6 +363,8 @@ const NonStaticDimensionContainer = (props: {
               displayCloseButton
               showAggregation
               handleButtonToggle={props.handleButtonToggle}
+              setAutoSaveState={props.setAutoSaveState}
+              showAutoSaveSwitch={props.showAutoSaveSwitch}
             />
           );
         })}
@@ -412,6 +437,8 @@ const NonStaticDimensionContainer = (props: {
                 nonStaticDimensionsIndex={props.dimensionIndex}
                 nonStaticDimensions={props.nonStaticDimensions}
                 showAggregation={false}
+                setAutoSaveState={props.setAutoSaveState}
+                showAutoSaveSwitch={props.showAutoSaveSwitch}
               />
             );
           })}
@@ -469,7 +496,6 @@ function ChartToolBoxMappingItem(
   props: Readonly<ChartToolBoxMappingItemProps>
 ) {
   const { index, dimension, dataTypes } = props;
-
   const setMapping = useStoreActions(
     (actions) => actions.charts.mapping.setValue
   );
@@ -560,6 +586,13 @@ function ChartToolBoxMappingItem(
                 }
               : undefined,
           },
+        });
+      }
+      //show auto save switch if it's not shown
+      if (!props.showAutoSaveSwitch) {
+        props.setAutoSaveState({
+          isAutoSaveEnabled: true,
+          showAutoSaveSwitch: true,
         });
       }
     }

@@ -25,21 +25,13 @@ import { InfoSnackbar } from "../chartSubheaderToolbar/infoSnackbar";
 
 export function ChartModuleToolBox(props: Readonly<ChartToolBoxProps>) {
   const { page, view } = useParams<{ page: string; view?: string }>();
-  const { user } = useAuth0();
   const history = useHistory();
-  const token = useStoreState((state) => state.AuthToken.value);
   const isMobile = useMediaQuery("(max-width: 767px)");
   const [isClickable, setIsClickable] = React.useState(false);
   const setRightPanelView = useRecoilState(reportRightPanelViewAtom)[1];
 
-  const mapping = useStoreState((state) => state.charts.mapping.value);
   const dataset = useStoreState((state) => state.charts.dataset.value);
-  const appliedFilters = useStoreState(
-    (state) => state.charts.appliedFilters.value
-  );
-  const enabledFilterOptionGroups = useStoreState(
-    (state) => state.charts.enabledFilterOptionGroups.value
-  );
+
   const activePanels = useStoreState(
     (state) => state.charts.activePanels.value
   );
@@ -47,29 +39,8 @@ export function ChartModuleToolBox(props: Readonly<ChartToolBoxProps>) {
   const setActivePanels = useStoreActions(
     (state) => state.charts.activePanels.setValue
   );
-  const selectedChartType = useStoreState(
-    (state) => state.charts.chartType.value
-  );
 
-  const createChart = useStoreActions(
-    (actions) => actions.charts.ChartCreate.post
-  );
-  const editChart = useStoreActions(
-    (actions) => actions.charts.ChartUpdate.patch
-  );
-  const createChartData = useStoreState(
-    (state) =>
-      (state.charts.ChartCreate.crudData ?? emptyChartAPI) as ChartAPIModel
-  );
-  const createChartSuccess = useStoreState(
-    (state) => state.charts.ChartCreate.success
-  );
-  const editChartSuccess = useStoreState(
-    (state) => state.charts.ChartUpdate.success
-  );
   const [showSnackbar, setShowSnackbar] = React.useState<string | null>(null);
-  const [chartFromReport, setChartFromReport] =
-    useRecoilState(chartFromReportAtom);
   const chartType = useStoreState((state) => state.charts.chartType.value);
   const [displayToolbar, setDisplayToolbar] = React.useState<"block" | "none">(
     "block"
@@ -140,53 +111,6 @@ export function ChartModuleToolBox(props: Readonly<ChartToolBoxProps>) {
       setIsClickable(true);
     }
   };
-  function onSave() {
-    const chart = {
-      name: props.chartName,
-      authId: user?.sub,
-      vizType: selectedChartType,
-      mapping,
-      datasetId: dataset,
-      vizOptions: props.visualOptions,
-      appliedFilters,
-      enabledFilterOptionGroups,
-    };
-    if (view !== undefined && page !== "new") {
-      editChart({
-        token,
-        patchId: page,
-        values: chart,
-      });
-    } else {
-      createChart({
-        token,
-        values: chart,
-      });
-    }
-  }
-
-  //handles what happens after chart is created or edited
-  React.useEffect(() => {
-    if ((editChartSuccess || createChartSuccess) && chartFromReport.state) {
-      //return to persisted report view
-      setRightPanelView("charts");
-      history.push(`/report/${chartFromReport.page}/edit`);
-    } else if (editChartSuccess && !chartFromReport.state) {
-      //return to chart detail page
-      history.push(`/chart/${page}`);
-    } else if (
-      createChartSuccess &&
-      !chartFromReport.state &&
-      createChartData.id
-    ) {
-      //show snackbar
-      setShowSnackbar(
-        createChartSuccess ? `Chart created successfully!` : null
-      );
-      //return to chart detail page
-      history.push(`/chart/${createChartData.id}`);
-    }
-  }, [editChartSuccess, createChartSuccess, createChartData]);
 
   React.useEffect(() => {
     if (location.pathname === `/chart/${page}` || view == "preview") {
@@ -266,7 +190,7 @@ export function ChartModuleToolBox(props: Readonly<ChartToolBoxProps>) {
               visualOptions={props.visualOptions}
               setVisualOptions={props.setVisualOptions}
               filterOptionGroups={props.filterOptionGroups}
-              save={onSave}
+              save={props.onSave}
               dimensions={props.dimensions}
               activeStep={activePanels}
               onNavBtnClick={onNavBtnClick}
@@ -276,6 +200,8 @@ export function ChartModuleToolBox(props: Readonly<ChartToolBoxProps>) {
               onMouseOverNavBtn={onMouseOverNavBtn}
               setChartFromAPI={props.setChartFromAPI}
               deselectDataset={props.deselectDataset}
+              setAutoSaveState={props.setAutoSaveState}
+              showAutoSaveSwitch={props.showAutoSaveSwitch}
             />
           )}
 

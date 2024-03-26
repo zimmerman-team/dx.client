@@ -171,7 +171,7 @@ const appSetup = (params: Params, newProps: Partial<MockProps> = {}) => {
                 node={chartFromReportAtom}
                 onChange={onChartFromReportChange}
               />
-              <ChartSubheaderToolbar {...props} />
+              {/* <ChartSubheaderToolbar {...props} /> */}
             </RecoilRoot>
           </StoreProvider>
         </Auth0Provider>

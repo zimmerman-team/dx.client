@@ -13,6 +13,8 @@ import { LinkIcon } from "app/assets/icons/Link";
 import DeleteIcon from "@material-ui/icons/Delete";
 import Container from "@material-ui/core/Container";
 import IconButton from "@material-ui/core/IconButton";
+import AutorenewIcon from "@material-ui/icons/Autorenew";
+import CloudDoneIcon from "@material-ui/icons/CloudDone";
 import CopyToClipboard from "react-copy-to-clipboard";
 import FileCopyIcon from "@material-ui/icons/FileCopy";
 import { PageLoader } from "app/modules/common/page-loader";
@@ -33,8 +35,13 @@ import {
 } from "app/state/recoil/atoms";
 import { InfoSnackbar } from "app/modules/chart-module/components/chartSubheaderToolbar/infoSnackbar";
 import { getRequiredFieldsAndErrors } from "../../routes/mapping/utils";
+import AutoSaveSwitch from "app/modules/report-module/components/reportSubHeaderToolbar/autoSaveSwitch";
+import useAutosave from "app/hooks/useAutoSave";
+import { useStyles } from "app/modules/report-module/components/reportSubHeaderToolbar";
+import AutoResizeInput from "app/modules/report-module/components/reportSubHeaderToolbar/autoResizeInput";
 
 export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
+  const classes = useStyles();
   const history = useHistory();
 
   const { user, isAuthenticated } = useAuth0();
@@ -43,7 +50,6 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
   const [showDeleteDialog, setShowDeleteDialog] = React.useState(false);
 
   const [enableButton, setEnableButton] = React.useState<boolean>(false);
-
   const setHomeTab = useRecoilState(homeDisplayAtom)[1];
   const [chartFromReport, _setChartFromReport] =
     useRecoilState(chartFromReportAtom);
@@ -86,26 +92,12 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
     (state) =>
       (state.charts.ChartGet.crudData ?? emptyChartAPI) as ChartAPIModel
   );
-  const createChartData = useStoreState(
-    (state) =>
-      (state.charts.ChartCreate.crudData ?? emptyChartAPI) as ChartAPIModel
-  );
-  const createChartSuccess = useStoreState(
-    (state) => state.charts.ChartCreate.success
-  );
-  const editChartSuccess = useStoreState(
-    (state) => state.charts.ChartUpdate.success
-  );
-  const createOrEditChartLoading = useStoreState(
-    (state) =>
-      state.charts.ChartCreate.loading || state.charts.ChartUpdate.loading
-  );
 
-  const createChart = useStoreActions(
-    (actions) => actions.charts.ChartCreate.post
+  const createChartLoading = useStoreState(
+    (state) => state.charts.ChartCreate.loading
   );
-  const editChart = useStoreActions(
-    (actions) => actions.charts.ChartUpdate.patch
+  const editChartLoading = useStoreState(
+    (state) => state.charts.ChartUpdate.loading
   );
   const createChartClear = useStoreActions(
     (actions) => actions.charts.ChartCreate.clear
@@ -156,56 +148,28 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
   const handleCloseSnackbar = () => {
     setOpenSnackbar(false);
   };
-  const onSave = () => {
-    const chart = {
-      name: props.name,
-      authId: user?.sub,
-      vizType: selectedChartType,
-      mapping,
-      datasetId: dataset,
-      vizOptions: props.visualOptions || {},
-      appliedFilters,
-      enabledFilterOptionGroups,
-    };
-    if (view !== undefined && page !== "new") {
-      editChart({
-        token,
-        patchId: page,
-        values: chart,
-      });
-    } else {
-      createChart({
-        token,
-        values: chart,
-      });
-    }
-  };
-  //handles what happens after chart is created or edited
-  React.useEffect(() => {
-    if ((editChartSuccess || createChartSuccess) && chartFromReport.state) {
-      //returns back to persisted report view
-      setRightPanelView("charts");
-      history.push(`/report/${chartFromReport.page}/edit`);
-    } else if (editChartSuccess && !chartFromReport.state) {
-      //returns back to chart detail page
-      history.push(`/chart/${page}`);
-    } else if (
-      createChartSuccess &&
-      !chartFromReport.state &&
-      createChartData.id
-    ) {
-      //shows snackbar
-      setShowSnackbar(`Chart created successfully!`);
-      //returns back to chart detail page
-      history.push(`/chart/${createChartData.id}`);
-    }
-  }, [editChartSuccess, createChartSuccess, createChartData]);
 
   React.useEffect(() => {
     return () => {
       clearChart();
     };
   }, []);
+
+  useAutosave(
+    () => {
+      props.onSave();
+    },
+    2 * 1000,
+    props.autoSave,
+    [
+      props.name,
+      selectedChartType,
+      mapping,
+      dataset,
+      props.visualOptions,
+      appliedFilters,
+    ]
+  );
 
   const isPreviewDisabled: boolean = React.useMemo(() => {
     const newValue =
@@ -215,11 +179,9 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
 
   const isSavedDisabled: boolean = React.useMemo(() => {
     const newValue = isEmpty(selectedChartType) || !isMappingValid;
-    // (view !== undefined && page !== "new" && props.name !== loadedChart.name);
     return newValue;
   }, [mapping, selectedChartType]);
 
-  // console.log(loadedChart.name, props.name, "propsname");
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
 
@@ -280,9 +242,11 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
     history.goBack();
   };
 
+  console.log(props.showAutoSaveSwitch, "showswitch");
+
   return (
     <div id="subheader-toolbar" css={styles.container}>
-      {createOrEditChartLoading && <PageLoader />}
+      {createChartLoading && <PageLoader />}
       <InfoSnackbar
         gap={location.pathname.includes("report")}
         data-testid="create-chart-snackbar"
@@ -322,30 +286,107 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
       />
       <Container maxWidth="lg">
         <div css={styles.innercontainer}>
-          <input
-            value={props.name}
-            placeholder="Title"
-            css={styles.nameInput}
-            onChange={onNameChange}
-            onFocus={() => {
-              props.setHasSubHeaderTitleFocused?.(true);
-              props.setHasSubHeaderTitleBlurred?.(false);
-            }}
-            onBlur={() => props.setHasSubHeaderTitleBlurred?.(true)}
-            onClick={(e) => {
-              if (props.name === "Untitled Chart") {
-                e.currentTarget.value = "";
-              }
-            }}
-            disabled={props.isPreviewView}
-            style={
-              page !== "new" && !view
-                ? {
-                    pointerEvents: "none",
+          <div
+            css={`
+              display: flex;
+              align-items: center;
+              gap: 12px;
+            `}
+          >
+            <div
+              css={`
+                overflow-x: visible;
+              `}
+            >
+              <AutoResizeInput
+                name={props.name}
+                setName={props.setName}
+                placeholder="Title"
+                autoResize={true}
+                maxWidth={500}
+                minWidth={100}
+                onClick={(e) => {
+                  if (props.name === "Untitled Chart") {
+                    e.currentTarget.value = "";
                   }
-                : {}
-            }
-          />
+                }}
+                onBlur={() => {
+                  props.setHasSubHeaderTitleBlurred?.(true);
+                }}
+                onFocus={() => {
+                  props.setHasSubHeaderTitleFocused?.(true);
+                  props.setHasSubHeaderTitleBlurred?.(false);
+                }}
+                disabled={props.isPreviewView}
+                style={
+                  page !== "new" && !view
+                    ? {
+                        pointerEvents: "none",
+                      }
+                    : {}
+                }
+              />
+            </div>
+
+            {editChartLoading && (
+              <div
+                css={`
+                  display: flex;
+                  align-items: center;
+                  gap: 4px;
+                  span {
+                    margin-bottom: -4px;
+                  }
+                `}
+              >
+                <span>
+                  <AutorenewIcon
+                    htmlColor="#70777E"
+                    className={classes.rotateIcon}
+                  />
+                </span>
+                <p
+                  css={`
+                    color: #70777e;
+                    font-family: "GothamNarrow-Book", sans-serif;
+                    font-size: 12px;
+                    font-weight: 325;
+                    margin: 0px;
+                  `}
+                >
+                  saving changes{" "}
+                </p>
+              </div>
+            )}
+            {props.savedChanges && (
+              <div
+                css={`
+                  display: flex;
+                  align-items: center;
+                  gap: 4px;
+                  span {
+                    margin-bottom: -7px;
+                  }
+                `}
+              >
+                <span>
+                  <CloudDoneIcon htmlColor="#70777E" />
+                </span>
+                <p
+                  css={`
+                    color: #70777e;
+                    font-family: "GothamNarrow-Book", sans-serif;
+                    font-size: 12px;
+                    font-weight: 325;
+                    margin: 0px;
+                    margin-top: 2px;
+                  `}
+                >
+                  All changes saved{" "}
+                </p>
+              </div>
+            )}
+          </div>
 
           <div css={styles.endContainer}>
             {view === "preview" && (
@@ -361,6 +402,41 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
             <div css={styles.iconbtns}>
               {(page === "new" || view) && (
                 <React.Fragment>
+                  {props.showAutoSaveSwitch && (
+                    <div
+                      css={`
+                        display: flex;
+                        gap: 14px;
+                        align-items: center;
+                        margin-right: 17px;
+                      `}
+                    >
+                      <span
+                        css={`
+                          color: #000;
+
+                          font-family: "GothamNarrow-Book", sans-serif;
+                          font-size: 12px;
+                          font-style: normal;
+                          font-weight: 325;
+                          margin-right: 10px;
+                        `}
+                      >
+                        AutoSave
+                      </span>
+                      <AutoSaveSwitch
+                        checked={props.autoSave}
+                        setAutoSave={
+                          props.setAutoSaveState as React.Dispatch<
+                            React.SetStateAction<{
+                              isAutoSaveEnabled: boolean;
+                              showAutoSaveSwitch?: boolean;
+                            }>
+                          >
+                        }
+                      />
+                    </div>
+                  )}
                   <Tooltip title="Preview">
                     <span>
                       <IconButton
@@ -386,7 +462,7 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
                   <Tooltip title="Save">
                     <span>
                       <IconButton
-                        onClick={onSave}
+                        onClick={props.onSave}
                         aria-label="save-button"
                         disabled={isSavedDisabled}
                         css={`
