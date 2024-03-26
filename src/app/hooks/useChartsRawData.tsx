@@ -210,8 +210,9 @@ export function useChartsRawData(props: {
           setLoading(false);
           if (isEmpty(chart)) {
             setNotFound(true);
+
+            setChartErrorMessage("This chart is no longer available.");
           } else if (response.data.error) {
-            console.log("hereei");
             setChartErrorMessage(response.data.error);
             setDataError(true);
           } else {
@@ -229,6 +230,8 @@ export function useChartsRawData(props: {
           console.log("API call error: " + error);
           setLoading(false);
           setNotFound(true);
+          setChartErrorMessage("This chart is no longer available.");
+
           setError401(error.response?.status === 401);
         });
     }

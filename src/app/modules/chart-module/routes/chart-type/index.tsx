@@ -19,8 +19,8 @@ function ChartBuilderChartType(props: ChartBuilderChartTypeProps) {
   const history = useHistory();
   const { page } = useParams<{ page: string }>();
 
-  const chartType = useStoreState((state) => state.charts.chartType.value);
   const dataset = useStoreState((state) => state.charts.dataset.value);
+  const chartType = useStoreState((state) => state.charts.chartType.value);
   const setChartType = useStoreActions(
     (actions) => actions.charts.chartType.setValue
   );
@@ -38,6 +38,8 @@ function ChartBuilderChartType(props: ChartBuilderChartTypeProps) {
     //if dataset is empty and not loading, redirect to data page
     if (dataset === null && !props.loading) {
       history.push(`/chart/${page}/data`);
+    } else {
+      props.loadDataset(`chart/sample-data/${dataset}`);
     }
   }, [dataset]);
 

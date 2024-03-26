@@ -98,7 +98,6 @@ export function ReportChartWrapper(props: Props) {
       clearChart();
     };
   }, [props.id, token]);
-
   React.useEffect(() => {
     if (notFound || dataError) {
       props.setError(true);
