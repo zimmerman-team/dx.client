@@ -15,12 +15,12 @@ export interface SubheaderToolbarProps {
   setAutoSaveState: React.Dispatch<
     React.SetStateAction<{
       isAutoSaveEnabled: boolean;
-      showAutoSaveSwitch: boolean;
+      enableAutoSaveSwitch: boolean;
     }>
   >;
   autoSave: boolean;
   onSave: () => void;
-  showAutoSaveSwitch: boolean;
+  enableAutoSaveSwitch: boolean;
   savedChanges: boolean;
 }
 

@@ -219,6 +219,7 @@ export default function ChartsGrid(props: Props) {
                 path={`/chart/${c.id}`}
                 viz={getIcon(c.vizType)}
                 vizType={c.vizType}
+                isMappingValid={c.isMappingValid}
                 handleDelete={() => handleModal(index)}
                 handleDuplicate={() => handleDuplicate(index)}
               />

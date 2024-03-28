@@ -43,13 +43,6 @@ interface ChartToolBoxStepsProps {
     value: React.SetStateAction<ChartRenderedItem | null>
   ) => void;
   deselectDataset: () => void;
-  setAutoSaveState: React.Dispatch<
-    React.SetStateAction<{
-      showAutoSaveSwitch: boolean;
-      isAutoSaveEnabled: boolean;
-    }>
-  >;
-  showAutoSaveSwitch: boolean;
 }
 
 export function ChartToolBoxSteps(props: ChartToolBoxStepsProps) {
@@ -118,8 +111,7 @@ export function ChartToolBoxSteps(props: ChartToolBoxStepsProps) {
             dataTypes={props.dataTypes}
             dimensions={props.dimensions}
             setChartFromAPI={props.setChartFromAPI}
-            setAutoSaveState={props.setAutoSaveState}
-            showAutoSaveSwitch={props.showAutoSaveSwitch}
+            loading={props.loading}
           />
         );
       case "filters":

@@ -41,11 +41,9 @@ import { isEmpty } from "lodash";
 import useResizeObserver from "use-resize-observer";
 import { ChartType } from "app/modules/chart-module/components/common-chart";
 import { DatasetListItemAPIModel } from "app/modules/dataset-module/data";
-import {
-  chartFromReportAtom,
-  reportRightPanelViewAtom,
-} from "app/state/recoil/atoms";
+import { reportRightPanelViewAtom } from "app/state/recoil/atoms";
 import { useRecoilState } from "recoil";
+import { getRequiredFieldsAndErrors } from "app/modules/chart-module/routes/mapping/utils";
 
 export default function ChartModule() {
   const { user, isLoading, isAuthenticated } = useAuth0();
@@ -109,13 +107,10 @@ export default function ChartModule() {
     (state) => state.charts.ChartGet.loading
   );
   const editView = !!(page !== "new" && view);
-  console.log(editView, "ditview");
   const [autoSaveState, setAutoSaveState] = React.useState({
-    isAutoSaveEnabled: false,
-    showAutoSaveSwitch: editView || false,
+    isAutoSaveEnabled: editView || false,
+    enableAutoSaveSwitch: editView || false,
   });
-  const [chartFromReport, _setChartFromReport] =
-    useRecoilState(chartFromReportAtom);
   const setRightPanelView = useRecoilState(reportRightPanelViewAtom)[1];
 
   const setMapping = useStoreActions(
@@ -188,6 +183,12 @@ export default function ChartModule() {
   const resetEnabledFilterOptionGroups = useStoreActions(
     (actions) => actions.charts.enabledFilterOptionGroups.clear
   );
+  const { updRequiredFields, updMinValuesFields } = getRequiredFieldsAndErrors(
+    mapping,
+    dimensions
+  );
+  const isMappingValid =
+    updRequiredFields.length === 0 && updMinValuesFields.length === 0;
 
   const config = get(routeToConfig, `["${view}"]`, routeToConfig.preview);
 
@@ -211,7 +212,7 @@ export default function ChartModule() {
     setNotFound(false);
   };
 
-  const onSave = () => {
+  const onSave = async () => {
     const chart = {
       name: chartName,
       authId: user?.sub,
@@ -219,8 +220,10 @@ export default function ChartModule() {
       mapping,
       datasetId: dataset,
       vizOptions: visualOptions || {},
+      dataTypes: dataTypes2,
       appliedFilters,
       enabledFilterOptionGroups,
+      isMappingValid,
     };
     if (view !== undefined && page !== "new") {
       editChart({
@@ -236,29 +239,26 @@ export default function ChartModule() {
     }
   };
 
-  //handles what happens after chart is created or edited
+  const onTriggerAutoSave = () => {
+    onSave().then(() => {
+      setAutoSaveState({
+        isAutoSaveEnabled: true,
+        enableAutoSaveSwitch: true,
+      });
+    });
+  };
+
   React.useEffect(() => {
+    //handles what happens after chart is created or edited
     let timeout: NodeJS.Timeout;
-    if ((editChartSuccess || createChartSuccess) && chartFromReport.state) {
-      //returns back to persisted report view
-      setRightPanelView("charts");
-      history.push(`/report/${chartFromReport.page}/edit`);
-    } else if (editChartSuccess && !chartFromReport.state) {
+    if (createChartSuccess && createChartData.id && page === "new") {
+      history.replace(`/chart/${createChartData.id}/mapping`);
+    } else if (editChartSuccess) {
       //returns back to chart detail page
       setSavedChanges(true);
       timeout = setTimeout(() => {
         setSavedChanges(false);
       }, 3000);
-      // history.push(`/chart/${page}`);
-    } else if (
-      createChartSuccess &&
-      !chartFromReport.state &&
-      createChartData.id
-    ) {
-      //returns back to chart detail page
-      console.log("herrr");
-      createChartClear();
-      history.replace(`/chart/${createChartData.id}/mapping`);
     }
     return () => {
       clearTimeout(timeout);
@@ -352,46 +352,38 @@ export default function ChartModule() {
 
   async function clear() {
     sessionStorage.setItem("visualOptions", JSON.stringify({}));
-    // resetDataset();
-    // resetMapping();
-    // resetChartType();
-    // resetAppliedFilters();
-    // resetEnabledFilterOptionGroups();
+    resetDataset();
+    resetMapping();
+    resetChartType();
+    resetAppliedFilters();
+    resetEnabledFilterOptionGroups();
     clearChart();
     createChartClear();
     editChartClear();
     setChartName("Untitled Chart");
     setDataError(false);
     setNotFound(false);
+    setAutoSaveState({
+      isAutoSaveEnabled: false,
+      enableAutoSaveSwitch: false,
+    });
   }
 
-  const clearNonAsyncStates = () => {
-    const resetStates = async () => {
-      resetDataset();
-      resetMapping();
-      resetChartType();
-      resetAppliedFilters();
-      resetEnabledFilterOptionGroups();
-    };
-    resetStates().then(() => {
-      if (process.env.NODE_ENV === "development") {
-        console.log(" clear non async states", dataset, chartType);
-      }
-    });
-  };
-
-  React.useEffect(() => {
-    const handlePageExit = () => {
-      clearNonAsyncStates();
-    };
-
-    // ComponentWillUnmount equivalent
-    return () => {
-      if (!createChartSuccess) {
-        handlePageExit();
-      }
-    };
-  }, []);
+  function clearChartBuilder() {
+    console.log("--about to reset chart states");
+    if (page !== "new") {
+      clear().then(() => {
+        if (process.env.NODE_ENV === "development") {
+          console.log(
+            "End of reset.",
+            "--visualOptions",
+            visualOptions,
+            chartName
+          );
+        }
+      });
+    }
+  }
 
   React.useEffect(() => {
     // Updates visual options width when container width changes
@@ -411,25 +403,11 @@ export default function ChartModule() {
 
   const { ref } = useResizeObserver<HTMLDivElement>();
 
-  function clearChartBuilder() {
-    clear().then(() => {
-      if (process.env.NODE_ENV === "development") {
-        console.log(
-          "End of reset.",
-          "--visualOptions",
-          visualOptions,
-          chartName
-        );
-      }
-    });
-  }
-
   React.useEffect(() => {
     if (!loading && chartType) {
       setVisualOptionsOnChange();
     }
   }, [chartType, loading]);
-  console.log(createChartSuccess, "createChartSuccess");
 
   React.useEffect(() => {
     if (page !== "new") {
@@ -514,7 +492,7 @@ export default function ChartModule() {
         dimensions={dimensions}
         setAutoSaveState={setAutoSaveState}
         autoSave={autoSaveState.isAutoSaveEnabled}
-        showAutoSaveSwitch={autoSaveState.showAutoSaveSwitch}
+        enableAutoSaveSwitch={autoSaveState.enableAutoSaveSwitch}
         onSave={onSave}
         savedChanges={savedChanges}
       />
@@ -544,9 +522,8 @@ export default function ChartModule() {
         onClose={() => setToolboxOpen(false)}
         onOpen={() => setToolboxOpen(true)}
         deselectDataset={deselectDataset}
-        setAutoSaveState={setAutoSaveState}
-        showAutoSaveSwitch={autoSaveState.showAutoSaveSwitch}
         onSave={onSave}
+        triggerAutoSave={onTriggerAutoSave}
       />
 
       <div
@@ -636,10 +613,7 @@ export default function ChartModule() {
                 />
               </Route>
               <Route path="/chart/:page/data">
-                <ChartModuleDataView
-                  loadDataset={loadDataset}
-                  clearChartBuilder={clearChartBuilder}
-                />
+                <ChartModuleDataView loadDataset={loadDataset} />
               </Route>
               <Route path="/chart/:page/preview">
                 <ChartBuilderPreviewTheme

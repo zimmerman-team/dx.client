@@ -24,17 +24,12 @@ import {
 } from "app/modules/chart-module/data";
 import { Dropdown } from "react-bootstrap";
 import { areAllRequiredDimensionsMapped } from "app/hooks/useChartsRawData";
+import Skeleton from "@material-ui/lab/Skeleton";
 
 interface ChartToolBoxMappingProps {
   dataTypes: any;
   dimensions: any[];
-  setAutoSaveState: React.Dispatch<
-    React.SetStateAction<{
-      showAutoSaveSwitch: boolean;
-      isAutoSaveEnabled: boolean;
-    }>
-  >;
-  showAutoSaveSwitch: boolean;
+  loading: boolean;
   setChartFromAPI: (
     value: React.SetStateAction<ChartRenderedItem | null>
   ) => void;
@@ -50,23 +45,20 @@ interface ChartToolBoxMappingItemProps {
   type: "string" | "number" | "date";
   nonStaticDimensionsId: number;
   nonStaticDimensionsIndex: number;
-  setNonStaticDimensions: React.Dispatch<React.SetStateAction<any[]>>;
+  handleNonStaticDimensionsUpdate: (
+    nonStaticDimensionsId: number,
+    mappingItemValue: any
+  ) => void;
+  // setNonStaticDimensions: React.Dispatch<React.SetStateAction<any[]>>;
   nonStaticDimensions: any[];
   displayCloseButton?: boolean;
   showAggregation: boolean;
   handleButtonToggle?: (id: string) => void;
-  setAutoSaveState: React.Dispatch<
-    React.SetStateAction<{
-      showAutoSaveSwitch: boolean;
-      isAutoSaveEnabled: boolean;
-    }>
-  >;
-  showAutoSaveSwitch: boolean;
 }
 
 const typeIcon = {
-  string: <p>Aa</p>,
-  number: <p>#</p>,
+  string: <span>Aa</span>,
+  number: <span>#</span>,
   date: <DateIcon />,
 };
 
@@ -84,24 +76,46 @@ export const AGGREGATIONS_LABELS = {
 
 export function ChartToolBoxMapping(props: Readonly<ChartToolBoxMappingProps>) {
   const staticDimensions = filter(props.dimensions, (d: any) => d.static);
-  const [nonStaticDimensions, setNonStaticDimensions] = React.useState(
-    filter(props.dimensions, (d: any) => !d.static).map((d: any) => {
+  const nonStaticDimensions = React.useMemo(() => {
+    return filter(props.dimensions, (d: any) => !d.static).map((d: any) => {
       return {
         ...d,
         mappedValues: [],
         mapValuesDisplayed: false,
       };
-    })
-  );
+    });
+  }, [props.dimensions]);
+
+  const [nonStaticDimensionsState, setNonStaticDimensionsState] =
+    React.useState(nonStaticDimensions);
 
   const mapping = useStoreState((state) => state.charts.mapping.value);
+
   const handleButtonToggle = (id: string) => {
-    setNonStaticDimensions((prev) => {
+    setNonStaticDimensionsState((prev) => {
       return prev.map((data) => {
         if (data.id === id) {
           return {
             ...data,
             mapValuesDisplayed: !data.mapValuesDisplayed,
+          };
+        }
+        return data;
+      });
+    });
+  };
+
+  const handleNonStaticDimensionsUpdate = (
+    nonStaticDimensionsId: number,
+    mappingItemValue: any
+  ) => {
+    setNonStaticDimensionsState((prev) => {
+      return prev.map((data) => {
+        if (data.id === nonStaticDimensionsId) {
+          return {
+            ...data,
+            mappedValues: [...data.mappedValues, mappingItemValue],
+            mapValuesDisplayed: false,
           };
         }
         return data;
@@ -123,7 +137,7 @@ export function ChartToolBoxMapping(props: Readonly<ChartToolBoxMappingProps>) {
       }
     });
 
-    setNonStaticDimensions(updatedNonStaticDimensions);
+    setNonStaticDimensionsState(updatedNonStaticDimensions);
   }, [mapping]);
 
   // empty rendered chart when req mapping fields are not filled
@@ -209,21 +223,39 @@ export function ChartToolBoxMapping(props: Readonly<ChartToolBoxMappingProps>) {
             position: relative;
           `}
         >
-          {nonStaticDimensions?.map(
+          {props.loading && (
+            <div
+              css={`
+                width: 100%;
+                height: 89px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+              `}
+            >
+              <Skeleton
+                animation="wave"
+                variant="rect"
+                width="100%"
+                height="100%"
+              />
+            </div>
+          )}
+          {nonStaticDimensionsState?.map(
             (dimension: any, dimensionIndex: number) => (
               <NonStaticDimensionContainer
                 dataTypes={props.dataTypes}
                 key={dimension.id}
                 dimension={dimension}
                 dimensionIndex={dimensionIndex}
-                nonStaticDimensions={nonStaticDimensions}
-                setNonStaticDimensions={setNonStaticDimensions}
+                nonStaticDimensions={nonStaticDimensionsState}
+                handleNonStaticDimensionsUpdate={
+                  handleNonStaticDimensionsUpdate
+                }
                 nonStaticDimensionsId={dimension.id}
                 getValidDataTypes={getValidDataTypes}
                 getSelectButtonLabel={getSelectButtonLabel}
                 handleButtonToggle={handleButtonToggle}
-                setAutoSaveState={props.setAutoSaveState}
-                showAutoSaveSwitch={props.showAutoSaveSwitch}
               />
             )
           )}
@@ -244,7 +276,10 @@ const NonStaticDimensionContainer = (props: {
   dimension: any;
   dimensionIndex: number;
   nonStaticDimensions: any[];
-  setNonStaticDimensions: React.Dispatch<React.SetStateAction<any[]>>;
+  handleNonStaticDimensionsUpdate: (
+    nonStaticDimensionsId: number,
+    mappingItemValue: any
+  ) => void;
   nonStaticDimensionsId: number;
   dataTypes: any[];
   getValidDataTypes: (dimensionTypes: string[], searchValue: string) => any;
@@ -253,13 +288,6 @@ const NonStaticDimensionContainer = (props: {
     multiple: boolean
   ) => any;
   handleButtonToggle: (id: string) => void;
-  setAutoSaveState: React.Dispatch<
-    React.SetStateAction<{
-      showAutoSaveSwitch: boolean;
-      isAutoSaveEnabled: boolean;
-    }>
-  >;
-  showAutoSaveSwitch: boolean;
 }) => {
   const [searchValue, setSearchValue] = React.useState("");
   const validTypes = Object.keys(
@@ -355,7 +383,9 @@ const NonStaticDimensionContainer = (props: {
               marginBottom="16px"
               mappingItemValue={mappingItemValue}
               dimension={props.dimension}
-              setNonStaticDimensions={props.setNonStaticDimensions}
+              handleNonStaticDimensionsUpdate={
+                props.handleNonStaticDimensionsUpdate
+              }
               dataTypes={props.dataTypes}
               nonStaticDimensionsId={props.dimension.id}
               nonStaticDimensionsIndex={props.dimensionIndex}
@@ -363,8 +393,6 @@ const NonStaticDimensionContainer = (props: {
               displayCloseButton
               showAggregation
               handleButtonToggle={props.handleButtonToggle}
-              setAutoSaveState={props.setAutoSaveState}
-              showAutoSaveSwitch={props.showAutoSaveSwitch}
             />
           );
         })}
@@ -431,14 +459,14 @@ const NonStaticDimensionContainer = (props: {
                 marginBottom="16px"
                 mappingItemValue={mappingItemValue}
                 dimension={props.dimension}
-                setNonStaticDimensions={props.setNonStaticDimensions}
+                handleNonStaticDimensionsUpdate={
+                  props.handleNonStaticDimensionsUpdate
+                }
                 dataTypes={props.dataTypes}
                 nonStaticDimensionsId={props.dimension.id}
                 nonStaticDimensionsIndex={props.dimensionIndex}
                 nonStaticDimensions={props.nonStaticDimensions}
                 showAggregation={false}
-                setAutoSaveState={props.setAutoSaveState}
-                showAutoSaveSwitch={props.showAutoSaveSwitch}
               />
             );
           })}
@@ -524,18 +552,10 @@ function ChartToolBoxMappingItem(
       dimension.validTypes?.includes(columnDataType);
 
     if (isValid) {
-      props.setNonStaticDimensions((prev) => {
-        return prev.map((data) => {
-          if (data.id === props.nonStaticDimensionsId) {
-            return {
-              ...data,
-              mappedValues: [...data.mappedValues, props.mappingItemValue],
-              mapValuesDisplayed: false,
-            };
-          }
-          return data;
-        });
-      });
+      props.handleNonStaticDimensionsUpdate(
+        props.nonStaticDimensionsId,
+        props.mappingItemValue
+      );
 
       const mappingFromStorage = get(
         JSON.parse(
@@ -586,13 +606,6 @@ function ChartToolBoxMappingItem(
                 }
               : undefined,
           },
-        });
-      }
-      //show auto save switch if it's not shown
-      if (!props.showAutoSaveSwitch) {
-        props.setAutoSaveState({
-          isAutoSaveEnabled: true,
-          showAutoSaveSwitch: true,
         });
       }
     }

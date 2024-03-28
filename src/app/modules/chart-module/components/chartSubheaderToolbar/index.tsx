@@ -28,11 +28,7 @@ import { ChartAPIModel, emptyChartAPI } from "app/modules/chart-module/data";
 import { SubheaderToolbarProps } from "app/modules/chart-module/components/chartSubheaderToolbar/data";
 import { ExportChartButton } from "app/modules/chart-module/components/chartSubheaderToolbar/exportButton";
 import { ISnackbarState } from "app/modules/dataset-upload-module/upload-steps/previewFragment";
-import {
-  homeDisplayAtom,
-  chartFromReportAtom,
-  reportRightPanelViewAtom,
-} from "app/state/recoil/atoms";
+import { homeDisplayAtom } from "app/state/recoil/atoms";
 import { InfoSnackbar } from "app/modules/chart-module/components/chartSubheaderToolbar/infoSnackbar";
 import { getRequiredFieldsAndErrors } from "../../routes/mapping/utils";
 import AutoSaveSwitch from "app/modules/report-module/components/reportSubHeaderToolbar/autoSaveSwitch";
@@ -43,17 +39,12 @@ import AutoResizeInput from "app/modules/report-module/components/reportSubHeade
 export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
   const classes = useStyles();
   const history = useHistory();
-
   const { user, isAuthenticated } = useAuth0();
   const token = useStoreState((state) => state.AuthToken.value);
   const { page, view } = useParams<{ page: string; view?: string }>();
   const [showDeleteDialog, setShowDeleteDialog] = React.useState(false);
-
   const [enableButton, setEnableButton] = React.useState<boolean>(false);
   const setHomeTab = useRecoilState(homeDisplayAtom)[1];
-  const [chartFromReport, _setChartFromReport] =
-    useRecoilState(chartFromReportAtom);
-  const setRightPanelView = useRecoilState(reportRightPanelViewAtom)[1];
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
   const [showSnackbar, setShowSnackbar] = React.useState<string | null>(null);
   const [duplicatedChartId, setDuplicatedChartId] = React.useState<
@@ -75,12 +66,6 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
   const appliedFilters = useStoreState(
     (state) => state.charts.appliedFilters.value
   );
-  const enabledFilterOptionGroups = useStoreState(
-    (state) => state.charts.enabledFilterOptionGroups.value
-  );
-  const activePanels = useStoreState(
-    (state) => state.charts.activePanels.value
-  );
   const selectedChartType = useStoreState(
     (state) => state.charts.chartType.value
   );
@@ -99,12 +84,6 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
   const editChartLoading = useStoreState(
     (state) => state.charts.ChartUpdate.loading
   );
-  const createChartClear = useStoreActions(
-    (actions) => actions.charts.ChartCreate.clear
-  );
-  const editChartClear = useStoreActions(
-    (actions) => actions.charts.ChartUpdate.clear
-  );
 
   const canChartEditDelete = React.useMemo(() => {
     return isAuthenticated && loadedChart && loadedChart.owner === user?.sub;
@@ -116,13 +95,6 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
     horizontal: "center",
   });
 
-  const clearChart = () => {
-    editChartClear();
-    createChartClear();
-  };
-  const onNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    props.setName(event.target.value);
-  };
   const handleDeleteModalInputChange = (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -149,11 +121,18 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
     setOpenSnackbar(false);
   };
 
-  React.useEffect(() => {
-    return () => {
-      clearChart();
-    };
-  }, []);
+  const handleEdit = () => {
+    props.setAutoSaveState({
+      isAutoSaveEnabled: true,
+      enableAutoSaveSwitch: true,
+    });
+
+    if (!loadedChart.isMappingValid) {
+      history.push(`/chart/${page}/mapping`);
+    } else {
+      history.push(`/chart/${page}/customize`);
+    }
+  };
 
   useAutosave(
     () => {
@@ -241,8 +220,6 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
   const handleBackToEdit = () => {
     history.goBack();
   };
-
-  console.log(props.showAutoSaveSwitch, "showswitch");
 
   return (
     <div id="subheader-toolbar" css={styles.container}>
@@ -402,41 +379,41 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
             <div css={styles.iconbtns}>
               {(page === "new" || view) && (
                 <React.Fragment>
-                  {props.showAutoSaveSwitch && (
-                    <div
+                  <div
+                    css={`
+                      display: flex;
+                      gap: 14px;
+                      align-items: center;
+                      margin-right: 17px;
+                    `}
+                  >
+                    <span
                       css={`
-                        display: flex;
-                        gap: 14px;
-                        align-items: center;
-                        margin-right: 17px;
+                        color: #000;
+
+                        font-family: "GothamNarrow-Book", sans-serif;
+                        font-size: 12px;
+                        font-style: normal;
+                        font-weight: 325;
+                        margin-right: 10px;
                       `}
                     >
-                      <span
-                        css={`
-                          color: #000;
+                      AutoSave
+                    </span>
+                    <AutoSaveSwitch
+                      disabled={!props.enableAutoSaveSwitch}
+                      checked={props.autoSave}
+                      setAutoSave={
+                        props.setAutoSaveState as React.Dispatch<
+                          React.SetStateAction<{
+                            isAutoSaveEnabled: boolean;
+                            showAutoSaveSwitch?: boolean;
+                          }>
+                        >
+                      }
+                    />
+                  </div>
 
-                          font-family: "GothamNarrow-Book", sans-serif;
-                          font-size: 12px;
-                          font-style: normal;
-                          font-weight: 325;
-                          margin-right: 10px;
-                        `}
-                      >
-                        AutoSave
-                      </span>
-                      <AutoSaveSwitch
-                        checked={props.autoSave}
-                        setAutoSave={
-                          props.setAutoSaveState as React.Dispatch<
-                            React.SetStateAction<{
-                              isAutoSaveEnabled: boolean;
-                              showAutoSaveSwitch?: boolean;
-                            }>
-                          >
-                        }
-                      />
-                    </div>
-                  )}
                   <Tooltip title="Preview">
                     <span>
                       <IconButton
@@ -527,11 +504,7 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
                   </Popover>
                   {canChartEditDelete && (
                     <Tooltip title="Edit">
-                      <IconButton
-                        component={Link}
-                        to={`/chart/${page}/customize`}
-                        aria-label="edit-button"
-                      >
+                      <IconButton onClick={handleEdit} aria-label="edit-button">
                         <EditIcon htmlColor="#262c34" />
                       </IconButton>
                     </Tooltip>

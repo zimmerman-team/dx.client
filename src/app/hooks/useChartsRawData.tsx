@@ -9,7 +9,10 @@ import { useAuth0 } from "@auth0/auth0-react";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
 /* project */
-import { ChartRenderedItem } from "app/modules/chart-module/data";
+import {
+  ChartAPIModel,
+  ChartRenderedItem,
+} from "app/modules/chart-module/data";
 
 const getValidMapping = (
   chartFromAPI: ChartRenderedItem | null,
@@ -81,9 +84,10 @@ export function useChartsRawData(props: {
   const token = useStoreState((state) => state.AuthToken.value);
   const { visualOptions, chartFromAPI, setVisualOptions, setChartFromAPI } =
     props;
-
+  const loadedChart = useStoreState(
+    (state) => state.charts.ChartGet.crudData as ChartAPIModel
+  );
   const { page, view } = useParams<{ page: string; view?: string }>();
-
   const [dataTypes, setDataTypes] = React.useState([]);
   const [dataTypesFromRenderedChart, setDataTypesFromRenderedChart] =
     React.useState([]);
@@ -345,6 +349,19 @@ export function useChartsRawData(props: {
     appliedFilters,
     token,
   ]);
+
+  React.useEffect(() => {
+    /*set values with loadedchart values - 
+            used when chart got saved 
+            before mapping was successful, to load the chart with the saved values.
+            Since we can not get it from this /render API, we set it to loadedchart values*/
+    if (isEmpty(dataset) && isEmpty(selectedChartType) && dataError) {
+      setDataset(loadedChart?.datasetId);
+      setSelectedChartType(loadedChart?.vizType);
+      setDataTypes(loadedChart?.dataTypes);
+      setMapping(loadedChart?.mapping);
+    }
+  }, [dataError, loadedChart]);
 
   return {
     loading,

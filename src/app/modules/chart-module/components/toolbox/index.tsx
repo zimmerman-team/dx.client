@@ -73,6 +73,9 @@ export function ChartModuleToolBox(props: Readonly<ChartToolBoxProps>) {
         return;
       }
       if (name === "mapping" && !isEmpty(dataset) && !isEmpty(chartType)) {
+        if (page === "new") {
+          props.triggerAutoSave();
+        }
         history.push(`/chart/${page}/mapping`);
 
         return;
@@ -200,8 +203,6 @@ export function ChartModuleToolBox(props: Readonly<ChartToolBoxProps>) {
               onMouseOverNavBtn={onMouseOverNavBtn}
               setChartFromAPI={props.setChartFromAPI}
               deselectDataset={props.deselectDataset}
-              setAutoSaveState={props.setAutoSaveState}
-              showAutoSaveSwitch={props.showAutoSaveSwitch}
             />
           )}
 

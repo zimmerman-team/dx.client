@@ -17,6 +17,7 @@ interface Props {
   vizType: string;
   public: boolean;
   viz: React.ReactNode;
+  isMappingValid: boolean;
   handleDelete?: (id: string) => void;
   handleDuplicate?: (id: string) => void;
 }
@@ -218,7 +219,13 @@ export default function gridItem(props: Props) {
                   : ""
               }
             >
-              <Link to={`/chart/${props.id}/customize`}>
+              <Link
+                to={
+                  props.isMappingValid
+                    ? `/chart/${props.id}/customize`
+                    : `/chart/${props.id}/mapping`
+                }
+              >
                 <Tooltip title="Edit" data-cy="chart-grid-item-edit-btn">
                   <EditIcon
                     css={`

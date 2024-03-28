@@ -62,7 +62,7 @@ export const ChartsMappingState: ChartsMappingStateModel = {
     ) => {
       let nextValue = { ...state.value };
       const keysToRemove: string[] = [];
-      Object.keys(payload).forEach((key: string) => {
+      Object.keys(payload ?? {}).forEach((key: string) => {
         if (payload[key] === undefined) {
           keysToRemove.push(key);
         }
