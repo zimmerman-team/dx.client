@@ -10,7 +10,7 @@ import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
 
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import { uniqueId, filter, isEmpty } from "lodash";
-import { Button, IconButton } from "@material-ui/core";
+import { Box, Button, IconButton } from "@material-ui/core";
 import ToolboxSubheader from "app/modules/chart-module/components/toolbox/steps/sub-header";
 import { ReactComponent as DateIcon } from "app/modules/chart-module/assets/date.svg";
 import CloseIcon from "@material-ui/icons/Close";
@@ -72,6 +72,37 @@ export const AGGREGATIONS_LABELS = {
   sum: "Sum",
   csv: "CSV",
   csvDistinct: "CSV (unique)",
+};
+
+const DimensionContainerSkeleton = () => {
+  return (
+    <div
+      css={`
+        width: 100%;
+        padding: 16px;
+        /* height: 89px; */
+        border-radius: 11px;
+        background: #dfe3e5;
+        margin-top: 16px;
+      `}
+    >
+      <Skeleton
+        animation="wave"
+        variant="rect"
+        width="100%"
+        height={39}
+        style={{ borderRadius: "25px" }}
+      />
+
+      <Skeleton
+        animation="wave"
+        variant="rect"
+        width="100%"
+        height={39}
+        style={{ borderRadius: "25px", marginTop: "16px" }}
+      />
+    </div>
+  );
 };
 
 export function ChartToolBoxMapping(props: Readonly<ChartToolBoxMappingProps>) {
@@ -223,49 +254,45 @@ export function ChartToolBoxMapping(props: Readonly<ChartToolBoxMappingProps>) {
             position: relative;
           `}
         >
-          {props.loading && (
+          {props.loading ? (
             <div
               css={`
                 width: 100%;
-                height: 89px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
               `}
             >
-              <Skeleton
-                animation="wave"
-                variant="rect"
-                width="100%"
-                height="100%"
-              />
+              <Box height={16} />
+              <DimensionContainerSkeleton />
+              <DimensionContainerSkeleton />
             </div>
+          ) : (
+            <>
+              {nonStaticDimensionsState?.map(
+                (dimension: any, dimensionIndex: number) => (
+                  <NonStaticDimensionContainer
+                    dataTypes={props.dataTypes}
+                    key={dimension.id}
+                    dimension={dimension}
+                    dimensionIndex={dimensionIndex}
+                    nonStaticDimensions={nonStaticDimensionsState}
+                    handleNonStaticDimensionsUpdate={
+                      handleNonStaticDimensionsUpdate
+                    }
+                    nonStaticDimensionsId={dimension.id}
+                    getValidDataTypes={getValidDataTypes}
+                    getSelectButtonLabel={getSelectButtonLabel}
+                    handleButtonToggle={handleButtonToggle}
+                  />
+                )
+              )}
+              {staticDimensions &&
+                staticDimensions.map((dimension: any) => (
+                  <StaticDimensionContainer
+                    key={dimension.id}
+                    dimension={dimension}
+                  />
+                ))}
+            </>
           )}
-          {nonStaticDimensionsState?.map(
-            (dimension: any, dimensionIndex: number) => (
-              <NonStaticDimensionContainer
-                dataTypes={props.dataTypes}
-                key={dimension.id}
-                dimension={dimension}
-                dimensionIndex={dimensionIndex}
-                nonStaticDimensions={nonStaticDimensionsState}
-                handleNonStaticDimensionsUpdate={
-                  handleNonStaticDimensionsUpdate
-                }
-                nonStaticDimensionsId={dimension.id}
-                getValidDataTypes={getValidDataTypes}
-                getSelectButtonLabel={getSelectButtonLabel}
-                handleButtonToggle={handleButtonToggle}
-              />
-            )
-          )}
-          {staticDimensions &&
-            staticDimensions.map((dimension: any) => (
-              <StaticDimensionContainer
-                key={dimension.id}
-                dimension={dimension}
-              />
-            ))}
         </div>
       </div>
     </div>
