@@ -10,12 +10,12 @@ export default function Icon() {
       fill="none"
     >
       <g clip-path="url(#clip0_1672_30213)">
-        <path d="M0 60.8604H68" stroke="#CBCBCB" stroke-width="0.136" />
-        <path d="M0 51H68" stroke="#CBCBCB" stroke-width="0.136" />
-        <path d="M0 40.7998H68" stroke="#CBCBCB" stroke-width="0.136" />
-        <path d="M0 30.5996H68" stroke="#CBCBCB" stroke-width="0.136" />
-        <path d="M0 20.7402H68" stroke="#CBCBCB" stroke-width="0.136" />
-        <path d="M0 10.54H68" stroke="#CBCBCB" stroke-width="0.136" />
+        <path d="M0 60.8604H68" stroke="#CBCBCB" strokeWidth="0.136" />
+        <path d="M0 51H68" stroke="#CBCBCB" strokeWidth="0.136" />
+        <path d="M0 40.7998H68" stroke="#CBCBCB" strokeWidth="0.136" />
+        <path d="M0 30.5996H68" stroke="#CBCBCB" strokeWidth="0.136" />
+        <path d="M0 20.7402H68" stroke="#CBCBCB" strokeWidth="0.136" />
+        <path d="M0 10.54H68" stroke="#CBCBCB" strokeWidth="0.136" />
         <circle cx="3.71428" cy="45.3354" r="3.37444" fill="#73D3CD" />
         <circle cx="9.19781" cy="36.0557" r="5.48346" fill="#73D3CD" />
         <circle cx="12.5722" cy="56.3022" r="3.37444" fill="#6061E5" />
