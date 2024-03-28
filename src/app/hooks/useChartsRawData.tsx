@@ -46,7 +46,7 @@ export const areAllRequiredDimensionsMapped = (
   }
 ): boolean => {
   //get required dimensions
-  const requiredDimensions = dimensions.filter(
+  const requiredDimensions = dimensions?.filter(
     (dimension: any) => dimension.required
   );
   //if required dimesions are empty or mapping is empty,
@@ -131,6 +131,10 @@ export function useChartsRawData(props: {
     location.pathname === `/chart/${page}` ||
     location.pathname === `/chart/${page}/preview`;
 
+  const isrequiredMappingKeysPresent = areAllRequiredDimensionsMapped(
+    props.dimensions,
+    mapping
+  );
   async function loadDataset(endpoint: string) {
     const extraLoader = document.getElementById("extra-loader");
     if (extraLoader) {
@@ -214,7 +218,6 @@ export function useChartsRawData(props: {
           setLoading(false);
           if (isEmpty(chart)) {
             setNotFound(true);
-
             setChartErrorMessage("This chart is no longer available.");
           } else if (response.data.error) {
             setChartErrorMessage(response.data.error);
@@ -246,9 +249,13 @@ export function useChartsRawData(props: {
     // useful when coming from report page to edit chart page
     // if in chart wrapper component, loadChartDataFromAPI is called from chart-wrapper component
     if (!props.inChartWrapper) {
-      loadChartDataFromAPI();
+      if (loadedChart?.isMappingValid) {
+        loadChartDataFromAPI();
+      } else {
+        setLoading(false);
+      }
     }
-  }, [token]);
+  }, [token, loadedChart]);
 
   useUpdateEffect(() => {
     //calls on second render
@@ -262,10 +269,6 @@ export function useChartsRawData(props: {
     const extraLoader = document.getElementById("extra-loader");
 
     const validMapping = getValidMapping(chartFromAPI, mapping);
-    const requiredMappingKey = areAllRequiredDimensionsMapped(
-      props.dimensions,
-      mapping
-    );
 
     const body = {
       rows: [
@@ -281,7 +284,7 @@ export function useChartsRawData(props: {
       ],
     };
 
-    if (page && requiredMappingKey) {
+    if (page && isrequiredMappingKeysPresent) {
       setNotFound(false);
       if (extraLoader) {
         extraLoader.style.display = "block";
@@ -355,7 +358,11 @@ export function useChartsRawData(props: {
             used when chart got saved 
             before mapping was successful, to load the chart with the saved values.
             Since we can not get it from this /render API, we set it to loadedchart values*/
-    if (isEmpty(dataset) && isEmpty(selectedChartType) && dataError) {
+    if (
+      isEmpty(dataset) &&
+      isEmpty(selectedChartType) &&
+      !loadedChart?.isMappingValid
+    ) {
       setDataset(loadedChart?.datasetId);
       setSelectedChartType(loadedChart?.vizType);
       setDataTypes(loadedChart?.dataTypes);

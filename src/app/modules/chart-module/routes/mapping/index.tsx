@@ -45,7 +45,6 @@ function ChartBuilderMapping(props: Readonly<ChartBuilderMappingProps>) {
       history.push(`/chart/${page}/data`);
     }
   }, [dataset]);
-
   return (
     <div css={commonStyles.container}>
       <div css={commonStyles.innercontainer}>
