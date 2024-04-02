@@ -246,12 +246,13 @@ export function useChartsRawData(props: {
 
   React.useEffect(() => {
     // calls loadChartDataFromAPI  on first render  when token is available or token changes
-    // useful when coming from report page to edit chart page
+    // useful when coming from outside chart builder flow straight to edit chart page
     // if in chart wrapper component, loadChartDataFromAPI is called from chart-wrapper component
     if (!props.inChartWrapper) {
       if (loadedChart?.isMappingValid) {
         loadChartDataFromAPI();
       } else {
+        // No need to call API if mapping is not valid. hence we set loading to false
         setLoading(false);
       }
     }

@@ -44,6 +44,7 @@ import { DatasetListItemAPIModel } from "app/modules/dataset-module/data";
 import { reportRightPanelViewAtom } from "app/state/recoil/atoms";
 import { useRecoilState } from "recoil";
 import { getRequiredFieldsAndErrors } from "app/modules/chart-module/routes/mapping/utils";
+import ErrorComponent from "./components/dialog/errrorComponent";
 
 export default function ChartModule() {
   const { user, isLoading, isAuthenticated } = useAuth0();
@@ -363,27 +364,26 @@ export default function ChartModule() {
     setChartName("Untitled Chart");
     setDataError(false);
     setNotFound(false);
-    setAutoSaveState({
-      isAutoSaveEnabled: false,
-      enableAutoSaveSwitch: false,
+  }
+  function clearChartBuilder() {
+    console.log("--about to reset chart states");
+    clear().then(() => {
+      if (process.env.NODE_ENV === "development") {
+        console.log(
+          "End of reset.",
+          "--visualOptions",
+          visualOptions,
+          chartName
+        );
+      }
     });
   }
 
-  function clearChartBuilder() {
-    console.log("--about to reset chart states");
-    if (page !== "new") {
-      clear().then(() => {
-        if (process.env.NODE_ENV === "development") {
-          console.log(
-            "End of reset.",
-            "--visualOptions",
-            visualOptions,
-            chartName
-          );
-        }
-      });
-    }
-  }
+  React.useEffect(() => {
+    //clear prev states when page mounts
+    console.log("clear prev states when page mounts");
+    clearChartBuilder();
+  }, []);
 
   React.useEffect(() => {
     // Updates visual options width when container width changes
@@ -413,6 +413,7 @@ export default function ChartModule() {
     if (page !== "new") {
       if (!isLoading) {
         if (token.length > 0) {
+          console.log("---load chart");
           loadChart({ token, getId: page });
         } else if (!isAuthenticated) {
           loadChart({ nonAuthCall: true, getId: page });
@@ -421,56 +422,7 @@ export default function ChartModule() {
         clearChart();
       }
     }
-    return () => {
-      clearChartBuilder();
-    };
   }, [page, token, isLoading, isAuthenticated]);
-
-  const errorComponent = () => {
-    return (
-      <div css={commonStyles.container}>
-        <div
-          css={
-            location.pathname === `/chart/${page}`
-              ? ""
-              : commonStyles.innercontainer
-          }
-        >
-          <div
-            css={`
-              height: 362.598px;
-              background: #dfe3e5;
-              margin: auto;
-              margin-top: 5%;
-              display: flex;
-              flex-direction: column;
-              align-items: center;
-              justify-content: center;
-              color: #e75656;
-              font-size: 14px;
-              line-height: 20px;
-              font-weight: bold;
-              font-family: "GothamNarrow-Bold", sans-serif;
-              text-align: center;
-              button {
-                outline: none;
-                border: none;
-                background: transparent;
-                cursor: pointer;
-                text-decoration: underline;
-              }
-              p {
-                margin-top: 18px;
-              }
-            `}
-          >
-            <ErrorOutlineIcon htmlColor="#E75656" fontSize="large" />
-            {notFound || (dataError && <p>{chartErrorMessage}</p>)}
-          </div>
-        </div>
-      </div>
-    );
-  };
 
   if (chartError401 || error401) {
     return (
@@ -544,8 +496,19 @@ export default function ChartModule() {
           `}
           ref={ref}
         >
-          {dataError || notFound ? (
-            <>{errorComponent()}</>
+          {dataError ||
+          notFound ||
+          (!loadedChart?.isMappingValid && view === undefined) ? (
+            <>
+              <ErrorComponent
+                isMappingValid={loadedChart?.isMappingValid}
+                chartErrorMessage={chartErrorMessage}
+                dataError={dataError}
+                notFound={notFound}
+                page={page}
+                view={view}
+              />
+            </>
           ) : (
             <Switch>
               {(isSaveLoading || isChartLoading) && <PageLoader />}
