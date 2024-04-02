@@ -4,11 +4,9 @@ import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 
 export default function ErrorComponent(props: {
   page: string;
-  view: string | undefined;
   notFound: boolean;
   dataError: boolean;
   chartErrorMessage: string;
-  isMappingValid: boolean;
 }) {
   return (
     <div css={commonStyles.container}>
@@ -47,25 +45,11 @@ export default function ErrorComponent(props: {
             }
           `}
         >
-          {!props.isMappingValid && props.view === undefined ? (
-            <>
-              <ErrorOutlineIcon htmlColor="#6061e5" fontSize="large" />
-              <p
-                css={`
-                  color: #000;
-                `}
-              >
-                Can not render chart because mapping is incomplete. Click edit
-                button to continue editing chart
-              </p>
-            </>
-          ) : (
-            <>
-              <ErrorOutlineIcon htmlColor="#E75656" fontSize="large" />
-              {props.notFound ||
-                (props.dataError && <p>{props.chartErrorMessage}</p>)}
-            </>
-          )}
+          <>
+            <ErrorOutlineIcon htmlColor="#E75656" fontSize="large" />
+            {props.notFound ||
+              (props.dataError && <p>{props.chartErrorMessage}</p>)}
+          </>
         </div>
       </div>
     </div>

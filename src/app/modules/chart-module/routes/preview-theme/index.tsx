@@ -4,22 +4,20 @@ import get from "lodash/get";
 import isEmpty from "lodash/isEmpty";
 import useTitle from "react-use/lib/useTitle";
 import { useStoreState } from "app/state/store/hooks";
-import { Redirect, useHistory, useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 /* project */
 import Skeleton from "@material-ui/lab/Skeleton";
-import { PageLoader } from "app/modules/common/page-loader";
-import { CHART_DEFAULT_WIDTH } from "app/modules/chart-module/data";
 import { useDataThemesEchart } from "app/hooks/useDataThemesEchart";
-import { useUpdateEffectOnce } from "app/hooks/useUpdateEffectOnce";
 import { styles as commonStyles } from "app/modules/chart-module/routes/common/styles";
 import { ChartBuilderPreviewThemeProps } from "app/modules/chart-module/routes/preview-theme/data";
+import WarningDialog from "../../components/dialog/warningDialog";
 
 export function ChartBuilderPreviewTheme(props: ChartBuilderPreviewThemeProps) {
   useTitle("DX DataXplorer - Preview Chart");
 
   const domRef = React.useRef<HTMLDivElement>(null);
 
-  const { page } = useParams<{ page: string }>();
+  const { page } = useParams<{ page: string; view: string }>();
   const dataset = useStoreState((state) => state.charts.dataset.value);
   const history = useHistory();
   const { render } = useDataThemesEchart();
@@ -135,64 +133,75 @@ export function ChartBuilderPreviewTheme(props: ChartBuilderPreviewThemeProps) {
 
   return (
     <div css={commonStyles.container}>
-      <div
-        id="chart-placeholder"
-        css={`
-          display: flex;
-          padding: 0 24px;
-          margin-top: 20px;
-          max-width: 1280px;
-          align-items: center;
-          align-self: flex-start;
-          justify-content: center;
-          height: ${get(visualOptions, "height", 100)}px;
-
-          @media (max-width: 1280px) {
-            width: calc(100vw - 400px);
-          }
-
-          .MuiSkeleton-wave::after {
-            background: linear-gradient(
-              90deg,
-              transparent,
-              rgba(223, 227, 230, 1),
-              transparent
-            );
-          }
-
-          .MuiSkeleton-root {
-            background: transparent;
-          }
-        `}
-      >
-        <Skeleton animation="wave" variant="rect" width="100%" height="100%" />
-      </div>
-
-      <div
-        css={`
-          height: 40px;
-        `}
-      />
-      <div>
+      {!props.loadedChart.isMappingValid && props.view === undefined ? (
+        <WarningDialog isMappingValid={props.loadedChart.isMappingValid} />
+      ) : (
         <div
-          ref={props.containerRef}
+          id="chart-placeholder"
           css={`
-            position: relative;
-            width: calc(100% - 24px);
+            display: flex;
+            padding: 0 24px;
+            margin-top: 20px;
+            max-width: 1280px;
+            align-items: center;
+            align-self: flex-start;
+            justify-content: center;
+            height: ${get(visualOptions, "height", 100)}px;
+
+            @media (max-width: 1280px) {
+              width: calc(100vw - 400px);
+            }
+
+            .MuiSkeleton-wave::after {
+              background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(223, 227, 230, 1),
+                transparent
+              );
+            }
+
+            .MuiSkeleton-root {
+              background: transparent;
+            }
           `}
         >
-          <div
-            ref={domRef}
-            onClick={handleVizClick}
-            id="common-chart-render-container"
-            css={`
-              ${props.renderedChartSsr
-                ? `overflow-x: auto;`
-                : `height: ${get(visualOptions, "height", 500)}px;`}
+          <Skeleton
+            animation="wave"
+            variant="rect"
+            width="100%"
+            height="100%"
+          />
+        </div>
+      )}
 
-              ${selectedChartType === "bigNumber" &&
-              window.location.pathname.indexOf("/chart/") > -1 &&
-              `
+      <>
+        {" "}
+        <div
+          css={`
+            height: 40px;
+          `}
+        />
+        <div>
+          <div
+            ref={props.containerRef}
+            css={`
+              position: relative;
+              width: calc(100% - 24px);
+            `}
+          >
+            <div
+              ref={domRef}
+              onClick={handleVizClick}
+              id="common-chart-render-container"
+              css={`
+                ${props.renderedChartSsr
+                  ? `overflow-x: auto;`
+                  : `height: ${get(visualOptions, "height", 500)}px;`}
+
+                ${selectedChartType === "bigNumber" &&
+                window.location.pathname.indexOf("/chart/") > -1 &&
+                `
            
       
                   > div {
@@ -202,12 +211,13 @@ export function ChartBuilderPreviewTheme(props: ChartBuilderPreviewThemeProps) {
 
 
               * {
-                font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif !important;
-              }
-            `}
-          />
+                  font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif !important;
+                }
+              `}
+            />
+          </div>
         </div>
-      </div>
+      </>
     </div>
   );
 }

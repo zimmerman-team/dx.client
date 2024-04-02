@@ -496,17 +496,13 @@ export default function ChartModule() {
           `}
           ref={ref}
         >
-          {dataError ||
-          notFound ||
-          (!loadedChart?.isMappingValid && view === undefined) ? (
+          {dataError || notFound ? (
             <>
               <ErrorComponent
-                isMappingValid={loadedChart?.isMappingValid}
                 chartErrorMessage={chartErrorMessage}
                 dataError={dataError}
                 notFound={notFound}
                 page={page}
-                view={view}
               />
             </>
           ) : (
@@ -589,6 +585,8 @@ export default function ChartModule() {
                   editable={!isPreviewMode || (page === "new" && !view)}
                   setIsPreviewView={setIsPreviewView}
                   containerRef={containerRef}
+                  loadedChart={loadedChart}
+                  view={view}
                 />
               </Route>
               <Route path="/chart/:page">
@@ -602,6 +600,8 @@ export default function ChartModule() {
                   editable={!isPreviewMode}
                   setIsPreviewView={setIsPreviewView}
                   containerRef={containerRef}
+                  loadedChart={loadedChart}
+                  view={view}
                 />
               </Route>
               <Route path="*">
