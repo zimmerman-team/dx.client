@@ -165,7 +165,10 @@ const sortByOptions = [
   { value: "name asc", label: "Name (ASC)" },
 ];
 
-const videoSources = [{ value: "youtube", label: "Youtube" }];
+const videoSources = [
+  { value: "youtube", label: "Youtube" },
+  { value: "vimeo", label: "Vimeo" },
+];
 
 const imageSources = [
   { value: "unsplash", label: "Unsplash" },
@@ -625,6 +628,10 @@ function VideoFrame(props: {
   embedUrl: string;
   snippet: any;
   source: "youtube";
+  thumbnail: string;
+  title: string;
+  description: string;
+  ownerThumbnail: string;
 }) {
   const [{ isDragging }, drag] = useDrag(() => ({
     type: "video",
@@ -646,7 +653,7 @@ function VideoFrame(props: {
         position: relative;
         cursor: grab;
         ${isDragging && "cursor: grabbing;"}
-        background-image: ${`url(${YoutubeGradient}),url(${props.snippet.thumbnails.medium.url})`};
+        background-image: ${`url(${YoutubeGradient}),url(${props.thumbnail})`};
         background-position: top left, top left;
         background-repeat: no-repeat, no-repeat;
         background-size: contain, cover;
@@ -713,7 +720,7 @@ function VideoFrame(props: {
               `}
             >
               <img
-                src={props.snippet.thumbnails.default.url}
+                src={props.ownerThumbnail}
                 alt="thumb"
                 css={css`
                   height: 100%;
@@ -727,12 +734,12 @@ function VideoFrame(props: {
                 white-space: nowrap;
                 text-overflow: ellipsis;
                 overflow: hidden;
-                width: 70%;
+                width: 250px;
                 color: white;
                 font-size: 10.662px;
                 font-family: Roboto;
               `}
-              dangerouslySetInnerHTML={{ __html: props.snippet.title }}
+              dangerouslySetInnerHTML={{ __html: props.title }}
             ></div>
           </div>
           <div
@@ -1063,6 +1070,10 @@ function ElementItem(props: {
                           key={d.videoId}
                           snippet={d.snippet}
                           source={d.source}
+                          thumbnail={d.thumbnail}
+                          title={d.title}
+                          description={d.description}
+                          ownerThumbnail={d.ownerThumbnail}
                         />
                       ) : (
                         <ImageFrame
