@@ -71,5 +71,9 @@ Icon
 # cypress recordings
 cypress/screenshots/
 cypress/videos/
+cypress.env.json
+cypress/fixtures/localStorage.json
+cypress/e2e/3-getting-started
+cypress/e2e/2-advanced-examples
 
 rawgraphs-charts

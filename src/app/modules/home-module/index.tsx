@@ -289,6 +289,7 @@ export default function HomeModule() {
                 <Tab.Left
                   active={display === "data"}
                   onClick={() => handleChange("data")}
+                  data-cy="home-data-tab"
                 >
                   Data
                 </Tab.Left>
@@ -296,6 +297,7 @@ export default function HomeModule() {
                   active={display === "charts"}
                   onClick={() => handleChange("charts")}
                   position={tabPrevPosition}
+                  data-cy="home-charts-tab"
                 >
                   Charts
                 </Tab.Center>
@@ -303,6 +305,7 @@ export default function HomeModule() {
                 <Tab.Right
                   active={display === "reports"}
                   onClick={() => handleChange("reports")}
+                  data-cy="home-reports-tab"
                 >
                   Reports
                 </Tab.Right>

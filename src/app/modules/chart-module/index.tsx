@@ -359,7 +359,7 @@ export default function ChartModule() {
               font-size: 14px;
               line-height: 20px;
               font-weight: bold;
-              font-family: "Gotham Narrow", sans-serif;
+              font-family: "GothamNarrow-Bold", sans-serif;
               text-align: center;
               button {
                 outline: none;
@@ -500,7 +500,10 @@ export default function ChartModule() {
                 />
               </Route>
               <Route path="/chart/:page/chart-type">
-                <ChartBuilderChartType loading={loading} />
+                <ChartBuilderChartType
+                  loading={loading}
+                  loadDataset={loadDataset}
+                />
               </Route>
               <Route path="/chart/:page/preview-data">
                 <ChartBuilderPreview

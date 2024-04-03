@@ -68,6 +68,7 @@ export const TemplateItem = ({
         }
       `}
       onClick={handleClick}
+      data-cy="report-template-card"
     >
       <div>
         <div
@@ -141,6 +142,7 @@ export const TemplateItem = ({
               font-family: "Inter", sans-serif;
             }
           `}
+          data-cy="use-report-template-button"
         >
           {value === "ai" ? (
             <span>Want to try it?</span>

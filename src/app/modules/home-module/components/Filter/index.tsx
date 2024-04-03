@@ -60,6 +60,7 @@ export default function Filter(
             value={props.searchValue}
             placeholder="eg. Kenya"
             onChange={handleSearch}
+            data-cy="filter-search-input"
           />
           <IconButton
             onClick={() => {
@@ -80,6 +81,7 @@ export default function Filter(
           </IconButton>
         </div>
         <IconButton
+          data-cy="open-search-button"
           onClick={() => {
             setOpenSearch(true);
             inputRef.current?.focus();

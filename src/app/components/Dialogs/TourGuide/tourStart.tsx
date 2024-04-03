@@ -119,6 +119,7 @@ export default function TourStart(props: {
             onClick={() => {
               props.handleClose();
             }}
+            data-cy="skip-tour-button"
             css={`
               background: #e4e4e4;
               padding: 12px 27px;

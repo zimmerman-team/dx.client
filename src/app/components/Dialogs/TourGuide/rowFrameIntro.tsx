@@ -37,7 +37,7 @@ export default function RowFrameIntro(props: {
           border-radius: 8px;
           background: #231d2c;
           color: #fff;
-          font-family: "Gotham Narrow", sans-serif;
+          font-family: "GothamNarrow-Medium", sans-serif;
           font-size: 12px;
           font-style: normal;
           font-weight: 350;

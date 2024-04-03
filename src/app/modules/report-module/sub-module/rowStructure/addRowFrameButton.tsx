@@ -12,7 +12,7 @@ interface Props {
   rowStructureType: IRowFrameStructure;
   setRowStructureType: React.Dispatch<React.SetStateAction<IRowFrameStructure>>;
   handlePersistReportState: () => void;
-
+  endTour: () => void;
   handleRowFrameItemResize: (
     rowId: string,
     itemIndex: number,
@@ -24,6 +24,7 @@ interface Props {
 export default function AddRowFrameButton(props: Props) {
   const [displayTooltip, setDisplayTooltip] = React.useState<boolean>(false);
   const handleAddrowStructureBlock = () => {
+    props.endTour();
     const id = v4();
     props.setFramesArray((prev) => {
       const tempPrev = cloneDeep(prev);

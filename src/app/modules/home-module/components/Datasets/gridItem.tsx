@@ -36,6 +36,7 @@ export default function GridItem(props: Readonly<Props>) {
       css={`
         position: relative;
       `}
+      data-cy="dataset-grid-item"
     >
       <Link
         to={`/dataset/${props.id}/detail`}
@@ -80,7 +81,7 @@ export default function GridItem(props: Readonly<Props>) {
                   margin-top: -5px;
                   font-size: 14px;
                   line-height: 22px;
-                  font-family: "Gotham Narrow", sans-serif;
+                  font-family: "GothamNarrow-Bold", sans-serif;
                   overflow: hidden;
                   margin-bottom: 2px;
                   white-space: nowrap;
@@ -116,6 +117,7 @@ export default function GridItem(props: Readonly<Props>) {
                   }
                 `}
                 onClick={showMenuOptions}
+                data-cy="dataset-grid-item-menu-btn"
               >
                 <MenuIcon />
               </IconButton>
@@ -212,7 +214,10 @@ export default function GridItem(props: Readonly<Props>) {
             `}
           >
             <div>
-              <Tooltip title="Duplicate">
+              <Tooltip
+                title="Duplicate"
+                data-cy="dataset-grid-item-duplicate-btn"
+              >
                 <IconButton
                   onClick={() => props.handleDuplicate?.(props.id as string)}
                 >
@@ -222,7 +227,7 @@ export default function GridItem(props: Readonly<Props>) {
             </div>
             <div>
               <Link to={props.path}>
-                <Tooltip title="Edit">
+                <Tooltip title="Edit" data-cy="dataset-grid-item-edit-btn">
                   <EditIcon
                     css={`
                       margin-top: 4px;
@@ -232,7 +237,7 @@ export default function GridItem(props: Readonly<Props>) {
               </Link>
             </div>
             <div>
-              <Tooltip title="Delete">
+              <Tooltip title="Delete" data-cy="dataset-grid-item-delete-btn">
                 <IconButton
                   onClick={() => props.handleDelete?.(props.id as string)}
                 >

@@ -91,7 +91,7 @@ export default function FinishedFragment(props: Props) {
             justify-content: flex-end;
           `}
         >
-          <Link to={`/chart/new/preview-data`}>
+          <Link to={`/chart/new/chart-type`}>
             <button
               css={`
                 color: #fff;

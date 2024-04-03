@@ -149,6 +149,7 @@ export const ReportElementsType = {
   IMAGE: "image",
   VIDEO: "video",
 };
+
 const sortByOptions = [
   { value: "createdDate desc", label: "Recent (DESC)" },
   { value: "createdDate asc", label: "Recent (ASC)" },
@@ -272,7 +273,9 @@ export function ReportRightPanelCreateView(props: Readonly<Props>) {
       >
         <IconButton
           disableRipple
+          data-testid="elements-button"
           onClick={() => setCurrentView("elements")}
+          data-cy="report-panel-elements-tab"
           css={`
             ${(() => {
               if (currentView === "elements") {
@@ -294,8 +297,10 @@ export function ReportRightPanelCreateView(props: Readonly<Props>) {
           )}
         </IconButton>
         <IconButton
+          data-cy="report-panel-chart-tab"
           disableRipple
           onClick={() => setCurrentView("charts")}
+          data-testid="charts-button"
           css={`
             ${(() => {
               if (currentView === "elements") {
@@ -316,6 +321,8 @@ export function ReportRightPanelCreateView(props: Readonly<Props>) {
         <IconButton
           disableRipple
           onClick={() => setCurrentView("media")}
+          data-cy="report-panel-media-tab"
+          data-testid="media-button"
           css={`
             ${(() => {
               if (currentView === "elements") {
@@ -664,6 +671,8 @@ function ElementItem(props: {
         ref={isImageElement || isVideoElement ? nullRef : drag}
         id={props.name}
         css={elementItemcss(props.disabled as boolean, isDragging)}
+        data-cy={`report-panel-${props.elementType}-item`}
+        data-testid={props.name}
       >
         {props.leftIcon}
         <div>
@@ -845,6 +854,7 @@ function ChartItem(
     <div
       ref={added || chartPreview ? nullRef : drag}
       id={`chart-${props.chartIndex}`}
+      data-testid={props.chartIndex === 0 ? "chart-0" : "chart-n"}
       className={
         props.chartIndex === 0 && chartFromReport.action === "create"
           ? "rhcpCard"
@@ -866,6 +876,7 @@ function ChartItem(
           width: 100%;
         }
       `}
+      data-cy="report-panel-chart-item"
     >
       <GridItem
         id={props.id}

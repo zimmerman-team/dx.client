@@ -14,6 +14,7 @@ interface Props {
   path: string;
   title: string;
   date: string;
+  vizType: string;
   public: boolean;
   viz: React.ReactNode;
   handleDelete?: (id: string) => void;
@@ -56,6 +57,7 @@ export default function gridItem(props: Props) {
             box-shadow: 0px 7px 22px 0px rgba(0, 0, 0, 0.1);
           }
         `}
+        data-cy={`chart-grid-item-${props.vizType}`}
       >
         <div
           css={`
@@ -99,6 +101,7 @@ export default function gridItem(props: Props) {
               }
             `}
             onClick={showMenuOptions}
+            data-cy="chart-grid-item-menu-btn"
           >
             <MenuIcon />
           </IconButton>
@@ -200,7 +203,10 @@ export default function gridItem(props: Props) {
                   setMenuOptionsDisplay(false);
                 }}
               >
-                <Tooltip title="Duplicate">
+                <Tooltip
+                  title="Duplicate"
+                  data-cy="chart-grid-item-duplicate-btn"
+                >
                   <DuplicateIcon />
                 </Tooltip>
               </IconButton>
@@ -213,7 +219,7 @@ export default function gridItem(props: Props) {
               }
             >
               <Link to={`/chart/${props.id}/customize`}>
-                <Tooltip title="Edit">
+                <Tooltip title="Edit" data-cy="chart-grid-item-edit-btn">
                   <EditIcon
                     css={`
                       margin-top: 4px;
@@ -230,7 +236,7 @@ export default function gridItem(props: Props) {
               }
             >
               <IconButton onClick={() => props.handleDelete?.(props.id)}>
-                <Tooltip title="Delete">
+                <Tooltip title="Delete" data-cy="chart-grid-item-delete-btn">
                   <DeleteIcon />
                 </Tooltip>
               </IconButton>

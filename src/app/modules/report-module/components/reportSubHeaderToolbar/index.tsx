@@ -287,6 +287,7 @@ export function ReportSubheaderToolbar(
               <button
                 css={styles.viewReportBtn}
                 onClick={handleViewReport}
+                data-cy="view-report-button"
                 aria-label="view report button"
               >
                 <PlayIcon />
@@ -313,7 +314,7 @@ export function ReportSubheaderToolbar(
                 <p
                   css={`
                     color: #70777e;
-                    font-family: "Gotham Narrow", sans-serif;
+                    font-family: "GothamNarrow-Book", sans-serif;
                     font-size: 12px;
                     font-weight: 325;
                     margin: 0px;
@@ -340,7 +341,7 @@ export function ReportSubheaderToolbar(
                 <p
                   css={`
                     color: #70777e;
-                    font-family: "Gotham Narrow", sans-serif;
+                    font-family: "GothamNarrow-Book", sans-serif;
                     font-size: 12px;
                     font-weight: 325;
                     margin: 0px;
@@ -368,7 +369,7 @@ export function ReportSubheaderToolbar(
                       css={`
                         color: #000;
 
-                        font-family: "Gotham Narrow", sans-serif;
+                        font-family: "GothamNarrow-Book", sans-serif;
                         font-size: 12px;
                         font-style: normal;
                         font-weight: 325;
@@ -394,6 +395,7 @@ export function ReportSubheaderToolbar(
                             opacity: 0.5;
                           }
                         `}
+                        data-cy="save-report-button"
                       >
                         <SaveIcon htmlColor="#262c34" />
                       </IconButton>

@@ -54,14 +54,13 @@ function ChartToolBoxSelectDataset(props: { deselectDataset: () => void }) {
         height: 89px;
         border-radius: 11px;
         background: #dfe3e5;
-        font-family: "Gotham Narrow", sans-serif;
 
         > p {
           margin-bottom: 4px;
           margin-top: -8px;
           color: #231d2c;
-          font-weight: bold;
           font-size: 14px;
+          font-family: "GothamNarrow-Bold", sans-serif;
         }
 
         > label {
@@ -110,7 +109,7 @@ function ChartToolBoxSelectDataset(props: { deselectDataset: () => void }) {
           }
         `}
       >
-        <span>
+        <span data-cy="toolbox-selected-dataset">
           {get(
             find(datasets, { id: dataset }),
             "name",
@@ -146,7 +145,6 @@ export const ConnectData = () => {
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        font-family: "Gotham Narrow", sans-serif;
         button {
           display: flex;
           padding: 12px 27px;
@@ -164,10 +162,9 @@ export const ConnectData = () => {
           cursor: pointer;
         }
         p {
+          font-family: "GothamNarrow-Bold", sans-serif;
           margin-bottom: 4px;
           margin-top: -8px;
-
-          font-weight: bold;
           font-size: 14px;
         }
       `}

@@ -137,6 +137,7 @@ export const RichEditor = (props: {
           font-size: 16px;
         }
       `}
+      data-cy="rich-text-editor-container"
     >
       <Editor
         plugins={plugins}
@@ -169,6 +170,8 @@ export const RichEditor = (props: {
         ref={(element) => {
           editor.current = element;
         }}
+        webDriverTestID="rich-text-editor"
+        data-cy="rich-text-editor"
       />
     </div>
   );

@@ -188,6 +188,7 @@ export function ReportPreviewView(props: {
                 setIsEditorFocused={() => {}}
                 handlePersistReportState={() => {}}
                 handleRowFrameItemResize={() => {}}
+                endReportTour={() => {}}
                 forceSelectedType={rowFrame.structure ?? undefined}
                 previewItems={rowFrame.items.map((item, index) => {
                   return contentTypes[index] === "text"

@@ -72,6 +72,7 @@ export default function HeaderBlock(props: Props) {
         onMouseEnter: () => setHandleDisplay(true),
         onMouseLeave: () => setHandleDisplay(false),
       };
+
   React.useEffect(() => {
     inputRef.current?.focus();
   }, []);
@@ -138,6 +139,7 @@ export default function HeaderBlock(props: Props) {
     return (
       <div
         ref={drop}
+        data-testid="drop-area"
         css={`
           z-index: 1;
           width: 100%;
@@ -153,6 +155,7 @@ export default function HeaderBlock(props: Props) {
     <div
       css={headerBlockcss.container(props.headerDetails.backgroundColor)}
       {...handlers}
+      data-cy="report-header-block"
       data-testid="header-block"
     >
       {(handleDisplay || currentView === "editHeader") && (
@@ -230,6 +233,7 @@ export default function HeaderBlock(props: Props) {
               disabled={props.previewMode}
               value={props.headerDetails.title}
               css={headerBlockcss.inputStyle(props.headerDetails.titleColor)}
+              data-cy="report-header-block-title-input"
             />
           </div>
 

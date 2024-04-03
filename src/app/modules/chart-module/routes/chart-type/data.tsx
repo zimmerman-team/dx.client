@@ -74,6 +74,7 @@ import { ReactComponent as AreatimeaxisPreviewImg } from "app/modules/chart-modu
 
 export interface ChartBuilderChartTypeProps {
   loading: boolean;
+  loadDataset: (endpoint: string) => Promise<any>;
 }
 
 export interface ChartTypeModel {

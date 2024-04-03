@@ -9,7 +9,9 @@ type SnackBarProps = {
   open: boolean;
 };
 
-const BaseSnackbar = styled((props) => <Snackbar {...props} />)`
+const BaseSnackbar = styled((props) => (
+  <Snackbar {...props} data-cy="cookie-dialog" />
+))`
   && {
     bottom: 0;
   }

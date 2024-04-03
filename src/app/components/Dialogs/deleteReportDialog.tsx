@@ -53,6 +53,7 @@ export default function DeleteReportDialog(props: Props) {
       <div className={classes.paper}>
         <form
           onSubmit={() => props.handleDelete(props.cardId as number)}
+          data-cy="delete-report-item-form"
           aria-label="form"
         >
           <div
@@ -101,6 +102,7 @@ export default function DeleteReportDialog(props: Props) {
                 placeholder='Type "DELETE" to confirm'
                 onChange={props.handleInputChange}
                 onKeyPress={onInputEnter}
+                data-cy="delete-report-item-input"
                 css={`
                   border: 1px solid #231d2c;
                   border-radius: 10px;
