@@ -73,3 +73,8 @@ jobs:
           CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
           GENERATE_SOURCEMAP: false
 
+          # GOOGLE CYPRESS
+          GOOGLE_CLIENT_ID_TEST: ${{ secrets.GOOGLE_CLIENT_ID_TEST }}
+          GOOGLE_CLIENT_SECRET_TEST: ${{ secrets.GOOGLE_CLIENT_SECRET_TEST }}
+          GOOGLE_REFRESH_TOKEN_TEST: ${{ secrets.GOOGLE_REFRESH_TOKEN_TEST }}
+
