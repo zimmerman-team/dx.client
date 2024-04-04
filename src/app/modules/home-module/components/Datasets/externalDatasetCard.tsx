@@ -155,7 +155,10 @@ export default function IExternalDatasetCard(
       >
         {sourceLogo(props.source)}
         {showButton && (
-          <button onClick={() => props.handleDownload(props.dataset)}>
+          <button
+            onClick={() => props.handleDownload(props.dataset)}
+            data-cy="import-to-dx-button"
+          >
             import to dx <ArrowRightAltIcon color="inherit" />
           </button>
         )}

@@ -17,6 +17,8 @@ describe("Testing connecting data on DX", () => {
 
   beforeEach(() => {
     cy.restoreLocalStorageCache();
+    cy.setGoogleAccessToken();
+
     cy.visit("/");
 
     cy.get('[data-cy="cookie-btn"]').click();
@@ -50,6 +52,77 @@ describe("Testing connecting data on DX", () => {
         1
       );
     });
+
+    cy.intercept(`${apiUrl}/external-sources/download`).as("downloadData");
+    cy.get('[data-cy="external-search-card"]')
+      .first()
+      .trigger("mouseover")
+      .within(() => {
+        cy.get('[data-cy="import-to-dx-button"]').click();
+      });
+    cy.wait("@downloadData");
+
+    cy.get('[data-cy="dataset-metadata-title"]').type(
+      "{selectall}{backspace} External Dataset"
+    );
+    cy.get('[data-cy="dataset-metadata-description"]').type(
+      "{selectall}{backspace} External Dataset"
+    );
+    cy.get('[data-cy="dataset-metadata-source"]').type(
+      "{selectall}{backspace} Rawgraphs"
+    );
+    cy.get('[data-cy="dataset-metadata-link"]').type(
+      "{selectall}{backspace} Not available"
+    );
+    cy.get('[data-cy="dataset-metadata-category"]').click();
+    cy.get('[data-value="Social"]').click();
+    cy.get('[data-cy="dataset-metadata-submit"]').scrollIntoView();
+    cy.intercept(`${apiUrl}/datasets`).as("submitData");
+    cy.get('[data-cy="dataset-metadata-submit"]').click();
+
+    cy.wait("@submitData");
+    cy.contains("External Dataset").should("be.visible");
+  });
+
+  it("Google Drive Upload", () => {
+    cy.intercept(
+      "https://www.googleapis.com/drive/v3/files/1ZMtAYFviJrhITddRe7ulDNGCL5F0Rur7?alt=media"
+    ).as("googleDrivePicker");
+
+    // Assuming your application has a function that's called when a file is selected from the picker
+    cy.visit("/dataset/new/upload");
+    cy.window().then((win) => {
+      // Manually trigger the callback function with mock data
+      const mockFileData = {
+        id: "1ZMtAYFviJrhITddRe7ulDNGCL5F0Rur7",
+        name: "WineQT.csv",
+        kind: "drive#file",
+        mimeType: "text/csv",
+        type: "file",
+        // Add any other properties your callback function expects
+      };
+      // Assuming your callback function is named "handlePickerSelection"
+      // @ts-ignore
+      win.handleGoogleDriveFilePicker(
+        mockFileData,
+        localStorage.getItem("google_access_token")
+      );
+    });
+    cy.wait(`@googleDrivePicker`);
+
+    cy.get('[data-cy="dataset-metadata-title"]').type("Wine Tasting");
+
+    cy.get('[data-cy="dataset-metadata-description"]').type("Wine Tasting");
+    cy.get('[data-cy="dataset-metadata-source"]').type("Rawgraphs");
+    cy.get('[data-cy="dataset-metadata-link"]').type("Not available");
+    cy.get('[data-cy="dataset-metadata-category"]').click();
+    cy.get('[data-value="Social"]').click();
+    cy.get('[data-cy="dataset-metadata-submit"]').scrollIntoView();
+    cy.intercept(`${apiUrl}/datasets`).as("submitData");
+    cy.get('[data-cy="dataset-metadata-submit"]').click();
+
+    cy.wait("@submitData");
+    cy.contains("Wine Tasting").should("be.visible");
   });
 
   it("Local Upload", () => {
@@ -168,6 +241,50 @@ describe("Edit, Delete and Duplicate Dataset", () => {
 
     cy.get('[data-cy="dataset-grid-item"]')
       .contains("Soccer Players (Copy)")
+      .should("not.exist");
+
+    cy.contains('[data-cy="dataset-grid-item"]', "Wine Tasting")
+      .first()
+      .scrollIntoView()
+      .within(() => {
+        cy.get('[data-cy="dataset-grid-item-menu-btn"]').click();
+      });
+
+    cy.get('[data-cy="dataset-grid-item-delete-btn"]').click();
+    cy.intercept("DELETE", `${apiUrl}/datasets/*`).as("deleteDataset");
+
+    cy.get('[data-cy="delete-dataset-item-form"]').within(() => {
+      cy.get('[data-cy="delete-dataset-item-input"]').type("DELETE {enter}");
+    });
+
+    cy.wait("@deleteDataset");
+
+    cy.wait("@fetchDatasets");
+
+    cy.get('[data-cy="dataset-grid-item"]')
+      .contains("Wine Tasting")
+      .should("not.exist");
+
+    cy.contains('[data-cy="dataset-grid-item"]', "External Dataset")
+      .first()
+      .scrollIntoView()
+      .within(() => {
+        cy.get('[data-cy="dataset-grid-item-menu-btn"]').click();
+      });
+
+    cy.get('[data-cy="dataset-grid-item-delete-btn"]').click();
+    cy.intercept("DELETE", `${apiUrl}/datasets/*`).as("deleteDataset");
+
+    cy.get('[data-cy="delete-dataset-item-form"]').within(() => {
+      cy.get('[data-cy="delete-dataset-item-input"]').type("DELETE {enter}");
+    });
+
+    cy.wait("@deleteDataset");
+
+    cy.wait("@fetchDatasets");
+
+    cy.get('[data-cy="dataset-grid-item"]')
+      .contains("External Dataset")
       .should("not.exist");
   });
 });
