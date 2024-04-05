@@ -80,6 +80,10 @@ export const isDividerOrRowFrameDraggingAtom = atom<boolean>({
   key: "isDividerOrRowFrameDraggingAtom",
   default: false,
 });
+export const isChartAIAgentActive = atom<boolean>({
+  key: "isChartAIAgentActiveAtom",
+  default: true,
+});
 
 export const unSavedReportPreviewMode = atom<boolean>({
   key: "unSavedReportPreviewMode",

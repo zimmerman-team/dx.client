@@ -92,13 +92,13 @@ import {
   ExternalDatasetDownload,
   ExternalDatasetGetLimited,
 } from "app/state/api/action-reducers/data-themes";
-import countrySummary from "../api/action-reducers/cms/countrySummary";
-import notesAndDisclaimers from "../api/action-reducers/cms/notesAndDisclaimers";
+import countrySummary from "app/state/api/action-reducers/cms/countrySummary";
+import notesAndDisclaimers from "app/state/api/action-reducers/cms/notesAndDisclaimers";
 import {
   DataPathActiveStep,
   DataPathPanelVisibilityState,
   DataPathStepsState,
-} from "../api/action-reducers/sync/dataPath";
+} from "app/state/api/action-reducers/sync/dataPath";
 
 import {
   ChartsActivePanelsState,
@@ -106,17 +106,18 @@ import {
   ChartsDatasetState,
   ChartsEnabledFilterOptionGroupsState,
   ChartsMappingState,
-} from "../api/action-reducers/sync/charts";
-import { ChartsAppliedFiltersState } from "../api/action-reducers/sync/charts/filters";
+} from "app/state/api/action-reducers/sync/charts";
+import { ChartsAppliedFiltersState } from "app/state/api/action-reducers/sync/charts/filters";
 import {
   ChartCreate,
   ChartDelete,
   ChartDuplicate,
   ChartGet,
   ChartGetList,
+  ChartTypesSuggest,
   ChartUpdate,
   ChartsCount,
-} from "../api/action-reducers/charts";
+} from "app/state/api/action-reducers/charts";
 import {
   ReportCreate,
   ReportDelete,
@@ -125,7 +126,7 @@ import {
   ReportGetList,
   ReportUpdate,
   ReportsCount,
-} from "../api/action-reducers/reports";
+} from "app/state/api/action-reducers/reports";
 
 const storeContent: StoreModel = {
   // global search
@@ -245,6 +246,7 @@ const storeContent: StoreModel = {
     ChartDuplicate: persist(ChartDuplicate),
     ChartGetList: ChartGetList,
     ChartsCount: persist(ChartsCount),
+    ChartTypesSuggest: persist(ChartTypesSuggest),
     activePanels: persist(ChartsActivePanelsState),
     dataset: persist(ChartsDatasetState),
     mapping: persist(ChartsMappingState),

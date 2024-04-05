@@ -294,7 +294,7 @@ export interface StoreModel {
     ChartDuplicate: ApiCallModel;
     ChartGetList: ApiCallModel;
     ChartsCount: ApiCallModel;
-
+    ChartTypesSuggest: ApiCallModel;
     activePanels: ChartsActivePanelsStateModel;
     dataset: ChartsDatasetStateModel;
     mapping: ChartsMappingStateModel;

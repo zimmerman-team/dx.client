@@ -25,6 +25,7 @@ import {
 import { Dropdown } from "react-bootstrap";
 import { areAllRequiredDimensionsMapped } from "app/hooks/useChartsRawData";
 import Skeleton from "@material-ui/lab/Skeleton";
+import { chartTypesFromMiddleWare } from "app/modules/chart-module/routes/chart-type/data";
 
 interface ChartToolBoxMappingProps {
   dataTypes: any;
@@ -121,7 +122,11 @@ export function ChartToolBoxMapping(props: Readonly<ChartToolBoxMappingProps>) {
     React.useState(nonStaticDimensions);
 
   const mapping = useStoreState((state) => state.charts.mapping.value);
+  const chartType = useStoreState((state) => state.charts.chartType.value);
 
+  const chartTypeSuggestions = useStoreState(
+    (state) => state.charts.ChartTypesSuggest.crudData
+  ) as { chartType: keyof typeof chartTypesFromMiddleWare }[] | null;
   const handleButtonToggle = (id: string) => {
     setNonStaticDimensionsState((prev) => {
       return prev.map((data) => {
@@ -135,6 +140,33 @@ export function ChartToolBoxMapping(props: Readonly<ChartToolBoxMappingProps>) {
       });
     });
   };
+
+  const selectedAIChartSuggestion = (ct: string) => {
+    if (!chartTypeSuggestions) return {};
+
+    return chartTypeSuggestions?.find(
+      (c: { chartType: keyof typeof chartTypesFromMiddleWare }) =>
+        chartTypesFromMiddleWare[c.chartType] === ct
+    );
+  };
+
+  React.useEffect(() => {
+    //auto map dimensions for AI charts
+    const aiChart: any = selectedAIChartSuggestion(chartType as string);
+    console.log(aiChart, "aiChart");
+    if (aiChart && nonStaticDimensionsState) {
+      console.log("heree", nonStaticDimensionsState);
+      nonStaticDimensionsState.forEach((dimension: any) => {
+        if (aiChart.hasOwnProperty(dimension.name)) {
+          console.log("hass", aiChart[dimension.name]);
+          handleNonStaticDimensionsUpdate(
+            dimension.id,
+            aiChart[dimension.name]
+          );
+        }
+      });
+    }
+  }, [nonStaticDimensions]);
 
   const handleNonStaticDimensionsUpdate = (
     nonStaticDimensionsId: number,

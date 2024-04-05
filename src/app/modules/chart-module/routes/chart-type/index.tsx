@@ -10,17 +10,30 @@ import {
   echartTypes,
   ChartTypeModel,
   ChartBuilderChartTypeProps,
+  chartTypesFromMiddleWare,
 } from "app/modules/chart-module/routes/chart-type/data";
 import { withAuthenticationRequired } from "@auth0/auth0-react";
+import AISwitch from "../../components/switch/AISwitch";
+import { useRecoilState } from "recoil";
+import { isChartAIAgentActive } from "app/state/recoil/atoms";
+import axios from "axios";
 
 function ChartBuilderChartType(props: ChartBuilderChartTypeProps) {
   useTitle("DX DataXplorer - Chart Type");
 
   const history = useHistory();
   const { page } = useParams<{ page: string }>();
+  const token = useStoreState((state) => state.AuthToken.value);
 
+  const [isAiActive, setIsAiActive] = useRecoilState(isChartAIAgentActive);
   const dataset = useStoreState((state) => state.charts.dataset.value);
   const chartType = useStoreState((state) => state.charts.chartType.value);
+  const loadChartTypesSuggestions = useStoreActions(
+    (actions) => actions.charts.ChartTypesSuggest.fetch
+  );
+  const chartTypeSuggestions = useStoreState(
+    (state) => state.charts.ChartTypesSuggest.crudData
+  ) as { chartType: keyof typeof chartTypesFromMiddleWare }[] | null;
   const setChartType = useStoreActions(
     (actions) => actions.charts.chartType.setValue
   );
@@ -39,13 +52,77 @@ function ChartBuilderChartType(props: ChartBuilderChartTypeProps) {
     if (dataset === null && !props.loading) {
       history.push(`/chart/${page}/data`);
     } else {
+      // load chart type suggestions
+      loadChartTypesSuggestions({
+        token,
+        filterString: `id=${dataset as string}`,
+        storeInCrudData: true,
+      });
+
       props.loadDataset(`chart/sample-data/${dataset}`);
     }
   }, [dataset]);
 
+  console.log(chartTypeSuggestions, "chartTypeSuggestions");
+
+  const aIChartSuggestions = (ct: string) => {
+    if (!chartTypeSuggestions) return [];
+
+    return (
+      chartTypeSuggestions?.findIndex(
+        (c: { chartType: keyof typeof chartTypesFromMiddleWare }) =>
+          chartTypesFromMiddleWare[c.chartType] === ct
+      ) > -1
+    );
+  };
+
   return (
     <div css={commonStyles.container}>
       <div css={commonStyles.innercontainer}>
+        <div
+          css={`
+            display: flex;
+            flex-direction: column;
+          `}
+        >
+          <div
+            css={`
+              display: flex;
+              align-items: center;
+              justify-content: end;
+              gap: 5px;
+              span {
+                color: #000000;
+                font-size: 12px;
+                font-family: "GothamNarrow-Book", sans-serif;
+              }
+            `}
+          >
+            <span>AI Agent</span>
+            <AISwitch checked={isAiActive} setIsAiActive={setIsAiActive} />
+          </div>
+          <p
+            css={`
+              font-family: "GothamNarrow-Bold", sans-serif;
+              font-size: 18px;
+              color: #231d2c;
+              margin-bottom: 0px;
+              span {
+                color: #359c96;
+              }
+            `}
+          >
+            Our <span>AI agent</span> has provided you with a suggested chart to
+            communicate your dataset. <br />
+            If you decide to go with any other chart, no worries it’s up to you!
+            Make your pick and tap “Next”.
+          </p>
+          <div
+            css={`
+              height: 40px;
+            `}
+          />
+        </div>
         <Grid
           container
           spacing={2}
@@ -54,65 +131,94 @@ function ChartBuilderChartType(props: ChartBuilderChartTypeProps) {
           `}
         >
           <Grid container item spacing={2}>
-            {echartTypes(false).map((ct: ChartTypeModel) => (
-              <Grid item xs={12} sm={6} md={4} key={ct.id}>
-                <div
-                  onClick={
-                    ct.label === "" ? () => {} : onChartTypeChange(ct.id)
-                  }
-                  data-cy="chart-type-item"
-                  css={`
-                    width: 100%;
-                    height: 64px;
-                    display: flex;
-                    padding: 0 15px;
-                    user-select: none;
-                    border-radius: 8px;
-                    flex-direction: row;
-                    align-items: center;
-                    background: ${chartType === ct.id ? "#cfd4da" : "#dfe3e6"};
-                    border: 1px solid
-                      ${chartType === ct.id ? "#262c34" : "#dfe3e6"};
-
-                    ${ct.label === "" &&
-                    `pointer-events: none;background: #f1f3f5;`}
-
-                    &:hover {
-                      cursor: ${ct.label !== "" ? "pointer" : "auto"};
-                      background: #cfd4da;
-                      border-color: #262c34;
-                    }
-                  `}
-                  data-testid={ct.id}
-                >
-                  {ct.icon}
+            {echartTypes(false).map((ct: ChartTypeModel) => {
+              console.log(aIChartSuggestions(ct.id), "aIChartSuggestions");
+              return (
+                <Grid item xs={12} sm={6} md={4} key={ct.id}>
                   <div
+                    onClick={
+                      ct.label === "" ? () => {} : onChartTypeChange(ct.id)
+                    }
+                    data-cy="chart-type-item"
                     css={`
+                      width: 100%;
+                      height: 64px;
                       display: flex;
-                      margin-left: 15px;
-                      flex-direction: column;
+                      padding: 0 15px;
+                      user-select: none;
+                      border-radius: 8px;
+                      flex-direction: row;
+                      align-items: center;
+                      background: ${aIChartSuggestions(ct.id)
+                        ? "#359C96"
+                        : chartType === ct.id
+                        ? "#cfd4da"
+                        : "#dfe3e6"};
+                      border: 1px solid
+                        ${aIChartSuggestions(ct.id)
+                          ? "#359C96"
+                          : chartType === ct.id
+                          ? "#6061E5"
+                          : "#dfe3e6"};
+
+                      ${ct.label === "" &&
+                      `pointer-events: none;background: #f1f3f5;`}
+
+                      &:hover {
+                        cursor: ${ct.label !== "" ? "pointer" : "auto"};
+                        background: #cfd4da;
+                        border-color: #262c34;
+                      }
+                      svg {
+                        path {
+                          fill: ${aIChartSuggestions(ct.id)
+                            ? "#fff"
+                            : "#262C34"};
+                        }
+                        circle {
+                          fill: ${aIChartSuggestions(ct.id)
+                            ? "#fff"
+                            : "#262C34"};
+                        }
+                      }
                     `}
+                    data-testid={ct.id}
                   >
+                    {ct.icon}
                     <div
                       css={`
-                        font-size: 14px;
+                        display: flex;
+                        margin-left: 15px;
+                        flex-direction: column;
                       `}
                     >
-                      <b>{ct.label}</b>
-                    </div>
-                    <div
-                      css={`
-                        font-size: 12px;
-                        font-family: "GothamNarrow-Book", "Helvetica Neue",
-                          sans-serif;
-                      `}
-                    >
-                      {ct.categories.join(", ")}
+                      <div
+                        css={`
+                          font-size: 14px;
+                          color: ${aIChartSuggestions(ct.id)
+                            ? "#fff"
+                            : "#262C34"};
+                        `}
+                      >
+                        <b>{ct.label}</b>
+                      </div>
+                      <div
+                        css={`
+                          font-size: 12px;
+                          font-family: "GothamNarrow-Book", "Helvetica Neue",
+                            sans-serif;
+                          color: ${aIChartSuggestions(ct.id)
+                            ? "#fff"
+                            : "#262C34"};
+                        `}
+                      >
+                        {ct.categories.join(", ")}
+                      </div>
                     </div>
                   </div>
-                </div>
-              </Grid>
-            ))}
+                </Grid>
+              );
+            })}
           </Grid>
         </Grid>
       </div>

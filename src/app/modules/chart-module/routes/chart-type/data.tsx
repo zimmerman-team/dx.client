@@ -85,6 +85,25 @@ export interface ChartTypeModel {
   description: string;
   ssr: boolean;
 }
+export const chartTypesFromMiddleWare = {
+  barchart: "echartsBarchart",
+  geomap: "echartsGeomap",
+  linechart: "echartsLinechart",
+  sankey: "echartsSankey",
+  treemap: "echartsTreemap",
+  areastack: "echartsAreastack",
+  sunburst: "echartsSunburst",
+  piechart: "echartsPiechart",
+  circlepacking: "echartsCirclepacking",
+  circulargraph: "echartsCirculargraph",
+  forcegraph: "echartsForcegraph",
+  bubblechart: "echartsBubblechart",
+  heatmap: "echartsHeatmap",
+  radarchart: "echartsRadarchart",
+  graphgl: "echartsGraphgl",
+  areatimeaxis: "echartsAreatimeaxis",
+  scatterchart: "echartsScatterchart",
+};
 
 export const echartTypes = (big: boolean) => {
   return [
