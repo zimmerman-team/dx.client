@@ -34,8 +34,6 @@ import {
   ChartRenderedItem,
   defaultChartOptions,
 } from "app/modules/chart-module/data";
-import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
-import { styles as commonStyles } from "app/modules/chart-module/routes/common/styles";
 import { NotAuthorizedMessageModule } from "app/modules/common/not-authorized-message";
 import { isEmpty } from "lodash";
 import useResizeObserver from "use-resize-observer";
@@ -45,6 +43,7 @@ import { reportRightPanelViewAtom } from "app/state/recoil/atoms";
 import { useRecoilState } from "recoil";
 import { getRequiredFieldsAndErrors } from "app/modules/chart-module/routes/mapping/utils";
 import ErrorComponent from "./components/dialog/errrorComponent";
+import axios from "axios";
 
 export default function ChartModule() {
   const { user, isLoading, isAuthenticated } = useAuth0();
@@ -233,28 +232,46 @@ export default function ChartModule() {
         values: chart,
       });
     } else {
-      createChart({
-        token,
-        values: chart,
-      });
+      try {
+        const response = await axios.post(
+          `${process.env.REACT_APP_API}/chart/`,
+          chart,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        return response;
+      } catch (e) {
+        console.log(e);
+      }
     }
   };
 
-  const onTriggerAutoSave = () => {
-    onSave().then(() => {
+  const onTriggerAutoSave = async () => {
+    try {
       setAutoSaveState({
         isAutoSaveEnabled: true,
         enableAutoSaveSwitch: true,
       });
-    });
+      if (page === "new") {
+        const response = await onSave();
+        const data = response?.data;
+        history.push(`/chart/${data.id}/mapping`);
+      } else {
+        onSave();
+      }
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   React.useEffect(() => {
     //handles what happens after chart is created or edited
     let timeout: NodeJS.Timeout;
-    if (createChartSuccess && createChartData.id && page === "new") {
-      history.replace(`/chart/${createChartData.id}/mapping`);
-    } else if (editChartSuccess) {
+    if (editChartSuccess) {
       //returns back to chart detail page
       setSavedChanges(true);
       timeout = setTimeout(() => {
@@ -264,7 +281,7 @@ export default function ChartModule() {
     return () => {
       clearTimeout(timeout);
     };
-  }, [editChartSuccess, createChartSuccess, createChartData]);
+  }, [editChartSuccess]);
 
   React.useEffect(() => {
     //empty chart when chart type and or  dataset types changes
