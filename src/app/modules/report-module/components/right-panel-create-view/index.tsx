@@ -864,6 +864,7 @@ function ElementItem(props: {
     1000,
     [searchValue, props.elementType, source]
   );
+  console.log(loading, "loading");
 
   return (
     <div
@@ -1054,12 +1055,13 @@ function ElementItem(props: {
                 {loading
                   ? Array(4)
                       .fill(null)
-                      .map(() => (
+                      .map((_d, index: number) => (
                         <Skeleton
                           animation="wave"
                           variant="rect"
                           width="100%"
                           height="173.25px"
+                          key={`${index}-skeleton`}
                         />
                       ))
                   : data.map((d, i) =>
