@@ -330,6 +330,8 @@ export interface ChartAPIModel {
   createdDate: Date;
   owner: string;
   public?: boolean;
+  dataTypes: any;
+  isMappingValid: boolean;
 }
 
 export interface ChartRenderedItem {
@@ -471,4 +473,6 @@ export const emptyChartAPI: ChartAPIModel = {
   appliedFilters: {},
   vizType: "echartsBarchart",
   datasetId: "investment-signed",
+  dataTypes: [],
+  isMappingValid: false,
 };

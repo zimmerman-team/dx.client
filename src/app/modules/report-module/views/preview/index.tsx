@@ -23,7 +23,11 @@ import { object } from "yup";
 
 export function ReportPreviewView(props: {
   setIsPreviewView: React.Dispatch<React.SetStateAction<boolean>>;
-  setAutoSave: React.Dispatch<React.SetStateAction<boolean>>;
+  setAutoSave: React.Dispatch<
+    React.SetStateAction<{
+      isAutoSaveEnabled: boolean;
+    }>
+  >;
 }) {
   const { page } = useParams<{ page: string }>();
 
@@ -73,7 +77,7 @@ export function ReportPreviewView(props: {
   const [reportPreviewData, setReportPreviewData] = React.useState(reportData);
 
   React.useEffect(() => {
-    props.setAutoSave(false);
+    props.setAutoSave({ isAutoSaveEnabled: false });
     if (!isLoading) {
       if (token) {
         fetchReportData({ token, getId: page });

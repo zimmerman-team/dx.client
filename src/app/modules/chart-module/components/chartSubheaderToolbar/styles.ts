@@ -19,13 +19,6 @@ export const styles = {
     align-items: center;
     flex-direction: row;
     justify-content: space-between;
-    p {
-      font-family: "GothamNarrow-Bold";
-      font-style: normal;
-      font-weight: 700;
-      font-size: 24px;
-      color: #231d2c;
-    }
     @media (max-width: 1280px) {
       margin-left: 0;
       width: calc(100vw - 400px);
@@ -100,7 +93,6 @@ export const styles = {
   `,
   nameInput: css`
     margin: 0;
-    width: 1200px;
     display: flex;
     color: #262c34;
     font-size: 24px;

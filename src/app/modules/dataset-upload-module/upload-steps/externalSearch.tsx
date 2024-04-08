@@ -43,9 +43,18 @@ export default function ExternalSearch(props: {
     []
   );
   const abortControllerRef = useRef<AbortController>(new AbortController());
-
+  const terminateSearch = () => {
+    abortControllerRef.current.abort();
+    abortControllerRef.current = new AbortController();
+  };
   const limit = 2;
   const handleLimitedSearch = () => {
+    let maxResults: number;
+    if (searchValue?.length === 0) {
+      maxResults = 20;
+    } else {
+      maxResults = 96;
+    }
     const loadSearch = async (offset: number, count: number) => {
       try {
         setLoading(true);
@@ -60,8 +69,13 @@ export default function ExternalSearch(props: {
         );
         const data = response.data;
         setLoading(false);
-        if (data.length > 0 && count < 96) {
-          setTotalDatasets((prev) => [...prev, ...data]);
+        if (data.length > 0 && count < maxResults) {
+          if (data.length + totalDatasets.length > maxResults) {
+            const finalData = data.slice(0, maxResults - totalDatasets.length);
+            setTotalDatasets((prev) => [...prev, ...finalData]);
+          } else {
+            setTotalDatasets((prev) => [...prev, ...data]);
+          }
           loadSearch(offset + limit, count + data.length);
         }
       } catch (e) {
@@ -146,6 +160,7 @@ export default function ExternalSearch(props: {
             setTableView={setTableView}
             sortValue={sortValue}
             tableView={tableView}
+            terminateSearch={terminateSearch}
           />
         </Grid>
       </Grid>

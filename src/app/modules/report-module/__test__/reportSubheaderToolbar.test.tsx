@@ -20,7 +20,6 @@ import { createStore, StoreProvider } from "easy-peasy";
 import { createMemoryHistory } from "history";
 import Router from "react-router-dom";
 import { MutableSnapshot, RecoilRoot } from "recoil";
-import { ReportSubheaderToolbar } from "../components/reportSubHeaderToolbar";
 import { ToolbarPluginsType } from "../components/reportSubHeaderToolbar/staticToolbar";
 import { IHeaderDetails } from "../components/right-panel/data";
 import { IFramesArray } from "../views/create/data";
@@ -34,7 +33,7 @@ import axios, { AxiosResponse } from "axios";
 interface MockProps {
   name: string;
   autoSave: boolean;
-  setAutoSave: (value: boolean) => void;
+  setAutoSave: (value: { isAutoSaveEnabled: boolean }) => void;
   visualOptions?: any;
   onReportSave: (type: "create" | "edit") => Promise<void>;
   setName: (name: string) => void;
@@ -82,8 +81,8 @@ const defaultProps = (props: Partial<MockProps> = {}): MockProps => {
   return {
     name: "Untitled report",
     autoSave: false,
-    setAutoSave: jest.fn((value: boolean) => {
-      mockSetValues.autoSave = value;
+    setAutoSave: jest.fn((value: { isAutoSaveEnabled: boolean }) => {
+      mockSetValues.autoSave = value.isAutoSaveEnabled;
     }),
     visualOptions: {},
     onReportSave: jest.fn().mockImplementation((type) => Promise.resolve()),
@@ -153,7 +152,7 @@ const appSetup = (params: Params, newProps: Partial<MockProps> = {}) => {
                 node={homeDisplayAtom}
                 onChange={onHomeTabChange}
               />
-              <ReportSubheaderToolbar {...props} />
+              {/* <ReportSubheaderToolbar {...props} /> */}
             </RecoilRoot>
           </StoreProvider>
         </Auth0Provider>

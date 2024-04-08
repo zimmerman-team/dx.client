@@ -631,9 +631,8 @@ const OneByTwo = (props: IRowStructureType) => {
       props.setTourStep(3);
     } else {
       props.endReportTour();
-
-      props.setSelectedType("oneByTwo");
     }
+    props.setSelectedType("oneByTwo");
   };
   return (
     <div css={blockcss} onClick={handleClick} data-cy="one-by-two-type">

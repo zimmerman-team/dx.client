@@ -7,7 +7,7 @@ import { useSessionStorage } from "react-use";
 import Container from "@material-ui/core/Container";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
-import { Switch, Route, useParams } from "react-router-dom";
+import { Switch, Route, useParams, useHistory } from "react-router-dom";
 import {
   getOptionsConfig,
   getDefaultOptionsValues,
@@ -26,7 +26,6 @@ import { ChartBuilderPreview } from "app/modules/chart-module/routes/preview";
 import ChartBuilderChartType from "app/modules/chart-module/routes/chart-type";
 import { ChartModuleToolBox } from "app/modules/chart-module/components/toolbox";
 import { ChartBuilderPreviewTheme } from "app/modules/chart-module/routes/preview-theme";
-import { getRequiredFieldsAndErrors } from "app/modules/chart-module/routes/mapping/utils";
 import {
   charts,
   ChartAPIModel,
@@ -35,18 +34,21 @@ import {
   ChartRenderedItem,
   defaultChartOptions,
 } from "app/modules/chart-module/data";
-import { IHeaderDetails } from "app/modules/report-module/components/right-panel/data";
-import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
-import { styles as commonStyles } from "app/modules/chart-module/routes/common/styles";
 import { NotAuthorizedMessageModule } from "app/modules/common/not-authorized-message";
 import { isEmpty } from "lodash";
 import useResizeObserver from "use-resize-observer";
 import { ChartType } from "app/modules/chart-module/components/common-chart";
 import { DatasetListItemAPIModel } from "app/modules/dataset-module/data";
+import { reportRightPanelViewAtom } from "app/state/recoil/atoms";
+import { useRecoilState } from "recoil";
+import { getRequiredFieldsAndErrors } from "app/modules/chart-module/routes/mapping/utils";
+import ErrorComponent from "./components/dialog/errrorComponent";
+import axios from "axios";
 
 export default function ChartModule() {
-  const { isLoading, isAuthenticated } = useAuth0();
+  const { user, isLoading, isAuthenticated } = useAuth0();
   const token = useStoreState((state) => state.AuthToken.value);
+  const history = useHistory();
   const { page, view } = useParams<{ page: string; view?: string }>();
   const [chartFromAPI, setChartFromAPI] =
     React.useState<ChartRenderedItem | null>(null);
@@ -56,6 +58,7 @@ export default function ChartModule() {
   );
   const [rawViz, setRawViz] = React.useState<any>(null);
   const [toolboxOpen, setToolboxOpen] = React.useState(Boolean(view));
+  const [savedChanges, setSavedChanges] = React.useState<boolean>(false);
 
   const [chartName, setChartName] = React.useState("Untitled Chart");
   const [isPreviewView, setIsPreviewView] = React.useState(false);
@@ -103,9 +106,21 @@ export default function ChartModule() {
   const isChartLoading = useStoreState(
     (state) => state.charts.ChartGet.loading
   );
+  const editView = !!(page !== "new" && view);
+  const [autoSaveState, setAutoSaveState] = React.useState({
+    isAutoSaveEnabled: editView || false,
+    enableAutoSaveSwitch: editView || false,
+  });
+  const setRightPanelView = useRecoilState(reportRightPanelViewAtom)[1];
 
   const setMapping = useStoreActions(
     (actions) => actions.charts.mapping.setValue
+  );
+  const appliedFilters = useStoreState(
+    (state) => state.charts.appliedFilters.value
+  );
+  const enabledFilterOptionGroups = useStoreState(
+    (state) => state.charts.enabledFilterOptionGroups.value
   );
   const loadChart = useStoreActions((actions) => actions.charts.ChartGet.fetch);
 
@@ -119,11 +134,27 @@ export default function ChartModule() {
         401 ||
       get(state.charts.ChartGet.crudData, "error", "") === "Unauthorized"
   );
+  const createChart = useStoreActions(
+    (actions) => actions.charts.ChartCreate.post
+  );
+  const editChart = useStoreActions(
+    (actions) => actions.charts.ChartUpdate.patch
+  );
   const clearChart = useStoreActions(
     (actions) => actions.charts.ChartGet.clear
   );
   const createChartClear = useStoreActions(
     (actions) => actions.charts.ChartCreate.clear
+  );
+  const createChartData = useStoreState(
+    (state) =>
+      (state.charts.ChartCreate.crudData ?? emptyChartAPI) as ChartAPIModel
+  );
+  const createChartSuccess = useStoreState(
+    (state) => state.charts.ChartCreate.success
+  );
+  const editChartSuccess = useStoreState(
+    (state) => state.charts.ChartUpdate.success
   );
   const editChartClear = useStoreActions(
     (actions) => actions.charts.ChartUpdate.clear
@@ -152,6 +183,12 @@ export default function ChartModule() {
   const resetEnabledFilterOptionGroups = useStoreActions(
     (actions) => actions.charts.enabledFilterOptionGroups.clear
   );
+  const { updRequiredFields, updMinValuesFields } = getRequiredFieldsAndErrors(
+    mapping,
+    dimensions
+  );
+  const isMappingValid =
+    updRequiredFields.length === 0 && updMinValuesFields.length === 0;
 
   const config = get(routeToConfig, `["${view}"]`, routeToConfig.preview);
 
@@ -175,21 +212,84 @@ export default function ChartModule() {
     setNotFound(false);
   };
 
-  //empty chart when chart type and or  dataset types changes
+  const onSave = async () => {
+    const chart = {
+      name: chartName,
+      authId: user?.sub,
+      vizType: chartType,
+      mapping,
+      datasetId: dataset,
+      vizOptions: visualOptions || {},
+      dataTypes: dataTypes2,
+      appliedFilters,
+      enabledFilterOptionGroups,
+      isMappingValid,
+    };
+    if (view !== undefined && page !== "new") {
+      editChart({
+        token,
+        patchId: page,
+        values: chart,
+      });
+    } else {
+      try {
+        const response = await axios.post(
+          `${process.env.REACT_APP_API}/chart/`,
+          chart,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        return response;
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  };
+
+  const onTriggerAutoSave = async () => {
+    try {
+      setAutoSaveState({
+        isAutoSaveEnabled: true,
+        enableAutoSaveSwitch: true,
+      });
+      if (page === "new") {
+        const response = await onSave();
+        const data = response?.data;
+        history.push(`/chart/${data.id}/mapping`);
+      } else {
+        onSave();
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   React.useEffect(() => {
+    //handles what happens after chart is created or edited
+    let timeout: NodeJS.Timeout;
+    if (editChartSuccess) {
+      //returns back to chart detail page
+      setSavedChanges(true);
+      timeout = setTimeout(() => {
+        setSavedChanges(false);
+      }, 3000);
+    }
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [editChartSuccess]);
+
+  React.useEffect(() => {
+    //empty chart when chart type and or  dataset types changes
     setChartFromAPI(null);
   }, [chartType, dataTypes]);
 
   React.useEffect(() => {
-    //resets mapping and applied filters when dataset becomes null
-    if (dataset === null) {
-      resetMapping();
-      resetAppliedFilters();
-    }
-  }, [dataset]);
-
-  //set chart name to selected dataset if chart name has not been focused
-  React.useEffect(() => {
+    //set chart name to selected dataset if chart name has not been focused
     if (page === "new" && !hasSubHeaderTitleFocused && dataset) {
       const datasetName = datasets.find((d) => d.id === dataset)?.name;
       setChartName(datasetName as string);
@@ -197,16 +297,18 @@ export default function ChartModule() {
     if (isEmpty(dataset) && page === "new" && !hasSubHeaderTitleFocused) {
       setChartName("Untitled Chart");
     }
+    //resets mapping and applied filters when dataset becomes null
+    if (dataset === null) {
+      resetMapping();
+      resetAppliedFilters();
+    }
   }, [dataset]);
 
-  //set chart name to loaded chart name
   React.useEffect(() => {
+    //set chart name to loaded chart name
     if (page !== "new" && loadedChart.name.length > 0) {
       setChartName(loadedChart.name);
     }
-  }, [loadedChart]);
-
-  React.useEffect(() => {
     //set mapping from loaded chart as it always has the complete mapping values
     //TODO: This will need to change when we have the complete mapping values for big number
     if (loadedChart.vizType === "bigNumber") {
@@ -280,6 +382,25 @@ export default function ChartModule() {
     setDataError(false);
     setNotFound(false);
   }
+  function clearChartBuilder() {
+    console.log("--about to reset chart states");
+    clear().then(() => {
+      if (process.env.NODE_ENV === "development") {
+        console.log(
+          "End of reset.",
+          "--visualOptions",
+          visualOptions,
+          chartName
+        );
+      }
+    });
+  }
+
+  React.useEffect(() => {
+    //clear prev states when page mounts
+    console.log("clear prev states when page mounts");
+    clearChartBuilder();
+  }, []);
 
   React.useEffect(() => {
     // Updates visual options width when container width changes
@@ -299,19 +420,6 @@ export default function ChartModule() {
 
   const { ref } = useResizeObserver<HTMLDivElement>();
 
-  function clearChartBuilder() {
-    clear().then(() => {
-      if (process.env.NODE_ENV === "development") {
-        console.log(
-          "End of reset.",
-          "--visualOptions",
-          visualOptions,
-          chartName
-        );
-      }
-    });
-  }
-
   React.useEffect(() => {
     if (!loading && chartType) {
       setVisualOptionsOnChange();
@@ -322,6 +430,7 @@ export default function ChartModule() {
     if (page !== "new") {
       if (!isLoading) {
         if (token.length > 0) {
+          console.log("---load chart");
           loadChart({ token, getId: page });
         } else if (!isAuthenticated) {
           loadChart({ nonAuthCall: true, getId: page });
@@ -330,56 +439,7 @@ export default function ChartModule() {
         clearChart();
       }
     }
-    return () => {
-      clearChartBuilder();
-    };
   }, [page, token, isLoading, isAuthenticated]);
-
-  const errorComponent = () => {
-    return (
-      <div css={commonStyles.container}>
-        <div
-          css={
-            location.pathname === `/chart/${page}`
-              ? ""
-              : commonStyles.innercontainer
-          }
-        >
-          <div
-            css={`
-              height: 362.598px;
-              background: #dfe3e5;
-              margin: auto;
-              margin-top: 5%;
-              display: flex;
-              flex-direction: column;
-              align-items: center;
-              justify-content: center;
-              color: #e75656;
-              font-size: 14px;
-              line-height: 20px;
-              font-weight: bold;
-              font-family: "GothamNarrow-Bold", sans-serif;
-              text-align: center;
-              button {
-                outline: none;
-                border: none;
-                background: transparent;
-                cursor: pointer;
-                text-decoration: underline;
-              }
-              p {
-                margin-top: 18px;
-              }
-            `}
-          >
-            <ErrorOutlineIcon htmlColor="#E75656" fontSize="large" />
-            {notFound || (dataError && <p>{chartErrorMessage}</p>)}
-          </div>
-        </div>
-      </div>
-    );
-  };
 
   if (chartError401 || error401) {
     return (
@@ -399,6 +459,11 @@ export default function ChartModule() {
         setHasSubHeaderTitleFocused={setHasSubHeaderTitleFocused}
         isPreviewView={isPreviewView}
         dimensions={dimensions}
+        setAutoSaveState={setAutoSaveState}
+        autoSave={autoSaveState.isAutoSaveEnabled}
+        enableAutoSaveSwitch={autoSaveState.enableAutoSaveSwitch}
+        onSave={onSave}
+        savedChanges={savedChanges}
       />
       <ChartModuleToolBox
         rawViz={rawViz}
@@ -426,6 +491,8 @@ export default function ChartModule() {
         onClose={() => setToolboxOpen(false)}
         onOpen={() => setToolboxOpen(true)}
         deselectDataset={deselectDataset}
+        onSave={onSave}
+        triggerAutoSave={onTriggerAutoSave}
       />
 
       <div
@@ -447,7 +514,14 @@ export default function ChartModule() {
           ref={ref}
         >
           {dataError || notFound ? (
-            <>{errorComponent()}</>
+            <>
+              <ErrorComponent
+                chartErrorMessage={chartErrorMessage}
+                dataError={dataError}
+                notFound={notFound}
+                page={page}
+              />
+            </>
           ) : (
             <Switch>
               {(isSaveLoading || isChartLoading) && <PageLoader />}
@@ -500,7 +574,10 @@ export default function ChartModule() {
                 />
               </Route>
               <Route path="/chart/:page/chart-type">
-                <ChartBuilderChartType loading={loading} />
+                <ChartBuilderChartType
+                  loading={loading}
+                  loadDataset={loadDataset}
+                />
               </Route>
               <Route path="/chart/:page/preview-data">
                 <ChartBuilderPreview
@@ -512,10 +589,7 @@ export default function ChartModule() {
                 />
               </Route>
               <Route path="/chart/:page/data">
-                <ChartModuleDataView
-                  loadDataset={loadDataset}
-                  clearChartBuilder={clearChartBuilder}
-                />
+                <ChartModuleDataView loadDataset={loadDataset} />
               </Route>
               <Route path="/chart/:page/preview">
                 <ChartBuilderPreviewTheme
@@ -528,6 +602,8 @@ export default function ChartModule() {
                   editable={!isPreviewMode || (page === "new" && !view)}
                   setIsPreviewView={setIsPreviewView}
                   containerRef={containerRef}
+                  loadedChart={loadedChart}
+                  view={view}
                 />
               </Route>
               <Route path="/chart/:page">
@@ -541,6 +617,8 @@ export default function ChartModule() {
                   editable={!isPreviewMode}
                   setIsPreviewView={setIsPreviewView}
                   containerRef={containerRef}
+                  loadedChart={loadedChart}
+                  view={view}
                 />
               </Route>
               <Route path="*">

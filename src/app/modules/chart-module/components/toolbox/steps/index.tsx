@@ -111,6 +111,7 @@ export function ChartToolBoxSteps(props: ChartToolBoxStepsProps) {
             dataTypes={props.dataTypes}
             dimensions={props.dimensions}
             setChartFromAPI={props.setChartFromAPI}
+            loading={props.loading}
           />
         );
       case "filters":
