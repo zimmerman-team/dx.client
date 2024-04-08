@@ -1,5 +1,5 @@
 /**third party */
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import useDrivePicker from "react-google-drive-picker";
 import {
@@ -47,6 +47,13 @@ export default function AddDatasetFragment(props: Props) {
       console.log(e, "handleGoogleDriveFilePicker error");
     }
   };
+  useEffect(() => {
+    if (process.env.REACT_APP_CYPRESS_TEST === "true") {
+      window.handleGoogleDriveFilePicker = function (file: any, token: string) {
+        handleGoogleDriveFilePicker(file, token);
+      };
+    }
+  }, []);
 
   const ACCEPTED_FILES = {
     "text/csv": [".csv"],

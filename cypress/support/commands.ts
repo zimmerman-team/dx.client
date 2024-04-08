@@ -128,3 +128,18 @@ Cypress.Commands.add("loginToAuth0", (username: string, password: string) => {
   log.snapshot("after");
   log.end();
 });
+
+Cypress.Commands.add("setGoogleAccessToken", () => {
+  cy.request({
+    method: "POST",
+    url: "https://oauth2.googleapis.com/token",
+    body: {
+      client_id: Cypress.env("google_client_id_test"),
+      client_secret: Cypress.env("google_client_secret_test"),
+      refresh_token: Cypress.env("google_refresh_token_test"),
+      grant_type: "refresh_token",
+    },
+  }).then(({ body }) => {
+    localStorage.setItem("google_access_token", body.access_token);
+  });
+});

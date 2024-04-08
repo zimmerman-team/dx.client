@@ -97,6 +97,7 @@ export const DropZone = (props: DropzoneProps) => {
                 type="button"
                 onClick={props.handleOpenPicker}
                 data-testid="google-drive-button"
+                data-cy="google-drive-button"
               >
                 <GoogleDriveIcon /> <p>Connect to google drive</p>
               </button>
