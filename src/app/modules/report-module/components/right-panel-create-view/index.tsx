@@ -1,5 +1,5 @@
 /* third-party */
-import React from "react";
+import React, { useState } from "react";
 import find from "lodash/find";
 import { useDrag } from "react-dnd";
 import { useRecoilState } from "recoil";
@@ -7,7 +7,8 @@ import MuiButton from "@material-ui/core/Button";
 import MenuItem from "@material-ui/core/MenuItem";
 import { EditorState } from "draft-js";
 import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
-import { SearchIcon } from "app/assets/icons/Search";
+import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
+import SearchIcon from "@material-ui/icons/Search";
 import { withStyles } from "@material-ui/core/styles";
 import { useHistory, useParams } from "react-router-dom";
 import Menu, { MenuProps } from "@material-ui/core/Menu";
@@ -28,6 +29,8 @@ import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import { IFramesArray } from "app/modules/report-module/views/create/data";
 import EditHeaderIcon from "app/modules/report-module/asset/EditHeaderIcon";
 import TextPreviewImg from "app/modules/report-module/asset/textPreview.svg";
+import { ReactComponent as YoutubeIcon } from "app/modules/report-module/asset/youtube-icon.svg";
+import YoutubeGradient from "app/modules/report-module/asset/youtube-gradient.png";
 import { Charts } from "app/modules/report-module/components/right-panel-create-view/data";
 import DividerPreviewImg from "app/modules/report-module/asset/dividerPreview.svg";
 import HeaderPreviewImg from "app/modules/report-module/asset/headerPreviewImg.svg";
@@ -46,6 +49,11 @@ import { ReactComponent as RowframeIcon } from "app/modules/report-module/asset/
 import PanelLabel from "app/modules/report-module/components/right-panel-create-view/panelLabel";
 import { elementItemcss } from "app/modules/report-module/components/right-panel-create-view/style";
 import GridItem from "app/modules/report-module/components/right-panel-create-view/rhpGridItem";
+import { css } from "styled-components";
+import { get } from "lodash";
+import { useSearchMediaSources } from "app/hooks/useSearchMediaSources";
+import { useDebounce } from "react-use";
+import Skeleton from "@material-ui/lab/Skeleton";
 
 interface IHeaderDetails {
   title: string;
@@ -157,6 +165,16 @@ const sortByOptions = [
   { value: "name asc", label: "Name (ASC)" },
 ];
 
+const videoSources = [
+  { value: "youtube", label: "Youtube" },
+  { value: "vimeo", label: "Vimeo" },
+];
+
+const imageSources = [
+  { value: "unsplash", label: "Unsplash" },
+  { value: "shutterstock", label: "Shutterstock" },
+];
+
 export function ReportRightPanelCreateView(props: Readonly<Props>) {
   const [currentView, setCurrentView] = useRecoilState(
     reportRightPanelViewAtom
@@ -220,6 +238,7 @@ export function ReportRightPanelCreateView(props: Readonly<Props>) {
           css={`
             width: 36px;
             height: 36px;
+            margin: 6px;
           `}
         />
       ),
@@ -398,19 +417,24 @@ export function ReportRightPanelCreateView(props: Readonly<Props>) {
             user-select: none;
             flex-direction: column;
             background: transparent;
+            padding-bottom: 25px;
+            overflow-y: scroll;
           `}
         >
           {mediaItemDetails.map((item, index) => (
             <ElementItem
               key={item.elementType}
               {...item}
-              disabled={
-                item.elementType === ReportElementsType.IMAGE ||
-                item.elementType === ReportElementsType.VIDEO
-              }
+              disabled={false}
               ItemDetails={mediaItemDetails}
               setItemDetails={setMediaItemDetails}
               index={index}
+              draggable={
+                !(
+                  item.elementType === ReportElementsType.IMAGE ||
+                  item.elementType === ReportElementsType.VIDEO
+                )
+              }
             />
           ))}
         </div>
@@ -485,7 +509,7 @@ function ReportRightPanelCreateViewChartList(
             padding: 0 45px 0 10px;
           `}
         />
-        <SearchIcon />
+        <SearchIcon htmlColor="#495057" />
         <Button
           disableTouchRipple
           onClick={handleClick}
@@ -599,6 +623,172 @@ function ReportRightPanelCreateViewChartList(
   );
 }
 
+function VideoFrame(props: {
+  videoId: string;
+  embedUrl: string;
+  snippet: any;
+  source: "youtube";
+  thumbnail: string;
+  title: string;
+  description: string;
+  ownerThumbnail: string;
+}) {
+  const [{ isDragging }, drag] = useDrag(() => ({
+    type: "video",
+    item: {
+      type: "video",
+      value: props,
+    },
+    collect: (monitor) => ({
+      isDragging: !!monitor.isDragging(),
+    }),
+  }));
+
+  const [play, setPlay] = useState(false);
+
+  return (
+    <div
+      css={css`
+        height: 173.25px;
+        position: relative;
+        cursor: grab;
+        ${isDragging && "cursor: grabbing;"}
+        background-image: ${`url(${YoutubeGradient}),url(${props.thumbnail})`};
+        background-position: top left, top left;
+        background-repeat: no-repeat, no-repeat;
+        background-size: contain, cover;
+      `}
+      ref={drag}
+      onClick={() => setPlay(!play)}
+    >
+      {play ? (
+        <>
+          {" "}
+          <iframe
+            src={props.embedUrl + "?autoplay=1"}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+            css={css`
+              position: absolute;
+              width: 100%;
+              height: 100%;
+              top: 0;
+              left: 0;
+              border: none;
+              box-shadow: none;
+              pointer-events: none;
+            `}
+          ></iframe>{" "}
+          <div
+            css={css`
+              position: absolute;
+              left: 0;
+              top: 0;
+              width: 100%;
+              height: 100%;
+            `}
+          ></div>
+        </>
+      ) : (
+        <div
+          css={css`
+            position: absolute;
+            left: 0;
+            top: 0;
+            display: flex;
+            width: 100%;
+            height: 100%;
+            justify-content: center;
+            align-items: center;
+          `}
+        >
+          <div
+            css={css`
+              position: absolute;
+              top: 7.11px;
+              left: 7.11px;
+              display: flex;
+              column-gap: 6px;
+            `}
+          >
+            <div
+              css={css`
+                width: 24px;
+                height: 24px;
+                border-radius: 9999px;
+                overflow: hidden;
+              `}
+            >
+              <img
+                src={props.ownerThumbnail}
+                alt="thumb"
+                css={css`
+                  height: 100%;
+                  width: 100%;
+                  object-fit: cover;
+                `}
+              />
+            </div>
+            <div
+              css={css`
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                width: 250px;
+                color: white;
+                font-size: 10.662px;
+                font-family: Roboto;
+              `}
+              dangerouslySetInnerHTML={{ __html: props.title }}
+            ></div>
+          </div>
+          <div
+            css={`
+              cursor: pointer;
+            `}
+          >
+            <YoutubeIcon />
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ImageFrame(props: {
+  imageId: string;
+  imageUrl: string;
+  source: "shutterstock" | "unsplash";
+  thumbnail: string;
+}) {
+  const [{ isDragging }, drag] = useDrag(() => ({
+    type: "image",
+    item: {
+      type: "image",
+      value: props,
+    },
+    collect: (monitor) => ({
+      isDragging: !!monitor.isDragging(),
+    }),
+  }));
+
+  return (
+    <div
+      css={css`
+        height: 173.25px;
+        position: relative;
+        cursor: grab;
+        ${isDragging && "cursor: grabbing;"}
+        background-image: ${`url(${props.thumbnail})`};
+        background-position: top left;
+        background-repeat: no-repeat;
+        background-size: cover;
+      `}
+      ref={drag}
+    ></div>
+  );
+}
+
 function ElementItem(props: {
   leftIcon: JSX.Element;
   previewImg: string;
@@ -611,8 +801,25 @@ function ElementItem(props: {
   setItemDetails?: React.Dispatch<React.SetStateAction<any[]>>;
   index?: number;
   description: string;
+  draggable?: boolean;
 }) {
   const nullRef = React.useRef(null);
+
+  const [dropDown, setDropDown] = React.useState(false);
+  const [searchValue, setSearchValue] = React.useState("");
+
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
+  const currentSourceOptions = { image: imageSources, video: videoSources };
+
+  const [source, setSource] = React.useState(
+    get(currentSourceOptions, props.elementType, [{}])[0]
+  );
+
+  const { data, loading, search } = useSearchMediaSources(
+    source.value,
+    props.elementType
+  );
 
   const [{ isDragging }, drag] = useDrag(() => ({
     type: props.elementType,
@@ -641,46 +848,250 @@ function ElementItem(props: {
 
   const isImageElement = props.elementType === ReportElementsType.IMAGE;
   const isVideoElement = props.elementType === ReportElementsType.VIDEO;
+
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  useDebounce(
+    () => {
+      search(searchValue);
+    },
+    1000,
+    [searchValue, props.elementType, source]
+  );
+
   return (
-    <Tooltip
-      title={"Available soon"}
-      placement="bottom-end"
-      open={props.openTooltip}
-      onClose={() => {
-        if (props.ItemDetails && props.index) {
-          props.setItemDetails?.((prev) => {
-            const tempPrev = prev.map((item) => ({ ...item }));
-            tempPrev[props.index as number].openTooltip = false;
-            return [...tempPrev];
-          });
-        }
-      }}
-      onOpen={() => {
-        if (props.disabled) {
+    <div
+      css={css`
+        background: #dfe3e5;
+        width: 90%;
+        margin: 8px auto;
+        border-radius: 8px;
+        flex-shrink: 0;
+        max-height: 70vh;
+      `}
+    >
+      <Tooltip
+        title={"Available soon"}
+        placement="bottom-end"
+        open={props.openTooltip}
+        onClose={() => {
           if (props.ItemDetails && props.index) {
             props.setItemDetails?.((prev) => {
               const tempPrev = prev.map((item) => ({ ...item }));
-              tempPrev[props.index as number].openTooltip = true;
+              tempPrev[props.index as number].openTooltip = false;
               return [...tempPrev];
             });
           }
-        }
-      }}
-    >
-      <div
-        ref={isImageElement || isVideoElement ? nullRef : drag}
-        id={props.name}
-        css={elementItemcss(props.disabled as boolean, isDragging)}
-        data-cy={`report-panel-${props.elementType}-item`}
-        data-testid={props.name}
+        }}
+        onOpen={() => {
+          if (props.disabled) {
+            if (props.ItemDetails && props.index) {
+              props.setItemDetails?.((prev) => {
+                const tempPrev = prev.map((item) => ({ ...item }));
+                tempPrev[props.index as number].openTooltip = true;
+                return [...tempPrev];
+              });
+            }
+          }
+        }}
       >
-        {props.leftIcon}
-        <div>
-          <b>{props.name}</b>
-          <p>{props.description}</p>
+        <div
+          ref={isImageElement || isVideoElement ? nullRef : drag}
+          data-cy={`report-panel-${props.elementType}-item`}
+          id={props.name}
+          data-testid={props.name}
+          css={elementItemcss(
+            props.disabled as boolean,
+            isDragging,
+            props.draggable,
+            dropDown
+          )}
+          onClick={() => setDropDown((prev) => !prev)}
+        >
+          {props.leftIcon}
+          <div>
+            <b>{props.name}</b>
+            <p>{props.description}</p>
+          </div>
+          {isImageElement || isVideoElement ? (
+            <>
+              <div
+                css={`
+                  position: absolute;
+                  top: 20px;
+                  right: 10px;
+                  transition: transform 150ms ease-out;
+                  transform: ${dropDown ? "rotate(180deg)" : "rotate(0deg)"};
+                  width: 24px;
+                  height: 24px;
+                `}
+              >
+                <ArrowDropDownIcon />
+              </div>
+            </>
+          ) : null}
         </div>
-      </div>
-    </Tooltip>
+      </Tooltip>
+
+      {isImageElement || isVideoElement ? (
+        <>
+          {dropDown ? (
+            <div
+              css={css`
+                padding: 0 8px 0 16px;
+                margin-top: 25px;
+              `}
+            >
+              <div
+                css={css`
+                  display: flex;
+                  background-color: white;
+                  border-radius: 24px;
+                  padding-left: 16px;
+                  padding-right: 8.78px;
+                  align-items: center;
+                `}
+              >
+                <input
+                  type="text"
+                  onChange={(e) => setSearchValue(e.target.value)}
+                  value={searchValue}
+                  css={`
+                    outline: none;
+                    height: 34px;
+                    width: 100%;
+                    border: none;
+                  `}
+                />
+                <SearchIcon htmlColor="#495057" />
+              </div>
+
+              <div
+                css={css`
+                  margin-top: 15px;
+                  margin-left: auto;
+                  width: max-content;
+                `}
+              >
+                <Button
+                  disableTouchRipple
+                  onClick={handleClick}
+                  css={`
+                    width: 159px;
+                    height: 35px;
+                    border-radius: 24px;
+                    background: #231d2c;
+                    text-transform: capitalize;
+                    padding: 0 16px;
+                    display: flex;
+                    justify-content: space-between;
+
+                    svg {
+                      margin-left: 10px;
+                      transition: all 0.2s ease-in-out;
+                      transform: rotate(${anchorEl ? "180" : "0"}deg);
+                      > path {
+                        fill: #fff;
+                      }
+                    }
+                  `}
+                >
+                  <span
+                    css={`
+                      color: #fff;
+                      font-size: 14px;
+                      overflow: hidden;
+                      font-weight: 325;
+                      white-space: nowrap;
+                      text-overflow: ellipsis;
+                      font-family: "GothamNarrow-Book", "Helvetica Neue",
+                        sans-serif;
+                    `}
+                  >
+                    {source.label}
+                  </span>
+                  <KeyboardArrowDownIcon />
+                </Button>
+                <StyledMenu
+                  keepMounted
+                  anchorEl={anchorEl}
+                  id="breadcrumb-menu"
+                  onClose={handleClose}
+                  open={Boolean(anchorEl)}
+                >
+                  {get(currentSourceOptions, props.elementType, [{}]).map(
+                    (option: any) => (
+                      <StyledMenuItem
+                        key={option.value}
+                        onClick={() => {
+                          setSource(option);
+                          handleClose();
+                        }}
+                      >
+                        {option.label}
+                      </StyledMenuItem>
+                    )
+                  )}
+                </StyledMenu>
+              </div>
+
+              <div
+                css={css`
+                  margin-top: 21px;
+                  display: grid;
+                  row-gap: 25.75px;
+                  max-height: 40vh;
+                  overflow-y: scroll;
+                  padding-bottom: 15px;
+                `}
+              >
+                {loading
+                  ? Array(4)
+                      .fill(null)
+                      .map((_d, index: number) => (
+                        <Skeleton
+                          animation="wave"
+                          variant="rect"
+                          width="100%"
+                          height="173.25px"
+                          key={`${index}-skeleton`}
+                        />
+                      ))
+                  : data.map((d, i) =>
+                      props.elementType === "video" ? (
+                        <VideoFrame
+                          embedUrl={d.embedUrl}
+                          videoId={d.videoId}
+                          key={d.videoId}
+                          snippet={d.snippet}
+                          source={d.source}
+                          thumbnail={d.thumbnail}
+                          title={d.title}
+                          description={d.description}
+                          ownerThumbnail={d.ownerThumbnail}
+                        />
+                      ) : (
+                        <ImageFrame
+                          imageUrl={d.imageUrl}
+                          imageId={d.imageId}
+                          key={d.imageId}
+                          thumbnail={d.thumbnail}
+                          source={d.source}
+                        />
+                      )
+                    )}
+              </div>
+            </div>
+          ) : null}
+        </>
+      ) : null}
+    </div>
   );
 }
 

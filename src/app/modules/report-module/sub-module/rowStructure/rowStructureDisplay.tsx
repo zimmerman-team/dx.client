@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import get from "lodash/get";
 import { useDrop } from "react-dnd";
 import { useDebounce } from "react-use";
@@ -26,6 +26,7 @@ import {
 } from "app/state/recoil/atoms";
 import { IFramesArray } from "../../views/create/data";
 import { ToolbarPluginsType } from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
+import { css } from "styled-components";
 
 interface RowStructureDisplayProps {
   gap: string;
@@ -296,11 +297,29 @@ const Box = (props: {
     (actions) => actions.charts.mapping.reset
   );
   const [chartId, setChartId] = React.useState<string | null>(null);
-  const [displayChart, setDisplayChart] = React.useState(false);
-  const [displayTextBox, setDisplayTextBox] = React.useState(false);
+
+  const [displayMode, setDisplayMode] = useState<
+    "chart" | "text" | "image" | "video" | null
+  >(null);
+
   const [textContent, setTextContent] = React.useState<EditorState>(
     EditorState.createEmpty()
   );
+
+  const [videoContent, setVideoContent] = React.useState<{
+    videoId: string;
+    embedUrl: string;
+    snippet: any;
+    source: "youtube";
+  }>();
+
+  const [imageContent, setImageContent] = React.useState<{
+    imageId: string;
+    imageUrl: string;
+    source: "shutterstock";
+    thumbnail: string;
+  }>();
+
   const [displayBoxIcons, setDisplayBoxIcons] = React.useState(false);
   const placeholder = "Add your story...";
   const [textPlaceholderState, setTextPlaceholderState] =
@@ -327,8 +346,8 @@ const Box = (props: {
   const handleRowFrameItemAddition = (
     rowId: string,
     itemIndex: number,
-    itemContent: string | object,
-    itemContentType: "text" | "divider" | "chart"
+    itemContent: string | any,
+    itemContentType: "text" | "divider" | "chart" | "image" | "video"
   ) => {
     props.setFramesArray((prev) => {
       const tempPrev = prev.map((item) => ({ ...item }));
@@ -370,7 +389,12 @@ const Box = (props: {
     accept:
       props.rowType === "oneByFive"
         ? [ReportElementsType.TEXT, ReportElementsType.BIG_NUMBER]
-        : [ReportElementsType.TEXT, ReportElementsType.CHART],
+        : [
+            ReportElementsType.TEXT,
+            ReportElementsType.CHART,
+            ReportElementsType.IMAGE,
+            ReportElementsType.VIDEO,
+          ],
     collect: (monitor) => ({
       isOver: monitor.isOver(),
       canDrop: monitor.canDrop(),
@@ -384,8 +408,7 @@ const Box = (props: {
           textContent,
           "text"
         );
-        setDisplayTextBox(true);
-        setDisplayChart(false);
+        setDisplayMode("text");
       } else if (
         item.type === ReportElementsType.CHART ||
         item.type === ReportElementsType.BIG_NUMBER
@@ -397,16 +420,33 @@ const Box = (props: {
           "chart"
         );
         setChartId(item.value);
-        setDisplayChart(true);
-        setDisplayTextBox(false);
+        setDisplayMode("chart");
         monitor.getDropResult();
+      } else if (item.type === ReportElementsType.VIDEO) {
+        handleRowFrameItemAddition(
+          props.rowId,
+          props.itemIndex,
+          item.value,
+          "video"
+        );
+        setVideoContent(item.value);
+        setDisplayMode("video");
+      } else if (item.type === ReportElementsType.IMAGE) {
+        handleRowFrameItemAddition(
+          props.rowId,
+          props.itemIndex,
+          item.value,
+          "image"
+        );
+        setImageContent(item.value);
+        setDisplayMode("image");
       }
     },
   }));
 
   const [,] = useDebounce(
     () => {
-      if (displayTextBox) {
+      if (displayMode === "text") {
         handleRowFrameItemAddition(
           props.rowId,
           props.itemIndex,
@@ -418,6 +458,31 @@ const Box = (props: {
     1000,
     [textContent]
   );
+
+  React.useEffect(() => {
+    if (displayMode === "chart" && chartId) {
+      handleRowFrameItemAddition(
+        props.rowId,
+        props.itemIndex,
+        chartId,
+        "chart"
+      );
+    } else if (displayMode === "video") {
+      handleRowFrameItemAddition(
+        props.rowId,
+        props.itemIndex,
+        videoContent,
+        "video"
+      );
+    } else if (displayMode === "image") {
+      handleRowFrameItemAddition(
+        props.rowId,
+        props.itemIndex,
+        imageContent,
+        "image"
+      );
+    }
+  }, [chartId, displayMode, imageContent, videoContent]);
 
   let width = `${props.width}%`;
   if (containerWidth) {
@@ -446,7 +511,7 @@ const Box = (props: {
   const textResizableRef = React.useRef<HTMLDivElement>(null);
 
   const content = React.useMemo(() => {
-    if (displayTextBox) {
+    if (displayMode === "text") {
       return (
         <Resizable
           grid={[5, 5]}
@@ -479,9 +544,8 @@ const Box = (props: {
             {!viewOnlyMode && displayBoxIcons && (
               <IconButton
                 onClick={() => {
-                  setDisplayChart(false);
+                  setDisplayMode(null);
                   setChartId(null);
-                  setDisplayTextBox(false);
                   setTextContent(EditorState.createEmpty());
                   handleRowFrameItemRemoval(props.rowId, props.itemIndex);
                 }}
@@ -527,7 +591,7 @@ const Box = (props: {
       );
     }
 
-    if (displayChart && chartId) {
+    if (displayMode === "chart" && chartId) {
       return (
         <Resizable
           key={chartId}
@@ -558,9 +622,8 @@ const Box = (props: {
               <div>
                 <IconButton
                   onClick={() => {
-                    setDisplayChart(false);
+                    setDisplayMode(null);
                     setChartId(null);
-                    setDisplayTextBox(false);
                     setTextContent(EditorState.createEmpty());
                     handleRowFrameItemRemoval(props.rowId, props.itemIndex);
                   }}
@@ -628,10 +691,163 @@ const Box = (props: {
       );
     }
 
+    if (displayMode === "video") {
+      return (
+        <Resizable
+          grid={[5, 5]}
+          onResize={onResize}
+          onResizeStop={onResizeStop}
+          size={{ width: width, height: `${props.height}px` }}
+          maxWidth={!viewOnlyMode ? containerWidth : undefined}
+          minWidth={78}
+          enable={{
+            right: !viewOnlyMode,
+            bottom: !viewOnlyMode,
+            bottomRight: !viewOnlyMode,
+          }}
+          css={`
+            background: #fff;
+            overflow: hidden;
+            position: relative;
+
+            div {
+              ${viewOnlyMode && "cursor: default;"}
+            }
+          `}
+        >
+          <div
+            onMouseEnter={() => setDisplayBoxIcons(true)}
+            onMouseLeave={() => setDisplayBoxIcons(false)}
+          >
+            {!viewOnlyMode && displayBoxIcons && (
+              <IconButton
+                onClick={() => {
+                  setDisplayMode(null);
+                  setChartId(null);
+                  setTextContent(EditorState.createEmpty());
+                  handleRowFrameItemRemoval(props.rowId, props.itemIndex);
+                }}
+                css={`
+                  top: 12px;
+                  z-index: 1;
+                  right: 12px;
+                  position: absolute;
+                  padding: 4px;
+                  width: 22px;
+                  height: 22px;
+                  border-radius: 50%;
+                  background: #adb5bd;
+
+                  :hover {
+                    background: #adb5bd;
+                    svg {
+                      path {
+                        fill: #fff;
+                      }
+                    }
+                  }
+                `}
+              >
+                <DeleteIcon />
+              </IconButton>
+            )}
+
+            <iframe
+              src={videoContent?.embedUrl}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+              css={css`
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                top: 0;
+                left: 0;
+                border: none;
+                box-shadow: none;
+              `}
+            ></iframe>
+          </div>
+        </Resizable>
+      );
+    }
+
+    if (displayMode === "image") {
+      return (
+        <Resizable
+          grid={[5, 5]}
+          onResize={onResize}
+          onResizeStop={onResizeStop}
+          size={{ width: width, height: `${props.height}px` }}
+          maxWidth={!viewOnlyMode ? containerWidth : undefined}
+          minWidth={78}
+          enable={{
+            right: !viewOnlyMode,
+            bottom: !viewOnlyMode,
+            bottomRight: !viewOnlyMode,
+          }}
+          css={`
+            background: #fff;
+            overflow: hidden;
+            position: relative;
+
+            div {
+              ${viewOnlyMode && "cursor: default;"}
+            }
+          `}
+        >
+          <div
+            onMouseEnter={() => setDisplayBoxIcons(true)}
+            onMouseLeave={() => setDisplayBoxIcons(false)}
+          >
+            {!viewOnlyMode && displayBoxIcons && (
+              <IconButton
+                onClick={() => {
+                  setDisplayMode(null);
+                  setChartId(null);
+                  setTextContent(EditorState.createEmpty());
+                  handleRowFrameItemRemoval(props.rowId, props.itemIndex);
+                }}
+                css={`
+                  top: 12px;
+                  z-index: 1;
+                  right: 12px;
+                  position: absolute;
+                  padding: 4px;
+                  width: 22px;
+                  height: 22px;
+                  border-radius: 50%;
+                  background: #adb5bd;
+
+                  :hover {
+                    background: #adb5bd;
+                    svg {
+                      path {
+                        fill: #fff;
+                      }
+                    }
+                  }
+                `}
+              >
+                <DeleteIcon />
+              </IconButton>
+            )}
+            <img
+              src={imageContent?.imageUrl}
+              alt={imageContent?.imageId}
+              css={css`
+                width: 100%;
+                height: ${props.height}px;
+                object-fit: contain;
+              `}
+            />
+          </div>
+        </Resizable>
+      );
+    }
+
     return null;
   }, [
-    displayTextBox,
-    displayChart,
+    displayMode,
     chartId,
     textContent,
     viewOnlyMode,
@@ -645,26 +861,19 @@ const Box = (props: {
     if (props.previewItem) {
       if (typeof props.previewItem === "string") {
         setChartId(props.previewItem);
-        setDisplayChart(true);
-        setDisplayTextBox(false);
+        setDisplayMode("chart");
+      } else if (get(props.previewItem, "embedUrl", null)) {
+        setVideoContent(props.previewItem);
+        setDisplayMode("video");
+      } else if (get(props.previewItem, "imageUrl", null)) {
+        setImageContent(props.previewItem);
+        setDisplayMode("image");
       } else {
         setTextContent(props.previewItem);
-        setDisplayTextBox(true);
-        setDisplayChart(false);
+        setDisplayMode("text");
       }
     }
   }, [props.previewItem]);
-
-  React.useEffect(() => {
-    if (displayChart && chartId) {
-      handleRowFrameItemAddition(
-        props.rowId,
-        props.itemIndex,
-        chartId,
-        "chart"
-      );
-    }
-  }, [chartId, displayChart]);
 
   let border = "none";
   if (isOver) {

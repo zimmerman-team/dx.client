@@ -22,7 +22,7 @@ export interface IFramesArray {
   contentWidths: number[];
   contentHeights: number[];
   content: (object | string | null)[];
-  contentTypes: ("text" | "divider" | "chart" | null)[];
+  contentTypes: ("text" | "divider" | "chart" | "video" | "image" | null)[];
   structure:
     | null
     | "oneByOne"
