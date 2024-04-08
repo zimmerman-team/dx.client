@@ -864,7 +864,6 @@ function ElementItem(props: {
     1000,
     [searchValue, props.elementType, source]
   );
-  console.log(loading, "loading");
 
   return (
     <div
