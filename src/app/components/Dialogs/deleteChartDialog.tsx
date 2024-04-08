@@ -39,7 +39,7 @@ export default function DeleteChartDialog(props: Props) {
   const classes = useStyles();
 
   const onInputEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
+    if (e.key === "Enter" && e.currentTarget.value === "DELETE") {
       props.handleDelete(props.cardId as number);
     }
   };

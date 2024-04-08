@@ -69,7 +69,9 @@ export default function ReportModule() {
   const framesArrayRef = React.useRef<IFramesArray[]>([]);
   const headerDetailsRef = React.useRef<IHeaderDetails>({} as IHeaderDetails);
 
-  const [autoSave, setAutoSave] = React.useState<boolean>(false);
+  const [autoSave, setAutoSave] = React.useState<{
+    isAutoSaveEnabled: boolean;
+  }>({ isAutoSaveEnabled: false });
 
   /** static toolbar states */
   const [plugins, setPlugins] = React.useState<ToolbarPluginsType>([]);
@@ -464,8 +466,7 @@ export default function ReportModule() {
     setRightPanelView("elements");
     setRightPanelOpen(true);
     setReportPreviewMode(false);
-    // setHasSubHeaderTitleFocused(false);
-    setAutoSave(false);
+    setAutoSave({ isAutoSaveEnabled: false });
   };
 
   const onSave = async (type: "create" | "edit") => {
@@ -532,7 +533,7 @@ export default function ReportModule() {
       onSave("edit");
     },
     2 * 1000,
-    autoSave,
+    autoSave.isAutoSaveEnabled,
     [framesArray, reportName, headerDetails]
   );
 
@@ -563,7 +564,7 @@ export default function ReportModule() {
     <DndProvider backend={HTML5Backend}>
       {!reportError401 && view !== "ai-template" && view !== "initial" && (
         <ReportSubheaderToolbar
-          autoSave={autoSave}
+          autoSave={autoSave.isAutoSaveEnabled}
           setAutoSave={setAutoSave}
           onReportSave={onSave}
           setName={setReportName}

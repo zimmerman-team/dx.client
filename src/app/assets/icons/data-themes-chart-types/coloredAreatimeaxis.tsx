@@ -10,12 +10,12 @@ export default function Icon() {
       xmlns="http://www.w3.org/2000/svg"
     >
       <g clip-path="url(#clip0_1777_32761)">
-        <path d="M0 61.166H68" stroke="#CBCBCB" stroke-width="0.25" />
-        <path d="M0 51.2559H68" stroke="#CBCBCB" stroke-width="0.25" />
-        <path d="M0 41.0049H68" stroke="#CBCBCB" stroke-width="0.25" />
-        <path d="M0 30.7539H68" stroke="#CBCBCB" stroke-width="0.25" />
-        <path d="M0 20.8438H68" stroke="#CBCBCB" stroke-width="0.25" />
-        <path d="M0 10.5928H68" stroke="#CBCBCB" stroke-width="0.25" />
+        <path d="M0 61.166H68" stroke="#CBCBCB" strokeWidth="0.25" />
+        <path d="M0 51.2559H68" stroke="#CBCBCB" strokeWidth="0.25" />
+        <path d="M0 41.0049H68" stroke="#CBCBCB" strokeWidth="0.25" />
+        <path d="M0 30.7539H68" stroke="#CBCBCB" strokeWidth="0.25" />
+        <path d="M0 20.8438H68" stroke="#CBCBCB" strokeWidth="0.25" />
+        <path d="M0 10.5928H68" stroke="#CBCBCB" strokeWidth="0.25" />
         <path
           d="M1.36368 36.6965L0 38.1762V48L2.5 45.0074L12 45.2794L14.625 48H17.75L30.001 45.8235L37.5 46.6397L42.3687 44.7353L44.5 47.4559L51.82 44.4632L54 45.8235L57 44.4632L63.0231 45.0074L68 48V11L66.8802 12.2818H65.8848L64.2673 13.5636L63.0231 14.8453L61.7788 17.6652H60.2857L58.7927 19.7161L55.8065 23.4927L51.82 27.9195L50.4563 29.2012H47.7289L45.1061 30.9957L43.8618 34.072L42.3687 37.1518L40.5024 39.3145L39.5468 42.0463L38.1831 39.2007L36.8194 37.1518L35.4558 41.9325L34.0921 43.0707L32.7284 41.7048L31.3647 40.7942L30.001 41.8187L28.6373 39.3145L27.2737 43.2984V38.7454L26.3181 35.2132L23 43.0707L22.461 40.6804H21.8189L20.4552 38.1762L17.7279 38.7454L16.3642 38.2901L15.0005 35.5582L14.1246 38.5177L13.378 40.6804L10.9095 40.9081L9.54578 43.6399L8.1821 43.0707L6.81841 41.7048L5.45473 43.0707L4.09105 41.591L2.72737 36.0135L1.36368 36.6965Z"
           fill="#6061E5"

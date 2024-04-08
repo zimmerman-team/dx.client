@@ -13,7 +13,11 @@ export interface ReportEditViewProps {
   framesArray: IFramesArray[];
   localPickedCharts: string[];
   setReportName: React.Dispatch<React.SetStateAction<string>>;
-  setAutoSave: React.Dispatch<React.SetStateAction<boolean>>;
+  setAutoSave: React.Dispatch<
+    React.SetStateAction<{
+      isAutoSaveEnabled: boolean;
+    }>
+  >;
   handlePersistReportState: () => void;
   reportName: string;
   headerDetails: {

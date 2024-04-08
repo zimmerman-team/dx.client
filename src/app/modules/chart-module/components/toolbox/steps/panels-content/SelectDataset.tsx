@@ -90,7 +90,7 @@ function ChartToolBoxSelectDataset(props: { deselectDataset: () => void }) {
           outline: none;
           border: none;
           color: #fff;
-          ${dataset === null &&
+          ${!find(datasets, { id: dataset }) &&
           "border: 0.722px dashed #231D2C;background: #DFE3E5; color:#868E96"};
           width: 313px;
           height: 31px;

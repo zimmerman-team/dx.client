@@ -24,7 +24,6 @@ import DatasetCategoryList from "app/modules/home-module/components/Datasets/dat
 
 function ChartModuleDataView(
   props: Readonly<{
-    clearChartBuilder: () => void;
     loadDataset: (endpoint: string) => Promise<boolean>;
   }>
 ) {

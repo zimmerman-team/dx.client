@@ -57,7 +57,7 @@ export default function Icon() {
         x2="35.2651"
         y2="5.65346"
         stroke="#262C34"
-        stroke-width="2"
+        strokeWidth="2"
       />
       <line
         y1="-1"
@@ -65,7 +65,7 @@ export default function Icon() {
         y2="-1"
         transform="matrix(-0.634097 -0.773253 0.77466 -0.632378 36.2651 19.2236)"
         stroke="#262C34"
-        stroke-width="2"
+        strokeWidth="2"
       />
       <line
         y1="-0.5"
@@ -136,7 +136,7 @@ export default function Icon() {
         y2="-1"
         transform="matrix(0.638459 -0.769656 0.771075 0.636744 37.4019 19.082)"
         stroke="#262C34"
-        stroke-width="2"
+        strokeWidth="2"
       />
       <line
         x1="35.2651"
@@ -144,7 +144,7 @@ export default function Icon() {
         x2="35.2651"
         y2="23.746"
         stroke="#262C34"
-        stroke-width="2"
+        strokeWidth="2"
       />
       <line
         y1="-1"
@@ -152,7 +152,7 @@ export default function Icon() {
         y2="-1"
         transform="matrix(-0.945215 0.326449 -0.327773 -0.944756 65.7339 26.0078)"
         stroke="#262C34"
-        stroke-width="2"
+        strokeWidth="2"
       />
       <line
         y1="-1"
@@ -160,7 +160,7 @@ export default function Icon() {
         y2="-1"
         transform="matrix(-0.421777 0.9067 -0.907429 -0.420206 35.1323 38.4453)"
         stroke="#262C34"
-        stroke-width="2"
+        strokeWidth="2"
       />
       <line
         y1="-1"
@@ -168,7 +168,7 @@ export default function Icon() {
         y2="-1"
         transform="matrix(0.912269 -0.409592 0.411139 0.911573 14 60.0635)"
         stroke="#262C34"
-        stroke-width="2"
+        strokeWidth="2"
       />
       <line
         y1="-1"
@@ -176,7 +176,7 @@ export default function Icon() {
         y2="-1"
         transform="matrix(-0.968135 -0.25043 0.251496 -0.967858 34 36.1846)"
         stroke="#262C34"
-        stroke-width="2"
+        strokeWidth="2"
       />
       <line
         y1="-1"
@@ -184,7 +184,7 @@ export default function Icon() {
         y2="-1"
         transform="matrix(-0.545612 -0.838038 0.839166 -0.543875 45.8501 52.0322)"
         stroke="#262C34"
-        stroke-width="2"
+        strokeWidth="2"
       />
       <line
         y1="-1"
@@ -192,7 +192,7 @@ export default function Icon() {
         y2="-1"
         transform="matrix(0.974503 0.224376 -0.225344 0.974279 45.8501 52.0322)"
         stroke="#262C34"
-        stroke-width="2"
+        strokeWidth="2"
       />
       <ellipse cx="66" cy="25.9411" rx="3.99999" ry="3.99093" fill="#73D3CD" />
       <ellipse

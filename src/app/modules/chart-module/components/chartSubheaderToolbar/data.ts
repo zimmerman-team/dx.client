@@ -12,12 +12,26 @@ export interface SubheaderToolbarProps {
   setStopInitializeFramesWidth?: (value: boolean) => void;
   handlePersistReportState?: () => void;
   isPreviewView: boolean;
+  setAutoSaveState: React.Dispatch<
+    React.SetStateAction<{
+      isAutoSaveEnabled: boolean;
+      enableAutoSaveSwitch: boolean;
+    }>
+  >;
+  autoSave: boolean;
+  onSave: () => void;
+  enableAutoSaveSwitch: boolean;
+  savedChanges: boolean;
 }
 
 export interface ReportSubheaderToolbarProps {
   name: string;
   autoSave: boolean;
-  setAutoSave: (value: boolean) => void;
+  setAutoSave: React.Dispatch<
+    React.SetStateAction<{
+      isAutoSaveEnabled: boolean;
+    }>
+  >;
   visualOptions?: any;
   onReportSave: (type: "create" | "edit") => Promise<void>;
   setName: (name: string) => void;

@@ -10,7 +10,7 @@ import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
 
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import { uniqueId, filter, isEmpty } from "lodash";
-import { Button, IconButton } from "@material-ui/core";
+import { Box, Button, IconButton } from "@material-ui/core";
 import ToolboxSubheader from "app/modules/chart-module/components/toolbox/steps/sub-header";
 import { ReactComponent as DateIcon } from "app/modules/chart-module/assets/date.svg";
 import CloseIcon from "@material-ui/icons/Close";
@@ -24,10 +24,12 @@ import {
 } from "app/modules/chart-module/data";
 import { Dropdown } from "react-bootstrap";
 import { areAllRequiredDimensionsMapped } from "app/hooks/useChartsRawData";
+import Skeleton from "@material-ui/lab/Skeleton";
 
 interface ChartToolBoxMappingProps {
   dataTypes: any;
   dimensions: any[];
+  loading: boolean;
   setChartFromAPI: (
     value: React.SetStateAction<ChartRenderedItem | null>
   ) => void;
@@ -43,7 +45,11 @@ interface ChartToolBoxMappingItemProps {
   type: "string" | "number" | "date";
   nonStaticDimensionsId: number;
   nonStaticDimensionsIndex: number;
-  setNonStaticDimensions: React.Dispatch<React.SetStateAction<any[]>>;
+  handleNonStaticDimensionsUpdate: (
+    nonStaticDimensionsId: number,
+    mappingItemValue: any
+  ) => void;
+  // setNonStaticDimensions: React.Dispatch<React.SetStateAction<any[]>>;
   nonStaticDimensions: any[];
   displayCloseButton?: boolean;
   showAggregation: boolean;
@@ -51,8 +57,8 @@ interface ChartToolBoxMappingItemProps {
 }
 
 const typeIcon = {
-  string: <p>Aa</p>,
-  number: <p>#</p>,
+  string: <span>Aa</span>,
+  number: <span>#</span>,
   date: <DateIcon />,
 };
 
@@ -68,26 +74,79 @@ export const AGGREGATIONS_LABELS = {
   csvDistinct: "CSV (unique)",
 };
 
+const DimensionContainerSkeleton = () => {
+  return (
+    <div
+      css={`
+        width: 100%;
+        padding: 16px;
+        /* height: 89px; */
+        border-radius: 11px;
+        background: #dfe3e5;
+        margin-top: 16px;
+      `}
+    >
+      <Skeleton
+        animation="wave"
+        variant="rect"
+        width="100%"
+        height={39}
+        style={{ borderRadius: "25px" }}
+      />
+
+      <Skeleton
+        animation="wave"
+        variant="rect"
+        width="100%"
+        height={39}
+        style={{ borderRadius: "25px", marginTop: "16px" }}
+      />
+    </div>
+  );
+};
+
 export function ChartToolBoxMapping(props: Readonly<ChartToolBoxMappingProps>) {
   const staticDimensions = filter(props.dimensions, (d: any) => d.static);
-  const [nonStaticDimensions, setNonStaticDimensions] = React.useState(
-    filter(props.dimensions, (d: any) => !d.static).map((d: any) => {
+  const nonStaticDimensions = React.useMemo(() => {
+    return filter(props.dimensions, (d: any) => !d.static).map((d: any) => {
       return {
         ...d,
         mappedValues: [],
         mapValuesDisplayed: false,
       };
-    })
-  );
+    });
+  }, [props.dimensions]);
+
+  const [nonStaticDimensionsState, setNonStaticDimensionsState] =
+    React.useState(nonStaticDimensions);
 
   const mapping = useStoreState((state) => state.charts.mapping.value);
+
   const handleButtonToggle = (id: string) => {
-    setNonStaticDimensions((prev) => {
+    setNonStaticDimensionsState((prev) => {
       return prev.map((data) => {
         if (data.id === id) {
           return {
             ...data,
             mapValuesDisplayed: !data.mapValuesDisplayed,
+          };
+        }
+        return data;
+      });
+    });
+  };
+
+  const handleNonStaticDimensionsUpdate = (
+    nonStaticDimensionsId: number,
+    mappingItemValue: any
+  ) => {
+    setNonStaticDimensionsState((prev) => {
+      return prev.map((data) => {
+        if (data.id === nonStaticDimensionsId) {
+          return {
+            ...data,
+            mappedValues: [...data.mappedValues, mappingItemValue],
+            mapValuesDisplayed: false,
           };
         }
         return data;
@@ -109,7 +168,7 @@ export function ChartToolBoxMapping(props: Readonly<ChartToolBoxMappingProps>) {
       }
     });
 
-    setNonStaticDimensions(updatedNonStaticDimensions);
+    setNonStaticDimensionsState(updatedNonStaticDimensions);
   }, [mapping]);
 
   // empty rendered chart when req mapping fields are not filled
@@ -195,29 +254,45 @@ export function ChartToolBoxMapping(props: Readonly<ChartToolBoxMappingProps>) {
             position: relative;
           `}
         >
-          {nonStaticDimensions?.map(
-            (dimension: any, dimensionIndex: number) => (
-              <NonStaticDimensionContainer
-                dataTypes={props.dataTypes}
-                key={dimension.id}
-                dimension={dimension}
-                dimensionIndex={dimensionIndex}
-                nonStaticDimensions={nonStaticDimensions}
-                setNonStaticDimensions={setNonStaticDimensions}
-                nonStaticDimensionsId={dimension.id}
-                getValidDataTypes={getValidDataTypes}
-                getSelectButtonLabel={getSelectButtonLabel}
-                handleButtonToggle={handleButtonToggle}
-              />
-            )
+          {props.loading ? (
+            <div
+              css={`
+                width: 100%;
+              `}
+            >
+              <Box height={16} />
+              <DimensionContainerSkeleton />
+              <DimensionContainerSkeleton />
+            </div>
+          ) : (
+            <>
+              {nonStaticDimensionsState?.map(
+                (dimension: any, dimensionIndex: number) => (
+                  <NonStaticDimensionContainer
+                    dataTypes={props.dataTypes}
+                    key={dimension.id}
+                    dimension={dimension}
+                    dimensionIndex={dimensionIndex}
+                    nonStaticDimensions={nonStaticDimensionsState}
+                    handleNonStaticDimensionsUpdate={
+                      handleNonStaticDimensionsUpdate
+                    }
+                    nonStaticDimensionsId={dimension.id}
+                    getValidDataTypes={getValidDataTypes}
+                    getSelectButtonLabel={getSelectButtonLabel}
+                    handleButtonToggle={handleButtonToggle}
+                  />
+                )
+              )}
+              {staticDimensions &&
+                staticDimensions.map((dimension: any) => (
+                  <StaticDimensionContainer
+                    key={dimension.id}
+                    dimension={dimension}
+                  />
+                ))}
+            </>
           )}
-          {staticDimensions &&
-            staticDimensions.map((dimension: any) => (
-              <StaticDimensionContainer
-                key={dimension.id}
-                dimension={dimension}
-              />
-            ))}
         </div>
       </div>
     </div>
@@ -228,7 +303,10 @@ const NonStaticDimensionContainer = (props: {
   dimension: any;
   dimensionIndex: number;
   nonStaticDimensions: any[];
-  setNonStaticDimensions: React.Dispatch<React.SetStateAction<any[]>>;
+  handleNonStaticDimensionsUpdate: (
+    nonStaticDimensionsId: number,
+    mappingItemValue: any
+  ) => void;
   nonStaticDimensionsId: number;
   dataTypes: any[];
   getValidDataTypes: (dimensionTypes: string[], searchValue: string) => any;
@@ -332,7 +410,9 @@ const NonStaticDimensionContainer = (props: {
               marginBottom="16px"
               mappingItemValue={mappingItemValue}
               dimension={props.dimension}
-              setNonStaticDimensions={props.setNonStaticDimensions}
+              handleNonStaticDimensionsUpdate={
+                props.handleNonStaticDimensionsUpdate
+              }
               dataTypes={props.dataTypes}
               nonStaticDimensionsId={props.dimension.id}
               nonStaticDimensionsIndex={props.dimensionIndex}
@@ -406,7 +486,9 @@ const NonStaticDimensionContainer = (props: {
                 marginBottom="16px"
                 mappingItemValue={mappingItemValue}
                 dimension={props.dimension}
-                setNonStaticDimensions={props.setNonStaticDimensions}
+                handleNonStaticDimensionsUpdate={
+                  props.handleNonStaticDimensionsUpdate
+                }
                 dataTypes={props.dataTypes}
                 nonStaticDimensionsId={props.dimension.id}
                 nonStaticDimensionsIndex={props.dimensionIndex}
@@ -469,7 +551,6 @@ function ChartToolBoxMappingItem(
   props: Readonly<ChartToolBoxMappingItemProps>
 ) {
   const { index, dimension, dataTypes } = props;
-
   const setMapping = useStoreActions(
     (actions) => actions.charts.mapping.setValue
   );
@@ -498,18 +579,10 @@ function ChartToolBoxMappingItem(
       dimension.validTypes?.includes(columnDataType);
 
     if (isValid) {
-      props.setNonStaticDimensions((prev) => {
-        return prev.map((data) => {
-          if (data.id === props.nonStaticDimensionsId) {
-            return {
-              ...data,
-              mappedValues: [...data.mappedValues, props.mappingItemValue],
-              mapValuesDisplayed: false,
-            };
-          }
-          return data;
-        });
-      });
+      props.handleNonStaticDimensionsUpdate(
+        props.nonStaticDimensionsId,
+        props.mappingItemValue
+      );
 
       const mappingFromStorage = get(
         JSON.parse(
