@@ -19,6 +19,7 @@ export default function Filter(
     sortValue: string;
     setTableView: React.Dispatch<React.SetStateAction<boolean>>;
     tableView: boolean;
+    terminateSearch?: () => void;
   }>
 ) {
   const inputRef = React.useRef<HTMLInputElement>(null);
@@ -35,6 +36,7 @@ export default function Filter(
     { label: "Name", value: "name" },
   ];
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    props.terminateSearch && props.terminateSearch();
     props.setSearchValue(e.target.value);
   };
 
@@ -65,6 +67,7 @@ export default function Filter(
           <IconButton
             onClick={() => {
               props.setSearchValue("");
+              props.terminateSearch && props.terminateSearch();
               setOpenSearch(false);
             }}
             css={`

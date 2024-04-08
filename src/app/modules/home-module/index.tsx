@@ -333,6 +333,7 @@ export default function HomeModule() {
                       value={searchValue ?? ""}
                       placeholder="eg. Kenya"
                       onChange={handleSearch}
+                      data-cy="home-search-input"
                     />
                     <IconButton
                       onClick={() => {
@@ -358,6 +359,7 @@ export default function HomeModule() {
                       inputRef.current?.focus();
                     }}
                     css={iconButtonCss(openSearch)}
+                    data-cy="home-search-button"
                   >
                     <SearchIcon />
                   </IconButton>

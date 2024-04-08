@@ -3,6 +3,7 @@ declare namespace Cypress {
     loginToAuth0(username: string, password: string): Chainable<any>;
     saveLocalStorageCache: () => {};
     restoreLocalStorageCache: () => {};
+    setGoogleAccessToken: () => {};
     hover: () => {};
     drag: () => {};
     drop: () => {};

@@ -108,6 +108,9 @@ describe("Testing reports on DX", () => {
     cy.wait("@fetchReport");
 
     cy.visit("/");
+
+    cy.wait("@fetchReports");
+
     cy.get('[data-cy="home-charts-tab"]').scrollIntoView().click();
 
     cy.get('[data-cy="home-reports-tab"]').scrollIntoView().click();
