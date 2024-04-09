@@ -3,6 +3,7 @@ import { WarningOutlined } from "@material-ui/icons";
 
 export function NotAuthorizedMessageModule(props: {
   asset: "chart" | "report";
+  action: "view" | "edit" | "delete";
 }) {
   return (
     <div
@@ -21,7 +22,9 @@ export function NotAuthorizedMessageModule(props: {
       `}
     >
       <WarningOutlined htmlColor="#e75656" fontSize="large" />
-      <p>You are not authorized to view this {props.asset}</p>
+      <p>
+        You are not authorized to {props.action} this {props.asset}
+      </p>
     </div>
   );
 }

@@ -7,7 +7,7 @@ import useResizeObserver from "use-resize-observer";
 import Container from "@material-ui/core/Container";
 import { EditorState, RawDraftContentState, convertFromRaw } from "draft-js";
 import { useUpdateEffect } from "react-use";
-import { withAuthenticationRequired } from "@auth0/auth0-react";
+import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 import { PlaceHolder } from "app/modules/report-module/views/create";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import { ReportModel, emptyReport } from "app/modules/report-module/data";
@@ -30,10 +30,12 @@ import RowFrame from "../../sub-module/rowStructure";
 import TourGuide from "app/components/Dialogs/TourGuide";
 import useCookie from "@devhammed/use-cookie";
 import { get } from "lodash";
+import { ChartAPIModel, emptyChartAPI } from "app/modules/chart-module/data";
 
 function ReportEditView(props: ReportEditViewProps) {
   const { page } = useParams<{ page: string }>();
   const token = useStoreState((state) => state.AuthToken.value);
+  const { isAuthenticated, user } = useAuth0();
 
   const { ref, width } = useResizeObserver<HTMLDivElement>();
 
@@ -67,6 +69,11 @@ function ReportEditView(props: ReportEditViewProps) {
 
   const reportError401 = useStoreState(
     (state) => state.reports.ReportGet.errorData
+  );
+
+  const loadedChart = useStoreState(
+    (state) =>
+      (state.charts.ChartGet.crudData ?? emptyChartAPI) as ChartAPIModel
   );
 
   function deleteFrame(id: string) {
@@ -189,9 +196,13 @@ function ReportEditView(props: ReportEditViewProps) {
     }
   }, [reportData]);
 
+  const canChartEditDelete = React.useMemo(() => {
+    return isAuthenticated && loadedChart && loadedChart.owner === user?.sub;
+  }, [user, isAuthenticated, loadedChart]);
+
   // console.log(reportError401, "reportError401");
-  if (reportError401) {
-    return <NotAuthorizedMessageModule asset="report" />;
+  if (reportError401 || !canChartEditDelete) {
+    return <NotAuthorizedMessageModule asset="report" action="edit" />;
   }
 
   return (

@@ -152,7 +152,9 @@ export function ReportPreviewView(props: {
       />
       <Container id="content-container" maxWidth="lg" ref={ref}>
         <Box height={45} />
-        {Error401 && <NotAuthorizedMessageModule asset="report" />}
+        {Error401 && (
+          <NotAuthorizedMessageModule asset="report" action="view" />
+        )}
         {!Error401 &&
           get(reportPreviewData, "rows", []).map((rowFrame, index) => {
             const contentTypes = rowFrame.items.map((item) => {
