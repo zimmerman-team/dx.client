@@ -17,6 +17,7 @@ import AISwitch from "../../components/switch/AISwitch";
 import { useRecoilState } from "recoil";
 import { isChartAIAgentActive } from "app/state/recoil/atoms";
 import axios from "axios";
+import { get } from "lodash";
 
 function ChartBuilderChartType(props: ChartBuilderChartTypeProps) {
   useTitle("DX DataXplorer - Chart Type");
@@ -31,8 +32,8 @@ function ChartBuilderChartType(props: ChartBuilderChartTypeProps) {
   const loadChartTypesSuggestions = useStoreActions(
     (actions) => actions.charts.ChartTypesSuggest.fetch
   );
-  const chartTypeSuggestions = useStoreState(
-    (state) => state.charts.ChartTypesSuggest.crudData
+  const chartTypeSuggestions = useStoreState((state) =>
+    get(state.charts.ChartTypesSuggest, "crudData", [])
   ) as { chartType: keyof typeof chartTypesFromMiddleWare }[] | null;
   const setChartType = useStoreActions(
     (actions) => actions.charts.chartType.setValue
@@ -40,6 +41,7 @@ function ChartBuilderChartType(props: ChartBuilderChartTypeProps) {
   const clearMapping = useStoreActions(
     (actions) => actions.charts.mapping.reset
   );
+  console.log(chartTypeSuggestions, "chartTypeSuggestions");
 
   const onChartTypeChange =
     (chartTypeId: string) => (e: React.MouseEvent<HTMLDivElement>) => {
@@ -63,12 +65,11 @@ function ChartBuilderChartType(props: ChartBuilderChartTypeProps) {
     }
   }, [dataset]);
 
-  console.log(chartTypeSuggestions, "chartTypeSuggestions");
-
   const aIChartSuggestions = (ct: string) => {
     if (!chartTypeSuggestions) return [];
 
     return (
+      chartTypeSuggestions.length &&
       chartTypeSuggestions?.findIndex(
         (c: { chartType: keyof typeof chartTypesFromMiddleWare }) =>
           chartTypesFromMiddleWare[c.chartType] === ct
@@ -132,7 +133,6 @@ function ChartBuilderChartType(props: ChartBuilderChartTypeProps) {
         >
           <Grid container item spacing={2}>
             {echartTypes(false).map((ct: ChartTypeModel) => {
-              console.log(aIChartSuggestions(ct.id), "aIChartSuggestions");
               return (
                 <Grid item xs={12} sm={6} md={4} key={ct.id}>
                   <div

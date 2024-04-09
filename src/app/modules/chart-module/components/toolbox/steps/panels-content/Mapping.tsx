@@ -26,6 +26,9 @@ import { Dropdown } from "react-bootstrap";
 import { areAllRequiredDimensionsMapped } from "app/hooks/useChartsRawData";
 import Skeleton from "@material-ui/lab/Skeleton";
 import { chartTypesFromMiddleWare } from "app/modules/chart-module/routes/chart-type/data";
+import { useParams } from "react-router-dom";
+import { isChartAIAgentActive } from "app/state/recoil/atoms";
+import { useRecoilState } from "recoil";
 
 interface ChartToolBoxMappingProps {
   dataTypes: any;
@@ -55,6 +58,8 @@ interface ChartToolBoxMappingItemProps {
   displayCloseButton?: boolean;
   showAggregation: boolean;
   handleButtonToggle?: (id: string) => void;
+  selectedAIChartSuggestion: (ct: string) => {} | undefined;
+  isMappingValid: boolean;
 }
 
 const typeIcon = {
@@ -107,6 +112,8 @@ const DimensionContainerSkeleton = () => {
 };
 
 export function ChartToolBoxMapping(props: Readonly<ChartToolBoxMappingProps>) {
+  const { page, view } = useParams<{ page: string; view?: string }>();
+  // console.log(page, "page");
   const staticDimensions = filter(props.dimensions, (d: any) => d.static);
   const nonStaticDimensions = React.useMemo(() => {
     return filter(props.dimensions, (d: any) => !d.static).map((d: any) => {
@@ -123,10 +130,12 @@ export function ChartToolBoxMapping(props: Readonly<ChartToolBoxMappingProps>) {
 
   const mapping = useStoreState((state) => state.charts.mapping.value);
   const chartType = useStoreState((state) => state.charts.chartType.value);
+  const [isAiActive, setIsAiActive] = useRecoilState(isChartAIAgentActive);
 
   const chartTypeSuggestions = useStoreState(
     (state) => state.charts.ChartTypesSuggest.crudData
   ) as { chartType: keyof typeof chartTypesFromMiddleWare }[] | null;
+
   const handleButtonToggle = (id: string) => {
     setNonStaticDimensionsState((prev) => {
       return prev.map((data) => {
@@ -150,23 +159,30 @@ export function ChartToolBoxMapping(props: Readonly<ChartToolBoxMappingProps>) {
     );
   };
 
-  React.useEffect(() => {
-    //auto map dimensions for AI charts
-    const aiChart: any = selectedAIChartSuggestion(chartType as string);
-    console.log(aiChart, "aiChart");
-    if (aiChart && nonStaticDimensionsState) {
-      console.log("heree", nonStaticDimensionsState);
-      nonStaticDimensionsState.forEach((dimension: any) => {
-        if (aiChart.hasOwnProperty(dimension.name)) {
-          console.log("hass", aiChart[dimension.name]);
-          handleNonStaticDimensionsUpdate(
-            dimension.id,
-            aiChart[dimension.name]
-          );
-        }
-      });
-    }
-  }, [nonStaticDimensions]);
+  // React.useEffect(() => {
+  //   //auto map dimensions for AI charts
+  //   const aiChart: any = selectedAIChartSuggestion(chartType as string);
+  //   console.log(aiChart, "aiChart");
+  //   console.log(nonStaticDimensionsState, "nonStaticDimensionsState");
+  //   console.log(isAiActive, "isAiActive");
+  //   if (isAiActive && aiChart && nonStaticDimensionsState && page !== "new") {
+  //     console.log("hereee");
+  //     nonStaticDimensionsState.forEach((dimension: any) => {
+  //       if (
+  //         aiChart.hasOwnProperty(dimension.name) &&
+  //         !areAllRequiredDimensionsMapped(props.dimensions, mapping)
+  //       ) {
+  //         console.log("hass", aiChart[dimension.name]);
+  //         handleNonStaticDimensionsUpdate(
+  //           dimension.id,
+  //           aiChart[dimension.name]
+  //         );
+  //       }
+  //     });
+  //   }
+  // }, [nonStaticDimensions, chartType, isAiActive, chartTypeSuggestions, page]);
+
+  console.log("valid", mapping);
 
   const handleNonStaticDimensionsUpdate = (
     nonStaticDimensionsId: number,
@@ -204,8 +220,12 @@ export function ChartToolBoxMapping(props: Readonly<ChartToolBoxMappingProps>) {
   }, [mapping]);
 
   // empty rendered chart when req mapping fields are not filled
+  const isMappingValid = areAllRequiredDimensionsMapped(
+    props.dimensions,
+    mapping
+  );
   React.useEffect(() => {
-    if (!areAllRequiredDimensionsMapped(props.dimensions, mapping)) {
+    if (!isMappingValid) {
       props.setChartFromAPI(null);
     }
   }, [mapping]);
@@ -313,6 +333,8 @@ export function ChartToolBoxMapping(props: Readonly<ChartToolBoxMappingProps>) {
                     getValidDataTypes={getValidDataTypes}
                     getSelectButtonLabel={getSelectButtonLabel}
                     handleButtonToggle={handleButtonToggle}
+                    isMappingValid={isMappingValid}
+                    selectedAIChartSuggestion={selectedAIChartSuggestion}
                   />
                 )
               )}
@@ -347,6 +369,8 @@ const NonStaticDimensionContainer = (props: {
     multiple: boolean
   ) => any;
   handleButtonToggle: (id: string) => void;
+  isMappingValid: boolean;
+  selectedAIChartSuggestion: (ct: string) => {} | undefined;
 }) => {
   const [searchValue, setSearchValue] = React.useState("");
   const validTypes = Object.keys(
@@ -452,6 +476,8 @@ const NonStaticDimensionContainer = (props: {
               displayCloseButton
               showAggregation
               handleButtonToggle={props.handleButtonToggle}
+              isMappingValid={props.isMappingValid}
+              selectedAIChartSuggestion={props.selectedAIChartSuggestion}
             />
           );
         })}
@@ -526,6 +552,8 @@ const NonStaticDimensionContainer = (props: {
                 nonStaticDimensionsIndex={props.dimensionIndex}
                 nonStaticDimensions={props.nonStaticDimensions}
                 showAggregation={false}
+                isMappingValid={props.isMappingValid}
+                selectedAIChartSuggestion={props.selectedAIChartSuggestion}
               />
             );
           })}
@@ -587,10 +615,15 @@ function ChartToolBoxMappingItem(
     (actions) => actions.charts.mapping.setValue
   );
   const mapping = useStoreState((state) => state.charts.mapping.value);
-
+  const chartType = useStoreState((state) => state.charts.chartType.value);
+  const [isAiActive, setIsAiActive] = useRecoilState(isChartAIAgentActive);
   const removeMappingValue = useStoreActions(
     (state) => state.charts.mapping.removeMappingValue
   );
+  const chartTypeSuggestions = useStoreState(
+    (state) => state.charts.ChartTypesSuggest.crudData
+  ) as { chartType: keyof typeof chartTypesFromMiddleWare }[] | null;
+  const page = useParams<{ page: string }>().page;
 
   const item = {
     type: "card",
@@ -669,6 +702,32 @@ function ChartToolBoxMappingItem(
       }
     }
   };
+
+  React.useEffect(() => {
+    //auto map dimensions for AI charts
+    const aiChart: any = props.selectedAIChartSuggestion(chartType as string);
+    console.log(aiChart, "aiChart");
+    console.log(props.nonStaticDimensions, "props.nonStaticDimensions");
+    console.log(isAiActive, "isAiActive");
+    if (isAiActive && aiChart && props.nonStaticDimensions && page !== "new") {
+      console.log("hereee");
+      props.nonStaticDimensions.forEach((dimension: any) => {
+        if (aiChart.hasOwnProperty(dimension.name) && !props.isMappingValid) {
+          console.log("hass", aiChart[dimension.name]);
+          props.handleNonStaticDimensionsUpdate(
+            dimension.id,
+            aiChart[dimension.name]
+          );
+        }
+      });
+    }
+  }, [
+    props.nonStaticDimensions,
+    chartType,
+    isAiActive,
+    chartTypeSuggestions,
+    page,
+  ]);
   const onDeleteItem = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
     e.stopPropagation();
