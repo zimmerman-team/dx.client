@@ -46,6 +46,7 @@ export default function ExternalSearch(props: {
   const terminateSearch = () => {
     abortControllerRef.current.abort();
     abortControllerRef.current = new AbortController();
+    setTotalDatasets([]);
   };
   const limit = 2;
   const handleLimitedSearch = () => {
@@ -70,8 +71,8 @@ export default function ExternalSearch(props: {
         const data = response.data;
         setLoading(false);
         if (data.length > 0 && count < maxResults) {
-          if (data.length + totalDatasets.length > maxResults) {
-            const finalData = data.slice(0, maxResults - totalDatasets.length);
+          if (data.length + count > maxResults) {
+            const finalData = data.slice(0, maxResults - count);
             setTotalDatasets((prev) => [...prev, ...finalData]);
           } else {
             setTotalDatasets((prev) => [...prev, ...data]);
