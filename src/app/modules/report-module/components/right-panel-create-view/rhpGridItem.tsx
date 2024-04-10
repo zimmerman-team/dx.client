@@ -74,25 +74,31 @@ export default function GridItem(props: Props) {
           >
             <b>{props.title}</b>
           </p>
-
-          {props.added ? (
-            <p
-              css={`
-                margin: 0;
-                width: 57px;
-                height: 17px;
-                display: flex;
-                font-size: 12px;
-                border-radius: 10px;
-                align-items: center;
-                border: 1px solid #000;
-                justify-content: center;
-                font-family: "GothamNarrow", sans-serif;
-              `}
-            >
-              Added
-            </p>
-          ) : (
+          <div
+            css={`
+              display: flex;
+              align-items: center;
+              gap: 8px;
+            `}
+          >
+            {props.added && (
+              <p
+                css={`
+                  margin: 0;
+                  width: 57px;
+                  height: 17px;
+                  display: flex;
+                  font-size: 12px;
+                  border-radius: 10px;
+                  align-items: center;
+                  border: 1px solid #000;
+                  justify-content: center;
+                  font-family: "GothamNarrow", sans-serif;
+                `}
+              >
+                Added
+              </p>
+            )}
             <IconButton
               onClick={() => props.setChartPreview(!props.chartPreview)}
               data-testid="expand-chart-button"
@@ -105,7 +111,7 @@ export default function GridItem(props: Props) {
             >
               <ExpandIcon />
             </IconButton>
-          )}
+          </div>
         </div>
 
         {props.chartPreview ? (
