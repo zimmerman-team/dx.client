@@ -39,8 +39,6 @@ import { isEmpty } from "lodash";
 import useResizeObserver from "use-resize-observer";
 import { ChartType } from "app/modules/chart-module/components/common-chart";
 import { DatasetListItemAPIModel } from "app/modules/dataset-module/data";
-import { reportRightPanelViewAtom } from "app/state/recoil/atoms";
-import { useRecoilState } from "recoil";
 import { getRequiredFieldsAndErrors } from "app/modules/chart-module/routes/mapping/utils";
 import ErrorComponent from "./components/dialog/errrorComponent";
 import axios from "axios";
@@ -111,7 +109,6 @@ export default function ChartModule() {
     isAutoSaveEnabled: editView || false,
     enableAutoSaveSwitch: editView || false,
   });
-  const setRightPanelView = useRecoilState(reportRightPanelViewAtom)[1];
 
   const setMapping = useStoreActions(
     (actions) => actions.charts.mapping.setValue

@@ -3,10 +3,6 @@ import React from "react";
 import { useRecoilState } from "recoil";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useHistory, useParams } from "react-router-dom";
-import {
-  chartFromReportAtom,
-  reportRightPanelViewAtom,
-} from "app/state/recoil/atoms";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import { isEmpty } from "lodash";
 import { Slide, SnackbarContent, useMediaQuery } from "@material-ui/core";
@@ -28,7 +24,6 @@ export function ChartModuleToolBox(props: Readonly<ChartToolBoxProps>) {
   const history = useHistory();
   const isMobile = useMediaQuery("(max-width: 767px)");
   const [isClickable, setIsClickable] = React.useState(false);
-  const setRightPanelView = useRecoilState(reportRightPanelViewAtom)[1];
 
   const dataset = useStoreState((state) => state.charts.dataset.value);
 

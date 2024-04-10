@@ -424,7 +424,7 @@ export default function ReportModule() {
       reportCreateClear();
       resetMapping();
       clearChart();
-      setRightPanelView("elements");
+      setRightPanelView("charts");
       setFramesArray([]);
     };
   }, []);
@@ -463,7 +463,7 @@ export default function ReportModule() {
       dateColor: "#ffffff",
     });
     setReportName("Untitled report");
-    setRightPanelView("elements");
+    setRightPanelView("charts");
     setRightPanelOpen(true);
     setReportPreviewMode(false);
     setAutoSave({ isAutoSaveEnabled: false });
