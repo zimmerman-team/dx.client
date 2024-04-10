@@ -1263,7 +1263,7 @@ function ChartItem(
 
   return (
     <div
-      ref={added || chartPreview ? nullRef : drag}
+      ref={added ? nullRef : drag}
       id={`chart-${props.chartIndex}`}
       data-testid={props.chartIndex === 0 ? "chart-0" : "chart-n"}
       className={
@@ -1357,7 +1357,7 @@ function EditHeaderPanelView(props: Props) {
                 color: #262c34;
               `}
               onClick={() => {
-                setCurrentView("elements");
+                setCurrentView("charts");
               }}
             >
               <Close color="inherit" />
