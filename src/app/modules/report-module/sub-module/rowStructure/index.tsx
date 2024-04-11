@@ -521,6 +521,8 @@ export default function RowFrame(props: RowFrameProps) {
               <p
                 css={`
                   margin-bottom: 0;
+                  color: #000;
+                  font-family: "GothamNarrow-bold", sans-serif;
                 `}
               >
                 Select your row structure
