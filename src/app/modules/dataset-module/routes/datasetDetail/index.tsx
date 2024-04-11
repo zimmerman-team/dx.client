@@ -20,7 +20,7 @@ export default function DatasetDetail() {
     (actions) => actions.dataThemes.DatasetGetList.fetch
   );
 
-  const { loadDataset, sampleData, dataTotalCount, dataStats } =
+  const { loadDataset, sampleData, dataTotalCount, dataStats, dataTypes } =
     useChartsRawData({
       visualOptions: () => {},
       setVisualOptions: () => {},
@@ -56,6 +56,7 @@ export default function DatasetDetail() {
       <FinishedFragment
         data={sampleData}
         stats={dataStats}
+        dataTypes={dataTypes}
         datasetId={page}
         dataTotalCount={dataTotalCount}
         description={description as string}

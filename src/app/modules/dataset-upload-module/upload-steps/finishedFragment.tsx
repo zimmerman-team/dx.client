@@ -12,6 +12,7 @@ interface Props {
   datasetId: string;
   dataTotalCount: number;
   description: string;
+  dataTypes: never[];
 }
 
 export default function FinishedFragment(props: Props) {
@@ -122,7 +123,11 @@ export default function FinishedFragment(props: Props) {
             </button>
           </Link>
         </div>
-        <DatasetDataTable data={props.data} stats={props.stats} />
+        <DatasetDataTable
+          data={props.data}
+          stats={props.stats}
+          dataTypes={props.dataTypes}
+        />
       </div>
       <CssSnackbar
         anchorOrigin={{
