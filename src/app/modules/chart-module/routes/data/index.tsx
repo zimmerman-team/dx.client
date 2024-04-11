@@ -25,6 +25,7 @@ import DatasetCategoryList from "app/modules/home-module/components/Datasets/dat
 function ChartModuleDataView(
   props: Readonly<{
     loadDataset: (endpoint: string) => Promise<boolean>;
+    toolboxOpen: boolean;
   }>
 ) {
   useTitle("DX DataXplorer - Select Data");
@@ -197,6 +198,8 @@ function ChartModuleDataView(
         tableView={tableView}
         searchStr={searchValue as string}
         onItemClick={handleItemClick}
+        md={props.toolboxOpen ? 4 : 6}
+        lg={props.toolboxOpen ? 4 : 3}
       />
     </div>
   );
