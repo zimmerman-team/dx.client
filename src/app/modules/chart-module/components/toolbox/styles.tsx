@@ -150,7 +150,7 @@ export const mappingStyles = {
       width: 100%;
     }
     p {
-      font-family: "Roboto", sans-serif;
+      font-family: "GothamNarrow-book", sans-serif;
       font-size: 14px;
     }
     &:hover {

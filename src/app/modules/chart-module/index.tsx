@@ -168,6 +168,9 @@ export default function ChartModule() {
   const resetDataset = useStoreActions(
     (actions) => actions.charts.dataset.reset
   );
+  const clearDatasetDetails = useStoreActions(
+    (state) => state.dataThemes.DatasetGet.clear
+  );
   const datasets = useStoreState(
     (state) =>
       (state.dataThemes.DatasetGetList.crudData ??
@@ -207,6 +210,7 @@ export default function ChartModule() {
     setDataset(null);
     setDataError(false);
     setNotFound(false);
+    clearDatasetDetails();
   };
 
   const onSave = async () => {
@@ -582,11 +586,15 @@ export default function ChartModule() {
                   data={sampleData}
                   loadDataset={loadDataset}
                   stats={dataStats}
+                  dataTypes={dataTypes2}
                   filterOptionGroups={filterOptionGroups}
                 />
               </Route>
               <Route path="/chart/:page/data">
-                <ChartModuleDataView loadDataset={loadDataset} />
+                <ChartModuleDataView
+                  loadDataset={loadDataset}
+                  toolboxOpen={toolboxOpen}
+                />
               </Route>
               <Route path="/chart/:page/preview">
                 <ChartBuilderPreviewTheme
