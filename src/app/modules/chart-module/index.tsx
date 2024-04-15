@@ -77,6 +77,7 @@ export default function ChartModule() {
   const {
     loading,
     dataTypes,
+    setDataTypes,
     dataStats,
     sampleData,
     isPreviewMode,
@@ -207,6 +208,7 @@ export default function ChartModule() {
 
   const deselectDataset = () => {
     setDataset(null);
+    setChartFromAPI(null);
     setDataError(false);
     setNotFound(false);
     clearDatasetDetails();
@@ -282,11 +284,6 @@ export default function ChartModule() {
       clearTimeout(timeout);
     };
   }, [editChartSuccess]);
-
-  React.useEffect(() => {
-    //empty chart when chart type and or  dataset types changes
-    setChartFromAPI(null);
-  }, [chartType, dataset]);
 
   React.useEffect(() => {
     //set chart name to selected dataset if chart name has not been focused
@@ -382,6 +379,7 @@ export default function ChartModule() {
     setChartName("Untitled Chart");
     setDataError(false);
     setNotFound(false);
+    setDataTypes([]);
   }
   function clearChartBuilder() {
     console.log("--about to reset chart states");
@@ -581,6 +579,7 @@ export default function ChartModule() {
                 <ChartBuilderChartType
                   loading={loading}
                   loadDataset={loadDataset}
+                  setChartFromAPI={setChartFromAPI}
                 />
               </Route>
               <Route path="/chart/:page/preview-data">
@@ -597,6 +596,7 @@ export default function ChartModule() {
                 <ChartModuleDataView
                   loadDataset={loadDataset}
                   toolboxOpen={toolboxOpen}
+                  setChartFromAPI={setChartFromAPI}
                 />
               </Route>
               <Route path="/chart/:page/preview">

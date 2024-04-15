@@ -35,6 +35,7 @@ function ChartBuilderChartType(props: ChartBuilderChartTypeProps) {
   const onChartTypeChange =
     (chartTypeId: string) => (e: React.MouseEvent<HTMLDivElement>) => {
       clearMapping();
+      props.setChartFromAPI(null);
       setChartType(chartType === chartTypeId ? null : chartTypeId);
     };
 

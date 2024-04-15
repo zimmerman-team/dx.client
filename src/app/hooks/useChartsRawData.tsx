@@ -331,6 +331,7 @@ export function useChartsRawData(props: {
     error401,
     dataError,
     dataTypes,
+    setDataTypes,
     dataTypesFromRenderedChart,
     dataStats,
     sampleData,

@@ -21,11 +21,15 @@ import { ReactComponent as GridIcon } from "app/modules/home-module/assets/grid-
 import { ReactComponent as CloseIcon } from "app/modules/home-module/assets/close-icon.svg";
 import { ReactComponent as SearchIcon } from "app/modules/home-module/assets/search-fill.svg";
 import DatasetCategoryList from "app/modules/home-module/components/Datasets/datasetCategoryList";
+import { ChartRenderedItem } from "app/modules/chart-module/data";
 
 function ChartModuleDataView(
   props: Readonly<{
     loadDataset: (endpoint: string) => Promise<boolean>;
     toolboxOpen: boolean;
+    setChartFromAPI: (
+      value: React.SetStateAction<ChartRenderedItem | null>
+    ) => void;
   }>
 ) {
   useTitle("DX DataXplorer - Select Data");
@@ -67,6 +71,7 @@ function ChartModuleDataView(
 
   const handleItemClick = (id: string) => {
     setDataset(id);
+    props.setChartFromAPI(null);
     props.loadDataset(`chart/sample-data/${id}`).then(() => {
       history.push(`/chart/${page}/preview-data`);
     });
