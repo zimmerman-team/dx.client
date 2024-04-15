@@ -92,7 +92,12 @@ export default function FinishedFragment(props: Props) {
             justify-content: flex-end;
           `}
         >
-          <Link to={`/chart/new/chart-type`}>
+          <Link
+            to={{
+              pathname: `/chart/new/chart-type`,
+              search: "?loadataset=true",
+            }}
+          >
             <button
               css={`
                 color: #fff;

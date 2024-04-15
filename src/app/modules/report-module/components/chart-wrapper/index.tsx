@@ -75,7 +75,7 @@ export function ReportChartWrapper(props: Props) {
   }, [loadedChart]);
 
   const {
-    loadChartDataFromAPI,
+    renderChartFromAPI,
     loading,
     notFound,
     setNotFound,
@@ -109,7 +109,7 @@ export function ReportChartWrapper(props: Props) {
 
   React.useEffect(() => {
     if (props.id) {
-      loadChartDataFromAPI(undefined, props.id);
+      renderChartFromAPI(props.id);
     }
     return () => {
       resetAppliedFilters();

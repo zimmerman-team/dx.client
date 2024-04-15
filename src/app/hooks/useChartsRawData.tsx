@@ -13,6 +13,7 @@ import {
   ChartAPIModel,
   ChartRenderedItem,
 } from "app/modules/chart-module/data";
+import { isEqual } from "lodash";
 
 const getValidMapping = (
   chartFromAPI: ChartRenderedItem | null,
@@ -84,9 +85,11 @@ export function useChartsRawData(props: {
   const token = useStoreState((state) => state.AuthToken.value);
   const { visualOptions, chartFromAPI, setVisualOptions, setChartFromAPI } =
     props;
-  const loadedChart = useStoreState(
+  const loadedChartDetails = useStoreState(
     (state) => state.charts.ChartGet.crudData as ChartAPIModel
   );
+  const [renderChartFromAPIFufilled, setRenderChartFromAPIFufilled] =
+    React.useState(true);
   const { page, view } = useParams<{ page: string; view?: string }>();
   const [dataTypes, setDataTypes] = React.useState([]);
   const [dataTypesFromRenderedChart, setDataTypesFromRenderedChart] =
@@ -127,6 +130,7 @@ export function useChartsRawData(props: {
     (actions) => actions.charts.chartType.setValue
   );
   const chartDetailPage = location.pathname === `/chart/${page}`;
+  const isEditPage = view !== undefined && view !== "preview";
   const isPreviewMode =
     location.pathname === `/chart/${page}` ||
     location.pathname === `/chart/${page}/preview`;
@@ -159,7 +163,9 @@ export function useChartsRawData(props: {
         } else {
           setDataStats(response.data.stats);
           setSampleData(response.data.sample);
-          setDataTypes(response.data.dataTypes);
+          if (!isEqual(dataTypes, response.data.dataTypes)) {
+            setDataTypes(response.data.dataTypes);
+          }
           setDataTotalCount(response.data.count);
           setEnabledFilterOptionGroups(response.data.filterOptionGroups);
           setDataError(false);
@@ -181,195 +187,141 @@ export function useChartsRawData(props: {
       });
   }
 
-  async function loadChartDataFromAPI(
-    customAppliedFilters?: [
-      [
+  async function renderChartFromAPI(chartId?: string) {
+    const extraLoader = document.getElementById("extra-loader");
+    const validMapping = getValidMapping(chartFromAPI, mapping);
+    const body =
+      props.inChartWrapper || isEmpty(mapping)
+        ? {}
+        : {
+            rows: [
+              [
+                {
+                  mapping: validMapping,
+                  vizType: selectedChartType,
+                  datasetId: dataset,
+                  vizOptions: visualOptions,
+                  appliedFilters,
+                },
+              ],
+            ],
+          };
+    setLoading(true);
+    setNotFound(false);
+    setRenderChartFromAPIFufilled(false);
+    if (extraLoader) {
+      extraLoader.style.display = "block";
+    }
+    await axios
+      .post(
+        `${process.env.REACT_APP_API}/chart/${chartId ?? page}/render${
+          token === "" ? "/public" : ""
+        }`,
+        body,
         {
-          [key: string]: any[];
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
         }
-      ]
-    ],
-    chartId?: string
-  ) {
-    if ((chartId || page) && page !== "new") {
-      const body = {
-        previewAppliedFilters: customAppliedFilters
-          ? customAppliedFilters
-          : appliedFilters,
-      };
-      setLoading(true);
-      setNotFound(false);
-
-      await axios
-        .post(
-          `${process.env.REACT_APP_API}/chart/${chartId ?? page}/render${
-            token === "" ? "/public" : ""
-          }`,
-          body,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        )
-        .then((response) => {
-          const chart = response.data || {};
-          setLoading(false);
-          if (isEmpty(chart)) {
-            setNotFound(true);
-            setChartErrorMessage("This chart is no longer available.");
-          } else if (response.data.error) {
-            setChartErrorMessage(response.data.error);
-            setDataError(true);
-          } else {
-            setAllAppliedFilters(chart.appliedFilters || {});
-            setEnabledFilterOptionGroups(chart.enabledFilterOptionGroups);
-            setVisualOptions(chart.vizOptions);
-            setMapping(chart.mapping);
-            setSelectedChartType(chart.vizType);
-            setDataset(chart.datasetId);
-            setChartFromAPI(chart);
-            setDataError(false);
-          }
-        })
-        .catch((error) => {
-          console.log("API call error: " + error);
-          setLoading(false);
+      )
+      .then((response) => {
+        const chart = response.data || {};
+        setLoading(false);
+        if (extraLoader) {
+          extraLoader.style.display = "none";
+        }
+        if (isEmpty(chart)) {
           setNotFound(true);
           setChartErrorMessage("This chart is no longer available.");
+        } else if (response.data.error) {
+          setChartErrorMessage(response.data.error);
+          setDataError(true);
+        } else {
+          if (!isEqual(chart.appliedFilters, appliedFilters)) {
+            setAllAppliedFilters(chart.appliedFilters || {});
+          }
+          if (!isEqual(chart.mapping, mapping)) {
+            setMapping(chart.mapping);
+          }
+          setEnabledFilterOptionGroups(chart.enabledFilterOptionGroups);
+          setVisualOptions(chart.vizOptions);
+          setDataTypesFromRenderedChart(chart.dataTypes);
+          setSelectedChartType(chart.vizType);
+          setDataset(chart.datasetId);
+          setChartFromAPI(chart);
+          setDataError(false);
+        }
+      })
+      .finally(() => {
+        setRenderChartFromAPIFufilled(true);
+      })
+      .catch((error) => {
+        console.log("API call error: " + error.message);
+        if (extraLoader) {
+          extraLoader.style.display = "none";
+        }
+        setLoading(false);
+        setNotFound(true);
+        setChartErrorMessage("This chart is no longer available.");
 
-          setError401(error.response?.status === 401);
-        });
-    }
+        setError401(error.response?.status === 401);
+      });
   }
 
   React.useEffect(() => {
-    // calls loadChartDataFromAPI  on first render  when token is available or token changes
-    // useful when coming from outside chart builder flow straight to edit chart page
-    // if in chart wrapper component, loadChartDataFromAPI is called from chart-wrapper component
-    if (!props.inChartWrapper) {
-      if (loadedChart?.isMappingValid) {
-        loadChartDataFromAPI();
+    //used only in chart detail page
+    if (!props.inChartWrapper && isPreviewMode) {
+      if (loadedChartDetails?.isMappingValid) {
+        console.log("calling render?");
+        renderChartFromAPI();
       } else {
         // No need to call API if mapping is not valid. hence we set loading to false
         setLoading(false);
       }
     }
-  }, [token, loadedChart]);
+  }, [token, loadedChartDetails, props.inChartWrapper, page]);
 
-  useUpdateEffect(() => {
-    //calls on second render
-    // calls loadChartDataFromAPI only in chart detail page
-    if (!props.inChartWrapper && chartDetailPage && !isLoading) {
-      loadChartDataFromAPI();
-    }
-  }, [page, props.inChartWrapper, isLoading, token]);
-
-  const renderChartFromAPI = () => {
-    const extraLoader = document.getElementById("extra-loader");
-
-    const validMapping = getValidMapping(chartFromAPI, mapping);
-
-    const body = {
-      rows: [
-        [
-          {
-            mapping: validMapping,
-            vizType: selectedChartType,
-            datasetId: dataset,
-            vizOptions: visualOptions,
-            appliedFilters,
-          },
-        ],
-      ],
-    };
-
-    if (page && isrequiredMappingKeysPresent) {
-      setNotFound(false);
-      if (extraLoader) {
-        extraLoader.style.display = "block";
+  React.useEffect(() => {
+    //used when in edit page
+    if (!props.inChartWrapper && isEditPage) {
+      if (
+        (isrequiredMappingKeysPresent || loadedChartDetails?.isMappingValid) &&
+        renderChartFromAPIFufilled
+      ) {
+        console.log("calling render2?");
+        renderChartFromAPI();
+      } else {
+        // No need to call API if mapping is not valid. hence we set loading to false
+        setLoading(false);
       }
-      axios
-        .post(
-          `${process.env.REACT_APP_API}/chart/${page}/render${
-            token === "" ? "/public" : ""
-          }`,
-          body,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        )
-        .then((response) => {
-          if (extraLoader) {
-            extraLoader.style.display = "none";
-          }
-
-          const chart = response.data || {};
-          if (isEmpty(chart)) {
-            setNotFound(true);
-          } else if (response.data.error) {
-            setDataError(true);
-          } else {
-            setChartFromAPI(chart);
-            setDataTypesFromRenderedChart(chart.dataTypes);
-            setDataError(false);
-          }
-          setLoading(false);
-        })
-        .catch((error) => {
-          console.log("API call error: " + error.message);
-          if (extraLoader) {
-            extraLoader.style.display = "none";
-          }
-          setNotFound(true);
-          setLoading(false);
-          setError401(error.response?.status === 401);
-        });
-    }
-  };
-
-  useUpdateEffect(() => {
-    // calls renderChartFromAPI only in chart editable pages
-    // calls only when token is available
-    // calls only when dataset is not empty and loading state is false
-    if (
-      !loading &&
-      !props.inChartWrapper &&
-      !isPreviewMode &&
-      !isEmpty(dataset)
-    ) {
-      renderChartFromAPI();
     }
   }, [
-    page,
-    view,
     mapping,
-    selectedChartType,
-    get(chartFromAPI, "ssr", false) ? visualOptions : undefined,
     appliedFilters,
+    props.inChartWrapper,
     token,
+    isrequiredMappingKeysPresent,
+    loadedChartDetails,
   ]);
 
   React.useEffect(() => {
     /*set values with loadedchart values - 
             used when chart got saved 
             before mapping was successful, to load the chart with the saved values.
-            Since we can not get it from this /render API, we set it to loadedchart values*/
+            Since we can not get it from renderChartFromAPI() because we only call renderChartFromAPI() when mapping is valid, we set it to loadedchart values*/
     if (
       isEmpty(dataset) &&
+      isEmpty(dataTypes) &&
       isEmpty(selectedChartType) &&
-      !loadedChart?.isMappingValid
+      !loadedChartDetails?.isMappingValid
     ) {
-      setDataset(loadedChart?.datasetId);
-      setSelectedChartType(loadedChart?.vizType);
-      setDataTypes(loadedChart?.dataTypes);
-      setMapping(loadedChart?.mapping);
+      setDataset(loadedChartDetails?.datasetId);
+      setSelectedChartType(loadedChartDetails?.vizType);
+      setDataTypes(loadedChartDetails?.dataTypes);
+      setMapping(loadedChartDetails?.mapping);
     }
-  }, [dataError, loadedChart]);
+  }, [dataError, loadedChartDetails]);
 
   return {
     loading,
@@ -385,7 +337,7 @@ export function useChartsRawData(props: {
     isPreviewMode,
     dataTotalCount,
     loadDataset,
-    loadChartDataFromAPI,
+    renderChartFromAPI,
     chartErrorMessage,
     setChartErrorMessage,
   };

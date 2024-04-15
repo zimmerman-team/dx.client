@@ -36,7 +36,7 @@ export function ChartBuilderPreview(props: ChartBuilderPreviewProps) {
     } else {
       props.loadDataset(`chart/sample-data/${dataset}`);
     }
-  }, [dataset]);
+  }, []);
 
   return (
     <div css={commonStyles.container}>

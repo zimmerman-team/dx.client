@@ -22,15 +22,7 @@ export interface ChartToolBoxProps {
   openToolbox: boolean;
   onClose: () => void;
   onOpen: () => void;
-  loadChartDataFromAPI: (
-    customAppliedFilters?: [
-      [
-        {
-          [key: string]: any[];
-        }
-      ]
-    ]
-  ) => void;
+  renderChartFromAPI: (chartId?: string | undefined) => Promise<void>;
   exportView: boolean;
   rawViz: any;
   dataTypes: any;

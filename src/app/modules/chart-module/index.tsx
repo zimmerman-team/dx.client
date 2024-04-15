@@ -81,7 +81,7 @@ export default function ChartModule() {
     sampleData,
     isPreviewMode,
     loadDataset,
-    loadChartDataFromAPI,
+    renderChartFromAPI,
     error401,
     setDataError,
     setNotFound,
@@ -198,7 +198,6 @@ export default function ChartModule() {
     () => get(chartFromAPI, "renderedContent", ""),
     [chartFromAPI]
   );
-
   const dataTypes2 = React.useMemo(() => {
     if (isEmpty(dataTypes)) {
       return dataTypesFromRenderedChart;
@@ -287,7 +286,7 @@ export default function ChartModule() {
   React.useEffect(() => {
     //empty chart when chart type and or  dataset types changes
     setChartFromAPI(null);
-  }, [chartType, dataTypes]);
+  }, [chartType, dataset]);
 
   React.useEffect(() => {
     //set chart name to selected dataset if chart name has not been focused
@@ -379,6 +378,7 @@ export default function ChartModule() {
     clearChart();
     createChartClear();
     editChartClear();
+    clearDatasetDetails();
     setChartName("Untitled Chart");
     setDataError(false);
     setNotFound(false);
@@ -397,11 +397,11 @@ export default function ChartModule() {
     });
   }
 
-  React.useEffect(() => {
-    //clear prev states when page mounts
-    console.log("clear prev states when page mounts");
-    clearChartBuilder();
-  }, []);
+  // React.useEffect(() => {
+  //   //clear prev states when page mounts
+  //   console.log("clear prev states when page mounts");
+  //   clearChartBuilder();
+  // }, []);
 
   React.useEffect(() => {
     // Updates visual options width when container width changes
@@ -440,6 +440,9 @@ export default function ChartModule() {
         clearChart();
       }
     }
+    return () => {
+      clearChartBuilder();
+    };
   }, [page, token, isLoading, isAuthenticated]);
 
   if (chartError401 || error401) {
@@ -479,7 +482,7 @@ export default function ChartModule() {
         openPanel={config.openPanel}
         visualOptions={visualOptions}
         exportView={config.exportView}
-        loadChartDataFromAPI={loadChartDataFromAPI}
+        renderChartFromAPI={renderChartFromAPI}
         setVisualOptions={setVisualOptions}
         loading={loading || isChartLoading}
         filterOptionGroups={filterOptionGroups}
