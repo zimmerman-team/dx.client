@@ -1,9 +1,7 @@
 /* third-party */
 import React from "react";
-import get from "lodash/get";
 import filter from "lodash/filter";
 import isEmpty from "lodash/isEmpty";
-import { useUpdateEffect } from "react-use";
 import { useParams } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import axios, { AxiosError, AxiosResponse } from "axios";
@@ -87,6 +85,9 @@ export function useChartsRawData(props: {
     props;
   const loadedChartDetails = useStoreState(
     (state) => state.charts.ChartGet.crudData as ChartAPIModel
+  );
+  const clearLoadedChartDetails = useStoreActions(
+    (actions) => actions.charts.ChartGet.clear
   );
   const [renderChartFromAPIFufilled, setRenderChartFromAPIFufilled] =
     React.useState(true);
@@ -273,7 +274,6 @@ export function useChartsRawData(props: {
     //used only in chart detail page
     if (!props.inChartWrapper && isPreviewMode) {
       if (loadedChartDetails?.isMappingValid) {
-        console.log("calling render?");
         renderChartFromAPI();
       } else {
         // No need to call API if mapping is not valid. hence we set loading to false
@@ -289,7 +289,7 @@ export function useChartsRawData(props: {
         (isrequiredMappingKeysPresent || loadedChartDetails?.isMappingValid) &&
         renderChartFromAPIFufilled
       ) {
-        console.log("calling render2?");
+        clearLoadedChartDetails();
         renderChartFromAPI();
       } else {
         // No need to call API if mapping is not valid. hence we set loading to false

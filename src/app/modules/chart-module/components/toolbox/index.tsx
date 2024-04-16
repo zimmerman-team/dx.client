@@ -59,12 +59,10 @@ export function ChartModuleToolBox(props: Readonly<ChartToolBoxProps>) {
     ) {
       if (name === "dataset" && !isEmpty(dataset)) {
         history.push(`/chart/${page}/preview-data`);
-
         return;
       }
       if (name === "chart" && !isEmpty(dataset)) {
         history.push(`/chart/${page}/chart-type`);
-
         return;
       }
       if (name === "mapping" && !isEmpty(dataset) && !isEmpty(chartType)) {
@@ -72,7 +70,6 @@ export function ChartModuleToolBox(props: Readonly<ChartToolBoxProps>) {
           props.triggerAutoSave();
         }
         history.push(`/chart/${page}/mapping`);
-
         return;
       }
     } else if (!isEmpty(props.mappedData)) {

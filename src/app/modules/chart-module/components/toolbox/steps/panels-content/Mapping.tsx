@@ -254,7 +254,7 @@ export function ChartToolBoxMapping(props: Readonly<ChartToolBoxMappingProps>) {
             position: relative;
           `}
         >
-          {props.loading ? (
+          {isEmpty(props.dimensions) ? (
             <div
               css={`
                 width: 100%;
