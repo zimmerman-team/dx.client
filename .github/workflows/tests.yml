@@ -49,8 +49,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install rawgraphs-charts
-        run: yarn add "https://github.com/zimmerman-team/rawgraphs-charts.git#3da650c" 
+      - name: Install packages
+        run: yarn install && yarn add "https://github.com/zimmerman-team/rawgraphs-charts.git#3da650c" 
 
       - name: Build package
         run: |
