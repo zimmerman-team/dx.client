@@ -43,7 +43,7 @@ env:
     GOOGLE_REFRESH_TOKEN_TEST: ${{ secrets.GOOGLE_REFRESH_TOKEN_TEST }}
 
 jobs:
-  build:
+  jest-run:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -52,7 +52,7 @@ jobs:
       - name: Install packages
         run: yarn install && yarn add "https://github.com/zimmerman-team/rawgraphs-charts.git#3da650c" 
 
-      - name: Build package
+      - name: Build rawgraphs package
         run: |
           if [ -d "node_modules/@rawgraphs/rawgraphs-charts" ]; then
             cd node_modules/@rawgraphs/rawgraphs-charts
@@ -61,25 +61,28 @@ jobs:
           else
             echo "Package directory not found"
           fi
-  
-  jest-run:
-    runs-on: ubuntu-latest
-    needs:
-      - build
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
 
       - name: Jest run
         run: yarn test
 
   cypress-run:
     runs-on: ubuntu-latest
-    needs:
-      - build
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Install packages
+        run: yarn install && yarn add "https://github.com/zimmerman-team/rawgraphs-charts.git#3da650c" 
+
+      - name: Build rawgraphs package
+        run: |
+          if [ -d "node_modules/@rawgraphs/rawgraphs-charts" ]; then
+            cd node_modules/@rawgraphs/rawgraphs-charts
+            yarn 
+            yarn build
+          else
+            echo "Package directory not found"
+          fi
         
       - name: Cypress run
         # Uses the official Cypress GitHub action https://github.com/cypress-io/github-action
