@@ -13,6 +13,7 @@ interface Props {
   dataTotalCount: number;
   description: string;
   dataTypes: never[];
+  canDatasetEditDelete?: boolean;
 }
 
 export default function FinishedFragment(props: Props) {
@@ -97,9 +98,16 @@ export default function FinishedFragment(props: Props) {
               pathname: `/chart/new/chart-type`,
               search: "?loadataset=true",
             }}
+            css={`
+              pointer-events: ${props.canDatasetEditDelete ? "auto" : "none"};
+            `}
           >
             <button
+              disabled={
+                props.canDatasetEditDelete ? !props.canDatasetEditDelete : false
+              }
               css={`
+                opacity: ${props.canDatasetEditDelete ? "1" : "0.5"};
                 color: #fff;
                 width: 100%;
                 width: 200px;

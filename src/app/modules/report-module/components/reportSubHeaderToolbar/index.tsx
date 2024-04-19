@@ -223,7 +223,7 @@ export function ReportSubheaderToolbar(
       .catch((error) => console.log(error));
   };
 
-  const canChartEditDelete = React.useMemo(() => {
+  const canReportEditDelete = React.useMemo(() => {
     return isAuthenticated && loadedReport && loadedReport.owner === user?.sub;
   }, [user, isAuthenticated, loadedChart, loadedReport]);
 
@@ -453,7 +453,7 @@ export function ReportSubheaderToolbar(
                       </CopyToClipboard>
                     </div>
                   </Popover>
-                  {canChartEditDelete && (
+                  {canReportEditDelete && (
                     <Tooltip title="Edit">
                       <IconButton
                         component={Link}
@@ -464,7 +464,7 @@ export function ReportSubheaderToolbar(
                       </IconButton>
                     </Tooltip>
                   )}
-                  {canChartEditDelete && (
+                  {canReportEditDelete && (
                     <Tooltip title="Delete">
                       <IconButton
                         onClick={handleModalDisplay}

@@ -134,7 +134,7 @@ export function useChartsRawData(props: {
   const setSelectedChartType = useStoreActions(
     (actions) => actions.charts.chartType.setValue
   );
-  const chartDetailPage = location.pathname === `/chart/${page}`;
+  const isChartRoute = location.pathname.split("/")[0] === "chart";
   const isEditPage = view !== undefined && view !== "preview";
   const isPreviewMode =
     location.pathname === `/chart/${page}` ||
@@ -318,6 +318,7 @@ export function useChartsRawData(props: {
             before mapping was successful, to load the chart with the saved values.
             Since we can not get it from renderChartFromAPI() because we only call renderChartFromAPI() when mapping is valid, we set it to loadedchart values*/
     if (
+      isChartRoute &&
       isEmpty(dataset) &&
       isEmpty(dataTypes) &&
       isEmpty(selectedChartType) &&
