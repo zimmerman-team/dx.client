@@ -8,6 +8,10 @@
 - Duplicate Report - Done
 
 */
+//@ts-ignore
+const randomId = () => Cypress._.random(0, 1e6);
+//@ts-ignore
+const reportTestName = `report-testname${randomId()}`;
 
 describe("Testing reports on DX", () => {
   const apiUrl = Cypress.env("api_url");
@@ -21,7 +25,7 @@ describe("Testing reports on DX", () => {
     cy.get('[data-cy="cookie-btn"]').click();
   });
 
-  it("Create report", () => {
+  it("Can Create report", () => {
     cy.get('[data-cy="appbar-create-report/login"]').click();
 
     cy.contains(
@@ -35,13 +39,11 @@ describe("Testing reports on DX", () => {
 
     cy.get('[data-cy="skip-tour-button"]').click();
 
-    cy.get('[data-cy="report-sub-header-title-input"]').type(
-      "Football Players Report"
-    );
+    cy.get('[data-cy="report-sub-header-title-input"]').type(reportTestName);
 
     cy.get('[data-cy="report-header-block"]').within(() => {
       cy.get('[data-cy="report-header-block-title-input"]').type(
-        "The football players report"
+        reportTestName
       );
       cy.get('[data-cy="rich-text-editor-container"]').click();
       cy.get('[data-testid="rich-text-editor"]').type(
@@ -62,14 +64,6 @@ describe("Testing reports on DX", () => {
 
     cy.intercept(`${apiUrl}/charts?filter=*`).as("fetchCharts");
 
-    // Drop Element
-
-    // cy.get('[data-cy="report-panel-elements-tab"]').click();
-
-    // cy.get('[data-cy="report-panel-rowFrame-item"]')
-    //   .first()
-    //   .drag('[data-cy="report-row-placeholder"]');
-
     // Drop Text item
 
     cy.get('[data-cy="report-panel-media-tab"]').click();
@@ -79,8 +73,6 @@ describe("Testing reports on DX", () => {
     cy.get('[data-cy="report-panel-text-item"]').first().drag();
     cy.get('[data-cy="row-frame-item-drop-zone-0-0"]').drop();
 
-    // Drag and drop chart item
-
     cy.get("[data-cy=row-frame-0]").within(() => {
       cy.get('[data-testid="rich-text-editor"]')
         .first()
@@ -88,6 +80,8 @@ describe("Testing reports on DX", () => {
           "This is a report on football players who played in a match last year"
         );
     });
+
+    // Drag and drop chart item
 
     cy.get('[data-cy="report-panel-chart-tab"]').click();
     cy.get('[data-cy="report-panel-chart-tab"]').click();
@@ -98,6 +92,55 @@ describe("Testing reports on DX", () => {
 
     cy.get('[data-cy="report-panel-chart-item"]').first().drag();
     cy.get('[data-cy="row-frame-item-drop-zone-0-1"]').drop();
+
+    // Drag and drop video item
+
+    cy.intercept(`${apiUrl}/youtube/search**`).as("fetchYoutubeVideos");
+    cy.get('[data-cy="add-row-frame-button"]').scrollIntoView().click();
+
+    cy.get('[data-cy="empty-row-frame"]')
+      .first()
+      .within(() => {
+        cy.get('[data-cy="one-by-one-type"]').click({ timeout: 2000 });
+      });
+
+    cy.get('[data-cy="report-panel-media-tab"]').click();
+
+    cy.wait("@fetchYoutubeVideos");
+
+    cy.get('[data-cy="report-panel-video-item"]').click();
+    cy.get('[data-cy="video-frame"]').first().drag();
+    cy.get('[data-cy="row-frame-item-drop-zone-1-0"]').scrollIntoView().drop();
+
+    cy.get('[data-cy="report-video-content"]')
+      .scrollIntoView()
+      .should("be.visible");
+
+    // Drag and drop image item
+
+    cy.intercept(`${apiUrl}/unsplash/image/search**`).as("fetchUnsplashImages");
+    cy.get('[data-cy="add-row-frame-button"]').scrollIntoView().click();
+
+    cy.get('[data-cy="empty-row-frame"]')
+      .first()
+      .within(() => {
+        cy.get('[data-cy="one-by-one-type"]').click({ timeout: 2000 });
+      });
+    cy.get('[data-cy="report-panel-chart-tab"]').click();
+    cy.get('[data-cy="report-panel-chart-tab"]').click();
+    cy.get('[data-cy="report-panel-media-tab"]').click();
+
+    cy.wait("@fetchUnsplashImages");
+
+    cy.get('[data-cy="report-panel-image-item"]').click();
+    cy.get('[data-cy="image-frame"]').first().drag();
+    cy.get('[data-cy="row-frame-item-drop-zone-2-0"]').scrollIntoView().drop();
+
+    cy.get('[data-cy="report-image-content"]')
+      .scrollIntoView()
+      .should("be.visible");
+
+    // Save the report
 
     cy.get('[data-cy="save-report-button"]').click();
 
@@ -117,7 +160,14 @@ describe("Testing reports on DX", () => {
 
     cy.wait("@fetchReports");
 
-    cy.contains("The football players report").should("be.visible");
+    cy.get("[data-cy=home-search-button]").click();
+    cy.get("[data-cy=home-search-input]").type(
+      `{selectall}{backspace}${reportTestName}`
+    );
+
+    cy.wait("@fetchReports");
+
+    cy.contains(reportTestName).should("be.visible");
   });
 });
 
@@ -138,8 +188,8 @@ describe("Edit, duplicate and delete report", () => {
     cy.wait("@fetchReports");
   });
 
-  it("Edit report", () => {
-    cy.contains('[data-cy="report-grid-item"]', "The football players report")
+  it("Can Edit a report", () => {
+    cy.contains('[data-cy="report-grid-item"]', reportTestName)
       .first()
       .scrollIntoView()
       .within(() => {
@@ -176,14 +226,18 @@ describe("Edit, duplicate and delete report", () => {
 
     cy.wait("@fetchReports");
 
-    cy.contains("The football players report - Edited").should("be.visible");
+    cy.get("[data-cy=home-search-button]").click();
+    cy.get("[data-cy=home-search-input]").type(
+      `{selectall}{backspace}${reportTestName}`
+    );
+
+    cy.wait("@fetchReports");
+
+    cy.contains(`${reportTestName} - Edited`).should("be.visible");
   });
 
-  it("Duplicate report", () => {
-    cy.contains(
-      '[data-cy="report-grid-item"]',
-      "The football players report - Edited"
-    )
+  it("Can Duplicate a report", () => {
+    cy.contains('[data-cy="report-grid-item"]', `${reportTestName} - Edited`)
       .first()
       .scrollIntoView()
       .within(() => {
@@ -194,17 +248,31 @@ describe("Edit, duplicate and delete report", () => {
 
     cy.wait("@fetchReports");
 
+    cy.get("[data-cy=home-search-button]").click();
+    cy.get("[data-cy=home-search-input]").type(
+      `{selectall}{backspace}${reportTestName}`
+    );
+
+    cy.wait("@fetchReports");
+
     cy.get('[data-cy="report-grid-item"]')
-      .contains("The football players report - Edited (Copy)")
+      .contains(`${reportTestName} - Edited (Copy)`)
       .should("be.visible");
   });
 
-  it("Delete report", () => {
+  it("Can delete a report", () => {
     cy.intercept("DELETE", `${apiUrl}/report/*`).as("deleteReport");
+
+    cy.get("[data-cy=home-search-button]").click();
+    cy.get("[data-cy=home-search-input]").type(
+      `{selectall}{backspace}${reportTestName}`
+    );
+
+    cy.wait("@fetchReports");
 
     cy.contains(
       '[data-cy="report-grid-item"]',
-      "The football players report - Edited (Copy)"
+      `${reportTestName} - Edited (Copy)`
     )
       .first()
       .scrollIntoView()
@@ -215,22 +283,27 @@ describe("Edit, duplicate and delete report", () => {
     cy.get('[data-cy="report-grid-item-delete-btn"]').click();
 
     cy.get('[data-cy="delete-report-item-form"]').within(() => {
-      cy.get('[data-cy="delete-report-item-input"]').type("DELETE {enter}");
+      cy.get('[data-cy="delete-report-item-input"]').type("DELETE{enter}");
     });
 
     cy.wait("@deleteReport");
+
+    cy.wait("@fetchReports");
+
+    cy.get("[data-cy=home-search-button]").click();
+    cy.get("[data-cy=home-search-input]").type(
+      `{selectall}{backspace}${reportTestName}`
+    );
 
     cy.wait("@fetchReports");
 
     cy.get('[data-cy="report-grid-item"]')
-      .contains("The football players report - Edited (Copy)")
+      .contains(`${reportTestName} - Edited (Copy)`)
       .should("not.exist");
 
     // Delete the edited report
-    cy.contains(
-      '[data-cy="report-grid-item"]',
-      "The football players report - Edited"
-    )
+
+    cy.contains('[data-cy="report-grid-item"]', `${reportTestName} - Edited`)
       .first()
       .scrollIntoView()
       .within(() => {
@@ -240,13 +313,22 @@ describe("Edit, duplicate and delete report", () => {
     cy.get('[data-cy="report-grid-item-delete-btn"]').click();
 
     cy.get('[data-cy="delete-report-item-form"]').within(() => {
-      cy.get('[data-cy="delete-report-item-input"]').type("DELETE {enter}");
+      cy.get('[data-cy="delete-report-item-input"]').type("DELETE{enter}");
     });
 
     cy.wait("@deleteReport");
 
     cy.wait("@fetchReports");
 
-    cy.contains("The football players report - Edited").should("not.exist");
+    cy.get("[data-cy=home-search-button]").click();
+    cy.get("[data-cy=home-search-input]").type(
+      `{selectall}{backspace}${reportTestName}`
+    );
+
+    cy.wait("@fetchReports");
+
+    cy.contains(`${reportTestName} - Edited`).should("not.exist");
   });
+
+  it("Can Edit a chart from a report");
 });

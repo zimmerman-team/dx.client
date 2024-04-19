@@ -665,6 +665,7 @@ function VideoFrame(props: {
       `}
       ref={drag}
       onClick={() => setPlay(!play)}
+      data-cy="video-frame"
     >
       {play ? (
         <>
@@ -790,6 +791,7 @@ function ImageFrame(props: {
         background-size: cover;
       `}
       ref={drag}
+      data-cy="image-frame"
     ></div>
   );
 }

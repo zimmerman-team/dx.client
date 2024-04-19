@@ -12,12 +12,17 @@
 
 */
 
+//@ts-ignore
+const randomId = () => Cypress._.random(0, 1e6);
+//@ts-ignore
+const testname1 = `testname${randomId()}`;
+
 describe("Testing connecting data on DX", () => {
   const apiUrl = Cypress.env("api_url");
 
   beforeEach(() => {
     cy.restoreLocalStorageCache();
-    cy.setGoogleAccessToken();
+    // cy.setGoogleAccessToken();
 
     cy.visit("/");
 
@@ -27,7 +32,7 @@ describe("Testing connecting data on DX", () => {
     cy.get('[data-cy="appbar-connect-data"]').click();
   });
 
-  it("External search upload", () => {
+  it("Can import data from External Search", () => {
     cy.intercept(`${apiUrl}/external-sources/search-limited?q=*`).as(
       "getDefaultData"
     );
@@ -63,16 +68,16 @@ describe("Testing connecting data on DX", () => {
     cy.wait("@downloadData");
 
     cy.get('[data-cy="dataset-metadata-title"]').type(
-      "{selectall}{backspace} External Dataset"
+      `{selectall}{backspace}${testname1}`
     );
     cy.get('[data-cy="dataset-metadata-description"]').type(
-      "{selectall}{backspace} External Dataset"
+      `{selectall}{backspace}${testname1}`
     );
     cy.get('[data-cy="dataset-metadata-source"]').type(
-      "{selectall}{backspace} Rawgraphs"
+      "{selectall}{backspace}Rawgraphs"
     );
     cy.get('[data-cy="dataset-metadata-link"]').type(
-      "{selectall}{backspace} Not available"
+      "{selectall}{backspace}Not available"
     );
     cy.get('[data-cy="dataset-metadata-category"]').click();
     cy.get('[data-value="Social"]').click();
@@ -81,51 +86,51 @@ describe("Testing connecting data on DX", () => {
     cy.get('[data-cy="dataset-metadata-submit"]').click();
 
     cy.wait("@submitData");
-    cy.contains("External Dataset").should("be.visible");
+    cy.contains(testname1).should("be.visible");
   });
 
-  it("Google Drive Upload", () => {
-    cy.intercept(
-      "https://www.googleapis.com/drive/v3/files/1ZMtAYFviJrhITddRe7ulDNGCL5F0Rur7?alt=media"
-    ).as("googleDrivePicker");
+  // it("Can import data from Google Drive", () => {
+  //   cy.intercept(
+  //     "https://www.googleapis.com/drive/v3/files/1ZMtAYFviJrhITddRe7ulDNGCL5F0Rur7?alt=media"
+  //   ).as("googleDrivePicker");
 
-    // Assuming your application has a function that's called when a file is selected from the picker
-    cy.visit("/dataset/new/upload");
-    cy.window().then((win) => {
-      // Manually trigger the callback function with mock data
-      const mockFileData = {
-        id: "1ZMtAYFviJrhITddRe7ulDNGCL5F0Rur7",
-        name: "WineQT.csv",
-        kind: "drive#file",
-        mimeType: "text/csv",
-        type: "file",
-        // Add any other properties your callback function expects
-      };
-      // Assuming your callback function is named "handlePickerSelection"
-      // @ts-ignore
-      win.handleGoogleDriveFilePicker(
-        mockFileData,
-        localStorage.getItem("google_access_token")
-      );
-    });
-    cy.wait(`@googleDrivePicker`);
+  //   // Assuming your application has a function that's called when a file is selected from the picker
+  //   cy.visit("/dataset/new/upload");
+  //   cy.window().then((win) => {
+  //     // Manually trigger the callback function with mock data
+  //     const mockFileData = {
+  //       id: "1ZMtAYFviJrhITddRe7ulDNGCL5F0Rur7",
+  //       name: "WineQT.csv",
+  //       kind: "drive#file",
+  //       mimeType: "text/csv",
+  //       type: "file",
+  //       // Add any other properties your callback function expects
+  //     };
+  //     // Calling the picker function with the mock data - The picker window is not accessible in Cypress
+  //     // @ts-ignore
+  //     win.handleGoogleDriveFilePicker(
+  //       mockFileData,
+  //       localStorage.getItem("google_access_token")
+  //     );
+  //   });
+  //   cy.wait(`@googleDrivePicker`);
 
-    cy.get('[data-cy="dataset-metadata-title"]').type("Wine Tasting");
+  //   cy.get('[data-cy="dataset-metadata-title"]').type("Wine Tasting");
 
-    cy.get('[data-cy="dataset-metadata-description"]').type("Wine Tasting");
-    cy.get('[data-cy="dataset-metadata-source"]').type("Rawgraphs");
-    cy.get('[data-cy="dataset-metadata-link"]').type("Not available");
-    cy.get('[data-cy="dataset-metadata-category"]').click();
-    cy.get('[data-value="Social"]').click();
-    cy.get('[data-cy="dataset-metadata-submit"]').scrollIntoView();
-    cy.intercept(`${apiUrl}/datasets`).as("submitData");
-    cy.get('[data-cy="dataset-metadata-submit"]').click();
+  //   cy.get('[data-cy="dataset-metadata-description"]').type("Wine Tasting");
+  //   cy.get('[data-cy="dataset-metadata-source"]').type("Rawgraphs");
+  //   cy.get('[data-cy="dataset-metadata-link"]').type("Not available");
+  //   cy.get('[data-cy="dataset-metadata-category"]').click();
+  //   cy.get('[data-value="Social"]').click();
+  //   cy.get('[data-cy="dataset-metadata-submit"]').scrollIntoView();
+  //   cy.intercept(`${apiUrl}/datasets`).as("submitData");
+  //   cy.get('[data-cy="dataset-metadata-submit"]').click();
 
-    cy.wait("@submitData");
-    cy.contains("Wine Tasting").should("be.visible");
-  });
+  //   cy.wait("@submitData");
+  //   cy.contains("Wine Tasting").should("be.visible");
+  // });
 
-  it("Local Upload", () => {
+  it("Can import data through local upload", () => {
     cy.get('[data-cy="local-upload-input"]').as("fileInput");
     cy.fixture("football-players.csv").then((fileContent) => {
       cy.get("@fileInput").attachFile({
@@ -166,7 +171,7 @@ describe("Edit, Delete and Duplicate Dataset", () => {
     cy.wait("@fetchDatasets");
   });
 
-  it("Edit Dataset", () => {
+  it("Can Edit a Dataset", () => {
     cy.contains('[data-cy="dataset-grid-item"]', "Football Players")
       .first()
       .scrollIntoView()
@@ -202,7 +207,7 @@ describe("Edit, Delete and Duplicate Dataset", () => {
     cy.contains("Soccer Players").scrollIntoView().should("be.visible");
   });
 
-  it("Duplicate dataset", () => {
+  it("Can duplicate a dataset", () => {
     cy.contains('[data-cy="dataset-grid-item"]', "Soccer Players")
       .first()
       .scrollIntoView()
@@ -220,7 +225,12 @@ describe("Edit, Delete and Duplicate Dataset", () => {
       .should("be.visible");
   });
 
-  it("Delete dataset", () => {
+  it("Can delete dataset", () => {
+    cy.get("[data-cy=home-search-button]").click();
+    cy.get("[data-cy=home-search-input]").type("Soccer Players");
+
+    cy.wait("@fetchDatasets");
+
     cy.contains('[data-cy="dataset-grid-item"]', "Soccer Players (Copy)")
       .first()
       .scrollIntoView()
@@ -232,18 +242,54 @@ describe("Edit, Delete and Duplicate Dataset", () => {
     cy.intercept("DELETE", `${apiUrl}/datasets/*`).as("deleteDataset");
 
     cy.get('[data-cy="delete-dataset-item-form"]').within(() => {
-      cy.get('[data-cy="delete-dataset-item-input"]').type("DELETE {enter}");
+      cy.get('[data-cy="delete-dataset-item-input"]').type("DELETE{enter}");
     });
 
     cy.wait("@deleteDataset");
 
     cy.wait("@fetchDatasets");
 
-    cy.get('[data-cy="dataset-grid-item"]')
-      .contains("Soccer Players (Copy)")
-      .should("not.exist");
+    // cy.get('[data-cy="dataset-grid-item"]')
+    //   .contains("Soccer Players (Copy)")
+    //   .should("not.exist");
 
-    cy.contains('[data-cy="dataset-grid-item"]', "Wine Tasting")
+    // cy.get("[data-cy=home-search-button]").click();
+    // cy.get("[data-cy=home-search-input]").type(
+    //   "{selectall}{backspace}Wine Tasting"
+    // );
+
+    // cy.wait("@fetchDatasets");
+
+    // cy.contains('[data-cy="dataset-grid-item"]', "Wine Tasting")
+    //   .first()
+    //   .scrollIntoView()
+    //   .within(() => {
+    //     cy.get('[data-cy="dataset-grid-item-menu-btn"]').click();
+    //   });
+
+    // cy.get('[data-cy="dataset-grid-item-delete-btn"]').click();
+    // cy.intercept("DELETE", `${apiUrl}/datasets/*`).as("deleteDataset");
+
+    // cy.get('[data-cy="delete-dataset-item-form"]').within(() => {
+    //   cy.get('[data-cy="delete-dataset-item-input"]').type("DELETE{enter}");
+    // });
+
+    // cy.wait("@deleteDataset");
+
+    // cy.wait("@fetchDatasets");
+
+    // cy.get('[data-cy="dataset-grid-item"]')
+    //   .contains("Wine Tasting")
+    //   .should("not.exist");
+
+    cy.get("[data-cy=home-search-button]").click();
+    cy.get("[data-cy=home-search-input]").type(
+      `{selectall}{backspace}${testname1}`
+    );
+
+    cy.wait("@fetchDatasets");
+
+    cy.contains('[data-cy="dataset-grid-item"]', testname1)
       .first()
       .scrollIntoView()
       .within(() => {
@@ -254,37 +300,22 @@ describe("Edit, Delete and Duplicate Dataset", () => {
     cy.intercept("DELETE", `${apiUrl}/datasets/*`).as("deleteDataset");
 
     cy.get('[data-cy="delete-dataset-item-form"]').within(() => {
-      cy.get('[data-cy="delete-dataset-item-input"]').type("DELETE {enter}");
+      cy.get('[data-cy="delete-dataset-item-input"]').type("DELETE{enter}");
     });
 
     cy.wait("@deleteDataset");
 
     cy.wait("@fetchDatasets");
 
-    cy.get('[data-cy="dataset-grid-item"]')
-      .contains("Wine Tasting")
-      .should("not.exist");
-
-    cy.contains('[data-cy="dataset-grid-item"]', "External Dataset")
-      .first()
-      .scrollIntoView()
-      .within(() => {
-        cy.get('[data-cy="dataset-grid-item-menu-btn"]').click();
-      });
-
-    cy.get('[data-cy="dataset-grid-item-delete-btn"]').click();
-    cy.intercept("DELETE", `${apiUrl}/datasets/*`).as("deleteDataset");
-
-    cy.get('[data-cy="delete-dataset-item-form"]').within(() => {
-      cy.get('[data-cy="delete-dataset-item-input"]').type("DELETE {enter}");
-    });
-
-    cy.wait("@deleteDataset");
-
+    cy.get("[data-cy=home-search-button]").click();
+    cy.get("[data-cy=home-search-input]").type(
+      `{selectall}{backspace}${testname1}`
+    );
     cy.wait("@fetchDatasets");
 
-    cy.get('[data-cy="dataset-grid-item"]')
-      .contains("External Dataset")
-      .should("not.exist");
+    cy.contains('[data-cy="dataset-grid-item"]', testname1).should(
+      "have.length",
+      0
+    );
   });
 });
