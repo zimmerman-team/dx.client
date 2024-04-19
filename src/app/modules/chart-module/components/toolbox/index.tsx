@@ -22,6 +22,7 @@ import { InfoSnackbar } from "../chartSubheaderToolbar/infoSnackbar";
 export function ChartModuleToolBox(props: Readonly<ChartToolBoxProps>) {
   const { page, view } = useParams<{ page: string; view?: string }>();
   const history = useHistory();
+  const { isAuthenticated, user } = useAuth0();
   const isMobile = useMediaQuery("(max-width: 767px)");
   const [isClickable, setIsClickable] = React.useState(false);
 
@@ -33,6 +34,10 @@ export function ChartModuleToolBox(props: Readonly<ChartToolBoxProps>) {
 
   const setActivePanels = useStoreActions(
     (state) => state.charts.activePanels.setValue
+  );
+  const loadedChart = useStoreState(
+    (state) =>
+      (state.charts.ChartGet.crudData ?? emptyChartAPI) as ChartAPIModel
   );
 
   const [showSnackbar, setShowSnackbar] = React.useState<string | null>(null);
@@ -116,6 +121,14 @@ export function ChartModuleToolBox(props: Readonly<ChartToolBoxProps>) {
       props.setToolboxOpen(true);
     }
   }, [location.pathname]);
+
+  const canChartEditDelete = React.useMemo(() => {
+    return isAuthenticated && loadedChart && loadedChart.owner === user?.sub;
+  }, [user, isAuthenticated, loadedChart]);
+
+  if (!canChartEditDelete && page !== "new") {
+    return null;
+  }
 
   return (
     <>

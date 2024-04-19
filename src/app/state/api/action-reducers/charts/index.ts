@@ -5,6 +5,10 @@ export const ChartGet: ApiCallModel = {
   ...APIModel(`${process.env.REACT_APP_API}/chart`),
 };
 
+export const ChartGetInReport: ApiCallModel = {
+  ...APIModel(`${process.env.REACT_APP_API}/chart`),
+};
+
 export const ChartCreate: ApiCallModel = {
   ...APIModel(`${process.env.REACT_APP_API}/chart`),
 };

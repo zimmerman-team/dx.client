@@ -11,12 +11,15 @@ import {
   ChartTypeModel,
   ChartBuilderChartTypeProps,
 } from "app/modules/chart-module/routes/chart-type/data";
-import { withAuthenticationRequired } from "@auth0/auth0-react";
+import { useAuth0 } from "@auth0/auth0-react";
+import { ChartAPIModel, emptyChartAPI } from "../../data";
+import { NotAuthorizedMessageModule } from "app/modules/common/not-authorized-message";
 
 function ChartBuilderChartType(props: ChartBuilderChartTypeProps) {
   useTitle("DX DataXplorer - Chart Type");
 
   const history = useHistory();
+  const { isAuthenticated, user } = useAuth0();
   const { page } = useParams<{ page: string }>();
   const location = useLocation();
 
@@ -31,6 +34,10 @@ function ChartBuilderChartType(props: ChartBuilderChartTypeProps) {
   // access query parameters
   const queryParams = new URLSearchParams(location.search);
   const paramValue = queryParams.get("loadataset");
+  const loadedChart = useStoreState(
+    (state) =>
+      (state.charts.ChartGet.crudData ?? emptyChartAPI) as ChartAPIModel
+  );
 
   const onChartTypeChange =
     (chartTypeId: string) => (e: React.MouseEvent<HTMLDivElement>) => {
@@ -49,6 +56,19 @@ function ChartBuilderChartType(props: ChartBuilderChartTypeProps) {
       props.loadDataset(`chart/sample-data/${dataset}`);
     }
   }, []);
+
+  const canChartEditDelete = React.useMemo(() => {
+    return isAuthenticated && loadedChart && loadedChart.owner === user?.sub;
+  }, [user, isAuthenticated, loadedChart]);
+
+  if (!canChartEditDelete && page !== "new") {
+    return (
+      <>
+        <div css="width: 100%; height: 100px;" />
+        <NotAuthorizedMessageModule asset="chart" action="edit" />
+      </>
+    );
+  }
 
   return (
     <div css={commonStyles.container}>
