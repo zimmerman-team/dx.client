@@ -73,8 +73,9 @@ export function ChartModuleToolBox(props: Readonly<ChartToolBoxProps>) {
       if (name === "mapping" && !isEmpty(dataset) && !isEmpty(chartType)) {
         if (page === "new") {
           props.triggerAutoSave();
+        } else {
+          history.push(`/chart/${page}/mapping`);
         }
-        history.push(`/chart/${page}/mapping`);
         return;
       }
     } else if (!isEmpty(props.mappedData)) {
