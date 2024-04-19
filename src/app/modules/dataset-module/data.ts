@@ -5,6 +5,7 @@ export interface DatasetListItemAPIModel {
   public: boolean;
   category: string;
   createdDate: Date;
+  owner: string;
 }
 export const tHeadData = [
   {

@@ -257,6 +257,7 @@ export default function DatasetsGrid(props: Readonly<Props>) {
                 }}
                 showMenu={!props.inChartBuilder}
                 id={data.id}
+                owner={data.owner}
               />
 
               {!props.inChartBuilder && <Box height={16} />}

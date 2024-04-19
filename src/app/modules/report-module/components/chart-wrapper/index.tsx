@@ -26,6 +26,10 @@ export function ReportChartWrapper(props: Props) {
   const [chartName, setChartName] = React.useState<string>("");
   const loadChart = useStoreActions((actions) => actions.charts.ChartGet.fetch);
   const chartError = useStoreState((state) => state.charts.ChartGet.errorData);
+  const resetMapping = useStoreActions(
+    (actions) => actions.charts.mapping.reset
+  );
+  const mapping = useStoreState((state) => state.charts.mapping.value);
 
   const loadedChart = useStoreState(
     (state) =>
@@ -82,6 +86,7 @@ export function ReportChartWrapper(props: Props) {
     dataError,
     chartErrorMessage,
     setChartErrorMessage,
+    abortControllerRef,
   } = useChartsRawData({
     visualOptions,
     setVisualOptions,
@@ -96,6 +101,7 @@ export function ReportChartWrapper(props: Props) {
     }
     return () => {
       clearChart();
+      console.log("unmounting --  clearing chart", loadedChart);
     };
   }, [props.id, token]);
   React.useEffect(() => {
@@ -113,6 +119,8 @@ export function ReportChartWrapper(props: Props) {
     }
     return () => {
       resetAppliedFilters();
+      resetMapping();
+      abortControllerRef.current.abort();
     };
   }, [props.id, token]);
 

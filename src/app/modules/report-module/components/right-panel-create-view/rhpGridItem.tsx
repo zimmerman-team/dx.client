@@ -123,7 +123,7 @@ export default function GridItem(props: Props) {
             setError={setChartError}
           />
         ) : (
-          <div>{props.viz}</div>
+          <div data-testid="closed-chart">{props.viz}</div>
         )}
       </div>
       <div

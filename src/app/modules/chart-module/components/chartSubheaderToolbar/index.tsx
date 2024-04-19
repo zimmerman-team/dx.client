@@ -218,7 +218,7 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
   };
 
   const handleBackToEdit = () => {
-    history.goBack();
+    history.go(-1);
   };
 
   return (
@@ -371,6 +371,7 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
                 onClick={handleBackToEdit}
                 css={styles.backToEdit}
                 type="button"
+                data-testid="back-to-edit-button"
               >
                 <EditIcon htmlColor="#fff" />
                 Go back to editing
@@ -420,6 +421,7 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
                         onClick={handlePreviewMode}
                         aria-label="preview-button"
                         disabled={isPreviewDisabled}
+                        data-testid="preview-button"
                         css={`
                           :disabled {
                             opacity: 0.5;

@@ -3,7 +3,6 @@ import React from "react";
 import filter from "lodash/filter";
 import isEmpty from "lodash/isEmpty";
 import { useParams } from "react-router-dom";
-import { useAuth0 } from "@auth0/auth0-react";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
 /* project */
@@ -79,7 +78,10 @@ export function useChartsRawData(props: {
   inChartWrapper?: boolean;
   dimensions?: any;
 }) {
-  const { isLoading } = useAuth0();
+  const abortControllerRef = React.useRef<AbortController>(
+    new AbortController()
+  );
+
   const token = useStoreState((state) => state.AuthToken.value);
   const { visualOptions, chartFromAPI, setVisualOptions, setChartFromAPI } =
     props;
@@ -220,6 +222,7 @@ export function useChartsRawData(props: {
         }`,
         body,
         {
+          signal: abortControllerRef.current.signal,
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -316,9 +319,9 @@ export function useChartsRawData(props: {
       isEmpty(selectedChartType) &&
       !loadedChartDetails?.isMappingValid
     ) {
+      loadDataset(`chart/sample-data/${loadedChartDetails?.datasetId}`);
       setDataset(loadedChartDetails?.datasetId);
       setSelectedChartType(loadedChartDetails?.vizType);
-      setDataTypes(loadedChartDetails?.dataTypes);
       setMapping(loadedChartDetails?.mapping);
     }
   }, [dataError, loadedChartDetails]);
@@ -341,5 +344,6 @@ export function useChartsRawData(props: {
     renderChartFromAPI,
     chartErrorMessage,
     setChartErrorMessage,
+    abortControllerRef,
   };
 }
