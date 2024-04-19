@@ -211,6 +211,7 @@ export default function ReportsGrid(props: Props) {
                 handleDelete={() => handleModal(index)}
                 handleDuplicate={() => handleDuplicate(index)}
                 title={data.title || data.name}
+                owner={data.owner}
               />
               <Box height={16} />
             </Grid>

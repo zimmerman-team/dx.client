@@ -14,6 +14,12 @@ import { createMemoryHistory } from "history";
 import { Auth0Provider } from "@auth0/auth0-react";
 import { mockUseAuth0 } from "app/utils/mockAuth0";
 
+interface MockProps {
+  loading: boolean;
+  loadDataset: jest.Mock<any, any, any>;
+  setChartFromAPI: jest.Mock<any, any, any>;
+}
+
 jest.mock("react-router-dom", () => ({
   ...jest.requireActual("react-router-dom"),
   useParams: jest.fn(),
@@ -31,10 +37,25 @@ jest.mock("@auth0/auth0-react", () => {
   };
 });
 
-const history = createMemoryHistory({
-  initialEntries: ["/chart/new/type"],
-});
-const appSetup = (chartType: string | null, dataset: string | null) => {
+const history = (path: string) =>
+  createMemoryHistory({
+    initialEntries: [path],
+  });
+const defaultProps = (props: Partial<MockProps> = {}): MockProps => {
+  return {
+    loading: false,
+    loadDataset: jest.fn(),
+    setChartFromAPI: jest.fn(),
+    ...props,
+  };
+};
+const appSetup = (
+  chartType: string | null,
+  dataset: string | null,
+  newProps: Partial<MockProps> = {},
+  historyPath?: string
+) => {
+  const props = defaultProps(newProps);
   const mockStore = createStore(
     {
       charts: {
@@ -63,15 +84,16 @@ const appSetup = (chartType: string | null, dataset: string | null) => {
   );
   return {
     app: (
-      <Router.Router history={history}>
+      <Router.Router history={history(historyPath ?? "/chart/new/type")}>
         <Auth0Provider clientId="__test_client_id__" domain="__test_domain__">
           <StoreProvider store={mockStore}>
-            {/* <ChartBuilderChartType loading={false} /> */}
+            <ChartBuilderChartType {...props} />
           </StoreProvider>
         </Auth0Provider>
       </Router.Router>
     ),
     mockStore,
+    props,
   };
 };
 
@@ -81,9 +103,15 @@ test("should select a chart type", async () => {
   const user = userEvent.setup();
   jest.spyOn(Router, "useParams").mockReturnValue({ page: "new" });
 
-  const { app, mockStore } = appSetup(null, "12345");
+  const { app, mockStore, props } = appSetup(
+    null,
+    "12345",
+    {},
+    "/chart/new/type?loadataset=true"
+  );
 
   render(app);
+  expect(props.loadDataset).toHaveBeenCalled();
   echartTypes(false).forEach((ct: ChartTypeModel) => {
     expect(screen.getByTestId(ct.id)).toBeInTheDocument();
   });
@@ -116,5 +144,7 @@ test("should redirect to data page if dataset is empty", async () => {
 
   render(app);
   expect(screen.getByTestId("echartsBarchart")).toBeInTheDocument();
-  expect(history.location.pathname).toEqual("/chart/new/data");
+  expect(history("/chart/new/data").location.pathname).toEqual(
+    "/chart/new/data"
+  );
 });

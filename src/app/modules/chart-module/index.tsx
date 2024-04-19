@@ -39,8 +39,6 @@ import { isEmpty } from "lodash";
 import useResizeObserver from "use-resize-observer";
 import { ChartType } from "app/modules/chart-module/components/common-chart";
 import { DatasetListItemAPIModel } from "app/modules/dataset-module/data";
-import { reportRightPanelViewAtom } from "app/state/recoil/atoms";
-import { useRecoilState } from "recoil";
 import { getRequiredFieldsAndErrors } from "app/modules/chart-module/routes/mapping/utils";
 import ErrorComponent from "./components/dialog/errrorComponent";
 import axios from "axios";
@@ -79,11 +77,12 @@ export default function ChartModule() {
   const {
     loading,
     dataTypes,
+    setDataTypes,
     dataStats,
     sampleData,
     isPreviewMode,
     loadDataset,
-    loadChartDataFromAPI,
+    renderChartFromAPI,
     error401,
     setDataError,
     setNotFound,
@@ -111,7 +110,6 @@ export default function ChartModule() {
     isAutoSaveEnabled: editView || false,
     enableAutoSaveSwitch: editView || false,
   });
-  const setRightPanelView = useRecoilState(reportRightPanelViewAtom)[1];
 
   const setMapping = useStoreActions(
     (actions) => actions.charts.mapping.setValue
@@ -171,6 +169,9 @@ export default function ChartModule() {
   const resetDataset = useStoreActions(
     (actions) => actions.charts.dataset.reset
   );
+  const clearDatasetDetails = useStoreActions(
+    (state) => state.dataThemes.DatasetGet.clear
+  );
   const datasets = useStoreState(
     (state) =>
       (state.dataThemes.DatasetGetList.crudData ??
@@ -198,7 +199,6 @@ export default function ChartModule() {
     () => get(chartFromAPI, "renderedContent", ""),
     [chartFromAPI]
   );
-
   const dataTypes2 = React.useMemo(() => {
     if (isEmpty(dataTypes)) {
       return dataTypesFromRenderedChart;
@@ -208,8 +208,10 @@ export default function ChartModule() {
 
   const deselectDataset = () => {
     setDataset(null);
+    setChartFromAPI(null);
     setDataError(false);
     setNotFound(false);
+    clearDatasetDetails();
   };
 
   const onSave = async () => {
@@ -282,11 +284,6 @@ export default function ChartModule() {
       clearTimeout(timeout);
     };
   }, [editChartSuccess]);
-
-  React.useEffect(() => {
-    //empty chart when chart type and or  dataset types changes
-    setChartFromAPI(null);
-  }, [chartType, dataTypes]);
 
   React.useEffect(() => {
     //set chart name to selected dataset if chart name has not been focused
@@ -378,9 +375,11 @@ export default function ChartModule() {
     clearChart();
     createChartClear();
     editChartClear();
+    clearDatasetDetails();
     setChartName("Untitled Chart");
     setDataError(false);
     setNotFound(false);
+    setDataTypes([]);
   }
   function clearChartBuilder() {
     console.log("--about to reset chart states");
@@ -396,11 +395,11 @@ export default function ChartModule() {
     });
   }
 
-  React.useEffect(() => {
-    //clear prev states when page mounts
-    console.log("clear prev states when page mounts");
-    clearChartBuilder();
-  }, []);
+  // React.useEffect(() => {
+  //   //clear prev states when page mounts
+  //   console.log("clear prev states when page mounts");
+  //   clearChartBuilder();
+  // }, []);
 
   React.useEffect(() => {
     // Updates visual options width when container width changes
@@ -439,6 +438,9 @@ export default function ChartModule() {
         clearChart();
       }
     }
+    return () => {
+      clearChartBuilder();
+    };
   }, [page, token, isLoading, isAuthenticated]);
 
   if (chartError401 || error401) {
@@ -478,7 +480,7 @@ export default function ChartModule() {
         openPanel={config.openPanel}
         visualOptions={visualOptions}
         exportView={config.exportView}
-        loadChartDataFromAPI={loadChartDataFromAPI}
+        renderChartFromAPI={renderChartFromAPI}
         setVisualOptions={setVisualOptions}
         loading={loading || isChartLoading}
         filterOptionGroups={filterOptionGroups}
@@ -577,6 +579,7 @@ export default function ChartModule() {
                 <ChartBuilderChartType
                   loading={loading}
                   loadDataset={loadDataset}
+                  setChartFromAPI={setChartFromAPI}
                 />
               </Route>
               <Route path="/chart/:page/preview-data">
@@ -585,11 +588,16 @@ export default function ChartModule() {
                   data={sampleData}
                   loadDataset={loadDataset}
                   stats={dataStats}
+                  dataTypes={dataTypes2}
                   filterOptionGroups={filterOptionGroups}
                 />
               </Route>
               <Route path="/chart/:page/data">
-                <ChartModuleDataView loadDataset={loadDataset} />
+                <ChartModuleDataView
+                  loadDataset={loadDataset}
+                  toolboxOpen={toolboxOpen}
+                  setChartFromAPI={setChartFromAPI}
+                />
               </Route>
               <Route path="/chart/:page/preview">
                 <ChartBuilderPreviewTheme

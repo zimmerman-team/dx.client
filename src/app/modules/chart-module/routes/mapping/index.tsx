@@ -47,12 +47,12 @@ function ChartBuilderMapping(props: Readonly<ChartBuilderMappingProps>) {
     setMinValuesFields(updMinValuesFields);
   }, [mapping, props.dimensions]);
 
-  React.useEffect(() => {
-    //if dataset is empty and not loading, redirect to data page
-    if (dataset === null && !props.loading) {
-      history.push(`/chart/${page}/data`);
-    }
-  }, [dataset]);
+  // React.useEffect(() => {
+  //   //if dataset is empty and not loading, redirect to data page
+  //   if (dataset === null && !props.loading) {
+  //     history.push(`/chart/${page}/data`);
+  //   }
+  // }, [dataset]);
 
   const canChartEditDelete = React.useMemo(() => {
     return isAuthenticated && loadedChart && loadedChart.owner === user?.sub;

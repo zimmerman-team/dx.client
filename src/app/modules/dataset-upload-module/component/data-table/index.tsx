@@ -92,6 +92,7 @@ export function DatasetDataTable(props: DataThemesDataTableProps) {
         dataStats={props.stats}
         columns={getColumns(props.stats)}
         columnDetails={columnDetails}
+        dataTypes={props.dataTypes}
       />
     </div>
   );

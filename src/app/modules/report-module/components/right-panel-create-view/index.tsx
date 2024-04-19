@@ -31,7 +31,10 @@ import EditHeaderIcon from "app/modules/report-module/asset/EditHeaderIcon";
 import TextPreviewImg from "app/modules/report-module/asset/textPreview.svg";
 import { ReactComponent as YoutubeIcon } from "app/modules/report-module/asset/youtube-icon.svg";
 import YoutubeGradient from "app/modules/report-module/asset/youtube-gradient.png";
-import { Charts } from "app/modules/report-module/components/right-panel-create-view/data";
+import {
+  Charts,
+  IChartDetail,
+} from "app/modules/report-module/components/right-panel-create-view/data";
 import DividerPreviewImg from "app/modules/report-module/asset/dividerPreview.svg";
 import HeaderPreviewImg from "app/modules/report-module/asset/headerPreviewImg.svg";
 import RowFramePreviewImg from "app/modules/report-module/asset/rowframePreview.svg";
@@ -458,7 +461,7 @@ function ReportRightPanelCreateViewChartList(
   const [sortBy, setSortBy] = React.useState(sortByOptions[0]);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const chartList = useStoreState(
-    (state) => (state.charts.ChartGetList.crudData || []) as any[]
+    (state) => (state.charts.ChartGetList.crudData || []) as IChartDetail[]
   );
   const loadChartList = useStoreActions(
     (actions) => actions.charts.ChartGetList.fetch
@@ -601,23 +604,25 @@ function ReportRightPanelCreateViewChartList(
           reportName={props.reportName}
           handlePersistReportState={props.handlePersistReportState}
         />
-        {chartList.map((chart, index) => (
-          <ChartItem
-            chartIndex={index}
-            id={chart.id}
-            key={chart.id}
-            name={chart.name}
-            vizType={chart.vizType}
-            datasetId={chart.datasetId}
-            createdDate={chart.createdDate}
-            framesArray={props.framesArray}
-            elementType={
-              (chart.vizType === "bigNumber"
-                ? ReportElementsType.BIG_NUMBER
-                : ReportElementsType.CHART) as "chart" | "bigNumber"
-            }
-          />
-        ))}
+        {chartList
+          .filter((c) => c.isMappingValid)
+          .map((chart, index) => (
+            <ChartItem
+              chartIndex={index}
+              id={chart.id}
+              key={chart.id}
+              name={chart.name}
+              vizType={chart.vizType}
+              datasetId={chart.datasetId}
+              createdDate={chart.createdDate}
+              framesArray={props.framesArray}
+              elementType={
+                (chart.vizType === "bigNumber"
+                  ? ReportElementsType.BIG_NUMBER
+                  : ReportElementsType.CHART) as "chart" | "bigNumber"
+              }
+            />
+          ))}
       </div>
     </React.Fragment>
   );
@@ -1138,6 +1143,7 @@ function CreateChartCard(props: {
     <div>
       <div
         onClick={action}
+        data-testid="create-chart-card"
         css={`
           background: #f2f7fd;
           box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.1);
@@ -1263,7 +1269,7 @@ function ChartItem(
 
   return (
     <div
-      ref={added || chartPreview ? nullRef : drag}
+      ref={added ? nullRef : drag}
       id={`chart-${props.chartIndex}`}
       data-testid={props.chartIndex === 0 ? "chart-0" : "chart-n"}
       className={
@@ -1357,7 +1363,7 @@ function EditHeaderPanelView(props: Props) {
                 color: #262c34;
               `}
               onClick={() => {
-                setCurrentView("elements");
+                setCurrentView("charts");
               }}
             >
               <Close color="inherit" />

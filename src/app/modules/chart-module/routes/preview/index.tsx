@@ -24,6 +24,7 @@ interface ChartBuilderPreviewProps {
   }[];
   filterOptionGroups: FilterGroupModel[];
   loadDataset: (endpoint: string) => Promise<boolean>;
+  dataTypes: never[];
 }
 
 export function ChartBuilderPreview(props: ChartBuilderPreviewProps) {
@@ -44,7 +45,7 @@ export function ChartBuilderPreview(props: ChartBuilderPreviewProps) {
     } else {
       props.loadDataset(`chart/sample-data/${dataset}`);
     }
-  }, [dataset]);
+  }, []);
 
   const canChartEditDelete = React.useMemo(() => {
     return isAuthenticated && loadedChart && loadedChart.owner === user?.sub;
@@ -63,7 +64,11 @@ export function ChartBuilderPreview(props: ChartBuilderPreviewProps) {
     <div css={commonStyles.container}>
       {props.loading && <PageLoader />}
       <div css={commonStyles.innercontainer}>
-        <DatasetDataTable data={props.data} stats={props.stats} />
+        <DatasetDataTable
+          data={props.data}
+          stats={props.stats}
+          dataTypes={props.dataTypes}
+        />
       </div>
     </div>
   );

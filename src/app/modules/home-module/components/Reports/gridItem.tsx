@@ -21,10 +21,11 @@ interface Props {
   handleDelete?: (id: string) => void;
   handleDuplicate?: (id: string) => void;
   showMenuButton: boolean;
+  owner: string;
 }
 
 export default function gridItem(props: Props) {
-  const { isAuthenticated } = useAuth0();
+  const { user, isAuthenticated } = useAuth0();
   const [menuOptionsDisplay, setMenuOptionsDisplay] = React.useState(false);
 
   const showMenuOptions = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -32,6 +33,9 @@ export default function gridItem(props: Props) {
     e.stopPropagation();
     setMenuOptionsDisplay(!menuOptionsDisplay);
   };
+  const canReportEditDelete = React.useMemo(() => {
+    return isAuthenticated && props.owner === user?.sub;
+  }, [user, isAuthenticated]);
 
   return (
     <div
@@ -242,9 +246,7 @@ export default function gridItem(props: Props) {
             </div>
             <div
               css={
-                props.public || !isAuthenticated
-                  ? "opacity: 0.5;pointer-events: none;"
-                  : ""
+                !canReportEditDelete ? "opacity: 0.5;pointer-events: none;" : ""
               }
             >
               <Link to={`/report/${props.id}/edit`}>
@@ -259,9 +261,7 @@ export default function gridItem(props: Props) {
             </div>
             <div
               css={
-                props.public || !isAuthenticated
-                  ? "opacity: 0.5;pointer-events: none;"
-                  : ""
+                !canReportEditDelete ? "opacity: 0.5;pointer-events: none;" : ""
               }
             >
               <IconButton

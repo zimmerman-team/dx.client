@@ -113,6 +113,7 @@ import {
   ChartDelete,
   ChartDuplicate,
   ChartGet,
+  ChartGetInReport,
   ChartGetList,
   ChartUpdate,
   ChartsCount,
@@ -239,6 +240,7 @@ const storeContent: StoreModel = {
   },
   charts: {
     ChartGet: persist(ChartGet),
+    ChartGetInReport: persist(ChartGetInReport),
     ChartCreate: persist(ChartCreate),
     ChartUpdate: persist(ChartUpdate),
     ChartDelete: persist(ChartDelete),

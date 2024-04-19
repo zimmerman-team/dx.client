@@ -2,7 +2,7 @@
 import React from "react";
 import Grid from "@material-ui/core/Grid";
 import useTitle from "react-use/lib/useTitle";
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory, useLocation, useParams } from "react-router-dom";
 import { useStoreState, useStoreActions } from "app/state/store/hooks";
 /* project */
 import { styles as commonStyles } from "app/modules/chart-module/routes/common/styles";
@@ -21,6 +21,7 @@ function ChartBuilderChartType(props: ChartBuilderChartTypeProps) {
   const history = useHistory();
   const { isAuthenticated, user } = useAuth0();
   const { page } = useParams<{ page: string }>();
+  const location = useLocation();
 
   const dataset = useStoreState((state) => state.charts.dataset.value);
   const chartType = useStoreState((state) => state.charts.chartType.value);
@@ -30,6 +31,9 @@ function ChartBuilderChartType(props: ChartBuilderChartTypeProps) {
   const clearMapping = useStoreActions(
     (actions) => actions.charts.mapping.reset
   );
+  // access query parameters
+  const queryParams = new URLSearchParams(location.search);
+  const paramValue = queryParams.get("loadataset");
   const loadedChart = useStoreState(
     (state) =>
       (state.charts.ChartGet.crudData ?? emptyChartAPI) as ChartAPIModel
@@ -38,6 +42,7 @@ function ChartBuilderChartType(props: ChartBuilderChartTypeProps) {
   const onChartTypeChange =
     (chartTypeId: string) => (e: React.MouseEvent<HTMLDivElement>) => {
       clearMapping();
+      props.setChartFromAPI(null);
       setChartType(chartType === chartTypeId ? null : chartTypeId);
     };
 
@@ -45,10 +50,12 @@ function ChartBuilderChartType(props: ChartBuilderChartTypeProps) {
     //if dataset is empty and not loading, redirect to data page
     if (dataset === null && !props.loading) {
       history.push(`/chart/${page}/data`);
-    } else {
+    } else if (paramValue) {
+      //when landing in chart type step from outside the chart module,
+      //load the sample data as data step is skipped
       props.loadDataset(`chart/sample-data/${dataset}`);
     }
-  }, [dataset]);
+  }, []);
 
   const canChartEditDelete = React.useMemo(() => {
     return isAuthenticated && loadedChart && loadedChart.owner === user?.sub;

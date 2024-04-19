@@ -3,10 +3,6 @@ import React from "react";
 import { useRecoilState } from "recoil";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useHistory, useParams } from "react-router-dom";
-import {
-  chartFromReportAtom,
-  reportRightPanelViewAtom,
-} from "app/state/recoil/atoms";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import { isEmpty } from "lodash";
 import { Slide, SnackbarContent, useMediaQuery } from "@material-ui/core";
@@ -29,7 +25,6 @@ export function ChartModuleToolBox(props: Readonly<ChartToolBoxProps>) {
   const { isAuthenticated, user } = useAuth0();
   const isMobile = useMediaQuery("(max-width: 767px)");
   const [isClickable, setIsClickable] = React.useState(false);
-  const setRightPanelView = useRecoilState(reportRightPanelViewAtom)[1];
 
   const dataset = useStoreState((state) => state.charts.dataset.value);
 
@@ -69,12 +64,10 @@ export function ChartModuleToolBox(props: Readonly<ChartToolBoxProps>) {
     ) {
       if (name === "dataset" && !isEmpty(dataset)) {
         history.push(`/chart/${page}/preview-data`);
-
         return;
       }
       if (name === "chart" && !isEmpty(dataset)) {
         history.push(`/chart/${page}/chart-type`);
-
         return;
       }
       if (name === "mapping" && !isEmpty(dataset) && !isEmpty(chartType)) {
@@ -82,7 +75,6 @@ export function ChartModuleToolBox(props: Readonly<ChartToolBoxProps>) {
           props.triggerAutoSave();
         }
         history.push(`/chart/${page}/mapping`);
-
         return;
       }
     } else if (!isEmpty(props.mappedData)) {
