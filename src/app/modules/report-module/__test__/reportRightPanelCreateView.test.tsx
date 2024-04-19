@@ -29,6 +29,7 @@ import { AuthTokenState } from "app/state/api/action-reducers/sync";
 import {
   ChartCreate,
   ChartGet,
+  ChartGetInReport,
   ChartGetList,
 } from "app/state/api/action-reducers/charts";
 import {
@@ -130,6 +131,7 @@ const appSetup = (
         ChartGetList,
         ChartGet,
         ChartCreate,
+        ChartGetInReport,
       },
     },
     {
@@ -259,6 +261,7 @@ test("should search for charts in in chart view", async () => {
         vizType: "echartsBarchart",
         datasetId: "65e9672ecc1d4b0a62cd6079",
         createdDate: "2024-03-07T07:22:07.342Z",
+        isMappingValid: true,
       },
     ],
   } as AxiosResponse<any>);
