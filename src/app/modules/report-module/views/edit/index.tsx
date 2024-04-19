@@ -30,7 +30,7 @@ import RowFrame from "../../sub-module/rowStructure";
 import TourGuide from "app/components/Dialogs/TourGuide";
 import useCookie from "@devhammed/use-cookie";
 import { get } from "lodash";
-import { ChartAPIModel, emptyChartAPI } from "app/modules/chart-module/data";
+import { PageLoader } from "app/modules/common/page-loader";
 
 function ReportEditView(props: ReportEditViewProps) {
   const { page } = useParams<{ page: string }>();
@@ -60,6 +60,10 @@ function ReportEditView(props: ReportEditViewProps) {
     (actions) => actions.reports.ReportGet.fetch
   );
 
+  const loadingReportData = useStoreState(
+    (state) => state.reports.ReportGet.loading
+  );
+
   const clearReportData = useStoreActions(
     (actions) => actions.reports.ReportGet.clear
   );
@@ -69,11 +73,6 @@ function ReportEditView(props: ReportEditViewProps) {
 
   const reportError401 = useStoreState(
     (state) => state.reports.ReportGet.errorData
-  );
-
-  const loadedChart = useStoreState(
-    (state) =>
-      (state.charts.ChartGet.crudData ?? emptyChartAPI) as ChartAPIModel
   );
 
   function deleteFrame(id: string) {
@@ -197,12 +196,16 @@ function ReportEditView(props: ReportEditViewProps) {
   }, [reportData]);
 
   const canChartEditDelete = React.useMemo(() => {
-    return isAuthenticated && loadedChart && loadedChart.owner === user?.sub;
-  }, [user, isAuthenticated, loadedChart]);
+    return isAuthenticated && reportData?.owner === user?.sub;
+  }, [user, isAuthenticated, reportData]);
 
   // console.log(reportError401, "reportError401");
-  if (reportError401 || !canChartEditDelete) {
+  if ((reportError401 || !canChartEditDelete) && !loadingReportData) {
     return <NotAuthorizedMessageModule asset="report" action="edit" />;
+  }
+
+  if (loadingReportData) {
+    return <PageLoader />;
   }
 
   return (

@@ -765,6 +765,7 @@ const Box = (props: {
                 border: none;
                 box-shadow: none;
               `}
+              data-cy="report-video-content"
             ></iframe>
           </div>
         </Resizable>
@@ -839,6 +840,7 @@ const Box = (props: {
                 height: ${props.height}px;
                 object-fit: contain;
               `}
+              data-cy="report-image-content"
             />
           </div>
         </Resizable>

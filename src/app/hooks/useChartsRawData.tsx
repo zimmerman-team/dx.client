@@ -77,6 +77,8 @@ export function useChartsRawData(props: {
   setChartFromAPI: (value: ChartRenderedItem) => void;
   inChartWrapper?: boolean;
   dimensions?: any;
+  isLoadedChartMappingValid?: boolean | null;
+  setIsLoadedChartMappingValid?: (value: boolean | null) => void;
 }) {
   const abortControllerRef = React.useRef<AbortController>(
     new AbortController()
@@ -259,6 +261,7 @@ export function useChartsRawData(props: {
       })
       .finally(() => {
         setRenderChartFromAPIFufilled(true);
+        props.setIsLoadedChartMappingValid?.(null);
       })
       .catch((error) => {
         console.log("API call error: " + error.message);
@@ -289,10 +292,10 @@ export function useChartsRawData(props: {
     //used when in edit page
     if (!props.inChartWrapper && isEditPage) {
       if (
-        (isrequiredMappingKeysPresent || loadedChartDetails?.isMappingValid) &&
+        (isrequiredMappingKeysPresent || props.isLoadedChartMappingValid) &&
         renderChartFromAPIFufilled
       ) {
-        clearLoadedChartDetails();
+        // clearLoadedChartDetails();
         renderChartFromAPI();
       } else {
         // No need to call API if mapping is not valid. hence we set loading to false
@@ -306,6 +309,7 @@ export function useChartsRawData(props: {
     token,
     isrequiredMappingKeysPresent,
     loadedChartDetails,
+    props.isLoadedChartMappingValid,
   ]);
 
   React.useEffect(() => {

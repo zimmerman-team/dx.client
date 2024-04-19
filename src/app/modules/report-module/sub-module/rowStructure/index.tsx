@@ -612,7 +612,7 @@ const OneByOne = (props: IRowStructureType) => {
     }
   };
   return (
-    <div css={blockcss} onClick={handleClick}>
+    <div css={blockcss} onClick={handleClick} data-cy="one-by-one-type">
       <p>1/1</p>
       <div>
         <div

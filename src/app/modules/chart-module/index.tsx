@@ -63,6 +63,9 @@ export default function ChartModule() {
   const [hasSubHeaderTitleFocused, setHasSubHeaderTitleFocused] =
     React.useState(false);
 
+  const [isLoadedChartMappingValid, setIsLoadedChartMappingValid] =
+    React.useState<null | boolean>(false);
+
   const chartType = useStoreState((state) => state.charts.chartType.value);
   const mapping = useStoreState((state) => state.charts.mapping.value);
   const dataset = useStoreState((state) => state.charts.dataset.value);
@@ -74,6 +77,7 @@ export default function ChartModule() {
       get(charts, `[${chartType}].dimensions`, [])
     );
   }, [chartFromAPI, chartType]);
+
   const {
     loading,
     dataTypes,
@@ -97,6 +101,8 @@ export default function ChartModule() {
     setChartFromAPI,
     chartFromAPI,
     dimensions,
+    isLoadedChartMappingValid,
+    setIsLoadedChartMappingValid,
   });
 
   const isSaveLoading = useStoreState(
@@ -311,6 +317,7 @@ export default function ChartModule() {
     if (loadedChart.vizType === "bigNumber") {
       setMapping(loadedChart.mapping);
     }
+    setIsLoadedChartMappingValid(loadedChart?.isMappingValid);
   }, [loadedChart]);
 
   const mappedData = React.useMemo(
