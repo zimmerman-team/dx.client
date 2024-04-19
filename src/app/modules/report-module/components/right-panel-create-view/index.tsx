@@ -665,6 +665,7 @@ function VideoFrame(props: {
       `}
       ref={drag}
       onClick={() => setPlay(!play)}
+      data-cy="video-frame"
     >
       {play ? (
         <>

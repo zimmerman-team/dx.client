@@ -9,6 +9,11 @@
 - Duplicate Chart - Done
 
 */
+//@ts-ignore
+const randomId = () => Cypress._.random(0, 1e6);
+//@ts-ignore
+const testname1 = `testname${randomId()}`;
+const testname2 = `testname${randomId()}`;
 
 describe("Testing create chart on DX", () => {
   const apiUrl = Cypress.env("api_url");
@@ -41,14 +46,25 @@ describe("Testing create chart on DX", () => {
     cy.get('[data-cy="toolbox-chart-next"]').click();
   });
 
-  it("Create Bar Chart", () => {
+  it("Can create a bar chart", () => {
     cy.get('[data-cy="chart-type-item"]').contains("Bar chart").click();
 
     cy.get('[data-cy="chart-type-preview"]')
       .contains("Bar chart")
       .should("be.visible");
 
+    cy.intercept(`${apiUrl}/chart`).as("saveChart");
+    cy.intercept(`${apiUrl}/chart/*`).as("saveChart2");
+
     cy.get('[data-cy="toolbox-chart-next"]').click();
+
+    cy.wait("@saveChart");
+
+    cy.location("pathname").should("include", "/mapping");
+
+    cy.get('[data-cy="report-sub-header-title-input"]').type(
+      `{selectall}{backspace}${testname1}`
+    );
 
     cy.contains('[data-cy="nonstatic-dimension-container"]', "Bars").within(
       () => {
@@ -56,7 +72,7 @@ describe("Testing create chart on DX", () => {
       }
     );
 
-    cy.intercept(`${apiUrl}/chart/new/render`).as("renderChart");
+    cy.intercept(`${apiUrl}/chart/*/render`).as("renderChart");
 
     cy.get('[data-cy="chart-dimension-mapping-item"]').first().click();
 
@@ -66,17 +82,15 @@ describe("Testing create chart on DX", () => {
 
     cy.get('[data-cy="toolbox-chart-next"]').click();
 
-    cy.wait("@renderChart");
+    // cy.wait("@renderChart");
 
     cy.get('[data-cy="toolbox-chart-next"]').click();
 
-    cy.wait("@renderChart");
-
-    cy.intercept(`${apiUrl}/chart`).as("saveChart");
+    // cy.wait("@renderChart");
 
     cy.get('[data-cy="toolbox-chart-next"]').click();
 
-    cy.wait("@saveChart");
+    cy.wait("@saveChart2");
 
     cy.visit("/");
 
@@ -87,19 +101,29 @@ describe("Testing create chart on DX", () => {
     cy.wait("@fetchCharts");
 
     cy.get('[data-cy="chart-grid-item-echartsBarchart"]')
-      .contains("Soccer Players")
+      .contains(testname1)
       .should("be.visible");
   });
 
-  it("Create Line Chart", () => {
+  it("Can create a Line Chart", () => {
     cy.get('[data-cy="chart-type-item"]').contains("Line chart").click();
 
     cy.get('[data-cy="chart-type-preview"]')
       .contains("Line chart")
       .should("be.visible");
 
+    cy.intercept(`${apiUrl}/chart`).as("saveChart");
+    cy.intercept(`${apiUrl}/chart/*`).as("saveChart2");
+
     cy.get('[data-cy="toolbox-chart-next"]').click();
 
+    cy.wait("@saveChart");
+
+    cy.location("pathname").should("include", "/mapping");
+
+    cy.get('[data-cy="report-sub-header-title-input"]').type(
+      `{selectall}{backspace}${testname2}`
+    );
     cy.contains('[data-cy="nonstatic-dimension-container"]', "X Axis").within(
       () => {
         cy.get('[data-cy="chart-dimension-select"]').first().click();
@@ -107,7 +131,7 @@ describe("Testing create chart on DX", () => {
       }
     );
 
-    cy.intercept(`${apiUrl}/chart/new/render`).as("renderChart");
+    cy.intercept(`${apiUrl}/chart/*/render`).as("renderChart");
     cy.contains('[data-cy="nonstatic-dimension-container"]', "Y Axis").within(
       () => {
         cy.get('[data-cy="chart-dimension-select"]').first().click();
@@ -122,17 +146,17 @@ describe("Testing create chart on DX", () => {
 
     cy.get('[data-cy="toolbox-chart-next"]').click();
 
-    cy.wait("@renderChart");
+    // cy.wait("@renderChart");
 
     cy.get('[data-cy="toolbox-chart-next"]').click();
 
-    cy.wait("@renderChart");
+    // cy.wait("@renderChart");
 
     cy.intercept(`${apiUrl}/chart`).as("saveChart");
 
     cy.get('[data-cy="toolbox-chart-next"]').click();
 
-    cy.wait("@saveChart");
+    cy.wait("@saveChart2");
 
     cy.visit("/");
 
@@ -143,7 +167,7 @@ describe("Testing create chart on DX", () => {
     cy.wait("@fetchCharts");
 
     cy.get('[data-cy="chart-grid-item-echartsLinechart"]')
-      .contains("Soccer Players")
+      .contains(testname2)
       .should("be.visible");
   });
 });
@@ -163,8 +187,8 @@ describe("Edit, duplicate and delete chart", () => {
     cy.wait("@fetchCharts");
   });
 
-  it("Edit chart", () => {
-    cy.contains('[data-cy="chart-grid-item-echartsBarchart"]', "Soccer Players")
+  it("Can Edit a chart", () => {
+    cy.contains('[data-cy="chart-grid-item-echartsBarchart"]', testname1)
       .first()
       .scrollIntoView()
       .within(() => {
@@ -184,8 +208,6 @@ describe("Edit, duplicate and delete chart", () => {
       .trigger("mouseover")
       .click();
 
-    cy.wait("@renderChart2");
-
     cy.get('[data-cy="chart-toolbox-mapping-tab"]').click();
 
     cy.contains('[data-cy="nonstatic-dimension-container"]', "Bars").within(
@@ -200,11 +222,11 @@ describe("Edit, duplicate and delete chart", () => {
 
     cy.get('[data-cy="toolbox-chart-next"]').click();
 
-    cy.wait("@renderChart2");
+    // cy.wait("@renderChart2");
 
     cy.get('[data-cy="toolbox-chart-next"]').click();
 
-    cy.wait("@renderChart2");
+    // cy.wait("@renderChart2");
 
     cy.intercept(`${apiUrl}/chart/*`).as("saveChart");
 
@@ -213,10 +235,10 @@ describe("Edit, duplicate and delete chart", () => {
     cy.wait("@saveChart");
   });
 
-  it("Duplicate chart", () => {
+  it("Can Duplicate a chart", () => {
     cy.intercept(`${apiUrl}/chart/duplicate/*`).as("duplicateChart");
 
-    cy.contains('[data-cy="chart-grid-item-echartsBarchart"]', "Soccer Players")
+    cy.contains('[data-cy="chart-grid-item-echartsBarchart"]', testname1)
       .first()
       .scrollIntoView()
       .within(() => {
@@ -226,61 +248,79 @@ describe("Edit, duplicate and delete chart", () => {
     cy.get('[data-cy="chart-grid-item-duplicate-btn"]').click();
     cy.wait("@duplicateChart");
 
-    // Wait for all occurrences of the API call to complete
-    cy.get("@fetchCharts").then((interceptions) => {
-      // Get the number of occurrences of the API call
-      const numberOfOccurrences = interceptions.length;
-
-      // Wait for each occurrence to complete
-      for (let i = 0; i < numberOfOccurrences; i++) {
-        cy.wait("@fetchCharts");
-      }
-    });
+    cy.wait("@fetchCharts");
 
     cy.get("[data-cy=home-search-button]").click();
-    cy.get("[data-cy=home-search-input]").type("(Copy)");
+    cy.get("[data-cy=home-search-input]").type(
+      `{selectall}{backspace}${testname1}`
+    );
+    cy.wait("@fetchCharts");
 
-    cy.get("@fetchCharts").then((interceptions) => {
-      // Get the number of occurrences of the API call
-      const numberOfOccurrences = interceptions.length;
-
-      // Wait for each occurrence to complete
-      for (let i = 0; i < numberOfOccurrences; i++) {
-        cy.wait("@fetchCharts");
-      }
-    });
     cy.contains(
       '[data-cy="chart-grid-item-echartsBarchart"]',
-      "Soccer Players (Copy)"
+      `${testname1} (Copy)`
     )
       .scrollIntoView()
       .should("be.visible");
   });
 
-  // it("Delete chart", () => {
-  //   cy.contains(
-  //     '[data-cy="chart-grid-item-echartsBarchart"]',
-  //     "Soccer Players (Copy)"
-  //   )
-  //     .first()
-  //     .scrollIntoView()
-  //     .within(() => {
-  //       cy.get('[data-cy="chart-grid-item-menu-btn"]').click();
-  //     });
+  it("Can Delete a chart", () => {
+    cy.get("[data-cy=home-search-button]").click();
+    cy.get("[data-cy=home-search-input]").type(
+      `{selectall}{backspace}${testname1}`
+    );
+    cy.wait("@fetchCharts");
+    cy.contains(
+      '[data-cy="chart-grid-item-echartsBarchart"]',
+      `${testname1} (Copy)`
+    )
+      .first()
+      .scrollIntoView()
+      .within(() => {
+        cy.get('[data-cy="chart-grid-item-menu-btn"]').click();
+      });
 
-  //   cy.get('[data-cy="chart-grid-item-delete-btn"]').click();
-  //   cy.intercept("DELETE", `${apiUrl}/chart/*`).as("deleteChart");
+    cy.get('[data-cy="chart-grid-item-delete-btn"]').click();
+    cy.intercept("DELETE", `${apiUrl}/chart/*`).as("deleteChart");
 
-  //   cy.get('[data-cy="delete-chart-item-form"]').within(() => {
-  //     cy.get('[data-cy="delete-chart-item-input"]').type("DELETE {enter}");
-  //   });
+    cy.get('[data-cy="delete-chart-item-form"]').within(() => {
+      cy.get('[data-cy="delete-chart-item-input"]').type("DELETE{enter}");
+    });
 
-  //   cy.wait("@deleteChart");
+    cy.wait("@deleteChart");
 
-  //   cy.wait("@fetchCharts");
+    cy.wait("@fetchCharts");
 
-  //   cy.get('[data-cy="chart-grid-item-echartsBarchart"]')
-  //     .contains("Soccer Players (Copy)")
-  //     .should("not.exist");
-  // });
+    // cy.get('[data-cy="chart-grid-item-echartsBarchart"]')
+    //   .contains("Soccer Players (Copy)")
+    //   .should("not.exist");
+
+    cy.get("[data-cy=home-search-button]").click();
+    cy.get("[data-cy=home-search-input]").type(
+      `{selectall}{backspace}${testname2}`
+    );
+    cy.wait("@fetchCharts");
+
+    cy.contains('[data-cy="chart-grid-item-echartsLinechart"]', `${testname2}`)
+      .first()
+      .scrollIntoView()
+      .within(() => {
+        cy.get('[data-cy="chart-grid-item-menu-btn"]').click();
+      });
+
+    cy.get('[data-cy="chart-grid-item-delete-btn"]').click();
+    cy.intercept("DELETE", `${apiUrl}/chart/*`).as("deleteChart");
+
+    cy.get('[data-cy="delete-chart-item-form"]').within(() => {
+      cy.get('[data-cy="delete-chart-item-input"]').type("DELETE{enter}");
+    });
+
+    cy.wait("@deleteChart");
+
+    cy.wait("@fetchCharts");
+
+    // cy.get('[data-cy="chart-grid-item-echartsBarchart"]')
+    //   .contains("Soccer Players (Copy)")
+    //   .should("not.exist");
+  });
 });

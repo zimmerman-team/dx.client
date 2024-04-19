@@ -81,6 +81,7 @@ export default function AddRowFrameButton(props: Props) {
           css={`
             padding: 4px;
           `}
+          data-cy="add-row-frame-button"
         >
           <PlusIcon />
         </IconButton>
