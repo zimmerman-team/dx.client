@@ -110,7 +110,35 @@ describe("Testing reports on DX", () => {
 
     cy.get('[data-cy="report-panel-video-item"]').click();
     cy.get('[data-cy="video-frame"]').first().drag();
-    cy.get('[data-cy="row-frame-item-drop-zone-1-0"]').drop();
+    cy.get('[data-cy="row-frame-item-drop-zone-1-0"]').scrollIntoView().drop();
+
+    cy.get('[data-cy="report-video-content"]')
+      .scrollIntoView()
+      .should("be.visible");
+
+    // Drag and drop image item
+
+    cy.intercept(`${apiUrl}/unsplash/image/search**`).as("fetchUnsplashImages");
+    cy.get('[data-cy="add-row-frame-button"]').scrollIntoView().click();
+
+    cy.get('[data-cy="empty-row-frame"]')
+      .first()
+      .within(() => {
+        cy.get('[data-cy="one-by-one-type"]').click({ timeout: 2000 });
+      });
+    cy.get('[data-cy="report-panel-chart-tab"]').click();
+    cy.get('[data-cy="report-panel-chart-tab"]').click();
+    cy.get('[data-cy="report-panel-media-tab"]').click();
+
+    cy.wait("@fetchUnsplashImages");
+
+    cy.get('[data-cy="report-panel-image-item"]').click();
+    cy.get('[data-cy="image-frame"]').first().drag();
+    cy.get('[data-cy="row-frame-item-drop-zone-2-0"]').scrollIntoView().drop();
+
+    cy.get('[data-cy="report-image-content"]')
+      .scrollIntoView()
+      .should("be.visible");
 
     // Save the report
 

@@ -791,6 +791,7 @@ function ImageFrame(props: {
         background-size: cover;
       `}
       ref={drag}
+      data-cy="image-frame"
     ></div>
   );
 }
