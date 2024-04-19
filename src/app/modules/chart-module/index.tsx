@@ -303,16 +303,12 @@ export default function ChartModule() {
 
   React.useEffect(() => {
     //set chart name to loaded chart name
-    if (
-      page !== "new" &&
-      loadedChart.name.length > 0 &&
-      loadedChart.id === page
-    ) {
+    if (page !== "new" && loadedChart.name.length > 0) {
       setChartName(loadedChart.name);
     }
     //set mapping from loaded chart as it always has the complete mapping values
     //TODO: This will need to change when we have the complete mapping values for big number
-    if (loadedChart.vizType === "bigNumber" && loadedChart.id === page) {
+    if (loadedChart.vizType === "bigNumber") {
       setMapping(loadedChart.mapping);
     }
   }, [loadedChart]);

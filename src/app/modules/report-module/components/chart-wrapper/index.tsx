@@ -24,8 +24,12 @@ export function ReportChartWrapper(props: Props) {
 
   const containerRef = React.useRef<HTMLDivElement>(null);
   const [chartName, setChartName] = React.useState<string>("");
-  const loadChart = useStoreActions((actions) => actions.charts.ChartGet.fetch);
-  const chartError = useStoreState((state) => state.charts.ChartGet.errorData);
+  const loadChart = useStoreActions(
+    (actions) => actions.charts.ChartGetInReport.fetch
+  );
+  const chartError = useStoreState(
+    (state) => state.charts.ChartGetInReport.errorData
+  );
   const resetMapping = useStoreActions(
     (actions) => actions.charts.mapping.reset
   );
@@ -33,10 +37,10 @@ export function ReportChartWrapper(props: Props) {
 
   const loadedChart = useStoreState(
     (state) =>
-      (state.charts.ChartGet.crudData ?? emptyChartAPI) as ChartAPIModel
+      (state.charts.ChartGetInReport.crudData ?? emptyChartAPI) as ChartAPIModel
   );
   const clearChart = useStoreActions(
-    (actions) => actions.charts.ChartGet.clear
+    (actions) => actions.charts.ChartGetInReport.clear
   );
 
   const [rawViz, setRawViz] = React.useState<any>(null);
