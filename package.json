@@ -169,7 +169,7 @@
     "depcheck": "depcheck",
     "start": "craco start",
     "build": "craco build",
-    "test": "react-scripts test --watchAll=false --coverage",
+    "test": "react-scripts test --watchAll --coverage",
     "eject": "craco eject",
     "upgrade-all": "yarn-upgrade-all",
     "docker": "yarn link '@rawgraphs/rawgraphs-charts' && craco start",
