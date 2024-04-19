@@ -447,7 +447,7 @@ export default function ChartModule() {
     return (
       <>
         <div css="width: 100%; height: 100px;" />
-        <NotAuthorizedMessageModule asset="chart" />
+        <NotAuthorizedMessageModule asset="chart" action="view" />
       </>
     );
   }

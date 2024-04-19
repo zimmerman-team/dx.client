@@ -5,10 +5,33 @@ import useTitle from "react-use/lib/useTitle";
 import { CommonChart } from "app/modules/chart-module/components/common-chart";
 import { styles as commonStyles } from "app/modules/chart-module/routes/common/styles";
 import { ChartBuilderCustomizeProps } from "app/modules/chart-module/routes/customize/data";
-import { withAuthenticationRequired } from "@auth0/auth0-react";
+import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
+import { useStoreState } from "app/state/store/hooks";
+import { ChartAPIModel, emptyChartAPI } from "../../data";
+import { NotAuthorizedMessageModule } from "app/modules/common/not-authorized-message";
 
 function ChartBuilderCustomize(props: Readonly<ChartBuilderCustomizeProps>) {
   useTitle("DX DataXplorer - Customize");
+
+  const { isAuthenticated, user } = useAuth0();
+
+  const loadedChart = useStoreState(
+    (state) =>
+      (state.charts.ChartGet.crudData ?? emptyChartAPI) as ChartAPIModel
+  );
+
+  const canChartEditDelete = React.useMemo(() => {
+    return isAuthenticated && loadedChart && loadedChart.owner === user?.sub;
+  }, [user, isAuthenticated, loadedChart]);
+
+  if (!canChartEditDelete) {
+    return (
+      <>
+        <div css="width: 100%; height: 100px;" />
+        <NotAuthorizedMessageModule asset="chart" action="edit" />
+      </>
+    );
+  }
 
   return (
     <div css={commonStyles.container}>
