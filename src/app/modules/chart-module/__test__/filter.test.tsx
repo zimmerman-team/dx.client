@@ -12,7 +12,6 @@ interface MockProps {
   key: string;
   name: string;
   options: any;
-  loadChartDataFromAPI: jest.Mock<any, any, any>;
   expandGroup: jest.Mock<any, any, any>;
   goBack: jest.Mock<any, any, any>;
 }
@@ -51,7 +50,6 @@ const optionsWithSubOptions = [
 
 const defaultProps = (props: Partial<MockProps> = {}): MockProps => {
   return {
-    loadChartDataFromAPI: jest.fn(),
     expandGroup: jest.fn(),
     goBack: jest.fn(),
     key: "1",
@@ -201,8 +199,6 @@ test("applied filters list should decrease by 1 when an applied filter is clicke
     fireEvent.click(appliedFilter);
   });
   expect(mockStore.getState().charts.appliedFilters.value[props.name]).toBeNull;
-
-  expect(props.loadChartDataFromAPI).toHaveBeenCalled();
 });
 
 test("expanded filter group should close when back button is clicked", async () => {
@@ -280,7 +276,6 @@ test("checking 'select all' checkbox should select all filter options", async ()
   expect(mockStore.getState().charts.appliedFilters.value).toEqual(
     defaultStoreValue(props.name)
   );
-  expect(props.loadChartDataFromAPI).toHaveBeenCalled();
   expect(props.goBack).toHaveBeenCalled();
 });
 
@@ -329,7 +324,6 @@ test("applied filters should be removed when reset button is clicked", async () 
   checkIfAllOptionsAreUnchecked(props.options);
 
   expect(mockStore.getState().charts.appliedFilters.value).toEqual({});
-  expect(props.loadChartDataFromAPI).toHaveBeenCalled();
 });
 
 test("search input should filter options", async () => {

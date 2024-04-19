@@ -32,7 +32,6 @@ export const containercss = css`
 
   p {
     font-size: 12px;
-    font-weight: 400;
     line-height: 15px;
     text-align: center;
   }

@@ -25,11 +25,11 @@ interface PreviewTableProps {
     type: "bar" | "percentage" | "unique";
     data: { name: string; value: number }[];
   }[];
+  dataTypes: any;
 }
 
 export default function PreviewTable(props: PreviewTableProps) {
   const [toolboxDisplay, setToolboxDisplay] = React.useState(false);
-
   return (
     <>
       <div
@@ -84,7 +84,7 @@ export default function PreviewTable(props: PreviewTableProps) {
                             background: #ffffff;
                           `}
                         >
-                          {val === "string" ? "Aa" : "#"}
+                          {props.dataTypes?.[val] === "string" ? "Aa" : "#"}
                         </div>
                         <p
                           css={`

@@ -222,6 +222,7 @@ export default function ChartsGrid(props: Props) {
                 isMappingValid={c.isMappingValid}
                 handleDelete={() => handleModal(index)}
                 handleDuplicate={() => handleDuplicate(index)}
+                owner={c.owner}
               />
               <Box height={16} />
             </Grid>

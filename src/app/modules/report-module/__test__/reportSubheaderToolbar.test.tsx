@@ -20,20 +20,21 @@ import { createStore, StoreProvider } from "easy-peasy";
 import { createMemoryHistory } from "history";
 import Router from "react-router-dom";
 import { MutableSnapshot, RecoilRoot } from "recoil";
-import { ToolbarPluginsType } from "../components/reportSubHeaderToolbar/staticToolbar";
-import { IHeaderDetails } from "../components/right-panel/data";
-import { IFramesArray } from "../views/create/data";
+import { ToolbarPluginsType } from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
+import { IHeaderDetails } from "app/modules/report-module/components/right-panel/data";
+import { IFramesArray } from "app/modules/report-module/views/create/data";
 import {
   ReportGet,
   ReportGetList,
   ReportUpdate,
 } from "app/state/api/action-reducers/reports";
 import axios, { AxiosResponse } from "axios";
+import { ReportSubheaderToolbar } from "../components/reportSubHeaderToolbar";
 
 interface MockProps {
   name: string;
   autoSave: boolean;
-  setAutoSave: (value: { isAutoSaveEnabled: boolean }) => void;
+  setAutoSave: jest.Mock<any, any, any>;
   visualOptions?: any;
   onReportSave: (type: "create" | "edit") => Promise<void>;
   setName: (name: string) => void;
@@ -152,7 +153,7 @@ const appSetup = (params: Params, newProps: Partial<MockProps> = {}) => {
                 node={homeDisplayAtom}
                 onChange={onHomeTabChange}
               />
-              {/* <ReportSubheaderToolbar {...props} /> */}
+              <ReportSubheaderToolbar {...props} />
             </RecoilRoot>
           </StoreProvider>
         </Auth0Provider>
@@ -240,7 +241,7 @@ test("clicking view report button should save report and go to report detail pag
   });
 });
 
-test("autosave switch should toggle autosave state fro false to true", async () => {
+test("autosave switch should toggle autosave state from false to true", async () => {
   const user = userEvent.setup();
 
   const { app, props } = appSetup({ mockActions: false });
@@ -252,7 +253,7 @@ test("autosave switch should toggle autosave state fro false to true", async () 
   expect(screen.getByTestId("auto-save-switch")).not.toBeChecked();
 
   await user.click(screen.getByTestId("auto-save-switch"));
-  expect(props.setAutoSave).toHaveBeenCalledWith(true);
+  expect(props.setAutoSave).toHaveBeenCalledWith({ isAutoSaveEnabled: true });
   expect(mockSetValues.autoSave).toBeTruthy();
 });
 
@@ -267,7 +268,7 @@ test("autosave switch should toggle autosave state from true to false", async ()
   expect(screen.getByTestId("auto-save-switch")).toBeChecked();
 
   await user.click(screen.getByTestId("auto-save-switch"));
-  expect(props.setAutoSave).toHaveBeenCalledWith(false);
+  expect(props.setAutoSave).toHaveBeenCalledWith({ isAutoSaveEnabled: false });
   expect(mockSetValues.autoSave).toBeFalsy();
 });
 

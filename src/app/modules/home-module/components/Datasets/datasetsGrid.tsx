@@ -3,7 +3,7 @@ import React from "react";
 import axios from "axios";
 import get from "lodash/get";
 import Box from "@material-ui/core/Box";
-import Grid from "@material-ui/core/Grid";
+import Grid, { GridSize } from "@material-ui/core/Grid";
 import { useRecoilState } from "recoil";
 import useDebounce from "react-use/lib/useDebounce";
 /** project */
@@ -25,6 +25,8 @@ interface Props {
   inChartBuilder?: boolean;
   category?: string;
   onItemClick?: (v: string) => void;
+  md?: GridSize;
+  lg?: GridSize;
 }
 
 export default function DatasetsGrid(props: Readonly<Props>) {
@@ -198,7 +200,8 @@ export default function DatasetsGrid(props: Readonly<Props>) {
     500,
     [props.searchStr]
   );
-
+  const md = props.md ?? 4;
+  const lg = props.lg ?? 3;
   return (
     <>
       {!props.tableView && (
@@ -210,8 +213,8 @@ export default function DatasetsGrid(props: Readonly<Props>) {
               key={data.id}
               xs={12}
               sm={6}
-              md={!props.inChartBuilder ? 4 : 6}
-              lg={!props.inChartBuilder ? 3 : 4}
+              md={md}
+              lg={lg}
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
@@ -254,6 +257,7 @@ export default function DatasetsGrid(props: Readonly<Props>) {
                 }}
                 showMenu={!props.inChartBuilder}
                 id={data.id}
+                owner={data.owner}
               />
 
               {!props.inChartBuilder && <Box height={16} />}

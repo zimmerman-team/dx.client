@@ -20,17 +20,21 @@ interface Props {
   isMappingValid: boolean;
   handleDelete?: (id: string) => void;
   handleDuplicate?: (id: string) => void;
+  owner: string;
 }
 
 export default function gridItem(props: Props) {
-  const { isAuthenticated } = useAuth0();
+  const { user, isAuthenticated } = useAuth0();
   const [menuOptionsDisplay, setMenuOptionsDisplay] = React.useState(false);
-
   const showMenuOptions = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
     setMenuOptionsDisplay(!menuOptionsDisplay);
   };
+
+  const canChartEditDelete = React.useMemo(() => {
+    return isAuthenticated && props.owner === user?.sub;
+  }, [user, isAuthenticated]);
 
   return (
     <div
@@ -214,9 +218,7 @@ export default function gridItem(props: Props) {
             </div>
             <div
               css={
-                props.public || !isAuthenticated
-                  ? "opacity: 0.5;pointer-events: none;"
-                  : ""
+                !canChartEditDelete ? "opacity: 0.5;pointer-events: none;" : ""
               }
             >
               <Link
@@ -237,9 +239,7 @@ export default function gridItem(props: Props) {
             </div>
             <div
               css={
-                props.public || !isAuthenticated
-                  ? "opacity: 0.5;pointer-events: none;"
-                  : ""
+                !canChartEditDelete ? "opacity: 0.5;pointer-events: none;" : ""
               }
             >
               <IconButton onClick={() => props.handleDelete?.(props.id)}>

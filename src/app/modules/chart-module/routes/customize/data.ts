@@ -24,28 +24,28 @@ export const checkLists = [
   {
     label: "Nordic Aurora",
 
-    value: ["#175A5C", "#23768C", "#5291BC", "#94A8E4", "#E0BAFD"],
+    value: ["#E0BAFD", "#94A8E4", "#5291BC", "#23768C", "#175A5C"],
   },
   {
     label: "Sunset coast",
 
-    value: ["#05405B", "#58528C", "#BB5390", "#FD6565", "#FDA529"],
+    value: ["#FDA529", "#FD6565", "#BB5390", "#58528C", "#05405B"],
   },
   {
     label: "Warm tone",
 
-    value: ["#5B0C0E", "#8A3C49", "#B26E87", "#D3A4C5", "#F5DCFE"],
+    value: ["#F5DCFE", "#D3A4C5", "#B26E87", "#8A3C49", "#5B0C0E"],
   },
   {
     label: "Sprint forest",
-    value: ["#2B5B16", "#538137", "#7BA95A", "#A4D37E", "#D0FEA3"],
+    value: ["#D0FEA3", "#A4D37E", "#7BA95A", "#538137", "#2B5B16"],
   },
   {
     label: "DataXplorer default",
-    value: ["#6061E5", "#73D3CD", "#F6C445", "#E492BD", "#E75656"],
+    value: ["#E75656", "#E492BD", "#F6C445", "#73D3CD", "#6061E5"],
   },
   {
     label: "Purple Gradient",
-    value: ["#231D2C", "#655579", "#B194D1", "#DAB5FF", "#DADAF8"],
+    value: ["#DADAF8", "#DAB5FF", "#B194D1", "#655579", "#231D2C"],
   },
 ];

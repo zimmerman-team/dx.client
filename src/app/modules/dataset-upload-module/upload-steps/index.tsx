@@ -60,7 +60,7 @@ function DatasetUploadSteps(props: Props) {
     setEstUploadTime,
     onUploadProgress,
   } = useOnUploadProgress();
-  const { loadDataset, sampleData, dataTotalCount, dataStats } =
+  const { loadDataset, sampleData, dataTotalCount, dataStats, dataTypes } =
     useChartsRawData({
       visualOptions: () => {},
       setVisualOptions: () => {},
@@ -255,6 +255,7 @@ function DatasetUploadSteps(props: Props) {
             datasetId={props.datasetId}
             dataTotalCount={dataTotalCount}
             description={description}
+            dataTypes={dataTypes}
           />
         );
 

@@ -136,72 +136,71 @@ export function ChartBuilderPreviewTheme(props: ChartBuilderPreviewThemeProps) {
       {!props.loadedChart.isMappingValid && props.view === undefined ? (
         <WarningDialog isMappingValid={props.loadedChart.isMappingValid} />
       ) : (
-        <div
-          id="chart-placeholder"
-          css={`
-            display: flex;
-            padding: 0 24px;
-            margin-top: 20px;
-            max-width: 1280px;
-            align-items: center;
-            align-self: flex-start;
-            justify-content: center;
-            height: ${get(visualOptions, "height", 100)}px;
-
-            @media (max-width: 1280px) {
-              width: calc(100vw - 400px);
-            }
-
-            .MuiSkeleton-wave::after {
-              background: linear-gradient(
-                90deg,
-                transparent,
-                rgba(223, 227, 230, 1),
-                transparent
-              );
-            }
-
-            .MuiSkeleton-root {
-              background: transparent;
-            }
-          `}
-        >
-          <Skeleton
-            animation="wave"
-            variant="rect"
-            width="100%"
-            height="100%"
-          />
-        </div>
-      )}
-
-      <>
-        {" "}
-        <div
-          css={`
-            height: 40px;
-          `}
-        />
-        <div>
+        <>
           <div
-            ref={props.containerRef}
+            id="chart-placeholder"
             css={`
-              position: relative;
-              width: calc(100% - 24px);
+              display: flex;
+              padding: 0 24px;
+              margin-top: 20px;
+              max-width: 1280px;
+              align-items: center;
+              align-self: flex-start;
+              justify-content: center;
+              height: ${get(visualOptions, "height", 100)}px;
+
+              @media (max-width: 1280px) {
+                width: calc(100vw - 400px);
+              }
+
+              .MuiSkeleton-wave::after {
+                background: linear-gradient(
+                  90deg,
+                  transparent,
+                  rgba(223, 227, 230, 1),
+                  transparent
+                );
+              }
+
+              .MuiSkeleton-root {
+                background: transparent;
+              }
             `}
           >
+            <Skeleton
+              animation="wave"
+              variant="rect"
+              width="100%"
+              height="100%"
+            />
+          </div>
+          <>
+            {" "}
             <div
-              ref={domRef}
-              onClick={handleVizClick}
-              id="common-chart-render-container"
               css={`
-                ${props.renderedChartSsr
-                  ? `overflow-x: auto;`
-                  : `height: ${get(visualOptions, "height", 500)}px;`}
+                height: 40px;
+              `}
+            />
+            <div>
+              <div
+                ref={props.containerRef}
+                css={`
+                  position: relative;
+                  width: calc(100% - 24px);
+                `}
+              >
+                <div
+                  ref={domRef}
+                  onClick={handleVizClick}
+                  id="common-chart-render-container"
+                  css={`
+                    ${props.renderedChartSsr
+                      ? `overflow-x: auto;`
+                      : `height: ${get(visualOptions, "height", 500)}px;`}
 
-                ${selectedChartType === "bigNumber" &&
-                window.location.pathname.indexOf("/chart/") > -1 &&
-                `
+                    ${selectedChartType === "bigNumber" &&
+                    window.location.pathname.indexOf("/chart/") > -1 &&
+                    `
            
       
                   > div {
@@ -211,13 +210,16 @@ export function ChartBuilderPreviewTheme(props: ChartBuilderPreviewThemeProps) {
 
 
               * {
-                  font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif !important;
-                }
-              `}
-            />
-          </div>
-        </div>
-      </>
+                      font-family: "GothamNarrow-Book", "Helvetica Neue",
+                        sans-serif !important;
+                    }
+                  `}
+                />
+              </div>
+            </div>
+          </>
+        </>
+      )}
     </div>
   );
 }

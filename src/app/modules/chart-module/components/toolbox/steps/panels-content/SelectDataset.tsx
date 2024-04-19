@@ -8,6 +8,19 @@ import { useHistory, useParams } from "react-router-dom";
 import ToolboxSubHeader from "app/modules/chart-module/components/toolbox/steps/sub-header";
 import { DatasetListItemAPIModel } from "app/modules/dataset-module/data";
 
+interface IDatasetDetails {
+  id: string;
+  name: string;
+  description: string;
+  public: boolean;
+  category: string;
+  source: string;
+  sourceUrl: string;
+  owner: string;
+  createdDate: string; // Date string in ISO 8601 format
+  updatedDate: string; // Date string in ISO 8601 format
+  authId: string;
+}
 export function DatasetPanel(props: { deselectDataset: () => void }) {
   return (
     <>
@@ -32,12 +45,25 @@ export function DatasetPanel(props: { deselectDataset: () => void }) {
 function ChartToolBoxSelectDataset(props: { deselectDataset: () => void }) {
   const { page } = useParams<{ page: string }>();
   const history = useHistory();
+  const token = useStoreState((state) => state.AuthToken.value);
+
   const dataset = useStoreState((state) => state.charts.dataset.value);
-  const datasets = useStoreState(
-    (state) =>
-      (state.dataThemes.DatasetGetList.crudData ??
-        []) as DatasetListItemAPIModel[]
+  const fetchDataset = useStoreActions(
+    (actions) => actions.dataThemes.DatasetGet.fetch
   );
+  const datasetDetails = useStoreState(
+    (state) => state.dataThemes.DatasetGet.crudData
+  ) as IDatasetDetails;
+
+  React.useEffect(() => {
+    if (token && dataset) {
+      fetchDataset({
+        token,
+        storeInCrudData: true,
+        getId: dataset as string,
+      });
+    }
+  }, [dataset]);
 
   const handleDeselectDataset = () => {
     props.deselectDataset();
@@ -83,14 +109,14 @@ function ChartToolBoxSelectDataset(props: { deselectDataset: () => void }) {
           border-radius: 24px;
           text-transform: capitalize;
           display: flex;
-          justify-content: ${dataset ? "space-between" : "center"};
+          justify-content: ${datasetDetails?.name ? "space-between" : "center"};
           align-items: center;
           border-radius: 25px;
           background: #231d2c;
           outline: none;
           border: none;
           color: #fff;
-          ${!find(datasets, { id: dataset }) &&
+          ${!datasetDetails?.name &&
           "border: 0.722px dashed #231D2C;background: #DFE3E5; color:#868E96"};
           width: 313px;
           height: 31px;
@@ -106,22 +132,23 @@ function ChartToolBoxSelectDataset(props: { deselectDataset: () => void }) {
             white-space: nowrap;
             text-overflow: ellipsis;
             font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
+            &:nth-child(1) {
+              width: 98%;
+              display: flex;
+              justify-content: flex-start;
+            }
           }
         `}
       >
         <span data-cy="toolbox-selected-dataset">
-          {get(
-            find(datasets, { id: dataset }),
-            "name",
-            "Select data from the list"
-          )}
+          {get(datasetDetails, "name", "Select data from the list")}
         </span>
         <span
           onClick={handleDeselectDataset}
           css={`
             margin-top: 2px;
             cursor: pointer;
-            display: ${dataset ? "block" : "none"};
+            display: ${datasetDetails?.name ? "block" : "none"};
           `}
         >
           <CloseIcon />
