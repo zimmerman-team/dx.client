@@ -139,7 +139,7 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
       props.onSave();
     },
     2 * 1000,
-    props.autoSave,
+    props.autoSave && canChartEditDelete,
     [
       props.name,
       selectedChartType,
@@ -305,7 +305,7 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
               />
             </div>
 
-            {editChartLoading && (
+            {editChartLoading && canChartEditDelete && (
               <div
                 css={`
                   display: flex;
@@ -335,7 +335,7 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
                 </p>
               </div>
             )}
-            {props.savedChanges && (
+            {props.savedChanges && canChartEditDelete && (
               <div
                 css={`
                   display: flex;
@@ -377,7 +377,7 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
               </button>
             )}
             <div css={styles.iconbtns}>
-              {(page === "new" || view) && (
+              {(page === "new" || view) && canChartEditDelete && (
                 <React.Fragment>
                   <div
                     css={`

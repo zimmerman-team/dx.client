@@ -3,22 +3,33 @@ import React from "react";
 import isEmpty from "lodash/isEmpty";
 import useTitle from "react-use/lib/useTitle";
 import { useHistory, useParams } from "react-router-dom";
-import { withAuthenticationRequired } from "@auth0/auth0-react";
+import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 import { useStoreState } from "app/state/store/hooks";
 /* project */
-import { CHART_DEFAULT_WIDTH } from "app/modules/chart-module/data";
+import {
+  CHART_DEFAULT_WIDTH,
+  ChartAPIModel,
+  emptyChartAPI,
+} from "app/modules/chart-module/data";
 import { useUpdateEffectOnce } from "app/hooks/useUpdateEffectOnce";
 import { CommonChart } from "app/modules/chart-module/components/common-chart";
 import { styles as commonStyles } from "app/modules/chart-module/routes/common/styles";
 import { ChartBuilderFiltersProps } from "app/modules/chart-module/routes/filters/data";
+import { NotAuthorizedMessageModule } from "app/modules/common/not-authorized-message";
 
 function ChartBuilderFilters(props: Readonly<ChartBuilderFiltersProps>) {
   useTitle("DX DataXplorer - Filters");
 
   const history = useHistory();
+  const { isAuthenticated, user } = useAuth0();
   const { page } = useParams<{ page: string }>();
 
   const dataset = useStoreState((state) => state.charts.dataset.value);
+
+  const loadedChart = useStoreState(
+    (state) =>
+      (state.charts.ChartGet.crudData ?? emptyChartAPI) as ChartAPIModel
+  );
 
   React.useEffect(() => {
     //if dataset is empty and not loading, redirect to data page
@@ -26,6 +37,19 @@ function ChartBuilderFilters(props: Readonly<ChartBuilderFiltersProps>) {
       history.push(`/chart/${page}/data`);
     }
   }, [dataset]);
+
+  const canChartEditDelete = React.useMemo(() => {
+    return isAuthenticated && loadedChart && loadedChart.owner === user?.sub;
+  }, [user, isAuthenticated, loadedChart]);
+
+  if (!canChartEditDelete && page !== "new") {
+    return (
+      <>
+        <div css="width: 100%; height: 100px;" />
+        <NotAuthorizedMessageModule asset="chart" action="edit" />
+      </>
+    );
+  }
 
   return (
     <div css={commonStyles.container}>
