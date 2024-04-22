@@ -3,9 +3,9 @@ import React from "react";
 import useTitle from "react-use/lib/useTitle";
 import Popover from "@material-ui/core/Popover";
 import IconButton from "@material-ui/core/IconButton";
-import { useStoreActions } from "app/state/store/hooks";
+import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import { useParams, useHistory } from "react-router-dom";
-import { withAuthenticationRequired } from "@auth0/auth0-react";
+import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 /* project */
 import {
   iconButtonCss,
@@ -21,15 +21,23 @@ import { ReactComponent as GridIcon } from "app/modules/home-module/assets/grid-
 import { ReactComponent as CloseIcon } from "app/modules/home-module/assets/close-icon.svg";
 import { ReactComponent as SearchIcon } from "app/modules/home-module/assets/search-fill.svg";
 import DatasetCategoryList from "app/modules/home-module/components/Datasets/datasetCategoryList";
+import { ChartRenderedItem } from "app/modules/chart-module/data";
+import { ChartAPIModel, emptyChartAPI } from "../../data";
+import { NotAuthorizedMessageModule } from "app/modules/common/not-authorized-message";
 
 function ChartModuleDataView(
   props: Readonly<{
     loadDataset: (endpoint: string) => Promise<boolean>;
+    toolboxOpen: boolean;
+    setChartFromAPI: (
+      value: React.SetStateAction<ChartRenderedItem | null>
+    ) => void;
   }>
 ) {
   useTitle("DX DataXplorer - Select Data");
 
   const history = useHistory();
+  const { isAuthenticated, user } = useAuth0();
   const { page } = useParams<{ page: string }>();
 
   const [category, setCategory] = React.useState("");
@@ -53,6 +61,10 @@ function ChartModuleDataView(
   const setDataset = useStoreActions(
     (actions) => actions.charts.dataset.setValue
   );
+  const loadedChart = useStoreState(
+    (state) =>
+      (state.charts.ChartGet.crudData ?? emptyChartAPI) as ChartAPIModel
+  );
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
@@ -66,10 +78,24 @@ function ChartModuleDataView(
 
   const handleItemClick = (id: string) => {
     setDataset(id);
+    props.setChartFromAPI(null);
     props.loadDataset(`chart/sample-data/${id}`).then(() => {
       history.push(`/chart/${page}/preview-data`);
     });
   };
+
+  const canChartEditDelete = React.useMemo(() => {
+    return isAuthenticated && loadedChart && loadedChart.owner === user?.sub;
+  }, [user, isAuthenticated, loadedChart]);
+
+  if (!canChartEditDelete && page !== "new") {
+    return (
+      <>
+        <div css="width: 100%; height: 100px;" />
+        <NotAuthorizedMessageModule asset="chart" action="edit" />
+      </>
+    );
+  }
 
   return (
     <div css={commonStyles.innercontainer}>
@@ -197,6 +223,8 @@ function ChartModuleDataView(
         tableView={tableView}
         searchStr={searchValue as string}
         onItemClick={handleItemClick}
+        md={props.toolboxOpen ? 4 : 6}
+        lg={props.toolboxOpen ? 4 : 3}
       />
     </div>
   );

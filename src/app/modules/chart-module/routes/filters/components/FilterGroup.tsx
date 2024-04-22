@@ -142,12 +142,12 @@ export function FilterGroup(props: FilterGroupCompProps) {
               <div
                 key={option}
                 css={`
-                  gap: 6px;
+                  gap: 10px;
                   display: flex;
                   color: #495057;
                   font-size: 14px;
                   background: #fff;
-                  padding: 5px 10px;
+                  padding: 6px 8px 6px 12px;
                   border-radius: 20px;
                   flex-direction: row;
                   justify-content: space-between;
@@ -166,6 +166,11 @@ export function FilterGroup(props: FilterGroupCompProps) {
                     overflow: hidden;
                     white-space: nowrap;
                     text-overflow: ellipsis;
+                  }
+                  > svg {
+                    path {
+                      fill: #495057;
+                    }
                   }
 
                   > svg:hover {

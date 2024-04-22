@@ -24,15 +24,23 @@ export function ReportChartWrapper(props: Props) {
 
   const containerRef = React.useRef<HTMLDivElement>(null);
   const [chartName, setChartName] = React.useState<string>("");
-  const loadChart = useStoreActions((actions) => actions.charts.ChartGet.fetch);
-  const chartError = useStoreState((state) => state.charts.ChartGet.errorData);
+  const loadChart = useStoreActions(
+    (actions) => actions.charts.ChartGetInReport.fetch
+  );
+  const chartError = useStoreState(
+    (state) => state.charts.ChartGetInReport.errorData
+  );
+  const resetMapping = useStoreActions(
+    (actions) => actions.charts.mapping.reset
+  );
+  const mapping = useStoreState((state) => state.charts.mapping.value);
 
   const loadedChart = useStoreState(
     (state) =>
-      (state.charts.ChartGet.crudData ?? emptyChartAPI) as ChartAPIModel
+      (state.charts.ChartGetInReport.crudData ?? emptyChartAPI) as ChartAPIModel
   );
   const clearChart = useStoreActions(
-    (actions) => actions.charts.ChartGet.clear
+    (actions) => actions.charts.ChartGetInReport.clear
   );
 
   const [rawViz, setRawViz] = React.useState<any>(null);
@@ -75,13 +83,14 @@ export function ReportChartWrapper(props: Props) {
   }, [loadedChart]);
 
   const {
-    loadChartDataFromAPI,
+    renderChartFromAPI,
     loading,
     notFound,
     setNotFound,
     dataError,
     chartErrorMessage,
     setChartErrorMessage,
+    abortControllerRef,
   } = useChartsRawData({
     visualOptions,
     setVisualOptions,
@@ -96,6 +105,7 @@ export function ReportChartWrapper(props: Props) {
     }
     return () => {
       clearChart();
+      console.log("unmounting --  clearing chart", loadedChart);
     };
   }, [props.id, token]);
   React.useEffect(() => {
@@ -109,10 +119,12 @@ export function ReportChartWrapper(props: Props) {
 
   React.useEffect(() => {
     if (props.id) {
-      loadChartDataFromAPI(undefined, props.id);
+      renderChartFromAPI(props.id);
     }
     return () => {
       resetAppliedFilters();
+      resetMapping();
+      abortControllerRef.current.abort();
     };
   }, [props.id, token]);
 

@@ -139,7 +139,7 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
       props.onSave();
     },
     2 * 1000,
-    props.autoSave,
+    props.autoSave && canChartEditDelete,
     [
       props.name,
       selectedChartType,
@@ -218,7 +218,7 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
   };
 
   const handleBackToEdit = () => {
-    history.goBack();
+    history.go(-1);
   };
 
   return (
@@ -305,7 +305,7 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
               />
             </div>
 
-            {editChartLoading && (
+            {editChartLoading && canChartEditDelete && (
               <div
                 css={`
                   display: flex;
@@ -335,7 +335,7 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
                 </p>
               </div>
             )}
-            {props.savedChanges && (
+            {props.savedChanges && canChartEditDelete && (
               <div
                 css={`
                   display: flex;
@@ -371,13 +371,14 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
                 onClick={handleBackToEdit}
                 css={styles.backToEdit}
                 type="button"
+                data-testid="back-to-edit-button"
               >
                 <EditIcon htmlColor="#fff" />
                 Go back to editing
               </button>
             )}
             <div css={styles.iconbtns}>
-              {(page === "new" || view) && (
+              {(page === "new" || view) && canChartEditDelete && (
                 <React.Fragment>
                   <div
                     css={`
@@ -420,6 +421,7 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
                         onClick={handlePreviewMode}
                         aria-label="preview-button"
                         disabled={isPreviewDisabled}
+                        data-testid="preview-button"
                         css={`
                           :disabled {
                             opacity: 0.5;

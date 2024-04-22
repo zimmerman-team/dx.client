@@ -5318,3 +5318,21 @@ export const Charts = [
     icon: <></>,
   },
 ];
+
+export interface IChartDetail {
+  id: string;
+  name: string;
+  public: boolean;
+  isMappingValid: boolean;
+  vizType: string;
+  datasetId: string;
+  mapping: Record<string, any>; // Can be more specific based on possible mapping types
+  dataTypes: Record<string, any>;
+  vizOptions: Record<string, any>;
+  appliedFilters: Record<string, any>; // Can be more specific based on possible filter types
+  enabledFilterOptionGroups: string[]; // Assuming it's an array of string identifiers
+  owner: string;
+  createdDate: string; // Date string in ISO 8601 format
+  updatedDate: string; // Date string in ISO 8601 format
+  authId: string;
+}

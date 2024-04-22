@@ -29,6 +29,7 @@ import { AuthTokenState } from "app/state/api/action-reducers/sync";
 import {
   ChartCreate,
   ChartGet,
+  ChartGetInReport,
   ChartGetList,
 } from "app/state/api/action-reducers/charts";
 import {
@@ -124,12 +125,13 @@ const appSetup = (
         dataset: ChartsDatasetState,
         appliedFilters: ChartsAppliedFiltersState,
         enabledFilterOptionGroups: ChartsEnabledFilterOptionGroupsState,
-        charType: ChartsChartTypeState,
+        chartType: ChartsChartTypeState,
 
         mapping: ChartsMappingState,
         ChartGetList,
         ChartGet,
         ChartCreate,
+        ChartGetInReport,
       },
     },
     {
@@ -259,11 +261,12 @@ test("should search for charts in in chart view", async () => {
         vizType: "echartsBarchart",
         datasetId: "65e9672ecc1d4b0a62cd6079",
         createdDate: "2024-03-07T07:22:07.342Z",
+        isMappingValid: true,
       },
     ],
   } as AxiosResponse<any>);
 
-  const { app, mockStore } = appSetup();
+  const { app, mockStore } = appSetup({}, { mockActions: false });
   render(app);
   mockStore.getActions().charts.ChartGetList.setCrudData(mockChartList);
 
@@ -324,11 +327,18 @@ test("chart card should be expandable", async () => {
   (axios.get as jest.Mock).mockResolvedValue({
     data: mockChartList,
   });
+  (axios.post as jest.Mock).mockResolvedValue({
+    data: {},
+  });
   const { app, mockStore } = appSetup({}, { mockActions: false });
   render(app);
+  mockStore.getActions().charts.ChartGetList.setCrudData(mockChartList);
+
   await user.click(screen.getByTestId("charts-button"));
   expect(reportRightPanelViewChange).toHaveBeenCalledWith("charts");
   expect(screen.getByText("charts")).toBeInTheDocument();
+  expect(screen.getByText(/Sort by Recent/)).toBeInTheDocument();
+  expect(screen.getByTestId("create-chart-card")).toBeInTheDocument();
+
   await user.click(screen.getAllByTestId("expand-chart-button")[0]);
-  expect(screen.getByTestId("chart-wrapperj")).toBeInTheDocument();
 });

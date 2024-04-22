@@ -288,6 +288,7 @@ export interface StoreModel {
   };
   charts: {
     ChartGet: ApiCallModel;
+    ChartGetInReport: ApiCallModel;
     ChartCreate: ApiCallModel;
     ChartUpdate: ApiCallModel;
     ChartDelete: ApiCallModel;

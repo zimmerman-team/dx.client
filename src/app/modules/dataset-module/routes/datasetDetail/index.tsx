@@ -7,9 +7,12 @@ import { find } from "lodash";
 import { Container } from "@material-ui/core";
 import { useParams } from "react-router-dom";
 import { DatasetListItemAPIModel } from "app/modules/dataset-module/data";
+import { useAuth0 } from "@auth0/auth0-react";
 
 export default function DatasetDetail() {
   const { page } = useParams<{ page: string }>();
+  const { user, isAuthenticated } = useAuth0();
+
   const token = useStoreState((state) => state.AuthToken.value);
   const datasets = useStoreState(
     (state) =>
@@ -19,8 +22,20 @@ export default function DatasetDetail() {
   const loadDatasets = useStoreActions(
     (actions) => actions.dataThemes.DatasetGetList.fetch
   );
+  const loadedDatasets = useStoreState(
+    (state) =>
+      (state.dataThemes.DatasetGetList.crudData ??
+        []) as DatasetListItemAPIModel[]
+  );
+  const loadedDataset = loadedDatasets.find((d) => d.id === page);
 
-  const { loadDataset, sampleData, dataTotalCount, dataStats } =
+  const canDatasetEditDelete = React.useMemo(() => {
+    return (
+      isAuthenticated && loadedDatasets && loadedDataset?.owner === user?.sub
+    );
+  }, [user, isAuthenticated, loadedDatasets]);
+
+  const { loadDataset, sampleData, dataTotalCount, dataStats, dataTypes } =
     useChartsRawData({
       visualOptions: () => {},
       setVisualOptions: () => {},
@@ -56,9 +71,11 @@ export default function DatasetDetail() {
       <FinishedFragment
         data={sampleData}
         stats={dataStats}
+        dataTypes={dataTypes}
         datasetId={page}
         dataTotalCount={dataTotalCount}
         description={description as string}
+        canDatasetEditDelete={canDatasetEditDelete}
       />
     </Container>
   );

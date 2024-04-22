@@ -521,6 +521,8 @@ export default function RowFrame(props: RowFrameProps) {
               <p
                 css={`
                   margin-bottom: 0;
+                  color: #000;
+                  font-family: "GothamNarrow-bold", sans-serif;
                 `}
               >
                 Select your row structure
@@ -610,7 +612,7 @@ const OneByOne = (props: IRowStructureType) => {
     }
   };
   return (
-    <div css={blockcss} onClick={handleClick}>
+    <div css={blockcss} onClick={handleClick} data-cy="one-by-one-type">
       <p>1/1</p>
       <div>
         <div

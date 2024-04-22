@@ -84,7 +84,6 @@ export function CommonChart(props: Readonly<Props>) {
       }
     }
   }, [props.renderedChart]);
-
   // client side rendering
   React.useEffect(() => {
     const visualOptions = props.containerRef.current
@@ -135,7 +134,9 @@ export function CommonChart(props: Readonly<Props>) {
               ? visualOptions.height - 28
               : visualOptions.height,
           },
-          `common-chart-render-container-${props.chartId || "1"}`
+          `common-chart-render-container-${props.chartId || "1"}-${
+            props.chartPreviewInReport
+          }`
         );
       } catch (e: any) {
         if (process.env.NODE_ENV === "development") {
@@ -164,7 +165,9 @@ export function CommonChart(props: Readonly<Props>) {
     content = (
       <div
         ref={domRef}
-        id={`common-chart-render-container-${props.chartId ?? "1"}`}
+        id={`common-chart-render-container-${props.chartId || "1"}-${
+          props.chartPreviewInReport
+        }`}
         data-cy="common-chart-container-ssr"
         css={`
           overflow-x: auto;
@@ -207,7 +210,9 @@ export function CommonChart(props: Readonly<Props>) {
       >
         <div
           ref={domRef}
-          id={`common-chart-render-container-${props.chartId ?? "1"}`}
+          id={`common-chart-render-container-${props.chartId || "1"}-${
+            props.chartPreviewInReport
+          }`}
           data-cy="common-chart-container"
           css={`
             width: auto !important;

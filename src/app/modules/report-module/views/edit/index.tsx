@@ -7,7 +7,7 @@ import useResizeObserver from "use-resize-observer";
 import Container from "@material-ui/core/Container";
 import { EditorState, RawDraftContentState, convertFromRaw } from "draft-js";
 import { useUpdateEffect } from "react-use";
-import { withAuthenticationRequired } from "@auth0/auth0-react";
+import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 import { PlaceHolder } from "app/modules/report-module/views/create";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import { ReportModel, emptyReport } from "app/modules/report-module/data";
@@ -30,10 +30,12 @@ import RowFrame from "../../sub-module/rowStructure";
 import TourGuide from "app/components/Dialogs/TourGuide";
 import useCookie from "@devhammed/use-cookie";
 import { get } from "lodash";
+import { PageLoader } from "app/modules/common/page-loader";
 
 function ReportEditView(props: ReportEditViewProps) {
   const { page } = useParams<{ page: string }>();
   const token = useStoreState((state) => state.AuthToken.value);
+  const { isAuthenticated, user } = useAuth0();
 
   const { ref, width } = useResizeObserver<HTMLDivElement>();
 
@@ -56,6 +58,10 @@ function ReportEditView(props: ReportEditViewProps) {
 
   const fetchReportData = useStoreActions(
     (actions) => actions.reports.ReportGet.fetch
+  );
+
+  const loadingReportData = useStoreState(
+    (state) => state.reports.ReportGet.loading
   );
 
   const clearReportData = useStoreActions(
@@ -189,9 +195,17 @@ function ReportEditView(props: ReportEditViewProps) {
     }
   }, [reportData]);
 
+  const canChartEditDelete = React.useMemo(() => {
+    return isAuthenticated && reportData?.owner === user?.sub;
+  }, [user, isAuthenticated, reportData]);
+
   // console.log(reportError401, "reportError401");
-  if (reportError401) {
-    return <NotAuthorizedMessageModule asset="report" />;
+  if ((reportError401 || !canChartEditDelete) && !loadingReportData) {
+    return <NotAuthorizedMessageModule asset="report" action="edit" />;
+  }
+
+  if (loadingReportData) {
+    return <PageLoader />;
   }
 
   return (

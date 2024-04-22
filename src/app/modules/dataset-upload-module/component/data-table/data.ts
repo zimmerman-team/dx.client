@@ -5,4 +5,5 @@ export interface DataThemesDataTableProps {
     type: "percentage" | "bar" | "unique";
     data: { name: string; value: number }[];
   }[];
+  dataTypes: never[];
 }

@@ -1373,7 +1373,7 @@ export function useDataThemesEchart() {
     const countDepth = (children: any[]) => {
       if (children) {
         maxDepth += 1;
-        countDepth(children[0].children);
+        countDepth(children[0]?.children);
       }
     };
     countDepth(data);

@@ -68,7 +68,7 @@ export const reportRightPanelViewAtom = atom<
   "elements" | "charts" | "media" | "editHeader"
 >({
   key: "reportRightPanelViewAtom",
-  default: "elements",
+  default: "charts",
 });
 
 export const isChartDraggingAtom = atom<"chart" | "bigNumber" | null>({

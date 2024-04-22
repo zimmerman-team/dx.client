@@ -71,10 +71,14 @@ import { ReactComponent as HeatmapPreviewImg } from "app/modules/chart-module/as
 import { ReactComponent as ScatterChartPreviewImg } from "app/modules/chart-module/assets/scatterChartPreview.svg";
 import { ReactComponent as GraphGlPreviewImg } from "app/modules/chart-module/assets/graphglPreview.svg";
 import { ReactComponent as AreatimeaxisPreviewImg } from "app/modules/chart-module/assets/areastackedPreview.svg";
+import { ChartRenderedItem } from "app/modules/chart-module/data";
 
 export interface ChartBuilderChartTypeProps {
   loading: boolean;
   loadDataset: (endpoint: string) => Promise<any>;
+  setChartFromAPI: (
+    value: React.SetStateAction<ChartRenderedItem | null>
+  ) => void;
 }
 
 export interface ChartTypeModel {

@@ -25,6 +25,7 @@ import { ISnackbarState } from "app/modules/dataset-upload-module/upload-steps/p
 import { homeDisplayAtom } from "app/state/recoil/atoms";
 import { useRecoilState } from "recoil";
 import { InfoSnackbar } from "app/modules/report-module/components/reportSubHeaderToolbar/infosnackbar";
+import { DatasetListItemAPIModel } from "app/modules/dataset-module/data";
 
 export default function DatasetSubHeaderToolbar(
   props: Readonly<{ name: string }>
@@ -54,6 +55,18 @@ export default function DatasetSubHeaderToolbar(
   const loadDatasets = useStoreActions(
     (actions) => actions.dataThemes.DatasetGetList.fetch
   );
+  const loadedDatasets = useStoreState(
+    (state) =>
+      (state.dataThemes.DatasetGetList.crudData ??
+        []) as DatasetListItemAPIModel[]
+  );
+
+  const loadedDataset = loadedDatasets.find((d) => d.id === page);
+  const canDatasetEditDelete = React.useMemo(() => {
+    return (
+      isAuthenticated && loadedDatasets && loadedDataset?.owner === user?.sub
+    );
+  }, [user, isAuthenticated, loadedDatasets]);
 
   const handleDuplicate = () => {
     axios
@@ -197,16 +210,20 @@ export default function DatasetSubHeaderToolbar(
                   </CopyToClipboard>
                 </div>
               </Popover>
-              <Tooltip title="Edit">
-                <IconButton component={Link} to={`/dataset/${page}/edit`}>
-                  <EditIcon htmlColor="#262c34" />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="Delete">
-                <IconButton onClick={handleModal}>
-                  <DeleteIcon htmlColor="#262c34" />
-                </IconButton>
-              </Tooltip>
+              {canDatasetEditDelete && (
+                <Tooltip title="Edit">
+                  <IconButton component={Link} to={`/dataset/${page}/edit`}>
+                    <EditIcon htmlColor="#262c34" />
+                  </IconButton>
+                </Tooltip>
+              )}
+              {canDatasetEditDelete && (
+                <Tooltip title="Delete">
+                  <IconButton onClick={handleModal}>
+                    <DeleteIcon htmlColor="#262c34" />
+                  </IconButton>
+                </Tooltip>
+              )}
             </div>
           </div>
         </div>

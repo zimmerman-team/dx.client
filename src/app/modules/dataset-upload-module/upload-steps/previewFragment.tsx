@@ -10,6 +10,7 @@ interface Props {
   stats: any[];
   dataTotalCount: number;
   handleNext: () => void;
+  dataTypes: never[];
 }
 
 export interface ISnackbarState {
@@ -67,7 +68,11 @@ export default function PreviewFragment(props: Props) {
           width: 100%;
         `}
       >
-        <DatasetDataTable data={props.data} stats={props.stats} />
+        <DatasetDataTable
+          data={props.data}
+          stats={props.stats}
+          dataTypes={props.dataTypes}
+        />
         <div css={buttonFlexcss}>
           <button type="button" onClick={props.handleNext}>
             Apply

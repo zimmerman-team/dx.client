@@ -3,7 +3,7 @@ import React from "react";
 import isEmpty from "lodash/isEmpty";
 import useTitle from "react-use/lib/useTitle";
 import { useHistory, useParams } from "react-router-dom";
-import { withAuthenticationRequired } from "@auth0/auth0-react";
+import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 import { useStoreState } from "app/state/store/hooks";
 /* project */
 import { CommonChart } from "app/modules/chart-module/components/common-chart";
@@ -14,11 +14,14 @@ import {
   ChartBuilderMappingProps,
 } from "app/modules/chart-module/routes/mapping/data";
 import ChartPlaceholder from "../../components/placeholder";
+import { ChartAPIModel, emptyChartAPI } from "../../data";
+import { NotAuthorizedMessageModule } from "app/modules/common/not-authorized-message";
 
 function ChartBuilderMapping(props: Readonly<ChartBuilderMappingProps>) {
   useTitle("DX DataXplorer - Mapping");
 
   const history = useHistory();
+  const { isAuthenticated, user } = useAuth0();
   const { page } = useParams<{ page: string }>();
 
   const dataset = useStoreState((state) => state.charts.dataset.value);
@@ -30,6 +33,11 @@ function ChartBuilderMapping(props: Readonly<ChartBuilderMappingProps>) {
     { id: string; name: string; minValues: number }[]
   >([]);
 
+  const loadedChart = useStoreState(
+    (state) =>
+      (state.charts.ChartGet.crudData ?? emptyChartAPI) as ChartAPIModel
+  );
+
   React.useEffect(() => {
     const { updRequiredFields, updMinValuesFields } =
       getRequiredFieldsAndErrors(mapping, props.dimensions);
@@ -39,12 +47,26 @@ function ChartBuilderMapping(props: Readonly<ChartBuilderMappingProps>) {
     setMinValuesFields(updMinValuesFields);
   }, [mapping, props.dimensions]);
 
-  React.useEffect(() => {
-    //if dataset is empty and not loading, redirect to data page
-    if (dataset === null && !props.loading) {
-      history.push(`/chart/${page}/data`);
-    }
-  }, [dataset]);
+  // React.useEffect(() => {
+  //   //if dataset is empty and not loading, redirect to data page
+  //   if (dataset === null && !props.loading) {
+  //     history.push(`/chart/${page}/data`);
+  //   }
+  // }, [dataset]);
+
+  const canChartEditDelete = React.useMemo(() => {
+    return isAuthenticated && loadedChart && loadedChart.owner === user?.sub;
+  }, [user, isAuthenticated, loadedChart]);
+
+  if (!canChartEditDelete) {
+    return (
+      <>
+        <div css="width: 100%; height: 100px;" />
+        <NotAuthorizedMessageModule asset="chart" action="edit" />
+      </>
+    );
+  }
+
   return (
     <div css={commonStyles.container}>
       <div css={commonStyles.innercontainer}>
