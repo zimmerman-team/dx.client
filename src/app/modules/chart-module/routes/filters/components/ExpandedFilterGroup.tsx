@@ -273,6 +273,7 @@ export function ExpandedFilterGroup(props: ExpandedFilterGroupProps) {
               white-space: nowrap;
               text-overflow: ellipsis;
               font-size: 14px;
+              font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
             `}
           >
             {splitStrBasedOnCapitalLetters(

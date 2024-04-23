@@ -67,9 +67,11 @@ export default function EmpowerBlock(props: {
               CREATE REPORT
             </HomePrimaryButton>
           </Link>
-          <HomePrimaryButton color="#E492BD" type="button">
-            EXPLORE REPORTS
-          </HomePrimaryButton>
+          <Link to="/explore">
+            <HomePrimaryButton color="#E492BD" type="button">
+              EXPLORE REPORTS
+            </HomePrimaryButton>
+          </Link>
         </div>
       )}
       {!isAuthenticated && (

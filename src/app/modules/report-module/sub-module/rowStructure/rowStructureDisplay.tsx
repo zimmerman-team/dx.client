@@ -908,6 +908,7 @@ const Box = (props: {
             color: #495057;
             font-size: 14px;
             font-weight: 400;
+            font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
             text-align: center;
             align-items: center;
             justify-content: center;
