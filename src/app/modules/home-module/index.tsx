@@ -101,6 +101,7 @@ export default function HomeModule() {
             sortBy={sortByStr}
             searchStr={searchStr}
             tableView={tableView}
+            addCard
           />
         );
       case "charts":
@@ -109,6 +110,7 @@ export default function HomeModule() {
             sortBy={sortByStr}
             searchStr={searchStr}
             tableView={tableView}
+            addCard
           />
         );
       case "reports":
@@ -118,6 +120,7 @@ export default function HomeModule() {
             searchStr={searchStr}
             tableView={tableView}
             showMenuButton={false}
+            addCard
           />
         );
       default:
