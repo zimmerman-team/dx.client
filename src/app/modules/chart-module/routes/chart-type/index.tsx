@@ -4,6 +4,7 @@ import Grid from "@material-ui/core/Grid";
 import useTitle from "react-use/lib/useTitle";
 import { useHistory, useLocation, useParams } from "react-router-dom";
 import { useStoreState, useStoreActions } from "app/state/store/hooks";
+import { get } from "lodash";
 /* project */
 import { styles as commonStyles } from "app/modules/chart-module/routes/common/styles";
 import {
@@ -14,9 +15,11 @@ import {
 } from "app/modules/chart-module/routes/chart-type/data";
 import { useAuth0 } from "@auth0/auth0-react";
 import AISwitch from "../../components/switch/AISwitch";
-import { useRecoilState } from "recoil";
-import { isChartAIAgentActive } from "app/state/recoil/atoms";
-import { get } from "lodash";
+import { useRecoilState, useResetRecoilState } from "recoil";
+import {
+  isChartAIAgentActive,
+  isChartAutoMappedAtom,
+} from "app/state/recoil/atoms";
 import { ChartAPIModel, emptyChartAPI } from "../../data";
 import { NotAuthorizedMessageModule } from "app/modules/common/not-authorized-message";
 
@@ -28,23 +31,22 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
   const { page } = useParams<{ page: string }>();
   const token = useStoreState((state) => state.AuthToken.value);
   const location = useLocation();
-
   const [isAiActive, setIsAiActive] = useRecoilState(isChartAIAgentActive);
-  const dataset = useStoreState((state) => state.charts.dataset.value);
+  const datasetId = useStoreState((state) => state.charts.dataset.value);
   const chartType = useStoreState((state) => state.charts.chartType.value);
   const loadChartTypesSuggestions = useStoreActions(
     (actions) => actions.charts.ChartTypesSuggest.fetch
   );
+  const resetIsChartAutoMapped = useResetRecoilState(isChartAutoMappedAtom);
   const chartTypeSuggestions = useStoreState((state) =>
     get(state.charts.ChartTypesSuggest, "crudData", [])
-  ) as { chartType: keyof typeof chartTypesFromMiddleWare }[] | null;
+  ) as { charttype: keyof typeof chartTypesFromMiddleWare }[] | null;
   const setChartType = useStoreActions(
     (actions) => actions.charts.chartType.setValue
   );
   const clearMapping = useStoreActions(
     (actions) => actions.charts.mapping.reset
   );
-  console.log(chartTypeSuggestions, "chartTypeSuggestions");
   // access query parameters
   const queryParams = new URLSearchParams(location.search);
   const paramValue = queryParams.get("loadataset");
@@ -53,31 +55,26 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
       (state.charts.ChartGet.crudData ?? emptyChartAPI) as ChartAPIModel
   );
 
-  const onChartTypeChange =
-    (chartTypeId: string) => (e: React.MouseEvent<HTMLDivElement>) => {
-      clearMapping();
-      props.setChartFromAPI(null);
-      setChartType(chartType === chartTypeId ? null : chartTypeId);
-    };
-
   React.useEffect(() => {
     //if dataset is empty and not loading, redirect to data page
-    if (dataset === null && !props.loading) {
+    if (datasetId === null && !props.loading) {
       history.push(`/chart/${page}/data`);
     } else if (paramValue) {
       //when landing in chart type step from outside the chart module,
       //load the sample data as data step is skipped
-      props.loadDataset(`chart/sample-data/${dataset}`);
-      loadChartTypesSuggestions({
-        token,
-        filterString: `id=${dataset as string}`,
-        storeInCrudData: true,
-      });
-    } else {
+      props.loadDataset(`chart/sample-data/${datasetId}`);
+      if (isAiActive) {
+        loadChartTypesSuggestions({
+          token,
+          filterString: `id=${datasetId as string}`,
+          storeInCrudData: true,
+        });
+      }
+    } else if (isAiActive) {
       // load chart type suggestions
       loadChartTypesSuggestions({
         token,
-        filterString: `id=${dataset as string}`,
+        filterString: `id=${datasetId as string}`,
         storeInCrudData: true,
       });
     }
@@ -96,17 +93,45 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
     );
   }
 
-  const aIChartSuggestions = (ct: string) => {
-    if (!chartTypeSuggestions) return [];
+  const aIChartSuggestions = (ctId: string) => {
+    if (!chartTypeSuggestions) return false;
 
     return (
       chartTypeSuggestions.length &&
       chartTypeSuggestions?.findIndex(
-        (c: { chartType: keyof typeof chartTypesFromMiddleWare }) =>
-          chartTypesFromMiddleWare[c.chartType] === ct
+        (c: { charttype: keyof typeof chartTypesFromMiddleWare }) =>
+          chartTypesFromMiddleWare[c.charttype] === ctId
       ) > -1
     );
   };
+
+  function getColor(ctId: string) {
+    let background, border;
+
+    if (aIChartSuggestions(ctId) && chartType === ctId) {
+      background = "#359C96";
+      border = "#6061E5";
+    } else if (aIChartSuggestions(ctId)) {
+      background = "#359C96";
+      border = "#359C96";
+    } else if (chartType === ctId) {
+      background = "#cfd4da";
+      border = "#6061E5";
+    } else {
+      background = "#dfe3e6";
+      border = "#dfe3e6";
+    }
+
+    return { background, border };
+  }
+
+  const onChartTypeChange =
+    (chartTypeId: string) => (e: React.MouseEvent<HTMLButtonElement>) => {
+      clearMapping();
+      resetIsChartAutoMapped();
+      props.setChartFromAPI(null);
+      setChartType(chartType === chartTypeId ? null : chartTypeId);
+    };
 
   return (
     <div css={commonStyles.container}>
@@ -131,7 +156,11 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
             `}
           >
             <span>AI Agent</span>
-            <AISwitch checked={isAiActive} setIsAiActive={setIsAiActive} />
+            <AISwitch
+              checked={isAiActive}
+              setIsAiActive={setIsAiActive}
+              dataset={datasetId as string}
+            />
           </div>
           <p
             css={`
@@ -166,7 +195,7 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
             {echartTypes(false).map((ct: ChartTypeModel) => {
               return (
                 <Grid item xs={12} sm={6} md={4} key={ct.id}>
-                  <div
+                  <button
                     onClick={
                       ct.label === "" ? () => {} : onChartTypeChange(ct.id)
                     }
@@ -180,17 +209,8 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
                       border-radius: 8px;
                       flex-direction: row;
                       align-items: center;
-                      background: ${aIChartSuggestions(ct.id)
-                        ? "#359C96"
-                        : chartType === ct.id
-                        ? "#cfd4da"
-                        : "#dfe3e6"};
-                      border: 1px solid
-                        ${aIChartSuggestions(ct.id)
-                          ? "#359C96"
-                          : chartType === ct.id
-                          ? "#6061E5"
-                          : "#dfe3e6"};
+                      background: ${getColor(ct.id).background};
+                      border: 1px solid ${getColor(ct.id).border};
 
                       ${ct.label === "" &&
                       `pointer-events: none;background: #f1f3f5;`}
@@ -246,7 +266,7 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
                         {ct.categories.join(", ")}
                       </div>
                     </div>
-                  </div>
+                  </button>
                 </Grid>
               );
             })}

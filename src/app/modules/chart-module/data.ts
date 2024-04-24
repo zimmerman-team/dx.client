@@ -332,6 +332,7 @@ export interface ChartAPIModel {
   public?: boolean;
   dataTypes: any;
   isMappingValid: boolean;
+  isAIAssisted: boolean;
 }
 
 export interface ChartRenderedItem {
@@ -475,4 +476,5 @@ export const emptyChartAPI: ChartAPIModel = {
   datasetId: "investment-signed",
   dataTypes: [],
   isMappingValid: false,
+  isAIAssisted: false,
 };

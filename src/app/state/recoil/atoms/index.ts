@@ -85,6 +85,10 @@ export const isChartAIAgentActive = atom<boolean>({
   default: true,
 });
 
+export const isChartAutoMappedAtom = atom<boolean>({
+  key: "isChartAutoMappedAtom",
+  default: false,
+});
 export const unSavedReportPreviewMode = atom<boolean>({
   key: "unSavedReportPreviewMode",
   default: false,

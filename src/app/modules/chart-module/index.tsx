@@ -40,8 +40,14 @@ import useResizeObserver from "use-resize-observer";
 import { ChartType } from "app/modules/chart-module/components/common-chart";
 import { DatasetListItemAPIModel } from "app/modules/dataset-module/data";
 import { getRequiredFieldsAndErrors } from "app/modules/chart-module/routes/mapping/utils";
-import ErrorComponent from "./components/dialog/errrorComponent";
+import ErrorComponent from "app/modules/chart-module/components/dialog/errrorComponent";
 import axios from "axios";
+import { useRecoilState, useResetRecoilState } from "recoil";
+import {
+  isChartAIAgentActive,
+  isChartAutoMappedAtom,
+} from "app/state/recoil/atoms";
+import { chartTypesFromMiddleWare } from "app/modules/chart-module/routes/chart-type/data";
 
 export default function ChartModule() {
   const { user, isLoading, isAuthenticated } = useAuth0();
@@ -116,6 +122,23 @@ export default function ChartModule() {
     isAutoSaveEnabled: editView || false,
     enableAutoSaveSwitch: editView || false,
   });
+  const chartTypeSuggestions = useStoreState(
+    (state) => state.charts.ChartTypesSuggest.crudData
+  ) as { charttype: keyof typeof chartTypesFromMiddleWare }[] | null;
+  const clearChartTypesSuggestions = useStoreActions(
+    (actions) => actions.charts.ChartTypesSuggest.clear
+  );
+  const [isAiActive, setIsAiActive] = useRecoilState(isChartAIAgentActive);
+  const resetIsAiActive = useResetRecoilState(isChartAIAgentActive);
+  const resetIsChartAutoMapped = useResetRecoilState(isChartAutoMappedAtom);
+  const selectedAIChartSuggestion = () => {
+    if (!chartTypeSuggestions) return {};
+
+    return chartTypeSuggestions?.find(
+      (c: { charttype: keyof typeof chartTypesFromMiddleWare }) =>
+        chartTypesFromMiddleWare[c.charttype] === chartType
+    );
+  };
 
   const setMapping = useStoreActions(
     (actions) => actions.charts.mapping.setValue
@@ -232,6 +255,9 @@ export default function ChartModule() {
       appliedFilters,
       enabledFilterOptionGroups,
       isMappingValid,
+      isAIAssisted: Boolean(
+        isAiActive && !isEmpty(selectedAIChartSuggestion())
+      ),
     };
     if (view !== undefined && page !== "new") {
       editChart({
@@ -317,6 +343,9 @@ export default function ChartModule() {
     if (loadedChart.vizType === "bigNumber") {
       setMapping(loadedChart.mapping);
     }
+    if (page !== "new" && loadedChart) {
+      setIsAiActive(loadedChart.isAIAssisted);
+    }
     setIsLoadedChartMappingValid(loadedChart?.isMappingValid);
   }, [loadedChart]);
 
@@ -383,10 +412,13 @@ export default function ChartModule() {
     createChartClear();
     editChartClear();
     clearDatasetDetails();
+    clearChartTypesSuggestions();
     setChartName("Untitled Chart");
     setDataError(false);
     setNotFound(false);
     setDataTypes([]);
+    resetIsChartAutoMapped();
+    resetIsAiActive();
   }
   function clearChartBuilder() {
     console.log("--about to reset chart states");
@@ -401,12 +433,6 @@ export default function ChartModule() {
       }
     });
   }
-
-  // React.useEffect(() => {
-  //   //clear prev states when page mounts
-  //   console.log("clear prev states when page mounts");
-  //   clearChartBuilder();
-  // }, []);
 
   React.useEffect(() => {
     // Updates visual options width when container width changes
@@ -549,6 +575,7 @@ export default function ChartModule() {
                   renderedChartType={chartType as ChartType}
                   setChartErrorMessage={setChartErrorMessage}
                   setNotFound={setNotFound}
+                  isAIAssistedChart={loadedChart?.isAIAssisted}
                 />
               </Route>
 
@@ -565,6 +592,7 @@ export default function ChartModule() {
                   renderedChartType={chartType as ChartType}
                   setChartErrorMessage={setChartErrorMessage}
                   setNotFound={setNotFound}
+                  isAIAssistedChart={loadedChart?.isAIAssisted}
                 />
               </Route>
               <Route path="/chart/:page/mapping">
@@ -580,6 +608,7 @@ export default function ChartModule() {
                   renderedChartType={chartType as ChartType}
                   setChartErrorMessage={setChartErrorMessage}
                   setNotFound={setNotFound}
+                  isAIAssistedChart={loadedChart?.isAIAssisted}
                 />
               </Route>
               <Route path="/chart/:page/chart-type">

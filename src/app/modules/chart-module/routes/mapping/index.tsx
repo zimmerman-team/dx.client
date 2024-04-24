@@ -13,9 +13,10 @@ import {
   ChartBuilderMappingMessageProps,
   ChartBuilderMappingProps,
 } from "app/modules/chart-module/routes/mapping/data";
-import ChartPlaceholder from "../../components/placeholder";
-import { ChartAPIModel, emptyChartAPI } from "../../data";
+import ChartPlaceholder from "app/modules/chart-module/components/placeholder";
+import { ChartAPIModel, emptyChartAPI } from "app/modules/chart-module/data";
 import { NotAuthorizedMessageModule } from "app/modules/common/not-authorized-message";
+import { ReactComponent as AIIcon } from "app/modules/chart-module/assets/ai-icon.svg";
 
 function ChartBuilderMapping(props: Readonly<ChartBuilderMappingProps>) {
   useTitle("DX DataXplorer - Mapping");
@@ -104,6 +105,16 @@ function ChartBuilderMapping(props: Readonly<ChartBuilderMappingProps>) {
           minValuesFields={minValuesFields}
           dimensions={props.dimensions}
         />
+        <div
+          css={`
+            position: absolute;
+            right: -2%;
+            top: 9%;
+            display: ${props.isAIAssistedChart ? "block" : "none"};
+          `}
+        >
+          <AIIcon />
+        </div>
       </div>
     </div>
   );

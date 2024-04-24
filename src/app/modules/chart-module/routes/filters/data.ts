@@ -12,4 +12,5 @@ export interface ChartBuilderFiltersProps {
   setNotFound: React.Dispatch<React.SetStateAction<boolean>>;
   renderedChartType: ChartType;
   containerRef: React.RefObject<HTMLDivElement>;
+  isAIAssistedChart: boolean;
 }

@@ -1,3 +1,4 @@
+import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import React from "react";
 import styled from "styled-components";
 interface Props {
@@ -50,7 +51,16 @@ const AISwitch = (props: {
   checked: boolean;
   setIsAiActive: (value: boolean) => void;
   disabled?: boolean;
+  dataset: string;
 }) => {
+  const loadChartTypesSuggestions = useStoreActions(
+    (actions) => actions.charts.ChartTypesSuggest.fetch
+  );
+  const clearChartTypesSuggestions = useStoreActions(
+    (actions) => actions.charts.ChartTypesSuggest.clear
+  );
+  const token = useStoreState((state) => state.AuthToken.value);
+
   return (
     <StyledLabel checked={props.checked}>
       <p>{props.checked ? "ON" : "OFF"}</p>
@@ -59,7 +69,15 @@ const AISwitch = (props: {
         checked={props.checked}
         disabled={props.disabled ?? false}
         onChange={(e) => {
-          console.log("calling?", e.target.checked);
+          if (e.target.checked) {
+            loadChartTypesSuggestions({
+              token,
+              filterString: `id=${props.dataset as string}`,
+              storeInCrudData: true,
+            });
+          } else {
+            clearChartTypesSuggestions();
+          }
           props.setIsAiActive(e.target.checked);
         }}
         data-testid={"auto-save-switch"}
