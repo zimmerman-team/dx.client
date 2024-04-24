@@ -46,7 +46,7 @@ export function DatasetDataTable(props: DataThemesDataTableProps) {
       css={`
         max-width: 100%;
 
-        height: 593px;
+        height: ${props.fullScreen ? "90vh" : "593px"};
         overflow: auto;
         overflow-x: scroll;
         padding-right: 20px;
@@ -56,18 +56,19 @@ export function DatasetDataTable(props: DataThemesDataTableProps) {
           border-radius: 23px;
           width: 12px;
 
-          background: #231d2c;
+          background: ${props.fullScreen ? "#f9f9f9" : "#231d2c"};
         }
         &::-webkit-scrollbar-track {
-          background: #f9f9f9;
+          background: ${props.fullScreen ? "#262C34" : "#f9f9f9"};
+          border-radius: 23px;
 
-          padding: 0 0.5rem;
+          /* padding: 0 0.5rem; */
         }
         &::-webkit-scrollbar-track:horizontal {
           /* border-right: none; */
         }
         &::-webkit-scrollbar-thumb {
-          background: #231d2c;
+          background: ${props.fullScreen ? "#f9f9f9" : "#231d2c"};
           border-radius: 23px;
           border: 3px solid transparent;
           background-clip: content-box;
@@ -80,7 +81,6 @@ export function DatasetDataTable(props: DataThemesDataTableProps) {
           border-style: none;
 
           * {
-            border-color: rgba(0, 0, 0, 0.12);
             outline: none !important;
           }
         }

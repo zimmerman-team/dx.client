@@ -37,11 +37,7 @@ export default function PreviewTable(props: PreviewTableProps) {
           width: max-content;
         `}
       >
-        <TableContainer
-          css={`
-            border-radius: 19px;
-          `}
-        >
+        <TableContainer>
           <Table css={previewTablecss}>
             <TableHead
               css={`
@@ -57,13 +53,7 @@ export default function PreviewTable(props: PreviewTableProps) {
               >
                 {props.columns.map((val, index) => {
                   return (
-                    <TableCell
-                      key={val}
-                      css={`
-                        border-left: ${index == 0 ? "none" : "auto"};
-                        border-top-left-radius: ${index == 0 ? "5px" : "0"};
-                      `}
-                    >
+                    <TableCell key={val}>
                       <div
                         css={`
                           display: flex;
@@ -139,7 +129,7 @@ export default function PreviewTable(props: PreviewTableProps) {
                   </TableCell>
                 ))}
               </TableRow>
-              {props.dataStats.map((data, rowIndex) => (
+              {props.tableData.map((data, rowIndex) => (
                 <TableRow
                   key={Object.values(data).join("-")}
                   css={`
@@ -159,7 +149,7 @@ export default function PreviewTable(props: PreviewTableProps) {
                           text-align: ${cellIndex === 0 ? "center" : "left"};
                         `}
                       >
-                        {props.tableData?.[rowIndex]?.[val] ?? ""}
+                        {data?.[val] ?? ""}
                       </p>
                     </TableCell>
                   ))}
