@@ -27,12 +27,12 @@ export default function FinishedFragment(props: Props) {
 
   const [display, setDisplay] = useRecoilState(homeDisplayAtom);
 
-  const setDataset = useStoreActions(
+  const setDatasetId = useStoreActions(
     (actions) => actions.charts.dataset.setValue
   );
 
   function handleCreateNewChart() {
-    setDataset(props.datasetId);
+    setDatasetId(props.datasetId);
   }
 
   const [snackbarState, setSnackbarState] = React.useState<ISnackbarState>({
@@ -222,6 +222,7 @@ export default function FinishedFragment(props: Props) {
           data={props.data}
           stats={props.stats}
           dataTypes={props.dataTypes}
+          datasetId={props.datasetId}
         />
 
         <FullScreen
@@ -284,6 +285,7 @@ export default function FinishedFragment(props: Props) {
               data={props.data}
               stats={props.stats}
               dataTypes={props.dataTypes}
+              datasetId={props.datasetId}
               fullScreen
             />
           </div>

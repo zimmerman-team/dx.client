@@ -14,6 +14,7 @@ import { ReactComponent as SortIcon } from "app/modules/dataset-upload-module/as
 import StatisticalTableToolBox, {
   ColumnDetailsProps,
 } from "app/components/Table/Preview-table/StatisticalTableToolBox";
+import CircleLoader from "app/modules/home-module/components/Loader";
 
 interface PreviewTableProps {
   placeUnderSubHeader?: boolean;
@@ -26,139 +27,176 @@ interface PreviewTableProps {
     data: { name: string; value: number }[];
   }[];
   dataTypes: any;
+  fullScreen?: boolean;
+  observerTarget: React.MutableRefObject<null>;
+  loading: boolean;
 }
 
 export default function PreviewTable(props: PreviewTableProps) {
   const [toolboxDisplay, setToolboxDisplay] = React.useState(false);
+
   return (
     <>
-      <div
+      <TableContainer
         css={`
-          width: max-content;
+          padding-bottom: 10px;
+          padding-right: 10px;
+          height: ${props.fullScreen ? "90vh" : "593px"};
+          &::-webkit-scrollbar {
+            height: 12px;
+            border-radius: 23px;
+            width: 12px;
+          }
+          &::-webkit-scrollbar-track {
+            background: ${props.fullScreen ? "#262C34" : "#f9f9f9"};
+            border-radius: 23px;
+
+            /* padding: 0 0.5rem; */
+          }
+          &::-webkit-scrollbar-track:horizontal {
+            /* border-right: none; */
+          }
+          &::-webkit-scrollbar-thumb {
+            background: ${props.fullScreen ? "#f9f9f9" : "#231d2c"};
+            border-radius: 23px;
+            border: 3px solid transparent;
+            background-clip: content-box;
+          }
+          &::-webkit-scrollbar-corner {
+            background: transparent;
+          }
+
+          > div {
+            border-style: none;
+
+            * {
+              outline: none !important;
+            }
+          }
         `}
       >
-        <TableContainer>
-          <Table css={previewTablecss}>
-            <TableHead
+        <Table css={previewTablecss}>
+          <TableHead
+            css={`
+              top: 0;
+              position: sticky;
+              background: #dadaf8;
+            `}
+          >
+            <TableRow
               css={`
-                top: 0;
-                position: sticky;
-                background: #dadaf8;
+                padding: 0rem 0.4rem;
               `}
             >
-              <TableRow
-                css={`
-                  padding: 0rem 0.4rem;
-                `}
-              >
-                {props.columns.map((val, index) => {
-                  return (
-                    <TableCell key={val}>
+              {props.columns.map((val, index) => {
+                return (
+                  <TableCell key={val}>
+                    <div
+                      css={`
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        gap: 1rem;
+                      `}
+                    >
                       <div
                         css={`
+                          width: 25px;
+                          height: 25px;
+                          border-radius: 50%;
+                          padding: 3px;
+                          justify-content: center;
                           display: flex;
-                          justify-content: space-between;
                           align-items: center;
-                          gap: 1rem;
+                          background: #ffffff;
                         `}
                       >
-                        <div
-                          css={`
-                            width: 25px;
-                            height: 25px;
-                            border-radius: 50%;
-                            padding: 3px;
-                            justify-content: center;
-                            display: flex;
-                            align-items: center;
-                            background: #ffffff;
-                          `}
-                        >
-                          {props.dataTypes?.[val] === "string" ? "Aa" : "#"}
-                        </div>
-                        <p
-                          css={`
-                            margin: 0;
-                            overflow: clip;
-                            max-width: 220px;
-                            text-align: left;
-                            line-height: 17px;
-                            white-space: nowrap;
-                            text-overflow: ellipsis;
-                          `}
-                        >
-                          <b>{val}</b>
-                        </p>
-                        <IconButton>
-                          <SortIcon />
-                        </IconButton>
+                        {props.dataTypes?.[val] === "string" ? "Aa" : "#"}
                       </div>
-                    </TableCell>
-                  );
-                })}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              <TableRow
-                css={`
-                  top: 54px;
-                  position: sticky;
-                  background: #f4f4f4;
-                `}
-              >
-                {props.dataStats?.map((val) => (
-                  <TableCell
-                    key={val.name}
-                    css={`
-                      color: #000;
-                      font-size: 12px;
-                      // cursor: pointer;
-                      background: #f4f4f4;
-                    `}
-                    // onClick={handleToolBoxDisplay}
-                  >
-                    {val.name !== "ID" && (
-                      <div
-                        css={`
-                          background: #f4f4f4;
-                        `}
-                      >
-                        <StatisticDisplay type={val.type} data={val.data} />
-                      </div>
-                    )}
-                  </TableCell>
-                ))}
-              </TableRow>
-              {props.tableData.map((data, rowIndex) => (
-                <TableRow
-                  key={Object.values(data).join("-")}
-                  css={`
-                    background: #fff;
-                  `}
-                >
-                  {props.columns.map((val, cellIndex) => (
-                    <TableCell key={val}>
                       <p
                         css={`
                           margin: 0;
                           overflow: clip;
                           max-width: 220px;
+                          text-align: left;
+                          line-height: 17px;
                           white-space: nowrap;
                           text-overflow: ellipsis;
-                          min-width: ${cellIndex === 0 ? "30px" : "auto"};
-                          text-align: ${cellIndex === 0 ? "center" : "left"};
                         `}
                       >
-                        {data?.[val] ?? ""}
+                        <b>{val}</b>
                       </p>
-                    </TableCell>
-                  ))}
-                </TableRow>
+                      <IconButton>
+                        <SortIcon />
+                      </IconButton>
+                    </div>
+                  </TableCell>
+                );
+              })}
+            </TableRow>
+            <TableRow>
+              {props.dataStats?.map((val) => (
+                <TableCell
+                  key={val.name}
+                  css={`
+                    color: #000;
+                    font-size: 12px;
+                    // cursor: pointer;
+                    background: #f4f4f4;
+                  `}
+                  // onClick={handleToolBoxDisplay}
+                >
+                  {val.name !== "ID" && (
+                    <div
+                      css={`
+                        background: #f4f4f4;
+                      `}
+                    >
+                      <StatisticDisplay type={val.type} data={val.data} />
+                    </div>
+                  )}
+                </TableCell>
               ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </div>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {props.tableData.map((data, rowIndex) => (
+              <TableRow
+                key={Object.values(data).join("-")}
+                css={`
+                  background: #fff;
+                `}
+              >
+                {props.columns.map((val, cellIndex) => (
+                  <TableCell key={val}>
+                    <p
+                      css={`
+                        margin: 0;
+                        overflow: clip;
+                        max-width: 220px;
+                        white-space: nowrap;
+                        text-overflow: ellipsis;
+                        min-width: ${cellIndex === 0 ? "30px" : "auto"};
+                        text-align: ${cellIndex === 0 ? "center" : "left"};
+                      `}
+                    >
+                      {data?.[val] ?? ""}
+                    </p>
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+        <tr
+          ref={props.observerTarget}
+          css={`
+            height: 1px;
+          `}
+        ></tr>
+        <div>{props.loading ? <CircleLoader /> : null}</div>
+      </TableContainer>
+
       {toolboxDisplay && (
         <StatisticalTableToolBox
           {...props.columnDetails}

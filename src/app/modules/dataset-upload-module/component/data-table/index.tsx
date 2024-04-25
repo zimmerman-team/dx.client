@@ -5,6 +5,8 @@ import { SortColumn } from "react-data-grid";
 import PreviewTable from "app/components/Table/Preview-table";
 import { tableToolBoxData } from "app/components/Table/Preview-table/data";
 import { DataThemesDataTableProps } from "app/modules/dataset-upload-module/component/data-table/data";
+import useGetDatasetContent from "app/hooks/useGetDatasetContent";
+import { useInfinityScroll } from "app/hooks/useInfinityScroll";
 
 const getColumns = (
   data: {
@@ -29,10 +31,27 @@ export function DatasetDataTable(props: DataThemesDataTableProps) {
   const [data, setData] = React.useState<
     { [key: string]: number | string | null | boolean }[]
   >([]);
+  const observerTarget = React.useRef(null);
+  const { isObserved } = useInfinityScroll(observerTarget);
+
+  const {
+    data: tableData,
+    loading,
+    refetch,
+  } = useGetDatasetContent(props.datasetId, 10);
 
   React.useEffect(() => {
-    setData(props.data);
-  }, [props.data]);
+    //load data if intersection observer is triggered
+    if (data.length > 0) {
+      if (isObserved) {
+        refetch(true);
+      }
+    }
+  }, [isObserved]);
+
+  React.useEffect(() => {
+    setData(tableData);
+  }, [tableData]);
 
   useUpdateEffect(() => {
     setData(
@@ -41,51 +60,7 @@ export function DatasetDataTable(props: DataThemesDataTableProps) {
   }, [sort]);
 
   return (
-    <div
-      ref={containerEl}
-      css={`
-        max-width: 100%;
-
-        height: ${props.fullScreen ? "90vh" : "593px"};
-        overflow: auto;
-        overflow-x: scroll;
-        padding-right: 20px;
-        padding-bottom: 10px;
-        &::-webkit-scrollbar {
-          height: 12px;
-          border-radius: 23px;
-          width: 12px;
-
-          background: ${props.fullScreen ? "#f9f9f9" : "#231d2c"};
-        }
-        &::-webkit-scrollbar-track {
-          background: ${props.fullScreen ? "#262C34" : "#f9f9f9"};
-          border-radius: 23px;
-
-          /* padding: 0 0.5rem; */
-        }
-        &::-webkit-scrollbar-track:horizontal {
-          /* border-right: none; */
-        }
-        &::-webkit-scrollbar-thumb {
-          background: ${props.fullScreen ? "#f9f9f9" : "#231d2c"};
-          border-radius: 23px;
-          border: 3px solid transparent;
-          background-clip: content-box;
-        }
-        &::-webkit-scrollbar-corner {
-          background: transparent;
-        }
-
-        > div {
-          border-style: none;
-
-          * {
-            outline: none !important;
-          }
-        }
-      `}
-    >
+    <div ref={containerEl}>
       <PreviewTable
         tableData={data}
         placeUnderSubHeader
@@ -93,6 +68,9 @@ export function DatasetDataTable(props: DataThemesDataTableProps) {
         columns={getColumns(props.stats)}
         columnDetails={columnDetails}
         dataTypes={props.dataTypes}
+        observerTarget={observerTarget}
+        fullScreen={props.fullScreen}
+        loading={loading}
       />
     </div>
   );
