@@ -138,8 +138,8 @@ export default function IExternalDatasetCard(
         }
       `}
     >
-      <p>{props.name}</p>
-      <p>{props.description}</p>
+      <p title={props.name}>{props.name}</p>
+      <p title={props.description}>{props.description}</p>
       <p>
         <a href={props.url} rel="noreferrer noopener" target="_blank">
           Link to data source.

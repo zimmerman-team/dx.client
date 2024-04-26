@@ -57,6 +57,7 @@ interface MockProps {
   onSave: jest.Mock<any, any, any>;
   enableAutoSaveSwitch: boolean;
   savedChanges: boolean;
+  isAiSwitchActive: boolean;
 }
 type Params = {
   dataset: string | null;
@@ -105,6 +106,7 @@ const defaultProps = (props: Partial<MockProps> = {}): MockProps => {
     onSave: jest.fn(),
     enableAutoSaveSwitch: false,
     savedChanges: false,
+    isAiSwitchActive: false,
     ...props,
   };
 };

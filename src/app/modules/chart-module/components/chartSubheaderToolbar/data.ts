@@ -4,6 +4,7 @@ import { ToolbarPluginsType } from "app/modules/report-module/components/reportS
 
 export interface SubheaderToolbarProps {
   name: string;
+  isAiSwitchActive: boolean;
   visualOptions?: any;
   dimensions: any;
   setName: (name: string) => void;

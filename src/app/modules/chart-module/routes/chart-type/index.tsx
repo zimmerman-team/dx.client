@@ -98,15 +98,19 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
   }
 
   const aIChartSuggestions = (ctId: string) => {
-    if (!chartTypeSuggestions) return false;
+    try {
+      if (!chartTypeSuggestions) return false;
 
-    return (
-      chartTypeSuggestions.length &&
-      chartTypeSuggestions?.findIndex(
-        (c: { charttype: keyof typeof chartTypesFromMiddleWare }) =>
-          chartTypesFromMiddleWare[c.charttype] === ctId
-      ) > -1
-    );
+      return (
+        chartTypeSuggestions.length &&
+        chartTypeSuggestions?.findIndex(
+          (c: { charttype: keyof typeof chartTypesFromMiddleWare }) =>
+            chartTypesFromMiddleWare[c.charttype] === ctId
+        ) > -1
+      );
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   function getColor(ctId: string) {

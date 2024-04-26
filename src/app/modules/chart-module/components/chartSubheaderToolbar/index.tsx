@@ -142,6 +142,7 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
     props.autoSave && canChartEditDelete,
     [
       props.name,
+      props.isAiSwitchActive,
       selectedChartType,
       mapping,
       dataset,

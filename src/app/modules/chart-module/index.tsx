@@ -128,16 +128,21 @@ export default function ChartModule() {
   const clearChartTypesSuggestions = useStoreActions(
     (actions) => actions.charts.ChartTypesSuggest.clear
   );
-  const [isAiActive, setIsAiActive] = useRecoilState(isChartAIAgentActive);
-  const resetIsAiActive = useResetRecoilState(isChartAIAgentActive);
+  const [isAiSwitchActive, setIsAiSwitchActive] =
+    useRecoilState(isChartAIAgentActive);
+  const resetIsAiSwitchActive = useResetRecoilState(isChartAIAgentActive);
   const resetIsChartAutoMapped = useResetRecoilState(isChartAutoMappedAtom);
   const selectedAIChartSuggestion = () => {
-    if (!chartTypeSuggestions) return {};
+    try {
+      if (!chartTypeSuggestions) return {};
 
-    return chartTypeSuggestions?.find(
-      (c: { charttype: keyof typeof chartTypesFromMiddleWare }) =>
-        chartTypesFromMiddleWare[c.charttype] === chartType
-    );
+      return chartTypeSuggestions?.find(
+        (c: { charttype: keyof typeof chartTypesFromMiddleWare }) =>
+          chartTypesFromMiddleWare[c.charttype] === chartType
+      );
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const setMapping = useStoreActions(
@@ -161,25 +166,19 @@ export default function ChartModule() {
         401 ||
       get(state.charts.ChartGet.crudData, "error", "") === "Unauthorized"
   );
-  const createChart = useStoreActions(
-    (actions) => actions.charts.ChartCreate.post
-  );
   const editChart = useStoreActions(
     (actions) => actions.charts.ChartUpdate.patch
   );
+  const editChartCrudData = useStoreState(
+    (state) => state.charts.ChartUpdate.crudData
+  ) as ChartAPIModel;
   const clearChart = useStoreActions(
     (actions) => actions.charts.ChartGet.clear
   );
   const createChartClear = useStoreActions(
     (actions) => actions.charts.ChartCreate.clear
   );
-  const createChartData = useStoreState(
-    (state) =>
-      (state.charts.ChartCreate.crudData ?? emptyChartAPI) as ChartAPIModel
-  );
-  const createChartSuccess = useStoreState(
-    (state) => state.charts.ChartCreate.success
-  );
+
   const editChartSuccess = useStoreState(
     (state) => state.charts.ChartUpdate.success
   );
@@ -242,7 +241,9 @@ export default function ChartModule() {
     setNotFound(false);
     clearDatasetDetails();
   };
-
+  const isAIAssisted = Boolean(
+    isAiSwitchActive && !isEmpty(selectedAIChartSuggestion())
+  );
   const onSave = async () => {
     const chart = {
       name: chartName,
@@ -255,9 +256,7 @@ export default function ChartModule() {
       appliedFilters,
       enabledFilterOptionGroups,
       isMappingValid,
-      isAIAssisted: Boolean(
-        isAiActive && !isEmpty(selectedAIChartSuggestion())
-      ),
+      isAIAssisted,
     };
     if (view !== undefined && page !== "new") {
       editChart({
@@ -306,7 +305,9 @@ export default function ChartModule() {
     //handles what happens after chart is created or edited
     let timeout: NodeJS.Timeout;
     if (editChartSuccess) {
-      //returns back to chart detail page
+      if (isAiSwitchActive !== editChartCrudData.isAIAssisted) {
+        setIsAiSwitchActive(isAiSwitchActive || editChartCrudData.isAIAssisted);
+      }
       setSavedChanges(true);
       timeout = setTimeout(() => {
         setSavedChanges(false);
@@ -343,8 +344,12 @@ export default function ChartModule() {
     if (loadedChart.vizType === "bigNumber") {
       setMapping(loadedChart.mapping);
     }
-    if (page !== "new" && loadedChart) {
-      setIsAiActive(loadedChart.isAIAssisted);
+    if (
+      page !== "new" &&
+      loadedChart &&
+      isAiSwitchActive !== loadedChart.isAIAssisted
+    ) {
+      setIsAiSwitchActive(isAiSwitchActive || loadedChart.isAIAssisted);
     }
     setIsLoadedChartMappingValid(loadedChart?.isMappingValid);
   }, [loadedChart]);
@@ -418,7 +423,7 @@ export default function ChartModule() {
     setNotFound(false);
     setDataTypes([]);
     resetIsChartAutoMapped();
-    resetIsAiActive();
+    resetIsAiSwitchActive();
   }
   function clearChartBuilder() {
     console.log("--about to reset chart states");
@@ -489,6 +494,7 @@ export default function ChartModule() {
     <DndProvider backend={HTML5Backend}>
       <ChartSubheaderToolbar
         visualOptions={visualOptions}
+        isAiSwitchActive={isAiSwitchActive}
         name={chartName}
         setName={setChartName}
         setHasSubHeaderTitleFocused={setHasSubHeaderTitleFocused}
@@ -575,7 +581,7 @@ export default function ChartModule() {
                   renderedChartType={chartType as ChartType}
                   setChartErrorMessage={setChartErrorMessage}
                   setNotFound={setNotFound}
-                  isAIAssistedChart={loadedChart?.isAIAssisted}
+                  isAIAssistedChart={editChartCrudData?.isAIAssisted}
                 />
               </Route>
 
@@ -592,7 +598,7 @@ export default function ChartModule() {
                   renderedChartType={chartType as ChartType}
                   setChartErrorMessage={setChartErrorMessage}
                   setNotFound={setNotFound}
-                  isAIAssistedChart={loadedChart?.isAIAssisted}
+                  isAIAssistedChart={editChartCrudData?.isAIAssisted}
                 />
               </Route>
               <Route path="/chart/:page/mapping">
@@ -608,7 +614,7 @@ export default function ChartModule() {
                   renderedChartType={chartType as ChartType}
                   setChartErrorMessage={setChartErrorMessage}
                   setNotFound={setNotFound}
-                  isAIAssistedChart={loadedChart?.isAIAssisted}
+                  isAIAssistedChart={editChartCrudData?.isAIAssisted}
                 />
               </Route>
               <Route path="/chart/:page/chart-type">
@@ -648,7 +654,7 @@ export default function ChartModule() {
                   containerRef={containerRef}
                   loadedChart={loadedChart}
                   view={view}
-                  isAIAssistedChart={loadedChart?.isAIAssisted}
+                  isAIAssistedChart={editChartCrudData?.isAIAssisted}
                 />
               </Route>
               <Route path="/chart/:page">
@@ -664,7 +670,7 @@ export default function ChartModule() {
                   containerRef={containerRef}
                   loadedChart={loadedChart}
                   view={view}
-                  isAIAssistedChart={loadedChart?.isAIAssisted}
+                  isAIAssistedChart={editChartCrudData?.isAIAssisted}
                 />
               </Route>
               <Route path="*">
