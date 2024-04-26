@@ -5335,4 +5335,5 @@ export interface IChartDetail {
   createdDate: string; // Date string in ISO 8601 format
   updatedDate: string; // Date string in ISO 8601 format
   authId: string;
+  isAIAssisted: boolean;
 }

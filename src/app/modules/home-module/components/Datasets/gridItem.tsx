@@ -83,6 +83,7 @@ export default function GridItem(props: Readonly<Props>) {
               `}
             >
               <p
+                title={props.title}
                 css={`
                   margin-top: -5px;
                   font-size: 14px;
@@ -97,6 +98,7 @@ export default function GridItem(props: Readonly<Props>) {
                 <b>{props.title}</b>
               </p>
               <p
+                title={props.descr}
                 css={`
                   font-size: 10px;
                   line-height: 14px;

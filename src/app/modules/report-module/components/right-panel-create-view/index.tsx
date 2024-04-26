@@ -616,6 +616,7 @@ function ReportRightPanelCreateViewChartList(
               datasetId={chart.datasetId}
               createdDate={chart.createdDate}
               framesArray={props.framesArray}
+              isAIAssistedChart={chart.isAIAssisted}
               elementType={
                 (chart.vizType === "bigNumber"
                   ? ReportElementsType.BIG_NUMBER
@@ -1212,6 +1213,7 @@ function ChartItem(
     createdDate: string;
     elementType: "chart" | "bigNumber";
     framesArray: IFramesArray[];
+    isAIAssistedChart: boolean;
   }>
 ) {
   const nullRef = React.useRef(null);
@@ -1306,6 +1308,7 @@ function ChartItem(
         added={added}
         chartPreview={chartPreview}
         setChartPreview={setChartPreview}
+        isAIAssistedChart={props.isAIAssistedChart}
         descr="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
       />
     </div>

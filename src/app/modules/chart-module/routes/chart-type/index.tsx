@@ -14,14 +14,15 @@ import {
   chartTypesFromMiddleWare,
 } from "app/modules/chart-module/routes/chart-type/data";
 import { useAuth0 } from "@auth0/auth0-react";
-import AISwitch from "../../components/switch/AISwitch";
+import AISwitch from "app/modules/chart-module/components/switch/AISwitch";
 import { useRecoilState, useResetRecoilState } from "recoil";
 import {
   isChartAIAgentActive,
   isChartAutoMappedAtom,
 } from "app/state/recoil/atoms";
-import { ChartAPIModel, emptyChartAPI } from "../../data";
+import { ChartAPIModel, emptyChartAPI } from "app/modules/chart-module/data";
 import { NotAuthorizedMessageModule } from "app/modules/common/not-authorized-message";
+import AILoader from "./loader";
 
 function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
   useTitle("DX DataXplorer - Chart Type");
@@ -36,6 +37,9 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
   const chartType = useStoreState((state) => state.charts.chartType.value);
   const loadChartTypesSuggestions = useStoreActions(
     (actions) => actions.charts.ChartTypesSuggest.fetch
+  );
+  const chartTypesSuggestionsLoading = useStoreState(
+    (state) => state.charts.ChartTypesSuggest.loading
   );
   const resetIsChartAutoMapped = useResetRecoilState(isChartAutoMappedAtom);
   const chartTypeSuggestions = useStoreState((state) =>
@@ -155,6 +159,8 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
               }
             `}
           >
+            {chartTypesSuggestionsLoading && <AILoader />}
+
             <span>AI Agent</span>
             <AISwitch
               checked={isAiActive}

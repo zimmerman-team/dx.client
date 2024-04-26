@@ -197,7 +197,10 @@ export function ChartToolBoxMapping(props: Readonly<ChartToolBoxMappingProps>) {
                         : d.aggregationDefault,
                   }
                 : undefined,
-              ids: [uniqueId()],
+              ids:
+                typeof selectedChart[d.id] === "object"
+                  ? Object.keys(selectedChart[d.id]).map(() => uniqueId())
+                  : [uniqueId()],
               value:
                 typeof selectedChart[d.id] === "object"
                   ? Object.keys(selectedChart[d.id])

@@ -648,6 +648,7 @@ export default function ChartModule() {
                   containerRef={containerRef}
                   loadedChart={loadedChart}
                   view={view}
+                  isAIAssistedChart={loadedChart?.isAIAssisted}
                 />
               </Route>
               <Route path="/chart/:page">
@@ -663,6 +664,7 @@ export default function ChartModule() {
                   containerRef={containerRef}
                   loadedChart={loadedChart}
                   view={view}
+                  isAIAssistedChart={loadedChart?.isAIAssisted}
                 />
               </Route>
               <Route path="*">

@@ -10,6 +10,7 @@ import {
   ChartRenderedItem,
   emptyChartAPI,
 } from "app/modules/chart-module/data";
+import { ReactComponent as AIIcon } from "app/modules/chart-module/assets/ai-icon.svg";
 
 interface Props {
   id: string;
@@ -199,7 +200,7 @@ export function ReportChartWrapper(props: Props) {
       css={`
         width: 100%;
         height: 100%;
-
+        position: relative;
         > div {
           margin: 0 !important;
           overflow: hidden !important;
@@ -242,6 +243,16 @@ export function ReportChartWrapper(props: Props) {
           {chartName}
         </h4>
       )}
+      <div
+        css={`
+          display: ${loadedChart?.isAIAssisted ? "block" : "none"};
+          position: absolute;
+          right: 4%;
+          top: 4%;
+        `}
+      >
+        <AIIcon />
+      </div>
       <CommonChart
         chartId={props.id}
         setRawViz={setRawViz}

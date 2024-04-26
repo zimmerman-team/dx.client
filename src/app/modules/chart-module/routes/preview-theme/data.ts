@@ -12,4 +12,5 @@ export interface ChartBuilderPreviewThemeProps {
   containerRef: React.RefObject<HTMLDivElement>;
   loadedChart: ChartAPIModel;
   view: string | undefined;
+  isAIAssistedChart: boolean;
 }

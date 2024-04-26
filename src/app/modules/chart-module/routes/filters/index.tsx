@@ -70,8 +70,8 @@ function ChartBuilderFilters(props: Readonly<ChartBuilderFiltersProps>) {
         <div
           css={`
             position: absolute;
-            right: -2%;
-            top: 9%;
+            right: 0%;
+            top: 4%;
             display: ${props.isAIAssistedChart ? "block" : "none"};
           `}
         >
