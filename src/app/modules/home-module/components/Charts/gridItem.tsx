@@ -82,6 +82,7 @@ export default function gridItem(props: Props) {
             css={`
               width: 96%;
               margin-top: -9px;
+              gap: 6px;
               display: flex;
               align-items: center;
               justify-content: space-between;

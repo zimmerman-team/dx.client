@@ -13,7 +13,13 @@ import { ChartTypeModel, echartTypes } from "../routes/chart-type/data";
 import { createMemoryHistory } from "history";
 import { Auth0Provider } from "@auth0/auth0-react";
 import { mockUseAuth0 } from "app/utils/mockAuth0";
-import { ChartGet } from "app/state/api/action-reducers/charts";
+import {
+  ChartGet,
+  ChartTypesSuggest,
+} from "app/state/api/action-reducers/charts";
+import { AuthTokenState } from "app/state/api/action-reducers/sync";
+import { MutableSnapshot, RecoilRoot } from "recoil";
+import { isChartAIAgentActive } from "app/state/recoil/atoms";
 
 interface MockProps {
   loading: boolean;
@@ -59,13 +65,18 @@ const appSetup = (
   historyPath?: string
 ) => {
   const props = defaultProps(newProps);
+  const initialRecoilState = (snap: MutableSnapshot) => {
+    snap.set(isChartAIAgentActive, false);
+  };
   const mockStore = createStore(
     {
+      AuthToken: AuthTokenState,
       charts: {
         chartType: ChartsChartTypeState,
         dataset: ChartsDatasetState,
         mapping: ChartsMappingState,
         ChartGet,
+        ChartTypesSuggest,
       },
     },
     {
@@ -91,7 +102,9 @@ const appSetup = (
       <Router.Router history={history(historyPath ?? "/chart/new/type")}>
         <Auth0Provider clientId="__test_client_id__" domain="__test_domain__">
           <StoreProvider store={mockStore}>
-            <ChartBuilderChartType {...props} />
+            <RecoilRoot initializeState={initialRecoilState}>
+              <ChartBuilderChartType {...props} />
+            </RecoilRoot>
           </StoreProvider>
         </Auth0Provider>
       </Router.Router>
