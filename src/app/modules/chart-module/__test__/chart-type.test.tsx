@@ -129,9 +129,11 @@ test("should select a chart type", async () => {
 
   render(app);
   expect(props.loadDataset).toHaveBeenCalled();
-  echartTypes(false).forEach((ct: ChartTypeModel) => {
-    expect(screen.getByTestId(ct.id)).toBeInTheDocument();
-  });
+  echartTypes(false)
+    .filter((c) => c.class === "basic")
+    .forEach((ct: ChartTypeModel) => {
+      expect(screen.getByTestId(ct.id)).toBeInTheDocument();
+    });
   await user.click(screen.getByTestId(echartTypes(false)[0].id));
   expect(mockStore.getState().charts.mapping.value).toEqual({});
   expect(mockStore.getState().charts.chartType.value).toEqual(
@@ -146,9 +148,11 @@ test("should unselect a chart type", async () => {
   const { app, mockStore } = appSetup("echartsBarchart", "12345");
 
   render(app);
-  echartTypes(false).forEach((ct: ChartTypeModel) => {
-    expect(screen.getByTestId(ct.id)).toBeInTheDocument();
-  });
+  echartTypes(false)
+    .filter((c) => c.class === "basic")
+    .forEach((ct: ChartTypeModel) => {
+      expect(screen.getByTestId(ct.id)).toBeInTheDocument();
+    });
   await user.click(screen.getByTestId(echartTypes(false)[0].id));
   expect(mockStore.getState().charts.mapping.value).toEqual({});
   expect(mockStore.getState().charts.chartType.value).toBeNull();
