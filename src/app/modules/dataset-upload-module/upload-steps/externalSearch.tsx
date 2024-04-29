@@ -40,39 +40,35 @@ export default function ExternalSearch(props: {
   const token = useStoreState((state) => state.AuthToken.value);
   const history = useHistory();
   const [loading, setLoading] = React.useState(false);
-  const [page, setPage] = React.useState(1);
-  const pageSize = 20;
+  const [offset, setOffset] = React.useState(0);
+  const limit = 20;
   const [datasets, setDatasets] = React.useState<IExternalDataset[]>([]);
 
   const { isObserved } = useInfinityScroll(observerTarget);
 
-  const [totalDatasets, setTotalDatasets] = React.useState<IExternalDataset[]>(
-    []
-  );
   const abortControllerRef = React.useRef<AbortController>(
     new AbortController()
   );
   const terminateSearch = () => {
     abortControllerRef.current.abort();
     abortControllerRef.current = new AbortController();
-    setTotalDatasets([]);
+    setDatasets([]);
   };
 
   // Pagination on scroll
   React.useEffect(() => {
     if (isObserved && datasets.length > 0) {
-      setDatasets(totalDatasets.slice(0, pageSize * page + 1));
-      setPage(page + 1);
+      loadSearch(true);
     }
   }, [isObserved]);
 
-  const loadSearch = async () => {
+  const loadSearch = async (nextPage: boolean = false) => {
     try {
       setLoading(true);
       const response = await axios.get(
         `${
           process.env.REACT_APP_API
-        }/external-sources/search?q=${searchValue}&source=${""}`,
+        }/external-sources/search?q=${searchValue}&source=${"Kaggle,World Bank,WHO,HDX"}&offset=${offset}&limit=${limit}`,
         {
           signal: abortControllerRef.current.signal,
           headers: {
@@ -81,8 +77,13 @@ export default function ExternalSearch(props: {
         }
       );
       setLoading(false);
-      setTotalDatasets(response.data);
-      setDatasets(response.data.slice(0, pageSize));
+      if (nextPage) {
+        setDatasets([...datasets, ...response.data]);
+        setOffset(offset + limit);
+      } else {
+        setDatasets(response.data);
+        setOffset(limit);
+      }
     } catch (e) {
       setLoading(false);
       console.log(e);
@@ -99,9 +100,8 @@ export default function ExternalSearch(props: {
   const [,] = useDebounce(
     () => {
       if (token) {
-        setTotalDatasets([]);
         setDatasets([]);
-        setPage(1);
+        setOffset(0);
         loadSearch();
       }
     },
