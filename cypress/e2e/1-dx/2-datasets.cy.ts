@@ -225,6 +225,30 @@ describe("Edit, Delete and Duplicate Dataset", () => {
       .should("be.visible");
   });
 
+  // it("Can switch to fullscreen on the dataset detail page", () => {
+  //   cy.get('[data-cy="dataset-grid-item"]').first().scrollIntoView().click();
+
+  //   cy.location("pathname").should("include", "/dataset/");
+
+  //   cy.get('[data-cy="dataset-full-screen-btn"]').click();
+
+  //   cy.get('[data-cy="dataset-full-screen-view"]').should("be.visible");
+
+  //   cy.get('[data-cy="dataset-close-full-screen-btn"]').click();
+
+  //   cy.get('[data-cy="dataset-full-screen-view"]').should("not.be.visible");
+  // });
+
+  it("Can go back to the library from the dataset detail page", () => {
+    cy.get('[data-cy="dataset-grid-item"]').first().scrollIntoView().click();
+
+    cy.location("pathname").should("include", "/dataset/");
+
+    cy.get('[data-cy="dataset-back-to-library-btn"]').click();
+
+    cy.location("pathname").should("not.include", "/dataset");
+  });
+
   it("Can delete dataset", () => {
     cy.get("[data-cy=home-search-button]").click();
     cy.get("[data-cy=home-search-input]").type("Soccer Players");

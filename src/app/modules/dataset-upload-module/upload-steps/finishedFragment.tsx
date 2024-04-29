@@ -94,6 +94,7 @@ export default function FinishedFragment(props: Props) {
           margin-bottom: 16px;
           column-gap: 8px;
         `}
+        data-cy="dataset-back-to-library-btn"
       >
         <ArrowBack fontSize={"small"} /> Back to Data Library
       </Link>
@@ -143,6 +144,7 @@ export default function FinishedFragment(props: Props) {
               onMouseOver={() => setOpenFullScreenTooltip(true)}
               onMouseLeave={() => setOpenFullScreenTooltip(false)}
               onClick={handle.enter}
+              data-cy="dataset-full-screen-btn"
             >
               <FullScreenIcon />
               <div
@@ -241,6 +243,7 @@ export default function FinishedFragment(props: Props) {
               padding: 26px 100px 26px 108px;
             `}
             hidden={!handle.active}
+            data-cy="dataset-full-screen-view"
           >
             <div
               css={`
@@ -260,6 +263,7 @@ export default function FinishedFragment(props: Props) {
                 onMouseOver={() => setCloseFullScreenTooltip(true)}
                 onMouseLeave={() => setCloseFullScreenTooltip(false)}
                 onClick={handle.exit}
+                data-cy="dataset-close-full-screen-btn"
               >
                 <CloseFullScreenIcon />
 
