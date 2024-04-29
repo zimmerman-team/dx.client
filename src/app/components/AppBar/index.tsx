@@ -228,27 +228,27 @@ export function AppBar() {
                 `}
               >
                 <div css={navLinkcss("why-dataXplorer", navLocation)}>
-                  <NavLink to="/why-dataXplorer">
+                  <NavLink to="/why-dataXplorer" data-cy="nav-why">
                     <b>Why DataXplorer?</b>
                   </NavLink>
                 </div>
                 <div css={navLinkcss("explore", navLocation)}>
-                  <NavLink to="/explore">
+                  <NavLink to="/explore" data-cy="nav-explore">
                     <b>Explore </b>
                   </NavLink>
                 </div>
                 <div css={navLinkcss("about", navLocation)}>
-                  <Link to="/about">
+                  <Link to="/about" data-cy="nav-about">
                     <b>About</b>
                   </Link>
                 </div>
                 <div css={navLinkcss("partners", navLocation)}>
-                  <Link to="/partners">
+                  <Link to="/partners" data-cy="nav-partners">
                     <b>Partners </b>
                   </Link>
                 </div>
                 <div css={navLinkcss("contact", navLocation)}>
-                  <Link to="/contact">
+                  <Link to="/contact" data-cy="nav-contact">
                     <b>Contact </b>
                   </Link>
                 </div>

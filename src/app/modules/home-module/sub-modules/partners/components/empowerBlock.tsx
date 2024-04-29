@@ -62,12 +62,15 @@ export default function EmpowerBlock(props: {
       </p>
       {isAuthenticated && (
         <div>
-          <Link to="/report/new/initial">
+          <Link
+            to="/report/new/initial"
+            data-cy="empower-block-create-report-link"
+          >
             <HomePrimaryButton color="#6061E5" type="button">
               CREATE REPORT
             </HomePrimaryButton>
           </Link>
-          <Link to="/explore">
+          <Link to="/explore" data-cy="empower-block-explore-reports-link">
             <HomePrimaryButton color="#E492BD" type="button">
               EXPLORE REPORTS
             </HomePrimaryButton>
