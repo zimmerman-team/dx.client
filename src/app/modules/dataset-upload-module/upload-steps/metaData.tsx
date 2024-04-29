@@ -61,14 +61,14 @@ export const SelectCategoryField = (props: {
   onChange: any;
 }) => (
   <FormControl variant="outlined" fullWidth>
-    <InputLabel id="select-label">Data category</InputLabel>
+    <InputLabel id="select-label">Data category*</InputLabel>
     <CssSelectField
       fullWidth
       id="select"
       value={props.formDetails.category}
       defaultValue={""}
       name="category"
-      label="Data category"
+      label="Data category*"
       labelId="select-label"
       data-cy="dataset-metadata-category"
       onChange={props.onChange}
@@ -166,7 +166,7 @@ export default function MetaData(props: Readonly<Props>) {
           <Grid lg={12} xs={12} md={12} item>
             <CssTextField
               id="outlined-basic"
-              label="Data title"
+              label="Data title*"
               variant="outlined"
               helperText="Title must be between 6 and 50 characters in length."
               onChange={handleChange}
@@ -229,7 +229,7 @@ export default function MetaData(props: Readonly<Props>) {
           <Grid lg={7} xs={12} md={7} item>
             <CssTextField
               id="outlined-basic"
-              label="Source of the data"
+              label="Source of the data*"
               variant="outlined"
               onChange={handleChange}
               name="source"
@@ -245,7 +245,7 @@ export default function MetaData(props: Readonly<Props>) {
           <Grid lg={12} xs={12} md={12} item>
             <CssTextField
               id="outlined-basic"
-              label="Link to data source"
+              label="Link to data source*"
               variant="outlined"
               onChange={handleChange}
               name="sourceUrl"
