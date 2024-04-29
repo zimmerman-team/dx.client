@@ -7,10 +7,12 @@ import { ReactComponent as DuplicateIcon } from "app/modules/home-module/assets/
 import { ReactComponent as DeleteIcon } from "app/modules/home-module/assets/delete.svg";
 import { ReactComponent as MenuIcon } from "app/modules/home-module/assets/menu.svg";
 import { ReactComponent as DataCardImg } from "app/modules/home-module/assets/data-card-img.svg";
+import { ReactComponent as InfoIcon } from "app/modules/home-module/assets/info-icon.svg";
 
 import { Tooltip } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
+import { useStoreActions } from "app/state/store/hooks";
 
 interface Props {
   path: string;
@@ -26,6 +28,8 @@ interface Props {
 
 export default function GridItem(props: Readonly<Props>) {
   const [menuOptionsDisplay, setMenuOptionsDisplay] = React.useState(false);
+  const [displayCreateChartButton, setDisplayCreateChartButton] =
+    React.useState(false);
   const { user, isAuthenticated } = useAuth0();
 
   const showMenuOptions = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -36,9 +40,18 @@ export default function GridItem(props: Readonly<Props>) {
   const canDatasetEditDelete = React.useMemo(() => {
     return isAuthenticated && props.owner === user?.sub;
   }, [user, isAuthenticated]);
+  const setDataset = useStoreActions(
+    (actions) => actions.charts.dataset.setValue
+  );
+
+  function handleCreateNewChart() {
+    setDataset(props.id as string);
+  }
 
   return (
     <div
+      onMouseEnter={() => setDisplayCreateChartButton(true)}
+      onMouseLeave={() => setDisplayCreateChartButton(false)}
       css={`
         position: relative;
       `}
@@ -170,6 +183,53 @@ export default function GridItem(props: Readonly<Props>) {
           </div>
         </div>
       </Link>
+      {displayCreateChartButton && (
+        <Link
+          to={{
+            pathname: `/chart/new/chart-type`,
+            search: "?loadataset=true",
+          }}
+          css={`
+            pointer-events: ${canDatasetEditDelete ? "auto" : "none"};
+          `}
+        >
+          <button
+            onClick={handleCreateNewChart}
+            disabled={!canDatasetEditDelete}
+            css={`
+              position: absolute;
+              cursor: ${canDatasetEditDelete ? "pointer" : "not-allowed"};
+              height: 20px;
+              border-radius: 20px;
+              color: #ffffff;
+              font-family: "GothamNarrow-Book", sans-serif;
+              right: 8px;
+              bottom: 30px;
+              z-index: 2;
+              border: none;
+              outline: none;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              gap: 8.3px;
+              background: #359c96;
+              span {
+                margin: 0;
+                font-size: 10px;
+              }
+            `}
+          >
+            <span>Create chart with AI</span>
+            <span
+              css={`
+                margin-bottom: -12px;
+              `}
+            >
+              <InfoIcon />
+            </span>
+          </button>
+        </Link>
+      )}
       {menuOptionsDisplay && (
         <React.Fragment>
           <div
