@@ -17,6 +17,8 @@ import ReportsGrid from "app/modules/home-module/components/Reports/reportsGrid"
 import { datasetCategories } from "app/modules/dataset-upload-module/upload-steps/metaData";
 import DatasetCategoryList from "app/modules/home-module/components/Datasets/datasetCategoryList";
 import Filter from "app/modules/home-module/components/Filter";
+import { useAuth0 } from "@auth0/auth0-react";
+import EmpowerBlock from "../partners/components/empowerBlock";
 
 const StyledTab = withStyles(() => ({
   root: {
@@ -59,6 +61,9 @@ export default function ExploreAssetsModule() {
   const [_, setReportPreviewMode] = useRecoilState(
     unSavedReportPreviewModeAtom
   );
+
+  const { isAuthenticated } = useAuth0();
+
   React.useEffect(() => {
     clearPersistedReportState();
     clearChartFromReportState();
@@ -83,6 +88,12 @@ export default function ExploreAssetsModule() {
   React.useEffect(() => {
     setSearchValue(undefined);
   }, [display]);
+
+  const descriptions = {
+    data: "Explore the collection of Datasets used to create Charts",
+    charts: "Explore the collection of Charts used in Reports",
+    reports: "Explore the collection of Reports",
+  };
 
   const displayGrid = (searchStr: string, sortByStr: string) => {
     switch (display) {
@@ -122,6 +133,8 @@ export default function ExploreAssetsModule() {
 
   return (
     <React.Fragment>
+      <Box height={45} />
+      {!isAuthenticated ? <EmpowerBlock view="explore" /> : null}
       <Container
         maxWidth="lg"
         ref={exploreViewRef}
@@ -129,9 +142,8 @@ export default function ExploreAssetsModule() {
           min-height: calc(100vh - 668px);
         `}
       >
-        <Box height={82} />
+        <Box height={58} />
         <Box css={featuredAssetsCss}>
-          <Box height={20} />
           <Grid
             container
             alignContent="space-between"
@@ -173,15 +185,28 @@ export default function ExploreAssetsModule() {
               />
             </Grid>
           </Grid>
-          <Box height={20} />
-          {display === "data" && (
+          <div
+            css={`
+              padding-top: 24px;
+              font-size: 14px;
+              font-family: GothamNarrow-Book;
+              color: #000000;
+            `}
+          >
+            {descriptions[display]}
+          </div>
+
+          {display === "data" ? (
             <DatasetCategoryList
               category={category}
               datasetCategories={datasetCategories}
               setCategory={setCategory}
             />
+          ) : (
+            <Box height={24} />
           )}
         </Box>
+
         <div>{displayGrid(searchValue as string, sortValue)}</div>
       </Container>
       <Box height={100} />

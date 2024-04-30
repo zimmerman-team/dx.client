@@ -19,7 +19,7 @@ import {
 } from "app/modules/home-module/sub-modules/partners/style";
 
 export default function EmpowerBlock(props: {
-  view?: "why-dx" | "contact" | "about" | "partners";
+  view?: "why-dx" | "contact" | "about" | "partners" | "explore";
 }) {
   const { isAuthenticated } = useAuth0();
 
@@ -46,6 +46,11 @@ export default function EmpowerBlock(props: {
       mainText = `Global Health and International Development\nOrganizations are using DataXplorer`;
       subText =
         "DataXplorer simplifies and empowers visual data reporting for all.";
+      break;
+    case "explore":
+      mainText = "Explore Empowered Data";
+      subText =
+        "Dataxplorer simplifies and empowers visual data reporting for all.";
       break;
 
     default:
