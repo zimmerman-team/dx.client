@@ -163,7 +163,7 @@ export function useChartsRawData(props: {
           extraLoader.style.display = "none";
         }
         setLoading(false);
-        if (isEmpty(response.data)) {
+        if (isEmpty(response.data) || response.data.error) {
           setDataError(true);
         } else {
           setDataStats(response.data.stats);
