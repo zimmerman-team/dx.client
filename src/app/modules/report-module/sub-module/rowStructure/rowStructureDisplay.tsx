@@ -58,8 +58,6 @@ interface RowStructureDisplayProps {
     width: number,
     height: number
   ) => void;
-  setIsEditorFocused: React.Dispatch<React.SetStateAction<boolean>>;
-  isEditorFocused: boolean;
   setPlugins: React.Dispatch<React.SetStateAction<ToolbarPluginsType>>;
 }
 
@@ -245,8 +243,6 @@ export default function RowstructureDisplay(props: RowStructureDisplayProps) {
               handlePersistReportState={props.handlePersistReportState}
               rowItemsCount={props.rowStructureDetailItems.length}
               setPlugins={props.setPlugins}
-              setIsEditorFocused={props.setIsEditorFocused}
-              isEditorFocused={props.isEditorFocused}
             />
           ))}
         </div>
@@ -263,8 +259,6 @@ const Box = (props: {
   itemIndex: number;
   handlePersistReportState: () => void;
   rowType: string;
-  setIsEditorFocused: React.Dispatch<React.SetStateAction<boolean>>;
-  isEditorFocused: boolean;
   setPlugins?: React.Dispatch<React.SetStateAction<ToolbarPluginsType>>;
   setFramesArray: (value: React.SetStateAction<IFramesArray[]>) => void;
   rowItemsCount: number;
@@ -580,8 +574,6 @@ const Box = (props: {
               textContent={textContent}
               setTextContent={setTextContent}
               setPlugins={props.setPlugins}
-              setIsEditorFocused={props.setIsEditorFocused}
-              isEditorFocused={props.isEditorFocused}
               placeholder={placeholder}
               setPlaceholderState={setTextPlaceholderState}
               placeholderState={textPlaceholderState}

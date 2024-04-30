@@ -51,6 +51,4 @@ export interface ReportEditViewProps {
   setStopInitializeFramesWidth: React.Dispatch<React.SetStateAction<boolean>>;
 
   setPlugins: React.Dispatch<React.SetStateAction<ToolbarPluginsType>>;
-  isEditorFocused: boolean;
-  setIsEditorFocused: React.Dispatch<React.SetStateAction<boolean>>;
 }

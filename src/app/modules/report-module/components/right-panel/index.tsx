@@ -11,7 +11,7 @@ export function ReportRightPanel(props: ReportRightPanelProps) {
 
   return (
     <Slide direction="left" in={props.open} style={{ visibility: "visible" }}>
-      <div css={styles.container(props.isEditorFocused)}>
+      <div css={styles.container}>
         {!isMobile && (
           <div
             role="button"

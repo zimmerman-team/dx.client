@@ -41,7 +41,6 @@ export interface ReportSubheaderToolbarProps {
   setHasSubHeaderTitleFocused?: (value: boolean) => void;
   setHasSubHeaderTitleBlurred?: (value: boolean) => void;
   plugins: ToolbarPluginsType;
-  isEditorFocused: boolean;
   headerDetails: IHeaderDetails;
   framesArray: IFramesArray[];
   setStopInitializeFramesWidth?: (value: boolean) => void;

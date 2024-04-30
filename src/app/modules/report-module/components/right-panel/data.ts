@@ -14,7 +14,6 @@ export interface ReportRightPanelProps {
   open: boolean;
   onOpen: () => void;
   onClose: () => void;
-  isEditorFocused: boolean;
   showHeaderItem: boolean;
   currentView: "initial" | "edit" | "create" | "preview" | "ai-template";
   headerDetails: IHeaderDetails;

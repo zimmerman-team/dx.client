@@ -107,8 +107,7 @@ function ReportCreateView(props: Readonly<ReportCreateViewProps>) {
     <div>
       <div
         css={`
-          height: ${props.isEditorFocused ? "55px" : "0px"};
-          transition: all cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
+          height: 55px;
         `}
       />
       <HeaderBlock
@@ -119,8 +118,6 @@ function ReportCreateView(props: Readonly<ReportCreateViewProps>) {
         reportName={props.reportName}
         hasSubHeaderTitleFocused={props.hasSubHeaderTitleFocused}
         setPlugins={props.setPlugins}
-        isEditorFocused={props.isEditorFocused}
-        setIsEditorFocused={props.setIsEditorFocused}
       />
       <Container maxWidth="lg">
         <div
@@ -168,8 +165,6 @@ function ReportCreateView(props: Readonly<ReportCreateViewProps>) {
                       previewItems={
                         frame.frame.previewItems as (string | object)[]
                       }
-                      isEditorFocused={props.isEditorFocused}
-                      setIsEditorFocused={props.setIsEditorFocused}
                       setPlugins={props.setPlugins}
                       endReportTour={() => {}}
                     />
