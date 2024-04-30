@@ -127,8 +127,8 @@ export function useChartsRawData(props: {
   const selectedChartType = useStoreState(
     (state) => state.charts.chartType.value
   );
-  const dataset = useStoreState((state) => state.charts.dataset.value);
-  const setDataset = useStoreActions(
+  const datasetId = useStoreState((state) => state.charts.dataset.value);
+  const setDatasetId = useStoreActions(
     (actions) => actions.charts.dataset.setValue
   );
   const setSelectedChartType = useStoreActions(
@@ -139,6 +139,8 @@ export function useChartsRawData(props: {
   const isPreviewMode =
     location.pathname === `/chart/${page}` ||
     location.pathname === `/chart/${page}/preview`;
+
+  const isChartRoute = location.pathname.startsWith("/chart");
 
   const isrequiredMappingKeysPresent = areAllRequiredDimensionsMapped(
     props.dimensions,
@@ -204,7 +206,7 @@ export function useChartsRawData(props: {
                 {
                   mapping: validMapping,
                   vizType: selectedChartType,
-                  datasetId: dataset,
+                  datasetId: datasetId,
                   vizOptions: visualOptions,
                   appliedFilters,
                 },
@@ -254,7 +256,7 @@ export function useChartsRawData(props: {
           setVisualOptions(chart.vizOptions);
           setDataTypesFromRenderedChart(chart.dataTypes);
           setSelectedChartType(chart.vizType);
-          setDataset(chart.datasetId);
+          setDatasetId(chart.datasetId);
           setChartFromAPI(chart);
           setDataError(false);
         }
@@ -318,13 +320,14 @@ export function useChartsRawData(props: {
             before mapping was successful, to load the chart with the saved values.
             Since we can not get it from renderChartFromAPI() because we only call renderChartFromAPI() when mapping is valid, we set it to loadedchart values*/
     if (
-      isEmpty(dataset) &&
+      isChartRoute &&
+      isEmpty(datasetId) &&
       isEmpty(dataTypes) &&
       isEmpty(selectedChartType) &&
       !loadedChartDetails?.isMappingValid
     ) {
       loadDataset(`chart/sample-data/${loadedChartDetails?.datasetId}`);
-      setDataset(loadedChartDetails?.datasetId);
+      setDatasetId(loadedChartDetails?.datasetId);
       setSelectedChartType(loadedChartDetails?.vizType);
       setMapping(loadedChartDetails?.mapping);
     }

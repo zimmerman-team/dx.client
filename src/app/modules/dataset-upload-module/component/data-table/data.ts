@@ -6,4 +6,6 @@ export interface DataThemesDataTableProps {
     data: { name: string; value: number }[];
   }[];
   dataTypes: never[];
+  datasetId: string;
+  fullScreen?: boolean;
 }
