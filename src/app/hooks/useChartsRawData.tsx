@@ -324,6 +324,7 @@ export function useChartsRawData(props: {
       isEmpty(datasetId) &&
       isEmpty(dataTypes) &&
       isEmpty(selectedChartType) &&
+      loadedChartDetails &&
       !loadedChartDetails?.isMappingValid
     ) {
       loadDataset(`chart/sample-data/${loadedChartDetails?.datasetId}`);
@@ -331,7 +332,7 @@ export function useChartsRawData(props: {
       setSelectedChartType(loadedChartDetails?.vizType);
       setMapping(loadedChartDetails?.mapping);
     }
-  }, [dataError, loadedChartDetails]);
+  }, [loadedChartDetails]);
 
   return {
     loading,
