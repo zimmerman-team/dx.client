@@ -24,6 +24,7 @@ interface Props {
   handleDelete?: (id: string) => void;
   id?: string;
   owner: string;
+  inChartBuilder: boolean;
 }
 
 export default function GridItem(props: Readonly<Props>) {
@@ -183,7 +184,7 @@ export default function GridItem(props: Readonly<Props>) {
           </div>
         </div>
       </Link>
-      {displayCreateChartButton && (
+      {displayCreateChartButton && !props.inChartBuilder && (
         <Link
           to={{
             pathname: `/chart/new/chart-type`,
@@ -215,18 +216,13 @@ export default function GridItem(props: Readonly<Props>) {
               background: #359c96;
               span {
                 margin: 0;
+                padding: 0;
                 font-size: 10px;
               }
             `}
           >
             <span>Create chart with AI</span>
-            <span
-              css={`
-                margin-bottom: -12px;
-              `}
-            >
-              <InfoIcon />
-            </span>
+            <InfoIcon />
           </button>
         </Link>
       )}
