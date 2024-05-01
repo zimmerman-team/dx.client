@@ -59,22 +59,15 @@ export function ReportChartWrapper(props: Props) {
     setNotFound,
   } = useRenderChartFromAPI(props.id);
 
-  console.log(chartFromAPI, "chartFromAPI");
-
   const renderedChart = React.useMemo(() => {
     return chartFromAPI
       ? chartFromAPI.renderedContent
       : get(chartFromAPI, "content", "");
   }, [chartFromAPI]);
 
-  const resetAppliedFilters = useStoreActions(
-    (actions) => actions.charts.appliedFilters.reset
-  );
-
   const renderedChartMappedData = React.useMemo(() => {
     return get(chartFromAPI, "mappedData", []);
   }, [chartFromAPI]);
-  console.log(renderedChartMappedData, "renderedChartMappedData");
 
   const renderedChartSsr = React.useMemo(() => {
     return get(chartFromAPI, "ssr", false);

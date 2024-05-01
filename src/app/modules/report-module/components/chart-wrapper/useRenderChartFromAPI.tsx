@@ -19,7 +19,7 @@ export const useRenderChartFromAPI = (chartId?: string) => {
   const abortControllerRef = React.useRef<AbortController>(
     new AbortController()
   );
-  const fetchRenderChart = async () => {
+  const fetchRenderChart = async (id: string) => {
     setLoading(true);
     setNotFound(false);
     if (extraLoader) {
@@ -27,7 +27,7 @@ export const useRenderChartFromAPI = (chartId?: string) => {
     }
     await axios
       .post(
-        `${process.env.REACT_APP_API}/chart/${chartId}/render${
+        `${process.env.REACT_APP_API}/chart/${id}/render${
           token === "" ? "/public" : ""
         }`,
         body,
@@ -72,12 +72,12 @@ export const useRenderChartFromAPI = (chartId?: string) => {
 
   React.useEffect(() => {
     if (chartId) {
-      fetchRenderChart();
+      fetchRenderChart(chartId);
     }
     return () => {
       abortControllerRef.current.abort();
     };
-  }, [chartId]);
+  }, [chartId, token]);
 
   return {
     loading,
