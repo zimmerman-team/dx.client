@@ -11,6 +11,7 @@ import {
   emptyChartAPI,
 } from "app/modules/chart-module/data";
 import { ReactComponent as AIIcon } from "app/modules/chart-module/assets/ai-icon.svg";
+import { useRenderChartFromAPI } from "./useRenderChartFromAPI";
 
 interface Props {
   id: string;
@@ -25,6 +26,7 @@ export function ReportChartWrapper(props: Props) {
 
   const containerRef = React.useRef<HTMLDivElement>(null);
   const [chartName, setChartName] = React.useState<string>("");
+  const [isAiAssisted, setIsAiAssisted] = React.useState<boolean>(false);
   const loadChart = useStoreActions(
     (actions) => actions.charts.ChartGetInReport.fetch
   );
@@ -45,20 +47,23 @@ export function ReportChartWrapper(props: Props) {
   );
 
   const [rawViz, setRawViz] = React.useState<any>(null);
-  const [visualOptions, setVisualOptions] = React.useState({});
-
-  const [chartFromAPI, setChartFromAPI] =
-    React.useState<ChartRenderedItem | null>(null);
+  const {
+    loading,
+    notFound,
+    chartErrorMessage,
+    dataError,
+    visualOptions,
+    chartFromAPI,
+    setChartErrorMessage,
+    setVisualOptions,
+    setNotFound,
+  } = useRenderChartFromAPI(props.id);
 
   const renderedChart = React.useMemo(() => {
     return chartFromAPI
       ? chartFromAPI.renderedContent
       : get(chartFromAPI, "content", "");
   }, [chartFromAPI]);
-
-  const resetAppliedFilters = useStoreActions(
-    (actions) => actions.charts.appliedFilters.reset
-  );
 
   const renderedChartMappedData = React.useMemo(() => {
     return get(chartFromAPI, "mappedData", []);
@@ -77,28 +82,29 @@ export function ReportChartWrapper(props: Props) {
 
   React.useEffect(() => {
     if (loadedChart && loadedChart.id !== "" && loadedChart.id === props.id) {
+      setIsAiAssisted(loadedChart.isAIAssisted);
       if (loadedChart.name.length > 0) {
         setChartName(loadedChart.name);
       }
     }
   }, [loadedChart]);
 
-  const {
-    renderChartFromAPI,
-    loading,
-    notFound,
-    setNotFound,
-    dataError,
-    chartErrorMessage,
-    setChartErrorMessage,
-    abortControllerRef,
-  } = useChartsRawData({
-    visualOptions,
-    setVisualOptions,
-    setChartFromAPI,
-    chartFromAPI,
-    inChartWrapper: true,
-  });
+  // const {
+  //   renderChartFromAPI,
+  //   loading,
+  //   notFound,
+  //   setNotFound,
+  //   dataError,
+  //   chartErrorMessage,
+  //   setChartErrorMessage,
+  //   abortControllerRef,
+  // } = useChartsRawData({
+  //   visualOptions,
+  //   setVisualOptions,
+  //   setChartFromAPI,
+  //   chartFromAPI,
+  //   inChartWrapper: true,
+  // });
 
   React.useEffect(() => {
     if (token.length > 0) {
@@ -109,6 +115,7 @@ export function ReportChartWrapper(props: Props) {
       console.log("unmounting --  clearing chart", loadedChart);
     };
   }, [props.id, token]);
+
   React.useEffect(() => {
     if (notFound || dataError) {
       props.setError(true);
@@ -118,16 +125,16 @@ export function ReportChartWrapper(props: Props) {
     }
   }, [notFound, dataError]);
 
-  React.useEffect(() => {
-    if (props.id) {
-      renderChartFromAPI(props.id);
-    }
-    return () => {
-      resetAppliedFilters();
-      resetMapping();
-      abortControllerRef.current.abort();
-    };
-  }, [props.id, token]);
+  // React.useEffect(() => {
+  //   if (props.id) {
+  //     fetchRenderChart(props.id);
+  //   }
+  //   return () => {
+  //     resetAppliedFilters();
+  //     resetMapping();
+  //     abortControllerRef.current.abort();
+  //   };
+  // }, [props.id, token]);
 
   React.useEffect(() => {
     const visualOptionsWidth = get(visualOptions, "width", 0);
@@ -245,7 +252,7 @@ export function ReportChartWrapper(props: Props) {
       )}
       <div
         css={`
-          display: ${loadedChart?.isAIAssisted ? "block" : "none"};
+          display: ${isAiAssisted ? "block" : "none"};
           position: absolute;
           right: 4%;
           top: 4%;
