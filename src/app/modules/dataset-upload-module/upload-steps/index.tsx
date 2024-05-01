@@ -21,6 +21,7 @@ import ExternalSearch, {
   IExternalDataset,
 } from "app/modules/dataset-upload-module/upload-steps/externalSearch";
 import Stepper from "app/modules/dataset-upload-module/component/stepper";
+import { Box } from "@material-ui/core";
 
 interface Props {
   datasetId: string;
@@ -309,33 +310,38 @@ function DatasetUploadSteps(props: Props) {
 
   return (
     <>
-      {isExternalSearch ? (
-        <ExternalSearch
-          setFormDetails={setFormDetails}
-          setActiveStep={setActiveStep}
-          setProcessingError={setProcessingError}
-          handleDownload={handleDownloadExternalDataset}
-          setIsExternalSearch={setIsExternalSearch}
-        />
-      ) : (
-        <Container maxWidth="lg">
-          <div css={stepcss}>
-            {steps.map((tab, index) => (
-              <Stepper
-                activeStep={activeStep}
-                setActiveStep={setActiveStep}
-                index={index}
-                tab={tab}
-                tabs={steps}
-                key={tab}
-                disabled={index > 0 && !processed && activeStep !== index}
-              />
-            ))}
-          </div>
-          <PageTopSpacer />
-          <div>{currentStep()}</div>
-        </Container>
-      )}
+      <Container maxWidth="lg">
+        <div css={stepcss}>
+          {steps.map((tab, index) => (
+            <Stepper
+              activeStep={activeStep}
+              setActiveStep={setActiveStep}
+              index={index}
+              tab={tab}
+              tabs={steps}
+              key={tab}
+              disabled={index > 0 && !processed && activeStep !== index}
+            />
+          ))}
+        </div>
+
+        {isExternalSearch ? (
+          <>
+            <Box height={32} />
+            <ExternalSearch
+              setFormDetails={setFormDetails}
+              setActiveStep={setActiveStep}
+              setProcessingError={setProcessingError}
+              handleDownload={handleDownloadExternalDataset}
+              setIsExternalSearch={setIsExternalSearch}
+            />
+          </>
+        ) : (
+          <>
+            <PageTopSpacer /> <div>{currentStep()}</div>
+          </>
+        )}
+      </Container>
     </>
   );
 }

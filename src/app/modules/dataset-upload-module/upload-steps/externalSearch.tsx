@@ -110,7 +110,7 @@ export default function ExternalSearch(props: {
     [searchValue, token]
   );
   return (
-    <Container maxWidth="lg">
+    <>
       <div
         css={`
           display: flex;
@@ -205,6 +205,6 @@ export default function ExternalSearch(props: {
       <Box display={"flex"} justifyContent={"center"}>
         {loading && <CircleLoader />}
       </Box>
-    </Container>
+    </>
   );
 }
