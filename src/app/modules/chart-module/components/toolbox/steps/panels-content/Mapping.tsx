@@ -26,11 +26,8 @@ import { Dropdown } from "react-bootstrap";
 import { areAllRequiredDimensionsMapped } from "app/hooks/useChartsRawData";
 import Skeleton from "@material-ui/lab/Skeleton";
 import { chartTypesFromMiddleWare } from "app/modules/chart-module/routes/chart-type/data";
-import {
-  isChartAIAgentActive,
-  isChartAutoMappedAtom,
-} from "app/state/recoil/atoms";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { isChartAutoMappedAtom } from "app/state/recoil/atoms";
+import { useRecoilState } from "recoil";
 import axios from "axios";
 
 interface ChartToolBoxMappingProps {
@@ -143,7 +140,9 @@ export function ChartToolBoxMapping(props: Readonly<ChartToolBoxMappingProps>) {
     (actions) => actions.charts.mapping.setValue
   );
   const chartType = useStoreState((state) => state.charts.chartType.value);
-  const isAiActive = useRecoilValue(isChartAIAgentActive);
+  const selectedAIChart = useStoreState(
+    (state) => state.charts.SelectedAIChartState.value
+  );
   const [isChartAutoMapped, setIsChartAutoMapped] = useRecoilState(
     isChartAutoMappedAtom
   );
@@ -166,7 +165,7 @@ export function ChartToolBoxMapping(props: Readonly<ChartToolBoxMappingProps>) {
 
   const autoMap = async () => {
     try {
-      if (isAiActive && !isChartAutoMapped) {
+      if (selectedAIChart && !isChartAutoMapped && isEmpty(mapping)) {
         const response = await fetchAISuggestedChartTypes(
           token,
           datasetId as string

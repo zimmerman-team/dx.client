@@ -106,6 +106,7 @@ import {
   ChartsDatasetState,
   ChartsEnabledFilterOptionGroupsState,
   ChartsMappingState,
+  SelectedAIChartState,
 } from "app/state/api/action-reducers/sync/charts";
 import { ChartsAppliedFiltersState } from "app/state/api/action-reducers/sync/charts/filters";
 import {
@@ -255,6 +256,7 @@ const storeContent: StoreModel = {
     chartType: persist(ChartsChartTypeState),
     appliedFilters: persist(ChartsAppliedFiltersState),
     enabledFilterOptionGroups: persist(ChartsEnabledFilterOptionGroupsState),
+    SelectedAIChartState: persist(SelectedAIChartState),
   },
   reports: {
     ReportGet: persist(ReportGet),

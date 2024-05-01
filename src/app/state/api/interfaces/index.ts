@@ -76,6 +76,7 @@ import {
   ChartsDatasetStateModel,
   ChartsEnabledFilterOptionGroupsStateModel,
   ChartsMappingStateModel,
+  SelectedAIChartModel,
 } from "../action-reducers/sync/charts";
 import { ChartsAppliedFiltersStateModel } from "../action-reducers/sync/charts/filters";
 
@@ -299,6 +300,7 @@ export interface StoreModel {
     activePanels: ChartsActivePanelsStateModel;
     dataset: ChartsDatasetStateModel;
     mapping: ChartsMappingStateModel;
+    SelectedAIChartState: SelectedAIChartModel;
     chartType: ChartsChartTypeStateModel;
     appliedFilters: ChartsAppliedFiltersStateModel;
     enabledFilterOptionGroups: ChartsEnabledFilterOptionGroupsStateModel;

@@ -38,7 +38,6 @@ import { NotAuthorizedMessageModule } from "app/modules/common/not-authorized-me
 import { isEmpty } from "lodash";
 import useResizeObserver from "use-resize-observer";
 import { ChartType } from "app/modules/chart-module/components/common-chart";
-import { DatasetListItemAPIModel } from "app/modules/dataset-module/data";
 import { getRequiredFieldsAndErrors } from "app/modules/chart-module/routes/mapping/utils";
 import ErrorComponent from "app/modules/chart-module/components/dialog/errrorComponent";
 import axios from "axios";
@@ -47,7 +46,7 @@ import {
   isChartAIAgentActive,
   isChartAutoMappedAtom,
 } from "app/state/recoil/atoms";
-import { chartTypesFromMiddleWare } from "app/modules/chart-module/routes/chart-type/data";
+import { IDatasetDetails } from "./components/toolbox/steps/panels-content/SelectDataset";
 
 export default function ChartModule() {
   const { user, isLoading, isAuthenticated } = useAuth0();
@@ -122,28 +121,15 @@ export default function ChartModule() {
     isAutoSaveEnabled: editView || false,
     enableAutoSaveSwitch: editView || false,
   });
-  const chartTypeSuggestions = useStoreState(
-    (state) => state.charts.ChartTypesSuggest.crudData
-  ) as { charttype: keyof typeof chartTypesFromMiddleWare }[] | null;
   const clearChartTypesSuggestions = useStoreActions(
     (actions) => actions.charts.ChartTypesSuggest.clear
   );
   const [isAiSwitchActive, setIsAiSwitchActive] =
     useRecoilState(isChartAIAgentActive);
-  const resetIsAiSwitchActive = useResetRecoilState(isChartAIAgentActive);
   const resetIsChartAutoMapped = useResetRecoilState(isChartAutoMappedAtom);
-  const selectedAIChartSuggestion = () => {
-    try {
-      if (!chartTypeSuggestions) return {};
-
-      return chartTypeSuggestions?.find(
-        (c: { charttype: keyof typeof chartTypesFromMiddleWare }) =>
-          chartTypesFromMiddleWare[c.charttype] === chartType
-      );
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  const selectedAIChart = useStoreState(
+    (state) => state.charts.SelectedAIChartState.value
+  );
 
   const setMapping = useStoreActions(
     (actions) => actions.charts.mapping.setValue
@@ -200,14 +186,15 @@ export default function ChartModule() {
   const clearDatasetDetails = useStoreActions(
     (state) => state.dataThemes.DatasetGet.clear
   );
-  const datasets = useStoreState(
-    (state) =>
-      (state.dataThemes.DatasetGetList.crudData ??
-        []) as DatasetListItemAPIModel[]
+  const setSelectedAIChart = useStoreActions(
+    (actions) => actions.charts.SelectedAIChartState.setValue
   );
   const setDataset = useStoreActions(
     (actions) => actions.charts.dataset.setValue
   );
+  const datasetDetail = useStoreState(
+    (state) => state.dataThemes.DatasetGet.crudData
+  ) as IDatasetDetails;
 
   const resetEnabledFilterOptionGroups = useStoreActions(
     (actions) => actions.charts.enabledFilterOptionGroups.clear
@@ -241,9 +228,6 @@ export default function ChartModule() {
     setNotFound(false);
     clearDatasetDetails();
   };
-  const isAIAssisted = Boolean(
-    isAiSwitchActive && !isEmpty(selectedAIChartSuggestion())
-  );
   const onSave = async () => {
     const chart = {
       name: chartName,
@@ -256,7 +240,7 @@ export default function ChartModule() {
       appliedFilters,
       enabledFilterOptionGroups,
       isMappingValid,
-      isAIAssisted,
+      isAIAssisted: selectedAIChart,
     };
     if (view !== undefined && page !== "new") {
       editChart({
@@ -305,9 +289,6 @@ export default function ChartModule() {
     //handles what happens after chart is created or edited
     let timeout: NodeJS.Timeout;
     if (editChartSuccess) {
-      if (isAiSwitchActive !== editChartCrudData.isAIAssisted) {
-        setIsAiSwitchActive(isAiSwitchActive || editChartCrudData.isAIAssisted);
-      }
       setSavedChanges(true);
       timeout = setTimeout(() => {
         setSavedChanges(false);
@@ -320,9 +301,8 @@ export default function ChartModule() {
 
   React.useEffect(() => {
     //set chart name to selected dataset if chart name has not been focused
-    if (page === "new" && !hasSubHeaderTitleFocused && dataset) {
-      const datasetName = datasets.find((d) => d.id === dataset)?.name;
-      setChartName(datasetName as string);
+    if (page === "new" && !hasSubHeaderTitleFocused && datasetDetail) {
+      setChartName(datasetDetail?.name as string);
     }
     if (isEmpty(dataset) && page === "new" && !hasSubHeaderTitleFocused) {
       setChartName("Untitled Chart");
@@ -332,7 +312,7 @@ export default function ChartModule() {
       resetMapping();
       resetAppliedFilters();
     }
-  }, [dataset]);
+  }, [dataset, datasetDetail]);
 
   React.useEffect(() => {
     //set chart name to loaded chart name
@@ -349,8 +329,9 @@ export default function ChartModule() {
       loadedChart &&
       isAiSwitchActive !== loadedChart.isAIAssisted
     ) {
-      setIsAiSwitchActive(isAiSwitchActive || loadedChart.isAIAssisted);
+      setIsAiSwitchActive(loadedChart.isAIAssisted);
     }
+    setSelectedAIChart(loadedChart?.isAIAssisted);
     setIsLoadedChartMappingValid(loadedChart?.isMappingValid);
   }, [loadedChart]);
 
@@ -423,7 +404,7 @@ export default function ChartModule() {
     setNotFound(false);
     setDataTypes([]);
     resetIsChartAutoMapped();
-    resetIsAiSwitchActive();
+    // resetIsAiSwitchActive();
   }
   function clearChartBuilder() {
     console.log("--about to reset chart states");
@@ -670,7 +651,9 @@ export default function ChartModule() {
                   containerRef={containerRef}
                   loadedChart={loadedChart}
                   view={view}
-                  isAIAssistedChart={editChartCrudData?.isAIAssisted}
+                  isAIAssistedChart={
+                    editChartCrudData?.isAIAssisted ?? loadedChart?.isAIAssisted
+                  }
                 />
               </Route>
               <Route path="*">

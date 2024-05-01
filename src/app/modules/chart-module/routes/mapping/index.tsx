@@ -2,7 +2,6 @@
 import React from "react";
 import isEmpty from "lodash/isEmpty";
 import useTitle from "react-use/lib/useTitle";
-import { useHistory, useParams } from "react-router-dom";
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 import { useStoreState } from "app/state/store/hooks";
 /* project */
@@ -20,12 +19,7 @@ import { ReactComponent as AIIcon } from "app/modules/chart-module/assets/ai-ico
 
 function ChartBuilderMapping(props: Readonly<ChartBuilderMappingProps>) {
   useTitle("DX DataXplorer - Mapping");
-
-  const history = useHistory();
   const { isAuthenticated, user } = useAuth0();
-  const { page } = useParams<{ page: string }>();
-
-  const dataset = useStoreState((state) => state.charts.dataset.value);
   const mapping = useStoreState((state) => state.charts.mapping.value);
   const [requiredFields, setRequiredFields] = React.useState<
     { id: string; name: string }[]
@@ -47,13 +41,6 @@ function ChartBuilderMapping(props: Readonly<ChartBuilderMappingProps>) {
 
     setMinValuesFields(updMinValuesFields);
   }, [mapping, props.dimensions]);
-
-  // React.useEffect(() => {
-  //   //if dataset is empty and not loading, redirect to data page
-  //   if (dataset === null && !props.loading) {
-  //     history.push(`/chart/${page}/data`);
-  //   }
-  // }, [dataset]);
 
   const canChartEditDelete = React.useMemo(() => {
     return isAuthenticated && loadedChart && loadedChart.owner === user?.sub;

@@ -90,9 +90,6 @@ export function useChartsRawData(props: {
   const loadedChartDetails = useStoreState(
     (state) => state.charts.ChartGet.crudData as ChartAPIModel
   );
-  const clearLoadedChartDetails = useStoreActions(
-    (actions) => actions.charts.ChartGet.clear
-  );
   const [renderChartFromAPIFufilled, setRenderChartFromAPIFufilled] =
     React.useState(true);
   const { page, view } = useParams<{ page: string; view?: string }>();

@@ -45,6 +45,10 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
   const chartTypeSuggestions = useStoreState((state) =>
     get(state.charts.ChartTypesSuggest, "crudData", [])
   ) as { charttype: keyof typeof chartTypesFromMiddleWare }[] | null;
+
+  const setSelectedAIChart = useStoreActions(
+    (actions) => actions.charts.SelectedAIChartState.setValue
+  );
   const setChartType = useStoreActions(
     (actions) => actions.charts.chartType.setValue
   );
@@ -101,12 +105,9 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
     try {
       if (!chartTypeSuggestions) return false;
 
-      return (
-        chartTypeSuggestions.length &&
-        chartTypeSuggestions?.findIndex(
-          (c: { charttype: keyof typeof chartTypesFromMiddleWare }) =>
-            chartTypesFromMiddleWare[c.charttype] === ctId
-        ) > -1
+      return chartTypeSuggestions?.find(
+        (c: { charttype: keyof typeof chartTypesFromMiddleWare }) =>
+          chartTypesFromMiddleWare[c.charttype] === ctId
       );
     } catch (e) {
       console.log(e);
@@ -139,6 +140,7 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
       resetIsChartAutoMapped();
       props.setChartFromAPI(null);
       setChartType(chartType === chartTypeId ? null : chartTypeId);
+      setSelectedAIChart(Boolean(aIChartSuggestions(chartTypeId)));
     };
 
   return (
