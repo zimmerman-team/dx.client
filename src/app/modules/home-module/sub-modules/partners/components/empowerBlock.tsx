@@ -19,7 +19,7 @@ import {
 } from "app/modules/home-module/sub-modules/partners/style";
 
 export default function EmpowerBlock(props: {
-  view?: "why-dx" | "contact" | "about" | "partners";
+  view?: "why-dx" | "contact" | "about" | "partners" | "explore";
 }) {
   const { isAuthenticated } = useAuth0();
 
@@ -47,6 +47,11 @@ export default function EmpowerBlock(props: {
       subText =
         "DataXplorer simplifies and empowers visual data reporting for all.";
       break;
+    case "explore":
+      mainText = "Explore Empowered Data";
+      subText =
+        "Dataxplorer simplifies and empowers visual data reporting for all.";
+      break;
 
     default:
       mainText = "Empower people with meaningful data";
@@ -62,14 +67,19 @@ export default function EmpowerBlock(props: {
       </p>
       {isAuthenticated && (
         <div>
-          <Link to="/report/new/initial">
+          <Link
+            to="/report/new/initial"
+            data-cy="empower-block-create-report-link"
+          >
             <HomePrimaryButton color="#6061E5" type="button">
               CREATE REPORT
             </HomePrimaryButton>
           </Link>
-          <HomePrimaryButton color="#E492BD" type="button">
-            EXPLORE REPORTS
-          </HomePrimaryButton>
+          <Link to="/explore" data-cy="empower-block-explore-reports-link">
+            <HomePrimaryButton color="#E492BD" type="button">
+              EXPLORE REPORTS
+            </HomePrimaryButton>
+          </Link>
         </div>
       )}
       {!isAuthenticated && (
