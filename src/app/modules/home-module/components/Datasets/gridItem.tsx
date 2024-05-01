@@ -13,6 +13,8 @@ import { Tooltip } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useStoreActions } from "app/state/store/hooks";
+import { isChartAIAgentActive } from "app/state/recoil/atoms";
+import { useRecoilState } from "recoil";
 
 interface Props {
   path: string;
@@ -32,6 +34,7 @@ export default function GridItem(props: Readonly<Props>) {
   const [menuOptionsDisplay, setMenuOptionsDisplay] = React.useState(false);
   const [displayCreateChartButton, setDisplayCreateChartButton] =
     React.useState(false);
+  const setIsAiSwitchActive = useRecoilState(isChartAIAgentActive)[1];
   const { user, isAuthenticated } = useAuth0();
 
   const showMenuOptions = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -48,6 +51,7 @@ export default function GridItem(props: Readonly<Props>) {
 
   function handleCreateNewChart() {
     setDataset(props.id as string);
+    setIsAiSwitchActive(true);
   }
 
   return (

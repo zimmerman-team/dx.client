@@ -22,6 +22,8 @@ import {
   logocss,
   navLinkcss,
 } from "app/components/AppBar/style";
+import { isChartAIAgentActive } from "app/state/recoil/atoms";
+import { useRecoilState } from "recoil";
 
 const TextHeader = (label: string) => (
   <h2
@@ -265,7 +267,7 @@ export function AppBar() {
 const ActionMenu = () => {
   const history = useHistory();
   const { user, isAuthenticated } = useAuth0();
-
+  const setIsAiSwitchActive = useRecoilState(isChartAIAgentActive)[1];
   const [actionPopoverAnchorEl, setActionPopoverAnchorEl] =
     React.useState<HTMLButtonElement | null>(null);
 
@@ -273,6 +275,10 @@ const ActionMenu = () => {
 
   const handleCloseActionPopover = () => {
     setActionPopoverAnchorEl(null);
+  };
+  const handleCreateChartAction = () => {
+    setActionPopoverAnchorEl(null);
+    setIsAiSwitchActive(true);
   };
 
   return (
@@ -428,7 +434,7 @@ const ActionMenu = () => {
             <button data-cy="appbar-connect-data">Connect Data</button>
           </Link>
 
-          <Link to="/chart/new/data" onClick={handleCloseActionPopover}>
+          <Link to="/chart/new/data" onClick={handleCreateChartAction}>
             <button data-cy="appbar-create-chart">Create Chart</button>
           </Link>
         </div>
