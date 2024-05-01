@@ -2,12 +2,13 @@ import React from "react";
 import { ReactComponent as ErrorICon } from "app/modules/dataset-upload-module/assets/error-icon.svg";
 
 export interface ProcessingMetaDataProps {
-  setProcessingError: React.Dispatch<React.SetStateAction<boolean>>;
-  processingError: boolean;
+  setProcessingError: React.Dispatch<React.SetStateAction<string | null>>;
+  processingError: string | null;
   fileName: string;
   loaded: string;
   percentageLoaded: number;
   estimatedUploadTime: number;
+  tryAgain: () => void;
 }
 
 export default function Processing(props: ProcessingMetaDataProps) {
@@ -30,35 +31,58 @@ export default function Processing(props: ProcessingMetaDataProps) {
             align-items: center;
             justify-content: center;
             color: #e75656;
-            margin-top: 13rem;
+            margin-top: 151px;
           `}
         >
           <ErrorICon />
-          <div
-            css={`
-              height: 1.2rem;
-            `}
-          />
+
           <p
             css={`
               font-size: 18px;
               text-align: center;
+              margin: 0;
+              padding: 0;
+              margin-top: 16px;
+              width: 365px;
+              text-align: center;
             `}
             data-testid="error-message"
           >
-            <b>
-              Data could not be processed, please try again <br /> or contact
-              your administrator
-            </b>
+            <b>{props.processingError}</b>
           </p>
 
           <p
             css={`
-              margin-top: -10px;
+              margin: 0;
+              padding: 0;
+              margin-top: 16px;
             `}
           >
             Error{" "}
           </p>
+          <button
+            type="button"
+            onClick={props.tryAgain}
+            data-cy="dataset-processing-try-again"
+            css={`
+              color: #231d2c;
+              text-transform: uppercase;
+              background: #231d2c;
+              color: #fff;
+              margin-top: 58px;
+              padding: 12px 27px;
+              border-radius: 30px;
+              font-weight: 500;
+              font-size: 14px;
+              font-family: "Inter";
+              cursor: pointer;
+              :hover {
+                opacity: 0.8;
+              }
+            `}
+          >
+            Try Again
+          </button>
         </div>
       ) : (
         <div

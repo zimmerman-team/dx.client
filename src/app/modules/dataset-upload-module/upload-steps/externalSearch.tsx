@@ -30,8 +30,9 @@ export default function ExternalSearch(props: {
     }>
   >;
   handleDownload: (dataset: IExternalDataset) => void;
-  setProcessingError: React.Dispatch<React.SetStateAction<boolean>>;
+  setProcessingError: React.Dispatch<React.SetStateAction<string | null>>;
   setActiveStep: React.Dispatch<React.SetStateAction<number>>;
+  setIsExternalSearch: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const observerTarget = React.useRef(null);
   const [tableView, setTableView] = React.useState(false);
@@ -125,7 +126,7 @@ export default function ExternalSearch(props: {
           }
         `}
       >
-        <IconButton onClick={() => history.goBack()}>
+        <IconButton onClick={() => props.setIsExternalSearch(false)}>
           <ArrowBackIcon htmlColor="#000" />
         </IconButton>
         <div
