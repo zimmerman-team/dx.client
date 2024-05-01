@@ -189,6 +189,12 @@ describe("Edit, duplicate and delete report", () => {
   });
 
   it("Can Edit a report", () => {
+    cy.get("[data-cy=home-search-button]").click();
+    cy.get("[data-cy=home-search-input]").type(
+      `{selectall}{backspace}${reportTestName}`
+    );
+
+    cy.wait("@fetchReports");
     cy.contains('[data-cy="report-grid-item"]', reportTestName)
       .first()
       .scrollIntoView()
@@ -237,6 +243,13 @@ describe("Edit, duplicate and delete report", () => {
   });
 
   it("Can Duplicate a report", () => {
+    cy.get("[data-cy=home-search-button]").click();
+    cy.get("[data-cy=home-search-input]").type(
+      `{selectall}{backspace}${reportTestName}`
+    );
+
+    cy.wait("@fetchReports");
+
     cy.contains('[data-cy="report-grid-item"]', `${reportTestName} - Edited`)
       .first()
       .scrollIntoView()

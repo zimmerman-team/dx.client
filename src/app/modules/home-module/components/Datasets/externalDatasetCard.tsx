@@ -5,6 +5,7 @@ import ArrowRightAltIcon from "@material-ui/icons/ArrowRightAlt";
 import WHOLogo from "app/modules/home-module/assets/WHO-logo.svg";
 import KaggleLogo from "app/modules/home-module/assets/kaggle-logo.svg";
 import WorldBankLogo from "app/modules/home-module/assets/world-bank-logo.svg";
+import HDXLogo from "app/modules/home-module/assets/hdx-logo.svg";
 import { ReactComponent as ClockIcon } from "app/modules/home-module/assets/clock-icon.svg";
 
 import moment from "moment";
@@ -28,6 +29,8 @@ export default function IExternalDatasetCard(
         return <img src={KaggleLogo} alt="kaggle-logo" />;
       case "World Bank":
         return <img src={WorldBankLogo} alt="world-bank-logo" />;
+      case "HDX":
+        return <img src={HDXLogo} alt="hdx-logo" />;
       default:
         return <div />;
     }
@@ -38,7 +41,7 @@ export default function IExternalDatasetCard(
     <div
       onMouseEnter={() => setShowButton(true)}
       onMouseLeave={() => setShowButton(false)}
-      data-cy="external-search-card"
+      data-cy={`external-search-card-${props.source}`}
       css={`
         width: 296px;
         height: 162px;

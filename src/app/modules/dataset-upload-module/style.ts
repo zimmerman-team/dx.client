@@ -117,7 +117,6 @@ export const metaDatacss = css`
 export const dataSetsCss = css`
   height: 100%;
   display: flex;
-  align-items: center;
   flex-direction: column;
   justify-content: center;
   a {

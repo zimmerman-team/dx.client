@@ -7,6 +7,7 @@ export default function Stepper(
     setActiveStep: React.Dispatch<React.SetStateAction<number>>;
     index: number;
     tab: string;
+    disabled?: boolean;
   }>
 ) {
   return (
@@ -38,6 +39,7 @@ export default function Stepper(
           border: none;
           height: 27px;
           display: flex;
+          cursor: pointer;
           padding: 5px 16px;
           width: max-content;
           align-items: center;
@@ -48,7 +50,11 @@ export default function Stepper(
           background: ${props.index <= props.activeStep
             ? "#dadaf8"
             : "#E4E4E4"};
+          :disabled {
+            cursor: not-allowed;
+          }
         `}
+        disabled={props.disabled}
       >
         {props.tab}
       </button>
