@@ -71,6 +71,8 @@ export default function Processing(props: ProcessingMetaDataProps) {
               color: #fff;
               margin-top: 58px;
               padding: 12px 27px;
+              border: none;
+              outline: none;
               border-radius: 30px;
               font-weight: 500;
               font-size: 14px;
