@@ -52,7 +52,7 @@ export default function GridItem(props: Readonly<Props>) {
       >
         <div
           css={`
-            width: 296px;
+            width: 100%;
             height: 161.588px;
             display: flex;
             color: #262c34;
