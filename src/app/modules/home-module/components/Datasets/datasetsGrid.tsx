@@ -27,6 +27,7 @@ interface Props {
   onItemClick?: (v: string) => void;
   md?: GridSize;
   lg?: GridSize;
+  fromHome?: boolean;
 }
 
 export default function DatasetsGrid(props: Readonly<Props>) {
@@ -259,6 +260,7 @@ export default function DatasetsGrid(props: Readonly<Props>) {
                 id={data.id}
                 owner={data.owner}
                 inChartBuilder={props.inChartBuilder as boolean}
+                fromHome={props.fromHome}
               />
 
               {!props.inChartBuilder && <Box height={16} />}

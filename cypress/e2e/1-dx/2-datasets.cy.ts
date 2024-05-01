@@ -33,33 +33,31 @@ describe("Testing connecting data on DX", () => {
   });
 
   it("Can import data from External Search", () => {
-    cy.intercept(`${apiUrl}/external-sources/search-limited?q=*`).as(
-      "getDefaultData"
-    );
+    cy.intercept(`${apiUrl}/external-sources/search?q=*`).as("getDefaultData");
     cy.get('[data-cy="external-search-button"]').click();
 
     cy.wait("@getDefaultData").then((interception) => {
-      cy.get('[data-cy="external-search-card"]').should(
+      cy.get('[data-cy="external-search-card-Kaggle"]').should(
         "have.length.greaterThan",
         1
       );
     });
 
     cy.get('[data-cy="open-search-button"]').click();
-    cy.intercept(`${apiUrl}/external-sources/search-limited?q=Youth*`).as(
+    cy.intercept(`${apiUrl}/external-sources/search?q=world%20population*`).as(
       "getDefaultData2"
     );
-    cy.get('[data-cy="filter-search-input"]').type("Youth");
+    cy.get('[data-cy="filter-search-input"]').type("world population");
 
     cy.wait("@getDefaultData2").then((interception) => {
-      cy.get('[data-cy="external-search-card"]').should(
+      cy.get('[data-cy="external-search-card-Kaggle"]').should(
         "have.length.greaterThan",
         1
       );
     });
 
     cy.intercept(`${apiUrl}/external-sources/download`).as("downloadData");
-    cy.get('[data-cy="external-search-card"]')
+    cy.get('[data-cy="external-search-card-Kaggle"]')
       .first()
       .trigger("mouseover")
       .within(() => {
@@ -223,6 +221,30 @@ describe("Edit, Delete and Duplicate Dataset", () => {
       .contains("Soccer Players (Copy)")
       .scrollIntoView()
       .should("be.visible");
+  });
+
+  // it("Can switch to fullscreen on the dataset detail page", () => {
+  //   cy.get('[data-cy="dataset-grid-item"]').first().scrollIntoView().click();
+
+  //   cy.location("pathname").should("include", "/dataset/");
+
+  //   cy.get('[data-cy="dataset-full-screen-btn"]').click();
+
+  //   cy.get('[data-cy="dataset-full-screen-view"]').should("be.visible");
+
+  //   cy.get('[data-cy="dataset-close-full-screen-btn"]').click();
+
+  //   cy.get('[data-cy="dataset-full-screen-view"]').should("not.be.visible");
+  // });
+
+  it("Can go back to the library from the dataset detail page", () => {
+    cy.get('[data-cy="dataset-grid-item"]').first().scrollIntoView().click();
+
+    cy.location("pathname").should("include", "/dataset/");
+
+    cy.get('[data-cy="dataset-back-to-library-btn"]').click();
+
+    cy.location("pathname").should("not.include", "/dataset");
   });
 
   it("Can delete dataset", () => {

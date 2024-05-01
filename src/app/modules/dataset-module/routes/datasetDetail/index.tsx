@@ -8,73 +8,71 @@ import { Container } from "@material-ui/core";
 import { useParams } from "react-router-dom";
 import { DatasetListItemAPIModel } from "app/modules/dataset-module/data";
 import { useAuth0 } from "@auth0/auth0-react";
+import { PageLoader } from "app/modules/common/page-loader";
 
 export default function DatasetDetail() {
   const { page } = useParams<{ page: string }>();
   const { user, isAuthenticated } = useAuth0();
 
   const token = useStoreState((state) => state.AuthToken.value);
-  const datasets = useStoreState(
+  const dataset = useStoreState(
     (state) =>
-      (state.dataThemes.DatasetGetList.crudData ??
-        []) as DatasetListItemAPIModel[]
+      (state.dataThemes.DatasetGet.crudData ?? {}) as DatasetListItemAPIModel
   );
-  const loadDatasets = useStoreActions(
-    (actions) => actions.dataThemes.DatasetGetList.fetch
+  const loadDataset = useStoreActions(
+    (actions) => actions.dataThemes.DatasetGet.fetch
   );
-  const loadedDatasets = useStoreState(
-    (state) =>
-      (state.dataThemes.DatasetGetList.crudData ??
-        []) as DatasetListItemAPIModel[]
+
+  const loadDatasetLoading = useStoreState(
+    (state) => state.dataThemes.DatasetGet.loading
   );
-  const loadedDataset = loadedDatasets.find((d) => d.id === page);
 
   const canDatasetEditDelete = React.useMemo(() => {
-    return (
-      isAuthenticated && loadedDatasets && loadedDataset?.owner === user?.sub
-    );
-  }, [user, isAuthenticated, loadedDatasets]);
+    return isAuthenticated && dataset && dataset?.owner === user?.sub;
+  }, [user, isAuthenticated, dataset]);
 
-  const { loadDataset, sampleData, dataTotalCount, dataStats, dataTypes } =
-    useChartsRawData({
-      visualOptions: () => {},
-      setVisualOptions: () => {},
-      setChartFromAPI: () => {},
-      chartFromAPI: null,
-    });
+  const {
+    loadDataset: loadSampleDataset,
+    sampleData,
+    dataTotalCount,
+    dataStats,
+    dataTypes,
+  } = useChartsRawData({
+    visualOptions: () => {},
+    setVisualOptions: () => {},
+    setChartFromAPI: () => {},
+    chartFromAPI: null,
+  });
 
   React.useEffect(() => {
-    loadDataset(`chart/sample-data/${page}`);
+    loadSampleDataset(`chart/sample-data/${page}`);
   }, []);
 
   React.useEffect(() => {
     if (token) {
-      loadDatasets({
+      loadDataset({
         token,
-        storeInCrudData: true,
-        filterString: "filter[order]=createdDate desc",
+        getId: page,
       });
     }
   }, [token, page]);
 
-  const name = find(datasets, (d: any) => d.id === page)?.name;
-  const description = find(datasets, (d: any) => d.id === page)?.description;
-
   return (
     <Container maxWidth="lg">
-      <DatasetSubHeaderToolbar name={name as string} />
+      <DatasetSubHeaderToolbar name={dataset.name} />
       <div
         css={`
-          height: 60px;
+          height: 98px;
         `}
       />
+      {loadDatasetLoading ? <PageLoader /> : null}
       <FinishedFragment
         data={sampleData}
         stats={dataStats}
         dataTypes={dataTypes}
         datasetId={page}
         dataTotalCount={dataTotalCount}
-        description={description as string}
+        description={dataset.description}
         canDatasetEditDelete={canDatasetEditDelete}
       />
     </Container>

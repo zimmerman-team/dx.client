@@ -319,18 +319,7 @@ export default function ChartModule() {
     if (page !== "new" && loadedChart.name.length > 0) {
       setChartName(loadedChart.name);
     }
-    //set mapping from loaded chart as it always has the complete mapping values
-    //TODO: This will need to change when we have the complete mapping values for big number
-    if (loadedChart.vizType === "bigNumber") {
-      setMapping(loadedChart.mapping);
-    }
-    if (
-      page !== "new" &&
-      loadedChart &&
-      isAiSwitchActive !== loadedChart.isAIAssisted
-    ) {
-      setIsAiSwitchActive(loadedChart.isAIAssisted);
-    }
+
     setSelectedAIChart(loadedChart?.isAIAssisted);
     setIsLoadedChartMappingValid(loadedChart?.isMappingValid);
   }, [loadedChart]);
