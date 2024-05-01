@@ -1,10 +1,15 @@
 import React from "react";
 import { Link, useHistory, useLocation } from "react-router-dom";
 import { dataSetsCss } from "app/modules/dataset-upload-module/style";
-import { PageTopSpacer } from "app/modules/common/page-top-spacer";
 import { useStoreActions } from "app/state/store/hooks";
 import { DatasetDataTable } from "app/modules/dataset-upload-module/component/data-table";
 import { CssSnackbar, ISnackbarState } from "./previewFragment";
+import { ArrowBack } from "@material-ui/icons";
+import { ReactComponent as FullScreenIcon } from "../assets/full-screen.svg";
+import { ReactComponent as CloseFullScreenIcon } from "../assets/close-full-screen.svg";
+import { FullScreen, useFullScreenHandle } from "react-full-screen";
+import { homeDisplayAtom } from "app/state/recoil/atoms";
+import { useRecoilState } from "recoil";
 
 interface Props {
   data: any[];
@@ -19,12 +24,15 @@ interface Props {
 export default function FinishedFragment(props: Props) {
   const history = useHistory();
   const location = useLocation();
-  const setDataset = useStoreActions(
+
+  const [display, setDisplay] = useRecoilState(homeDisplayAtom);
+
+  const setDatasetId = useStoreActions(
     (actions) => actions.charts.dataset.setValue
   );
 
   function handleCreateNewChart() {
-    setDataset(props.datasetId);
+    setDatasetId(props.datasetId);
   }
 
   const [snackbarState, setSnackbarState] = React.useState<ISnackbarState>({
@@ -32,6 +40,14 @@ export default function FinishedFragment(props: Props) {
     vertical: "bottom",
     horizontal: "center",
   });
+
+  const [openFullScreenTooltip, setOpenFullScreenTooltip] =
+    React.useState(false);
+
+  const [closeFullScreenTooltip, setCloseFullScreenTooltip] =
+    React.useState(false);
+
+  const handle = useFullScreenHandle();
 
   React.useEffect(() => {
     let snackbarTimeOut: any;
@@ -63,7 +79,25 @@ export default function FinishedFragment(props: Props) {
 
   return (
     <div css={dataSetsCss}>
-      <PageTopSpacer />
+      <Link
+        to={(() => {
+          setDisplay("data");
+          return location.search.includes("?fromHome=true") ? "/" : "/explore";
+        })()}
+        css={`
+          display: flex;
+          align-items: center;
+          font-size: 14px;
+          color: #231d2c;
+          text-decoration: none;
+          margin-top: 16px;
+          margin-bottom: 16px;
+          column-gap: 8px;
+        `}
+        data-cy="dataset-back-to-library-btn"
+      >
+        <ArrowBack fontSize={"small"} /> Back to Data Library
+      </Link>
       <div
         css={`
           width: 100%;
@@ -80,7 +114,6 @@ export default function FinishedFragment(props: Props) {
             font-size: 16px;
             font-family: "GothamNarrow-Bold", sans-serif;
             line-height: 19px;
-            margin-bottom: 17px;
           `}
         >
           {props.description}
@@ -90,9 +123,60 @@ export default function FinishedFragment(props: Props) {
             width: 100%;
             display: flex;
             margin-bottom: 12px;
-            justify-content: flex-end;
+            justify-content: space-between;
+            margin-top: 34px;
           `}
         >
+          <div
+            css={`
+              display: flex;
+              column-gap: 13px;
+              align-items: center;
+            `}
+          >
+            <div
+              css={`
+                width: 40px;
+                height: 40px;
+                cursor: pointer;
+                position: relative;
+              `}
+              onMouseOver={() => setOpenFullScreenTooltip(true)}
+              onMouseLeave={() => setOpenFullScreenTooltip(false)}
+              onClick={handle.enter}
+              data-cy="dataset-full-screen-btn"
+            >
+              <FullScreenIcon />
+              <div
+                css={`
+                  background: #626262;
+                  color: #fff;
+                  font-size: 12px;
+                  position: absolute;
+                  top: 60%;
+                  left: 110%;
+                  width: max-content;
+                  padding: 1px 8px;
+                  border-radius: 4px;
+                `}
+                hidden={!openFullScreenTooltip}
+              >
+                Full Screen
+              </div>
+            </div>
+
+            <p
+              css={`
+                font-size: 16px;
+                font-family: "GothamNarrow-Book", sans-serif;
+                padding: 0;
+                margin: 0;
+              `}
+            >
+              {props.dataTotalCount} rows &{" "}
+              {Object.keys(props.data[0] || {}).length} columns
+            </p>
+          </div>
           <Link
             to={{
               pathname: `/chart/new/chart-type`,
@@ -140,7 +224,76 @@ export default function FinishedFragment(props: Props) {
           data={props.data}
           stats={props.stats}
           dataTypes={props.dataTypes}
+          datasetId={props.datasetId}
         />
+
+        <FullScreen
+          handle={handle}
+          css={`
+            ::backdrop {
+              background: #000;
+              opacity: 0.75;
+            }
+          `}
+        >
+          <div
+            css={`
+              width: 100%;
+              height: 100%;
+              padding: 26px 100px 26px 108px;
+            `}
+            hidden={!handle.active}
+            data-cy="dataset-full-screen-view"
+          >
+            <div
+              css={`
+                display: flex;
+                column-gap: 13px;
+                align-items: center;
+              `}
+            >
+              <div
+                css={`
+                  width: 40px;
+                  height: 40px;
+                  cursor: pointer;
+                  margin-bottom: 15px;
+                  position: relative;
+                `}
+                onMouseOver={() => setCloseFullScreenTooltip(true)}
+                onMouseLeave={() => setCloseFullScreenTooltip(false)}
+                onClick={handle.exit}
+                data-cy="dataset-close-full-screen-btn"
+              >
+                <CloseFullScreenIcon />
+
+                <div
+                  css={`
+                    background: #626262;
+                    color: #fff;
+                    font-size: 12px;
+                    position: absolute;
+                    top: 60%;
+                    left: 110%;
+                    width: max-content;
+                    padding: 1px 8px;
+                    border-radius: 4px;
+                  `}
+                  hidden={!closeFullScreenTooltip}
+                >
+                  Close Full Screen
+                </div>
+              </div>
+            </div>
+            <DatasetDataTable
+              data={props.data}
+              stats={props.stats}
+              dataTypes={props.dataTypes}
+              datasetId={props.datasetId}
+              fullScreen
+            />
+          </div>
+        </FullScreen>
       </div>
       <CssSnackbar
         anchorOrigin={{
