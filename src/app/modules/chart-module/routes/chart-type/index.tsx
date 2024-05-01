@@ -145,13 +145,34 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
 
   return (
     <div css={commonStyles.container}>
-      <div css={commonStyles.innercontainer}>
+      <div
+        css={`
+          ${commonStyles.innercontainer}
+          padding: 40px 0px 0 0;
+        `}
+      >
         <div
           css={`
             display: flex;
-            flex-direction: column;
+            justify-content: space-between;
           `}
         >
+          <p
+            css={`
+              font-family: "GothamNarrow-Bold", sans-serif;
+              font-size: 18px;
+              color: #231d2c;
+              margin-bottom: 0px;
+              span {
+                color: #359c96;
+              }
+            `}
+          >
+            Our <span>AI agent</span> has provided you with a suggested chart to
+            communicate your dataset. <br />
+            If you decide to go with any other chart, no worries it’s up to you!
+            Make your pick and tap “Next”.
+          </p>
           <div
             css={`
               display: flex;
@@ -174,28 +195,12 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
               dataset={datasetId as string}
             />
           </div>
-          <p
-            css={`
-              font-family: "GothamNarrow-Bold", sans-serif;
-              font-size: 18px;
-              color: #231d2c;
-              margin-bottom: 0px;
-              span {
-                color: #359c96;
-              }
-            `}
-          >
-            Our <span>AI agent</span> has provided you with a suggested chart to
-            communicate your dataset. <br />
-            If you decide to go with any other chart, no worries it’s up to you!
-            Make your pick and tap “Next”.
-          </p>
-          <div
-            css={`
-              height: 40px;
-            `}
-          />
         </div>
+        <div
+          css={`
+            height: 40px;
+          `}
+        />
         <div>
           <p
             css={`
