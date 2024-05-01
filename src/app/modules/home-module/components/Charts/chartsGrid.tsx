@@ -26,7 +26,7 @@ interface Props {
 
 export default function ChartsGrid(props: Props) {
   const observerTarget = React.useRef(null);
-  const [cardId, setCardId] = React.useState<number>(0);
+  const [chartId, setChartId] = React.useState<string>("");
   const [loadedCharts, setLoadedCharts] = React.useState<any[]>([]);
   const [modalDisplay, setModalDisplay] = React.useState<boolean>(false);
   const [enableButton, setEnableButton] = React.useState<boolean>(false);
@@ -121,10 +121,10 @@ export default function ChartsGrid(props: Props) {
     loadData();
   }, [offset, token]);
 
-  const handleDelete = (index?: number) => {
+  const handleDelete = (id: string) => {
     setModalDisplay(false);
     setEnableButton(false);
-    const id = loadedCharts[index as number].id;
+
     if (!id) {
       return;
     }
@@ -140,8 +140,7 @@ export default function ChartsGrid(props: Props) {
       .catch((error) => console.log(error));
   };
 
-  const handleDuplicate = (index: number) => {
-    const id = loadedCharts[index].id;
+  const handleDuplicate = (id: string) => {
     if (!id) {
       return;
     }
@@ -165,8 +164,8 @@ export default function ChartsGrid(props: Props) {
     }
   };
 
-  const handleModal = (id: number) => {
-    setCardId(id);
+  const handleModal = (id: string) => {
+    setChartId(id);
     setModalDisplay(true);
   };
 
@@ -220,8 +219,8 @@ export default function ChartsGrid(props: Props) {
                 viz={getIcon(c.vizType)}
                 vizType={c.vizType}
                 isMappingValid={c.isMappingValid}
-                handleDelete={() => handleModal(index)}
-                handleDuplicate={() => handleDuplicate(index)}
+                handleDelete={() => handleModal(c.id)}
+                handleDuplicate={() => handleDuplicate(c.id)}
                 owner={c.owner}
                 isAIAssisted={c.isAIAssisted}
               />
@@ -246,7 +245,7 @@ export default function ChartsGrid(props: Props) {
       {loading && <CircleLoader />}
 
       <DeleteChartDialog
-        cardId={cardId}
+        chartId={chartId}
         modalDisplay={modalDisplay}
         enableButton={enableButton}
         handleDelete={handleDelete}
