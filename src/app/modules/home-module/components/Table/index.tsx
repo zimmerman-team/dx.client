@@ -19,6 +19,7 @@ export function HomepageTable(props: {
   }[];
   inChartBuilder?: boolean;
   onItemClick?: (v: string) => void;
+  fromHome?: boolean;
 }) {
   const history = useHistory();
   const display = useRecoilState(homeDisplayAtom)[0];
@@ -89,7 +90,9 @@ export function HomepageTable(props: {
                 if (!props.inChartBuilder) {
                   history.push(
                     `/${pathBase[display]}/${data.id}${
-                      display === "data" ? "/detail" : ""
+                      display === "data"
+                        ? `/detail?fromHome=${props.fromHome}`
+                        : ""
                     }`
                   );
                 } else if (props.inChartBuilder && props.onItemClick) {
