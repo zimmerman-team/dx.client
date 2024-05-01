@@ -15,7 +15,7 @@ import { DropZone } from "app/modules/dataset-upload-module/component/dropzone/"
 interface Props {
   disabled: boolean;
   onFileSubmit: (file: File) => void;
-  processingError: boolean;
+  processingError: string | null;
   setIsExternalSearch: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -137,7 +137,7 @@ export default function AddDatasetFragment(props: Props) {
         fileRejections={fileRejections}
         acceptedFiles={acceptedFiles}
         handleOpenPicker={handleOpenPicker}
-        uploadError={props.processingError}
+        uploadError={!!props.processingError}
         setIsExternalSearch={props.setIsExternalSearch}
       />
       {fileRejections.length > 0 && fileRejectionItems}

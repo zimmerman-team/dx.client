@@ -102,6 +102,7 @@ export default function HomeModule() {
             searchStr={searchStr}
             tableView={tableView}
             addCard
+            fromHome
           />
         );
       case "charts":

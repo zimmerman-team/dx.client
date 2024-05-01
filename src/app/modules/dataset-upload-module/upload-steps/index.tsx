@@ -40,9 +40,16 @@ function DatasetUploadSteps(props: Props) {
     sourceUrl: "",
   });
   const [activeStep, setActiveStep] = React.useState<number>(0);
-  const [processingError, setProcessingError] = React.useState(false);
+  const [processingError, setProcessingError] = React.useState<string | null>(
+    null
+  );
+  const [processed, setProcessed] = React.useState(false);
   const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
   const [isExternalSearch, setIsExternalSearch] = React.useState(false);
+  const [fromExternalSearch, setFromExternalSearch] = React.useState(false);
+
+  const defaultProcessingError =
+    "Data could not be processed, please try again or contact your administrator";
 
   const loadDatasets = useStoreActions(
     (actions) => actions.dataThemes.DatasetGetList.fetch
@@ -116,6 +123,13 @@ function DatasetUploadSteps(props: Props) {
     setLoadedDatasets(datasets);
   }, [datasets]);
 
+  React.useEffect(() => {
+    if (activeStep === 0) {
+      setProcessingError("");
+      setProcessed(false);
+    }
+  }, [activeStep]);
+
   const onSubmitMetadata = () => {
     //Post the dataset
     axios
@@ -140,7 +154,7 @@ function DatasetUploadSteps(props: Props) {
       })
       .catch((error) => {
         console.debug("Dataset creation error", error);
-        setProcessingError(true);
+        setProcessingError(defaultProcessingError);
       });
   };
 
@@ -164,13 +178,19 @@ function DatasetUploadSteps(props: Props) {
         },
         onUploadProgress,
       })
-      .then(() => {
+      .then((response) => {
         //go to next step - metadata
-        setActiveStep(2);
+        if (response.data.error) {
+          setProcessingError(response.data.error);
+          console.debug("Dataset upload error", response.data.error);
+        } else {
+          setActiveStep(2);
+          setProcessed(true);
+        }
       })
       .catch((error) => {
         console.debug("Dataset upload error", error);
-        setProcessingError(true);
+        setProcessingError(defaultProcessingError);
         setSelectedFile(null);
       });
   };
@@ -181,6 +201,7 @@ function DatasetUploadSteps(props: Props) {
     props.setDatasetId(id);
     //set isExternalSearch to false
     setIsExternalSearch(false);
+    setFromExternalSearch(true);
     //set active step to processing
     setActiveStep(1);
     axios
@@ -195,24 +216,38 @@ function DatasetUploadSteps(props: Props) {
           onUploadProgress,
         }
       )
-      .then(() => {
+      .then((response) => {
         //populate formDetails with externalDataset fields to be used in metadata
-        setFormDetails({
-          category: "",
-          description: externalDataset.description.substring(0, 150),
-          name: externalDataset.name,
-          public: false,
-          source: externalDataset.source,
-          sourceUrl: externalDataset.url,
-        });
-        //go to next step - metadata
-        setActiveStep(2);
+
+        if (response.data.error) {
+          setProcessingError(response.data.error);
+          console.debug("Dataset upload error", response.data.error);
+        } else {
+          setFormDetails({
+            category: "",
+            description: externalDataset.description.substring(0, 150),
+            name: externalDataset.name,
+            public: false,
+            source: externalDataset.source,
+            sourceUrl: externalDataset.url,
+          });
+          //go to next step - metadata
+          setActiveStep(2);
+          setProcessed(true);
+        }
       })
       .catch((error) => {
         console.debug("Dataset upload error", error);
         setActiveStep(0);
-        setProcessingError(true);
+        setProcessingError(defaultProcessingError);
       });
+  };
+
+  const tryAgain = () => {
+    setActiveStep(0);
+    if (fromExternalSearch) {
+      setIsExternalSearch(true);
+    }
   };
 
   const currentStep = () => {
@@ -235,6 +270,7 @@ function DatasetUploadSteps(props: Props) {
             loaded={loadedProgress}
             percentageLoaded={percentageLoadedProgress}
             estimatedUploadTime={estUploadTime}
+            tryAgain={tryAgain}
           />
         );
       case 2:
@@ -279,6 +315,7 @@ function DatasetUploadSteps(props: Props) {
           setActiveStep={setActiveStep}
           setProcessingError={setProcessingError}
           handleDownload={handleDownloadExternalDataset}
+          setIsExternalSearch={setIsExternalSearch}
         />
       ) : (
         <Container maxWidth="lg">
@@ -291,6 +328,7 @@ function DatasetUploadSteps(props: Props) {
                 tab={tab}
                 tabs={steps}
                 key={tab}
+                disabled={index > 0 && !processed && activeStep !== index}
               />
             ))}
           </div>
