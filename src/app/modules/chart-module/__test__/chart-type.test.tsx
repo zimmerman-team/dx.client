@@ -7,6 +7,7 @@ import {
   ChartsChartTypeState,
   ChartsDatasetState,
   ChartsMappingState,
+  SelectedAIChartState,
 } from "app/state/api/action-reducers/sync/charts";
 import ChartBuilderChartType from "app/modules/chart-module/routes/chart-type";
 import { ChartTypeModel, echartTypes } from "../routes/chart-type/data";
@@ -77,6 +78,7 @@ const appSetup = (
         mapping: ChartsMappingState,
         ChartGet,
         ChartTypesSuggest,
+        SelectedAIChartState,
       },
     },
     {
