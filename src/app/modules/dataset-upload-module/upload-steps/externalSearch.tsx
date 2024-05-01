@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 import { Box, Container, Grid, IconButton } from "@material-ui/core";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import Filter from "app/modules/home-module/components/Filter";
@@ -8,6 +8,7 @@ import { useHistory } from "react-router-dom";
 import useDebounce from "react-use/lib/useDebounce";
 import axios from "axios";
 import CircleLoader from "app/modules/home-module/components/Loader";
+import { useInfinityScroll } from "app/hooks/useInfinityScroll";
 
 export interface IExternalDataset {
   name: string;
@@ -29,62 +30,65 @@ export default function ExternalSearch(props: {
     }>
   >;
   handleDownload: (dataset: IExternalDataset) => void;
-  setProcessingError: React.Dispatch<React.SetStateAction<boolean>>;
+  setProcessingError: React.Dispatch<React.SetStateAction<string | null>>;
   setActiveStep: React.Dispatch<React.SetStateAction<number>>;
+  setIsExternalSearch: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
+  const observerTarget = React.useRef(null);
   const [tableView, setTableView] = React.useState(false);
   const [searchValue, setSearchValue] = React.useState<string | undefined>("");
   const [sortValue, setSortValue] = React.useState("createdDate");
   const token = useStoreState((state) => state.AuthToken.value);
   const history = useHistory();
   const [loading, setLoading] = React.useState(false);
+  const [offset, setOffset] = React.useState(0);
+  const limit = 20;
+  const [datasets, setDatasets] = React.useState<IExternalDataset[]>([]);
 
-  const [totalDatasets, setTotalDatasets] = React.useState<IExternalDataset[]>(
-    []
+  const { isObserved } = useInfinityScroll(observerTarget);
+
+  const abortControllerRef = React.useRef<AbortController>(
+    new AbortController()
   );
-  const abortControllerRef = useRef<AbortController>(new AbortController());
   const terminateSearch = () => {
     abortControllerRef.current.abort();
     abortControllerRef.current = new AbortController();
-    setTotalDatasets([]);
+    setDatasets([]);
   };
-  const limit = 2;
-  const handleLimitedSearch = () => {
-    let maxResults: number;
-    if (searchValue?.length === 0) {
-      maxResults = 20;
-    } else {
-      maxResults = 96;
+
+  // Pagination on scroll
+  React.useEffect(() => {
+    if (isObserved && datasets.length > 0) {
+      loadSearch(true);
     }
-    const loadSearch = async (offset: number, count: number) => {
-      try {
-        setLoading(true);
-        const response = await axios.get(
-          `${process.env.REACT_APP_API}/external-sources/search-limited?q=${searchValue}&limit=${limit}&offset=${offset}`,
-          {
-            signal: abortControllerRef.current.signal,
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        const data = response.data;
-        setLoading(false);
-        if (data.length > 0 && count < maxResults) {
-          if (data.length + count > maxResults) {
-            const finalData = data.slice(0, maxResults - count);
-            setTotalDatasets((prev) => [...prev, ...finalData]);
-          } else {
-            setTotalDatasets((prev) => [...prev, ...data]);
-          }
-          loadSearch(offset + limit, count + data.length);
+  }, [isObserved]);
+
+  const loadSearch = async (nextPage: boolean = false) => {
+    try {
+      setLoading(true);
+      const response = await axios.get(
+        `${
+          process.env.REACT_APP_API
+        }/external-sources/search?q=${searchValue}&source=${"Kaggle,World Bank,WHO,HDX"}&offset=${offset}&limit=${limit}`,
+        {
+          signal: abortControllerRef.current.signal,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
-      } catch (e) {
-        setLoading(false);
-        console.log(e);
+      );
+      setLoading(false);
+      if (nextPage) {
+        setDatasets([...datasets, ...response.data]);
+        setOffset(offset + limit);
+      } else {
+        setDatasets(response.data);
+        setOffset(limit);
       }
-    };
-    loadSearch(0, 0);
+    } catch (e) {
+      setLoading(false);
+      console.log(e);
+    }
   };
 
   React.useEffect(() => {
@@ -97,8 +101,9 @@ export default function ExternalSearch(props: {
   const [,] = useDebounce(
     () => {
       if (token) {
-        setTotalDatasets([]);
-        handleLimitedSearch();
+        setDatasets([]);
+        setOffset(0);
+        loadSearch();
       }
     },
     500,
@@ -121,7 +126,7 @@ export default function ExternalSearch(props: {
           }
         `}
       >
-        <IconButton onClick={() => history.goBack()}>
+        <IconButton onClick={() => props.setIsExternalSearch(false)}>
           <ArrowBackIcon htmlColor="#000" />
         </IconButton>
         <div
@@ -167,8 +172,8 @@ export default function ExternalSearch(props: {
       </Grid>
       <Box height={62} />
       <Grid container spacing={2}>
-        {totalDatasets &&
-          totalDatasets?.map((dataset, index) => (
+        {datasets &&
+          datasets?.map((dataset, index) => (
             <Grid
               item
               lg={3}
@@ -189,6 +194,13 @@ export default function ExternalSearch(props: {
               <Box height={16} />
             </Grid>
           ))}
+
+        <div
+          ref={observerTarget}
+          css={`
+            height: 1px;
+          `}
+        />
       </Grid>
       <Box display={"flex"} justifyContent={"center"}>
         {loading && <CircleLoader />}

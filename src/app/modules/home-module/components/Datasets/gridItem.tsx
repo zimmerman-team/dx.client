@@ -22,6 +22,7 @@ interface Props {
   handleDelete?: (id: string) => void;
   id?: string;
   owner: string;
+  fromHome?: boolean;
 }
 
 export default function GridItem(props: Readonly<Props>) {
@@ -45,14 +46,14 @@ export default function GridItem(props: Readonly<Props>) {
       data-cy="dataset-grid-item"
     >
       <Link
-        to={`/dataset/${props.id}/detail`}
+        to={`/dataset/${props.id}/detail?fromHome=${props.fromHome}`}
         css={`
           text-decoration: none;
         `}
       >
         <div
           css={`
-            width: 296px;
+            width: 100%;
             height: 161.588px;
             display: flex;
             color: #262c34;

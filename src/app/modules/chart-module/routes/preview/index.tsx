@@ -32,7 +32,7 @@ export function ChartBuilderPreview(props: ChartBuilderPreviewProps) {
   const history = useHistory();
   const { isAuthenticated, user } = useAuth0();
   const { page } = useParams<{ page: string }>();
-  const dataset = useStoreState((state) => state.charts.dataset.value);
+  const datasetId = useStoreState((state) => state.charts.dataset.value);
 
   const loadedChart = useStoreState(
     (state) =>
@@ -40,10 +40,10 @@ export function ChartBuilderPreview(props: ChartBuilderPreviewProps) {
   );
 
   React.useEffect(() => {
-    if (dataset === null && !props.loading) {
+    if (datasetId === null && !props.loading) {
       history.push(`/chart/${page}/data`);
     } else {
-      props.loadDataset(`chart/sample-data/${dataset}`);
+      props.loadDataset(`chart/sample-data/${datasetId}`);
     }
   }, []);
 
@@ -68,6 +68,7 @@ export function ChartBuilderPreview(props: ChartBuilderPreviewProps) {
           data={props.data}
           stats={props.stats}
           dataTypes={props.dataTypes}
+          datasetId={datasetId!}
         />
       </div>
     </div>

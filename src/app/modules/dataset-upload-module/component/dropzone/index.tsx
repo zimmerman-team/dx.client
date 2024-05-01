@@ -103,7 +103,7 @@ export const DropZone = (props: DropzoneProps) => {
               </button>
             </div>
             <Box height={40} />
-            {props.uploadError && (
+            {/* {props.uploadError && (
               <div
                 css={`
                   color: #e75656;
@@ -131,7 +131,7 @@ export const DropZone = (props: DropzoneProps) => {
                 </p>
                 <span>Error</span>
               </div>
-            )}
+            )} */}
           </>
         )}
       </div>

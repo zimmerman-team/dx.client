@@ -101,6 +101,7 @@ export default function HomeModule() {
             sortBy={sortByStr}
             searchStr={searchStr}
             tableView={tableView}
+            fromHome
           />
         );
       case "charts":

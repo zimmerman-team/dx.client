@@ -30,7 +30,7 @@ const appFn = (
       <AddDatasetFragment
         onFileSubmit={mockSetSelectedFile}
         disabled={false}
-        processingError={false}
+        processingError={null}
         setIsExternalSearch={mockSetIsExternalSearch}
       />
     </StoreProvider>
