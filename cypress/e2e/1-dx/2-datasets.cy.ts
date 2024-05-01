@@ -33,33 +33,31 @@ describe("Testing connecting data on DX", () => {
   });
 
   it("Can import data from External Search", () => {
-    cy.intercept(`${apiUrl}/external-sources/search-limited?q=*`).as(
-      "getDefaultData"
-    );
+    cy.intercept(`${apiUrl}/external-sources/search?q=*`).as("getDefaultData");
     cy.get('[data-cy="external-search-button"]').click();
 
     cy.wait("@getDefaultData").then((interception) => {
-      cy.get('[data-cy="external-search-card"]').should(
+      cy.get('[data-cy="external-search-card-Kaggle"]').should(
         "have.length.greaterThan",
         1
       );
     });
 
     cy.get('[data-cy="open-search-button"]').click();
-    cy.intercept(`${apiUrl}/external-sources/search-limited?q=Youth*`).as(
+    cy.intercept(`${apiUrl}/external-sources/search?q=world%20population*`).as(
       "getDefaultData2"
     );
-    cy.get('[data-cy="filter-search-input"]').type("Youth");
+    cy.get('[data-cy="filter-search-input"]').type("world population");
 
     cy.wait("@getDefaultData2").then((interception) => {
-      cy.get('[data-cy="external-search-card"]').should(
+      cy.get('[data-cy="external-search-card-Kaggle"]').should(
         "have.length.greaterThan",
         1
       );
     });
 
     cy.intercept(`${apiUrl}/external-sources/download`).as("downloadData");
-    cy.get('[data-cy="external-search-card"]')
+    cy.get('[data-cy="external-search-card-Kaggle"]')
       .first()
       .trigger("mouseover")
       .within(() => {
