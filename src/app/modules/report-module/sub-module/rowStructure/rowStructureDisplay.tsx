@@ -325,6 +325,7 @@ const Box = (props: {
       view,
       page,
       action: "edit",
+      chartId: null,
     });
     setDataset(null);
     setLoadedChart(null);

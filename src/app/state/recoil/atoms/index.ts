@@ -125,6 +125,7 @@ export const chartFromReportAtom = atom<{
   view: string;
   page: string;
   action: "create" | "edit" | null;
+  chartId: string | null;
 }>({
   key: "chartFromReportAtom",
   default: {
@@ -132,6 +133,7 @@ export const chartFromReportAtom = atom<{
     view: "",
     page: "",
     action: null,
+    chartId: null,
   },
   effects_UNSTABLE: [persistAtom],
 });

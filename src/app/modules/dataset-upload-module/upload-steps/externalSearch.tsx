@@ -78,6 +78,10 @@ export default function ExternalSearch(props: {
         }
       );
       setLoading(false);
+      if (response.data.error) {
+        console.log(response.data.error);
+        return;
+      }
       if (nextPage) {
         setDatasets([...datasets, ...response.data]);
         setOffset(offset + limit);

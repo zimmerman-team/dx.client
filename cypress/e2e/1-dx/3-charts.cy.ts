@@ -49,6 +49,9 @@ describe("Testing create chart on DX", () => {
     );
 
     cy.get('[data-cy="toolbox-chart-next"]').click();
+    cy.get('[data-cy="ai-agent-switch"]').should("be.checked");
+    cy.get('[data-cy="ai-agent-switch"]').click();
+    cy.get('[data-cy="ai-agent-switch"]').should("not.be.checked");
   });
 
   it("Can create a bar chart", () => {

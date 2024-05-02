@@ -225,6 +225,7 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
   };
   const handleBackToReport = () => {
     const { page: reportPage, view: reportView } = chartFromReport;
+    setChartFromReport((prev) => ({ ...prev, chartId: page }));
     console.log(chartFromReport, "chartFromReport");
     history.push(`/report/${reportPage}/edit`);
   };
@@ -380,6 +381,7 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
                 css={styles.backToReport}
                 type="button"
                 data-testid="back-to-report-button"
+                data-cy="back-to-report-button"
               >
                 Back to the report
               </button>
