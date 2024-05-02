@@ -661,6 +661,7 @@ test('should call onSave function when "save" button is clicked', async () => {
       page: "65dcb26aaf4c8500693f1ab7",
       action: "edit",
       view: "edit",
+      chartId: null,
     });
   };
   const { app, mockStore, props } = appSetup(

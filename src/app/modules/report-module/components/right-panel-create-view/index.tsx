@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import find from "lodash/find";
 import { useDrag } from "react-dnd";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import MuiButton from "@material-ui/core/Button";
 import MenuItem from "@material-ui/core/MenuItem";
 import { EditorState } from "draft-js";
@@ -18,6 +18,7 @@ import {
   chartFromReportAtom,
   isDividerOrRowFrameDraggingAtom,
   isChartDraggingAtom,
+  isChartAIAgentActive,
 } from "app/state/recoil/atoms";
 import { Close } from "@material-ui/icons";
 import { IconButton, Tooltip } from "@material-ui/core";
@@ -503,6 +504,7 @@ function ReportRightPanelCreateViewChartList(
         <input
           type="text"
           onChange={(e) => setSearch(e.target.value)}
+          data-cy="report-panel-chart-search-input"
           css={`
             width: 187px;
             height: 35px;
@@ -1111,6 +1113,8 @@ function CreateChartCard(props: {
 }) {
   const history = useHistory();
 
+  const setIsAiSwitchActive = useSetRecoilState(isChartAIAgentActive);
+
   const { page, view } = useParams<{
     page: string;
     view: string;
@@ -1134,7 +1138,9 @@ function CreateChartCard(props: {
       view,
       page,
       action: "create",
+      chartId: null,
     });
+    setIsAiSwitchActive(true);
     setDataset(null);
     setLoadedChart(null);
     setCreateChartData(null);
@@ -1147,6 +1153,7 @@ function CreateChartCard(props: {
       <div
         onClick={action}
         data-testid="create-chart-card"
+        data-cy="report-panel-create-chart-card"
         css={`
           background: #f2f7fd;
           box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.1);
@@ -1239,6 +1246,7 @@ function ChartItem(
         page: "",
         view: "",
         action: null,
+        chartId: null,
       });
     }, 3000);
     return () => {
@@ -1277,7 +1285,9 @@ function ChartItem(
       id={`chart-${props.chartIndex}`}
       data-testid={props.chartIndex === 0 ? "chart-0" : "chart-n"}
       className={
-        props.chartIndex === 0 && chartFromReport.action === "create"
+        props.chartIndex === 0 &&
+        chartFromReport.action === "create" &&
+        chartFromReport.chartId === props.id
           ? "rhcpCard"
           : ""
       }

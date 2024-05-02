@@ -12,6 +12,7 @@
 const randomId = () => Cypress._.random(0, 1e6);
 //@ts-ignore
 const reportTestName = `report-testname${randomId()}`;
+const chartTestName = `chart-testname${randomId()}`;
 
 describe("Testing reports on DX", () => {
   const apiUrl = Cypress.env("api_url");
@@ -273,6 +274,120 @@ describe("Edit, duplicate and delete report", () => {
       .should("be.visible");
   });
 
+  it("Can Create a chart from a report", () => {
+    cy.get("[data-cy=home-search-button]").click();
+    cy.get("[data-cy=home-search-input]").type(
+      `{selectall}{backspace}${reportTestName}`
+    );
+
+    cy.wait("@fetchReports");
+
+    cy.contains(
+      '[data-cy="report-grid-item"]',
+      `${reportTestName} - Edited (Copy)`
+    )
+      .first()
+      .scrollIntoView()
+      .within(() => {
+        cy.get('[data-cy="report-grid-item-menu-btn"]').click();
+      });
+
+    cy.intercept(`${apiUrl}/report/*`).as("fetchReport");
+
+    cy.get('[data-cy="report-grid-item-edit-btn"]').click();
+
+    cy.wait("@fetchReport");
+
+    cy.intercept("GET", `${apiUrl}/datasets?filter=*`).as("getDatasets");
+    cy.get('[data-cy="report-panel-create-chart-card"]').click();
+    cy.wait("@getDatasets");
+    cy.intercept("GET", `${apiUrl}/chart/sample-data/*`).as("getDataset");
+
+    cy.contains('[data-cy="dataset-grid-item"]', "Grossing Movies")
+      .first()
+      .click();
+
+    cy.wait("@getDataset");
+
+    cy.contains("Please select data from Dx");
+
+    cy.get('[data-cy="toolbox-selected-dataset"]')
+      .contains("Grossing Movies")
+      .should("be.visible");
+
+    cy.intercept("GET", `${apiUrl}/chart-types/ai-suggestions?id=*`).as(
+      "aiSuggestion"
+    );
+
+    cy.get('[data-cy="toolbox-chart-next"]').click();
+
+    cy.wait("@aiSuggestion");
+    cy.get('[data-cy="ai-agent-switch"]').scrollIntoView();
+    cy.get('[data-cy="ai-agent-switch"]').should("be.checked");
+    cy.get('[data-cy="ai-agent-switch"]').click();
+
+    cy.wait(4000);
+    cy.get('[data-cy="ai-agent-switch"]').should("not.be.checked");
+
+    cy.get('[data-cy="chart-type-item"]').contains("Bar chart").click();
+
+    cy.get('[data-cy="chart-type-preview"]')
+      .contains("Bar chart")
+      .should("be.visible");
+
+    cy.intercept(`${apiUrl}/chart`).as("saveChart");
+    cy.intercept(`${apiUrl}/chart/*`).as("saveChart2");
+
+    cy.get('[data-cy="toolbox-chart-next"]').click();
+
+    cy.wait("@saveChart");
+
+    cy.location("pathname").should("include", "/mapping");
+
+    cy.get('[data-cy="report-sub-header-title-input"]').type(
+      `{selectall}{backspace}${chartTestName}`
+    );
+
+    cy.contains('[data-cy="nonstatic-dimension-container"]', "Bars").within(
+      () => {
+        cy.get('[data-cy="chart-dimension-select"]').click();
+      }
+    );
+
+    cy.intercept(`${apiUrl}/chart/*/render`).as("renderChart");
+
+    cy.get('[data-cy="chart-dimension-mapping-item"]').first().click();
+
+    cy.wait("@renderChart");
+
+    cy.get('[data-cy="common-chart-container"]').should("be.visible");
+
+    cy.get('[data-cy="toolbox-chart-next"]').click();
+
+    // cy.wait("@renderChart");
+
+    cy.get('[data-cy="toolbox-chart-next"]').click();
+
+    // cy.wait("@renderChart");
+
+    cy.get('[data-cy="toolbox-chart-next"]').click();
+
+    cy.wait("@saveChart2");
+
+    cy.intercept(`${apiUrl}/charts?filter=*`).as("fetchCharts");
+
+    cy.get('[data-cy="back-to-report-button"]').click();
+
+    cy.wait("@fetchCharts");
+
+    cy.get('[data-cy="report-panel-chart-search-input"]').type(chartTestName);
+    cy.wait("@fetchCharts");
+
+    cy.contains('[data-cy="report-panel-chart-item"]', chartTestName).should(
+      "be.visible"
+    );
+  });
+
   it("Can delete a report", () => {
     cy.intercept("DELETE", `${apiUrl}/report/*`).as("deleteReport");
 
@@ -342,6 +457,4 @@ describe("Edit, duplicate and delete report", () => {
 
     cy.contains(`${reportTestName} - Edited`).should("not.exist");
   });
-
-  it("Can Edit a chart from a report");
 });

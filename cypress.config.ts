@@ -24,4 +24,5 @@ export default defineConfig({
     },
     baseUrl: process.env.REACT_APP_BASE_URL,
   },
+  experimentalMemoryManagement: true,
 });
