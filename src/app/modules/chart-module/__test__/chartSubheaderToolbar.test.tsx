@@ -454,6 +454,7 @@ test("clicking back to report button should reroute to report path ", async () =
       page: "65dcb26aaf4c8500693f1ab7",
       action: "edit",
       view: "edit",
+      chartId: null,
     });
   };
 
