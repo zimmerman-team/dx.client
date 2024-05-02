@@ -213,7 +213,7 @@ export function ChartToolBoxMapping(props: Readonly<ChartToolBoxMappingProps>) {
         }
       }
     } catch (e) {
-      console.log("error fetching ai suggestions", e);
+      console.log("error in ai suggestions", e);
     }
   };
 
@@ -533,6 +533,7 @@ const NonStaticDimensionContainer = (props: {
           dimension={props.dimension}
           getSelectButtonLabel={props.getSelectButtonLabel}
           handleButtonToggle={props.handleButtonToggle}
+          selectedDimensions={selectedDimensions}
           index={0}
         />
       </div>
@@ -618,10 +619,13 @@ const DimensionSelect = (props: {
   ) => any;
   handleButtonToggle: (id: string) => void;
   index: number;
+  selectedDimensions: string[];
 }) => {
   return (
     <>
-      {!!props.dimension?.multiple || isEmpty(props.dimension.mappedValues) ? (
+      {!!props.dimension?.multiple ||
+      isEmpty(props.selectedDimensions) ||
+      isEmpty(props.dimension.mappedValues) ? (
         <div
           css={`
             > span {
