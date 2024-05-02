@@ -44,7 +44,11 @@ export function CommonChart(props: Readonly<Props>) {
   const { render } = useDataThemesEchart();
 
   const domRef = React.useRef<HTMLDivElement>(null);
-  const chartType = useStoreState((state) => state.charts.chartType.value);
+  const chartTypeFromState = useStoreState(
+    (state) => state.charts.chartType.value
+  );
+
+  const chartType = props.renderedChartType ?? chartTypeFromState;
 
   useUpdateEffectOnce(() => {
     if (props.containerRef.current) {
@@ -85,6 +89,7 @@ export function CommonChart(props: Readonly<Props>) {
     }
   }, [props.renderedChart]);
   // client side rendering
+
   React.useEffect(() => {
     const visualOptions = props.containerRef.current
       ? {

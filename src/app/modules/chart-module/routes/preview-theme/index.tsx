@@ -10,7 +10,8 @@ import Skeleton from "@material-ui/lab/Skeleton";
 import { useDataThemesEchart } from "app/hooks/useDataThemesEchart";
 import { styles as commonStyles } from "app/modules/chart-module/routes/common/styles";
 import { ChartBuilderPreviewThemeProps } from "app/modules/chart-module/routes/preview-theme/data";
-import WarningDialog from "../../components/dialog/warningDialog";
+import WarningDialog from "app/modules/chart-module/components/dialog/warningDialog";
+import { ReactComponent as AIIcon } from "app/modules/chart-module/assets/ai-icon.svg";
 
 export function ChartBuilderPreviewTheme(props: ChartBuilderPreviewThemeProps) {
   useTitle("DX DataXplorer - Preview Chart");
@@ -215,6 +216,16 @@ export function ChartBuilderPreviewTheme(props: ChartBuilderPreviewThemeProps) {
                     }
                   `}
                 />
+                <div
+                  css={`
+                    position: absolute;
+                    right: -0.6%;
+                    top: -4%;
+                    display: ${props.isAIAssistedChart ? "block" : "none"};
+                  `}
+                >
+                  <AIIcon />
+                </div>
               </div>
             </div>
           </>

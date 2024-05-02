@@ -12,6 +12,7 @@ export interface ChartBuilderMappingProps {
   setVisualOptions: (value: any) => void;
   renderedChartType: ChartType;
   containerRef: React.RefObject<HTMLDivElement>;
+  isAIAssistedChart: boolean;
 }
 
 export interface ChartBuilderMappingDimensionProps {

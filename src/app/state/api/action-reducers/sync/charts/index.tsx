@@ -33,6 +33,21 @@ export const ChartsDatasetState: ChartsDatasetStateModel = {
     state.value = null;
   }),
 };
+export interface SelectedAIChartModel {
+  value: boolean | null;
+  reset: Action<SelectedAIChartModel>;
+  setValue: Action<SelectedAIChartModel, boolean | null>;
+}
+
+export const SelectedAIChartState: SelectedAIChartModel = {
+  value: null,
+  setValue: action((state, payload) => {
+    state.value = payload;
+  }),
+  reset: action((state) => {
+    state.value = null;
+  }),
+};
 
 export interface ChartsMappingStateModel {
   value: {

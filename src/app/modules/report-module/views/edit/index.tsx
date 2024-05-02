@@ -212,7 +212,7 @@ function ReportEditView(props: ReportEditViewProps) {
     <div>
       <div
         css={`
-          height: ${props.isEditorFocused ? "55px" : "0px"};
+          height: 55px;
           transition: all cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
         `}
       />
@@ -227,8 +227,6 @@ function ReportEditView(props: ReportEditViewProps) {
         hasSubHeaderTitleFocused={props.hasSubHeaderTitleFocused}
         setHasSubHeaderTitleFocused={props.setHasSubHeaderTitleFocused}
         setHeaderDetails={props.setHeaderDetails}
-        isEditorFocused={props.isEditorFocused}
-        setIsEditorFocused={props.setIsEditorFocused}
         setPlugins={props.setPlugins}
       />
       <Container maxWidth="lg">
@@ -279,8 +277,6 @@ function ReportEditView(props: ReportEditViewProps) {
                     view={props.view}
                     rowContentHeights={frame.contentHeights}
                     rowContentWidths={frame.contentWidths}
-                    isEditorFocused={props.isEditorFocused}
-                    setIsEditorFocused={props.setIsEditorFocused}
                     setPlugins={props.setPlugins}
                     endReportTour={handleEndReportTour}
                   />

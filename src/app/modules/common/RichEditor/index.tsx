@@ -32,8 +32,6 @@ export const RichEditor = (props: {
   invertColors?: boolean;
   textContent: EditorState;
   setTextContent: (value: EditorState) => void;
-  setIsEditorFocused?: React.Dispatch<React.SetStateAction<boolean>>;
-  isEditorFocused?: boolean;
   setPlugins?: React.Dispatch<React.SetStateAction<ToolbarPluginsType>>;
   focusOnMount?: boolean;
   setPlaceholderState: React.Dispatch<React.SetStateAction<string>>;
@@ -51,7 +49,7 @@ export const RichEditor = (props: {
     }
   }, []);
 
-  const [localFocus, setLocalFocus] = React.useState(false);
+  const [localFocus, setLocalFocus] = React.useState(true);
 
   const emojiPlugin = createEmojiPlugin({
     selectButtonContent: EmojiButton,
@@ -157,13 +155,11 @@ export const RichEditor = (props: {
         onChange={props.setTextContent}
         onBlur={() => {
           setLocalFocus(false);
-          props.setIsEditorFocused?.(false);
           if (props.textContent.getCurrentContent().getPlainText().length === 0)
             props.setPlaceholderState(props.placeholder);
         }}
         onFocus={() => {
           setLocalFocus(true);
-          props.setIsEditorFocused?.(true);
           props.setPlaceholderState("");
         }}
         placeholder={props.placeholderState}

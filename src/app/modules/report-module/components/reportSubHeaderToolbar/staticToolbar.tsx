@@ -36,10 +36,7 @@ export type ToolbarPluginsType = (
   | EditorPlugin
 )[];
 
-export default function StaticToolbar(props: {
-  plugins: ToolbarPluginsType;
-  isEditorFocused: boolean;
-}) {
+export default function StaticToolbar(props: { plugins: ToolbarPluginsType }) {
   //control modals for color and background color pickers
   const [anchorEl, setAnchorEl] = React.useState<HTMLDivElement | null>(null);
   const [activeColorModal, setActiveColorModal] = React.useState<
@@ -76,104 +73,103 @@ export default function StaticToolbar(props: {
   );
   return (
     <div>
-      {(props.isEditorFocused || linkInputComponent) &&
-        props.plugins.length > 0 && (
-          <Toolbar>
-            {
-              // may be use React.Fragment instead of div to improve perfomance after React 16
-              (externalProps) => (
-                <React.Fragment>
-                  <BoldButton {...externalProps} />
-                  <ItalicButton {...externalProps} />
-                  <UnderlineButton {...externalProps} />
-                  <StrikeThroughButton {...externalProps} />
-                  <div
-                    onMouseDown={(e) => e.preventDefault()}
-                    onClick={(e) => handleClick(e, "color")}
+      {props.plugins.length > 0 && (
+        <Toolbar>
+          {
+            // may be use React.Fragment instead of div to improve perfomance after React 16
+            (externalProps) => (
+              <React.Fragment>
+                <BoldButton {...externalProps} />
+                <ItalicButton {...externalProps} />
+                <UnderlineButton {...externalProps} />
+                <StrikeThroughButton {...externalProps} />
+                <div
+                  onMouseDown={(e) => e.preventDefault()}
+                  onClick={(e) => handleClick(e, "color")}
+                  id={colorId}
+                  tabIndex={0} // Add tabIndex attribute to make the div focusable
+                >
+                  <HiglightPicker {...externalProps} />
+                </div>
+
+                <div
+                  onMouseDown={(e) => e.preventDefault()}
+                  onClick={(e) => handleClick(e, "bg")}
+                  id={bgId}
+                  tabIndex={0} // Add tabIndex attribute to make the div focusable
+                >
+                  <BGHiglightPicker {...externalProps} />
+                </div>
+
+                <div onMouseDown={(e) => e.preventDefault()}>
+                  <emojiPlugin.EmojiSelect {...externalProps} />
+                </div>
+                <emojiPlugin.EmojiSuggestions {...externalProps} />
+                <div
+                  css={`
+                    width: 1px;
+                    height: 28px;
+                    background: #b4b4b4;
+                  `}
+                />
+                <HeaderOneButton {...externalProps} />
+                <HeaderTwoButton {...externalProps} />
+                <BlockquoteButton {...externalProps} />
+                <div
+                  css={`
+                    width: 1px;
+                    height: 28px;
+                    background: #b4b4b4;
+                  `}
+                />
+                <textAlignmentPlugin.TextAlignment {...externalProps} />
+
+                <UnorderedListButton {...externalProps} />
+                <OrderedListButton {...externalProps} />
+                <div
+                  css={`
+                    width: 1px;
+                    height: 28px;
+                    background: #b4b4b4;
+                  `}
+                />
+                <div
+                  onMouseDown={(e) => {
+                    e.preventDefault();
+                  }}
+                >
+                  <LinkButton {...externalProps} />
+                </div>
+                <div onMouseDown={(e) => e.preventDefault()}>
+                  <UndoButton {...externalProps} />
+                </div>
+                <div onMouseDown={(e) => e.preventDefault()}>
+                  <RedoButton {...externalProps} />
+                </div>
+                <div onMouseDown={(e) => e.preventDefault()}>
+                  <ColorModal
+                    {...externalProps}
+                    anchorEl={anchorEl}
+                    handleClose={handleClose}
                     id={colorId}
-                    tabIndex={0} // Add tabIndex attribute to make the div focusable
-                  >
-                    <HiglightPicker {...externalProps} />
-                  </div>
+                    open={colorOpen}
+                  />
+                </div>
 
-                  <div
-                    onMouseDown={(e) => e.preventDefault()}
-                    onClick={(e) => handleClick(e, "bg")}
+                <div onMouseDown={(e) => e.preventDefault()}>
+                  <BgColorModal
+                    {...externalProps}
+                    anchorEl={anchorEl}
+                    handleClose={handleClose}
                     id={bgId}
-                    tabIndex={0} // Add tabIndex attribute to make the div focusable
-                  >
-                    <BGHiglightPicker {...externalProps} />
-                  </div>
-
-                  <div onMouseDown={(e) => e.preventDefault()}>
-                    <emojiPlugin.EmojiSelect {...externalProps} />
-                  </div>
-                  <emojiPlugin.EmojiSuggestions {...externalProps} />
-                  <div
-                    css={`
-                      width: 1px;
-                      height: 28px;
-                      background: #b4b4b4;
-                    `}
+                    open={bgOpen}
                   />
-                  <HeaderOneButton {...externalProps} />
-                  <HeaderTwoButton {...externalProps} />
-                  <BlockquoteButton {...externalProps} />
-                  <div
-                    css={`
-                      width: 1px;
-                      height: 28px;
-                      background: #b4b4b4;
-                    `}
-                  />
-                  <textAlignmentPlugin.TextAlignment {...externalProps} />
-
-                  <UnorderedListButton {...externalProps} />
-                  <OrderedListButton {...externalProps} />
-                  <div
-                    css={`
-                      width: 1px;
-                      height: 28px;
-                      background: #b4b4b4;
-                    `}
-                  />
-                  <div
-                    onMouseDown={(e) => {
-                      e.preventDefault();
-                    }}
-                  >
-                    <LinkButton {...externalProps} />
-                  </div>
-                  <div onMouseDown={(e) => e.preventDefault()}>
-                    <UndoButton {...externalProps} />
-                  </div>
-                  <div onMouseDown={(e) => e.preventDefault()}>
-                    <RedoButton {...externalProps} />
-                  </div>
-                  <div onMouseDown={(e) => e.preventDefault()}>
-                    <ColorModal
-                      {...externalProps}
-                      anchorEl={anchorEl}
-                      handleClose={handleClose}
-                      id={colorId}
-                      open={colorOpen}
-                    />
-                  </div>
-
-                  <div onMouseDown={(e) => e.preventDefault()}>
-                    <BgColorModal
-                      {...externalProps}
-                      anchorEl={anchorEl}
-                      handleClose={handleClose}
-                      id={bgId}
-                      open={bgOpen}
-                    />
-                  </div>
-                </React.Fragment>
-              )
-            }
-          </Toolbar>
-        )}
+                </div>
+              </React.Fragment>
+            )
+          }
+        </Toolbar>
+      )}
     </div>
   );
 }

@@ -228,7 +228,7 @@ export function ReportSubheaderToolbar(
   }, [user, isAuthenticated, loadedChart, loadedReport]);
 
   return (
-    <div id="subheader-toolbar" css={styles.container(props.isEditorFocused)}>
+    <div id="subheader-toolbar" css={styles.container(view !== undefined)}>
       {createOrEditChartLoading && <PageLoader />}
       <Snackbar
         anchorOrigin={{
@@ -482,10 +482,7 @@ export function ReportSubheaderToolbar(
       </Container>
       {view === "edit" && (
         <Container maxWidth="lg">
-          <StaticToolbar
-            isEditorFocused={props.isEditorFocused}
-            plugins={props.plugins}
-          />
+          <StaticToolbar plugins={props.plugins} />
         </Container>
       )}
       <InfoSnackbar

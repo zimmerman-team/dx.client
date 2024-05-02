@@ -89,6 +89,25 @@ export interface ChartTypeModel {
   description: string;
   ssr: boolean;
 }
+export const chartTypesFromMiddleWare = {
+  barchart: "echartsBarchart",
+  geomap: "echartsGeomap",
+  linechart: "echartsLinechart",
+  sankey: "echartsSankey",
+  treemap: "echartsTreemap",
+  areastack: "echartsAreastack",
+  sunburst: "echartsSunburst",
+  piechart: "echartsPiechart",
+  circlepacking: "echartsCirclepacking",
+  circulargraph: "echartsCirculargraph",
+  forcegraph: "echartsForcegraph",
+  bubblechart: "echartsBubblechart",
+  heatmap: "echartsHeatmap",
+  radarchart: "echartsRadarchart",
+  graphgl: "echartsGraphgl",
+  areatimeaxis: "echartsAreatimeaxis",
+  scatterchart: "echartsScatterchart",
+};
 
 export const echartTypes = (big: boolean) => {
   return [
@@ -98,19 +117,10 @@ export const echartTypes = (big: boolean) => {
       icon: <BarChartIcon big={big} />,
       preview: <BarChartPreviewImg />,
       categories: ["Correllations"],
+      class: "basic",
       ssr: false,
       description:
         "Bar charts present data by visually displaying and comparing categorical information or discrete values through the use of bars of varying lengths or heights.",
-    },
-    {
-      id: "echartsGeomap",
-      label: "Geo map",
-      icon: <GeomapChartIcon big={big} />,
-      preview: <GeomapPreviewImg />,
-      categories: ["Locations"],
-      ssr: false,
-      description:
-        "A geomap is a map of a country, continent, or region map, with colors and values assigned to specific regions. Values are displayed as a color scale, and you can specify optional hovertext for regions. ",
     },
     {
       id: "echartsLinechart",
@@ -118,16 +128,55 @@ export const echartTypes = (big: boolean) => {
       icon: <LineChartIcon big={big} />,
       preview: <LineChartPreviewImg />,
       categories: ["Trends", "changes over time"],
+      class: "basic",
+
       ssr: false,
       description:
         "Line charts present data by illustrating trends and changes in continuous or sequential data points over time, making them ideal for visualizing patterns, fluctuations, or relationships in data.",
     },
+    {
+      id: "echartsPiechart",
+      label: "Pie Chart",
+      icon: <PieIcon big={big} />,
+      preview: <PieChartPreviewImg />,
+      categories: ["Proportions"],
+      class: "basic",
+      ssr: false,
+      description:
+        "Pie charts display data as slices of a circular pie, where each slice represents a category or value.",
+    },
+    {
+      id: "echartsScatterchart",
+      label: "Scatter Chart",
+      icon: <ScatterIcon big={big} />,
+      preview: <ScatterChartPreviewImg />,
+      categories: ["Correlations", "Proportions"],
+      class: "basic",
+      ssr: false,
+      description:
+        "Scatter plot is a graphical representation of data points in a two-dimensional space. Scatter plots are used to analyze the relationship or correlation between two variables and identify any patterns or trends.",
+    },
+    {
+      id: "echartsGeomap",
+      label: "Geo map",
+      icon: <GeomapChartIcon big={big} />,
+      preview: <GeomapPreviewImg />,
+      categories: ["Locations"],
+      class: "basic",
+
+      ssr: false,
+      description:
+        "A geomap is a map of a country, continent, or region map, with colors and values assigned to specific regions. Values are displayed as a color scale, and you can specify optional hovertext for regions. ",
+    },
+
     {
       id: "echartsSankey",
       label: "Sankey diagram",
       icon: <SankeyChartIcon big={big} />,
       preview: <SankeyPreviewImg />,
       categories: ["Networks"],
+      class: "advanced",
+
       ssr: false,
       description:
         "Sankey diagrams represent flows among nodes of a network. Nodes are represented as rectangles, the height represents their value. Flows are represented with curved lines whose width is proportional to their value.",
@@ -138,89 +187,11 @@ export const echartTypes = (big: boolean) => {
       icon: <TreeMapIcon big={big} />,
       preview: <TreeMapPreviewImg />,
       categories: ["Hierarchies", "Proportions"],
+      class: "advanced",
+
       ssr: false,
       description:
         "Tree maps present hierarchical data structures by visually depicting the relative proportions and relationships among different categories or subcategories, making them useful for displaying complex data in a compact and informative manner.",
-    },
-    {
-      id: "bigNumber",
-      label: "Big number",
-      icon: <BigNumberIcon />,
-      preview: <BigNumberPreviewImg />,
-      categories: ["Key data points"],
-      ssr: true,
-      description:
-        "Big number charts present specific, standout numerical values or key performance indicators in a visually prominent and easily digestible format, enabling quick recognition of important data points.",
-    },
-    {
-      id: "echartsSunburst",
-      label: "Sunburst diagram",
-      icon: <SunburstIcon big={big} />,
-      preview: <SunburstPreviewImg />,
-      categories: ["Hierarchies", "Proportions"],
-      ssr: false,
-      description:
-        "Sunburst charts visualize hierarchical data using a circular layout. The innermost circle represents the main category, while the subsequent circles represent subcategories.",
-    },
-    {
-      id: "echartsPiechart",
-      label: "Pie Chart",
-      icon: <PieIcon big={big} />,
-      preview: <PieChartPreviewImg />,
-      categories: ["Proportions"],
-      ssr: false,
-      description:
-        "Pie charts display data as slices of a circular pie, where each slice represents a category or value.",
-    },
-    {
-      id: "echartsCirclepacking",
-      label: "Circle Packing Chart",
-      icon: <CirclePackingIcon big={big} />,
-      preview: <CirclepackingPreviewImg />,
-      categories: ["Hierarchies", "Proportions"],
-      ssr: false,
-      description:
-        "Circle Packing chart present hierarchical data structures by visually depicting the relative proportions and relationships among different categories or subcategories.",
-    },
-    {
-      id: "echartsForcegraph",
-      label: "Network Graph",
-      icon: <ForceGraphIcon big={big} />,
-      preview: <ForcegraphPreviewImg />,
-      categories: ["Networks"],
-      ssr: false,
-      description:
-        "Network graphs illustrate relationships between nodes in a network. Nodes are represented as points, and connections between nodes are depicted as lines",
-    },
-    {
-      id: "echartsCirculargraph",
-      label: "Circular Network Graph",
-      icon: <CircularGraphIcon big={big} />,
-      preview: <CirculargraphPreviewImg />,
-      categories: ["Networks"],
-      ssr: false,
-      description:
-        "Network graphs illustrate relationships between nodes in a network. Nodes are represented as points, and connections between nodes are depicted as lines",
-    },
-    {
-      id: "echartsAreastack",
-      label: "Line Stacked Chart",
-      icon: <AreastackedIcon big={big} />,
-      preview: <AreastackedPreviewImg />,
-      categories: ["Trends", "changes over time"],
-      ssr: false,
-      description:
-        "Line stacked charts present data by illustrating trends and changes in continuous or sequential data points over time, making them ideal for visualizing patterns, fluctuations, or relationships in data.",
-    },
-    {
-      id: "echartsBubblechart",
-      label: "Bubble Chart",
-      icon: <BubblechartIcon big={big} />,
-      preview: <BubbleChartPreviewImg />,
-      categories: ["Correlations", "Proportions"],
-      ssr: false,
-      description:
-        "Bubble charts are used to display three dimensions of data on a two-dimensional plot. Each bubble represents a data point and is positioned based on its x and y values.",
     },
     {
       id: "echartsHeatmap",
@@ -228,9 +199,21 @@ export const echartTypes = (big: boolean) => {
       icon: <HeatmapIcon big={big} />,
       preview: <HeatmapPreviewImg />,
       categories: ["Correlations", "Proportions"],
+      class: "advanced",
       ssr: false,
       description:
         "Heatmaps visualize data using color-coded cells in a tabular format. Each cell represents a specific combination of two variables, typically displayed as rows and columns.",
+    },
+    {
+      id: "echartsBubblechart",
+      label: "Bubble Chart",
+      icon: <BubblechartIcon big={big} />,
+      preview: <BubbleChartPreviewImg />,
+      categories: ["Correlations", "Proportions"],
+      class: "advanced",
+      ssr: false,
+      description:
+        "Bubble charts are used to display three dimensions of data on a two-dimensional plot. Each bubble represents a data point and is positioned based on its x and y values.",
     },
     {
       id: "echartsRadarchart",
@@ -238,41 +221,104 @@ export const echartTypes = (big: boolean) => {
       icon: <RadarchartIcon big={big} />,
       preview: <RadarChartPreviewImg />,
       categories: ["Correlations"],
+      class: "advanced",
       ssr: false,
       description:
         "Radar charts are particularly useful for assessing and comparing the strengths and weaknesses of different data points or individuals across various attributes.",
     },
     {
-      id: "echartsGraphgl",
-      label: "Graph GL Chart",
-      icon: <GraphGLIcon big={big} />,
-      preview: <GraphGlPreviewImg />,
-      categories: ["Networks"],
+      id: "bigNumber",
+      label: "Big number",
+      icon: <BigNumberIcon />,
+      preview: <BigNumberPreviewImg />,
+      categories: ["Key data points"],
+      class: "advanced",
+
+      ssr: true,
+      description:
+        "Big number charts present specific, standout numerical values or key performance indicators in a visually prominent and easily digestible format, enabling quick recognition of important data points.",
+    },
+    {
+      id: "echartsAreastack",
+      label: "Line Stacked Chart",
+      icon: <AreastackedIcon big={big} />,
+      preview: <AreastackedPreviewImg />,
+      categories: ["Trends", "changes over time"],
+      class: "compound",
       ssr: false,
       description:
-        "Network graphs illustrate relationships between nodes in a network. Nodes are represented as points, and connections between nodes are depicted as lines",
+        "Line stacked charts present data by illustrating trends and changes in continuous or sequential data points over time, making them ideal for visualizing patterns, fluctuations, or relationships in data.",
     },
-
     {
       id: "echartsAreatimeaxis",
       label: "Area Time Axis Chart",
       icon: <AreaTimeAxisIcon big={big} />,
       preview: <AreatimeaxisPreviewImg />,
       categories: ["Trends", "changes over time"],
+      class: "compound",
       ssr: false,
       description:
         "Area time Axis charts present data by illustrating trends and changes in continuous or sequential data points over time, making them ideal for visualizing patterns, fluctuations, or relationships in data.",
     },
     {
-      id: "echartsScatterchart",
-      label: "Scatter Chart",
-      icon: <ScatterIcon big={big} />,
-      preview: <ScatterChartPreviewImg />,
-      categories: ["Correlations", "Proportions"],
+      id: "echartsSunburst",
+      label: "Sunburst diagram",
+      icon: <SunburstIcon big={big} />,
+      preview: <SunburstPreviewImg />,
+      categories: ["Hierarchies", "Proportions"],
+      class: "compound",
+
       ssr: false,
       description:
-        "Scatter plot is a graphical representation of data points in a two-dimensional space. Scatter plots are used to analyze the relationship or correlation between two variables and identify any patterns or trends.",
+        "Sunburst charts visualize hierarchical data using a circular layout. The innermost circle represents the main category, while the subsequent circles represent subcategories.",
     },
+
+    {
+      id: "echartsCirclepacking",
+      label: "Circle Packing Chart",
+      icon: <CirclePackingIcon big={big} />,
+      preview: <CirclepackingPreviewImg />,
+      categories: ["Hierarchies", "Proportions"],
+      class: "compound",
+      ssr: false,
+      description:
+        "Circle Packing chart present hierarchical data structures by visually depicting the relative proportions and relationships among different categories or subcategories.",
+    },
+    {
+      id: "echartsCirculargraph",
+      label: "Circular Network Graph",
+      icon: <CircularGraphIcon big={big} />,
+      preview: <CirculargraphPreviewImg />,
+      categories: ["Networks"],
+      class: "compound",
+      ssr: false,
+      description:
+        "Network graphs illustrate relationships between nodes in a network. Nodes are represented as points, and connections between nodes are depicted as lines",
+    },
+    {
+      id: "echartsForcegraph",
+      label: "Network Graph",
+      icon: <ForceGraphIcon big={big} />,
+      preview: <ForcegraphPreviewImg />,
+      categories: ["Networks"],
+      class: "compound",
+      ssr: false,
+      description:
+        "Network graphs illustrate relationships between nodes in a network. Nodes are represented as points, and connections between nodes are depicted as lines",
+    },
+
+    {
+      id: "echartsGraphgl",
+      label: "Graph GL Chart",
+      icon: <GraphGLIcon big={big} />,
+      preview: <GraphGlPreviewImg />,
+      categories: ["Networks"],
+      class: "compound",
+      ssr: false,
+      description:
+        "Network graphs illustrate relationships between nodes in a network. Nodes are represented as points, and connections between nodes are depicted as lines",
+    },
+
     {
       id: "placeholder9",
       label: "",

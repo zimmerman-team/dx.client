@@ -145,8 +145,6 @@ export function ReportPreviewView(props: {
           dateColor: reportPreviewData.dateColor,
           createdDate: reportPreviewData.createdDate,
         }}
-        isEditorFocused={false}
-        setIsEditorFocused={() => {}}
         setPlugins={() => {}}
         setHeaderDetails={() => {}}
       />
@@ -197,10 +195,8 @@ export function ReportPreviewView(props: {
                 rowIndex={index}
                 framesArray={[]}
                 setPlugins={() => {}}
-                isEditorFocused={false}
                 setFramesArray={() => {}}
                 key={"rowframe" + `${index}`}
-                setIsEditorFocused={() => {}}
                 handlePersistReportState={() => {}}
                 handleRowFrameItemResize={() => {}}
                 endReportTour={() => {}}

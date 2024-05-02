@@ -32,3 +32,6 @@ export const ChartGetList: ApiCallModel = {
 export const ChartsCount: ApiCallModel = {
   ...APIModel(`${process.env.REACT_APP_API}/charts/count`),
 };
+export const ChartTypesSuggest: ApiCallModel = {
+  ...APIModel(`${process.env.REACT_APP_API}/chart-types/ai-suggestions`),
+};

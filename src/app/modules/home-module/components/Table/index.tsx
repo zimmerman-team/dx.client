@@ -19,9 +19,15 @@ export function HomepageTable(props: {
   }[];
   inChartBuilder?: boolean;
   onItemClick?: (v: string) => void;
+  fromHome?: boolean;
 }) {
   const history = useHistory();
   const display = useRecoilState(homeDisplayAtom)[0];
+  const pathBase = {
+    data: "dataset",
+    charts: "chart",
+    reports: "report",
+  };
 
   return (
     <TableContainer
@@ -81,23 +87,24 @@ export function HomepageTable(props: {
             <TableRow
               key={data.id}
               onClick={() => {
-                if (display !== "data" && !props.inChartBuilder) {
+                if (!props.inChartBuilder) {
                   history.push(
-                    `/${display.slice(0, display.length - 1)}/${data.id}`
+                    `/${pathBase[display]}/${data.id}${
+                      display === "data"
+                        ? `/detail?fromHome=${props.fromHome}`
+                        : ""
+                    }`
                   );
                 } else if (props.inChartBuilder && props.onItemClick) {
                   props.onItemClick(data.id);
                 }
               }}
-              css={
-                display === "data"
-                  ? ""
-                  : `
+              css={`
                 &:hover {
-                    cursor: pointer;
-                    background: #F1F3F5;
-                }`
-              }
+                  cursor: pointer;
+                  background: #f1f3f5;
+                }
+              `}
             >
               <TableCell>{index + 1}</TableCell>
               <TableCell>{data.name}</TableCell>

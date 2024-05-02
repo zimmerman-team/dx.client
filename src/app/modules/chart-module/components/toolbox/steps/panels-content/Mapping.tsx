@@ -25,6 +25,10 @@ import {
 import { Dropdown } from "react-bootstrap";
 import { areAllRequiredDimensionsMapped } from "app/hooks/useChartsRawData";
 import Skeleton from "@material-ui/lab/Skeleton";
+import { chartTypesFromMiddleWare } from "app/modules/chart-module/routes/chart-type/data";
+import { isChartAutoMappedAtom } from "app/state/recoil/atoms";
+import { useRecoilState } from "recoil";
+import axios from "axios";
 
 interface ChartToolBoxMappingProps {
   dataTypes: any;
@@ -49,11 +53,11 @@ interface ChartToolBoxMappingItemProps {
     nonStaticDimensionsId: number,
     mappingItemValue: any
   ) => void;
-  // setNonStaticDimensions: React.Dispatch<React.SetStateAction<any[]>>;
   nonStaticDimensions: any[];
   displayCloseButton?: boolean;
   showAggregation: boolean;
   handleButtonToggle?: (id: string) => void;
+  isMappingValid: boolean;
 }
 
 const typeIcon = {
@@ -80,7 +84,6 @@ const DimensionContainerSkeleton = () => {
       css={`
         width: 100%;
         padding: 16px;
-        /* height: 89px; */
         border-radius: 11px;
         background: #dfe3e5;
         margin-top: 16px;
@@ -104,8 +107,20 @@ const DimensionContainerSkeleton = () => {
     </div>
   );
 };
+const fetchAISuggestedChartTypes = async (token: string, datasetId: string) => {
+  const response = await axios.get(
+    `${process.env.REACT_APP_API}/chart-types/ai-suggestions?id=${datasetId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return response;
+};
 
 export function ChartToolBoxMapping(props: Readonly<ChartToolBoxMappingProps>) {
+  const token = useStoreState((state) => state.AuthToken.value);
   const staticDimensions = filter(props.dimensions, (d: any) => d.static);
   const nonStaticDimensions = React.useMemo(() => {
     return filter(props.dimensions, (d: any) => !d.static).map((d: any) => {
@@ -121,6 +136,90 @@ export function ChartToolBoxMapping(props: Readonly<ChartToolBoxMappingProps>) {
     React.useState(nonStaticDimensions);
 
   const mapping = useStoreState((state) => state.charts.mapping.value);
+  const setMapping = useStoreActions(
+    (actions) => actions.charts.mapping.setValue
+  );
+  const chartType = useStoreState((state) => state.charts.chartType.value);
+  const selectedAIChart = useStoreState(
+    (state) => state.charts.SelectedAIChartState.value
+  );
+  const [isChartAutoMapped, setIsChartAutoMapped] = useRecoilState(
+    isChartAutoMappedAtom
+  );
+  const datasetId = useStoreState((state) => state.charts.dataset.value);
+  const setChartSuggestionsCrudData = useStoreActions(
+    (actions) => actions.charts.ChartTypesSuggest.setCrudData
+  );
+  const loadedChart = useStoreState(
+    (state) =>
+      (state.charts.ChartGet.crudData ?? emptyChartAPI) as ChartAPIModel
+  );
+  const selectedAIChartSuggestion = (data: any) => {
+    if (!data) return {};
+
+    return data?.find(
+      (c: { charttype: keyof typeof chartTypesFromMiddleWare }) =>
+        chartTypesFromMiddleWare[c.charttype] === chartType
+    );
+  };
+
+  const autoMap = async () => {
+    try {
+      if (selectedAIChart && !isChartAutoMapped && isEmpty(mapping)) {
+        const response = await fetchAISuggestedChartTypes(
+          token,
+          datasetId as string
+        );
+        const data = response.data;
+        //update Crud Data value with data from non-easy-peasy API  call
+        setChartSuggestionsCrudData(data);
+        const selectedChart = selectedAIChartSuggestion(data);
+        if (!isEmpty(selectedChart)) {
+          const localMapping: any = {};
+          //get mapping from selected ai suggested chart
+          props.dimensions.forEach((d) => {
+            const columnDataType = getTypeName(
+              props.dataTypes[selectedChart[d.id] as any]
+            );
+            const isValid =
+              d.validTypes?.length === 0 ||
+              d.validTypes?.includes(columnDataType);
+
+            localMapping[d.id] = {
+              config: d.aggregation
+                ? {
+                    aggregation:
+                      typeof selectedChart[d.id] === "object"
+                        ? Object.values(selectedChart[d.id]) ?? [
+                            d.aggregationDefault,
+                          ]
+                        : d.aggregationDefault,
+                  }
+                : undefined,
+              ids:
+                typeof selectedChart[d.id] === "object"
+                  ? Object.keys(selectedChart[d.id]).map(() => uniqueId())
+                  : [uniqueId()],
+              value:
+                typeof selectedChart[d.id] === "object"
+                  ? Object.keys(selectedChart[d.id])
+                  : [selectedChart[d.id]],
+              mappedType: columnDataType,
+              isValid,
+            };
+          });
+          setMapping(localMapping);
+          setIsChartAutoMapped(true);
+        }
+      }
+    } catch (e) {
+      console.log("error in ai suggestions", e);
+    }
+  };
+
+  React.useEffect(() => {
+    autoMap();
+  }, [chartType, datasetId, loadedChart]);
 
   const handleButtonToggle = (id: string) => {
     setNonStaticDimensionsState((prev) => {
@@ -172,8 +271,12 @@ export function ChartToolBoxMapping(props: Readonly<ChartToolBoxMappingProps>) {
   }, [mapping]);
 
   // empty rendered chart when req mapping fields are not filled
+  const isMappingValid = areAllRequiredDimensionsMapped(
+    props.dimensions,
+    mapping
+  );
   React.useEffect(() => {
-    if (!areAllRequiredDimensionsMapped(props.dimensions, mapping)) {
+    if (!isMappingValid) {
       props.setChartFromAPI(null);
     }
   }, [mapping]);
@@ -281,6 +384,7 @@ export function ChartToolBoxMapping(props: Readonly<ChartToolBoxMappingProps>) {
                     getValidDataTypes={getValidDataTypes}
                     getSelectButtonLabel={getSelectButtonLabel}
                     handleButtonToggle={handleButtonToggle}
+                    isMappingValid={isMappingValid}
                   />
                 )
               )}
@@ -315,6 +419,7 @@ const NonStaticDimensionContainer = (props: {
     multiple: boolean
   ) => any;
   handleButtonToggle: (id: string) => void;
+  isMappingValid: boolean;
 }) => {
   const [searchValue, setSearchValue] = React.useState("");
   const validTypes = Object.keys(
@@ -420,6 +525,7 @@ const NonStaticDimensionContainer = (props: {
               displayCloseButton
               showAggregation
               handleButtonToggle={props.handleButtonToggle}
+              isMappingValid={props.isMappingValid}
             />
           );
         })}
@@ -427,6 +533,7 @@ const NonStaticDimensionContainer = (props: {
           dimension={props.dimension}
           getSelectButtonLabel={props.getSelectButtonLabel}
           handleButtonToggle={props.handleButtonToggle}
+          selectedDimensions={selectedDimensions}
           index={0}
         />
       </div>
@@ -494,6 +601,7 @@ const NonStaticDimensionContainer = (props: {
                 nonStaticDimensionsIndex={props.dimensionIndex}
                 nonStaticDimensions={props.nonStaticDimensions}
                 showAggregation={false}
+                isMappingValid={props.isMappingValid}
               />
             );
           })}
@@ -511,10 +619,13 @@ const DimensionSelect = (props: {
   ) => any;
   handleButtonToggle: (id: string) => void;
   index: number;
+  selectedDimensions: string[];
 }) => {
   return (
     <>
-      {!!props.dimension?.multiple || isEmpty(props.dimension.mappedValues) ? (
+      {!!props.dimension?.multiple ||
+      isEmpty(props.selectedDimensions) ||
+      isEmpty(props.dimension.mappedValues) ? (
         <div
           css={`
             > span {
@@ -550,23 +661,16 @@ const DimensionSelect = (props: {
 function ChartToolBoxMappingItem(
   props: Readonly<ChartToolBoxMappingItemProps>
 ) {
-  const { index, dimension, dataTypes } = props;
+  const { dimension, dataTypes } = props;
   const setMapping = useStoreActions(
     (actions) => actions.charts.mapping.setValue
   );
   const mapping = useStoreState((state) => state.charts.mapping.value);
-
   const removeMappingValue = useStoreActions(
     (state) => state.charts.mapping.removeMappingValue
   );
 
-  const item = {
-    type: "card",
-    index,
-    id: props.mappingItemValue,
-    dimensionId: dimension.id,
-  };
-  const columnDataType = getTypeName(dataTypes[item.id as any]);
+  const columnDataType = getTypeName(dataTypes[props.mappingItemValue as any]);
 
   const handleClick = () => {
     //checking for props.aggregation cos it's only true for selected dimesions
@@ -595,7 +699,10 @@ function ChartToolBoxMappingItem(
       const localDimensionMapping = get(mappingFromStorage, dimension.id, {});
 
       const defaulAggregation = dimension.aggregation
-        ? getDefaultDimensionAggregation(dimension, dataTypes[item.id as any])
+        ? getDefaultDimensionAggregation(
+            dimension,
+            dataTypes[props.mappingItemValue as any]
+          )
         : null;
 
       if (
@@ -607,7 +714,7 @@ function ChartToolBoxMappingItem(
         setMapping({
           [dimension.id]: {
             ids: [uniqueId()],
-            value: [item.id],
+            value: [props.mappingItemValue],
             isValid: isValid,
             mappedType: columnDataType,
             config: dimension.aggregation
@@ -621,7 +728,10 @@ function ChartToolBoxMappingItem(
         setMapping({
           [dimension.id]: {
             ids: (localDimensionMapping.ids || []).concat(uniqueId()),
-            value: [...(localDimensionMapping.value || []), item.id],
+            value: [
+              ...(localDimensionMapping.value || []),
+              props.mappingItemValue,
+            ],
             isValid: isValid,
             mappedType: columnDataType,
             config: dimension.aggregation
@@ -637,6 +747,7 @@ function ChartToolBoxMappingItem(
       }
     }
   };
+
   const onDeleteItem = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
     e.stopPropagation();

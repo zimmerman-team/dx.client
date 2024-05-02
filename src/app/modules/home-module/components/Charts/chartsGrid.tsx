@@ -222,6 +222,7 @@ export default function ChartsGrid(props: Props) {
                 handleDelete={() => handleModal(c.id)}
                 handleDuplicate={() => handleDuplicate(c.id)}
                 owner={c.owner}
+                isAIAssisted={c.isAIAssisted}
               />
               <Box height={16} />
             </Grid>

@@ -152,6 +152,31 @@ describe("Testing connecting data on DX", () => {
     cy.wait("@submitData");
     cy.contains("Football Players").should("be.visible");
   });
+
+  it("Can import another dataset through local upload", () => {
+    cy.get('[data-cy="local-upload-input"]').as("fileInput");
+    cy.fixture("grossing-movies.csv").then((fileContent) => {
+      cy.get("@fileInput").attachFile({
+        fileContent: fileContent.toString(),
+        fileName: "grossing-movies.csv",
+        mimeType: "text/csv",
+      });
+    });
+    cy.get('[data-cy="dataset-metadata-title"]').type("Grossing Movies");
+    cy.get('[data-cy="dataset-metadata-description"]').type(
+      "Grossing Movies Data"
+    );
+    cy.get('[data-cy="dataset-metadata-source"]').type("Rawgraphs");
+    cy.get('[data-cy="dataset-metadata-link"]').type("Not available");
+    cy.get('[data-cy="dataset-metadata-category"]').click();
+    cy.get('[data-value="Social"]').click();
+    cy.get('[data-cy="dataset-metadata-submit"]').scrollIntoView();
+    cy.intercept(`${apiUrl}/datasets`).as("submitData");
+    cy.get('[data-cy="dataset-metadata-submit"]').click();
+
+    cy.wait("@submitData");
+    cy.contains("Grossing Movies").should("be.visible");
+  });
 });
 
 describe("Edit, Delete and Duplicate Dataset", () => {

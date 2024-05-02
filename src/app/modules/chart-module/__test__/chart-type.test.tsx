@@ -7,18 +7,26 @@ import {
   ChartsChartTypeState,
   ChartsDatasetState,
   ChartsMappingState,
+  SelectedAIChartState,
 } from "app/state/api/action-reducers/sync/charts";
 import ChartBuilderChartType from "app/modules/chart-module/routes/chart-type";
 import { ChartTypeModel, echartTypes } from "../routes/chart-type/data";
 import { createMemoryHistory } from "history";
 import { Auth0Provider } from "@auth0/auth0-react";
 import { mockUseAuth0 } from "app/utils/mockAuth0";
-import { ChartGet } from "app/state/api/action-reducers/charts";
+import {
+  ChartGet,
+  ChartTypesSuggest,
+} from "app/state/api/action-reducers/charts";
+import { AuthTokenState } from "app/state/api/action-reducers/sync";
+import { MutableSnapshot, RecoilRoot } from "recoil";
+import { isChartAIAgentActive } from "app/state/recoil/atoms";
 
 interface MockProps {
   loading: boolean;
   loadDataset: jest.Mock<any, any, any>;
   setChartFromAPI: jest.Mock<any, any, any>;
+  dataTypes: any[];
 }
 
 jest.mock("react-router-dom", () => ({
@@ -47,23 +55,29 @@ const defaultProps = (props: Partial<MockProps> = {}): MockProps => {
     loading: false,
     loadDataset: jest.fn(),
     setChartFromAPI: jest.fn(),
+    dataTypes: [],
     ...props,
   };
 };
 const appSetup = (
   chartType: string | null,
   dataset: string | null,
+  initialRecoilState: (snap: MutableSnapshot) => void,
   newProps: Partial<MockProps> = {},
   historyPath?: string
 ) => {
   const props = defaultProps(newProps);
+
   const mockStore = createStore(
     {
+      AuthToken: AuthTokenState,
       charts: {
         chartType: ChartsChartTypeState,
         dataset: ChartsDatasetState,
         mapping: ChartsMappingState,
         ChartGet,
+        ChartTypesSuggest,
+        SelectedAIChartState,
       },
     },
     {
@@ -89,7 +103,9 @@ const appSetup = (
       <Router.Router history={history(historyPath ?? "/chart/new/type")}>
         <Auth0Provider clientId="__test_client_id__" domain="__test_domain__">
           <StoreProvider store={mockStore}>
-            <ChartBuilderChartType {...props} />
+            <RecoilRoot initializeState={initialRecoilState}>
+              <ChartBuilderChartType {...props} />
+            </RecoilRoot>
           </StoreProvider>
         </Auth0Provider>
       </Router.Router>
@@ -100,23 +116,51 @@ const appSetup = (
 };
 
 //test cases
+test("clicking AI switch should toggle switch", async () => {
+  const initialRecoilState = (snap: MutableSnapshot) => {
+    snap.set(isChartAIAgentActive, false);
+  };
+  jest.spyOn(Router, "useParams").mockReturnValue({ page: "new" });
+  const { app, mockStore, props } = appSetup(
+    null,
+    "12345",
+    initialRecoilState,
+    {},
+    "/chart/new/type"
+  );
+
+  render(app);
+  expect(screen.getByTestId("ai-agent-switch")).toBeInTheDocument();
+  //turn on switch
+  await userEvent.click(screen.getByTestId("ai-agent-switch"));
+  expect(screen.getByTestId("ai-agent-switch")).toBeChecked();
+  //turn off switch
+  await userEvent.click(screen.getByTestId("ai-agent-switch"));
+  expect(screen.getByTestId("ai-agent-switch")).not.toBeChecked();
+});
 
 test("should select a chart type", async () => {
+  const initialRecoilState = (snap: MutableSnapshot) => {
+    snap.set(isChartAIAgentActive, false);
+  };
   const user = userEvent.setup();
   jest.spyOn(Router, "useParams").mockReturnValue({ page: "new" });
 
   const { app, mockStore, props } = appSetup(
     null,
     "12345",
+    initialRecoilState,
     {},
     "/chart/new/type?loadataset=true"
   );
 
   render(app);
   expect(props.loadDataset).toHaveBeenCalled();
-  echartTypes(false).forEach((ct: ChartTypeModel) => {
-    expect(screen.getByTestId(ct.id)).toBeInTheDocument();
-  });
+  echartTypes(false)
+    .filter((c) => c.class === "basic")
+    .forEach((ct: ChartTypeModel) => {
+      expect(screen.getByTestId(ct.id)).toBeInTheDocument();
+    });
   await user.click(screen.getByTestId(echartTypes(false)[0].id));
   expect(mockStore.getState().charts.mapping.value).toEqual({});
   expect(mockStore.getState().charts.chartType.value).toEqual(
@@ -127,13 +171,21 @@ test("should select a chart type", async () => {
 test("should unselect a chart type", async () => {
   const user = userEvent.setup();
   jest.spyOn(Router, "useParams").mockReturnValue({ page: "new" });
-
-  const { app, mockStore } = appSetup("echartsBarchart", "12345");
+  const initialRecoilState = (snap: MutableSnapshot) => {
+    snap.set(isChartAIAgentActive, false);
+  };
+  const { app, mockStore } = appSetup(
+    "echartsBarchart",
+    "12345",
+    initialRecoilState
+  );
 
   render(app);
-  echartTypes(false).forEach((ct: ChartTypeModel) => {
-    expect(screen.getByTestId(ct.id)).toBeInTheDocument();
-  });
+  echartTypes(false)
+    .filter((c) => c.class === "basic")
+    .forEach((ct: ChartTypeModel) => {
+      expect(screen.getByTestId(ct.id)).toBeInTheDocument();
+    });
   await user.click(screen.getByTestId(echartTypes(false)[0].id));
   expect(mockStore.getState().charts.mapping.value).toEqual({});
   expect(mockStore.getState().charts.chartType.value).toBeNull();
@@ -141,8 +193,10 @@ test("should unselect a chart type", async () => {
 
 test("should redirect to data page if dataset is empty", async () => {
   jest.spyOn(Router, "useParams").mockReturnValue({ page: "new" });
-
-  const { app } = appSetup(null, null);
+  const initialRecoilState = (snap: MutableSnapshot) => {
+    snap.set(isChartAIAgentActive, false);
+  };
+  const { app } = appSetup(null, null, initialRecoilState);
 
   render(app);
   expect(screen.getByTestId("echartsBarchart")).toBeInTheDocument();

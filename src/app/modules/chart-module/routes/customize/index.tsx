@@ -9,6 +9,7 @@ import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 import { useStoreState } from "app/state/store/hooks";
 import { ChartAPIModel, emptyChartAPI } from "../../data";
 import { NotAuthorizedMessageModule } from "app/modules/common/not-authorized-message";
+import { ReactComponent as AIIcon } from "app/modules/chart-module/assets/ai-icon.svg";
 
 function ChartBuilderCustomize(props: Readonly<ChartBuilderCustomizeProps>) {
   useTitle("DX DataXplorer - Customize");
@@ -53,6 +54,16 @@ function ChartBuilderCustomize(props: Readonly<ChartBuilderCustomizeProps>) {
             setNotFound={props.setNotFound}
             renderedChartType={props.renderedChartType}
           />
+        </div>
+        <div
+          css={`
+            position: absolute;
+            right: 0%;
+            top: 4%;
+            display: ${props.isAIAssistedChart ? "block" : "none"};
+          `}
+        >
+          <AIIcon />
         </div>
       </div>
     </div>

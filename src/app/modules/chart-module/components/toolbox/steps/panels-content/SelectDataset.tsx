@@ -1,14 +1,12 @@
 import React from "react";
 import get from "lodash/get";
-import find from "lodash/find";
 import CloseIcon from "@material-ui/icons/Close";
 import { useStoreState, useStoreActions } from "app/state/store/hooks";
 import { Box } from "@material-ui/core";
 import { useHistory, useParams } from "react-router-dom";
 import ToolboxSubHeader from "app/modules/chart-module/components/toolbox/steps/sub-header";
-import { DatasetListItemAPIModel } from "app/modules/dataset-module/data";
 
-interface IDatasetDetails {
+export interface IDatasetDetails {
   id: string;
   name: string;
   description: string;

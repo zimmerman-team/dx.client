@@ -90,9 +90,6 @@ export function useChartsRawData(props: {
   const loadedChartDetails = useStoreState(
     (state) => state.charts.ChartGet.crudData as ChartAPIModel
   );
-  const clearLoadedChartDetails = useStoreActions(
-    (actions) => actions.charts.ChartGet.clear
-  );
   const [renderChartFromAPIFufilled, setRenderChartFromAPIFufilled] =
     React.useState(true);
   const { page, view } = useParams<{ page: string; view?: string }>();
@@ -167,6 +164,10 @@ export function useChartsRawData(props: {
         setLoading(false);
         if (isEmpty(response.data) || response.data.error) {
           setDataError(true);
+          setChartErrorMessage(
+            response.data.error ??
+              "Something went wrong with loading your data! Try again or contact admin!"
+          );
         } else {
           setDataStats(response.data.stats);
           setSampleData(response.data.sample);

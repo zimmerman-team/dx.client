@@ -211,6 +211,7 @@ test("typing on input should edit report title", async () => {
       page: "65dcb26aaf4c8500693f1ab7",
       action: "edit",
       view: "edit",
+      chartId: null,
     });
   };
   const { app, props } = appSetup({ mockActions: false, initialRecoilState });

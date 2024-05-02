@@ -8,6 +8,7 @@ import { ReactComponent as MenuIcon } from "app/modules/home-module/assets/menu.
 import { ReactComponent as DeleteIcon } from "app/modules/home-module/assets/delete.svg";
 import { ReactComponent as ClockIcon } from "app/modules/home-module/assets/clock-icon.svg";
 import { ReactComponent as DuplicateIcon } from "app/modules/home-module/assets/duplicate.svg";
+import { ReactComponent as AIIcon } from "app/modules/chart-module/assets/ai-icon.svg";
 
 interface Props {
   id: string;
@@ -21,6 +22,7 @@ interface Props {
   handleDelete?: (id: string) => void;
   handleDuplicate?: (id: string) => void;
   owner: string;
+  isAIAssisted: boolean;
 }
 
 export default function gridItem(props: Props) {
@@ -44,6 +46,7 @@ export default function gridItem(props: Props) {
     >
       <Link
         to={`/chart/${props.id}`}
+        title={props.title}
         css={`
           width: 296px;
           height: 161.59px;
@@ -62,7 +65,7 @@ export default function gridItem(props: Props) {
             box-shadow: 0px 7px 22px 0px rgba(0, 0, 0, 0.1);
           }
         `}
-        data-cy={`chart-grid-item-${props.vizType}`}
+        data-cy={`chart-grid-item`}
       >
         <div
           css={`
@@ -77,8 +80,12 @@ export default function gridItem(props: Props) {
         >
           <div
             css={`
-              width: 90%;
+              width: 96%;
               margin-top: -9px;
+              gap: 6px;
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
             `}
           >
             <p
@@ -94,6 +101,16 @@ export default function gridItem(props: Props) {
             >
               <b>{props.title}</b>
             </p>
+
+            <div
+              css={`
+                display: ${props.isAIAssisted ? "block" : "none"};
+                margin-bottom: -12px;
+              `}
+              data-cy="chart-grid-item-ai-icon"
+            >
+              <AIIcon />
+            </div>
           </div>
           <IconButton
             css={`

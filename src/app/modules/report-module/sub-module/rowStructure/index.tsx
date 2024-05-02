@@ -133,8 +133,6 @@ export interface RowFrameProps {
   rowContentHeights: number[];
   rowContentWidths: number[];
   setPlugins: React.Dispatch<React.SetStateAction<ToolbarPluginsType>>;
-  isEditorFocused: boolean;
-  setIsEditorFocused: React.Dispatch<React.SetStateAction<boolean>>;
   endReportTour: () => void;
 }
 
@@ -397,8 +395,6 @@ export default function RowFrame(props: RowFrameProps) {
         previewItems={props.previewItems}
         onRowBoxItemResize={onRowBoxItemResize}
         handlePersistReportState={props.handlePersistReportState}
-        isEditorFocused={props.isEditorFocused}
-        setIsEditorFocused={props.setIsEditorFocused}
         setPlugins={props.setPlugins}
       />
     ),
@@ -421,8 +417,6 @@ export default function RowFrame(props: RowFrameProps) {
         previewItems={props.previewItems}
         onRowBoxItemResize={onRowBoxItemResize}
         handlePersistReportState={props.handlePersistReportState}
-        isEditorFocused={props.isEditorFocused}
-        setIsEditorFocused={props.setIsEditorFocused}
         setPlugins={props.setPlugins}
       />
     ),
@@ -445,8 +439,6 @@ export default function RowFrame(props: RowFrameProps) {
         previewItems={props.previewItems}
         onRowBoxItemResize={onRowBoxItemResize}
         handlePersistReportState={props.handlePersistReportState}
-        isEditorFocused={props.isEditorFocused}
-        setIsEditorFocused={props.setIsEditorFocused}
         setPlugins={props.setPlugins}
       />
     ),
@@ -468,8 +460,6 @@ export default function RowFrame(props: RowFrameProps) {
         rowContentWidths={props.rowContentWidths}
         deleteFrame={deleteFrame}
         handlePersistReportState={props.handlePersistReportState}
-        isEditorFocused={props.isEditorFocused}
-        setIsEditorFocused={props.setIsEditorFocused}
         setPlugins={props.setPlugins}
         previewItems={props.previewItems}
       />
@@ -493,8 +483,6 @@ export default function RowFrame(props: RowFrameProps) {
         previewItems={props.previewItems}
         onRowBoxItemResize={onRowBoxItemResize}
         handlePersistReportState={props.handlePersistReportState}
-        isEditorFocused={props.isEditorFocused}
-        setIsEditorFocused={props.setIsEditorFocused}
         setPlugins={props.setPlugins}
       />
     ),

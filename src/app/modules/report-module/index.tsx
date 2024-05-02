@@ -75,7 +75,6 @@ export default function ReportModule() {
 
   /** static toolbar states */
   const [plugins, setPlugins] = React.useState<ToolbarPluginsType>([]);
-  const [isEditorFocused, setIsEditorFocused] = React.useState(false);
   /** end of static toolbar states */
 
   const token = useStoreState((state) => state.AuthToken.value);
@@ -577,7 +576,6 @@ export default function ReportModule() {
           setStopInitializeFramesWidth={setStopInitializeFramesWidth}
           handlePersistReportState={handlePersistReportState}
           isPreviewView={isPreviewView}
-          isEditorFocused={isEditorFocused}
           plugins={plugins}
         />
       )}
@@ -596,7 +594,6 @@ export default function ReportModule() {
             framesArray={framesArray}
             reportName={reportName}
             handlePersistReportState={handlePersistReportState}
-            isEditorFocused={isEditorFocused}
           />
         )}
       <div
@@ -630,8 +627,6 @@ export default function ReportModule() {
             setHeaderDetails={setHeaderDetails}
             handlePersistReportState={handlePersistReportState}
             handleRowFrameItemResize={handleRowFrameItemResize}
-            isEditorFocused={isEditorFocused}
-            setIsEditorFocused={setIsEditorFocused}
             setPlugins={setPlugins}
           />
         </Route>
@@ -653,8 +648,6 @@ export default function ReportModule() {
             view={view}
             hasSubHeaderTitleFocused={hasSubHeaderTitleFocused}
             setHasSubHeaderTitleFocused={setHasSubHeaderTitleFocused}
-            isEditorFocused={isEditorFocused}
-            setIsEditorFocused={setIsEditorFocused}
             setPlugins={setPlugins}
             setAutoSave={setAutoSave}
             isSaveEnabled={isSaveEnabled}

@@ -53,8 +53,6 @@ export default function DeleteDatasetDialog(props: Props) {
 
   const { data, loading } = useGetChartsReportsCountByDataset(props.cardId);
 
-  console.log(data);
-
   return (
     <div>
       <Modal

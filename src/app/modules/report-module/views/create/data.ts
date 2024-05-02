@@ -76,8 +76,6 @@ export interface ReportCreateViewProps {
   ) => void;
 
   setPlugins: React.Dispatch<React.SetStateAction<ToolbarPluginsType>>;
-  isEditorFocused: boolean;
-  setIsEditorFocused: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface PlaceholderProps {

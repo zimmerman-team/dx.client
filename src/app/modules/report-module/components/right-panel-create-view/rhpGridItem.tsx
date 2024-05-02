@@ -6,6 +6,7 @@ import { ReactComponent as ClockIcon } from "app/modules/report-module/asset/clo
 import { ReactComponent as ExpandIcon } from "app/modules/report-module/asset/expand-icon.svg";
 import { IconButton } from "@material-ui/core";
 import { ReportChartWrapper } from "app/modules/report-module/components/chart-wrapper/";
+import { ReactComponent as AIIcon } from "app/modules/chart-module/assets/ai-icon.svg";
 
 interface Props {
   id: string;
@@ -19,6 +20,7 @@ interface Props {
   handleDuplicate?: (id: string) => void;
   chartPreview: boolean;
   setChartPreview: React.Dispatch<React.SetStateAction<boolean>>;
+  isAIAssistedChart: boolean;
 }
 
 export default function GridItem(props: Props) {
@@ -64,6 +66,7 @@ export default function GridItem(props: Props) {
       >
         <div>
           <p
+            title={props.title}
             css={`
               margin: 0;
               font-size: 14px;
@@ -81,6 +84,14 @@ export default function GridItem(props: Props) {
               gap: 8px;
             `}
           >
+            <div
+              css={`
+                display: ${props.isAIAssistedChart ? "block" : "none"};
+                margin-top: 6px;
+              `}
+            >
+              <AIIcon />
+            </div>
             {props.added && (
               <p
                 css={`

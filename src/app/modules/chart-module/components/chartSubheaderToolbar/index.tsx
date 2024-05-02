@@ -28,7 +28,7 @@ import { ChartAPIModel, emptyChartAPI } from "app/modules/chart-module/data";
 import { SubheaderToolbarProps } from "app/modules/chart-module/components/chartSubheaderToolbar/data";
 import { ExportChartButton } from "app/modules/chart-module/components/chartSubheaderToolbar/exportButton";
 import { ISnackbarState } from "app/modules/dataset-upload-module/upload-steps/previewFragment";
-import { homeDisplayAtom } from "app/state/recoil/atoms";
+import { chartFromReportAtom, homeDisplayAtom } from "app/state/recoil/atoms";
 import { InfoSnackbar } from "app/modules/chart-module/components/chartSubheaderToolbar/infoSnackbar";
 import { getRequiredFieldsAndErrors } from "../../routes/mapping/utils";
 import AutoSaveSwitch from "app/modules/report-module/components/reportSubHeaderToolbar/autoSaveSwitch";
@@ -53,6 +53,8 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
   );
+  const [chartFromReport, setChartFromReport] =
+    useRecoilState(chartFromReportAtom);
 
   const mapping = useStoreState((state) => state.charts.mapping.value);
   const { updRequiredFields, updMinValuesFields } = getRequiredFieldsAndErrors(
@@ -142,6 +144,7 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
     props.autoSave && canChartEditDelete,
     [
       props.name,
+      props.isAiSwitchActive,
       selectedChartType,
       mapping,
       dataset,
@@ -219,6 +222,12 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
 
   const handleBackToEdit = () => {
     history.go(-1);
+  };
+  const handleBackToReport = () => {
+    const { page: reportPage, view: reportView } = chartFromReport;
+    setChartFromReport((prev) => ({ ...prev, chartId: page }));
+    console.log(chartFromReport, "chartFromReport");
+    history.push(`/report/${reportPage}/edit`);
   };
 
   return (
@@ -366,6 +375,17 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
           </div>
 
           <div css={styles.endContainer}>
+            {chartFromReport.state && (
+              <button
+                onClick={handleBackToReport}
+                css={styles.backToReport}
+                type="button"
+                data-testid="back-to-report-button"
+                data-cy="back-to-report-button"
+              >
+                Back to the report
+              </button>
+            )}
             {view === "preview" && (
               <button
                 onClick={handleBackToEdit}
@@ -377,6 +397,7 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
                 Go back to editing
               </button>
             )}
+
             <div css={styles.iconbtns}>
               {(page === "new" || view) && canChartEditDelete && (
                 <React.Fragment>

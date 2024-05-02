@@ -80,7 +80,15 @@ export const isDividerOrRowFrameDraggingAtom = atom<boolean>({
   key: "isDividerOrRowFrameDraggingAtom",
   default: false,
 });
+export const isChartAIAgentActive = atom<boolean>({
+  key: "isChartAIAgentActiveAtom",
+  default: true,
+});
 
+export const isChartAutoMappedAtom = atom<boolean>({
+  key: "isChartAutoMappedAtom",
+  default: false,
+});
 export const unSavedReportPreviewMode = atom<boolean>({
   key: "unSavedReportPreviewMode",
   default: false,
@@ -117,6 +125,7 @@ export const chartFromReportAtom = atom<{
   view: string;
   page: string;
   action: "create" | "edit" | null;
+  chartId: string | null;
 }>({
   key: "chartFromReportAtom",
   default: {
@@ -124,6 +133,7 @@ export const chartFromReportAtom = atom<{
     view: "",
     page: "",
     action: null,
+    chartId: null,
   },
   effects_UNSTABLE: [persistAtom],
 });

@@ -38,10 +38,15 @@ import { NotAuthorizedMessageModule } from "app/modules/common/not-authorized-me
 import { isEmpty } from "lodash";
 import useResizeObserver from "use-resize-observer";
 import { ChartType } from "app/modules/chart-module/components/common-chart";
-import { DatasetListItemAPIModel } from "app/modules/dataset-module/data";
 import { getRequiredFieldsAndErrors } from "app/modules/chart-module/routes/mapping/utils";
-import ErrorComponent from "./components/dialog/errrorComponent";
+import ErrorComponent from "app/modules/chart-module/components/dialog/errrorComponent";
 import axios from "axios";
+import { useRecoilState, useResetRecoilState } from "recoil";
+import {
+  isChartAIAgentActive,
+  isChartAutoMappedAtom,
+} from "app/state/recoil/atoms";
+import { IDatasetDetails } from "./components/toolbox/steps/panels-content/SelectDataset";
 
 export default function ChartModule() {
   const { user, isLoading, isAuthenticated } = useAuth0();
@@ -116,6 +121,15 @@ export default function ChartModule() {
     isAutoSaveEnabled: editView || false,
     enableAutoSaveSwitch: editView || false,
   });
+  const clearChartTypesSuggestions = useStoreActions(
+    (actions) => actions.charts.ChartTypesSuggest.clear
+  );
+  const [isAiSwitchActive, setIsAiSwitchActive] =
+    useRecoilState(isChartAIAgentActive);
+  const resetIsChartAutoMapped = useResetRecoilState(isChartAutoMappedAtom);
+  const selectedAIChart = useStoreState(
+    (state) => state.charts.SelectedAIChartState.value
+  );
 
   const setMapping = useStoreActions(
     (actions) => actions.charts.mapping.setValue
@@ -138,25 +152,19 @@ export default function ChartModule() {
         401 ||
       get(state.charts.ChartGet.crudData, "error", "") === "Unauthorized"
   );
-  const createChart = useStoreActions(
-    (actions) => actions.charts.ChartCreate.post
-  );
   const editChart = useStoreActions(
     (actions) => actions.charts.ChartUpdate.patch
   );
+  const editChartCrudData = useStoreState(
+    (state) => state.charts.ChartUpdate.crudData
+  ) as ChartAPIModel;
   const clearChart = useStoreActions(
     (actions) => actions.charts.ChartGet.clear
   );
   const createChartClear = useStoreActions(
     (actions) => actions.charts.ChartCreate.clear
   );
-  const createChartData = useStoreState(
-    (state) =>
-      (state.charts.ChartCreate.crudData ?? emptyChartAPI) as ChartAPIModel
-  );
-  const createChartSuccess = useStoreState(
-    (state) => state.charts.ChartCreate.success
-  );
+
   const editChartSuccess = useStoreState(
     (state) => state.charts.ChartUpdate.success
   );
@@ -178,14 +186,15 @@ export default function ChartModule() {
   const clearDatasetDetails = useStoreActions(
     (state) => state.dataThemes.DatasetGet.clear
   );
-  const datasets = useStoreState(
-    (state) =>
-      (state.dataThemes.DatasetGetList.crudData ??
-        []) as DatasetListItemAPIModel[]
+  const setSelectedAIChart = useStoreActions(
+    (actions) => actions.charts.SelectedAIChartState.setValue
   );
   const setDataset = useStoreActions(
     (actions) => actions.charts.dataset.setValue
   );
+  const datasetDetail = useStoreState(
+    (state) => state.dataThemes.DatasetGet.crudData
+  ) as IDatasetDetails;
 
   const resetEnabledFilterOptionGroups = useStoreActions(
     (actions) => actions.charts.enabledFilterOptionGroups.clear
@@ -219,7 +228,6 @@ export default function ChartModule() {
     setNotFound(false);
     clearDatasetDetails();
   };
-
   const onSave = async () => {
     const chart = {
       name: chartName,
@@ -232,6 +240,7 @@ export default function ChartModule() {
       appliedFilters,
       enabledFilterOptionGroups,
       isMappingValid,
+      isAIAssisted: selectedAIChart,
     };
     if (view !== undefined && page !== "new") {
       editChart({
@@ -280,7 +289,6 @@ export default function ChartModule() {
     //handles what happens after chart is created or edited
     let timeout: NodeJS.Timeout;
     if (editChartSuccess) {
-      //returns back to chart detail page
       setSavedChanges(true);
       timeout = setTimeout(() => {
         setSavedChanges(false);
@@ -293,9 +301,8 @@ export default function ChartModule() {
 
   React.useEffect(() => {
     //set chart name to selected dataset if chart name has not been focused
-    if (page === "new" && !hasSubHeaderTitleFocused && dataset) {
-      const datasetName = datasets.find((d) => d.id === dataset)?.name;
-      setChartName(datasetName as string);
+    if (page === "new" && !hasSubHeaderTitleFocused && datasetDetail) {
+      setChartName(datasetDetail?.name as string);
     }
     if (isEmpty(dataset) && page === "new" && !hasSubHeaderTitleFocused) {
       setChartName("Untitled Chart");
@@ -305,7 +312,7 @@ export default function ChartModule() {
       resetMapping();
       resetAppliedFilters();
     }
-  }, [dataset]);
+  }, [dataset, datasetDetail]);
 
   React.useEffect(() => {
     //set chart name to loaded chart name
@@ -313,6 +320,7 @@ export default function ChartModule() {
       setChartName(loadedChart.name);
     }
 
+    setSelectedAIChart(loadedChart?.isAIAssisted);
     setIsLoadedChartMappingValid(loadedChart?.isMappingValid);
   }, [loadedChart]);
 
@@ -379,10 +387,13 @@ export default function ChartModule() {
     createChartClear();
     editChartClear();
     clearDatasetDetails();
+    clearChartTypesSuggestions();
     setChartName("Untitled Chart");
     setDataError(false);
     setNotFound(false);
     setDataTypes([]);
+    resetIsChartAutoMapped();
+    // resetIsAiSwitchActive();
   }
   function clearChartBuilder() {
     console.log("--about to reset chart states");
@@ -397,12 +408,6 @@ export default function ChartModule() {
       }
     });
   }
-
-  // React.useEffect(() => {
-  //   //clear prev states when page mounts
-  //   console.log("clear prev states when page mounts");
-  //   clearChartBuilder();
-  // }, []);
 
   React.useEffect(() => {
     // Updates visual options width when container width changes
@@ -459,6 +464,7 @@ export default function ChartModule() {
     <DndProvider backend={HTML5Backend}>
       <ChartSubheaderToolbar
         visualOptions={visualOptions}
+        isAiSwitchActive={isAiSwitchActive}
         name={chartName}
         setName={setChartName}
         setHasSubHeaderTitleFocused={setHasSubHeaderTitleFocused}
@@ -545,6 +551,7 @@ export default function ChartModule() {
                   renderedChartType={chartType as ChartType}
                   setChartErrorMessage={setChartErrorMessage}
                   setNotFound={setNotFound}
+                  isAIAssistedChart={editChartCrudData?.isAIAssisted}
                 />
               </Route>
 
@@ -561,6 +568,7 @@ export default function ChartModule() {
                   renderedChartType={chartType as ChartType}
                   setChartErrorMessage={setChartErrorMessage}
                   setNotFound={setNotFound}
+                  isAIAssistedChart={editChartCrudData?.isAIAssisted}
                 />
               </Route>
               <Route path="/chart/:page/mapping">
@@ -576,6 +584,7 @@ export default function ChartModule() {
                   renderedChartType={chartType as ChartType}
                   setChartErrorMessage={setChartErrorMessage}
                   setNotFound={setNotFound}
+                  isAIAssistedChart={editChartCrudData?.isAIAssisted}
                 />
               </Route>
               <Route path="/chart/:page/chart-type">
@@ -615,6 +624,7 @@ export default function ChartModule() {
                   containerRef={containerRef}
                   loadedChart={loadedChart}
                   view={view}
+                  isAIAssistedChart={editChartCrudData?.isAIAssisted}
                 />
               </Route>
               <Route path="/chart/:page">
@@ -630,6 +640,9 @@ export default function ChartModule() {
                   containerRef={containerRef}
                   loadedChart={loadedChart}
                   view={view}
+                  isAIAssistedChart={
+                    editChartCrudData?.isAIAssisted ?? loadedChart?.isAIAssisted
+                  }
                 />
               </Route>
               <Route path="*">

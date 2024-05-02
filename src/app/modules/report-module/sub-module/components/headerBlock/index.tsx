@@ -24,8 +24,6 @@ interface Props {
   setReportName?: React.Dispatch<React.SetStateAction<string>>;
   reportName?: string;
   setPlugins: React.Dispatch<React.SetStateAction<ToolbarPluginsType>>;
-  isEditorFocused: boolean;
-  setIsEditorFocused: React.Dispatch<React.SetStateAction<boolean>>;
   headerDetails: {
     title: string;
     showHeader: boolean;
@@ -285,8 +283,6 @@ export default function HeaderBlock(props: Props) {
               setPlaceholderState={setDescriptionPlaceholderState}
               textContent={props.headerDetails.description}
               setPlugins={props.setPlugins}
-              isEditorFocused={props.isEditorFocused}
-              setIsEditorFocused={props.setIsEditorFocused}
             />
           </div>
         </div>

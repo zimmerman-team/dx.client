@@ -13,6 +13,7 @@ export interface ChartBuilderCustomizeProps {
   setNotFound: React.Dispatch<React.SetStateAction<boolean>>;
   renderedChartType: ChartType;
   containerRef: React.RefObject<HTMLDivElement>;
+  isAIAssistedChart: boolean;
 }
 
 export const checkLists = [

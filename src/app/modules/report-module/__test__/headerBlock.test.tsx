@@ -24,8 +24,6 @@ interface MockProps {
   setReportName?: React.Dispatch<React.SetStateAction<string>>;
   reportName?: string;
   setPlugins: React.Dispatch<React.SetStateAction<ToolbarPluginsType>>;
-  isEditorFocused: boolean;
-  setIsEditorFocused: React.Dispatch<React.SetStateAction<boolean>>;
   headerDetails: {
     title: string;
     showHeader: boolean;
@@ -71,8 +69,6 @@ const defaultProps = (props: Partial<MockProps>): MockProps => {
     setReportName: jest.fn(),
     reportName: "Test Report",
     setPlugins: jest.fn(),
-    isEditorFocused: false,
-    setIsEditorFocused: jest.fn(),
     headerDetails: {
       title: "Test Title",
       showHeader: true,
@@ -196,7 +192,6 @@ test("focusing on description input should call setIsEditorFocused", async () =>
   const { app, props } = appSetup();
   render(app);
   await user.click(screen.getByText("Add a header description"));
-  expect(props.setIsEditorFocused).toHaveBeenCalledWith(true);
 });
 
 // test("description input should be visible and editable", async () => {

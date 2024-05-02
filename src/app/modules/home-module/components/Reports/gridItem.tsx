@@ -86,6 +86,7 @@ export default function gridItem(props: Props) {
             `}
           >
             <p
+              title={props.title}
               css={`
                 font-size: 14px;
                 line-height: 22px;
@@ -101,6 +102,7 @@ export default function gridItem(props: Props) {
               <b>{props.title}</b>
             </p>
             <p
+              title={props.descr}
               css={`
                 font-size: 10px;
                 line-height: 14px;

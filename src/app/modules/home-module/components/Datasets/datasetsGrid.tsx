@@ -259,6 +259,7 @@ export default function DatasetsGrid(props: Readonly<Props>) {
                 showMenu={!props.inChartBuilder}
                 id={data.id}
                 owner={data.owner}
+                inChartBuilder={props.inChartBuilder as boolean}
                 fromHome={props.fromHome}
               />
 
@@ -270,6 +271,7 @@ export default function DatasetsGrid(props: Readonly<Props>) {
 
       {props.tableView && (
         <HomepageTable
+          fromHome={props.fromHome}
           onItemClick={props.onItemClick}
           inChartBuilder={props.inChartBuilder}
           data={loadedDatasets?.map((data) => ({

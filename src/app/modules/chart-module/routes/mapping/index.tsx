@@ -2,7 +2,6 @@
 import React from "react";
 import isEmpty from "lodash/isEmpty";
 import useTitle from "react-use/lib/useTitle";
-import { useHistory, useParams } from "react-router-dom";
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 import { useStoreState } from "app/state/store/hooks";
 /* project */
@@ -13,18 +12,14 @@ import {
   ChartBuilderMappingMessageProps,
   ChartBuilderMappingProps,
 } from "app/modules/chart-module/routes/mapping/data";
-import ChartPlaceholder from "../../components/placeholder";
-import { ChartAPIModel, emptyChartAPI } from "../../data";
+import ChartPlaceholder from "app/modules/chart-module/components/placeholder";
+import { ChartAPIModel, emptyChartAPI } from "app/modules/chart-module/data";
 import { NotAuthorizedMessageModule } from "app/modules/common/not-authorized-message";
+import { ReactComponent as AIIcon } from "app/modules/chart-module/assets/ai-icon.svg";
 
 function ChartBuilderMapping(props: Readonly<ChartBuilderMappingProps>) {
   useTitle("DX DataXplorer - Mapping");
-
-  const history = useHistory();
   const { isAuthenticated, user } = useAuth0();
-  const { page } = useParams<{ page: string }>();
-
-  const dataset = useStoreState((state) => state.charts.dataset.value);
   const mapping = useStoreState((state) => state.charts.mapping.value);
   const [requiredFields, setRequiredFields] = React.useState<
     { id: string; name: string }[]
@@ -46,13 +41,6 @@ function ChartBuilderMapping(props: Readonly<ChartBuilderMappingProps>) {
 
     setMinValuesFields(updMinValuesFields);
   }, [mapping, props.dimensions]);
-
-  // React.useEffect(() => {
-  //   //if dataset is empty and not loading, redirect to data page
-  //   if (dataset === null && !props.loading) {
-  //     history.push(`/chart/${page}/data`);
-  //   }
-  // }, [dataset]);
 
   const canChartEditDelete = React.useMemo(() => {
     return isAuthenticated && loadedChart && loadedChart.owner === user?.sub;
@@ -104,6 +92,16 @@ function ChartBuilderMapping(props: Readonly<ChartBuilderMappingProps>) {
           minValuesFields={minValuesFields}
           dimensions={props.dimensions}
         />
+        <div
+          css={`
+            position: absolute;
+            right: 0%;
+            top: 4%;
+            display: ${props.isAIAssistedChart ? "block" : "none"};
+          `}
+        >
+          <AIIcon />
+        </div>
       </div>
     </div>
   );

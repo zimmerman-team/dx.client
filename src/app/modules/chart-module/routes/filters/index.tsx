@@ -1,21 +1,16 @@
 /* third-party */
 import React from "react";
-import isEmpty from "lodash/isEmpty";
 import useTitle from "react-use/lib/useTitle";
 import { useHistory, useParams } from "react-router-dom";
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 import { useStoreState } from "app/state/store/hooks";
 /* project */
-import {
-  CHART_DEFAULT_WIDTH,
-  ChartAPIModel,
-  emptyChartAPI,
-} from "app/modules/chart-module/data";
-import { useUpdateEffectOnce } from "app/hooks/useUpdateEffectOnce";
+import { ChartAPIModel, emptyChartAPI } from "app/modules/chart-module/data";
 import { CommonChart } from "app/modules/chart-module/components/common-chart";
 import { styles as commonStyles } from "app/modules/chart-module/routes/common/styles";
 import { ChartBuilderFiltersProps } from "app/modules/chart-module/routes/filters/data";
 import { NotAuthorizedMessageModule } from "app/modules/common/not-authorized-message";
+import { ReactComponent as AIIcon } from "app/modules/chart-module/assets/ai-icon.svg";
 
 function ChartBuilderFilters(props: Readonly<ChartBuilderFiltersProps>) {
   useTitle("DX DataXplorer - Filters");
@@ -71,6 +66,16 @@ function ChartBuilderFilters(props: Readonly<ChartBuilderFiltersProps>) {
             setNotFound={props.setNotFound}
             renderedChartType={props.renderedChartType}
           />
+        </div>
+        <div
+          css={`
+            position: absolute;
+            right: 0%;
+            top: 4%;
+            display: ${props.isAIAssistedChart ? "block" : "none"};
+          `}
+        >
+          <AIIcon />
         </div>
       </div>
     </div>
