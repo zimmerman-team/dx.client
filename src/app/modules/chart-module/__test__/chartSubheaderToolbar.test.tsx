@@ -280,39 +280,46 @@ test("clicking preview button should go to preview page", async () => {
   expect(history.location.pathname).toBe("/chart/chartid/preview");
 });
 
-// test("clicking back to edit button should go back to edit view from preview page", async () => {
-//   const user = userEvent.setup();
-//   jest
-//     .spyOn(Router, "useParams")
-//     .mockReturnValue({ page: "chartid", view: "preview" });
+test("clicking back to edit button should go back to edit view from preview page", async () => {
+  const user = userEvent.setup();
+  jest
+    .spyOn(Router, "useParams")
+    .mockReturnValue({ page: "chartid", view: "preview" });
 
-//   const { app } = appSetup({
-//     dataset: "12345",
-//     mapping: mockMappingValue,
-//     chartType: "echartsBarchart",
-//     mockActions: true,
-//   });
-//   render(app);
+  const { app, mockStore } = appSetup({
+    dataset: "12345",
+    mapping: mockMappingValue,
+    chartType: "echartsBarchart",
+    mockActions: false,
+  });
+  render(app);
+  act(() => {
+    mockStore.getActions().charts.ChartGet.setCrudData({
+      id: "12345",
+      name: "test",
+      owner: "auth0|123",
+    });
+  });
 
-//   //assert reroute to preview page
-//   expect(history.location.pathname).toBe("/chart/chartid/preview");
-//   expect(
-//     screen.getByRole("button", {
-//       name: "preview-button",
-//     })
-//   ).not.toBeEnabled();
-//   const backButton = screen.getByTestId("back-to-edit-button");
-//   //click back to edit button
-//   expect(backButton).toBeEnabled();
-//   await user.click(backButton);
-//   //assert reroute to edit page
-//   expect(history.location.pathname).toBe("/chart/new/mapping");
-//   // expect(
-//   //   screen.getByRole("button", {
-//   //     name: "preview-button",
-//   //   })
-//   // ).toBeEnabled();
-// });
+  //assert reroute to preview page
+  expect(history.location.pathname).toBe("/chart/chartid/preview");
+  expect(
+    screen.getByRole("button", {
+      name: "preview-button",
+    })
+  ).not.toBeEnabled();
+  const backButton = screen.getByTestId("back-to-edit-button");
+  //click back to edit button
+  expect(backButton).toBeEnabled();
+  await user.click(backButton);
+  //assert reroute to edit page
+  expect(history.location.pathname).toBe("/chart/new/mapping");
+  // expect(
+  //   screen.getByRole("button", {
+  //     name: "preview-button",
+  //   })
+  // ).toBeEnabled();
+});
 
 test("typing in text input should edit chart title", async () => {
   const user = userEvent.setup();
@@ -436,85 +443,42 @@ test("clicking document body should close create chart snackbar", async () => {
   expect(props.onSave).toHaveBeenCalled();
 });
 
-// test("should reroute to report path after chart is created, and chartFromReport is true", async () => {
-//   const user = userEvent.setup();
-//   jest
-//     .spyOn(Router, "useParams")
-//     .mockReturnValue({ page: "new", view: "mapping" });
-//   const initialRecoilState = (snap: MutableSnapshot) => {
-//     snap.set(chartFromReportAtom, {
-//       state: true,
-//       page: "65dcb26aaf4c8500693f1ab7",
-//       action: "edit",
-//       view: "edit",
-//     });
-//   };
+test("clicking back to report button should reroute to report path ", async () => {
+  const user = userEvent.setup();
+  jest
+    .spyOn(Router, "useParams")
+    .mockReturnValue({ page: "new", view: "mapping" });
+  const initialRecoilState = (snap: MutableSnapshot) => {
+    snap.set(chartFromReportAtom, {
+      state: true,
+      page: "65dcb26aaf4c8500693f1ab7",
+      action: "edit",
+      view: "edit",
+    });
+  };
 
-//   const { app, mockStore } = appSetup(
-//     {
-//       dataset: "12345",
-//       mapping: mockMappingValue,
-//       chartType: "echartsBarchart",
-//       mockActions: false,
-//       initialRecoilState,
-//     },
-//     { name: "test" }
-//   );
-//   render(app);
-//   // click save button
-//   const saveButton = screen.getByRole("button", { name: "save-button" });
-//   expect(saveButton).toBeEnabled();
-//   axios.post = jest.fn().mockResolvedValueOnce({ data: { id: "12345" } });
-//   await user.click(saveButton);
+  const { app, mockStore } = appSetup(
+    {
+      dataset: "12345",
+      mapping: mockMappingValue,
+      chartType: "echartsBarchart",
+      mockActions: false,
+      initialRecoilState,
+    },
+    { name: "test" }
+  );
+  render(app);
+  // click save button
+  const backToReportButton = screen.getByRole("button", {
+    name: "Back to the report",
+  });
+  expect(backToReportButton).toBeEnabled();
+  await user.click(backToReportButton);
 
-//   expect(mockStore.getState().charts.ChartCreate.success).toBeTruthy();
-//   expect(history.location.pathname).toBe(
-//     "/report/65dcb26aaf4c8500693f1ab7/edit"
-//   );
-// });
-
-// test("should reroute to report path after chart is edited, and chartFromReport is true", async () => {
-//   const user = userEvent.setup();
-//   jest
-//     .spyOn(Router, "useParams")
-//     .mockReturnValue({ page: "65c08b7a6ddfe800ba395ae3", view: "mapping" });
-//   const initialRecoilState = (snap: MutableSnapshot) => {
-//     snap.set(chartFromReportAtom, {
-//       state: true,
-//       page: "65dcb26aaf4c8500693f1ab7",
-//       action: "edit",
-//       view: "edit",
-//     });
-//   };
-
-//   const { app, mockStore } = appSetup(
-//     {
-//       dataset: "12345",
-//       mapping: mockMappingValue,
-//       chartType: "echartsBarchart",
-//       mockActions: false,
-//       initialRecoilState,
-//     },
-//     { name: "test" }
-//   );
-//   render(app);
-//   act(() => {
-//     mockStore.getActions().charts.ChartGet.setCrudData({
-//       id: "12345",
-//       name: "test",
-//       owner: "auth0|123",
-//     });
-//   });
-//   // click save button
-//   const saveButton = screen.getByRole("button", { name: "save-button" });
-//   expect(saveButton).toBeEnabled();
-//   axios.patch = jest.fn().mockResolvedValueOnce({ data: { id: "12345" } });
-//   await user.click(saveButton);
-//   expect(mockStore.getState().charts.ChartUpdate.success).toBeTruthy();
-//   expect(history.location.pathname).toBe(
-//     "/report/65dcb26aaf4c8500693f1ab7/edit"
-//   );
-// });
+  expect(history.location.pathname).toBe(
+    "/report/65dcb26aaf4c8500693f1ab7/edit"
+  );
+});
 
 test("all buttons should be visible and active when page is not new", async () => {
   jest

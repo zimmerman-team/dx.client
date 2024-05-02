@@ -81,7 +81,7 @@ const AISwitch = (props: {
           }
           props.setIsAiActive(e.target.checked);
         }}
-        data-testid={"auto-save-switch"}
+        data-testid={"ai-agent-switch"}
       />
       <StyledSpan checked={props.checked} />
     </StyledLabel>

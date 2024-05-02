@@ -62,13 +62,12 @@ const defaultProps = (props: Partial<MockProps> = {}): MockProps => {
 const appSetup = (
   chartType: string | null,
   dataset: string | null,
+  initialRecoilState: (snap: MutableSnapshot) => void,
   newProps: Partial<MockProps> = {},
   historyPath?: string
 ) => {
   const props = defaultProps(newProps);
-  const initialRecoilState = (snap: MutableSnapshot) => {
-    snap.set(isChartAIAgentActive, false);
-  };
+
   const mockStore = createStore(
     {
       AuthToken: AuthTokenState,
@@ -117,14 +116,40 @@ const appSetup = (
 };
 
 //test cases
+test("clicking AI switch should toggle switch", async () => {
+  const initialRecoilState = (snap: MutableSnapshot) => {
+    snap.set(isChartAIAgentActive, false);
+  };
+  jest.spyOn(Router, "useParams").mockReturnValue({ page: "new" });
+  const { app, mockStore, props } = appSetup(
+    null,
+    "12345",
+    initialRecoilState,
+    {},
+    "/chart/new/type"
+  );
+
+  render(app);
+  expect(screen.getByTestId("ai-agent-switch")).toBeInTheDocument();
+  //turn on switch
+  await userEvent.click(screen.getByTestId("ai-agent-switch"));
+  expect(screen.getByTestId("ai-agent-switch")).toBeChecked();
+  //turn off switch
+  await userEvent.click(screen.getByTestId("ai-agent-switch"));
+  expect(screen.getByTestId("ai-agent-switch")).not.toBeChecked();
+});
 
 test("should select a chart type", async () => {
+  const initialRecoilState = (snap: MutableSnapshot) => {
+    snap.set(isChartAIAgentActive, false);
+  };
   const user = userEvent.setup();
   jest.spyOn(Router, "useParams").mockReturnValue({ page: "new" });
 
   const { app, mockStore, props } = appSetup(
     null,
     "12345",
+    initialRecoilState,
     {},
     "/chart/new/type?loadataset=true"
   );
@@ -146,8 +171,14 @@ test("should select a chart type", async () => {
 test("should unselect a chart type", async () => {
   const user = userEvent.setup();
   jest.spyOn(Router, "useParams").mockReturnValue({ page: "new" });
-
-  const { app, mockStore } = appSetup("echartsBarchart", "12345");
+  const initialRecoilState = (snap: MutableSnapshot) => {
+    snap.set(isChartAIAgentActive, false);
+  };
+  const { app, mockStore } = appSetup(
+    "echartsBarchart",
+    "12345",
+    initialRecoilState
+  );
 
   render(app);
   echartTypes(false)
@@ -162,8 +193,10 @@ test("should unselect a chart type", async () => {
 
 test("should redirect to data page if dataset is empty", async () => {
   jest.spyOn(Router, "useParams").mockReturnValue({ page: "new" });
-
-  const { app } = appSetup(null, null);
+  const initialRecoilState = (snap: MutableSnapshot) => {
+    snap.set(isChartAIAgentActive, false);
+  };
+  const { app } = appSetup(null, null, initialRecoilState);
 
   render(app);
   expect(screen.getByTestId("echartsBarchart")).toBeInTheDocument();
