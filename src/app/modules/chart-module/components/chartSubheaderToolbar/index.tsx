@@ -377,11 +377,10 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
             {chartFromReport.state && (
               <button
                 onClick={handleBackToReport}
-                css={styles.backToEdit}
+                css={styles.backToReport}
                 type="button"
                 data-testid="back-to-report-button"
               >
-                <EditIcon htmlColor="#fff" />
                 Back to the report
               </button>
             )}

@@ -45,6 +45,23 @@ export const styles = {
     color: white;
     text-decoration: none;
   `,
+  backToReport: css`
+    background: #231d2c;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 32px;
+    padding: 10px 20px;
+    font-family: "GothamNarrow-Bold", sans-serif;
+    gap: 10px;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    color: white;
+    text-decoration: none;
+  `,
   sharePopup: css`
     width: 170px;
     display: flex;
