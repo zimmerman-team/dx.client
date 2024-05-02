@@ -14,6 +14,7 @@ const randomId = () => Cypress._.random(0, 1e6);
 //@ts-ignore
 const testname1 = `testname${randomId()}`;
 const testname2 = `testname${randomId()}`;
+const testname3 = `testname${randomId()}`;
 
 describe("Testing create chart on DX", () => {
   const apiUrl = Cypress.env("api_url");
@@ -42,6 +43,10 @@ describe("Testing create chart on DX", () => {
     cy.get('[data-cy="toolbox-selected-dataset"]')
       .contains("Soccer Players")
       .should("be.visible");
+
+    cy.intercept("GET", `${apiUrl}/chart-types/ai-suggestions?id=*`).as(
+      "aiSuggestion"
+    );
 
     cy.get('[data-cy="toolbox-chart-next"]').click();
   });
@@ -100,7 +105,7 @@ describe("Testing create chart on DX", () => {
 
     cy.wait("@fetchCharts");
 
-    cy.get('[data-cy="chart-grid-item-echartsBarchart"]')
+    cy.get('[data-cy="chart-grid-item"]')
       .contains(testname1)
       .should("be.visible");
   });
@@ -166,9 +171,97 @@ describe("Testing create chart on DX", () => {
 
     cy.wait("@fetchCharts");
 
-    cy.get('[data-cy="chart-grid-item-echartsLinechart"]')
+    cy.get('[data-cy="chart-grid-item"]')
       .contains(testname2)
       .should("be.visible");
+  });
+});
+
+describe("Testing Ai chart creation", () => {
+  const apiUrl = Cypress.env("api_url");
+
+  beforeEach(() => {
+    cy.restoreLocalStorageCache();
+    cy.visit("/");
+
+    cy.get('[data-cy="cookie-btn"]').click();
+
+    cy.get('[data-cy="create-report-dropdown"]').click();
+    cy.intercept("GET", `${apiUrl}/datasets?filter=*`).as("getDatasets");
+    cy.get('[data-cy="appbar-create-chart"]').click();
+    cy.wait("@getDatasets");
+
+    cy.intercept("GET", `${apiUrl}/chart/sample-data/*`).as("getDataset");
+
+    cy.contains('[data-cy="dataset-grid-item"]', "Grossing Movies")
+      .first()
+      .click();
+
+    cy.wait("@getDataset");
+
+    cy.contains("Please select data from Dx");
+
+    cy.get('[data-cy="toolbox-selected-dataset"]')
+      .contains("Grossing Movies")
+      .should("be.visible");
+
+    cy.intercept("GET", `${apiUrl}/chart-types/ai-suggestions?id=*`).as(
+      "aiSuggestion"
+    );
+
+    cy.get('[data-cy="toolbox-chart-next"]').click();
+  });
+
+  it("Can create a chart with AI", () => {
+    cy.wait("@aiSuggestion");
+
+    cy.get('[data-cy="ai-agent-switch"]').should("be.checked");
+
+    cy.intercept(`${apiUrl}/chart`).as("saveChart");
+    cy.intercept(`${apiUrl}/chart/*`).as("saveChart2");
+    cy.intercept(`${apiUrl}/chart/*/render`).as("renderChart");
+
+    cy.get('[data-cy="ai-suggestion-icon"]').filter(":visible").eq(0).click();
+
+    cy.get('[data-cy="toolbox-chart-next"]').click();
+
+    cy.wait("@saveChart");
+    cy.wait("@renderChart");
+
+    cy.location("pathname").should("include", "/mapping");
+
+    cy.get('[data-cy="report-sub-header-title-input"]').type(
+      `{selectall}{backspace}${testname3}`
+    );
+
+    cy.get('[data-cy="common-chart-container"]').should("be.visible");
+
+    cy.get('[data-cy="toolbox-chart-next"]').click();
+
+    // cy.wait("@renderChart");
+
+    cy.get('[data-cy="toolbox-chart-next"]').click();
+
+    // cy.wait("@renderChart");
+
+    cy.get('[data-cy="toolbox-chart-next"]').click();
+
+    cy.wait("@saveChart2");
+
+    cy.visit("/");
+
+    cy.intercept("GET", `${apiUrl}/charts*`).as("fetchCharts");
+
+    cy.get('[data-cy="home-charts-tab"]').scrollIntoView().click();
+
+    cy.wait("@fetchCharts");
+
+    cy.contains('[data-cy="chart-grid-item"]', `${testname3}`)
+      .first()
+      .scrollIntoView()
+      .within(() => {
+        cy.get('[data-cy="chart-grid-item-ai-icon"]').should("be.visible");
+      });
   });
 });
 
@@ -188,7 +281,7 @@ describe("Edit, duplicate and delete chart", () => {
   });
 
   it("Can Edit a chart", () => {
-    cy.contains('[data-cy="chart-grid-item-echartsBarchart"]', testname1)
+    cy.contains('[data-cy="chart-grid-item"]', testname1)
       .first()
       .scrollIntoView()
       .within(() => {
@@ -238,7 +331,7 @@ describe("Edit, duplicate and delete chart", () => {
   it("Can Duplicate a chart", () => {
     cy.intercept(`${apiUrl}/chart/duplicate/*`).as("duplicateChart");
 
-    cy.contains('[data-cy="chart-grid-item-echartsBarchart"]', testname1)
+    cy.contains('[data-cy="chart-grid-item"]', testname1)
       .first()
       .scrollIntoView()
       .within(() => {
@@ -256,10 +349,7 @@ describe("Edit, duplicate and delete chart", () => {
     );
     cy.wait("@fetchCharts");
 
-    cy.contains(
-      '[data-cy="chart-grid-item-echartsBarchart"]',
-      `${testname1} (Copy)`
-    )
+    cy.contains('[data-cy="chart-grid-item"]', `${testname1} (Copy)`)
       .scrollIntoView()
       .should("be.visible");
   });
@@ -270,10 +360,7 @@ describe("Edit, duplicate and delete chart", () => {
       `{selectall}{backspace}${testname1}`
     );
     cy.wait("@fetchCharts");
-    cy.contains(
-      '[data-cy="chart-grid-item-echartsBarchart"]',
-      `${testname1} (Copy)`
-    )
+    cy.contains('[data-cy="chart-grid-item"]', `${testname1} (Copy)`)
       .first()
       .scrollIntoView()
       .within(() => {
@@ -291,7 +378,7 @@ describe("Edit, duplicate and delete chart", () => {
 
     cy.wait("@fetchCharts");
 
-    // cy.get('[data-cy="chart-grid-item-echartsBarchart"]')
+    // cy.get('[data-cy="chart-grid-item"]')
     //   .contains("Soccer Players (Copy)")
     //   .should("not.exist");
 
@@ -301,7 +388,7 @@ describe("Edit, duplicate and delete chart", () => {
     );
     cy.wait("@fetchCharts");
 
-    cy.contains('[data-cy="chart-grid-item-echartsLinechart"]', `${testname2}`)
+    cy.contains('[data-cy="chart-grid-item"]', `${testname2}`)
       .first()
       .scrollIntoView()
       .within(() => {
@@ -319,8 +406,32 @@ describe("Edit, duplicate and delete chart", () => {
 
     cy.wait("@fetchCharts");
 
-    // cy.get('[data-cy="chart-grid-item-echartsBarchart"]')
+    // cy.get('[data-cy="chart-grid-item"]')
     //   .contains("Soccer Players (Copy)")
     //   .should("not.exist");
+
+    cy.get("[data-cy=home-search-button]").click();
+    cy.get("[data-cy=home-search-input]").type(
+      `{selectall}{backspace}${testname3}`
+    );
+    cy.wait("@fetchCharts");
+
+    cy.contains('[data-cy="chart-grid-item"]', `${testname3}`)
+      .first()
+      .scrollIntoView()
+      .within(() => {
+        cy.get('[data-cy="chart-grid-item-menu-btn"]').click();
+      });
+
+    cy.get('[data-cy="chart-grid-item-delete-btn"]').click();
+    cy.intercept("DELETE", `${apiUrl}/chart/*`).as("deleteChart");
+
+    cy.get('[data-cy="delete-chart-item-form"]').within(() => {
+      cy.get('[data-cy="delete-chart-item-input"]').type("DELETE{enter}");
+    });
+
+    cy.wait("@deleteChart");
+
+    cy.wait("@fetchCharts");
   });
 });

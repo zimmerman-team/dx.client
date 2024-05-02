@@ -321,6 +321,7 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
                             font-size: 10px;
                             font-family: "GothamNarrow-Book", sans-serif;
                           `}
+                          data-cy="ai-suggestion-icon"
                         >
                           AI
                         </div>
@@ -457,6 +458,7 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
                             font-size: 10px;
                             font-family: "GothamNarrow-Book", sans-serif;
                           `}
+                          data-cy="ai-suggestion-icon"
                         >
                           AI
                         </div>
@@ -593,6 +595,7 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
                             font-size: 10px;
                             font-family: "GothamNarrow-Book", sans-serif;
                           `}
+                          data-cy="ai-suggestion-icon"
                         >
                           AI
                         </div>

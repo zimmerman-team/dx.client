@@ -65,7 +65,7 @@ export default function gridItem(props: Props) {
             box-shadow: 0px 7px 22px 0px rgba(0, 0, 0, 0.1);
           }
         `}
-        data-cy={`chart-grid-item-${props.vizType}`}
+        data-cy={`chart-grid-item`}
       >
         <div
           css={`
@@ -107,6 +107,7 @@ export default function gridItem(props: Props) {
                 display: ${props.isAIAssisted ? "block" : "none"};
                 margin-bottom: -12px;
               `}
+              data-cy="chart-grid-item-ai-icon"
             >
               <AIIcon />
             </div>

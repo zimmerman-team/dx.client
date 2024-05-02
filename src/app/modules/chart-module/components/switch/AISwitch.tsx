@@ -68,6 +68,7 @@ const AISwitch = (props: {
         type="checkbox"
         checked={props.checked}
         disabled={props.disabled ?? false}
+        data-cy="ai-agent-switch"
         onChange={(e) => {
           if (e.target.checked) {
             loadChartTypesSuggestions({

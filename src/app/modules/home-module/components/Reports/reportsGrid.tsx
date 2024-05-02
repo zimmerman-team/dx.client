@@ -26,7 +26,7 @@ interface Props {
 
 export default function ReportsGrid(props: Props) {
   const observerTarget = React.useRef(null);
-  const [cardId, setCardId] = React.useState<number>(0);
+  const [cardId, setCardId] = React.useState<string>("");
   const [modalDisplay, setModalDisplay] = React.useState<boolean>(false);
   const [enableButton, setEnableButton] = React.useState<boolean>(false);
   const [loadedReports, setLoadedReports] = React.useState<ReportModel[]>([]);
@@ -116,10 +116,9 @@ export default function ReportsGrid(props: Props) {
     loadData();
   }, [offset, token]);
 
-  const handleDelete = (index?: number) => {
+  const handleDelete = (id?: string) => {
     setModalDisplay(false);
     setEnableButton(false);
-    const id = loadedReports[index as number].id;
     if (!id) {
       return;
     }
@@ -135,8 +134,7 @@ export default function ReportsGrid(props: Props) {
       .catch((error) => console.log(error));
   };
 
-  const handleDuplicate = (index: number) => {
-    const id = loadedReports[index].id;
+  const handleDuplicate = (id: string) => {
     if (!id) {
       return;
     }
@@ -160,7 +158,7 @@ export default function ReportsGrid(props: Props) {
     }
   };
 
-  const handleModal = (id: number) => {
+  const handleModal = (id: string) => {
     setCardId(id);
     setModalDisplay(true);
   };
@@ -208,8 +206,8 @@ export default function ReportsGrid(props: Props) {
                 viz={<ColoredReportIcon />}
                 color={data.backgroundColor}
                 showMenuButton={props.showMenuButton}
-                handleDelete={() => handleModal(index)}
-                handleDuplicate={() => handleDuplicate(index)}
+                handleDelete={() => handleModal(data.id)}
+                handleDuplicate={() => handleDuplicate(data.id)}
                 title={data.title || data.name}
                 owner={data.owner}
               />
