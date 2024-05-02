@@ -164,6 +164,10 @@ export function useChartsRawData(props: {
         setLoading(false);
         if (isEmpty(response.data) || response.data.error) {
           setDataError(true);
+          setChartErrorMessage(
+            response.data.error ??
+              "Something went wrong with loading your data! Try again or contact admin!"
+          );
         } else {
           setDataStats(response.data.stats);
           setSampleData(response.data.sample);
