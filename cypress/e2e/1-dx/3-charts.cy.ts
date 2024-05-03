@@ -49,8 +49,10 @@ describe("Testing create chart on DX", () => {
     );
 
     cy.get('[data-cy="toolbox-chart-next"]').click();
+    cy.wait("@aiSuggestion");
     cy.get('[data-cy="ai-agent-switch"]').should("be.checked");
     cy.get('[data-cy="ai-agent-switch"]').click();
+    cy.wait(4000);
     cy.get('[data-cy="ai-agent-switch"]').should("not.be.checked");
   });
 

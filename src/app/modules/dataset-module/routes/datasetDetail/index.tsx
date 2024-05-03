@@ -54,6 +54,12 @@ export default function DatasetDetail() {
         token,
         getId: page,
       });
+    } else {
+      loadDataset({
+        token,
+        getId: page,
+        nonAuthCall: !token,
+      });
     }
   }, [token, page]);
 

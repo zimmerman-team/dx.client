@@ -165,7 +165,19 @@ export default function DatasetSubHeaderToolbar(
       />
       <Container maxWidth="lg">
         <div css={styles.innercontainer}>
-          <p css={styles.nameInput}>{props.name}</p>
+          <p
+            title={props.name}
+            css={`
+              ${styles.nameInput}
+              display: block;
+              max-width: 1000px;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+            `}
+          >
+            {props.name}
+          </p>
 
           <div css={styles.endContainer}>
             <div css={styles.iconbtns}>
