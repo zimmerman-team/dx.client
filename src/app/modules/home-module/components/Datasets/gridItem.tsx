@@ -189,48 +189,47 @@ export default function GridItem(props: Readonly<Props>) {
           </div>
         </div>
       </Link>
-      {displayCreateChartButton && !props.inChartBuilder && (
-        <Link
-          to={{
-            pathname: `/chart/new/chart-type`,
-            search: "?loadataset=true",
-          }}
-          css={`
-            pointer-events: ${canDatasetEditDelete ? "auto" : "none"};
-          `}
-        >
-          <button
-            onClick={handleCreateNewChart}
-            disabled={!canDatasetEditDelete}
-            css={`
-              position: absolute;
-              cursor: ${canDatasetEditDelete ? "pointer" : "not-allowed"};
-              height: 20px;
-              border-radius: 20px;
-              color: #ffffff;
-              font-family: "GothamNarrow-Book", sans-serif;
-              right: 8px;
-              bottom: 30px;
-              z-index: 2;
-              border: none;
-              outline: none;
-              display: flex;
-              justify-content: center;
-              align-items: center;
-              gap: 8.3px;
-              background: #359c96;
-              span {
-                margin: 0;
-                padding: 0;
-                font-size: 10px;
-              }
-            `}
+      {displayCreateChartButton &&
+        !props.inChartBuilder &&
+        canDatasetEditDelete && (
+          <Link
+            to={{
+              pathname: `/chart/new/chart-type`,
+              search: "?loadataset=true",
+            }}
           >
-            <span>Create chart with AI</span>
-            <InfoIcon />
-          </button>
-        </Link>
-      )}
+            <button
+              onClick={handleCreateNewChart}
+              disabled={!canDatasetEditDelete}
+              css={`
+                position: absolute;
+                cursor: ${canDatasetEditDelete ? "pointer" : "not-allowed"};
+                height: 20px;
+                border-radius: 20px;
+                color: #ffffff;
+                font-family: "GothamNarrow-Book", sans-serif;
+                right: 8px;
+                bottom: 30px;
+                z-index: 2;
+                border: none;
+                outline: none;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 8.3px;
+                background: #359c96;
+                span {
+                  margin: 0;
+                  padding: 0;
+                  font-size: 10px;
+                }
+              `}
+            >
+              <span>Create chart with AI</span>
+              <InfoIcon />
+            </button>
+          </Link>
+        )}
       {menuOptionsDisplay && (
         <React.Fragment>
           <div
