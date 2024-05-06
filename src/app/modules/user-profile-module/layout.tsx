@@ -6,50 +6,40 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { bigAvicss, layoutcss } from "./style";
 import { Box, Container, Grid } from "@material-ui/core";
 import { PageTopSpacer } from "../common/page-top-spacer";
-import { Route, Switch, useHistory } from "react-router-dom";
+import { Route, Switch, useHistory, useParams } from "react-router-dom";
+import { LogOutIcon, RightIcon } from "./component/icons";
 import LogOutDialog from "app/components/Dialogs/logOutDialog";
 
-interface UserProfileLayoutProps {
-  tabstate: {
-    title: string;
-    active: boolean;
-    component: (active: boolean) => JSX.Element;
-  }[];
-  setTabState: React.Dispatch<
-    React.SetStateAction<
-      {
-        title: string;
-        active: boolean;
-        component: (active: boolean) => JSX.Element;
-      }[]
-    >
-  >;
-}
-
-export default function UserProfileLayout(props: UserProfileLayoutProps) {
+export default function UserProfileLayout() {
   const { user } = useAuth0();
   const history = useHistory();
 
-  const [modalDisplay, setModalDisplay] = React.useState<boolean>(false);
+  const [logoutModalDisplay, setLogoutModalDisplay] =
+    React.useState<boolean>(false);
+  const { tab: activeTab } = useParams<{ tab: string }>();
+
+  const tabList = [
+    // {
+    //   title: "profile",
+    //   component: (active: boolean) => <RightIcon active={active} />,
+    // },
+    {
+      title: "settings",
+      component: (active: boolean) => <RightIcon active={active} />,
+    },
+    // {
+    //   title: "billing",
+    //   component: (active: boolean) => <RightIcon active={active} />,
+    // },
+    {
+      title: "Log Out",
+      component: (active: boolean) => <LogOutIcon active={active} />,
+    },
+  ];
 
   const handleTabClick = (index: number, title: string) => {
-    const newTabState = props.tabstate.map((tab, i) => {
-      if (i === index) {
-        return {
-          ...tab,
-          active: true,
-        };
-      } else {
-        return {
-          ...tab,
-          active: false,
-        };
-      }
-    });
-    props.setTabState(newTabState);
-
     if (title === "Log Out") {
-      setModalDisplay(true);
+      setLogoutModalDisplay(true);
     } else {
       history.push(`/user-management/${title}`);
     }
@@ -70,13 +60,13 @@ export default function UserProfileLayout(props: UserProfileLayoutProps) {
             </div>
             <Box height={109} />
             <div>
-              {props.tabstate.map((tab, index) => (
+              {tabList.map((tab, index) => (
                 <div key={tab.title}>
                   <Tab
                     title={tab.title}
-                    active={tab.active}
+                    active={tab.title === activeTab}
                     handleClick={() => handleTabClick(index, tab.title)}
-                    component={() => tab.component(tab.active)}
+                    component={() => tab.component(tab.title === activeTab)}
                   />
                   <Box height={10} />
                 </div>
@@ -94,8 +84,8 @@ export default function UserProfileLayout(props: UserProfileLayoutProps) {
             </Switch>
           </Grid>
           <LogOutDialog
-            modalDisplay={modalDisplay}
-            setModalDisplay={setModalDisplay}
+            modalDisplay={logoutModalDisplay}
+            setModalDisplay={setLogoutModalDisplay}
           />
         </Grid>
       </Container>
