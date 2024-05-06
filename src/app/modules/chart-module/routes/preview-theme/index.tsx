@@ -12,6 +12,7 @@ import { styles as commonStyles } from "app/modules/chart-module/routes/common/s
 import { ChartBuilderPreviewThemeProps } from "app/modules/chart-module/routes/preview-theme/data";
 import WarningDialog from "app/modules/chart-module/components/dialog/warningDialog";
 import { ReactComponent as AIIcon } from "app/modules/chart-module/assets/ai-icon.svg";
+import GeomapLegend from "../../components/geomap-legend";
 
 export function ChartBuilderPreviewTheme(props: ChartBuilderPreviewThemeProps) {
   useTitle("DX DataXplorer - Preview Chart");
@@ -226,6 +227,23 @@ export function ChartBuilderPreviewTheme(props: ChartBuilderPreviewThemeProps) {
                 >
                   <AIIcon />
                 </div>
+
+                {selectedChartType === "echartsGeomap" &&
+                props.visualOptions?.showLegend ? (
+                  <div
+                    css={`
+                      position: absolute;
+                      bottom: 0;
+                      right: 0;
+                    `}
+                  >
+                    <GeomapLegend
+                      data={props.renderedChartMappedData}
+                      visualOptions={props.visualOptions}
+                      mapping={mapping}
+                    />
+                  </div>
+                ) : null}
               </div>
             </div>
           </>

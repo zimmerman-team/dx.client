@@ -83,6 +83,7 @@ function ChartBuilderMapping(props: Readonly<ChartBuilderMappingProps>) {
                 setChartErrorMessage={props.setChartErrorMessage}
                 setNotFound={props.setNotFound}
                 renderedChartType={props.renderedChartType}
+                mapping={mapping}
               />
             )}
           </div>
