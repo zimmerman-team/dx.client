@@ -75,6 +75,7 @@ export function ChartBuilderPreviewTheme(props: ChartBuilderPreviewThemeProps) {
                 domRef.current,
                 selectedChartType || "echartsBarchart",
                 visualOptions,
+                mapping,
                 "common-chart-render-container"
               );
             }

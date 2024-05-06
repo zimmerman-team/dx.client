@@ -141,6 +141,7 @@ export function CommonChart(props: Readonly<Props>) {
               ? visualOptions.height - 28
               : visualOptions.height,
           },
+          props.mapping,
           `common-chart-render-container-${props.chartId || "1"}-${
             props.chartPreviewInReport
           }`

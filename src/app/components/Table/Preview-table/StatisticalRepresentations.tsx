@@ -98,6 +98,7 @@ export const BarChartRepresentation = (props: ChartRepresentationProps) => {
               return isEqual(props.data[index], max);
             },
           },
+          null,
           props.containerId
         );
       } catch (e) {
