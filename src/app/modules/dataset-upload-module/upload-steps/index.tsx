@@ -286,14 +286,18 @@ function DatasetUploadSteps(props: Props) {
 
       case 3:
         return (
-          <FinishedFragment
-            data={sampleData}
-            stats={dataStats}
-            datasetId={props.datasetId}
-            dataTotalCount={dataTotalCount}
-            description={description}
-            dataTypes={dataTypes}
-          />
+          <>
+            <Box height={32} />
+            <FinishedFragment
+              data={sampleData}
+              stats={dataStats}
+              datasetId={props.datasetId}
+              dataTotalCount={dataTotalCount}
+              description={description}
+              dataTypes={dataTypes}
+              canDatasetEditDelete={true} //if user has just uploaded the dataset, then they own it and can edit it.
+            />
+          </>
         );
 
       default:
