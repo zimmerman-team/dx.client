@@ -11,9 +11,20 @@ interface InputProps
   maxWidth: number;
   name: string;
   setName: (name: string) => void;
+  spanVisibility: boolean;
+  setSpanVisibility: (spanVisibility: boolean) => void;
 }
 export default function AutoResizeInput(props: InputProps) {
-  const { autoResize, minWidth, maxWidth, name, setName, ...rest } = props;
+  const {
+    autoResize,
+    minWidth,
+    maxWidth,
+    name,
+    setName,
+    spanVisibility,
+    setSpanVisibility,
+    ...rest
+  } = props;
   const spanRef = useRef<HTMLSpanElement | null>(null);
 
   const [autoResizeInputWidth, setAutoResizeInputWidth] =
@@ -75,18 +86,23 @@ export default function AutoResizeInput(props: InputProps) {
         {...rest}
         css={`
           ${styles.nameInput};
+          color: ${spanVisibility ? "#f4f4f4" : "#262c34"};
+          opacity: ${spanVisibility ? "0" : "1"};
         `}
         value={name}
         onChange={(e) => onChange(e.target.value)}
         style={getInputStyle()}
         data-cy="report-sub-header-title-input"
+        title={name}
       />
       {!props.autoResize || (
         <span
           className="auto-resize-span"
           ref={spanRef}
+          title={name}
           css={`
             ${styles.autoResizeSpan}
+            visibility: ${spanVisibility ? "visible" : "hidden"};
           `}
         >
           {` ${name}`}

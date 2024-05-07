@@ -11,7 +11,7 @@ export const styles = {
     position: fixed;
     background: #f4f4f4;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
   `,
   innercontainer: css`
     height: 100%;
@@ -19,9 +19,12 @@ export const styles = {
     align-items: center;
     flex-direction: row;
     justify-content: space-between;
+    gap: 10px;
+    padding-left: 13.3%;
+    padding-right: 1.8%;
     @media (max-width: 1280px) {
-      margin-left: 0;
-      width: calc(100vw - 400px);
+      /* margin-left: 0; */
+      /* width: calc(100vw - 400px); */
     }
 
     @media (max-width: 600px) {
@@ -49,6 +52,7 @@ export const styles = {
     background: #231d2c;
     border-radius: 8px;
     display: flex;
+    flex-shrink: 0;
     flex-direction: row;
     justify-content: center;
     align-items: center;
@@ -126,8 +130,9 @@ export const styles = {
   endContainer: css`
     display: flex;
     right: 29px;
-    position: absolute;
     gap: 13px;
+    flex-shrink: 0;
+    justify-content: flex-end;
   `,
   iconbtns: css`
     display: flex;

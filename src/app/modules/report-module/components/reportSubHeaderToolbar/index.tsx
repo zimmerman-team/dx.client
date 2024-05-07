@@ -62,6 +62,7 @@ export function ReportSubheaderToolbar(
   const [showDeleteDialog, setShowDeleteDialog] = React.useState(false);
 
   const [enableButton, setEnableButton] = React.useState<boolean>(false);
+  const [inputSpanVisibiltiy, setInputSpanVisibility] = React.useState(false);
 
   const setHomeTab = useRecoilState(homeDisplayAtom)[1];
 
@@ -261,6 +262,8 @@ export function ReportSubheaderToolbar(
                 autoResize={autoResizeInput}
                 maxWidth={500}
                 minWidth={100}
+                spanVisibility={inputSpanVisibiltiy}
+                setSpanVisibility={setInputSpanVisibility}
                 onClick={(e) => {
                   if (props.name === "Untitled report") {
                     e.currentTarget.value = "";
