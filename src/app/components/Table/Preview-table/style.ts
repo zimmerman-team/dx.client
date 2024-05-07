@@ -35,8 +35,14 @@ export const previewTablecss = css`
           border-top-left-radius: 19px;
         }
         :last-of-type {
-          border-right: 1px solid #e4e4e4;
           border-top-right-radius: 19px;
+        }
+      }
+    }
+    :nth-of-type(2) {
+      th {
+        :first-of-type {
+          border-left: 1px solid #e4e4e4;
         }
       }
     }
