@@ -162,8 +162,8 @@ const IntercomBootupComponent = () => {
   React.useEffect(() => {
     if (window.Intercom)
       if (isAuthenticated) {
-        try {
-          getIntercomHash().then((res) => {
+        getIntercomHash()
+          .then((res) => {
             if (res.data.error) {
               console.error(res.data.error);
             } else {
@@ -178,10 +178,10 @@ const IntercomBootupComponent = () => {
                 user_hash: res.data.hash,
               });
             }
+          })
+          .catch((error) => {
+            console.error(error);
           });
-        } catch (error) {
-          console.log(error);
-        }
       } else {
         // @ts-ignore
         window.Intercom("boot", {
