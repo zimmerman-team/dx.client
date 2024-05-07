@@ -162,22 +162,26 @@ const IntercomBootupComponent = () => {
   React.useEffect(() => {
     if (window.Intercom)
       if (isAuthenticated) {
-        getIntercomHash().then((res) => {
-          if (res.data.error) {
-            console.error(res.data.error);
-          } else {
-            // @ts-ignore
-            window.Intercom("boot", {
-              api_base: "https://api-iam.intercom.io",
-              app_id: "tfvurn19",
-              name: user?.name, // Full name
-              email: user?.email, // the email for your user
-              user_id: user?.sub, // user_id as a string
-              created_at: user?.created_at, // Signup date as a Unix timestamp
-              user_hash: res.data.hash,
-            });
-          }
-        });
+        try {
+          getIntercomHash().then((res) => {
+            if (res.data.error) {
+              console.error(res.data.error);
+            } else {
+              // @ts-ignore
+              window.Intercom("boot", {
+                api_base: "https://api-iam.intercom.io",
+                app_id: "tfvurn19",
+                name: user?.name, // Full name
+                email: user?.email, // the email for your user
+                user_id: user?.sub, // user_id as a string
+                created_at: user?.created_at, // Signup date as a Unix timestamp
+                user_hash: res.data.hash,
+              });
+            }
+          });
+        } catch (error) {
+          console.log(error);
+        }
       } else {
         // @ts-ignore
         window.Intercom("boot", {
