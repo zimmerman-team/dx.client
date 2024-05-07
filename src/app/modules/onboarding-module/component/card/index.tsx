@@ -84,9 +84,10 @@ export default function AuthCard(props: { isLogin?: boolean }) {
           >
             I agree with DX's{" "}
             <a
-              href=""
+              href="https://drive.google.com/file/d/1wgY5HYdE5-redIOF85E5fZZJT_YueOWP/view?usp=sharing"
+              className="privacy-link"
               target="_blank"
-              rel="noreferrer noopener"
+              rel="noreferrer"
               css={`
                 color: #231d2c;
               `}
