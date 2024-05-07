@@ -45,6 +45,42 @@
       }
     </script>
     <!-- end of Google tag (gtag.js) -->
+    <script>
+      // We pre-filled your app ID in the widget URL: 'https://widget.intercom.io/widget/tfvurn19'
+      (function () {
+        var w = window;
+        var ic = w.Intercom;
+        if (typeof ic === "function") {
+          ic("reattach_activator");
+          ic("update", w.intercomSettings);
+        } else {
+          var d = document;
+          var i = function () {
+            i.c(arguments);
+          };
+          i.q = [];
+          i.c = function (args) {
+            i.q.push(args);
+          };
+          w.Intercom = i;
+          var l = function () {
+            var s = d.createElement("script");
+            s.type = "text/javascript";
+            s.async = true;
+            s.src = "https://widget.intercom.io/widget/tfvurn19";
+            var x = d.getElementsByTagName("script")[0];
+            x.parentNode.insertBefore(s, x);
+          };
+          if (document.readyState === "complete") {
+            l();
+          } else if (w.attachEvent) {
+            w.attachEvent("onload", l);
+          } else {
+            w.addEventListener("load", l, false);
+          }
+        }
+      })();
+    </script>
     <!-- Start of HubSpot Embed Code -->
     <script
       type="text/javascript"
@@ -56,7 +92,10 @@
     <!-- End of HubSpot Embed Code -->
     <!-- Hotjar Tracking Code for DataXplorer -->
     <script>
-      if (window.location.hostname === "dataxplorer.org" || window.location.hostname === "www.dataxplorer.org") {
+      if (
+        window.location.hostname === "dataxplorer.org" ||
+        window.location.hostname === "www.dataxplorer.org"
+      ) {
         (function (h, o, t, j, a, r) {
           h.hj =
             h.hj ||
@@ -77,27 +116,40 @@
     <!-- start of linkedIn insight tag -->
     <script type="text/javascript">
       _linkedin_partner_id = "5847546";
-      window._linkedin_data_partner_ids = window._linkedin_data_partner_ids || [];
+      window._linkedin_data_partner_ids =
+        window._linkedin_data_partner_ids || [];
       window._linkedin_data_partner_ids.push(_linkedin_partner_id);
-      </script><script type="text/javascript">
-      (function(l) {
-      if (!l){window.lintrk = function(a,b){window.lintrk.q.push([a,b])};
-      window.lintrk.q=[]}
-      var s = document.getElementsByTagName("script")[0];
-      var b = document.createElement("script");
-      b.type = "text/javascript";b.async = true;
-      b.src = "https://snap.licdn.com/li.lms-analytics/insight.min.js";
-      s.parentNode.insertBefore(b, s);})(window.lintrk);
-      </script>
-      <noscript>
-      <img height="1" width="1" style="display:none;" alt="" src="https://px.ads.linkedin.com/collect/?pid=5847546&fmt=gif" />
-      </noscript>
+    </script>
+    <script type="text/javascript">
+      (function (l) {
+        if (!l) {
+          window.lintrk = function (a, b) {
+            window.lintrk.q.push([a, b]);
+          };
+          window.lintrk.q = [];
+        }
+        var s = document.getElementsByTagName("script")[0];
+        var b = document.createElement("script");
+        b.type = "text/javascript";
+        b.async = true;
+        b.src = "https://snap.licdn.com/li.lms-analytics/insight.min.js";
+        s.parentNode.insertBefore(b, s);
+      })(window.lintrk);
+    </script>
+    <noscript>
+      <img
+        height="1"
+        width="1"
+        style="display: none"
+        alt=""
+        src="https://px.ads.linkedin.com/collect/?pid=5847546&fmt=gif"
+      />
+    </noscript>
     <!-- end of linkedIn insight tag -->
-<script>
-    window.lintrk('track', { conversion_id: 16130146 });
-</script>
+    <script>
+      window.lintrk("track", { conversion_id: 16130146 });
+    </script>
     <!-- start of linkedIn track tag -->
-    
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
