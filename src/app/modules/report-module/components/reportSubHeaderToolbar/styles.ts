@@ -118,6 +118,7 @@ export const styles = {
     align-items: center;
     width: 30%;
     justify-content: flex-end;
+    flex-shrink: 0;
   `,
   previewEndContainer: css`
     display: flex;
@@ -138,7 +139,6 @@ export const styles = {
     font-size: 24px;
     position: absolute;
     z-index: 1;
-    top: 10%;
     left: -0.5%;
     padding: 5px;
     white-space: pre;
@@ -147,6 +147,5 @@ export const styles = {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    max-width: 100%;
   `,
 };

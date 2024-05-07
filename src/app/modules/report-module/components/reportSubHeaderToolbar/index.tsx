@@ -57,17 +57,14 @@ export function ReportSubheaderToolbar(
   const history = useHistory();
   const classes = useStyles();
   const { user, isAuthenticated } = useAuth0();
+  const titleRef = React.useRef<HTMLDivElement>(null);
   const { page, view } = useParams<{ page: string; view?: string }>();
   const token = useStoreState((state) => state.AuthToken.value);
   const [showDeleteDialog, setShowDeleteDialog] = React.useState(false);
-
   const [enableButton, setEnableButton] = React.useState<boolean>(false);
-  const [inputSpanVisibiltiy, setInputSpanVisibility] = React.useState(false);
-
+  const [inputSpanVisibiltiy, setInputSpanVisibility] = React.useState(true);
   const setHomeTab = useRecoilState(homeDisplayAtom)[1];
-
   const [autoResizeInput, _setAutoResizeInput] = React.useState<boolean>(true);
-
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
   const [duplicatedReportId, setDuplicatedReportId] = React.useState<
     string | null
@@ -114,6 +111,8 @@ export function ReportSubheaderToolbar(
   const reportEditLoading = useStoreState(
     (state) => state.reports.ReportUpdate.loading
   );
+  const saveStatusDivWidth =
+    (savedChanges || reportEditLoading ? 150 : 0) + 150;
 
   React.useEffect(() => {
     // handles saved changes state for autosave
@@ -244,48 +243,50 @@ export function ReportSubheaderToolbar(
       <Container maxWidth="lg">
         <div css={styles.innercontainer}>
           <div
+            ref={titleRef}
             css={`
               display: flex;
               align-items: center;
               gap: 28px;
+              position: relative;
+              width: 70%;
             `}
           >
-            <div
-              css={`
-                overflow-x: visible;
-              `}
-            >
-              <AutoResizeInput
-                name={props.name}
-                setName={props.setName}
-                placeholder="Title"
-                autoResize={autoResizeInput}
-                maxWidth={500}
-                minWidth={100}
-                spanVisibility={inputSpanVisibiltiy}
-                setSpanVisibility={setInputSpanVisibility}
-                onClick={(e) => {
-                  if (props.name === "Untitled report") {
-                    e.currentTarget.value = "";
-                  }
-                }}
-                onBlur={() => {
-                  props.setHasSubHeaderTitleBlurred?.(true);
-                }}
-                onFocus={() => {
-                  props.setHasSubHeaderTitleFocused?.(true);
-                  props.setHasSubHeaderTitleBlurred?.(false);
-                }}
-                disabled={props.isPreviewView}
-                style={
-                  page !== "new" && !view
-                    ? {
-                        pointerEvents: "none",
-                      }
-                    : {}
+            <AutoResizeInput
+              name={props.name}
+              setName={props.setName}
+              placeholder="Title"
+              autoResize={autoResizeInput}
+              maxWidth={
+                (titleRef.current?.offsetWidth as number) - saveStatusDivWidth
+              }
+              spanBuffer={saveStatusDivWidth}
+              minWidth={100}
+              spanVisibility={inputSpanVisibiltiy}
+              setSpanVisibility={setInputSpanVisibility}
+              onClick={(e) => {
+                if (props.name === "Untitled report") {
+                  e.currentTarget.value = "";
                 }
-              />
-            </div>
+              }}
+              onBlur={() => {
+                setInputSpanVisibility(true);
+                props.setHasSubHeaderTitleBlurred?.(true);
+              }}
+              onFocus={() => {
+                props.setHasSubHeaderTitleFocused?.(true);
+                props.setHasSubHeaderTitleBlurred?.(false);
+                setInputSpanVisibility(false);
+              }}
+              disabled={props.isPreviewView}
+              style={
+                page !== "new" && !view
+                  ? {
+                      pointerEvents: "none",
+                    }
+                  : {}
+              }
+            />
             {view === "edit" && (
               <button
                 css={styles.viewReportBtn}

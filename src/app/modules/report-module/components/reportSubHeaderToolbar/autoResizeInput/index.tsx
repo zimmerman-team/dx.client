@@ -13,6 +13,7 @@ interface InputProps
   setName: (name: string) => void;
   spanVisibility: boolean;
   setSpanVisibility: (spanVisibility: boolean) => void;
+  spanBuffer: number;
 }
 export default function AutoResizeInput(props: InputProps) {
   const {
@@ -23,6 +24,7 @@ export default function AutoResizeInput(props: InputProps) {
     setName,
     spanVisibility,
     setSpanVisibility,
+    spanBuffer,
     ...rest
   } = props;
   const spanRef = useRef<HTMLSpanElement | null>(null);
@@ -103,6 +105,7 @@ export default function AutoResizeInput(props: InputProps) {
           css={`
             ${styles.autoResizeSpan}
             visibility: ${spanVisibility ? "visible" : "hidden"};
+            max-width: ${`calc(100% - ${spanBuffer}px)`};
           `}
         >
           {` ${name}`}

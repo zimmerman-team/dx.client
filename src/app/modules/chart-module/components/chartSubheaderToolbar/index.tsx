@@ -93,6 +93,12 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
     return isAuthenticated && loadedChart && loadedChart.owner === user?.sub;
   }, [user, isAuthenticated, loadedChart]);
 
+  const saveStatusDivWidth =
+    (canChartEditDelete && props.savedChanges) ||
+    (canChartEditDelete && editChartLoading)
+      ? 140
+      : 0;
+
   const [snackbarState, setSnackbarState] = React.useState<ISnackbarState>({
     open: false,
     vertical: "bottom",
@@ -279,8 +285,7 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
             display: flex;
             align-items: center;
             gap: 12px;
-            width: 65%;
-            height: 40px;
+            width: 72%;
             position: relative;
           `}
         >
@@ -289,7 +294,10 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
             setName={props.setName}
             placeholder="Title"
             autoResize={true}
-            maxWidth={titleRef.current?.offsetWidth as number}
+            maxWidth={
+              (titleRef.current?.offsetWidth as number) - saveStatusDivWidth
+            }
+            spanBuffer={saveStatusDivWidth}
             minWidth={100}
             spanVisibility={inputSpanVisibiltiy}
             setSpanVisibility={setInputSpanVisibility}
@@ -316,66 +324,65 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
                 : {}
             }
           />
-          <div>
-            {editChartLoading && canChartEditDelete && (
-              <div
+          {editChartLoading && canChartEditDelete && (
+            <div
+              css={`
+                display: flex;
+                align-items: center;
+                gap: 4px;
+                span {
+                  margin-bottom: -4px;
+                }
+              `}
+            >
+              <span>
+                <AutorenewIcon
+                  htmlColor="#70777E"
+                  className={classes.rotateIcon}
+                />
+              </span>
+              <p
                 css={`
-                  display: flex;
-                  align-items: center;
-                  gap: 4px;
-                  span {
-                    margin-bottom: -4px;
-                  }
+                  color: #70777e;
+                  font-family: "GothamNarrow-Book", sans-serif;
+                  font-size: 12px;
+                  font-weight: 325;
+                  margin: 0px;
                 `}
               >
-                <span>
-                  <AutorenewIcon
-                    htmlColor="#70777E"
-                    className={classes.rotateIcon}
-                  />
-                </span>
-                <p
-                  css={`
-                    color: #70777e;
-                    font-family: "GothamNarrow-Book", sans-serif;
-                    font-size: 12px;
-                    font-weight: 325;
-                    margin: 0px;
-                  `}
-                >
-                  saving changes{" "}
-                </p>
-              </div>
-            )}
-            {props.savedChanges && canChartEditDelete && (
-              <div
+                saving changes{" "}
+              </p>
+            </div>
+          )}
+          {props.savedChanges && canChartEditDelete && (
+            <div
+              css={`
+                display: flex;
+                align-items: center;
+                gap: 4px;
+                flex-shrink: 0;
+                span {
+                  margin-bottom: -7px;
+                }
+              `}
+            >
+              <span>
+                <CloudDoneIcon htmlColor="#70777E" />
+              </span>
+              <p
                 css={`
-                  display: flex;
-                  align-items: center;
-                  gap: 4px;
-                  span {
-                    margin-bottom: -7px;
-                  }
+                  color: #70777e;
+                  font-family: "GothamNarrow-Book", sans-serif;
+                  font-size: 12px;
+                  font-weight: 325;
+                  margin: 0px;
+                  margin-top: 2px;
                 `}
               >
-                <span>
-                  <CloudDoneIcon htmlColor="#70777E" />
-                </span>
-                <p
-                  css={`
-                    color: #70777e;
-                    font-family: "GothamNarrow-Book", sans-serif;
-                    font-size: 12px;
-                    font-weight: 325;
-                    margin: 0px;
-                    margin-top: 2px;
-                  `}
-                >
-                  All changes saved{" "}
-                </p>
-              </div>
-            )}
-          </div>
+                All changes saved{" "}
+              </p>
+            </div>
+          )}
         </div>
 
         <div css={styles.endContainer}>
