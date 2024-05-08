@@ -3,7 +3,7 @@ import { css } from "styled-components";
 export const layoutcss = css`
   margin-top: 3rem;
 `;
-export const tabcss = (active: boolean) => css`
+export const tabcss = (active: boolean, disabled: boolean) => css`
   width: 224px;
   height: 48px;
   border: 1px solid #231d2c;
@@ -13,6 +13,8 @@ export const tabcss = (active: boolean) => css`
   justify-content: space-between;
   align-items: center;
   padding: 12px 24px;
+  pointer-events: ${disabled ? "none" : "auto"};
+  opacity: ${disabled ? "0.25" : "1"};
   cursor: pointer;
   p {
     text-transform: capitalize;
@@ -38,7 +40,7 @@ export const flexContainercss = css`
   display: grid;
   grid-template-columns: 31% auto;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 `;
 export const bigAvicss = css`
   width: 223px;
@@ -63,9 +65,10 @@ export const avicss = css`
   align-items: center;
   border-radius: 50%;
   justify-self: flex-start;
+  font-family: "GothamNarrow-Bold", sans-serif;
+  font-size: 22.0606px;
+  line-height: 32px;
   b {
-    font-size: 22.0606px;
-    line-height: 32px;
   }
 `;
 export const inputcss = css`

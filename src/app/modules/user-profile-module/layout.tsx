@@ -19,18 +19,18 @@ export default function UserProfileLayout() {
   const { tab: activeTab } = useParams<{ tab: string }>();
 
   const tabList = [
-    // {
-    //   title: "profile",
-    //   component: (active: boolean) => <RightIcon active={active} />,
-    // },
+    {
+      title: "profile",
+      component: (active: boolean) => <RightIcon active={active} />,
+    },
     {
       title: "settings",
       component: (active: boolean) => <RightIcon active={active} />,
     },
-    // {
-    //   title: "billing",
-    //   component: (active: boolean) => <RightIcon active={active} />,
-    // },
+    {
+      title: "billing",
+      component: (active: boolean) => <RightIcon active={active} />,
+    },
     {
       title: "Log Out",
       component: (active: boolean) => <LogOutIcon active={active} />,
@@ -49,7 +49,13 @@ export default function UserProfileLayout() {
     <div css={layoutcss}>
       <Container maxWidth="lg">
         <PageTopSpacer />
-        <Grid container spacing={3}>
+        <Grid
+          container
+          spacing={3}
+          css={`
+            position: relative;
+          `}
+        >
           <Grid item xs={12} sm={6} md={5} lg={4}>
             <Box height={20} />
             <div css={bigAvicss}>
@@ -67,6 +73,7 @@ export default function UserProfileLayout() {
                     active={tab.title === activeTab}
                     handleClick={() => handleTabClick(index, tab.title)}
                     component={() => tab.component(tab.title === activeTab)}
+                    disabled={tab.title === "billing"}
                   />
                   <Box height={10} />
                 </div>
