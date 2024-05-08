@@ -6,6 +6,7 @@ import { ReactComponent as FullEllipse } from "app/modules/home-module/assets/co
 import NewsletterForm from "app/modules/common/newsletterForm";
 import { FieldErrors } from "react-hook-form";
 import axios, { AxiosError, AxiosResponse } from "axios";
+import { useTitle } from "react-use";
 
 const DXLogo = (
   <svg
@@ -27,6 +28,8 @@ const DXLogo = (
 );
 
 export default function ContactModule() {
+  useTitle("DX DataXplorer - Contact");
+
   const [isSubscribed, setIsSubscribed] = React.useState(false);
   const [isSubscriptionFailed, setIsSubscriptionFailed] = React.useState(false);
   const [openSnackbar, setOpenSnackbar] = React.useState(false);

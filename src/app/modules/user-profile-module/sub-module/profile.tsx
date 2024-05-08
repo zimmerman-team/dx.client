@@ -3,6 +3,7 @@ import { PrimaryButton } from "app/components/Styled/button";
 import React from "react";
 import PasswordInput from "../component/passwordInput";
 import { avicss, flexContainercss, inputcss, profilecss } from "../style";
+import { useTitle } from "react-use";
 
 interface State {
   password: string;
@@ -10,6 +11,8 @@ interface State {
 }
 
 export default function Profile() {
+  useTitle("DX DataXplorer - User Profile");
+
   const [values, setValues] = React.useState({
     password: "",
     showPassword: false,

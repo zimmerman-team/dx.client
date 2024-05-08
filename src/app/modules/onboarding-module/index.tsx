@@ -7,8 +7,11 @@ import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { Route, Switch, useHistory, useLocation } from "react-router-dom";
 import AuthCard from "app/modules/onboarding-module/component/card";
 import OnboardingRightDeco from "app/modules/onboarding-module/asset/onboardingRight-img.svg";
+import { useTitle } from "react-use";
 
 export default function Onboarding() {
+  useTitle("DX DataXplorer - Onboarding");
+
   const history = useHistory();
   const location = useLocation();
   const { isAuthenticated } = useAuth0();

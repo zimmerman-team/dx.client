@@ -9,8 +9,11 @@ import { useParams } from "react-router-dom";
 import { DatasetListItemAPIModel } from "app/modules/dataset-module/data";
 import { useAuth0 } from "@auth0/auth0-react";
 import { PageLoader } from "app/modules/common/page-loader";
+import { useTitle } from "react-use";
 
 export default function DatasetDetail() {
+  useTitle("DX DataXplorer - Dataset Detail");
+
   const { page } = useParams<{ page: string }>();
   const { user, isAuthenticated } = useAuth0();
 

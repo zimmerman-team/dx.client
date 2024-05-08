@@ -22,6 +22,7 @@ import ExternalSearch, {
 } from "app/modules/dataset-upload-module/upload-steps/externalSearch";
 import Stepper from "app/modules/dataset-upload-module/component/stepper";
 import { Box } from "@material-ui/core";
+import { useTitle } from "react-use";
 
 interface Props {
   datasetId: string;
@@ -29,6 +30,8 @@ interface Props {
 }
 
 function DatasetUploadSteps(props: Props) {
+  useTitle("DX DataXplorer - Upload Dataset");
+
   const { user } = useAuth0();
   const token = useStoreState((state) => state.AuthToken.value);
   const steps = ["Connect", "Processing Data", "Description", "Finished"];
