@@ -133,8 +133,7 @@ export default function ExploreAssetsModule() {
 
   return (
     <React.Fragment>
-      <Box height={45} />
-      {!isAuthenticated ? <EmpowerBlock view="explore" /> : null}
+      {!isAuthenticated ? <EmpowerBlock view="explore" /> : <Box height={48} />}
       <Container
         maxWidth="lg"
         ref={exploreViewRef}

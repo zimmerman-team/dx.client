@@ -20,6 +20,9 @@ import {
 } from "@auth0/auth0-react";
 import axios from "axios";
 
+const LandingModule = lazy(
+  () => import("app/modules/home-module/sub-modules/landing")
+);
 const HomeModule = lazy(() => import("app/modules/home-module"));
 const PartnersModule = lazy(
   () => import("app/modules/home-module/sub-modules/partners")
@@ -237,6 +240,9 @@ export function MainRoutes() {
           </RouteWithAppBar>
           <RouteWithAppBar exact path="/about">
             <AboutModule />
+          </RouteWithAppBar>
+          <RouteWithAppBar exact path="/landing">
+            <LandingModule />
           </RouteWithAppBar>
           <RouteWithAppBar exact path="/chart/:page/:view?">
             <ChartModule />

@@ -1,15 +1,18 @@
 import { css } from "styled-components/macro";
+import styled from "styled-components/macro";
 
-export const empowercss = css`
-  display: flex;
-  height: 445px;
+import Ellipses from "app/modules/home-module/assets/ellipses.svg";
+
+export const empowercss = (view: string) => css`
+  height: ${view === "landing" ? "533px" : "418px"};
   position: relative;
-  align-items: center;
-  flex-direction: column;
-  justify-content: center;
-  padding: 113px 0 55px 0;
+  margin-top: 48px;
+  padding: 78px 0 55px 0;
   font-family: "GothamNarrow-Bold", sans-serif;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #f2f7fd 100%);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #f2f7fd 100%),
+    url(${Ellipses});
+  background-repeat: no-repeat;
+  background-size: auto, cover;
   a {
     text-decoration: none;
   }
@@ -21,7 +24,7 @@ export const empowercss = css`
     line-height: 48px;
     white-space: pre-line;
     text-align: center;
-    margin-bottom: 36px;
+    margin-bottom: ${view === "landing" ? "14px" : "26px"};
     font-family: "GothamNarrow-Bold", sans-serif;
   }
   p {
@@ -35,7 +38,7 @@ export const empowercss = css`
   div {
     gap: 34px;
     display: flex;
-    margin-top: 40px;
+    margin-top: ${view === "landing" ? "28px" : "50px"};
     align-items: center;
     justify-content: center;
   }
@@ -227,5 +230,22 @@ export const bestDecisioncss = css`
         cursor: pointer;
       }
     }
+  }
+`;
+
+export const ClimateButton = styled.button`
+  padding: 12px 27px;
+  border-radius: 30px;
+  outline: none;
+  border: none;
+  color: #ffffff;
+  font-family: "Inter", sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  text-transform: uppercase;
+  background: ${(props) => (props.color ? props.color : "inherit")};
+  :hover {
+    opacity: 0.8;
+    cursor: pointer;
   }
 `;
