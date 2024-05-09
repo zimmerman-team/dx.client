@@ -278,288 +278,287 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
         message="Link copied to clipboard"
         data-testid="copied-link-snackbar"
       />
-      <div css={styles.innercontainer}>
-        <div
-          ref={titleRef}
-          css={`
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            width: 72%;
-            position: relative;
-          `}
-        >
-          <AutoResizeInput
-            name={props.name}
-            setName={props.setName}
-            placeholder="Title"
-            autoResize={true}
-            maxWidth={
-              (titleRef.current?.offsetWidth as number) - saveStatusDivWidth
-            }
-            spanBuffer={saveStatusDivWidth}
-            minWidth={100}
-            spanVisibility={inputSpanVisibiltiy}
-            setSpanVisibility={setInputSpanVisibility}
-            onClick={(e) => {
-              if (props.name === "Untitled Chart") {
-                e.currentTarget.value = "";
+      <Container maxWidth="lg">
+        <div css={styles.innercontainer}>
+          <div
+            ref={titleRef}
+            css={`
+              display: flex;
+              align-items: center;
+              gap: 12px;
+              width: 72%;
+              position: relative;
+            `}
+          >
+            <AutoResizeInput
+              name={props.name}
+              setName={props.setName}
+              placeholder="Title"
+              autoResize={false}
+              maxWidth={titleRef.current?.offsetWidth as number}
+              spanBuffer={0}
+              minWidth={100}
+              spanVisibility={inputSpanVisibiltiy}
+              setSpanVisibility={setInputSpanVisibility}
+              onClick={(e) => {
+                if (props.name === "Untitled Chart") {
+                  e.currentTarget.value = "";
+                }
+              }}
+              onBlur={() => {
+                props.setHasSubHeaderTitleBlurred?.(true);
+                setInputSpanVisibility(true);
+              }}
+              onFocus={() => {
+                props.setHasSubHeaderTitleFocused?.(true);
+                props.setHasSubHeaderTitleBlurred?.(false);
+                setInputSpanVisibility(false);
+              }}
+              disabled={props.isPreviewView}
+              style={
+                page !== "new" && !view
+                  ? {
+                      pointerEvents: "none",
+                    }
+                  : {}
               }
-            }}
-            onBlur={() => {
-              props.setHasSubHeaderTitleBlurred?.(true);
-              setInputSpanVisibility(true);
-            }}
-            onFocus={() => {
-              props.setHasSubHeaderTitleFocused?.(true);
-              props.setHasSubHeaderTitleBlurred?.(false);
-              setInputSpanVisibility(false);
-            }}
-            disabled={props.isPreviewView}
-            style={
-              page !== "new" && !view
-                ? {
-                    pointerEvents: "none",
+            />
+          </div>
+
+          <div css={styles.endContainer}>
+            {editChartLoading && canChartEditDelete && (
+              <div
+                css={`
+                  display: flex;
+                  align-items: center;
+                  gap: 4px;
+                  span {
+                    margin-bottom: -4px;
                   }
-                : {}
-            }
-          />
-          {editChartLoading && canChartEditDelete && (
-            <div
-              css={`
-                display: flex;
-                align-items: center;
-                gap: 4px;
-                span {
-                  margin-bottom: -4px;
-                }
-              `}
-            >
-              <span>
-                <AutorenewIcon
-                  htmlColor="#70777E"
-                  className={classes.rotateIcon}
-                />
-              </span>
-              <p
-                css={`
-                  color: #70777e;
-                  font-family: "GothamNarrow-Book", sans-serif;
-                  font-size: 12px;
-                  font-weight: 325;
-                  margin: 0px;
                 `}
               >
-                saving changes{" "}
-              </p>
-            </div>
-          )}
-          {props.savedChanges && canChartEditDelete && (
-            <div
-              css={`
-                display: flex;
-                align-items: center;
-                gap: 4px;
-                flex-shrink: 0;
-                span {
-                  margin-bottom: -7px;
-                }
-              `}
-            >
-              <span>
-                <CloudDoneIcon htmlColor="#70777E" />
-              </span>
-              <p
-                css={`
-                  color: #70777e;
-                  font-family: "GothamNarrow-Book", sans-serif;
-                  font-size: 12px;
-                  font-weight: 325;
-                  margin: 0px;
-                  margin-top: 2px;
-                `}
-              >
-                All changes saved{" "}
-              </p>
-            </div>
-          )}
-        </div>
-
-        <div css={styles.endContainer}>
-          {chartFromReport.state && (
-            <button
-              onClick={handleBackToReport}
-              css={styles.backToReport}
-              type="button"
-              data-testid="back-to-report-button"
-              data-cy="back-to-report-button"
-            >
-              Back to the report
-            </button>
-          )}
-          {view === "preview" && (
-            <button
-              onClick={handleBackToEdit}
-              css={styles.backToEdit}
-              type="button"
-              data-testid="back-to-edit-button"
-            >
-              <EditIcon htmlColor="#fff" />
-              Go back to editing
-            </button>
-          )}
-
-          <div css={styles.iconbtns}>
-            {(page === "new" || view) && canChartEditDelete && (
-              <React.Fragment>
-                <div
+                <span>
+                  <AutorenewIcon
+                    htmlColor="#70777E"
+                    className={classes.rotateIcon}
+                  />
+                </span>
+                <p
                   css={`
-                    display: flex;
-                    gap: 14px;
-                    align-items: center;
-                    margin-right: 17px;
+                    color: #70777e;
+                    font-family: "GothamNarrow-Book", sans-serif;
+                    font-size: 12px;
+                    font-weight: 325;
+                    margin: 0px;
                   `}
                 >
-                  <span
-                    css={`
-                      color: #000;
+                  saving changes{" "}
+                </p>
+              </div>
+            )}
+            {props.savedChanges && canChartEditDelete && (
+              <div
+                css={`
+                  display: flex;
+                  align-items: center;
+                  gap: 4px;
+                  flex-shrink: 0;
+                  span {
+                    margin-bottom: -7px;
+                  }
+                `}
+              >
+                <span>
+                  <CloudDoneIcon htmlColor="#70777E" />
+                </span>
+                <p
+                  css={`
+                    color: #70777e;
+                    font-family: "GothamNarrow-Book", sans-serif;
+                    font-size: 12px;
+                    font-weight: 325;
+                    margin: 0px;
+                    margin-top: 2px;
+                  `}
+                >
+                  All changes saved{" "}
+                </p>
+              </div>
+            )}
+            {chartFromReport.state && (
+              <button
+                onClick={handleBackToReport}
+                css={styles.backToReport}
+                type="button"
+                data-testid="back-to-report-button"
+                data-cy="back-to-report-button"
+              >
+                Back to the report
+              </button>
+            )}
+            {view === "preview" && (
+              <button
+                onClick={handleBackToEdit}
+                css={styles.backToEdit}
+                type="button"
+                data-testid="back-to-edit-button"
+              >
+                <EditIcon htmlColor="#fff" />
+                Go back to editing
+              </button>
+            )}
 
-                      font-family: "GothamNarrow-Book", sans-serif;
-                      font-size: 12px;
-                      font-style: normal;
-                      font-weight: 325;
-                      margin-right: 10px;
+            <div css={styles.iconbtns}>
+              {(page === "new" || view) && canChartEditDelete && (
+                <React.Fragment>
+                  <div
+                    css={`
+                      display: flex;
+                      gap: 14px;
+                      align-items: center;
+                      margin-right: 17px;
                     `}
                   >
-                    AutoSave
-                  </span>
-                  <AutoSaveSwitch
-                    disabled={!props.enableAutoSaveSwitch}
-                    checked={props.autoSave}
-                    setAutoSave={
-                      props.setAutoSaveState as React.Dispatch<
-                        React.SetStateAction<{
-                          isAutoSaveEnabled: boolean;
-                          showAutoSaveSwitch?: boolean;
-                        }>
-                      >
-                    }
-                  />
-                </div>
+                    <span
+                      css={`
+                        color: #000;
 
-                <Tooltip title="Preview">
-                  <span>
-                    <IconButton
-                      onClick={handlePreviewMode}
-                      aria-label="preview-button"
-                      disabled={isPreviewDisabled}
-                      data-testid="preview-button"
-                      css={`
-                        :disabled {
-                          opacity: 0.5;
-                        }
+                        font-family: "GothamNarrow-Book", sans-serif;
+                        font-size: 12px;
+                        font-style: normal;
+                        font-weight: 325;
+                        margin-right: 10px;
                       `}
                     >
-                      <svg width="20" height="19" viewBox="0 0 20 19">
-                        <rect width="20" height="19" rx="3" fill="#262C34" />
-                        <path
-                          fill="#EFEFEF"
-                          d="M14 9L6.5 13.3301L6.5 4.66987L14 9Z"
-                        />
-                      </svg>
-                    </IconButton>
-                  </span>
-                </Tooltip>
-                <Tooltip title="Save">
-                  <span>
-                    <IconButton
-                      onClick={props.onSave}
-                      aria-label="save-button"
-                      disabled={isSavedDisabled}
-                      css={`
-                        :disabled {
-                          opacity: 0.5;
-                        }
-                      `}
-                    >
-                      <SaveIcon htmlColor="#262c34" />
-                    </IconButton>
-                  </span>
-                </Tooltip>
-              </React.Fragment>
-            )}
-            {page !== "new" && !view && (
-              <React.Fragment>
-                <ExportChartButton />
-                {isAuthenticated && (
-                  <Tooltip title="Duplicate">
-                    <IconButton
-                      onClick={handleDuplicate}
-                      aria-label="duplicate-button"
-                    >
-                      <FileCopyIcon htmlColor="#262c34" />
-                    </IconButton>
-                  </Tooltip>
-                )}
-                <Tooltip title="Share">
-                  <IconButton onClick={handleClick} aria-label="share-button">
-                    <ShareIcon htmlColor="#262c34" />
-                  </IconButton>
-                </Tooltip>
-                <Popover
-                  id={id}
-                  open={open}
-                  anchorEl={anchorEl}
-                  onClose={handleClose}
-                  anchorOrigin={{
-                    vertical: "bottom",
-                    horizontal: "right",
-                  }}
-                  transformOrigin={{
-                    vertical: "top",
-                    horizontal: "right",
-                  }}
-                  css={`
-                    .MuiPaper-root {
-                      border-radius: 10px;
-                      background: #495057;
-                    }
-                  `}
-                  aria-label="copy-link-popover"
-                >
-                  <div css={styles.sharePopup} data-testid="copy-link-action">
-                    <CopyToClipboard
-                      text={window.location.href}
-                      onCopy={handleCopy}
-                    >
-                      <Button startIcon={<LinkIcon />}>Copy link</Button>
-                    </CopyToClipboard>
+                      AutoSave
+                    </span>
+                    <AutoSaveSwitch
+                      disabled={!props.enableAutoSaveSwitch}
+                      checked={props.autoSave}
+                      setAutoSave={
+                        props.setAutoSaveState as React.Dispatch<
+                          React.SetStateAction<{
+                            isAutoSaveEnabled: boolean;
+                            showAutoSaveSwitch?: boolean;
+                          }>
+                        >
+                      }
+                    />
                   </div>
-                </Popover>
-                {canChartEditDelete && (
-                  <Tooltip title="Edit">
-                    <IconButton onClick={handleEdit} aria-label="edit-button">
-                      <EditIcon htmlColor="#262c34" />
+
+                  <Tooltip title="Preview">
+                    <span>
+                      <IconButton
+                        onClick={handlePreviewMode}
+                        aria-label="preview-button"
+                        disabled={isPreviewDisabled}
+                        data-testid="preview-button"
+                        css={`
+                          :disabled {
+                            opacity: 0.5;
+                          }
+                        `}
+                      >
+                        <svg width="20" height="19" viewBox="0 0 20 19">
+                          <rect width="20" height="19" rx="3" fill="#262C34" />
+                          <path
+                            fill="#EFEFEF"
+                            d="M14 9L6.5 13.3301L6.5 4.66987L14 9Z"
+                          />
+                        </svg>
+                      </IconButton>
+                    </span>
+                  </Tooltip>
+                  <Tooltip title="Save">
+                    <span>
+                      <IconButton
+                        onClick={props.onSave}
+                        aria-label="save-button"
+                        disabled={isSavedDisabled}
+                        css={`
+                          :disabled {
+                            opacity: 0.5;
+                          }
+                        `}
+                      >
+                        <SaveIcon htmlColor="#262c34" />
+                      </IconButton>
+                    </span>
+                  </Tooltip>
+                </React.Fragment>
+              )}
+              {page !== "new" && !view && (
+                <React.Fragment>
+                  <ExportChartButton />
+                  {isAuthenticated && (
+                    <Tooltip title="Duplicate">
+                      <IconButton
+                        onClick={handleDuplicate}
+                        aria-label="duplicate-button"
+                      >
+                        <FileCopyIcon htmlColor="#262c34" />
+                      </IconButton>
+                    </Tooltip>
+                  )}
+                  <Tooltip title="Share">
+                    <IconButton onClick={handleClick} aria-label="share-button">
+                      <ShareIcon htmlColor="#262c34" />
                     </IconButton>
                   </Tooltip>
-                )}
-                {canChartEditDelete && (
-                  <Tooltip title="Delete">
-                    <IconButton
-                      onClick={handleModalDisplay}
-                      aria-label="delete-button"
-                    >
-                      <DeleteIcon htmlColor="#262c34" />
-                    </IconButton>
-                  </Tooltip>
-                )}
-              </React.Fragment>
-            )}
+                  <Popover
+                    id={id}
+                    open={open}
+                    anchorEl={anchorEl}
+                    onClose={handleClose}
+                    anchorOrigin={{
+                      vertical: "bottom",
+                      horizontal: "right",
+                    }}
+                    transformOrigin={{
+                      vertical: "top",
+                      horizontal: "right",
+                    }}
+                    css={`
+                      .MuiPaper-root {
+                        border-radius: 10px;
+                        background: #495057;
+                      }
+                    `}
+                    aria-label="copy-link-popover"
+                  >
+                    <div css={styles.sharePopup} data-testid="copy-link-action">
+                      <CopyToClipboard
+                        text={window.location.href}
+                        onCopy={handleCopy}
+                      >
+                        <Button startIcon={<LinkIcon />}>Copy link</Button>
+                      </CopyToClipboard>
+                    </div>
+                  </Popover>
+                  {canChartEditDelete && (
+                    <Tooltip title="Edit">
+                      <IconButton onClick={handleEdit} aria-label="edit-button">
+                        <EditIcon htmlColor="#262c34" />
+                      </IconButton>
+                    </Tooltip>
+                  )}
+                  {canChartEditDelete && (
+                    <Tooltip title="Delete">
+                      <IconButton
+                        onClick={handleModalDisplay}
+                        aria-label="delete-button"
+                      >
+                        <DeleteIcon htmlColor="#262c34" />
+                      </IconButton>
+                    </Tooltip>
+                  )}
+                </React.Fragment>
+              )}
+            </div>
           </div>
         </div>
-      </div>
-      {/* <Container maxWidth="lg">
-      </Container> */}
+      </Container>
+
       <InfoSnackbar
         anchorOrigin={{
           vertical: snackbarState.vertical,

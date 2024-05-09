@@ -64,7 +64,6 @@ export function ReportSubheaderToolbar(
   const [enableButton, setEnableButton] = React.useState<boolean>(false);
   const [inputSpanVisibiltiy, setInputSpanVisibility] = React.useState(true);
   const setHomeTab = useRecoilState(homeDisplayAtom)[1];
-  const [autoResizeInput, _setAutoResizeInput] = React.useState<boolean>(true);
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
   const [duplicatedReportId, setDuplicatedReportId] = React.useState<
     string | null
@@ -111,8 +110,7 @@ export function ReportSubheaderToolbar(
   const reportEditLoading = useStoreState(
     (state) => state.reports.ReportUpdate.loading
   );
-  const saveStatusDivWidth =
-    (savedChanges || reportEditLoading ? 150 : 0) + 150;
+  const saveStatusDivWidth = savedChanges || reportEditLoading ? 150 : 0;
 
   React.useEffect(() => {
     // handles saved changes state for autosave
@@ -256,12 +254,12 @@ export function ReportSubheaderToolbar(
               name={props.name}
               setName={props.setName}
               placeholder="Title"
-              autoResize={autoResizeInput}
+              autoResize={true}
               maxWidth={
                 (titleRef.current?.offsetWidth as number) - saveStatusDivWidth
               }
               spanBuffer={saveStatusDivWidth}
-              minWidth={100}
+              minWidth={200}
               spanVisibility={inputSpanVisibiltiy}
               setSpanVisibility={setInputSpanVisibility}
               onClick={(e) => {
@@ -287,81 +285,89 @@ export function ReportSubheaderToolbar(
                   : {}
               }
             />
-            {view === "edit" && (
-              <button
-                css={styles.viewReportBtn}
-                onClick={handleViewReport}
-                data-cy="view-report-button"
-                aria-label="view report button"
-              >
-                <PlayIcon />
-                View Report
-              </button>
-            )}
-            {reportEditLoading && (
-              <div
-                css={`
-                  display: flex;
-                  align-items: center;
-                  gap: 4px;
-                  span {
-                    margin-bottom: -4px;
-                  }
-                `}
-              >
-                <span>
-                  <AutorenewIcon
-                    htmlColor="#70777E"
-                    className={classes.rotateIcon}
-                  />
-                </span>
-                <p
-                  css={`
-                    color: #70777e;
-                    font-family: "GothamNarrow-Book", sans-serif;
-                    font-size: 12px;
-                    font-weight: 325;
-                    margin: 0px;
-                  `}
+            <div
+              css={`
+                display: flex;
+                flex-shrink: 0;
+                gap: 12px;
+              `}
+            >
+              {view === "edit" && (
+                <button
+                  css={styles.viewReportBtn}
+                  onClick={handleViewReport}
+                  data-cy="view-report-button"
+                  aria-label="view report button"
                 >
-                  saving changes{" "}
-                </p>
-              </div>
-            )}
-            {savedChanges && (
-              <div
-                css={`
-                  display: flex;
-                  align-items: center;
-                  gap: 4px;
-                  span {
-                    margin-bottom: -7px;
-                  }
-                `}
-              >
-                <span>
-                  <CloudDoneIcon htmlColor="#70777E" />
-                </span>
-                <p
-                  css={`
-                    color: #70777e;
-                    font-family: "GothamNarrow-Book", sans-serif;
-                    font-size: 12px;
-                    font-weight: 325;
-                    margin: 0px;
-                    margin-top: 2px;
-                  `}
-                >
-                  All changes saved{" "}
-                </p>
-              </div>
-            )}
+                  <PlayIcon />
+                  View Report
+                </button>
+              )}
+            </div>
           </div>
 
           {view !== "initial" && (
             <>
               {(page === "new" || view) && (
                 <div css={styles.endContainer}>
+                  {reportEditLoading && (
+                    <div
+                      css={`
+                        display: flex;
+                        align-items: center;
+                        gap: 4px;
+                        span {
+                          margin-bottom: -4px;
+                        }
+                      `}
+                    >
+                      <span>
+                        <AutorenewIcon
+                          htmlColor="#70777E"
+                          className={classes.rotateIcon}
+                        />
+                      </span>
+                      <p
+                        css={`
+                          color: #70777e;
+                          font-family: "GothamNarrow-Book", sans-serif;
+                          font-size: 12px;
+                          font-weight: 325;
+                          margin: 0px;
+                        `}
+                      >
+                        saving changes{" "}
+                      </p>
+                    </div>
+                  )}
+                  {savedChanges && (
+                    <div
+                      css={`
+                        display: flex;
+                        align-items: center;
+                        gap: 4px;
+                        span {
+                          margin-bottom: -7px;
+                        }
+                      `}
+                    >
+                      <span>
+                        <CloudDoneIcon htmlColor="#70777E" />
+                      </span>
+                      <p
+                        css={`
+                          color: #70777e;
+                          font-family: "GothamNarrow-Book", sans-serif;
+                          font-size: 12px;
+                          font-weight: 325;
+                          margin: 0px;
+                          margin-top: 2px;
+                        `}
+                      >
+                        All changes saved{" "}
+                      </p>
+                    </div>
+                  )}
                   <div
                     css={`
                       display: flex;

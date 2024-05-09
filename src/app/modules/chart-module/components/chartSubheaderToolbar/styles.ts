@@ -11,7 +11,7 @@ export const styles = {
     position: fixed;
     background: #f4f4f4;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: center;
   `,
   innercontainer: css`
     height: 100%;
@@ -20,8 +20,6 @@ export const styles = {
     flex-direction: row;
     justify-content: space-between;
     gap: 10px;
-    padding-left: 13.3%;
-    padding-right: 1.8%;
     @media (max-width: 1280px) {
       /* margin-left: 0; */
       /* width: calc(100vw - 400px); */
