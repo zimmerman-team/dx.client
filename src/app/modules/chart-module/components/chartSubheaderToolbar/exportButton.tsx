@@ -25,7 +25,6 @@ export function ExportChartButton(props: { filename: string }) {
     if (value === ".png") {
       exportPage("png", "#f2f7fd", filename);
     }
-
     if (value === ".svg") {
       exportPage("svg", "#f2f7fd", filename);
     }
