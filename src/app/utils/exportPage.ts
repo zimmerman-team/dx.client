@@ -9,12 +9,15 @@ export function exportPage(type: string, bgcolor: string, filename: string) {
     node = document.getElementById("common-chart-render-container");
   }
   // const filter = (n: any) => n.id !== "app-bar" && n.id !== "subheader-toolbar";
-  if (type === "jpg") {
+  if (type === "png") {
     domtoimage
-      .toJpeg(node, { bgcolor })
+      .toPng(node, {
+        bgcolor,
+        filename,
+      })
       .then((dataUrl: any) => {
         const link = document.createElement("a");
-        link.download = `${filename}.jpg`;
+        link.download = `${filename}.png`;
         link.href = dataUrl;
         link.click();
       })
@@ -52,13 +55,10 @@ export function exportPage(type: string, bgcolor: string, filename: string) {
       .save(`${filename}.pdf`);
   } else {
     domtoimage
-      .toPng(node, {
-        bgcolor,
-        filename,
-      })
+      .toJpeg(node, { bgcolor })
       .then((dataUrl: any) => {
         const link = document.createElement("a");
-        link.download = `${filename}.png`;
+        link.download = `${filename}.jpg`;
         link.href = dataUrl;
         link.click();
       })

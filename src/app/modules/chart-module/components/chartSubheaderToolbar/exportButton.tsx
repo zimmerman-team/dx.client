@@ -21,16 +21,11 @@ export function ExportChartButton(props: { filename: string }) {
     setAnchorEl(null);
   }
 
-  function handleTypeChange(
-    value: ".svg" | ".png" | ".jpg" | ".pdf",
-    filename: string
-  ) {
+  function handleTypeChange(value: ".svg" | ".png" | ".pdf", filename: string) {
     if (value === ".png") {
       exportPage("png", "#f2f7fd", filename);
     }
-    if (value === ".jpg") {
-      exportPage("jpg", "#f2f7fd", filename);
-    }
+
     if (value === ".svg") {
       exportPage("svg", "#f2f7fd", filename);
     }
@@ -66,11 +61,7 @@ export function ExportChartButton(props: { filename: string }) {
         >
           .png
         </StyledMenuItem>
-        <StyledMenuItem
-          onClick={() => handleTypeChange(".jpg", props.filename)}
-        >
-          .jpg
-        </StyledMenuItem>
+
         <StyledMenuItem
           onClick={() => handleTypeChange(".svg", props.filename)}
         >
