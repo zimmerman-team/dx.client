@@ -592,6 +592,7 @@ export default function ChartModule() {
                   loading={loading}
                   loadDataset={loadDataset}
                   setChartFromAPI={setChartFromAPI}
+                  setVisualOptions={setVisualOptions}
                 />
               </Route>
               <Route path="/chart/:page/preview-data">

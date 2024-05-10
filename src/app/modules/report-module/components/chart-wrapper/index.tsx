@@ -274,6 +274,7 @@ export function ReportChartWrapper(props: Props) {
         setNotFound={setNotFound}
         inChartWrapper={true}
         chartPreviewInReport={props.chartPreviewInReport}
+        mapping={chartFromAPI?.mapping}
       />
     </div>
   );

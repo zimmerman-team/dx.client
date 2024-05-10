@@ -343,6 +343,7 @@ export interface ChartRenderedItem {
   mappedData: any;
   dimensions: any;
   ssr: boolean;
+  mapping?: any;
 }
 
 export interface DatasetAPIModel {
