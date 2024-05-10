@@ -2,6 +2,7 @@ import { css } from "styled-components/macro";
 import styled from "styled-components/macro";
 
 import Ellipses from "app/modules/home-module/assets/ellipses.svg";
+import Ellipses2 from "app/modules/home-module/assets/ellipses-2.svg";
 
 export const empowercss = (view: string) => css`
   height: ${view === "landing" ? "533px" : "418px"};
@@ -9,10 +10,10 @@ export const empowercss = (view: string) => css`
   margin-top: 48px;
   padding: 78px 0 55px 0;
   font-family: "GothamNarrow-Bold", sans-serif;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #f2f7fd 100%),
-    url(${Ellipses});
+  background: url(${view === "landing" ? Ellipses2 : Ellipses}),
+    linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #f2f7fd 100%);
   background-repeat: no-repeat;
-  background-size: auto, cover;
+  background-size: 100% 100%, auto;
   a {
     text-decoration: none;
   }
@@ -66,7 +67,7 @@ export const empowercss = (view: string) => css`
 `;
 
 export const TopRightEllipseCss = css`
-  top: 0;
+  top: -48px;
   right: 0;
   z-index: 1;
   position: absolute;
