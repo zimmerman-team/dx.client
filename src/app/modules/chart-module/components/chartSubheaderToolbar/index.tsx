@@ -42,6 +42,8 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
   const { user, isAuthenticated } = useAuth0();
   const token = useStoreState((state) => state.AuthToken.value);
   const titleRef = React.useRef<HTMLDivElement>(null);
+  const innerContainerRef = React.useRef<HTMLDivElement>(null);
+  const innerContainerWidth = innerContainerRef?.current?.offsetWidth;
   const { page, view } = useParams<{ page: string; view?: string }>();
   const [showDeleteDialog, setShowDeleteDialog] = React.useState(false);
   const [enableButton, setEnableButton] = React.useState<boolean>(false);
@@ -279,7 +281,7 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
         data-testid="copied-link-snackbar"
       />
       <Container maxWidth="lg">
-        <div css={styles.innercontainer}>
+        <div css={styles.innercontainer} ref={innerContainerRef}>
           <div
             ref={titleRef}
             css={`
@@ -325,7 +327,14 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
             />
           </div>
 
-          <div css={styles.endContainer}>
+          <div
+            css={`
+              ${styles.endContainer}
+              margin-right: ${`calc(((100vw - ${
+                (innerContainerWidth as number) + 48
+              }px) / 2) * -1)`};
+            `}
+          >
             {editChartLoading && canChartEditDelete && (
               <div
                 css={`

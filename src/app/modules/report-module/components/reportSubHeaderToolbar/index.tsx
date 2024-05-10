@@ -110,7 +110,6 @@ export function ReportSubheaderToolbar(
   const reportEditLoading = useStoreState(
     (state) => state.reports.ReportUpdate.loading
   );
-  const saveStatusDivWidth = savedChanges || reportEditLoading ? 150 : 0;
 
   React.useEffect(() => {
     // handles saved changes state for autosave
@@ -119,7 +118,7 @@ export function ReportSubheaderToolbar(
       setSavedChanges(true);
       timeout = setTimeout(() => {
         setSavedChanges(false);
-      }, 3000);
+      }, 1000);
     }
     return () => {
       clearTimeout(timeout);
@@ -255,10 +254,8 @@ export function ReportSubheaderToolbar(
               setName={props.setName}
               placeholder="Title"
               autoResize={true}
-              maxWidth={
-                (titleRef.current?.offsetWidth as number) - saveStatusDivWidth
-              }
-              spanBuffer={saveStatusDivWidth}
+              maxWidth={(titleRef.current?.offsetWidth as number) - 100}
+              spanBuffer={150}
               minWidth={200}
               spanVisibility={inputSpanVisibiltiy}
               setSpanVisibility={setInputSpanVisibility}

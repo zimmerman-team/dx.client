@@ -20,10 +20,6 @@ export const styles = {
     flex-direction: row;
     justify-content: space-between;
     gap: 10px;
-    @media (max-width: 1280px) {
-      /* margin-left: 0; */
-      /* width: calc(100vw - 400px); */
-    }
 
     @media (max-width: 600px) {
       padding: 13px 16px 0 16px;
@@ -127,7 +123,6 @@ export const styles = {
   `,
   endContainer: css`
     display: flex;
-    right: 29px;
     gap: 13px;
     flex-shrink: 0;
     justify-content: flex-end;
