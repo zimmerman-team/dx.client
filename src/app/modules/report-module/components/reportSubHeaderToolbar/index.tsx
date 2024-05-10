@@ -405,7 +405,7 @@ export function ReportSubheaderToolbar(
               )}
               {page !== "new" && !view && (
                 <div css={styles.previewEndContainer}>
-                  <ExportChartButton />
+                  <ExportChartButton filename={props.name} />
                   {isAuthenticated && (
                     <Tooltip title="Duplicate">
                       <IconButton
