@@ -1,8 +1,9 @@
-import { Box } from "@material-ui/core";
 import { PrimaryButton } from "app/components/Styled/button";
 import React from "react";
-import PasswordInput from "../component/passwordInput";
 import { avicss, flexContainercss, inputcss, profilecss } from "../style";
+import { useAuth0 } from "@auth0/auth0-react";
+import axios from "axios";
+import { useStoreState } from "app/state/store/hooks";
 
 interface State {
   password: string;
@@ -10,24 +11,57 @@ interface State {
 }
 
 export default function Profile() {
+  const { user, getAccessTokenSilently } = useAuth0();
+  const token = useStoreState((state) => state.AuthToken.value);
+
   const [values, setValues] = React.useState({
-    password: "",
-    showPassword: false,
+    name: user?.name || `${user?.given_name} ${user?.family_name}`,
   });
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setValues({ ...values, [name]: value });
   };
+  const handleSave = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    try {
+      const response = await axios.patch(
+        `${process.env.REACT_APP_API}/users/update-profile`,
+        values,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(response, "response");
+      if (response.data.error) {
+      } else {
+        getAccessTokenSilently().then(() => {
+          if (user) {
+            user["name"] = response.data.name;
+          }
+        });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <div css={profilecss}>
       <h4>Profile</h4>
-      <form>
+      <form onSubmit={handleSave}>
         <div css={flexContainercss}>
           <p>Name</p>
           <div>
-            <input type="text" css={inputcss} />
+            <input
+              type="text"
+              name="name"
+              css={inputcss}
+              onChange={handleChange}
+              value={values.name}
+            />
           </div>
         </div>
         <div css={flexContainercss}>
@@ -39,95 +73,27 @@ export default function Profile() {
             `}
           >
             <div css={avicss}>
-              <b>VI</b>{" "}
+              {user?.given_name?.slice(0, 1)}
+              {user?.family_name?.slice(0, 1)}
             </div>
           </div>
         </div>
-        <div css={flexContainercss}>
-          <p>Email</p>
-          <div>
-            <input type="text" css={inputcss} />
-          </div>
-        </div>
-        <div css={flexContainercss}>
-          <p>Job Title</p>
-          <div>
-            <input type="text" css={inputcss} />
-          </div>
-        </div>
+
         <div
           css={`
-            display: grid;
-            grid-template-columns: 31% auto;
-            margin-bottom: 20px;
+            width: 10%;
+            display: flex;
+            justify-content: flex-end;
+            color: #ffffff;
+            margin-top: 2rem;
+            position: absolute;
+            top: 73vh;
+            right: 0%;
           `}
         >
-          <p>Password</p>
-          <div>
-            <PasswordInput
-              handleChange={handleChange}
-              label="Current password"
-              name="password"
-              setValues={setValues}
-              values={values}
-            />
-            <div>
-              <p
-                css={`
-                  font-weight: 400;
-                `}
-              >
-                Reset password
-              </p>
-              <div>
-                <h5
-                  css={`
-                    line-height: 14.52px;
-
-                    font-size: 12px;
-                    font-weight: 400;
-                  `}
-                >
-                  Your new password must be different from previously used
-                  <br />
-                  passwords.
-                </h5>
-              </div>
-              <input css={inputcss} type="text" />
-              <h5
-                css={`
-                  line-height: 14.52px;
-                  font-size: 12px;
-                  font-weight: 400;
-                `}
-              >
-                Password must contain at least 1 letter, 1 number, and 1 symbol.
-                <br /> Minimum length is 8 characters.
-              </h5>
-              <input css={inputcss} type="text" />
-              <div
-                css={`
-                  width: 100%;
-                  display: flex;
-                  justify-content: flex-end;
-                `}
-              >
-                <div
-                  css={`
-                    width: 30%;
-                    display: flex;
-                    justify-content: flex-end;
-                    color: #ffffff;
-                    margin-top: 2rem;
-                  `}
-                >
-                  <PrimaryButton type="button" color="#231D2C">
-                    Save
-                  </PrimaryButton>
-                </div>
-              </div>
-            </div>
-          </div>
+          <PrimaryButton type="submit" color="#231D2C">
+            Save
+          </PrimaryButton>
         </div>
       </form>
     </div>

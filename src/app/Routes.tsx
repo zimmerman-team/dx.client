@@ -249,7 +249,7 @@ export function MainRoutes() {
           </RouteWithAppBar>
           <RouteWithAppBar
             exact
-            path="/profile"
+            path="/user-management/:tab?"
             element={<ProtectedRoute component={UserProfileModule} />}
           />
           <RouteWithAppBar path="*">

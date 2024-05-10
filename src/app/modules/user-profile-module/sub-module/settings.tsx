@@ -1,18 +1,44 @@
+import { useAuth0 } from "@auth0/auth0-react";
 import DeleteAccountDialog from "app/components/Dialogs/deleteAccountDialog";
 import { PrimaryButton } from "app/components/Styled/button";
+import axios from "axios";
 import React from "react";
-import { useHistory } from "react-router-dom";
 
 export default function Settings() {
   const [modalDisplay, setModalDisplay] = React.useState<boolean>(false);
   const [inputValue, setInputValue] = React.useState<string>("");
   const [enableButton, setEnableButton] = React.useState<boolean>(false);
-  const history = useHistory();
+  const { getAccessTokenSilently, logout } = useAuth0();
+
+  const deleteUserAccount = async () => {
+    return getAccessTokenSilently().then(async (newToken) => {
+      return await axios.post(
+        `${process.env.REACT_APP_API}/users/delete-account`,
+        {},
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${newToken}`,
+          },
+        }
+      );
+    });
+  };
 
   const handleDelete = () => {
-    setModalDisplay(false);
-    setEnableButton(false);
-    history.push("/");
+    deleteUserAccount()
+      .then(() => {
+        setModalDisplay(false);
+        setEnableButton(false);
+        logout({
+          logoutParams: {
+            returnTo: window.location.origin,
+          },
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
