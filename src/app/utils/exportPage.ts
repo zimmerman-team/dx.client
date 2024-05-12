@@ -1,7 +1,7 @@
 // @ts-ignore
 import domtoimage from "dom-to-image";
 // @ts-ignore
-import html2pdf from "html2pdf.js";
+import { jsPDF } from "jspdf";
 
 export function exportPage(type: string, bgcolor: string, filename: string) {
   let node = document.getElementById("export-container");
@@ -37,22 +37,25 @@ export function exportPage(type: string, bgcolor: string, filename: string) {
         console.error("oops, something went wrong!", error);
       });
   } else if ((type = "pdf")) {
-    const WIDTH = 1133;
-
-    const rect = node?.getBoundingClientRect();
-
-    console.log(rect?.height);
-    html2pdf()
-      .from(node)
-      .set({
-        image: { type: "jpeg", quality: 1 },
-        jsPDF: {
-          unit: "px",
-          format: [WIDTH, rect?.height],
-          orientation: "landscape",
-        },
+    domtoimage
+      .toPng(node, {
+        bgcolor,
+        filename,
       })
-      .save(`${filename}.pdf`);
+      .then((dataUrl: any) => {
+        const height = node?.getBoundingClientRect().height as number;
+        const width = node?.getBoundingClientRect().width as number;
+        const pdf = new jsPDF({
+          orientation: "portrait",
+          unit: "px",
+          format: [width, height],
+        });
+        pdf.addImage(dataUrl, "PNG", 0, 0, width, height);
+        pdf.save(`${filename}.pdf`);
+      })
+      .catch((error: any) => {
+        console.error("oops, something went wrong!", error);
+      });
   } else {
     domtoimage
       .toJpeg(node, { bgcolor })
