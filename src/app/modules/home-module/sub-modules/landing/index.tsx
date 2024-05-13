@@ -7,8 +7,11 @@ import Investment from "app/modules/home-module/sub-modules/landing/assets/inves
 import ThePowerImage from "app/modules/home-module/sub-modules/landing/assets/the-power.png";
 import HomeFooter from "../../components/Footer";
 import Subscribe from "../../components/Subscribe";
+import { useTitle } from "react-use";
 
 export default function LandingModule() {
+  useTitle("DX DataXplorer - Landing");
+
   return (
     <div>
       <EmpowerBlock view="landing" />
