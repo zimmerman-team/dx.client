@@ -11,6 +11,7 @@ import { styles as commonStyles } from "app/modules/chart-module/routes/common/s
 import { ChartBuilderFiltersProps } from "app/modules/chart-module/routes/filters/data";
 import { NotAuthorizedMessageModule } from "app/modules/common/not-authorized-message";
 import { ReactComponent as AIIcon } from "app/modules/chart-module/assets/ai-icon.svg";
+import ErrorComponent from "app/modules/chart-module/components/dialog/errrorComponent";
 
 function ChartBuilderFilters(props: Readonly<ChartBuilderFiltersProps>) {
   useTitle("DX DataXplorer - Filters");
@@ -48,6 +49,19 @@ function ChartBuilderFilters(props: Readonly<ChartBuilderFiltersProps>) {
     );
   }
 
+  if (props.dataError || props.chartError) {
+    return (
+      <>
+        <ErrorComponent
+          chartErrorMessage={props.chartErrorMessage}
+          dataError={props.dataError}
+          chartError={props.chartError}
+          page={page}
+        />
+      </>
+    );
+  }
+
   return (
     <div css={commonStyles.container}>
       <div css={commonStyles.innercontainer}>
@@ -65,7 +79,7 @@ function ChartBuilderFilters(props: Readonly<ChartBuilderFiltersProps>) {
             renderedChartSsr={props.renderedChartSsr}
             renderedChartMappedData={props.renderedChartMappedData}
             setChartErrorMessage={props.setChartErrorMessage}
-            setNotFound={props.setNotFound}
+            setChartError={props.setChartError}
             renderedChartType={props.renderedChartType}
             mapping={mapping}
           />

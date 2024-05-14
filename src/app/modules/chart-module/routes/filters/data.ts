@@ -9,8 +9,11 @@ export interface ChartBuilderFiltersProps {
   renderedChartMappedData: any;
   setVisualOptions: (value: any) => void;
   setChartErrorMessage: React.Dispatch<React.SetStateAction<string>>;
-  setNotFound: React.Dispatch<React.SetStateAction<boolean>>;
+  setChartError: React.Dispatch<React.SetStateAction<boolean>>;
   renderedChartType: ChartType;
   containerRef: React.RefObject<HTMLDivElement>;
   isAIAssistedChart: boolean;
+  chartError: boolean;
+  dataError: boolean;
+  chartErrorMessage: string;
 }

@@ -99,12 +99,12 @@ export function useChartsRawData(props: {
   const [dataStats, setDataStats] = React.useState([]);
   const [sampleData, setSampleData] = React.useState([]);
   const [loading, setLoading] = React.useState(page !== "new");
-  const [notFound, setNotFound] = React.useState(false);
+  const [chartError, setChartError] = React.useState(false);
   const [error401, setError401] = React.useState(false);
   const [dataError, setDataError] = React.useState(false);
   const [dataTotalCount, setDataTotalCount] = React.useState(0);
   const [chartErrorMessage, setChartErrorMessage] = React.useState<string>(
-    "Something went wrong with loading your chart! Check your chart settings or data."
+    "Something went wrong with loading your data!\nChoose another dimensions or select different chart type."
   );
   const appliedFilters = useStoreState(
     (state) => state.charts.appliedFilters.value
@@ -166,7 +166,7 @@ export function useChartsRawData(props: {
           setDataError(true);
           setChartErrorMessage(
             response.data.error ??
-              "Something went wrong with loading your data! Try again or contact admin!"
+              "Something went wrong with loading your data!\nChoose another dimensions or select different chart type."
           );
         } else {
           setDataStats(response.data.stats);
@@ -215,7 +215,7 @@ export function useChartsRawData(props: {
             ],
           };
     setLoading(true);
-    setNotFound(false);
+    setChartError(false);
     setRenderChartFromAPIFufilled(false);
     if (extraLoader) {
       extraLoader.style.display = "block";
@@ -241,11 +241,13 @@ export function useChartsRawData(props: {
           extraLoader.style.display = "none";
         }
         if (isEmpty(chart)) {
-          setNotFound(true);
+          setChartError(true);
           setChartErrorMessage("This chart is no longer available.");
         } else if (response.data.error) {
-          setChartErrorMessage(response.data.error);
-          setDataError(true);
+          setChartErrorMessage(
+            "Something went wrong with loading your data!\n\nChoose another dimensions or select different chart type."
+          );
+          setChartError(true);
         } else {
           if (!isEqual(chart.appliedFilters, appliedFilters)) {
             setAllAppliedFilters(chart.appliedFilters || {});
@@ -272,8 +274,10 @@ export function useChartsRawData(props: {
           extraLoader.style.display = "none";
         }
         setLoading(false);
-        setNotFound(true);
-        setChartErrorMessage("This chart is no longer available.");
+        setChartError(true);
+        setChartErrorMessage(
+          "Something went wrong with loading your data!\nChoose another dimensions or select different chart type."
+        );
 
         setError401(error.response?.status === 401);
       });
@@ -337,8 +341,8 @@ export function useChartsRawData(props: {
 
   return {
     loading,
-    notFound,
-    setNotFound,
+    chartError,
+    setChartError,
     setDataError,
     error401,
     dataError,
