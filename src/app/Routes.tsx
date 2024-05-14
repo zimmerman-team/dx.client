@@ -170,7 +170,7 @@ const IntercomBootupComponent = () => {
               // @ts-ignore
               window.Intercom("boot", {
                 api_base: "https://api-iam.intercom.io",
-                app_id: "tfvurn19",
+                app_id: process.env.REACT_APP_INTERCOM_APP_ID!,
                 name: user?.name, // Full name
                 email: user?.email, // the email for your user
                 user_id: user?.sub, // user_id as a string
@@ -186,7 +186,7 @@ const IntercomBootupComponent = () => {
         // @ts-ignore
         window.Intercom("boot", {
           api_base: "https://api-iam.intercom.io",
-          app_id: "tfvurn19",
+          app_id: process.env.REACT_APP_INTERCOM_APP_ID!,
         });
       }
   }, [isAuthenticated]);
