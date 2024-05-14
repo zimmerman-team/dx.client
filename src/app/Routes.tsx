@@ -37,6 +37,10 @@ const ExploreAssetsModule = lazy(
   () => import("app/modules/home-module/sub-modules/explore-assets")
 );
 
+const PricingModule = lazy(
+  () => import("app/modules/home-module/sub-modules/pricing")
+);
+
 const ChartModule = lazy(() => import("app/modules/chart-module"));
 const ReportModule = lazy(() => import("app/modules/report-module"));
 
@@ -237,6 +241,9 @@ export function MainRoutes() {
           </RouteWithAppBar>
           <RouteWithAppBar exact path="/about">
             <AboutModule />
+          </RouteWithAppBar>
+          <RouteWithAppBar exact path="/pricing">
+            <PricingModule />
           </RouteWithAppBar>
           <RouteWithAppBar exact path="/chart/:page/:view?">
             <ChartModule />
