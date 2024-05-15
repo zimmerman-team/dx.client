@@ -254,7 +254,10 @@ test("autosave switch should toggle autosave state from false to true", async ()
   expect(screen.getByTestId("auto-save-switch")).not.toBeChecked();
 
   await user.click(screen.getByTestId("auto-save-switch"));
-  expect(props.setAutoSave).toHaveBeenCalledWith({ isAutoSaveEnabled: true });
+  expect(props.setAutoSave).toHaveBeenCalledWith({
+    isAutoSaveEnabled: true,
+    enableAutoSaveSwitch: true,
+  });
   expect(mockSetValues.autoSave).toBeTruthy();
 });
 
@@ -269,7 +272,10 @@ test("autosave switch should toggle autosave state from true to false", async ()
   expect(screen.getByTestId("auto-save-switch")).toBeChecked();
 
   await user.click(screen.getByTestId("auto-save-switch"));
-  expect(props.setAutoSave).toHaveBeenCalledWith({ isAutoSaveEnabled: false });
+  expect(props.setAutoSave).toHaveBeenCalledWith({
+    isAutoSaveEnabled: false,
+    enableAutoSaveSwitch: true,
+  });
   expect(mockSetValues.autoSave).toBeFalsy();
 });
 
