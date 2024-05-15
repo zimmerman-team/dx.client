@@ -169,7 +169,12 @@ export function useChartsRawData(props: {
               "Something went wrong with loading your data! Try again or contact admin!"
           );
         } else {
-          setDataStats(response.data.stats);
+          if (response.data.stats === "Error") {
+            setDataStats([]);
+          } else {
+            setDataStats(response.data.stats);
+          }
+
           setSampleData(response.data.sample);
           if (!isEqual(dataTypes, response.data.dataTypes)) {
             setDataTypes(response.data.dataTypes);
