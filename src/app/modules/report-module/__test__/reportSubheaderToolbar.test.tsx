@@ -394,7 +394,7 @@ test("clicking on export button should open export menu", async () => {
   await user.click(screen.getByRole("button", { name: "export-button" }));
   expect(screen.getByRole("menu")).toBeVisible();
   expect(screen.getByText(".png")).toBeVisible();
-  expect(screen.getByText(".jpg")).toBeVisible();
+  expect(screen.getByText(".svg")).toBeVisible();
 });
 
 test("clicking on duplicate button should open duplicate dialog", async () => {
