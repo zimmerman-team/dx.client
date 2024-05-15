@@ -11,26 +11,33 @@ interface InputProps
   maxWidth: number;
   name: string;
   setName: (name: string) => void;
+  spanVisibility: boolean;
+  setSpanVisibility: (spanVisibility: boolean) => void;
+  spanBuffer: number;
 }
 export default function AutoResizeInput(props: InputProps) {
-  const { autoResize, minWidth, maxWidth, name, setName, ...rest } = props;
+  const {
+    autoResize,
+    minWidth,
+    maxWidth,
+    name,
+    setName,
+    spanVisibility,
+    setSpanVisibility,
+    spanBuffer,
+    ...rest
+  } = props;
   const spanRef = useRef<HTMLSpanElement | null>(null);
 
   const [autoResizeInputWidth, setAutoResizeInputWidth] =
     React.useState<number>(100);
-
-  React.useEffect(() => {
-    if (props.autoResize) {
-      handleAutoResize();
-    }
-  }, [name, props.autoResize]);
 
   const handleAutoResize = () => {
     let spanAutoResizeWidth = 0;
     if (spanRef) {
       spanAutoResizeWidth = spanRef.current ? spanRef.current.offsetWidth : 0;
     }
-
+    
     const autoResizeInputWidth =
       !minWidth || spanAutoResizeWidth > minWidth
         ? spanAutoResizeWidth
@@ -42,6 +49,11 @@ export default function AutoResizeInput(props: InputProps) {
       setAutoResizeInputWidth(props.maxWidth);
     }
   };
+  React.useEffect(() => {
+    if (props.autoResize) {
+      handleAutoResize();
+    }
+  }, [name, props.autoResize]);
 
   function getInputStyle() {
     const style = {
@@ -70,28 +82,34 @@ export default function AutoResizeInput(props: InputProps) {
   }
 
   return (
-    <div>
+    <>
       <input
         {...rest}
         css={`
           ${styles.nameInput};
+          color: ${spanVisibility ? "#f4f4f4" : "#262c34"};
+          opacity: ${spanVisibility ? "0" : "1"};
+          ${!autoResize ? "width: 100% !important;" : ""};
+          max-width: 100% !important;
         `}
         value={name}
         onChange={(e) => onChange(e.target.value)}
         style={getInputStyle()}
         data-cy="report-sub-header-title-input"
+        title={name}
       />
-      {!props.autoResize || (
-        <span
-          className="auto-resize-span"
-          ref={spanRef}
-          css={`
-            ${styles.autoResizeSpan}
-          `}
-        >
-          {` ${name}`}
-        </span>
-      )}
-    </div>
+      <span
+        className="auto-resize-span"
+        ref={spanRef}
+        title={name}
+        css={`
+          ${styles.autoResizeSpan}
+          visibility: ${spanVisibility ? "visible" : "hidden"};
+          max-width: ${autoResize ? `calc(100% - ${spanBuffer}px)` : "100%"};
+        `}
+      >
+        {` ${name}`}
+      </span>
+    </>
   );
 }

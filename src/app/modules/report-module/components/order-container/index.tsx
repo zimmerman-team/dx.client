@@ -132,7 +132,8 @@ function ItemComponent(props: ItemComponentProps) {
           border-radius: 3.45px;
           justify-content: center;
           height: calc(100% - 38px + 8px);
-          display: ${props.childrenData[props.index]?.structure === null
+          display: ${props.childrenData[props.index]?.structure === null &&
+          props.childrenData[props.index]?.content[0] !== "divider"
             ? "none"
             : "flex"};
         `}

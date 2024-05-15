@@ -18,7 +18,12 @@ const getColumns = (
     }[];
   }[]
 ) => {
-  return data.map((d) => d.name);
+  try {
+    return data.map((d) => d.name);
+  } catch (e) {
+    console.error(e);
+    return [];
+  }
 };
 
 export function DatasetDataTable(props: DataThemesDataTableProps) {

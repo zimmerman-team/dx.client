@@ -26,8 +26,11 @@ import {
 } from "./style";
 import SneakPreview from "./sneakPreview";
 import NewsletterForm from "app/modules/common/newsletterForm";
+import { useTitle } from "react-use";
 
 export default function AITemplate() {
+  useTitle("DX DataXplorer - AI Template");
+
   const [isSubscribed, setIsSubscribed] = React.useState(false);
   const [isSubscriptionFailed, setIsSubscriptionFailed] = React.useState(false);
   const [modalDisplay, setModalDisplay] = React.useState<boolean>(true);

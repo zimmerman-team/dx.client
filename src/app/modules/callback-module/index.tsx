@@ -4,9 +4,11 @@ import { useHistory } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import { PageLoader } from "app/modules/common/page-loader";
 import axios from "axios";
-import { useStoreState } from "app/state/store/hooks";
+import { useTitle } from "react-use";
 
 function AuthCallbackModule() {
+  useTitle("DX DataXplorer - Auth Callback");
+
   const history = useHistory();
   const { error, isAuthenticated, getAccessTokenSilently } = useAuth0();
   const [loading, setLoading] = React.useState(true);

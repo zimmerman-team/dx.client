@@ -236,7 +236,9 @@ export function ChartBuilderPreviewTheme(props: ChartBuilderPreviewThemeProps) {
                     position: absolute;
                     right: -0.6%;
                     top: -4%;
-                    display: ${props.isAIAssistedChart ? "block" : "none"};
+                    display: ${!props.isAIAssistedChart || props.loading
+                      ? "none"
+                      : "block"};
                   `}
                 >
                   <AIIcon />

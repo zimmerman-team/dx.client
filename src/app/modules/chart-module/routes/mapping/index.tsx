@@ -17,6 +17,8 @@ import { ChartAPIModel, emptyChartAPI } from "app/modules/chart-module/data";
 import { NotAuthorizedMessageModule } from "app/modules/common/not-authorized-message";
 import { ReactComponent as AIIcon } from "app/modules/chart-module/assets/ai-icon.svg";
 import ErrorComponent from "app/modules/chart-module/components/dialog/errrorComponent";
+import { useRecoilState } from "recoil";
+import { chartFromReportAtom } from "app/state/recoil/atoms";
 import { useParams } from "react-router-dom";
 
 function ChartBuilderMapping(props: Readonly<ChartBuilderMappingProps>) {
@@ -36,7 +38,12 @@ function ChartBuilderMapping(props: Readonly<ChartBuilderMappingProps>) {
     (state) =>
       (state.charts.ChartGet.crudData ?? emptyChartAPI) as ChartAPIModel
   );
-
+  const [chartFromReport, setChartFromReport] =
+    useRecoilState(chartFromReportAtom);
+  // access query parameters
+  const queryParams = new URLSearchParams(location.search);
+  const paramValue = queryParams.get("fromreport");
+  const reportPage = queryParams.get("page") as string;
   React.useEffect(() => {
     const { updRequiredFields, updMinValuesFields } =
       getRequiredFieldsAndErrors(mapping, props.dimensions);
@@ -45,6 +52,17 @@ function ChartBuilderMapping(props: Readonly<ChartBuilderMappingProps>) {
 
     setMinValuesFields(updMinValuesFields);
   }, [mapping, props.dimensions]);
+  React.useEffect(() => {
+    if (paramValue === "true") {
+      setChartFromReport((prev) => ({
+        ...chartFromReport,
+        state: true,
+        action: "create",
+        page: reportPage,
+        chartId: page,
+      }));
+    }
+  }, []);
 
   const canChartEditDelete = React.useMemo(() => {
     return isAuthenticated && loadedChart && loadedChart.owner === user?.sub;

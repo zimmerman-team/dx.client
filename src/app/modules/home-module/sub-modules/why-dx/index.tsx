@@ -6,8 +6,11 @@ import TryUsBlock from "app/modules/home-module/sub-modules/why-dx/components/tr
 import EmpowerBlock from "app/modules/home-module/sub-modules/partners/components/empowerBlock";
 import BenefitsBlock from "app/modules/home-module/sub-modules/why-dx/components/benefitsBlock";
 import KeyFeaturesBlock from "app/modules/home-module/sub-modules/why-dx/components/keyFeaturesBlock";
+import { useTitle } from "react-use";
 
 export default function WhyDX() {
+  useTitle("DX DataXplorer - Why Dataxplorer?");
+
   return (
     <>
       <EmpowerBlock view="why-dx" />
