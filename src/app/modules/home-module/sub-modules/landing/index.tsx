@@ -13,7 +13,11 @@ export default function LandingModule() {
   useTitle("DX DataXplorer - Landing");
 
   return (
-    <div>
+    <div
+      css={`
+        background: #ffffff;
+      `}
+    >
       <EmpowerBlock view="landing" />
 
       <Container maxWidth="lg">
@@ -78,7 +82,8 @@ export default function LandingModule() {
               alt="interact-image"
               css={`
                 width: 551px;
-                margin-right: -17.449px;
+                margin-right: -18.449px;
+                margin-top: -6.72px;
               `}
             />
           </div>
@@ -95,6 +100,8 @@ export default function LandingModule() {
               alt="investment-image"
               css={`
                 width: 551px;
+                margin-left: -25px;
+                margin-top: -9.399px;
               `}
             />
             <div
