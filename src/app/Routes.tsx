@@ -20,6 +20,9 @@ import {
 } from "@auth0/auth0-react";
 import axios from "axios";
 
+const LandingModule = lazy(
+  () => import("app/modules/home-module/sub-modules/landing")
+);
 const HomeModule = lazy(() => import("app/modules/home-module"));
 const PartnersModule = lazy(
   () => import("app/modules/home-module/sub-modules/partners")
@@ -170,7 +173,7 @@ const IntercomBootupComponent = () => {
               // @ts-ignore
               window.Intercom("boot", {
                 api_base: "https://api-iam.intercom.io",
-                app_id: "tfvurn19",
+                app_id: process.env.REACT_APP_INTERCOM_APP_ID!,
                 name: user?.name, // Full name
                 email: user?.email, // the email for your user
                 user_id: user?.sub, // user_id as a string
@@ -186,7 +189,7 @@ const IntercomBootupComponent = () => {
         // @ts-ignore
         window.Intercom("boot", {
           api_base: "https://api-iam.intercom.io",
-          app_id: "tfvurn19",
+          app_id: process.env.REACT_APP_INTERCOM_APP_ID!,
         });
       }
   }, [isAuthenticated]);
@@ -237,6 +240,9 @@ export function MainRoutes() {
           </RouteWithAppBar>
           <RouteWithAppBar exact path="/about">
             <AboutModule />
+          </RouteWithAppBar>
+          <RouteWithAppBar exact path="/landing">
+            <LandingModule />
           </RouteWithAppBar>
           <RouteWithAppBar exact path="/chart/:page/:view?">
             <ChartModule />

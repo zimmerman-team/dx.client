@@ -19,10 +19,7 @@ export const styles = {
     align-items: center;
     flex-direction: row;
     justify-content: space-between;
-    @media (max-width: 1280px) {
-      margin-left: 0;
-      width: calc(100vw - 400px);
-    }
+    gap: 10px;
 
     @media (max-width: 600px) {
       padding: 13px 16px 0 16px;
@@ -49,6 +46,7 @@ export const styles = {
     background: #231d2c;
     border-radius: 8px;
     display: flex;
+    flex-shrink: 0;
     flex-direction: row;
     justify-content: center;
     align-items: center;
@@ -125,9 +123,10 @@ export const styles = {
   `,
   endContainer: css`
     display: flex;
-    right: 29px;
-    position: absolute;
     gap: 13px;
+    flex-shrink: 0;
+    justify-content: flex-end;
+    align-items: center;
   `,
   iconbtns: css`
     display: flex;

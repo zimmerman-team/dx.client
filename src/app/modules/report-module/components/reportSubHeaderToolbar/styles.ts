@@ -104,12 +104,10 @@ export const styles = {
     background: transparent;
     transition: background 0.2s ease-in-out;
     font-family: "Inter", sans-serif;
-    overflow-x: visible;
+    position: relative;
+    z-index: 2;
     padding-left: 0px;
     outline: none;
-    &:focus {
-      background: #f1f3f5;
-    }
   `,
   endContainer: css`
     display: flex;
@@ -117,6 +115,7 @@ export const styles = {
     align-items: center;
     width: 30%;
     justify-content: flex-end;
+    flex-shrink: 0;
   `,
   previewEndContainer: css`
     display: flex;
@@ -133,14 +132,17 @@ export const styles = {
   `,
 
   autoResizeSpan: css`
-    visibility: hidden;
     font-family: "Inter", sans-serif;
     font-size: 24px;
-    position: fixed;
-    left: 0;
+    position: absolute;
+    z-index: 1;
+    left: -0.5%;
     padding: 5px;
     white-space: pre;
     font-size: 24px;
     font-weight: 700;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   `,
 };
