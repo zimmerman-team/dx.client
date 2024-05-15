@@ -107,6 +107,8 @@ export default function PricingModule() {
       <Container maxWidth="lg">
         <h1
           css={`
+            margin: 0;
+            padding: 0;
             margin-top: 124px;
             font-size: 55px;
             font-weight: 400;
