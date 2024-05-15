@@ -8,7 +8,7 @@ import {
   StyledMenuItem,
 } from "app/modules/chart-module/components/exporter";
 
-export function ExportChartButton() {
+export function ExportChartButton(props: { filename: string }) {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
   );
@@ -21,13 +21,17 @@ export function ExportChartButton() {
     setAnchorEl(null);
   }
 
-  function handleTypeChange(value: ".svg" | ".png" | ".jpg") {
+  function handleTypeChange(value: ".svg" | ".png" | ".pdf", filename: string) {
     if (value === ".png") {
-      exportPage("png", "#f2f7fd");
+      exportPage("png", "#f2f7fd", filename);
     }
-    if (value === ".jpg") {
-      exportPage("jpg", "#f2f7fd");
+    if (value === ".svg") {
+      exportPage("svg", "#f2f7fd", filename);
     }
+    if (value === ".pdf") {
+      exportPage("pdf", "", filename);
+    }
+
     handleClose();
   }
 
@@ -46,11 +50,21 @@ export function ExportChartButton() {
         anchorEl={anchorEl}
         onClose={handleClose}
       >
-        <StyledMenuItem onClick={() => handleTypeChange(".png")}>
+        <StyledMenuItem
+          onClick={() => handleTypeChange(".pdf", props.filename)}
+        >
+          .pdf
+        </StyledMenuItem>
+        <StyledMenuItem
+          onClick={() => handleTypeChange(".png", props.filename)}
+        >
           .png
         </StyledMenuItem>
-        <StyledMenuItem onClick={() => handleTypeChange(".jpg")}>
-          .jpg
+
+        <StyledMenuItem
+          onClick={() => handleTypeChange(".svg", props.filename)}
+        >
+          .svg
         </StyledMenuItem>
       </StyledMenu>
     </>

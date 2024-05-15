@@ -498,7 +498,7 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
               )}
               {page !== "new" && !view && (
                 <React.Fragment>
-                  <ExportChartButton />
+                  <ExportChartButton filename={props.name} />
                   {isAuthenticated && (
                     <Tooltip title="Duplicate">
                       <IconButton

@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import find from "lodash/find";
 import { useDrag } from "react-dnd";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import MuiButton from "@material-ui/core/Button";
 import MenuItem from "@material-ui/core/MenuItem";
 import { EditorState } from "draft-js";
@@ -183,6 +183,8 @@ export function ReportRightPanelCreateView(props: Readonly<Props>) {
   const [currentView, setCurrentView] = useRecoilState(
     reportRightPanelViewAtom
   );
+  const [chartFromReport, setChartFromReport] =
+    useRecoilState(chartFromReportAtom);
   const whiteBackgroundOnly = "background-color: #fff;";
   const whiteBackgroundRoundedBottomRight =
     whiteBackgroundOnly + " border-radius: 0px 0px 8px 0px;";
@@ -266,6 +268,20 @@ export function ReportRightPanelCreateView(props: Readonly<Props>) {
       setCurrentView("elements");
     }
   }, [props.headerDetails.showHeader]);
+  React.useEffect(() => {
+    const timeout = setTimeout(() => {
+      setChartFromReport({
+        state: false,
+        page: "",
+        view: "",
+        action: null,
+        chartId: null,
+      });
+    }, 3000);
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, []);
 
   return (
     <div
@@ -1225,8 +1241,7 @@ function ChartItem(
 ) {
   const nullRef = React.useRef(null);
   const [chartPreview, setChartPreview] = React.useState(false);
-  const [chartFromReport, setChartFromReport] =
-    useRecoilState(chartFromReportAtom);
+  const chartFromReport = useRecoilValue(chartFromReportAtom);
 
   const [{ isDragging }, drag] = useDrag(() => ({
     type: props.elementType,
@@ -1238,21 +1253,6 @@ function ChartItem(
       isDragging: !!monitor.isDragging(),
     }),
   }));
-
-  React.useEffect(() => {
-    const timeout = setTimeout(() => {
-      setChartFromReport({
-        state: false,
-        page: "",
-        view: "",
-        action: null,
-        chartId: null,
-      });
-    }, 3000);
-    return () => {
-      clearTimeout(timeout);
-    };
-  }, []);
 
   const getIcon = (vizType: string) => {
     const type = find(Charts, { id: vizType });
