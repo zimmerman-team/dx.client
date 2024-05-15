@@ -24,8 +24,8 @@ export default function Profile() {
     const { name, value } = event.target;
     setValues({ ...values, [name]: value });
   };
-  const handleSave = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+
+  const updateUserProfile = async () => {
     try {
       const response = await axios.patch(
         `${process.env.REACT_APP_API}/users/update-profile`,
@@ -36,7 +36,6 @@ export default function Profile() {
           },
         }
       );
-      console.log(response, "response");
       if (response.data.error) {
       } else {
         getAccessTokenSilently().then(() => {
@@ -49,11 +48,24 @@ export default function Profile() {
       console.log(err);
     }
   };
+  const handleSubmit = async (
+    event:
+      | React.FormEvent<HTMLFormElement>
+      | React.FocusEventHandler<HTMLInputElement>
+  ) => {
+    if ("preventDefault" in event) {
+      event.preventDefault();
+    }
+    updateUserProfile();
+  };
+  const handleBlur = () => {
+    updateUserProfile();
+  };
 
   return (
     <div css={profilecss}>
       <h4>Profile</h4>
-      <form onSubmit={handleSave}>
+      <form onSubmit={handleSubmit}>
         <div css={flexContainercss}>
           <p>Name</p>
           <div>
@@ -63,6 +75,7 @@ export default function Profile() {
               css={inputcss}
               onChange={handleChange}
               value={values.name}
+              onBlur={handleBlur}
             />
           </div>
         </div>
@@ -79,23 +92,6 @@ export default function Profile() {
               {user?.family_name?.slice(0, 1)}
             </div>
           </div>
-        </div>
-
-        <div
-          css={`
-            width: 10%;
-            display: flex;
-            justify-content: flex-end;
-            color: #ffffff;
-            margin-top: 2rem;
-            position: absolute;
-            top: 73vh;
-            right: 0%;
-          `}
-        >
-          <PrimaryButton type="submit" color="#231D2C">
-            Save
-          </PrimaryButton>
         </div>
       </form>
     </div>

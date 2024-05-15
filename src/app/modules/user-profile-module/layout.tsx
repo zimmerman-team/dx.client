@@ -49,13 +49,7 @@ export default function UserProfileLayout() {
     <div css={layoutcss}>
       <Container maxWidth="lg">
         <PageTopSpacer />
-        <Grid
-          container
-          spacing={3}
-          css={`
-            position: relative;
-          `}
-        >
+        <Grid container spacing={3}>
           <Grid item xs={12} sm={6} md={5} lg={4}>
             <Box height={20} />
             <div css={bigAvicss}>
