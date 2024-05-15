@@ -4,6 +4,7 @@ import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import axios from "axios";
 import React from "react";
 import { useHistory, useParams } from "react-router-dom";
+import { useTitle } from "react-use";
 export interface IDatasetDetail {
   name: string;
   description: string;
@@ -18,6 +19,8 @@ export interface IDatasetDetail {
   id: string;
 }
 export default function EditMetaData() {
+  useTitle("DX DataXplorer - Edit Meta Data");
+
   const { page } = useParams<{ page: string }>();
   const token = useStoreState((state) => state.AuthToken.value);
   const history = useHistory();

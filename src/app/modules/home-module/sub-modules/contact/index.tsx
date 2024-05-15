@@ -4,6 +4,7 @@ import { Box, Container, Snackbar, TextField } from "@material-ui/core";
 import HomeFooter from "../../components/Footer";
 import { ReactComponent as FullEllipse } from "app/modules/home-module/assets/contact-lg-ellispe.svg";
 import axios, { AxiosError, AxiosResponse } from "axios";
+import { useTitle } from "react-use";
 import Subscribe from "../../components/Subscribe";
 
 const DXLogo = (
@@ -26,6 +27,8 @@ const DXLogo = (
 );
 
 export default function ContactModule() {
+  useTitle("DX DataXplorer - Contact");
+
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
   const [message, setMessage] = React.useState("");
 

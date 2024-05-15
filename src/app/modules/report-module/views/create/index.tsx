@@ -23,8 +23,11 @@ import {
 import TourGuide from "app/components/Dialogs/TourGuide";
 import { cloneDeep } from "lodash";
 import { withAuthenticationRequired } from "@auth0/auth0-react";
+import { useTitle } from "react-use";
 
 function ReportCreateView(props: Readonly<ReportCreateViewProps>) {
+  useTitle("DX DataXplorer - Create Report");
+
   const { ref, width } = useResizeObserver<HTMLDivElement>();
 
   const [containerWidth, setContainerWidth] = useRecoilState(

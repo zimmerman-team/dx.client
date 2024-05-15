@@ -25,10 +25,12 @@ import { persistedReportStateAtom } from "app/state/recoil/atoms";
 import { useResetRecoilState } from "recoil";
 import { useHistory, useParams } from "react-router-dom";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
-import { useMount, useUpdateEffect } from "react-use";
+import { useMount, useTitle, useUpdateEffect } from "react-use";
 import { isEmpty } from "lodash";
 
 export function ReportInitialView(props: Readonly<ReportInitialViewProps>) {
+  useTitle("DX DataXplorer - New Report");
+
   const history = useHistory();
   const { page, view } = useParams<{ page: string; view?: string }>();
 

@@ -8,7 +8,11 @@ import Ellipses from "app/modules/home-module/assets/about-ellipses.svg";
 import HomeFooter from "../../components/Footer";
 import { subParagraphcss } from "./style";
 import TeamBlock from "./components/teamBlock";
+import { useTitle } from "react-use";
+
 export default function AboutModule() {
+  useTitle("DX DataXplorer - About");
+
   return (
     <>
       <EmpowerBlock view="about" />
