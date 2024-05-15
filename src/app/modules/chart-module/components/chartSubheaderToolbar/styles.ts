@@ -126,6 +126,7 @@ export const styles = {
     gap: 13px;
     flex-shrink: 0;
     justify-content: flex-end;
+    align-items: center;
   `,
   iconbtns: css`
     display: flex;
