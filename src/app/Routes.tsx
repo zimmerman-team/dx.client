@@ -149,8 +149,17 @@ const OneTapLoginComponent = () => {
 };
 
 const IntercomBootupComponent = () => {
-  const { isLoading, isAuthenticated, user, getAccessTokenSilently } =
-    useAuth0();
+  const { isAuthenticated, user, getAccessTokenSilently } = useAuth0();
+
+  const APP_ID = window.location.hostname.includes("dataxplorer.org")
+    ? "tfvurn19"
+    : "hv1bfyau";
+
+  React.useEffect(() => {
+    if (window.Intercom) {
+      window.Intercom("update");
+    }
+  }, [location.pathname]);
 
   const getIntercomHash = async () => {
     return getAccessTokenSilently().then(async (newToken) => {
@@ -177,7 +186,7 @@ const IntercomBootupComponent = () => {
               // @ts-ignore
               window.Intercom("boot", {
                 api_base: "https://api-iam.intercom.io",
-                app_id: process.env.REACT_APP_INTERCOM_APP_ID!,
+                app_id: APP_ID,
                 name: user?.name, // Full name
                 email: user?.email, // the email for your user
                 user_id: user?.sub, // user_id as a string
@@ -193,7 +202,7 @@ const IntercomBootupComponent = () => {
         // @ts-ignore
         window.Intercom("boot", {
           api_base: "https://api-iam.intercom.io",
-          app_id: process.env.REACT_APP_INTERCOM_APP_ID!,
+          app_id: APP_ID,
         });
       }
   }, [isAuthenticated]);
