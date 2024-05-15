@@ -79,6 +79,7 @@ export interface ChartBuilderChartTypeProps {
   setChartFromAPI: (
     value: React.SetStateAction<ChartRenderedItem | null>
   ) => void;
+  setVisualOptions: (value: any) => void;
 }
 
 export interface ChartTypeModel {

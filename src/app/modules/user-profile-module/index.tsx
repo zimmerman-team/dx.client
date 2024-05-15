@@ -33,7 +33,6 @@ export default function UserProfileModule() {
 
   const history = useHistory();
   const { isAuthenticated, isLoading } = useAuth0();
-  const [tabstate, setTabState] = React.useState(tabList);
 
   React.useEffect(() => {
     if (!isLoading && !isAuthenticated) {
@@ -41,5 +40,5 @@ export default function UserProfileModule() {
     }
   }, [isLoading, isAuthenticated]);
 
-  return <UserProfileLayout tabstate={tabstate} setTabState={setTabState} />;
+  return <UserProfileLayout />;
 }

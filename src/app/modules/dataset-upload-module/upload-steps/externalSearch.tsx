@@ -54,6 +54,7 @@ export default function ExternalSearch(props: {
     abortControllerRef.current.abort();
     abortControllerRef.current = new AbortController();
     setDatasets([]);
+    setOffset(0);
   };
 
   // Pagination on scroll

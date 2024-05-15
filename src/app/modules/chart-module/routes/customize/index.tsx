@@ -21,6 +21,8 @@ function ChartBuilderCustomize(props: Readonly<ChartBuilderCustomizeProps>) {
       (state.charts.ChartGet.crudData ?? emptyChartAPI) as ChartAPIModel
   );
 
+  const mapping = useStoreState((state) => state.charts.mapping.value);
+
   const canChartEditDelete = React.useMemo(() => {
     return isAuthenticated && loadedChart && loadedChart.owner === user?.sub;
   }, [user, isAuthenticated, loadedChart]);
@@ -53,6 +55,7 @@ function ChartBuilderCustomize(props: Readonly<ChartBuilderCustomizeProps>) {
             setChartErrorMessage={props.setChartErrorMessage}
             setNotFound={props.setNotFound}
             renderedChartType={props.renderedChartType}
+            mapping={mapping}
           />
         </div>
         <div

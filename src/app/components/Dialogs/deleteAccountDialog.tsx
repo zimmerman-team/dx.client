@@ -63,11 +63,12 @@ export default function DeleteAccountDialog(props: Props) {
               `}
             >
               Are you sure about delete account? Deleted accounts cannot be
-              restored.
+              restored. Upon deletion all your assets will be deleted from our
+              systems as well.
             </p>
             <div
               css={`
-                margin-top: 3rem;
+                margin-top: 21px;
               `}
             >
               <input

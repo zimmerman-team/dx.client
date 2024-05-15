@@ -40,8 +40,7 @@ export default function Onboarding() {
           @media (max-width: 1024px) {
             padding-bottom: 7rem;
           }
-          padding-top: 94px;
-          /* width: 45.625%; */
+          padding-top: 174px;
         `}
       >
         <div
@@ -65,13 +64,7 @@ export default function Onboarding() {
               ? "Welcome back!"
               : "Create your free account."}
           </h2>
-          <div
-            css={`
-              width: 100%;
-            `}
-          >
-            <SplitBar leftLabel="Log In" rightLabel="Sign Up" />
-          </div>
+
           <Switch>
             <Route path="/onboarding/signup">
               <AuthCard />

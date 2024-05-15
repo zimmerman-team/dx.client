@@ -7,7 +7,6 @@ import { CssSnackbar, ISnackbarState } from "./previewFragment";
 import { ArrowBack } from "@material-ui/icons";
 import { ReactComponent as FullScreenIcon } from "../assets/full-screen.svg";
 import { ReactComponent as CloseFullScreenIcon } from "../assets/close-full-screen.svg";
-import { FullScreen, useFullScreenHandle } from "react-full-screen";
 import { homeDisplayAtom } from "app/state/recoil/atoms";
 import { useRecoilState } from "recoil";
 
@@ -47,7 +46,7 @@ export default function FinishedFragment(props: Props) {
   const [closeFullScreenTooltip, setCloseFullScreenTooltip] =
     React.useState(false);
 
-  const handle = useFullScreenHandle();
+  const [openFullScreen, setOpenFullScreen] = React.useState(false);
 
   React.useEffect(() => {
     let snackbarTimeOut: any;
@@ -143,7 +142,7 @@ export default function FinishedFragment(props: Props) {
               `}
               onMouseOver={() => setOpenFullScreenTooltip(true)}
               onMouseLeave={() => setOpenFullScreenTooltip(false)}
-              onClick={handle.enter}
+              onClick={() => setOpenFullScreen(true)}
               data-cy="dataset-full-screen-btn"
             >
               <FullScreenIcon />
@@ -158,6 +157,7 @@ export default function FinishedFragment(props: Props) {
                   width: max-content;
                   padding: 1px 8px;
                   border-radius: 4px;
+                  user-select: none;
                 `}
                 hidden={!openFullScreenTooltip}
               >
@@ -227,73 +227,69 @@ export default function FinishedFragment(props: Props) {
           datasetId={props.datasetId}
         />
 
-        <FullScreen
-          handle={handle}
+        <div
           css={`
-            ::backdrop {
-              background: #000;
-              opacity: 0.75;
-            }
+            background: rgba(0, 0, 0, 0.75);
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100001;
+            width: 100vw;
+            height: 100vh;
+            padding: 26px 100px 26px 108px;
           `}
+          hidden={!openFullScreen}
+          data-cy="dataset-full-screen-view"
         >
           <div
             css={`
-              width: 100%;
-              height: 100%;
-              padding: 26px 100px 26px 108px;
+              display: flex;
+              column-gap: 13px;
+              align-items: center;
             `}
-            hidden={!handle.active}
-            data-cy="dataset-full-screen-view"
           >
             <div
               css={`
-                display: flex;
-                column-gap: 13px;
-                align-items: center;
+                width: 40px;
+                height: 40px;
+                cursor: pointer;
+                margin-bottom: 15px;
+                position: relative;
               `}
+              onMouseOver={() => setCloseFullScreenTooltip(true)}
+              onMouseLeave={() => setCloseFullScreenTooltip(false)}
+              onClick={() => setOpenFullScreen(false)}
+              data-cy="dataset-close-full-screen-btn"
             >
+              <CloseFullScreenIcon />
+
               <div
                 css={`
-                  width: 40px;
-                  height: 40px;
-                  cursor: pointer;
-                  margin-bottom: 15px;
-                  position: relative;
+                  background: #626262;
+                  color: #fff;
+                  font-size: 12px;
+                  position: absolute;
+                  top: 60%;
+                  left: 110%;
+                  width: max-content;
+                  padding: 1px 8px;
+                  border-radius: 4px;
+                  user-select: none;
                 `}
-                onMouseOver={() => setCloseFullScreenTooltip(true)}
-                onMouseLeave={() => setCloseFullScreenTooltip(false)}
-                onClick={handle.exit}
-                data-cy="dataset-close-full-screen-btn"
+                hidden={!closeFullScreenTooltip}
               >
-                <CloseFullScreenIcon />
-
-                <div
-                  css={`
-                    background: #626262;
-                    color: #fff;
-                    font-size: 12px;
-                    position: absolute;
-                    top: 60%;
-                    left: 110%;
-                    width: max-content;
-                    padding: 1px 8px;
-                    border-radius: 4px;
-                  `}
-                  hidden={!closeFullScreenTooltip}
-                >
-                  Close Full Screen
-                </div>
+                Close Full Screen
               </div>
             </div>
-            <DatasetDataTable
-              data={props.data}
-              stats={props.stats}
-              dataTypes={props.dataTypes}
-              datasetId={props.datasetId}
-              fullScreen
-            />
           </div>
-        </FullScreen>
+          <DatasetDataTable
+            data={props.data}
+            stats={props.stats}
+            dataTypes={props.dataTypes}
+            datasetId={props.datasetId}
+            fullScreen
+          />
+        </div>
       </div>
       <CssSnackbar
         anchorOrigin={{
