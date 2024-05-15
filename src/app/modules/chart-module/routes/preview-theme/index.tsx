@@ -12,7 +12,8 @@ import { styles as commonStyles } from "app/modules/chart-module/routes/common/s
 import { ChartBuilderPreviewThemeProps } from "app/modules/chart-module/routes/preview-theme/data";
 import WarningDialog from "app/modules/chart-module/components/dialog/warningDialog";
 import { ReactComponent as AIIcon } from "app/modules/chart-module/assets/ai-icon.svg";
-import GeomapLegend from "../../components/geomap-legend";
+import GeomapLegend from "app/modules/chart-module/components/geomap-legend";
+import ErrorComponent from "app/modules/chart-module/components/dialog/errrorComponent";
 
 export function ChartBuilderPreviewTheme(props: ChartBuilderPreviewThemeProps) {
   useTitle("DX DataXplorer - Preview Chart");
@@ -133,6 +134,18 @@ export function ChartBuilderPreviewTheme(props: ChartBuilderPreviewThemeProps) {
       props.setIsPreviewView(false);
     };
   }, []);
+  if (props.dataError || props.chartError) {
+    return (
+      <>
+        <ErrorComponent
+          chartErrorMessage={props.chartErrorMessage}
+          dataError={props.dataError}
+          chartError={props.chartError}
+          page={page}
+        />
+      </>
+    );
+  }
 
   return (
     <div css={commonStyles.container}>

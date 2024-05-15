@@ -34,7 +34,7 @@ interface Props {
   setVisualOptions: (value: any) => void;
   containerRef: React.RefObject<HTMLDivElement>;
   chartId?: string;
-  setNotFound: React.Dispatch<React.SetStateAction<boolean>>;
+  setChartError: React.Dispatch<React.SetStateAction<boolean>>;
   setChartErrorMessage: React.Dispatch<React.SetStateAction<string>>;
   renderedChartType?: ChartType;
   inChartWrapper?: boolean;
@@ -149,7 +149,7 @@ export function CommonChart(props: Readonly<Props>) {
       } catch (e: any) {
         if (process.env.NODE_ENV === "development") {
           console.log("chart error", e);
-          props.setNotFound(true);
+          props.setChartError(true);
           props.setChartErrorMessage(e.message);
         }
       }

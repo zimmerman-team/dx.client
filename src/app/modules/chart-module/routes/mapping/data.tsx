@@ -7,12 +7,15 @@ export interface ChartBuilderMappingProps {
   renderedChart: string;
   renderedChartSsr: boolean;
   renderedChartMappedData: any;
-  setNotFound: React.Dispatch<React.SetStateAction<boolean>>;
+  setChartError: React.Dispatch<React.SetStateAction<boolean>>;
   setChartErrorMessage: React.Dispatch<React.SetStateAction<string>>;
   setVisualOptions: (value: any) => void;
   renderedChartType: ChartType;
   containerRef: React.RefObject<HTMLDivElement>;
   isAIAssistedChart: boolean;
+  chartError: boolean;
+  dataError: boolean;
+  chartErrorMessage: string;
 }
 
 export interface ChartBuilderMappingDimensionProps {

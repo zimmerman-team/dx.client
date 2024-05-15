@@ -4,7 +4,7 @@ import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 
 export default function ErrorComponent(props: {
   page: string;
-  notFound: boolean;
+  chartError: boolean;
   dataError: boolean;
   chartErrorMessage: string;
 }) {
@@ -41,14 +41,18 @@ export default function ErrorComponent(props: {
               text-decoration: underline;
             }
             p {
-              margin-top: 18px;
+              margin-top: 34px;
+              white-space: pre-line;
+              line-height: 11px;
+              font-family: "GothamNarrow-Bold", sans-serif;
             }
           `}
         >
           <>
             <ErrorOutlineIcon htmlColor="#E75656" fontSize="large" />
-            {props.notFound ||
-              (props.dataError && <p>{props.chartErrorMessage}</p>)}
+            {(props.chartError || props.dataError) && (
+              <p>{props.chartErrorMessage}</p>
+            )}
           </>
         </div>
       </div>

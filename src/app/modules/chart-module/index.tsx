@@ -39,7 +39,6 @@ import { isEmpty } from "lodash";
 import useResizeObserver from "use-resize-observer";
 import { ChartType } from "app/modules/chart-module/components/common-chart";
 import { getRequiredFieldsAndErrors } from "app/modules/chart-module/routes/mapping/utils";
-import ErrorComponent from "app/modules/chart-module/components/dialog/errrorComponent";
 import axios from "axios";
 import { useRecoilState, useResetRecoilState } from "recoil";
 import {
@@ -95,8 +94,8 @@ export default function ChartModule() {
     renderChartFromAPI,
     error401,
     setDataError,
-    setNotFound,
-    notFound,
+    setChartError,
+    chartError,
     dataError,
     dataTypesFromRenderedChart,
     chartErrorMessage,
@@ -131,6 +130,7 @@ export default function ChartModule() {
   const selectedAIChart = useStoreState(
     (state) => state.charts.SelectedAIChartState.value
   );
+
   const [chartFromReport, setChartFromReport] =
     useRecoilState(chartFromReportAtom);
   const setMapping = useStoreActions(
@@ -227,7 +227,7 @@ export default function ChartModule() {
     setDataset(null);
     setChartFromAPI(null);
     setDataError(false);
-    setNotFound(false);
+    setChartError(false);
     clearDatasetDetails();
   };
   const onSave = async () => {
@@ -398,7 +398,7 @@ export default function ChartModule() {
     clearChartTypesSuggestions();
     setChartName("Untitled Chart");
     setDataError(false);
-    setNotFound(false);
+    setChartError(false);
     setDataTypes([]);
     resetIsChartAutoMapped();
     setChartFromReport((prev) => ({
@@ -538,133 +538,140 @@ export default function ChartModule() {
           `}
           ref={ref}
         >
-          {dataError || notFound ? (
-            <>
-              <ErrorComponent
-                chartErrorMessage={chartErrorMessage}
+          <Switch>
+            {(isSaveLoading || isChartLoading) && <PageLoader />}
+
+            <Route path="/chart/:page/customize">
+              <ChartBuilderCustomize
+                loading={loading}
+                dimensions={dimensions}
+                mappedData={mappedData}
+                containerRef={containerRef}
+                renderedChart={content}
+                visualOptions={visualOptions}
+                setVisualOptions={setVisualOptions}
+                renderedChartSsr={activeRenderedChartSsr}
+                renderedChartMappedData={renderedChartMappedData}
+                renderedChartType={chartType as ChartType}
+                setChartErrorMessage={setChartErrorMessage}
+                setChartError={setChartError}
+                isAIAssistedChart={editChartCrudData?.isAIAssisted}
                 dataError={dataError}
-                notFound={notFound}
-                page={page}
+                chartError={chartError}
+                chartErrorMessage={chartErrorMessage}
               />
-            </>
-          ) : (
-            <Switch>
-              {(isSaveLoading || isChartLoading) && <PageLoader />}
+            </Route>
 
-              <Route path="/chart/:page/customize">
-                <ChartBuilderCustomize
-                  loading={loading}
-                  dimensions={dimensions}
-                  mappedData={mappedData}
-                  containerRef={containerRef}
-                  renderedChart={content}
-                  visualOptions={visualOptions}
-                  setVisualOptions={setVisualOptions}
-                  renderedChartSsr={activeRenderedChartSsr}
-                  renderedChartMappedData={renderedChartMappedData}
-                  renderedChartType={chartType as ChartType}
-                  setChartErrorMessage={setChartErrorMessage}
-                  setNotFound={setNotFound}
-                  isAIAssistedChart={editChartCrudData?.isAIAssisted}
-                />
-              </Route>
-
-              <Route path="/chart/:page/filters">
-                <ChartBuilderFilters
-                  loading={loading}
-                  renderedChart={content}
-                  dimensions={dimensions}
-                  visualOptions={visualOptions}
-                  containerRef={containerRef}
-                  setVisualOptions={setVisualOptions}
-                  renderedChartSsr={activeRenderedChartSsr}
-                  renderedChartMappedData={renderedChartMappedData}
-                  renderedChartType={chartType as ChartType}
-                  setChartErrorMessage={setChartErrorMessage}
-                  setNotFound={setNotFound}
-                  isAIAssistedChart={editChartCrudData?.isAIAssisted}
-                />
-              </Route>
-              <Route path="/chart/:page/mapping">
-                <ChartBuilderMapping
-                  loading={loading}
-                  visualOptions={visualOptions}
-                  setVisualOptions={setVisualOptions}
-                  dimensions={dimensions}
-                  renderedChart={content}
-                  containerRef={containerRef}
-                  renderedChartSsr={activeRenderedChartSsr}
-                  renderedChartMappedData={renderedChartMappedData}
-                  renderedChartType={chartType as ChartType}
-                  setChartErrorMessage={setChartErrorMessage}
-                  setNotFound={setNotFound}
-                  isAIAssistedChart={editChartCrudData?.isAIAssisted}
-                />
-              </Route>
-              <Route path="/chart/:page/chart-type">
-                <ChartBuilderChartType
-                  loading={loading}
-                  loadDataset={loadDataset}
-                  setChartFromAPI={setChartFromAPI}
-                  setVisualOptions={setVisualOptions}
-                />
-              </Route>
-              <Route path="/chart/:page/preview-data">
-                <ChartBuilderPreview
-                  loading={loading}
-                  data={sampleData}
-                  loadDataset={loadDataset}
-                  stats={dataStats}
-                  dataTypes={dataTypes2}
-                  filterOptionGroups={filterOptionGroups}
-                />
-              </Route>
-              <Route path="/chart/:page/data">
-                <ChartModuleDataView
-                  loadDataset={loadDataset}
-                  toolboxOpen={toolboxOpen}
-                  setChartFromAPI={setChartFromAPI}
-                />
-              </Route>
-              <Route path="/chart/:page/preview">
-                <ChartBuilderPreviewTheme
-                  loading={loading || isChartLoading}
-                  visualOptions={visualOptions}
-                  renderedChart={renderedChart}
-                  setVisualOptions={setVisualOptions}
-                  renderedChartSsr={renderedChartSsr}
-                  renderedChartMappedData={renderedChartMappedData}
-                  editable={!isPreviewMode || (page === "new" && !view)}
-                  setIsPreviewView={setIsPreviewView}
-                  containerRef={containerRef}
-                  loadedChart={loadedChart}
-                  view={view}
-                  isAIAssistedChart={editChartCrudData?.isAIAssisted}
-                />
-              </Route>
-              <Route path="/chart/:page">
-                <ChartBuilderPreviewTheme
-                  loading={loading || isChartLoading}
-                  visualOptions={visualOptions}
-                  renderedChart={renderedChart}
-                  setVisualOptions={setVisualOptions}
-                  renderedChartSsr={renderedChartSsr}
-                  renderedChartMappedData={renderedChartMappedData}
-                  editable={!isPreviewMode}
-                  setIsPreviewView={setIsPreviewView}
-                  containerRef={containerRef}
-                  loadedChart={loadedChart}
-                  view={view}
-                  isAIAssistedChart={
-                    editChartCrudData?.isAIAssisted ?? loadedChart?.isAIAssisted
-                  }
-                />
-              </Route>
-              <Route path="*">
-                <NoMatchPage />
-              </Route>
-            </Switch>
-          )}
+            <Route path="/chart/:page/filters">
+              <ChartBuilderFilters
+                loading={loading}
+                renderedChart={content}
+                dimensions={dimensions}
+                visualOptions={visualOptions}
+                containerRef={containerRef}
+                setVisualOptions={setVisualOptions}
+                renderedChartSsr={activeRenderedChartSsr}
+                renderedChartMappedData={renderedChartMappedData}
+                renderedChartType={chartType as ChartType}
+                setChartErrorMessage={setChartErrorMessage}
+                setChartError={setChartError}
+                isAIAssistedChart={editChartCrudData?.isAIAssisted}
+                dataError={dataError}
+                chartError={chartError}
+                chartErrorMessage={chartErrorMessage}
+              />
+            </Route>
+            <Route path="/chart/:page/mapping">
+              <ChartBuilderMapping
+                loading={loading}
+                visualOptions={visualOptions}
+                setVisualOptions={setVisualOptions}
+                dimensions={dimensions}
+                renderedChart={content}
+                containerRef={containerRef}
+                renderedChartSsr={activeRenderedChartSsr}
+                renderedChartMappedData={renderedChartMappedData}
+                renderedChartType={chartType as ChartType}
+                setChartErrorMessage={setChartErrorMessage}
+                setChartError={setChartError}
+                isAIAssistedChart={editChartCrudData?.isAIAssisted}
+                dataError={dataError}
+                chartError={chartError}
+                chartErrorMessage={chartErrorMessage}
+              />
+            </Route>
+            <Route path="/chart/:page/chart-type">
+              <ChartBuilderChartType
+                loading={loading}
+                loadDataset={loadDataset}
+                setChartFromAPI={setChartFromAPI}
+                setVisualOptions={setVisualOptions}
+              />
+            </Route>
+            <Route path="/chart/:page/preview-data">
+              <ChartBuilderPreview
+                loading={loading}
+                data={sampleData}
+                loadDataset={loadDataset}
+                stats={dataStats}
+                dataTypes={dataTypes2}
+                filterOptionGroups={filterOptionGroups}
+                dataError={dataError}
+                chartError={chartError}
+                chartErrorMessage={chartErrorMessage}
+              />
+            </Route>
+            <Route path="/chart/:page/data">
+              <ChartModuleDataView
+                loadDataset={loadDataset}
+                toolboxOpen={toolboxOpen}
+                setChartFromAPI={setChartFromAPI}
+              />
+            </Route>
+            <Route path="/chart/:page/preview">
+              <ChartBuilderPreviewTheme
+                loading={loading || isChartLoading}
+                visualOptions={visualOptions}
+                renderedChart={renderedChart}
+                setVisualOptions={setVisualOptions}
+                renderedChartSsr={renderedChartSsr}
+                renderedChartMappedData={renderedChartMappedData}
+                editable={!isPreviewMode || (page === "new" && !view)}
+                setIsPreviewView={setIsPreviewView}
+                containerRef={containerRef}
+                loadedChart={loadedChart}
+                view={view}
+                isAIAssistedChart={editChartCrudData?.isAIAssisted}
+                dataError={dataError}
+                chartError={chartError}
+                chartErrorMessage={chartErrorMessage}
+              />
+            </Route>
+            <Route path="/chart/:page">
+              <ChartBuilderPreviewTheme
+                loading={loading || isChartLoading}
+                visualOptions={visualOptions}
+                renderedChart={renderedChart}
+                setVisualOptions={setVisualOptions}
+                renderedChartSsr={renderedChartSsr}
+                renderedChartMappedData={renderedChartMappedData}
+                editable={!isPreviewMode}
+                setIsPreviewView={setIsPreviewView}
+                containerRef={containerRef}
+                loadedChart={loadedChart}
+                view={view}
+                isAIAssistedChart={
+                  editChartCrudData?.isAIAssisted ?? loadedChart?.isAIAssisted
+                }
+                dataError={dataError}
+                chartError={chartError}
+                chartErrorMessage={chartErrorMessage}
+              />
+            </Route>
+            <Route path="*">
+              <NoMatchPage />
+            </Route>
+          </Switch>
         </div>
       </Container>
     </DndProvider>

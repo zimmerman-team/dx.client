@@ -7,14 +7,17 @@ import { styles as commonStyles } from "app/modules/chart-module/routes/common/s
 import { ChartBuilderCustomizeProps } from "app/modules/chart-module/routes/customize/data";
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 import { useStoreState } from "app/state/store/hooks";
-import { ChartAPIModel, emptyChartAPI } from "../../data";
+import { ChartAPIModel, emptyChartAPI } from "app/modules/chart-module/data";
 import { NotAuthorizedMessageModule } from "app/modules/common/not-authorized-message";
 import { ReactComponent as AIIcon } from "app/modules/chart-module/assets/ai-icon.svg";
+import ErrorComponent from "app/modules/chart-module/components/dialog/errrorComponent";
+import { useParams } from "react-router-dom";
 
 function ChartBuilderCustomize(props: Readonly<ChartBuilderCustomizeProps>) {
   useTitle("DX DataXplorer - Customize");
 
   const { isAuthenticated, user } = useAuth0();
+  const { page, view } = useParams<{ page: string; view?: string }>();
 
   const loadedChart = useStoreState(
     (state) =>
@@ -32,6 +35,18 @@ function ChartBuilderCustomize(props: Readonly<ChartBuilderCustomizeProps>) {
       <>
         <div css="width: 100%; height: 100px;" />
         <NotAuthorizedMessageModule asset="chart" action="edit" />
+      </>
+    );
+  }
+  if (props.dataError || props.chartError) {
+    return (
+      <>
+        <ErrorComponent
+          chartErrorMessage={props.chartErrorMessage}
+          dataError={props.dataError}
+          chartError={props.chartError}
+          page={page}
+        />
       </>
     );
   }
@@ -53,7 +68,7 @@ function ChartBuilderCustomize(props: Readonly<ChartBuilderCustomizeProps>) {
             renderedChartSsr={props.renderedChartSsr}
             renderedChartMappedData={props.renderedChartMappedData}
             setChartErrorMessage={props.setChartErrorMessage}
-            setNotFound={props.setNotFound}
+            setChartError={props.setChartError}
             renderedChartType={props.renderedChartType}
             mapping={mapping}
           />

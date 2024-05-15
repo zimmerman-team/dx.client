@@ -16,6 +16,7 @@ import ChartPlaceholder from "app/modules/chart-module/components/placeholder";
 import { ChartAPIModel, emptyChartAPI } from "app/modules/chart-module/data";
 import { NotAuthorizedMessageModule } from "app/modules/common/not-authorized-message";
 import { ReactComponent as AIIcon } from "app/modules/chart-module/assets/ai-icon.svg";
+import ErrorComponent from "app/modules/chart-module/components/dialog/errrorComponent";
 import { useRecoilState } from "recoil";
 import { chartFromReportAtom } from "app/state/recoil/atoms";
 import { useParams } from "react-router-dom";
@@ -75,6 +76,18 @@ function ChartBuilderMapping(props: Readonly<ChartBuilderMappingProps>) {
       </>
     );
   }
+  if (props.dataError || props.chartError) {
+    return (
+      <>
+        <ErrorComponent
+          chartErrorMessage={props.chartErrorMessage}
+          dataError={props.dataError}
+          chartError={props.chartError}
+          page={page}
+        />
+      </>
+    );
+  }
 
   return (
     <div css={commonStyles.container}>
@@ -102,7 +115,7 @@ function ChartBuilderMapping(props: Readonly<ChartBuilderMappingProps>) {
                 renderedChartSsr={props.renderedChartSsr}
                 renderedChartMappedData={props.renderedChartMappedData}
                 setChartErrorMessage={props.setChartErrorMessage}
-                setNotFound={props.setNotFound}
+                setChartError={props.setChartError}
                 renderedChartType={props.renderedChartType}
                 mapping={mapping}
               />

@@ -13,4 +13,7 @@ export interface ChartBuilderPreviewThemeProps {
   loadedChart: ChartAPIModel;
   view: string | undefined;
   isAIAssistedChart: boolean;
+  chartError: boolean;
+  dataError: boolean;
+  chartErrorMessage: string;
 }
