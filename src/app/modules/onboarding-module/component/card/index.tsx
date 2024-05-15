@@ -64,40 +64,40 @@ export default function AuthCard(props: { isLogin?: boolean }) {
         <LinkedInIcon />
         {props.isLogin ? "Log in" : "Sign up"} with LinkedIn
       </button>
-
-      <FormControlLabel
-        control={
-          <Checkbox
-            name="tna"
-            color="default"
-            checked={checked}
-            onChange={handleChange}
-          />
-        }
-        label={
-          <p
-            css={`
-              color: #231d2c;
-              font-size: 12px;
-              font-family: "GothamNarrow-Book";
-            `}
-          >
-            I agree with DX's{" "}
-            <a
-              href="https://drive.google.com/file/d/1wgY5HYdE5-redIOF85E5fZZJT_YueOWP/view?usp=sharing"
-              className="privacy-link"
-              target="_blank"
-              rel="noreferrer"
+      {props.isLogin ? null : (
+        <FormControlLabel
+          control={
+            <Checkbox
+              name="tna"
+              color="default"
+              checked={checked}
+              onChange={handleChange}
+            />
+          }
+          label={
+            <p
               css={`
                 color: #231d2c;
+                font-size: 12px;
+                font-family: "GothamNarrow-Book";
               `}
             >
-              terms of services and privacy policy
-            </a>
-          </p>
-        }
-        css={termsOfServiceCss}
-      />
+              I agree with DX's{" "}
+              <a
+                href=""
+                target="_blank"
+                rel="noreferrer noopener"
+                css={`
+                  color: #231d2c;
+                `}
+              >
+                terms of services and privacy policy
+              </a>
+            </p>
+          }
+          css={termsOfServiceCss}
+        />
+      )}
     </div>
   );
 }

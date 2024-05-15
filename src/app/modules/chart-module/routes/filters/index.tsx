@@ -21,6 +21,8 @@ function ChartBuilderFilters(props: Readonly<ChartBuilderFiltersProps>) {
 
   const dataset = useStoreState((state) => state.charts.dataset.value);
 
+  const mapping = useStoreState((state) => state.charts.mapping.value);
+
   const loadedChart = useStoreState(
     (state) =>
       (state.charts.ChartGet.crudData ?? emptyChartAPI) as ChartAPIModel
@@ -65,6 +67,7 @@ function ChartBuilderFilters(props: Readonly<ChartBuilderFiltersProps>) {
             setChartErrorMessage={props.setChartErrorMessage}
             setNotFound={props.setNotFound}
             renderedChartType={props.renderedChartType}
+            mapping={mapping}
           />
         </div>
         <div

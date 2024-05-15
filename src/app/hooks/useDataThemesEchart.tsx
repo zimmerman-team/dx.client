@@ -66,7 +66,7 @@ export function useDataThemesEchart() {
     });
   }
 
-  function echartsBarchart(data: any, visualOptions: any) {
+  function echartsBarchart(data: any, visualOptions: any, mapping: any) {
     const {
       marginTop,
       marginRight,
@@ -123,6 +123,7 @@ export function useDataThemesEchart() {
         splitLine: {
           show: splitLineY ?? true,
         },
+        name: mapping?.size?.value?.[0] ?? "",
       },
       // xAxis: orientation === "horizontal" ? { type: "value" } : { data: bars },
       // yAxis: orientation === "vertical" ? { type: "value" } : { data: bars },
@@ -183,8 +184,6 @@ export function useDataThemesEchart() {
 
     const thicknessPercent =
       defaultRadius - (arcThickness / 100) * defaultRadius;
-
-    const sizes = data.map((d: any) => d.value);
 
     const option = {
       color: checkLists.find((item) => item.label === palette)?.value,
@@ -343,7 +342,7 @@ export function useDataThemesEchart() {
     return option;
   }
 
-  function echartsLinechart(data: any, visualOptions: any) {
+  function echartsLinechart(data: any, visualOptions: any, mapping: any) {
     const {
       // artboard
       // margins
@@ -378,6 +377,7 @@ export function useDataThemesEchart() {
         type: "value",
         zlevel: -1,
         z: -1,
+        name: mapping?.y?.value?.[0] ?? "",
       },
       legend: {
         show: showLegend,
@@ -413,7 +413,7 @@ export function useDataThemesEchart() {
     return option;
   }
 
-  function echartsAreatimeaxis(data: any, visualOptions: any) {
+  function echartsAreatimeaxis(data: any, visualOptions: any, mapping: any) {
     const {
       // artboard
       // margins
@@ -463,6 +463,7 @@ export function useDataThemesEchart() {
       yAxis: {
         type: "value",
         boundaryGap: [0, "100%"],
+        name: mapping?.y?.value?.[0] ?? "",
       },
       dataZoom: dataZoom
         ? [
@@ -491,7 +492,7 @@ export function useDataThemesEchart() {
     return option;
   }
 
-  function echartsAreastack(data: any, visualOptions: any) {
+  function echartsAreastack(data: any, visualOptions: any, mapping: any) {
     const {
       // artboard
       // margins
@@ -531,6 +532,7 @@ export function useDataThemesEchart() {
         type: "value",
         zlevel: -1,
         z: -1,
+        name: mapping?.y?.value?.[0] ?? "",
       },
       legend: {
         show: showLegend,
@@ -568,7 +570,7 @@ export function useDataThemesEchart() {
     return option;
   }
 
-  function echartsBubblechart(data: any, visualOptions: any) {
+  function echartsBubblechart(data: any, visualOptions: any, mapping: any) {
     const {
       // artboard
       showLegend,
@@ -625,6 +627,7 @@ export function useDataThemesEchart() {
           },
         },
         scale: true,
+        name: mapping?.y?.value?.[0] ?? "",
       },
       tooltip: {
         trigger: showTooltip ? "item" : "none",
@@ -671,7 +674,7 @@ export function useDataThemesEchart() {
     return option;
   }
 
-  function echartsScatterchart(data: any, visualOptions: any) {
+  function echartsScatterchart(data: any, visualOptions: any, mapping: any) {
     const {
       // margin
       marginTop,
@@ -704,7 +707,9 @@ export function useDataThemesEchart() {
           data: uniqBy(sortBy(data.map((d: any) => d.x)), (d: any) => d),
         },
       ],
-      yAxis: {},
+      yAxis: {
+        name: mapping?.y?.value?.[0] ?? "",
+      },
       tooltip: {
         trigger: showTooltip ? "item" : "none",
         confine: true,
@@ -1473,6 +1478,7 @@ export function useDataThemesEchart() {
       | "echartsCirclepacking",
 
     visualOptions: any,
+    mapping: any,
     id: string
   ) {
     if (chartType === "bigNumber") {
@@ -1490,19 +1496,22 @@ export function useDataThemesEchart() {
       window.removeEventListener("resize", () => onResize(chart, id));
 
       const CHART_TYPE_TO_COMPONENT = {
-        echartsBarchart: () => echartsBarchart(data, visualOptions),
+        echartsBarchart: () => echartsBarchart(data, visualOptions, mapping),
         echartsGeomap: () => echartsGeomap(data, visualOptions),
-        echartsLinechart: () => echartsLinechart(data, visualOptions),
-        echartsAreatimeaxis: () => echartsAreatimeaxis(data, visualOptions),
-        echartsAreastack: () => echartsAreastack(data, visualOptions),
+        echartsLinechart: () => echartsLinechart(data, visualOptions, mapping),
+        echartsAreatimeaxis: () =>
+          echartsAreatimeaxis(data, visualOptions, mapping),
+        echartsAreastack: () => echartsAreastack(data, visualOptions, mapping),
         echartsSankey: () => echartsSankey(data, visualOptions),
         echartsTreemap: () => echartsTreemap(data, visualOptions),
         echartsSunburst: () => echartsSunburst(data, visualOptions),
         echartsForcegraph: () => echartsForcegraph(data, visualOptions),
         echartsCirculargraph: () => echartsCirculargraph(data, visualOptions),
         echartsPiechart: () => echartsPiechart(data, visualOptions),
-        echartsBubblechart: () => echartsBubblechart(data, visualOptions),
-        echartsScatterchart: () => echartsScatterchart(data, visualOptions),
+        echartsBubblechart: () =>
+          echartsBubblechart(data, visualOptions, mapping),
+        echartsScatterchart: () =>
+          echartsScatterchart(data, visualOptions, mapping),
         echartsHeatmap: () => echartsHeatmap(data, visualOptions),
         echartsGraphgl: () => echartsGraphgl(data, visualOptions),
         echartsRadarchart: () => echartsRadarchart(data, visualOptions),

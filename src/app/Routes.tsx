@@ -18,6 +18,7 @@ import {
   useAuth0,
   withAuthenticationRequired,
 } from "@auth0/auth0-react";
+import axios from "axios";
 
 const HomeModule = lazy(() => import("app/modules/home-module"));
 const PartnersModule = lazy(
@@ -140,6 +141,59 @@ const OneTapLoginComponent = () => {
   );
 };
 
+const IntercomBootupComponent = () => {
+  const { isLoading, isAuthenticated, user, getAccessTokenSilently } =
+    useAuth0();
+
+  const getIntercomHash = async () => {
+    return getAccessTokenSilently().then(async (newToken) => {
+      return await axios.get(
+        `${process.env.REACT_APP_API}/users/intercom-hash`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${newToken}`,
+          },
+        }
+      );
+    });
+  };
+
+  React.useEffect(() => {
+    if (window.Intercom)
+      if (isAuthenticated) {
+        getIntercomHash()
+          .then((res) => {
+            if (res.data.error) {
+              console.error(res.data.error);
+            } else {
+              // @ts-ignore
+              window.Intercom("boot", {
+                api_base: "https://api-iam.intercom.io",
+                app_id: "tfvurn19",
+                name: user?.name, // Full name
+                email: user?.email, // the email for your user
+                user_id: user?.sub, // user_id as a string
+                created_at: user?.created_at, // Signup date as a Unix timestamp
+                user_hash: res.data.hash,
+              });
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      } else {
+        // @ts-ignore
+        window.Intercom("boot", {
+          api_base: "https://api-iam.intercom.io",
+          app_id: "tfvurn19",
+        });
+      }
+  }, [isAuthenticated]);
+
+  return <></>;
+};
+
 export function MainRoutes() {
   useScrollToTop();
 
@@ -154,6 +208,7 @@ export function MainRoutes() {
     >
       <AuthLoader />
       <OneTapLoginComponent />
+      <IntercomBootupComponent />
       <Suspense fallback={<PageLoader />}>
         <Switch>
           <Route exact path="/callback">
@@ -194,7 +249,7 @@ export function MainRoutes() {
           </RouteWithAppBar>
           <RouteWithAppBar
             exact
-            path="/profile"
+            path="/user-management/:tab?"
             element={<ProtectedRoute component={UserProfileModule} />}
           />
           <RouteWithAppBar path="*">

@@ -343,7 +343,7 @@ const ActionMenu = () => {
         )}
         {isAuthenticated && (
           <button
-            onClick={() => history.push("/profile")}
+            onClick={() => history.push("/user-management")}
             css={`
               min-width: 33px;
               height: 33px;

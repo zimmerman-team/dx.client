@@ -3,6 +3,7 @@ import { useStoreState } from "app/state/store/hooks";
 import { PageLoader } from "app/modules/common/page-loader";
 import { useDataThemesEchart } from "app/hooks/useDataThemesEchart";
 import { useUpdateEffectOnce } from "app/hooks/useUpdateEffectOnce";
+import GeomapLegend from "../geomap-legend";
 
 export type ChartType =
   | "echartsBarchart"
@@ -38,6 +39,7 @@ interface Props {
   renderedChartType?: ChartType;
   inChartWrapper?: boolean;
   chartPreviewInReport?: boolean;
+  mapping?: any;
 }
 
 export function CommonChart(props: Readonly<Props>) {
@@ -139,6 +141,7 @@ export function CommonChart(props: Readonly<Props>) {
               ? visualOptions.height - 28
               : visualOptions.height,
           },
+          props.mapping,
           `common-chart-render-container-${props.chartId || "1"}-${
             props.chartPreviewInReport
           }`
@@ -207,6 +210,7 @@ export function CommonChart(props: Readonly<Props>) {
         css={`
           width: 100%;
           overflow: hidden;
+          position: relative;
           height: ${contentHeight};
           * {
             font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif !important;
@@ -270,6 +274,21 @@ export function CommonChart(props: Readonly<Props>) {
             }
           `}
         />
+        {chartType === "echartsGeomap" && props.visualOptions?.showLegend ? (
+          <div
+            css={`
+              position: absolute;
+              bottom: 0;
+              right: 0;
+            `}
+          >
+            <GeomapLegend
+              data={props.renderedChartMappedData}
+              visualOptions={props.visualOptions}
+              mapping={props.mapping}
+            />
+          </div>
+        ) : null}
       </div>
     );
   }
