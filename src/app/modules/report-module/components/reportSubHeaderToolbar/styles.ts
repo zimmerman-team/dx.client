@@ -108,9 +108,6 @@ export const styles = {
     z-index: 2;
     padding-left: 0px;
     outline: none;
-    &:focus {
-      background: #f1f3f5;
-    }
   `,
   endContainer: css`
     display: flex;
