@@ -51,7 +51,7 @@ const AutoSaveSwitch = (props: {
   checked: boolean;
   setAutoSave: (value: {
     isAutoSaveEnabled: boolean;
-    showAutoSaveSwitch?: boolean;
+    enableAutoSaveSwitch?: boolean;
   }) => void;
   disabled?: boolean;
 }) => {
@@ -64,7 +64,10 @@ const AutoSaveSwitch = (props: {
         disabled={props.disabled ?? false}
         onChange={(e) => {
           console.log("calling?", e.target.checked);
-          props.setAutoSave({ isAutoSaveEnabled: e.target.checked });
+          props.setAutoSave({
+            isAutoSaveEnabled: e.target.checked,
+            enableAutoSaveSwitch: true,
+          });
         }}
         data-testid={"auto-save-switch"}
       />

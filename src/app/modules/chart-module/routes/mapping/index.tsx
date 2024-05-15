@@ -16,10 +16,15 @@ import ChartPlaceholder from "app/modules/chart-module/components/placeholder";
 import { ChartAPIModel, emptyChartAPI } from "app/modules/chart-module/data";
 import { NotAuthorizedMessageModule } from "app/modules/common/not-authorized-message";
 import { ReactComponent as AIIcon } from "app/modules/chart-module/assets/ai-icon.svg";
+import { useRecoilState } from "recoil";
+import { chartFromReportAtom } from "app/state/recoil/atoms";
+import { useParams } from "react-router-dom";
 
 function ChartBuilderMapping(props: Readonly<ChartBuilderMappingProps>) {
   useTitle("DX DataXplorer - Mapping");
   const { isAuthenticated, user } = useAuth0();
+  const { page, view } = useParams<{ page: string; view?: string }>();
+
   const mapping = useStoreState((state) => state.charts.mapping.value);
   const [requiredFields, setRequiredFields] = React.useState<
     { id: string; name: string }[]
@@ -32,7 +37,12 @@ function ChartBuilderMapping(props: Readonly<ChartBuilderMappingProps>) {
     (state) =>
       (state.charts.ChartGet.crudData ?? emptyChartAPI) as ChartAPIModel
   );
-
+  const [chartFromReport, setChartFromReport] =
+    useRecoilState(chartFromReportAtom);
+  // access query parameters
+  const queryParams = new URLSearchParams(location.search);
+  const paramValue = queryParams.get("fromreport");
+  const reportPage = queryParams.get("page") as string;
   React.useEffect(() => {
     const { updRequiredFields, updMinValuesFields } =
       getRequiredFieldsAndErrors(mapping, props.dimensions);
@@ -41,6 +51,17 @@ function ChartBuilderMapping(props: Readonly<ChartBuilderMappingProps>) {
 
     setMinValuesFields(updMinValuesFields);
   }, [mapping, props.dimensions]);
+  React.useEffect(() => {
+    if (paramValue === "true") {
+      setChartFromReport((prev) => ({
+        ...chartFromReport,
+        state: true,
+        action: "create",
+        page: reportPage,
+        chartId: page,
+      }));
+    }
+  }, []);
 
   const canChartEditDelete = React.useMemo(() => {
     return isAuthenticated && loadedChart && loadedChart.owner === user?.sub;
@@ -83,6 +104,7 @@ function ChartBuilderMapping(props: Readonly<ChartBuilderMappingProps>) {
                 setChartErrorMessage={props.setChartErrorMessage}
                 setNotFound={props.setNotFound}
                 renderedChartType={props.renderedChartType}
+                mapping={mapping}
               />
             )}
           </div>

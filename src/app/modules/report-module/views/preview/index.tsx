@@ -19,7 +19,7 @@ import {
   unSavedReportPreviewModeAtom,
 } from "app/state/recoil/atoms";
 import { linkDecorator } from "app/modules/common/RichEditor/decorators";
-import { object } from "yup";
+import { useTitle } from "react-use";
 
 export function ReportPreviewView(props: {
   setIsPreviewView: React.Dispatch<React.SetStateAction<boolean>>;
@@ -29,6 +29,12 @@ export function ReportPreviewView(props: {
     }>
   >;
 }) {
+  useTitle(
+    `DX DataXplorer - Report ${
+      location.pathname.endsWith("preview") ? "Preview" : "View"
+    }`
+  );
+
   const { page } = useParams<{ page: string }>();
 
   const { isLoading, isAuthenticated } = useAuth0();

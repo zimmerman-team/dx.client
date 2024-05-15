@@ -51,7 +51,7 @@ const StyledTabs = withStyles({
 })(Tabs);
 
 export default function ExploreAssetsModule() {
-  useTitle("DX DataXplorer");
+  useTitle("DX DataXplorer - Explore");
   // clear persisted state
   const clearPersistedReportState = useResetRecoilState(
     persistedReportStateAtom
@@ -133,8 +133,7 @@ export default function ExploreAssetsModule() {
 
   return (
     <React.Fragment>
-      <Box height={45} />
-      {!isAuthenticated ? <EmpowerBlock view="explore" /> : null}
+      {!isAuthenticated ? <EmpowerBlock view="explore" /> : <Box height={48} />}
       <Container
         maxWidth="lg"
         ref={exploreViewRef}

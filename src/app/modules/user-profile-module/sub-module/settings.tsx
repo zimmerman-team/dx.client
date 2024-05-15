@@ -3,8 +3,11 @@ import DeleteAccountDialog from "app/components/Dialogs/deleteAccountDialog";
 import { PrimaryButton } from "app/components/Styled/button";
 import axios from "axios";
 import React from "react";
+import { useTitle } from "react-use";
 
 export default function Settings() {
+  useTitle("DX DataXplorer - User Settings");
+
   const [modalDisplay, setModalDisplay] = React.useState<boolean>(false);
   const [inputValue, setInputValue] = React.useState<string>("");
   const [enableButton, setEnableButton] = React.useState<boolean>(false);

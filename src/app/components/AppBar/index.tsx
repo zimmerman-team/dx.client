@@ -249,6 +249,11 @@ export function AppBar() {
                     <b>Partners </b>
                   </Link>
                 </div>
+                <div css={navLinkcss("pricing", navLocation)}>
+                  <Link to="/pricing" data-cy="nav-pricing">
+                    <b>Pricing </b>
+                  </Link>
+                </div>
                 <div css={navLinkcss("contact", navLocation)}>
                   <Link to="/contact" data-cy="nav-contact">
                     <b>Contact </b>

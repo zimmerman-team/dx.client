@@ -43,6 +43,7 @@ import ErrorComponent from "app/modules/chart-module/components/dialog/errrorCom
 import axios from "axios";
 import { useRecoilState, useResetRecoilState } from "recoil";
 import {
+  chartFromReportAtom,
   isChartAIAgentActive,
   isChartAutoMappedAtom,
 } from "app/state/recoil/atoms";
@@ -130,7 +131,8 @@ export default function ChartModule() {
   const selectedAIChart = useStoreState(
     (state) => state.charts.SelectedAIChartState.value
   );
-
+  const [chartFromReport, setChartFromReport] =
+    useRecoilState(chartFromReportAtom);
   const setMapping = useStoreActions(
     (actions) => actions.charts.mapping.setValue
   );
@@ -276,7 +278,13 @@ export default function ChartModule() {
       if (page === "new") {
         const response = await onSave();
         const data = response?.data;
-        history.push(`/chart/${data.id}/mapping`);
+        history.push(
+          `/chart/${data.id}/mapping${
+            chartFromReport.state
+              ? `?fromreport=true&page=${chartFromReport.page}`
+              : ""
+          }`
+        );
       } else {
         onSave();
       }
@@ -393,6 +401,12 @@ export default function ChartModule() {
     setNotFound(false);
     setDataTypes([]);
     resetIsChartAutoMapped();
+    setChartFromReport((prev) => ({
+      ...prev,
+      state: false,
+      page: "",
+      view: "",
+    }));
     // resetIsAiSwitchActive();
   }
   function clearChartBuilder() {
@@ -592,6 +606,7 @@ export default function ChartModule() {
                   loading={loading}
                   loadDataset={loadDataset}
                   setChartFromAPI={setChartFromAPI}
+                  setVisualOptions={setVisualOptions}
                 />
               </Route>
               <Route path="/chart/:page/preview-data">

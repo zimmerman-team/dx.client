@@ -34,6 +34,10 @@ export default function LogOutDialog(props: Props) {
   }
 
   function onLogout() {
+    // @ts-ignore
+    if (window.Intercom) {
+      window.Intercom("shutdown");
+    }
     clearAssets();
     logout({
       logoutParams: {

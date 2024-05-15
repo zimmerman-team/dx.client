@@ -1,25 +1,18 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Grid from "@material-ui/core/Grid";
 import { useAuth0 } from "@auth0/auth0-react";
 import { socialAuth } from "app/utils/socialAuth";
 import { HomePrimaryButton } from "app/components/Styled/button";
 import { ReactComponent as GoogleIcon } from "app/modules/onboarding-module/asset/google-img.svg";
-import { ReactComponent as SmallEllipse } from "app/modules/home-module/assets/cases-sm-ellipse.svg";
 import { ReactComponent as LinkedInIcon } from "app/modules/onboarding-module/asset/linkedIn-img.svg";
-import { ReactComponent as TopRightEllipse } from "app/modules/home-module/assets/top-right-ellipse.svg";
-import { ReactComponent as BottomLeftEllipse } from "app/modules/home-module/assets/bottom-left-ellipse.svg";
-import { ReactComponent as BottomRightEllipse } from "app/modules/home-module/assets/bottom-right-ellipse.svg";
 import {
   empowercss,
-  SmallEllipseCss,
-  TopRightEllipseCss,
-  BottomLeftEllipseCss,
-  BottomRightEllipseCss,
+  ClimateButton,
 } from "app/modules/home-module/sub-modules/partners/style";
+import { Box } from "@material-ui/core";
 
 export default function EmpowerBlock(props: {
-  view?: "why-dx" | "contact" | "about" | "partners" | "explore";
+  view?: "why-dx" | "contact" | "about" | "partners" | "explore" | "landing";
 }) {
   const { isAuthenticated } = useAuth0();
 
@@ -52,6 +45,10 @@ export default function EmpowerBlock(props: {
       subText =
         "Dataxplorer simplifies and empowers visual data reporting for all.";
       break;
+    case "landing":
+      mainText = "Start Making Impact Today\nwith DataXplorer";
+      subText = "Create top-notch reports for your business.";
+      break;
 
     default:
       mainText = "Empower people with meaningful data";
@@ -60,11 +57,25 @@ export default function EmpowerBlock(props: {
   }
 
   return (
-    <Grid container css={empowercss}>
+    <Box css={empowercss(props.view!)}>
       <h1>{mainText}</h1>
       <p>
         <b>{subText}</b>
       </p>
+      {props.view === "landing" ? (
+        <div
+          css={`
+            margin: 0 auto;
+            width: max-content;
+            margin-top: 34px !important;
+          `}
+        >
+          <ClimateButton color="#6061E5" type="button">
+            EXPLORE CLIMATE CHANGE IN EUROPE 2022 REPORT
+          </ClimateButton>
+        </div>
+      ) : null}
+
       {isAuthenticated && (
         <div>
           <Link
@@ -96,7 +107,7 @@ export default function EmpowerBlock(props: {
               gap: 10px;
               color: #fff;
               display: flex;
-              padding: 9px 18px;
+              padding: 9px 18px !important;
               background: #a1a2ff;
               align-items: center;
               justify-content: center;
@@ -116,10 +127,6 @@ export default function EmpowerBlock(props: {
           </button>
         </div>
       )}
-      <TopRightEllipse css={TopRightEllipseCss} />
-      <SmallEllipse css={SmallEllipseCss} />
-      <BottomRightEllipse css={BottomRightEllipseCss} />
-      <BottomLeftEllipse css={BottomLeftEllipseCss} />
-    </Grid>
+    </Box>
   );
 }

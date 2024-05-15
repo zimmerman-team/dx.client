@@ -132,7 +132,10 @@ export default function RowstructureDisplay(props: RowStructureDisplayProps) {
     <div
       ref={ref}
       css={`
+        width: 100%;
+        height: 100%;
         position: relative;
+        margin-bottom: ${!viewOnlyMode ? "0px" : "50px"};
       `}
     >
       <div
@@ -140,8 +143,6 @@ export default function RowstructureDisplay(props: RowStructureDisplayProps) {
         css={`
           width: 100%;
           height: 100%;
-          position: relative;
-          margin-bottom: ${!viewOnlyMode ? "0px" : "50px"};
         `}
       >
         {handleDisplay && (

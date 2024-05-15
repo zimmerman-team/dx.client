@@ -12,6 +12,7 @@ import { styles as commonStyles } from "app/modules/chart-module/routes/common/s
 import { ChartBuilderPreviewThemeProps } from "app/modules/chart-module/routes/preview-theme/data";
 import WarningDialog from "app/modules/chart-module/components/dialog/warningDialog";
 import { ReactComponent as AIIcon } from "app/modules/chart-module/assets/ai-icon.svg";
+import GeomapLegend from "../../components/geomap-legend";
 
 export function ChartBuilderPreviewTheme(props: ChartBuilderPreviewThemeProps) {
   useTitle("DX DataXplorer - Preview Chart");
@@ -74,6 +75,7 @@ export function ChartBuilderPreviewTheme(props: ChartBuilderPreviewThemeProps) {
                 domRef.current,
                 selectedChartType || "echartsBarchart",
                 visualOptions,
+                mapping,
                 "common-chart-render-container"
               );
             }
@@ -221,11 +223,30 @@ export function ChartBuilderPreviewTheme(props: ChartBuilderPreviewThemeProps) {
                     position: absolute;
                     right: -0.6%;
                     top: -4%;
-                    display: ${props.isAIAssistedChart ? "block" : "none"};
+                    display: ${!props.isAIAssistedChart || props.loading
+                      ? "none"
+                      : "block"};
                   `}
                 >
                   <AIIcon />
                 </div>
+
+                {selectedChartType === "echartsGeomap" &&
+                props.visualOptions?.showLegend ? (
+                  <div
+                    css={`
+                      position: absolute;
+                      bottom: 0;
+                      right: 0;
+                    `}
+                  >
+                    <GeomapLegend
+                      data={props.renderedChartMappedData}
+                      visualOptions={props.visualOptions}
+                      mapping={mapping}
+                    />
+                  </div>
+                ) : null}
               </div>
             </div>
           </>

@@ -1,6 +1,7 @@
 import { PrimaryButton } from "app/components/Styled/button";
 import React from "react";
 import { avicss, flexContainercss, inputcss, profilecss } from "../style";
+import { useTitle } from "react-use";
 import { useAuth0 } from "@auth0/auth0-react";
 import axios from "axios";
 import { useStoreState } from "app/state/store/hooks";
@@ -11,6 +12,7 @@ interface State {
 }
 
 export default function Profile() {
+  useTitle("DX DataXplorer - User Profile");
   const { user, getAccessTokenSilently } = useAuth0();
   const token = useStoreState((state) => state.AuthToken.value);
 

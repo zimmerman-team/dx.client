@@ -19,6 +19,7 @@ import {
   GrantsTabCard,
   PerformanceTabCard,
 } from "app/modules/home-module/sub-modules/partners/components/tabCard";
+import { useTitle } from "react-use";
 
 export const StyledTab = withStyles(() => ({
   root: {
@@ -102,6 +103,8 @@ const Pagination = (props: {
   </div>
 );
 export default function PartnersModule() {
+  useTitle("DX DataXplorer - Partners");
+
   const [displayTab, setDisplayTab] = React.useState<number>(0);
   const handleChange = (
     event: React.ChangeEvent<{}> | null,

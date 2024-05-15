@@ -22,6 +22,7 @@ import ExternalSearch, {
 } from "app/modules/dataset-upload-module/upload-steps/externalSearch";
 import Stepper from "app/modules/dataset-upload-module/component/stepper";
 import { Box } from "@material-ui/core";
+import { useTitle } from "react-use";
 
 interface Props {
   datasetId: string;
@@ -29,6 +30,8 @@ interface Props {
 }
 
 function DatasetUploadSteps(props: Props) {
+  useTitle("DX DataXplorer - Upload Dataset");
+
   const { user } = useAuth0();
   const token = useStoreState((state) => state.AuthToken.value);
   const steps = ["Connect", "Processing Data", "Description", "Finished"];
@@ -286,14 +289,18 @@ function DatasetUploadSteps(props: Props) {
 
       case 3:
         return (
-          <FinishedFragment
-            data={sampleData}
-            stats={dataStats}
-            datasetId={props.datasetId}
-            dataTotalCount={dataTotalCount}
-            description={description}
-            dataTypes={dataTypes}
-          />
+          <>
+            <Box height={32} />
+            <FinishedFragment
+              data={sampleData}
+              stats={dataStats}
+              datasetId={props.datasetId}
+              dataTotalCount={dataTotalCount}
+              description={description}
+              dataTypes={dataTypes}
+              canDatasetEditDelete={true} //if user has just uploaded the dataset, then they own it and can edit it.
+            />
+          </>
         );
 
       default:

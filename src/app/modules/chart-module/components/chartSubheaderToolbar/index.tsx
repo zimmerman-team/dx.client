@@ -41,11 +41,15 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
   const history = useHistory();
   const { user, isAuthenticated } = useAuth0();
   const token = useStoreState((state) => state.AuthToken.value);
+  const titleRef = React.useRef<HTMLDivElement>(null);
+  const innerContainerRef = React.useRef<HTMLDivElement>(null);
+  const innerContainerWidth = innerContainerRef?.current?.offsetWidth;
   const { page, view } = useParams<{ page: string; view?: string }>();
   const [showDeleteDialog, setShowDeleteDialog] = React.useState(false);
   const [enableButton, setEnableButton] = React.useState<boolean>(false);
   const setHomeTab = useRecoilState(homeDisplayAtom)[1];
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
+  const [inputSpanVisibiltiy, setInputSpanVisibility] = React.useState(true);
   const [showSnackbar, setShowSnackbar] = React.useState<string | null>(null);
   const [duplicatedChartId, setDuplicatedChartId] = React.useState<
     string | null
@@ -90,6 +94,12 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
   const canChartEditDelete = React.useMemo(() => {
     return isAuthenticated && loadedChart && loadedChart.owner === user?.sub;
   }, [user, isAuthenticated, loadedChart]);
+
+  const saveStatusDivWidth =
+    (canChartEditDelete && props.savedChanges) ||
+    (canChartEditDelete && editChartLoading)
+      ? 140
+      : 0;
 
   const [snackbarState, setSnackbarState] = React.useState<ISnackbarState>({
     open: false,
@@ -271,49 +281,60 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
         data-testid="copied-link-snackbar"
       />
       <Container maxWidth="lg">
-        <div css={styles.innercontainer}>
+        <div css={styles.innercontainer} ref={innerContainerRef}>
           <div
+            ref={titleRef}
             css={`
               display: flex;
               align-items: center;
               gap: 12px;
+              width: 72%;
+              position: relative;
             `}
           >
-            <div
-              css={`
-                overflow-x: visible;
-              `}
-            >
-              <AutoResizeInput
-                name={props.name}
-                setName={props.setName}
-                placeholder="Title"
-                autoResize={true}
-                maxWidth={500}
-                minWidth={100}
-                onClick={(e) => {
-                  if (props.name === "Untitled Chart") {
-                    e.currentTarget.value = "";
-                  }
-                }}
-                onBlur={() => {
-                  props.setHasSubHeaderTitleBlurred?.(true);
-                }}
-                onFocus={() => {
-                  props.setHasSubHeaderTitleFocused?.(true);
-                  props.setHasSubHeaderTitleBlurred?.(false);
-                }}
-                disabled={props.isPreviewView}
-                style={
-                  page !== "new" && !view
-                    ? {
-                        pointerEvents: "none",
-                      }
-                    : {}
+            <AutoResizeInput
+              name={props.name}
+              setName={props.setName}
+              placeholder="Title"
+              autoResize={false}
+              maxWidth={titleRef.current?.offsetWidth as number}
+              spanBuffer={0}
+              minWidth={100}
+              spanVisibility={inputSpanVisibiltiy}
+              setSpanVisibility={setInputSpanVisibility}
+              onClick={(e) => {
+                if (props.name === "Untitled Chart") {
+                  e.currentTarget.value = "";
                 }
-              />
-            </div>
+              }}
+              onBlur={() => {
+                props.setHasSubHeaderTitleBlurred?.(true);
+                setInputSpanVisibility(true);
+              }}
+              onFocus={() => {
+                props.setHasSubHeaderTitleFocused?.(true);
+                props.setHasSubHeaderTitleBlurred?.(false);
+                setInputSpanVisibility(false);
+              }}
+              disabled={props.isPreviewView}
+              style={
+                page !== "new" && !view
+                  ? {
+                      pointerEvents: "none",
+                    }
+                  : {}
+              }
+            />
+          </div>
 
+          <div
+            css={`
+              ${styles.endContainer}
+              margin-right: ${`calc(((100vw - ${
+                (innerContainerWidth as number) + 48
+              }px) / 2) * -1)`};
+            `}
+          >
             {editChartLoading && canChartEditDelete && (
               <div
                 css={`
@@ -350,6 +371,7 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
                   display: flex;
                   align-items: center;
                   gap: 4px;
+                  flex-shrink: 0;
                   span {
                     margin-bottom: -7px;
                   }
@@ -372,9 +394,6 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
                 </p>
               </div>
             )}
-          </div>
-
-          <div css={styles.endContainer}>
             {chartFromReport.state && (
               <button
                 onClick={handleBackToReport}
@@ -479,7 +498,7 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
               )}
               {page !== "new" && !view && (
                 <React.Fragment>
-                  <ExportChartButton />
+                  <ExportChartButton filename={props.name} />
                   {isAuthenticated && (
                     <Tooltip title="Duplicate">
                       <IconButton
@@ -548,6 +567,7 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
           </div>
         </div>
       </Container>
+
       <InfoSnackbar
         anchorOrigin={{
           vertical: snackbarState.vertical,

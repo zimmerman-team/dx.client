@@ -18,7 +18,11 @@ import {
   useAuth0,
   withAuthenticationRequired,
 } from "@auth0/auth0-react";
+import axios from "axios";
 
+const LandingModule = lazy(
+  () => import("app/modules/home-module/sub-modules/landing")
+);
 const HomeModule = lazy(() => import("app/modules/home-module"));
 const PartnersModule = lazy(
   () => import("app/modules/home-module/sub-modules/partners")
@@ -34,6 +38,10 @@ const WhyDXModule = lazy(
 );
 const ExploreAssetsModule = lazy(
   () => import("app/modules/home-module/sub-modules/explore-assets")
+);
+
+const PricingModule = lazy(
+  () => import("app/modules/home-module/sub-modules/pricing")
 );
 
 const ChartModule = lazy(() => import("app/modules/chart-module"));
@@ -140,6 +148,59 @@ const OneTapLoginComponent = () => {
   );
 };
 
+const IntercomBootupComponent = () => {
+  const { isLoading, isAuthenticated, user, getAccessTokenSilently } =
+    useAuth0();
+
+  const getIntercomHash = async () => {
+    return getAccessTokenSilently().then(async (newToken) => {
+      return await axios.get(
+        `${process.env.REACT_APP_API}/users/intercom-hash`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${newToken}`,
+          },
+        }
+      );
+    });
+  };
+
+  React.useEffect(() => {
+    if (window.Intercom)
+      if (isAuthenticated) {
+        getIntercomHash()
+          .then((res) => {
+            if (res.data.error) {
+              console.error(res.data.error);
+            } else {
+              // @ts-ignore
+              window.Intercom("boot", {
+                api_base: "https://api-iam.intercom.io",
+                app_id: process.env.REACT_APP_INTERCOM_APP_ID!,
+                name: user?.name, // Full name
+                email: user?.email, // the email for your user
+                user_id: user?.sub, // user_id as a string
+                created_at: user?.created_at, // Signup date as a Unix timestamp
+                user_hash: res.data.hash,
+              });
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      } else {
+        // @ts-ignore
+        window.Intercom("boot", {
+          api_base: "https://api-iam.intercom.io",
+          app_id: process.env.REACT_APP_INTERCOM_APP_ID!,
+        });
+      }
+  }, [isAuthenticated]);
+
+  return <></>;
+};
+
 export function MainRoutes() {
   useScrollToTop();
 
@@ -154,6 +215,7 @@ export function MainRoutes() {
     >
       <AuthLoader />
       <OneTapLoginComponent />
+      <IntercomBootupComponent />
       <Suspense fallback={<PageLoader />}>
         <Switch>
           <Route exact path="/callback">
@@ -182,6 +244,12 @@ export function MainRoutes() {
           </RouteWithAppBar>
           <RouteWithAppBar exact path="/about">
             <AboutModule />
+          </RouteWithAppBar>
+          <RouteWithAppBar exact path="/pricing">
+            <PricingModule />
+          </RouteWithAppBar>
+          <RouteWithAppBar exact path="/landing">
+            <LandingModule />
           </RouteWithAppBar>
           <RouteWithAppBar exact path="/chart/:page/:view?">
             <ChartModule />
