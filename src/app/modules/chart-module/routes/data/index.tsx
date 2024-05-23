@@ -40,7 +40,7 @@ function ChartModuleDataView(
   const { isAuthenticated, user } = useAuth0();
   const { page } = useParams<{ page: string }>();
 
-  const [category, setCategory] = React.useState("");
+  const [categories, setCategories] = React.useState<string[]>([]);
   const [tableView, setTableView] = React.useState(false);
   const [searchValue, setSearchValue] = React.useState<undefined | string>(
     undefined
@@ -211,15 +211,15 @@ function ChartModuleDataView(
         </IconButton>
       </div>
       <DatasetCategoryList
-        category={category}
+        categories={categories}
         datasetCategories={datasetCategories}
-        setCategory={setCategory}
+        setCategories={setCategories}
         customCss={{ gap: "10px" }}
       />
       <DatasetsGrid
         inChartBuilder
         sortBy={sortValue}
-        category={category}
+        categories={categories}
         tableView={tableView}
         searchStr={searchValue as string}
         onItemClick={handleItemClick}

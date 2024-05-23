@@ -23,7 +23,7 @@ interface Props {
   tableView: boolean;
   addCard?: boolean;
   inChartBuilder?: boolean;
-  category?: string;
+  categories?: string[];
   onItemClick?: (v: string) => void;
   md?: GridSize;
   lg?: GridSize;
@@ -178,9 +178,9 @@ export default function DatasetsGrid(props: Readonly<Props>) {
       const f = datasets.filter(
         (dataset) => !prevDatasetsIds.includes(dataset.id)
       );
-      if (props.category && props.category.length > 0) {
-        return [...prevDatasets, ...f].filter(
-          (d) => d.category === props.category
+      if (props.categories && props.categories.length > 0) {
+        return [...prevDatasets, ...f].filter((d) =>
+          props.categories?.includes(d.category)
         );
       } else {
         return [...prevDatasets, ...f];
@@ -190,7 +190,7 @@ export default function DatasetsGrid(props: Readonly<Props>) {
 
   React.useEffect(() => {
     reloadData();
-  }, [props.sortBy, token, props.category]);
+  }, [props.sortBy, token, props.categories]);
 
   const [,] = useDebounce(
     () => {
