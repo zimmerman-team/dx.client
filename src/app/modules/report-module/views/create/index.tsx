@@ -310,7 +310,7 @@ export const PlaceHolder = (props: PlaceholderProps) => {
         margin: 10px 0;
         display: ${isItemDragging ? "block" : "none"};
         border: 1px ${isItemDragging ? "dashed" : "none"} #adb5bd;
-        background-color: ${placeholderActive() ? "blue" : "#262c34"};
+        background-color: ${placeholderActive() ? "#6061E5" : "#262c34"};
       `}
     />
   );
