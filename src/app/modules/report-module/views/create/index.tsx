@@ -288,6 +288,9 @@ export const PlaceHolder = (props: PlaceholderProps) => {
 
   const placeholderActive = () => {
     if (isOver) {
+      if (dragIndex === -1) {
+        return true;
+      }
       if (placeholderIndex === dragIndex) {
         return false;
       }
