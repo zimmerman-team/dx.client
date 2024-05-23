@@ -1,1 +1,1 @@
-export { default } from './InlineColorPicker'
+export { default } from "./InlineColorPicker";

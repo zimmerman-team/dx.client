@@ -1,7 +1,6 @@
 import React from "react";
 import get from "lodash/get";
 
-
 const ColorSchemePreview = ({ label, scale, numSamples = 150 }) => {
   let samples;
   if (scale.ticks) {

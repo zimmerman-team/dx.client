@@ -130,8 +130,7 @@ export const mockdata = [
     ],
   },
   {
-    name:
-      "Strengthening and Scaling-up Malaria Prevention and Case Management to Improve Health Status in Afghanistan",
+    name: "Strengthening and Scaling-up Malaria Prevention and Case Management to Improve Health Status in Afghanistan",
     years: [2015, 2023],
     value: 54891868.16,
     component: "Malaria",
@@ -162,8 +161,7 @@ export const mockdata = [
     ],
   },
   {
-    name:
-      "Scaling Up Innovative Approaches to Respond to TB Challenges and Strengthening Health Systems Initiatives in Afghanistan",
+    name: "Scaling Up Innovative Approaches to Respond to TB Challenges and Strengthening Health Systems Initiatives in Afghanistan",
     years: [2015, 2023],
     value: 32330993.22,
     component: "Tuberculosis",
@@ -266,8 +264,7 @@ export const mockdata = [
   //   ],
   // },
   {
-    name:
-      "Scaling HIV Interventions among Key Affected Populations in Afghanistan",
+    name: "Scaling HIV Interventions among Key Affected Populations in Afghanistan",
     years: [2016, 2023],
     value: 18849461.75,
     component: "HIV",
@@ -356,8 +353,7 @@ export const mockdata = [
     ],
   },
   {
-    name:
-      "Scaling up Innovative Approaches to Respond to TB Challenges and Strengthening Health Systems Initiatives in Afghanistan",
+    name: "Scaling up Innovative Approaches to Respond to TB Challenges and Strengthening Health Systems Initiatives in Afghanistan",
     years: [2015, 2023],
     value: 11856446.620000001,
     component: "Tuberculosis",

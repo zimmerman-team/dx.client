@@ -3,3 +3,6 @@ build/**/*
 config/**/*
 scripts/**/*
 storybook-static/**/*
+coverage/**/*
+node_modules/**/*
+rawgraphs-charts/**/*
