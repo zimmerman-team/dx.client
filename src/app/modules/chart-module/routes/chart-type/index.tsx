@@ -20,9 +20,14 @@ import {
   isChartAIAgentActive,
   isChartAutoMappedAtom,
 } from "app/state/recoil/atoms";
-import { ChartAPIModel, emptyChartAPI } from "app/modules/chart-module/data";
+import {
+  ChartAPIModel,
+  charts,
+  emptyChartAPI,
+} from "app/modules/chart-module/data";
 import { NotAuthorizedMessageModule } from "app/modules/common/not-authorized-message";
-import AILoader from "./loader";
+import AILoader from "app/modules/chart-module/routes/chart-type/loader";
+import { handleValidityCheckOfDimensionsToBeMapped } from "app/modules/chart-module/components/toolbox/steps/panels-content/Mapping";
 
 function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
   useTitle("DX DataXplorer - Chart Type");
@@ -101,11 +106,57 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
     );
   }
 
+  const validAiSuggestions = () => {
+    try {
+      const validSuggestions:
+        | {
+            charttype: keyof typeof chartTypesFromMiddleWare;
+          }[]
+        | null = [];
+
+      const chartTypeSuggestionsArr: any = chartTypeSuggestions;
+      // check if the dimensions are valid for each chart type
+      chartTypeSuggestionsArr?.forEach((cts: any) => {
+        const chartDimensions = get(
+          charts,
+          `[${
+            chartTypesFromMiddleWare[
+              cts.charttype as keyof typeof chartTypesFromMiddleWare
+            ]
+          }].dimensions`,
+          []
+        );
+
+        const dimensionsValidObj: any = {};
+        chartDimensions.forEach((d: any) => {
+          const { isValid, selectedDataTypes } =
+            handleValidityCheckOfDimensionsToBeMapped(
+              cts[d.id as any],
+              d,
+              props.dataTypes
+            );
+
+          dimensionsValidObj[d.id] = isValid();
+        });
+        const isDimensionsValid = Object.values(dimensionsValidObj).every(
+          (v) => v === true
+        );
+        // if all dimensions are valid, add the chart type to the valid suggestions
+        if (isDimensionsValid) {
+          validSuggestions.push(cts);
+        }
+      });
+      return validSuggestions;
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   const aIChartSuggestions = (ctId: string) => {
     try {
       if (!chartTypeSuggestions) return false;
 
-      return chartTypeSuggestions?.find(
+      return validAiSuggestions()?.find(
         (c: { charttype: keyof typeof chartTypesFromMiddleWare }) =>
           chartTypesFromMiddleWare[c.charttype] === ctId
       );

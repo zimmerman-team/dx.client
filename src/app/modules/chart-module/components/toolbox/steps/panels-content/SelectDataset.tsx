@@ -109,6 +109,7 @@ function ChartToolBoxSelectDataset(props: { deselectDataset: () => void }) {
     >
       <p>Please select data from Dx</p>
       <button
+        title={get(datasetDetails, "name", "Select data from the list")}
         css={`
           width: 100%;
           font-size: 14px;

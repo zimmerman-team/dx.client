@@ -119,6 +119,59 @@ const fetchAISuggestedChartTypes = async (token: string, datasetId: string) => {
   return response;
 };
 
+export const handleValidityCheckOfDimensionsToBeMapped = (
+  selectedChartDimension: any,
+  dimension: any,
+  dataTypes: any
+) => {
+  //get selected data types
+  let selectedDataTypes: string[] = [];
+  if (typeof selectedChartDimension === "object") {
+    Object.keys(selectedChartDimension).forEach((key) => {
+      const dataTypeToBeMapped = getTypeName(dataTypes[key as any]);
+      selectedDataTypes = [
+        ...(selectedDataTypes as string[]),
+        dataTypeToBeMapped,
+      ];
+    });
+  } else {
+    selectedDataTypes = [getTypeName(dataTypes[selectedChartDimension as any])];
+  }
+
+  const isValid = () => {
+    if (dimension.validTypes?.length === 0) return true;
+    if (typeof selectedChartDimension === "object") {
+      //don't map if selected chart has multiple variables for a non multiple dimension
+      if (
+        !dimension.multiple &&
+        Object.keys(selectedChartDimension).length > 1
+      ) {
+        return false;
+      }
+
+      // confirm aggregation from selected chart matches expected aggregation values
+      for (let aggr of Object.values(selectedChartDimension)) {
+        if (!AGGREGATIONS_LABELS[aggr as keyof typeof AGGREGATIONS_LABELS]) {
+          return false;
+        }
+      }
+    }
+    //check validity of selected data types
+    if (selectedDataTypes.length > 0) {
+      for (let c of selectedDataTypes as string[]) {
+        if (dimension.validTypes?.includes(c)) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+    }
+
+    return false;
+  };
+  return { isValid, selectedDataTypes };
+};
+
 export function ChartToolBoxMapping(props: Readonly<ChartToolBoxMappingProps>) {
   const token = useStoreState((state) => state.AuthToken.value);
   const staticDimensions = filter(props.dimensions, (d: any) => d.static);
@@ -174,39 +227,41 @@ export function ChartToolBoxMapping(props: Readonly<ChartToolBoxMappingProps>) {
         //update Crud Data value with data from non-easy-peasy API  call
         setChartSuggestionsCrudData(data);
         const selectedChart = selectedAIChartSuggestion(data);
-        if (!isEmpty(selectedChart)) {
+        if (!isEmpty(selectedChart) && !isEmpty(props.dataTypes)) {
           const localMapping: any = {};
           //get mapping from selected ai suggested chart
           props.dimensions.forEach((d) => {
-            const columnDataType = getTypeName(
-              props.dataTypes[selectedChart[d.id] as any]
-            );
-            const isValid =
-              d.validTypes?.length === 0 ||
-              d.validTypes?.includes(columnDataType);
+            const { isValid, selectedDataTypes } =
+              handleValidityCheckOfDimensionsToBeMapped(
+                selectedChart[d.id],
+                d,
+                props.dataTypes
+              );
 
-            localMapping[d.id] = {
-              config: d.aggregation
-                ? {
-                    aggregation:
-                      typeof selectedChart[d.id] === "object"
-                        ? Object.values(selectedChart[d.id]) ?? [
-                            d.aggregationDefault,
-                          ]
-                        : d.aggregationDefault,
-                  }
-                : undefined,
-              ids:
-                typeof selectedChart[d.id] === "object"
-                  ? Object.keys(selectedChart[d.id]).map(() => uniqueId())
-                  : [uniqueId()],
-              value:
-                typeof selectedChart[d.id] === "object"
-                  ? Object.keys(selectedChart[d.id])
-                  : [selectedChart[d.id]],
-              mappedType: columnDataType,
-              isValid,
-            };
+            if (isValid()) {
+              localMapping[d.id] = {
+                config: d.aggregation
+                  ? {
+                      aggregation:
+                        typeof selectedChart[d.id] === "object"
+                          ? Object.values(selectedChart[d.id]) ?? [
+                              d.aggregationDefault,
+                            ]
+                          : d.aggregationDefault,
+                    }
+                  : undefined,
+                ids:
+                  typeof selectedChart[d.id] === "object"
+                    ? Object.keys(selectedChart[d.id]).map(() => uniqueId())
+                    : [uniqueId()],
+                value:
+                  typeof selectedChart[d.id] === "object"
+                    ? Object.keys(selectedChart[d.id])
+                    : [selectedChart[d.id]],
+                mappedType: selectedDataTypes,
+                isValid: isValid(),
+              };
+            }
           });
           setMapping(localMapping);
           setIsChartAutoMapped(true);
@@ -219,7 +274,7 @@ export function ChartToolBoxMapping(props: Readonly<ChartToolBoxMappingProps>) {
 
   React.useEffect(() => {
     autoMap();
-  }, [chartType, datasetId, loadedChart]);
+  }, [chartType, datasetId, loadedChart, props.dataTypes]);
 
   const handleButtonToggle = (id: string) => {
     setNonStaticDimensionsState((prev) => {
