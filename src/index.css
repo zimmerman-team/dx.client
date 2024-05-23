@@ -74,7 +74,6 @@
 body {
   margin: 0;
   width: 100vw;
-  overflow-x: hidden;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   transition: background 0.2s ease-in-out;
@@ -85,8 +84,6 @@ body {
 #root {
   width: 100vw;
   height: 100vh;
-  overflow-y: overlay;
-  overflow-x: hidden;
   position: relative;
 }
 
