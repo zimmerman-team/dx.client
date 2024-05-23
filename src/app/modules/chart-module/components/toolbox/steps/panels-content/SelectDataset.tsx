@@ -5,6 +5,8 @@ import { useStoreState, useStoreActions } from "app/state/store/hooks";
 import { Box } from "@material-ui/core";
 import { useHistory, useParams } from "react-router-dom";
 import ToolboxSubHeader from "app/modules/chart-module/components/toolbox/steps/sub-header";
+import { useResetRecoilState } from "recoil";
+import { isChartAutoMappedAtom } from "app/state/recoil/atoms";
 
 export interface IDatasetDetails {
   id: string;
@@ -52,6 +54,10 @@ function ChartToolBoxSelectDataset(props: { deselectDataset: () => void }) {
   const datasetDetails = useStoreState(
     (state) => state.dataThemes.DatasetGet.crudData
   ) as IDatasetDetails;
+  const clearChartSuggestionsCrudData = useStoreActions(
+    (actions) => actions.charts.ChartTypesSuggest.clear
+  );
+  const resetIsChartAutoMapped = useResetRecoilState(isChartAutoMappedAtom);
 
   React.useEffect(() => {
     if (token && dataset) {
@@ -64,6 +70,8 @@ function ChartToolBoxSelectDataset(props: { deselectDataset: () => void }) {
   }, [dataset]);
 
   const handleDeselectDataset = () => {
+    clearChartSuggestionsCrudData();
+    resetIsChartAutoMapped();
     props.deselectDataset();
     history.push(`/chart/${page}/data`);
   };

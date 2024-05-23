@@ -87,8 +87,10 @@ export function useDataThemesEchart() {
       label,
     } = visualOptions;
 
-    const bars = data.map((d: any) => d.bars);
-    const sizes = data.map((d: any) => d.size);
+    const sortedData = sortBy(data, (d) => d.bars);
+
+    const bars = sortedData.map((d: any) => d.bars);
+    const sizes = sortedData.map((d: any) => d.size);
 
     const option = {
       grid: {
