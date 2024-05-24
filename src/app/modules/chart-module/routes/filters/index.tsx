@@ -29,13 +29,6 @@ function ChartBuilderFilters(props: Readonly<ChartBuilderFiltersProps>) {
       (state.charts.ChartGet.crudData ?? emptyChartAPI) as ChartAPIModel
   );
 
-  React.useEffect(() => {
-    //if dataset is empty and not loading, redirect to data page
-    if (dataset === null && !props.loading) {
-      history.push(`/chart/${page}/data`);
-    }
-  }, [dataset]);
-
   const canChartEditDelete = React.useMemo(() => {
     return isAuthenticated && loadedChart && loadedChart.owner === user?.sub;
   }, [user, isAuthenticated, loadedChart]);

@@ -72,6 +72,9 @@ export default function ChartModule() {
     React.useState<null | boolean>(false);
 
   const chartType = useStoreState((state) => state.charts.chartType.value);
+  const setChartType = useStoreActions(
+    (actions) => actions.charts.chartType.setValue
+  );
   const mapping = useStoreState((state) => state.charts.mapping.value);
   const dataset = useStoreState((state) => state.charts.dataset.value);
 
@@ -133,9 +136,6 @@ export default function ChartModule() {
 
   const [chartFromReport, setChartFromReport] =
     useRecoilState(chartFromReportAtom);
-  const setMapping = useStoreActions(
-    (actions) => actions.charts.mapping.setValue
-  );
   const appliedFilters = useStoreState(
     (state) => state.charts.appliedFilters.value
   );
@@ -327,9 +327,10 @@ export default function ChartModule() {
     if (page !== "new" && loadedChart.name.length > 0) {
       setChartName(loadedChart.name);
     }
-
+    console.log(loadedChart?.vizType, "loaded viz");
     setSelectedAIChart(loadedChart?.isAIAssisted);
     setIsLoadedChartMappingValid(loadedChart?.isMappingValid);
+    // setChartType(loadedChart?.vizType);
   }, [loadedChart]);
 
   const mappedData = React.useMemo(

@@ -307,7 +307,6 @@ export function useChartsRawData(props: {
         (isrequiredMappingKeysPresent || props.isLoadedChartMappingValid) &&
         renderChartFromAPIFufilled
       ) {
-        // clearLoadedChartDetails();
         renderChartFromAPI();
       } else {
         // No need to call API if mapping is not valid. hence we set loading to false
