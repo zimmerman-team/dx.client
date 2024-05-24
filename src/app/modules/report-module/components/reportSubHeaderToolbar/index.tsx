@@ -34,6 +34,7 @@ import StaticToolbar from "app/modules/report-module/components/reportSubHeaderT
 import AutoSaveSwitch from "app/modules/report-module/components/reportSubHeaderToolbar/autoSaveSwitch";
 import AutoResizeInput from "app/modules/report-module/components/reportSubHeaderToolbar/autoResizeInput";
 import { InfoSnackbar } from "app/modules/report-module/components/reportSubHeaderToolbar/infosnackbar";
+import useCookie from "@devhammed/use-cookie";
 
 export const useStyles = makeStyles(() =>
   createStyles({
@@ -224,6 +225,24 @@ export function ReportSubheaderToolbar(
     return isAuthenticated && loadedReport && loadedReport.owner === user?.sub;
   }, [user, isAuthenticated, loadedChart, loadedReport]);
 
+  const [_, setDuplicateReportAfterSignIn] = useCookie(
+    "duplicateReportAfterSignIn",
+    null
+  );
+
+  const handleSignIn = () => {
+    setDuplicateReportAfterSignIn(page, {
+      expires: 3600, // 1hr
+      domain: "",
+      path: "",
+      secure: false,
+      httpOnly: false,
+      maxAge: 0,
+      sameSite: "",
+    });
+    history.push("/onboarding/login");
+  };
+
   return (
     <div id="subheader-toolbar" css={styles.container(view !== undefined)}>
       {createOrEditChartLoading && <PageLoader />}
@@ -413,16 +432,16 @@ export function ReportSubheaderToolbar(
               {page !== "new" && !view && (
                 <div css={styles.previewEndContainer}>
                   <ExportChartButton filename={props.name} />
-                  {isAuthenticated && (
-                    <Tooltip title="Duplicate">
-                      <IconButton
-                        onClick={handleDuplicate}
-                        data-testid="duplicate-button"
-                      >
-                        <FileCopyIcon htmlColor="#262c34" />
-                      </IconButton>
-                    </Tooltip>
-                  )}
+
+                  <Tooltip title="Duplicate">
+                    <IconButton
+                      onClick={isAuthenticated ? handleDuplicate : handleSignIn}
+                      data-testid="duplicate-button"
+                    >
+                      <FileCopyIcon htmlColor="#262c34" />
+                    </IconButton>
+                  </Tooltip>
+
                   <Tooltip title="Share">
                     <IconButton
                       onClick={handleClick}
