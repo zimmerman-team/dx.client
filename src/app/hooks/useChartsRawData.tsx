@@ -4,8 +4,8 @@ import filter from "lodash/filter";
 import isEmpty from "lodash/isEmpty";
 import { useParams } from "react-router-dom";
 import axios, { AxiosError, AxiosResponse } from "axios";
-import { useStoreActions, useStoreState } from "app/state/store/hooks";
 /* project */
+import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import {
   ChartAPIModel,
   ChartRenderedItem,
@@ -75,7 +75,6 @@ export function useChartsRawData(props: {
   setVisualOptions: (value: any) => void;
   chartFromAPI: ChartRenderedItem | null;
   setChartFromAPI: (value: ChartRenderedItem) => void;
-  inChartWrapper?: boolean;
   dimensions?: any;
   isLoadedChartMappingValid?: boolean | null;
   setIsLoadedChartMappingValid?: (value: boolean | null) => void;
@@ -136,8 +135,6 @@ export function useChartsRawData(props: {
   const isPreviewMode =
     location.pathname === `/chart/${page}` ||
     location.pathname === `/chart/${page}/preview`;
-
-  const isChartRoute = location.pathname.startsWith("/chart");
 
   const isrequiredMappingKeysPresent = areAllRequiredDimensionsMapped(
     props.dimensions,
@@ -203,22 +200,21 @@ export function useChartsRawData(props: {
   async function renderChartFromAPI(chartId?: string) {
     const extraLoader = document.getElementById("extra-loader");
     const validMapping = getValidMapping(chartFromAPI, mapping);
-    const body =
-      props.inChartWrapper || isEmpty(mapping)
-        ? {}
-        : {
-            rows: [
-              [
-                {
-                  mapping: validMapping,
-                  vizType: selectedChartType,
-                  datasetId: datasetId,
-                  vizOptions: visualOptions,
-                  appliedFilters,
-                },
-              ],
+    const body = isEmpty(mapping)
+      ? {}
+      : {
+          rows: [
+            [
+              {
+                mapping: validMapping,
+                vizType: selectedChartType,
+                datasetId: datasetId,
+                vizOptions: visualOptions,
+                appliedFilters,
+              },
             ],
-          };
+          ],
+        };
     setLoading(true);
     setChartError(false);
     setRenderChartFromAPIFufilled(false);
@@ -240,7 +236,7 @@ export function useChartsRawData(props: {
         }
       )
       .then((response) => {
-        const chart = response.data || {};
+        const chart = response.data;
         setLoading(false);
         if (extraLoader) {
           extraLoader.style.display = "none";
@@ -267,6 +263,7 @@ export function useChartsRawData(props: {
           setDatasetId(chart.datasetId);
           setChartFromAPI(chart);
           setDataError(false);
+          setChartError(false);
         }
       })
       .finally(() => {
@@ -290,7 +287,7 @@ export function useChartsRawData(props: {
 
   React.useEffect(() => {
     //used only in chart detail page
-    if (!props.inChartWrapper && isPreviewMode) {
+    if (isPreviewMode) {
       if (loadedChartDetails?.isMappingValid) {
         renderChartFromAPI();
       } else {
@@ -298,11 +295,11 @@ export function useChartsRawData(props: {
         setLoading(false);
       }
     }
-  }, [token, loadedChartDetails, props.inChartWrapper, page]);
+  }, [token, loadedChartDetails, page]);
 
   React.useEffect(() => {
     //used when in edit page
-    if (!props.inChartWrapper && isEditPage) {
+    if (isEditPage) {
       if (
         (isrequiredMappingKeysPresent || props.isLoadedChartMappingValid) &&
         renderChartFromAPIFufilled
@@ -316,32 +313,11 @@ export function useChartsRawData(props: {
   }, [
     mapping,
     appliedFilters,
-    props.inChartWrapper,
     token,
     isrequiredMappingKeysPresent,
     loadedChartDetails,
     props.isLoadedChartMappingValid,
   ]);
-
-  React.useEffect(() => {
-    /*set values with loadedchart values - 
-            used when chart got saved 
-            before mapping was successful, to load the chart with the saved values.
-            Since we can not get it from renderChartFromAPI() because we only call renderChartFromAPI() when mapping is valid, we set it to loadedchart values*/
-    if (
-      isChartRoute &&
-      isEmpty(datasetId) &&
-      isEmpty(dataTypes) &&
-      isEmpty(selectedChartType) &&
-      loadedChartDetails &&
-      !loadedChartDetails?.isMappingValid
-    ) {
-      loadDataset(`chart/sample-data/${loadedChartDetails?.datasetId}`);
-      setDatasetId(loadedChartDetails?.datasetId);
-      setSelectedChartType(loadedChartDetails?.vizType);
-      setMapping(loadedChartDetails?.mapping);
-    }
-  }, [loadedChartDetails]);
 
   return {
     loading,
