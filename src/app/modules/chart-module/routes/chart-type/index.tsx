@@ -70,7 +70,7 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
 
   React.useEffect(() => {
     //if dataset is empty and not loading, redirect to data page
-    if (datasetId === null && !props.loading) {
+    if (datasetId === null && !props.loading && page === "new") {
       history.push(`/chart/${page}/data`);
     } else if (paramValue) {
       //when landing in chart type step from outside the chart module,
@@ -91,7 +91,7 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
         storeInCrudData: true,
       });
     }
-  }, []);
+  }, [datasetId]);
 
   const canChartEditDelete = React.useMemo(() => {
     return isAuthenticated && loadedChart && loadedChart.owner === user?.sub;
