@@ -13,12 +13,10 @@ interface RouteWithAppBarProps {
 
 export function RouteWithAppBar(props: RouteWithAppBarProps) {
   const { isAuthenticated, getAccessTokenSilently } = useAuth0();
-
-  const token = useStoreState((state) => state.AuthToken.value);
   const setToken = useStoreActions((actions) => actions.AuthToken.setValue);
 
   React.useEffect(() => {
-    if (isAuthenticated && token === "") {
+    if (isAuthenticated) {
       getAccessTokenSilently().then((newToken) => {
         setToken(newToken);
       });
