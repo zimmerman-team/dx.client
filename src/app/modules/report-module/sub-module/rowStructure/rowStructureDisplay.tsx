@@ -832,7 +832,7 @@ const Box = (props: {
               css={css`
                 width: 100%;
                 height: ${props.height}px;
-                object-fit: contain;
+                object-fit: cover;
               `}
               data-cy="report-image-content"
             />
