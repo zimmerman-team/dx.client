@@ -479,7 +479,7 @@ const Box = (props: {
       );
     }
   }, [chartId, displayMode, imageContent, videoContent]);
-  console.log(props.width, "box");
+
   let width = `${props.width}%`;
   if (containerWidth) {
     width = `${
@@ -487,7 +487,6 @@ const Box = (props: {
       ((props.rowItemsCount - 1) * 11.3) / props.rowItemsCount
     }px`;
   }
-  console.log(width, "width%", containerWidth);
 
   const onResizeStop = (
     _event: MouseEvent | TouchEvent,
