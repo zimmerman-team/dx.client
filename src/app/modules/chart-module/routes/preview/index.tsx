@@ -44,12 +44,12 @@ export function ChartBuilderPreview(props: ChartBuilderPreviewProps) {
   );
 
   React.useEffect(() => {
-    if (datasetId === null && !props.loading) {
+    if (datasetId === null && !props.loading && page === "new") {
       history.push(`/chart/${page}/data`);
     } else {
       props.loadDataset(`chart/sample-data/${datasetId}`);
     }
-  }, []);
+  }, [datasetId]);
 
   const canChartEditDelete = React.useMemo(() => {
     return isAuthenticated && loadedChart && loadedChart.owner === user?.sub;

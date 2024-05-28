@@ -57,7 +57,6 @@ interface ChartToolBoxMappingItemProps {
   displayCloseButton?: boolean;
   showAggregation: boolean;
   handleButtonToggle?: (id: string) => void;
-  isMappingValid: boolean;
 }
 
 const typeIcon = {
@@ -439,7 +438,6 @@ export function ChartToolBoxMapping(props: Readonly<ChartToolBoxMappingProps>) {
                     getValidDataTypes={getValidDataTypes}
                     getSelectButtonLabel={getSelectButtonLabel}
                     handleButtonToggle={handleButtonToggle}
-                    isMappingValid={isMappingValid}
                   />
                 )
               )}
@@ -474,7 +472,6 @@ const NonStaticDimensionContainer = (props: {
     multiple: boolean
   ) => any;
   handleButtonToggle: (id: string) => void;
-  isMappingValid: boolean;
 }) => {
   const [searchValue, setSearchValue] = React.useState("");
   const validTypes = Object.keys(
@@ -580,7 +577,6 @@ const NonStaticDimensionContainer = (props: {
               displayCloseButton
               showAggregation
               handleButtonToggle={props.handleButtonToggle}
-              isMappingValid={props.isMappingValid}
             />
           );
         })}
@@ -656,7 +652,6 @@ const NonStaticDimensionContainer = (props: {
                 nonStaticDimensionsIndex={props.dimensionIndex}
                 nonStaticDimensions={props.nonStaticDimensions}
                 showAggregation={false}
-                isMappingValid={props.isMappingValid}
               />
             );
           })}
