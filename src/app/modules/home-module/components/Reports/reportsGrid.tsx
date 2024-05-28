@@ -226,7 +226,7 @@ export default function ReportsGrid(props: Props) {
           }))}
         />
       )}
-      <Box height={100} />
+      <Box height={80} />
       <div ref={observerTarget} />
       {loading && <CircleLoader />}
       <DeleteReportDialog

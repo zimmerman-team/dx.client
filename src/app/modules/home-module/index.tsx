@@ -40,11 +40,14 @@ import {
   sortByItemCss,
   turnsDataCss,
 } from "app/modules/home-module/style";
+import DatasetCategoryList from "./components/Datasets/datasetCategoryList";
+import { datasetCategories } from "../dataset-upload-module/upload-steps/metaData";
+import AssetsGrid from "./components/All/assetsGrid";
 
 export default function HomeModule() {
   useTitle("DX DataXplorer");
 
-  const { isAuthenticated } = useAuth0();
+  const { isAuthenticated, user } = useAuth0();
 
   // clear persisted states
   const clearPersistedReportState = useResetRecoilState(
@@ -59,6 +62,8 @@ export default function HomeModule() {
     clearChartFromReportState();
     setReportPreviewMode(false);
   }, []);
+
+  const [category, setCategory] = React.useState("");
 
   const [tableView, setTableView] = React.useState(false);
   const [searchValue, setSearchValue] = React.useState<string | undefined>(
@@ -81,7 +86,7 @@ export default function HomeModule() {
     { label: "Name", value: "name" },
   ];
 
-  const handleChange = (newValue: "data" | "charts" | "reports") => {
+  const handleChange = (newValue: "all" | "data" | "charts" | "reports") => {
     setDisplay(newValue);
   };
 
@@ -101,6 +106,7 @@ export default function HomeModule() {
             sortBy={sortByStr}
             searchStr={searchStr}
             tableView={tableView}
+            category={category}
             addCard
             fromHome
           />
@@ -124,6 +130,17 @@ export default function HomeModule() {
             addCard
           />
         );
+      case "all":
+        return (
+          <AssetsGrid
+            sortBy={sortByStr}
+            searchStr={searchStr}
+            tableView={tableView}
+            showMenuButton={false}
+            addCard
+            fromHome
+          />
+        );
       default:
         break;
     }
@@ -141,16 +158,27 @@ export default function HomeModule() {
   const openSortPopover = Boolean(sortPopoverAnchorEl);
 
   React.useEffect(() => {
-    if (display === "data") {
+    if (display === "all" || display === "data") {
       setTabPrevPosition("left");
     } else {
       setTabPrevPosition("right");
     }
   }, [display]);
 
+  const descriptions = {
+    all: "Explore the collection of Reports, Charts and Datasets",
+    data: "Explore the collection of Datasets used to create Charts",
+    charts: "Explore the collection of Charts used in Reports",
+    reports: "Explore the collection of Reports",
+  };
+
   return (
-    <React.Fragment>
-      <div
+    <div
+      css={`
+        background: #ffffff;
+      `}
+    >
+      {/* <div
         css={`
           position: relative;
           background: linear-gradient(
@@ -265,21 +293,64 @@ export default function HomeModule() {
             </Grid>
           </Grid>
         </Container>
+
+
+        
         <BottomLeftEllipse css={bottomLeftEllipseCss} />
         <BottomRightEllipse css={bottomRightEllipseCss} />
         <TopRightEllipse css={TopRightEllipseCss} />
-      </div>
+      </div> */}
+
       <Container
         maxWidth="lg"
         ref={exploreViewRef}
         css={`
-          min-height: calc(100vh - 668px);
+          min-height: calc(100vh - 133px);
         `}
       >
-        <Box height={52} />
+        <div css={turnsDataCss}>
+          {isAuthenticated ? (
+            <h1>Welcome {user?.given_name ?? user?.name?.split(" ")[0]}</h1>
+          ) : (
+            <div />
+          )}
+
+          <div
+            css={`
+              ${rowFlexCss} gap: 8px;
+              /* width: 100%; */
+            `}
+          >
+            <Link
+              to="/dataset/new/upload"
+              css={`
+                background: #e492bd;
+              `}
+            >
+              CONNECT DATASET
+            </Link>
+            <Link
+              to="/chart/new/data"
+              css={`
+                background: #64afaa;
+              `}
+            >
+              CREATE CHART
+            </Link>
+            <Link
+              to="/report/new/initial"
+              css={`
+                background: #6061e5;
+              `}
+            >
+              CREATE REPORT
+            </Link>
+          </div>
+        </div>
+        <Box height={24} />
         <Box css={featuredAssetsCss}>
-          <h3>Featured assets in DX:</h3>
-          <Box height={20} />
+          <h3>Library:</h3>
+          <Box height={24} />
           <Grid
             container
             alignContent="space-between"
@@ -291,12 +362,20 @@ export default function HomeModule() {
             <Grid item lg={6} md={6} sm={6}>
               <Tab.Container>
                 <Tab.Left
+                  active={display === "all"}
+                  onClick={() => handleChange("all")}
+                  data-cy="home-all-tab"
+                >
+                  All
+                </Tab.Left>
+                <Tab.Center
                   active={display === "data"}
                   onClick={() => handleChange("data")}
+                  position={tabPrevPosition}
                   data-cy="home-data-tab"
                 >
                   Data
-                </Tab.Left>
+                </Tab.Center>
                 <Tab.Center
                   active={display === "charts"}
                   onClick={() => handleChange("charts")}
@@ -421,18 +500,38 @@ export default function HomeModule() {
                     </div>
                   ))}
                 </Popover>
-                <IconButton
-                  onClick={() => {
-                    setTableView(!tableView);
-                  }}
-                  css={iconButtonCss(tableView)}
-                >
-                  <GridIcon />
-                </IconButton>
+                {display !== "all" && (
+                  <IconButton
+                    onClick={() => {
+                      setTableView(!tableView);
+                    }}
+                    css={iconButtonCss(tableView)}
+                  >
+                    <GridIcon />
+                  </IconButton>
+                )}
               </div>
             </Grid>
           </Grid>
-          <Box height={20} />
+          <div
+            css={`
+              padding-top: 24px;
+              font-size: 14px;
+              font-family: GothamNarrow-Book;
+              color: #000000;
+            `}
+          >
+            {descriptions[display]}
+          </div>
+          {display === "data" ? (
+            <DatasetCategoryList
+              category={category}
+              datasetCategories={datasetCategories}
+              setCategory={setCategory}
+            />
+          ) : (
+            <Box height={24} />
+          )}
         </Box>
         <div
           id="scrollableDiv"
@@ -446,8 +545,7 @@ export default function HomeModule() {
           {displayGrid(searchValue as string, sortValue)}
         </div>
       </Container>
-      <Box height={100} />
-      <HomeFooter />
-    </React.Fragment>
+      <HomeFooter small />
+    </div>
   );
 }

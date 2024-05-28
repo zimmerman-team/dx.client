@@ -24,6 +24,7 @@ export function HomepageTable(props: {
   const history = useHistory();
   const display = useRecoilState(homeDisplayAtom)[0];
   const pathBase = {
+    all: "all",
     data: "dataset",
     charts: "chart",
     reports: "report",

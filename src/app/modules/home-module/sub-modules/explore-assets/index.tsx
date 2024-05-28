@@ -90,6 +90,7 @@ export default function ExploreAssetsModule() {
   }, [display]);
 
   const descriptions = {
+    all: "Explore the collection of Reports, Charts and Datasets",
     data: "Explore the collection of Datasets used to create Charts",
     charts: "Explore the collection of Charts used in Reports",
     reports: "Explore the collection of Reports",

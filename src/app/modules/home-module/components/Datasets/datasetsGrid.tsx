@@ -133,8 +133,7 @@ export default function DatasetsGrid(props: Readonly<Props>) {
     setEnableButton(false);
   };
 
-  const handleDuplicate = (index: number) => {
-    const id = loadedDatasets[index].id;
+  const handleDuplicate = (id: string) => {
     if (!id) {
       return;
     }
@@ -254,7 +253,7 @@ export default function DatasetsGrid(props: Readonly<Props>) {
                 }}
                 descr={data.description}
                 handleDuplicate={() => {
-                  handleDuplicate(index);
+                  handleDuplicate(data.id);
                 }}
                 showMenu={!props.inChartBuilder}
                 id={data.id}
@@ -282,13 +281,13 @@ export default function DatasetsGrid(props: Readonly<Props>) {
           }))}
         />
       )}
-      <Box height={100} />
+      <Box height={80} />
 
       <div
         ref={observerTarget}
-        css={`
-          height: 10px;
-        `}
+        // css={`
+        //   height: 10px;
+        // `}
       />
       {loading && <CircleLoader />}
       <DeleteDatasetDialog

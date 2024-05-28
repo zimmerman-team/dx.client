@@ -129,6 +129,7 @@ import {
   ReportUpdate,
   ReportsCount,
 } from "app/state/api/action-reducers/reports";
+import { AssetGetList, AssetsCount } from "../api/action-reducers/assets";
 
 const storeContent: StoreModel = {
   // global search
@@ -239,6 +240,10 @@ const storeContent: StoreModel = {
     ExternalDatasetDownload: persist(ExternalDatasetDownload),
     DatasetCount: persist(DatasetCount),
     DatasetCreate: persist(DatasetCreate),
+  },
+  assets: {
+    AssetGetList: AssetGetList,
+    AssetsCount: AssetsCount,
   },
   charts: {
     ChartGet: persist(ChartGet),

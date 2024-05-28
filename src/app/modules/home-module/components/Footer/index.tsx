@@ -9,7 +9,7 @@ import NewsletterForm from "app/modules/common/newsletterForm";
 import { FieldErrors } from "react-hook-form";
 import moment from "moment";
 
-export default function HomeFooter() {
+export default function HomeFooter({ small }: { small?: boolean }) {
   const [isSubscribed, setIsSubscribed] = React.useState(false);
   const [isSubscriptionFailed, setIsSubscriptionFailed] = React.useState(false);
   const [formError, setFormError] = React.useState<
@@ -20,192 +20,194 @@ export default function HomeFooter() {
   return (
     <div css={homeFootercss}>
       <Container maxWidth="lg">
-        <Grid
-          container
-          alignContent="space-between"
-          alignItems="center"
-          spacing={2}
-        >
+        {small ? null : (
           <Grid
-            item
-            lg={3}
-            md={4}
-            css={`
-              a {
-                font-size: 16px;
-                text-decoration: none;
-                color: #000;
-                font-family: "GothamNarrow-Medium", sans-serif;
-              }
-            `}
+            container
+            alignContent="space-between"
+            alignItems="center"
+            spacing={2}
           >
-            <ul
+            <Grid
+              item
+              lg={3}
+              md={4}
               css={`
-                display: flex;
-                flex-direction: column;
-                gap: 18px;
+                a {
+                  font-size: 16px;
+                  text-decoration: none;
+                  color: #000;
+                  font-family: "GothamNarrow-Medium", sans-serif;
+                }
+              `}
+            >
+              <ul
+                css={`
+                  display: flex;
+                  flex-direction: column;
+                  gap: 18px;
+                  li {
+                    font-size: 16px;
+                    font-weight: 350;
+                    color: #000;
+                  }
+                  li:first-child {
+                    margin-bottom: 20px;
+                  }
+                `}
+              >
+                <li>
+                  <Link to="/">
+                    <LogoIcon />
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/why-dataXplorer"> Why DataXplorer?</Link>{" "}
+                </li>
+                <li>
+                  <Link to="/explore">Explore</Link>{" "}
+                </li>
+                <li>
+                  <Link to="/about">About</Link>
+                </li>
+                <li>
+                  <Link to="/partners">Partners</Link>
+                </li>
+                <li>
+                  <Link to="/contact">Contact</Link>
+                </li>
+              </ul>
+            </Grid>
+            <Grid
+              item
+              lg={3}
+              md={4}
+              css={`
+                ul {
+                  margin-top: 20px;
+                  color: #000;
+                  font-weight: 325;
+                  font-family: "GothamNarrow-Medium", sans-serif;
+                }
+                a {
+                  text-decoration: none;
+                  color: #000;
+                }
                 li {
+                  font-size: 12px;
+                  :nth-child(1),
+                  :nth-child(2) {
+                    margin-bottom: 17px;
+                  }
+                  p {
+                    margin: 0px;
+                    line-height: normal;
+                  }
+                }
+              `}
+            >
+              <ul>
+                <li>Tel: +3185 401 5241</li>
+                <li>
+                  {" "}
+                  <a href="mailto:contact@dataxplorer.org">
+                    Email: contact@dataxplorer.org
+                  </a>{" "}
+                </li>
+                <li>
+                  <p>Keizersgracht 555</p>
+
+                  <p>1017 DR Amsterdam</p>
+
+                  <p>The Netherlands</p>
+                </li>
+              </ul>
+            </Grid>
+
+            <Grid item lg={4} md={4}>
+              <p
+                css={`
                   font-size: 16px;
                   font-weight: 350;
                   color: #000;
-                }
-                li:first-child {
-                  margin-bottom: 20px;
-                }
-              `}
-            >
-              <li>
-                <Link to="/">
-                  <LogoIcon />
-                </Link>
-              </li>
-              <li>
-                <Link to="/why-dataXplorer"> Why DataXplorer?</Link>{" "}
-              </li>
-              <li>
-                <Link to="/explore">Explore</Link>{" "}
-              </li>
-              <li>
-                <Link to="/about">About</Link>
-              </li>
-              <li>
-                <Link to="/partners">Partners</Link>
-              </li>
-              <li>
-                <Link to="/contact">Contact</Link>
-              </li>
-            </ul>
-          </Grid>
-          <Grid
-            item
-            lg={3}
-            md={4}
-            css={`
-              ul {
-                margin-top: 20px;
-                color: #000;
-                font-weight: 325;
-                font-family: "GothamNarrow-Medium", sans-serif;
-              }
-              a {
-                text-decoration: none;
-                color: #000;
-              }
-              li {
-                font-size: 12px;
-                :nth-child(1),
-                :nth-child(2) {
-                  margin-bottom: 17px;
-                }
-                p {
-                  margin: 0px;
-                  line-height: normal;
-                }
-              }
-            `}
-          >
-            <ul>
-              <li>Tel: +3185 401 5241</li>
-              <li>
-                {" "}
-                <a href="mailto:contact@dataxplorer.org">
-                  Email: contact@dataxplorer.org
-                </a>{" "}
-              </li>
-              <li>
-                <p>Keizersgracht 555</p>
-
-                <p>1017 DR Amsterdam</p>
-
-                <p>The Netherlands</p>
-              </li>
-            </ul>
-          </Grid>
-
-          <Grid item lg={4} md={4}>
-            <p
-              css={`
-                font-size: 16px;
-                font-weight: 350;
-                color: #000;
-                font-family: "GothamNarrow-Medium", sans-serif;
-              `}
-            >
-              Subscribe to our newsletter
-            </p>
-            {formError.email && (
-              <label
-                css={`
-                  font-family: "Inter", sans-serif;
-                  font-size: 12px;
-                  text-align: left;
-                  width: 100%;
-                  padding-left: 10px;
-                  color: #e75656;
+                  font-family: "GothamNarrow-Medium", sans-serif;
                 `}
               >
-                Please enter a valid email address.
-              </label>
-            )}
-            <div
-              css={`
-                border-radius: 40px;
-                background: #f7f7f7;
-                width: 611px;
-                height: 47px;
-                display: flex;
-
-                input {
-                  outline: none;
-                  border: none;
-                  border-radius: 34.5px 0 0 34.5px;
-                  width: 70%;
-                  padding-left: 24px;
+                Subscribe to our newsletter
+              </p>
+              {formError.email && (
+                <label
+                  css={`
+                    font-family: "Inter", sans-serif;
+                    font-size: 12px;
+                    text-align: left;
+                    width: 100%;
+                    padding-left: 10px;
+                    color: #e75656;
+                  `}
+                >
+                  Please enter a valid email address.
+                </label>
+              )}
+              <div
+                css={`
+                  border-radius: 40px;
                   background: #f7f7f7;
-                  font-family: "Roboto", sans-serif;
-                  font-weight: 400;
-                  ::placeholder {
+                  width: 611px;
+                  height: 47px;
+                  display: flex;
+
+                  input {
+                    outline: none;
+                    border: none;
+                    border-radius: 34.5px 0 0 34.5px;
+                    width: 70%;
+                    padding-left: 24px;
+                    background: #f7f7f7;
                     font-family: "Roboto", sans-serif;
                     font-weight: 400;
-                    color: #000;
+                    ::placeholder {
+                      font-family: "Roboto", sans-serif;
+                      font-weight: 400;
+                      color: #000;
+                    }
                   }
-                }
-                button {
-                  border: none;
-                  outline: none;
-                  border-radius: 0 34.5px 34.5px 0;
-                  background: #231d2c;
-                  text-transform: uppercase;
-                  color: #fff;
-                  font-family: "Inter", sans-serif;
-                  font-size: 14px;
-                  width: 30%;
-                  font-weight: 700;
-                  cursor: pointer;
-                }
-              `}
-            >
-              <NewsletterForm
-                setIsSubscribed={setIsSubscribed}
-                setIsSubscriptionFailed={setIsSubscriptionFailed}
-                setFormError={setFormError}
-              />
-            </div>
-            <p
-              css={`
-                line-height: normal;
-                font-size: 12px;
-                height: 30px;
-              `}
-            >
-              {isSubscribed
-                ? "Thank you for subscribing!"
-                : isSubscriptionFailed
-                ? "Oops! Something went wrong with the request! Please fill your email again."
-                : "  You will receive occasional emails from DX. You always have choice to unsubscribe within every Email."}
-            </p>
+                  button {
+                    border: none;
+                    outline: none;
+                    border-radius: 0 34.5px 34.5px 0;
+                    background: #231d2c;
+                    text-transform: uppercase;
+                    color: #fff;
+                    font-family: "Inter", sans-serif;
+                    font-size: 14px;
+                    width: 30%;
+                    font-weight: 700;
+                    cursor: pointer;
+                  }
+                `}
+              >
+                <NewsletterForm
+                  setIsSubscribed={setIsSubscribed}
+                  setIsSubscriptionFailed={setIsSubscriptionFailed}
+                  setFormError={setFormError}
+                />
+              </div>
+              <p
+                css={`
+                  line-height: normal;
+                  font-size: 12px;
+                  height: 30px;
+                `}
+              >
+                {isSubscribed
+                  ? "Thank you for subscribing!"
+                  : isSubscriptionFailed
+                  ? "Oops! Something went wrong with the request! Please fill your email again."
+                  : "  You will receive occasional emails from DX. You always have choice to unsubscribe within every Email."}
+              </p>
+            </Grid>
           </Grid>
-        </Grid>
+        )}
         <div
           css={`
             display: flex;
@@ -216,7 +218,7 @@ export default function HomeFooter() {
             padding-bottom: 20px;
             font-size: 12px;
 
-            margin-top: 40px;
+            margin-top: ${small ? "0px" : "40px"};
             a {
               text-decoration: none;
               color: #000;

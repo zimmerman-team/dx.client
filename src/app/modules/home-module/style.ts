@@ -1,20 +1,24 @@
 import { css } from "styled-components/macro";
 
 export const turnsDataCss = css`
-  margin-top: 60px;
+  /* margin-top: 60px;
   padding: 0;
   @media screen and (max-width: 768px) {
     justify-content: center;
     align-items: center;
-  }
+  } */
+  margin-top: 80px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
   h1 {
     font-family: "GothamNarrow-Bold", sans-serif;
-    font-weight: 700;
-    font-size: 40px;
-    line-height: 48px;
-    text-align: center;
-    color: #231d2c;
+    font-weight: 400;
+    font-size: 34px;
+    line-height: 42px;
+    /* text-align: center; */
+    color: #2b3674;
     margin: 0;
     padding: 0;
   }
@@ -32,17 +36,21 @@ export const turnsDataCss = css`
 
   button,
   a {
-    padding: 9px 27px;
+    padding: 8px 24px;
     height: 41px;
-    border-radius: 30px;
+    border-radius: 25px;
     outline: none;
     border: none;
     color: #ffffff;
-    font-family: "Inter", sans-serif;
-    font-weight: 700;
+    font-family: "GothamNarrow-Bold", sans-serif;
+    font-weight: 400;
     font-size: 14px;
     text-transform: uppercase;
     text-decoration: none;
+    font-size: 14px;
+    font-style: normal;
+    line-height: 24px; /* 171.429% */
+    letter-spacing: -0.28px;
 
     :hover {
       opacity: 0.8;
