@@ -136,7 +136,12 @@ export function ReportPreviewView(props: {
   }, [persistedReportState]);
 
   return (
-    <div id="export-container">
+    <div
+      id="export-container"
+      css={`
+        background: white;
+      `}
+    >
       <HeaderBlock
         previewMode={true}
         headerDetails={{
