@@ -8,7 +8,7 @@ export default function LocalAssets(props: {
   searchValue: string;
   sortValue: string;
   tableView: boolean;
-  category: string;
+  categories: string[];
 }) {
   const displayGrid = (searchStr: string, sortByStr: string) => {
     switch (props.display) {
@@ -18,7 +18,7 @@ export default function LocalAssets(props: {
             sortBy={sortByStr}
             searchStr={searchStr}
             tableView={props.tableView}
-            category={props.category}
+            categories={props.categories}
             addCard
           />
         );
