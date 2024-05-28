@@ -1,8 +1,8 @@
-import React from 'react';
+import React from "react";
 
-import styled from 'styled-components/macro';
-import Button from '@material-ui/core/Button';
-import { ProjectPalette } from 'app/theme';
+import styled from "styled-components/macro";
+import Button from "@material-ui/core/Button";
+import { ProjectPalette } from "app/theme";
 
 type Props = {
   text: string;
@@ -18,7 +18,7 @@ const BaseContainedButton = styled((props) => <Button {...props} />)`
     background-color: ${ProjectPalette.primary.light} !important;
   }
 
-  & [class*='MuiButton-label'] {
+  & [class*="MuiButton-label"] {
     min-width: 102px;
     text-transform: none;
   }
@@ -29,7 +29,7 @@ const ContainedButton = (props: Props) => {
 
   return (
     <BaseContainedButton
-      variant={'contained'}
+      variant={"contained"}
       color="primary"
       disabled={disabled}
       disableRipple

@@ -1,16 +1,16 @@
 .button {
   border: 0;
-  color: #70777E;
+  color: #70777e;
   font-size: 18px;
   background: transparent;
-width: 40px;
-height: 35px;
+  width: 40px;
+  height: 35px;
   border-radius: 8px;
   cursor: pointer;
 }
 
 .button svg {
-  fill: #70777E;
+  fill: #70777e;
   padding-top: 5px;
   width: 24px;
   height: 24px;
@@ -19,66 +19,65 @@ height: 35px;
 .button:hover,
 .button:focus {
   outline: 0;
-  color: #70777E;
+  color: #70777e;
   border-radius: 8px;
-background: #F2F2F2;
-width: 40px;
-height: 35px;
+  background: #f2f2f2;
+  width: 40px;
+  height: 35px;
 }
 
 .button:hover svg,
 .button:focus svg {
-  fill: #70777E;
+  fill: #70777e;
 }
 
 .active {
-  color: #70777E;
+  color: #70777e;
 }
 
 .active svg {
-  fill: #70777E;
+  fill: #70777e;
 }
-.undoButton{
-  border:none;
- outline: none;
+.undoButton {
+  border: none;
+  outline: none;
   background: transparent;
   width: 100%;
   height: 100%;
   cursor: pointer;
 }
-.undoButton :hover{
+.undoButton :hover {
   border-radius: 8px;
-  background:#F2F2F2;
-
+  background: #f2f2f2;
 }
-.undoButton:focus svg path  {
-  fill: #231D2C;
- 
+.undoButton:focus svg path {
+  fill: #231d2c;
+
   outline: 0; /* reset for :focus */
 }
 
 .undoButton:hover svg path {
-  fill: #231D2C;
+  fill: #231d2c;
 }
 
-.undoButton:active svg path  {
-  fill: #231D2C;
+.undoButton:active svg path {
+  fill: #231d2c;
 }
 
 .undoButton:disabled {
   color: #ccc;
 }
 
-.emojiButton{
-background-color: transparent;
+.emojiButton {
+  background-color: transparent;
   border: none;
   outline: none;
   cursor: pointer;
 }
 
-.emojiButton:hover{
+.emojiButton:hover {
   border-radius: 8px;
-  background: #F2F2F2;
+  background: #f2f2f2;
   border: none;
   outline: none;
 }
