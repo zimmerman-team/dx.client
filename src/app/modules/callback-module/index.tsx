@@ -42,6 +42,8 @@ function AuthCallbackModule() {
       if (response.data) {
         localStorage.removeItem("duplicateReportAfterSignIn");
         history.push(`/report/${response.data.id}/edit`);
+      } else {
+        history.replace("/");
       }
     });
   };
@@ -52,17 +54,21 @@ function AuthCallbackModule() {
         setLoading(true);
         await duplicateAssets();
         setLoading(false);
-        const reportId = localStorage.getItem("duplicateReportAfterSignIn");
-        if (reportId) {
-          await duplicateReport(reportId);
-        }
       })();
-
-      if (localStorage.getItem("signup-state") == "true") {
-        history.replace("/report/new/initial");
-        localStorage.removeItem("signup-state");
+      const reportId = localStorage.getItem("duplicateReportAfterSignIn");
+      if (reportId) {
+        (async () => {
+          setLoading(true);
+          await duplicateReport(reportId);
+          setLoading(false);
+        })();
       } else {
-        history.replace("/");
+        if (localStorage.getItem("signup-state") == "true") {
+          history.replace("/report/new/initial");
+          localStorage.removeItem("signup-state");
+        } else {
+          history.replace("/");
+        }
       }
     } else {
       getAccessTokenSilently();
