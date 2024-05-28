@@ -1,4 +1,3 @@
-import useCookie from "@devhammed/use-cookie";
 import { Container } from "@material-ui/core";
 import { ReactComponent as GoogleIcon } from "app/modules/onboarding-module/asset/google-img.svg";
 import { ReactComponent as LinkedInIcon } from "app/modules/onboarding-module/asset/linkedIn-img.svg";
@@ -7,22 +6,10 @@ import React from "react";
 import { useParams } from "react-router-dom";
 
 function ReportUsePanel() {
-  const [_, setDuplicateReportAfterSignIn] = useCookie(
-    "duplicateReportAfterSignIn",
-    null
-  );
   const { page } = useParams<{ page: string }>();
 
   const handleSignIn = (connection: "google-oauth2" | "linkedin") => {
-    setDuplicateReportAfterSignIn(page, {
-      expires: 3600, // 1hr
-      domain: "",
-      path: "",
-      secure: false,
-      httpOnly: false,
-      maxAge: 0,
-      sameSite: "",
-    });
+    localStorage.setItem("duplicateReportAfterSignIn", page);
     socialAuth(connection);
   };
 

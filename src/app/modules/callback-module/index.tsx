@@ -5,7 +5,6 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { PageLoader } from "app/modules/common/page-loader";
 import axios from "axios";
 import { useTitle } from "react-use";
-import useCookie from "@devhammed/use-cookie";
 
 function AuthCallbackModule() {
   useTitle("DX DataXplorer - Auth Callback");
@@ -13,11 +12,6 @@ function AuthCallbackModule() {
   const history = useHistory();
   const { error, isAuthenticated, getAccessTokenSilently } = useAuth0();
   const [loading, setLoading] = React.useState(true);
-
-  const [reportId, _, deleteReportId] = useCookie(
-    "duplicateReportAfterSignIn",
-    null
-  );
 
   const duplicateAssets = async () => {
     getAccessTokenSilently().then(async (newToken) => {
@@ -46,7 +40,7 @@ function AuthCallbackModule() {
         }
       );
       if (response.data) {
-        deleteReportId();
+        localStorage.removeItem("duplicateReportAfterSignIn");
         history.push(`/report/${response.data.id}/edit`);
       }
     });
@@ -58,11 +52,12 @@ function AuthCallbackModule() {
         setLoading(true);
         await duplicateAssets();
         setLoading(false);
+        const reportId = localStorage.getItem("duplicateReportAfterSignIn");
+        if (reportId) {
+          await duplicateReport(reportId);
+        }
       })();
 
-      if (reportId) {
-        duplicateReport(reportId);
-      }
       if (localStorage.getItem("signup-state") == "true") {
         history.replace("/report/new/initial");
         localStorage.removeItem("signup-state");
