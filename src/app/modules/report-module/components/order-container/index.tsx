@@ -1,11 +1,11 @@
 import React from "react";
-import update from "immutability-helper";
 import { useUpdateEffect } from "react-use";
-import { useDrag, useDrop } from "react-dnd";
-import type { Identifier, XYCoord } from "dnd-core";
+import { useDrag } from "react-dnd";
 import { ReactComponent as RowFrameHandleAdornment } from "app/modules/report-module/asset/rowFrameHandleAdornment.svg";
-
-import { IFramesArray } from "../../views/create/data";
+import { IFramesArray } from "app/modules/report-module/views/create/data";
+import { ReportElementsType } from "app/modules/report-module/components/right-panel-create-view/";
+import { useRecoilState } from "recoil";
+import { isDividerOrRowFrameDraggingAtom } from "app/state/recoil/atoms";
 
 interface Item {
   id: string;
@@ -16,94 +16,20 @@ interface ItemComponentProps {
   id: string;
   index: number;
   content: React.ReactNode;
-  moveCard: (dragIndex: number, hoverIndex: number) => void;
   childrenData: any[];
 }
-
-interface DragItem {
-  index: number;
-  id: string;
-  type: string;
-}
-
-const ItemTypes = {
-  CARD: "card",
-};
 
 const style = {
   transform: "translate(0px, 0px)",
 };
 
 function ItemComponent(props: ItemComponentProps) {
-  const { id, content, index, moveCard } = props;
-
-  const ref = React.useRef<HTMLDivElement>(null);
-
-  const [{ handlerId }, drop] = useDrop<
-    DragItem,
-    void,
-    { handlerId: Identifier | null }
-  >({
-    accept: ItemTypes.CARD,
-    collect(monitor) {
-      return {
-        handlerId: monitor.getHandlerId(),
-      };
-    },
-    hover(item: DragItem, monitor) {
-      if (!ref.current) {
-        return;
-      }
-      const dragIndex = item.index;
-      const hoverIndex = index;
-
-      // Don't replace items with themselves
-      if (dragIndex === hoverIndex) {
-        return;
-      }
-
-      // Determine rectangle on screen
-      const hoverBoundingRect = ref.current?.getBoundingClientRect();
-
-      // Get vertical middle
-      const hoverMiddleY =
-        (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
-
-      // Determine mouse position
-      const clientOffset = monitor.getClientOffset();
-
-      // Get pixels to the top
-      const hoverClientY = (clientOffset as XYCoord).y - hoverBoundingRect.top;
-
-      // Only perform the move when the mouse has crossed half of the items height
-      // When dragging downwards, only move when the cursor is below 50%
-      // When dragging upwards, only move when the cursor is above 50%
-
-      // Dragging downwards
-      if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
-        return;
-      }
-
-      // Dragging upwards
-      if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
-        return;
-      }
-
-      // Time to actually perform the action
-      moveCard(dragIndex, hoverIndex);
-
-      // Note: we're mutating the monitor item here!
-      // Generally it's better to avoid mutations,
-      // but it's good here for the sake of performance
-      // to avoid expensive index searches.
-      item.index = hoverIndex;
-    },
-  });
+  const { id, content, index } = props;
 
   const [{ isDragging }, drag] = useDrag({
-    type: ItemTypes.CARD,
+    type: ReportElementsType.ROW,
     item: () => {
-      return { id, index };
+      return { id, index, type: ReportElementsType.ROW };
     },
     collect: (monitor: any) => ({
       isDragging: monitor.isDragging(),
@@ -112,14 +38,21 @@ function ItemComponent(props: ItemComponentProps) {
 
   const opacity = isDragging ? 0.5 : 1;
 
-  drag(drop(ref));
+  const [isItemDragging, setIsItemDragging] = useRecoilState(
+    isDividerOrRowFrameDraggingAtom
+  );
+
+  React.useEffect(() => {
+    if (isDragging !== isItemDragging) {
+      setIsItemDragging(isDragging);
+    }
+  }, [isDragging]);
 
   return (
     <div style={{ ...style, opacity }}>
       <div
-        ref={ref}
+        ref={drag}
         id={`item-${id}`}
-        data-handler-id={handlerId}
         css={`
           top: -4px;
           left: -1rem;
@@ -160,20 +93,6 @@ export function ReportOrderContainer(props: Props) {
     }))
   );
 
-  const moveCard = React.useCallback(
-    (dragIndex: number, hoverIndex: number) => {
-      props.setFramesArray((prevItems: IFramesArray[]) =>
-        update(prevItems, {
-          $splice: [
-            [dragIndex, 1],
-            [hoverIndex, 0, prevItems[dragIndex]],
-          ],
-        })
-      );
-    },
-    []
-  );
-
   const renderItem = React.useCallback(
     (item: Item, index: number) => {
       return (
@@ -182,7 +101,6 @@ export function ReportOrderContainer(props: Props) {
           index={index}
           id={item.id}
           content={item.content}
-          moveCard={moveCard}
           childrenData={props.childrenData}
         />
       );

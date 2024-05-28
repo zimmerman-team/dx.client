@@ -21,7 +21,6 @@ import {
   isDividerOrRowFrameDraggingAtom,
 } from "app/state/recoil/atoms";
 import TourGuide from "app/components/Dialogs/TourGuide";
-import { cloneDeep } from "lodash";
 import { withAuthenticationRequired } from "@auth0/auth0-react";
 import { useTitle } from "react-use";
 
@@ -208,51 +207,105 @@ function ReportCreateView(props: Readonly<ReportCreateViewProps>) {
 export default withAuthenticationRequired(ReportCreateView);
 
 export const PlaceHolder = (props: PlaceholderProps) => {
-  const [{ isOver }, drop] = useDrop(() => ({
+  const moveCard = React.useCallback((itemId: string) => {
+    props.setFramesArray((prev) => {
+      const tempPrev = prev.map((p) => ({ ...p }));
+      const dragIndex = tempPrev.findIndex((frame) => frame.id === itemId);
+
+      const dropIndex =
+        props.index ??
+        tempPrev.findIndex((frame) => frame.id === props.rowId) + 1;
+
+      const fakeId = v4();
+      const tempItem = { ...tempPrev[dragIndex] };
+      tempPrev[dragIndex].id = fakeId;
+
+      tempPrev.splice(dropIndex, 0, tempItem);
+      const fakeIndex = tempPrev.findIndex((frame) => frame.id === fakeId);
+      tempPrev.splice(fakeIndex, 1);
+      return [...tempPrev];
+    });
+  }, []);
+  const [{ isOver, handlerId, item: dragItem }, drop] = useDrop(() => ({
     // The type (or types) to accept - strings or symbols
-    accept: [ReportElementsType.DIVIDER, ReportElementsType.ROWFRAME],
+    accept: [
+      ReportElementsType.DIVIDER,
+      ReportElementsType.ROWFRAME,
+      ReportElementsType.ROW,
+    ],
     // Props to collect
     collect: (monitor) => ({
       isOver: monitor.isOver(),
       canDrop: monitor.canDrop(),
       item: monitor.getItem(),
+      handlerId: monitor.getHandlerId(),
     }),
     drop: (item: any, monitor) => {
-      props.setFramesArray((prev) => {
-        const tempPrev = cloneDeep(prev);
+      if (item.type === ReportElementsType.ROW) {
+        moveCard(item.id);
+      } else {
+        props.setFramesArray((prev) => {
+          const tempPrev = prev.map((p) => ({ ...p }));
 
-        const tempIndex =
-          props.index ??
-          tempPrev.findIndex((frame) => frame.id === props.rowId) + 1;
+          const tempIndex =
+            props.index ??
+            tempPrev.findIndex((frame) => frame.id === props.rowId) + 1;
 
-        const id = v4();
-        tempPrev.splice(tempIndex, 0, {
-          id,
-          frame: {
-            rowId: id,
-            rowIndex: tempIndex,
+          const id = v4();
+          tempPrev.splice(tempIndex, 0, {
+            id,
+            frame: {
+              rowId: id,
+              rowIndex: tempIndex,
 
-            handlePersistReportState: props.handlePersistReportState,
-            handleRowFrameItemResize: props.handleRowFrameItemResize,
-            type: item.type,
-          },
-          content: item.type === ReportElementsType.ROWFRAME ? [] : ["divider"],
-          contentWidths: [],
-          contentHeights: [],
-          contentTypes:
-            item.type === ReportElementsType.ROWFRAME ? [] : ["divider"],
-          structure: null,
+              handlePersistReportState: props.handlePersistReportState,
+              handleRowFrameItemResize: props.handleRowFrameItemResize,
+              type: item.type,
+            },
+            content:
+              item.type === ReportElementsType.ROWFRAME ? [] : ["divider"],
+            contentWidths: [],
+            contentHeights: [],
+            contentTypes:
+              item.type === ReportElementsType.ROWFRAME ? [] : ["divider"],
+            structure: null,
+          });
+          return [...tempPrev];
         });
-        return [...tempPrev];
-      });
+      }
     },
   }));
 
   const isItemDragging = useRecoilValue(isDividerOrRowFrameDraggingAtom);
 
+  const placeholderIndex =
+    props.index ??
+    props.framesArray.findIndex((frame) => frame.id === props.rowId) + 1;
+
+  const dragIndex = props.framesArray.findIndex(
+    (frame) => frame.id === (dragItem as any)?.id
+  );
+
+  const placeholderActive = () => {
+    if (isOver) {
+      if (dragIndex === -1) {
+        return true;
+      }
+      if (placeholderIndex === dragIndex) {
+        return false;
+      }
+      if (placeholderIndex - 1 === dragIndex) {
+        return false;
+      }
+      return true;
+    }
+    return false;
+  };
+
   return (
     <div
       data-cy="report-row-placeholder"
+      data-handler-id={handlerId}
       ref={drop}
       css={`
         width: 100%;
@@ -260,7 +313,7 @@ export const PlaceHolder = (props: PlaceholderProps) => {
         margin: 10px 0;
         display: ${isItemDragging ? "block" : "none"};
         border: 1px ${isItemDragging ? "dashed" : "none"} #adb5bd;
-        background-color: #262c34;
+        background-color: ${placeholderActive() ? "#6061E5" : "#262c34"};
       `}
     />
   );
