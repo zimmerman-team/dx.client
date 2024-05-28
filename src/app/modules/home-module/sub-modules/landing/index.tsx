@@ -8,6 +8,7 @@ import ThePowerImage from "app/modules/home-module/sub-modules/landing/assets/th
 import HomeFooter from "../../components/Footer";
 import Subscribe from "../../components/Subscribe";
 import { useTitle } from "react-use";
+import { Link } from "react-router-dom";
 
 export default function LandingModule() {
   useTitle("DX DataXplorer - Landing");
@@ -21,15 +22,20 @@ export default function LandingModule() {
       <EmpowerBlock view="landing" />
 
       <Container maxWidth="lg">
-        <img
-          src={ReportImage}
-          alt="report-image"
-          css={`
-            width: 100%;
-            margin-top: -140px;
-            position: relative;
-          `}
-        />
+        <Link to="/report/664f406b82350800ca942b92?fromLanding=true">
+          <img
+            src={ReportImage}
+            alt="report-image"
+            css={`
+              width: 100%;
+              margin-top: -140px;
+              position: relative;
+              :hover {
+                opacity: 0.8;
+              }
+            `}
+          />
+        </Link>
         <div
           css={`
             h2 {

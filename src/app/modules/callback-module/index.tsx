@@ -28,13 +28,36 @@ function AuthCallbackModule() {
     });
   };
 
+  const duplicateReport = async (id: string) => {
+    getAccessTokenSilently().then(async (newToken) => {
+      const response = await axios.get(
+        `${process.env.REACT_APP_API}/users/duplicate-landing-report/${id}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${newToken}`,
+          },
+        }
+      );
+      if (response.data) {
+        localStorage.removeItem("duplicateReportAfterSignIn");
+        history.push(`/report/${response.data.id}/edit`);
+      }
+    });
+  };
+
   React.useEffect(() => {
     if (isAuthenticated) {
       (async () => {
         setLoading(true);
         await duplicateAssets();
         setLoading(false);
+        const reportId = localStorage.getItem("duplicateReportAfterSignIn");
+        if (reportId) {
+          await duplicateReport(reportId);
+        }
       })();
+
       if (localStorage.getItem("signup-state") == "true") {
         history.replace("/report/new/initial");
         localStorage.removeItem("signup-state");

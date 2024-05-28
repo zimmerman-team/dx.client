@@ -16,6 +16,7 @@ import { HomepageTable } from "app/modules/home-module/components/Table";
 import { coloredEchartTypes } from "app/modules/chart-module/routes/chart-type/data";
 import ChartAddnewCard from "app/modules/home-module/components/Charts/chartAddNewCard";
 import GridItem from "app/modules/home-module/components/Charts/gridItem";
+import { useAuth0 } from "@auth0/auth0-react";
 
 interface Props {
   sortBy: string;
@@ -30,6 +31,8 @@ export default function ChartsGrid(props: Props) {
   const [loadedCharts, setLoadedCharts] = React.useState<any[]>([]);
   const [modalDisplay, setModalDisplay] = React.useState<boolean>(false);
   const [enableButton, setEnableButton] = React.useState<boolean>(false);
+
+  const { isAuthenticated } = useAuth0();
 
   const token = useStoreState((state) => state.AuthToken.value);
 
@@ -207,7 +210,7 @@ export default function ChartsGrid(props: Props) {
     <>
       {!props.tableView && (
         <Grid container spacing={2}>
-          {props.addCard && <ChartAddnewCard />}
+          {props.addCard && isAuthenticated ? <ChartAddnewCard /> : null}
           {loadedCharts.map((c, index) => (
             <Grid item key={c.id} xs={12} sm={6} md={6} lg={3}>
               <GridItem

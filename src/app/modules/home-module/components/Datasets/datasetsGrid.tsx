@@ -16,6 +16,7 @@ import DatasetAddnewCard from "app/modules/home-module/components/Datasets/datas
 import CircleLoader from "app/modules/home-module/components/Loader";
 import { loadedDatasetsAtom } from "app/state/recoil/atoms";
 import { DatasetListItemAPIModel } from "app/modules/dataset-module/data";
+import { useAuth0 } from "@auth0/auth0-react";
 
 interface Props {
   sortBy: string;
@@ -40,6 +41,8 @@ export default function DatasetsGrid(props: Readonly<Props>) {
   const { isObserved } = useInfinityScroll(observerTarget);
   const [loadedDatasets, setLoadedDatasets] =
     useRecoilState(loadedDatasetsAtom);
+
+  const { isAuthenticated } = useAuth0();
 
   const token = useStoreState((state) => state.AuthToken.value);
   const datasets = useStoreState(
@@ -207,7 +210,7 @@ export default function DatasetsGrid(props: Readonly<Props>) {
     <>
       {!props.tableView && (
         <Grid container spacing={!props.inChartBuilder ? 2 : 1}>
-          {props.addCard && <DatasetAddnewCard />}
+          {props.addCard && isAuthenticated ? <DatasetAddnewCard /> : null}
           {loadedDatasets?.map((data, index) => (
             <Grid
               item
