@@ -211,7 +211,11 @@ function ReportEditView(props: ReportEditViewProps) {
   }
 
   return (
-    <div>
+    <div
+      css={`
+        /* background: white; */
+      `}
+    >
       <div
         css={`
           height: 55px;
@@ -282,7 +286,7 @@ function ReportEditView(props: ReportEditViewProps) {
                     setPlugins={props.setPlugins}
                     endReportTour={handleEndReportTour}
                   />
-                  <Box height={38} />
+                  <Box height={16} />
 
                   <PlaceHolder
                     rowId={frame.id}

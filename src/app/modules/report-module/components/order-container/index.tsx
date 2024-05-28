@@ -131,7 +131,7 @@ function ItemComponent(props: ItemComponentProps) {
           background: #adb5bd;
           border-radius: 3.45px;
           justify-content: center;
-          height: calc(100% - 38px + 8px);
+          height: calc(100% - 16px + 8px);
           display: ${props.childrenData[props.index]?.structure === null &&
           props.childrenData[props.index]?.content[0] !== "divider"
             ? "none"

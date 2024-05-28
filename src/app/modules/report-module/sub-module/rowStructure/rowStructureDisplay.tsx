@@ -479,14 +479,15 @@ const Box = (props: {
       );
     }
   }, [chartId, displayMode, imageContent, videoContent]);
-
+  console.log(props.width, "box");
   let width = `${props.width}%`;
   if (containerWidth) {
     width = `${
       containerWidth * (props.width / 100) -
-      ((props.rowItemsCount - 1) * 60) / props.rowItemsCount
+      ((props.rowItemsCount - 1) * 11.3) / props.rowItemsCount
     }px`;
   }
+  console.log(width, "width%", containerWidth);
 
   const onResizeStop = (
     _event: MouseEvent | TouchEvent,
@@ -886,7 +887,7 @@ const Box = (props: {
         css={`
           width: ${width};
           border: ${border};
-          background: #dfe3e6;
+          background: ${viewOnlyMode ? "transparent" : "#dfe3e6"};
           height: ${props.height}px;
         `}
         ref={drop}
@@ -897,7 +898,6 @@ const Box = (props: {
             margin: 0;
             width: 100%;
             height: 100%;
-            display: flex;
             padding: 24px;
             color: #495057;
             font-size: 14px;
@@ -906,6 +906,7 @@ const Box = (props: {
             text-align: center;
             align-items: center;
             justify-content: center;
+            display: ${viewOnlyMode ? "none" : "flex"};
           `}
         >
           {isOver ? "Release to drop" : "Drag and drop content here"}
