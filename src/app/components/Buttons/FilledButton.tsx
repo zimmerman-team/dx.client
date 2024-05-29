@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import React from 'react';
-import theme from 'app/theme';
+import React from "react";
+import theme from "app/theme";
 
 interface GeneralButtonProps {
   label: string;
@@ -13,7 +13,7 @@ interface GeneralButtonProps {
 export const FilledButton = (props: GeneralButtonProps) => {
   // tidy up and make re-useable
   const backgroundColor = () => {
-    if (props.disabled) return '#B6B6B6';
+    if (props.disabled) return "#B6B6B6";
     if (props.backgroundColor) return props.backgroundColor;
     return theme.palette.primary.main;
   };
@@ -30,7 +30,7 @@ export const FilledButton = (props: GeneralButtonProps) => {
         display: flex;
         justify-content: center;
         align-items: center;
-        cursor: ${props.disabled ? 'unset' : 'pointer'};
+        cursor: ${props.disabled ? "unset" : "pointer"};
         user-select: none;
         font-style: normal;
         font-weight: 500;
@@ -42,7 +42,7 @@ export const FilledButton = (props: GeneralButtonProps) => {
         white-space: nowrap;
 
         &:hover {
-          opacity: ${props.disabled ? 'unset' : '0.7'};
+          opacity: ${props.disabled ? "unset" : "0.7"};
         }
       `}
     >

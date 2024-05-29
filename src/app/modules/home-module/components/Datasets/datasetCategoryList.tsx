@@ -2,8 +2,8 @@ import React from "react";
 
 interface Props {
   datasetCategories: string[];
-  category: string;
-  setCategory: (c: string) => void;
+  categories: string[];
+  setCategories: (c: string[]) => void;
   customCss?: { gap: string };
 }
 export default function DatasetCategoryList(props: Readonly<Props>) {
@@ -48,9 +48,16 @@ export default function DatasetCategoryList(props: Readonly<Props>) {
       {props.datasetCategories.map((c: string) => (
         <button
           key={c}
-          onClick={() => props.setCategory(c !== props.category ? c : "")}
+          onClick={() => {
+            if (!props.categories.includes(c)) {
+              props.setCategories([...props.categories, c]);
+            } else {
+              const fCategory = props.categories.filter((f) => f !== c);
+              props.setCategories(fCategory);
+            }
+          }}
           style={
-            c === props.category
+            props.categories.includes(c)
               ? {
                   color: "#fff",
                   background: "#6061E5",

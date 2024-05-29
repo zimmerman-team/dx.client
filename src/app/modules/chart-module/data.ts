@@ -322,8 +322,8 @@ export const defaultChartOptions = {
 export interface ChartAPIModel {
   id: string;
   name: string;
-  vizType: string;
-  datasetId: string;
+  vizType: string | null;
+  datasetId: string | null;
   mapping: any;
   vizOptions: any;
   appliedFilters: { [key: string]: any[] };
@@ -473,8 +473,8 @@ export const emptyChartAPI: ChartAPIModel = {
   mapping: {},
   vizOptions: {},
   appliedFilters: {},
-  vizType: "echartsBarchart",
-  datasetId: "investment-signed",
+  vizType: null,
+  datasetId: null,
   dataTypes: [],
   isMappingValid: false,
   isAIAssisted: false,

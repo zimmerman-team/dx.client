@@ -15,6 +15,7 @@ import ReportAddnewCard from "./reportAddNewCard";
 import { useInfinityScroll } from "app/hooks/useInfinityScroll";
 import CircleLoader from "../Loader";
 import { EditorState, convertFromRaw } from "draft-js";
+import { useAuth0 } from "@auth0/auth0-react";
 
 interface Props {
   sortBy: string;
@@ -35,6 +36,9 @@ export default function ReportsGrid(props: Props) {
   const [offset, setOffset] = React.useState(0);
   const { isObserved } = useInfinityScroll(observerTarget);
   const token = useStoreState((state) => state.AuthToken.value);
+
+  const { isAuthenticated } = useAuth0();
+
   const reports = useStoreState(
     (state) => (state.reports.ReportGetList.crudData ?? []) as ReportModel[]
   );
@@ -194,7 +198,7 @@ export default function ReportsGrid(props: Props) {
     <>
       {!props.tableView && (
         <Grid container spacing={2}>
-          {props.addCard && <ReportAddnewCard />}
+          {props.addCard && isAuthenticated ? <ReportAddnewCard /> : null}
           {loadedReports.map((data, index) => (
             <Grid item key={data.id} xs={12} sm={6} md={4} lg={3}>
               <ReformedGridItem

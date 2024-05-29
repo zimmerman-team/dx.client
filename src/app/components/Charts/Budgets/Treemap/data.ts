@@ -90,8 +90,7 @@ export const mockdata3: BudgetsTreemapDataItem[] = [
         },
       },
       {
-        name:
-          "RSSH: Human resources for health, including community health workers",
+        name: "RSSH: Human resources for health, including community health workers",
         value: 86614187,
         formattedValue: "86,614,187 USD",
         color: "#70777E",
@@ -99,8 +98,7 @@ export const mockdata3: BudgetsTreemapDataItem[] = [
           header: "HIV",
           componentsStats: [
             {
-              name:
-                "RSSH: Human resources for health, including community health workers",
+              name: "RSSH: Human resources for health, including community health workers",
               value: 86614187,
             },
           ],
@@ -156,8 +154,7 @@ export const mockdata3: BudgetsTreemapDataItem[] = [
         },
       },
       {
-        name:
-          "Comprehensive prevention programs for people who inject drugs (PWID) and their partners",
+        name: "Comprehensive prevention programs for people who inject drugs (PWID) and their partners",
         value: 38093788,
         formattedValue: "38,093,788 USD",
         color: "#70777E",
@@ -165,8 +162,7 @@ export const mockdata3: BudgetsTreemapDataItem[] = [
           header: "HIV",
           componentsStats: [
             {
-              name:
-                "Comprehensive prevention programs for people who inject drugs (PWID) and their partners",
+              name: "Comprehensive prevention programs for people who inject drugs (PWID) and their partners",
               value: 38093788,
             },
           ],
@@ -190,8 +186,7 @@ export const mockdata3: BudgetsTreemapDataItem[] = [
         },
       },
       {
-        name:
-          "Comprehensive prevention programs for sex workers and their clients",
+        name: "Comprehensive prevention programs for sex workers and their clients",
         value: 30648775,
         formattedValue: "30,648,775 USD",
         color: "#70777E",
@@ -199,8 +194,7 @@ export const mockdata3: BudgetsTreemapDataItem[] = [
           header: "HIV",
           componentsStats: [
             {
-              name:
-                "Comprehensive prevention programs for sex workers and their clients",
+              name: "Comprehensive prevention programs for sex workers and their clients",
               value: 30648775,
             },
           ],
@@ -272,8 +266,7 @@ export const mockdata3: BudgetsTreemapDataItem[] = [
         },
       },
       {
-        name:
-          "Prevention programs for adolescents and youth, in and out of school",
+        name: "Prevention programs for adolescents and youth, in and out of school",
         value: 15173907,
         formattedValue: "15,173,907 USD",
         color: "#70777E",
@@ -281,8 +274,7 @@ export const mockdata3: BudgetsTreemapDataItem[] = [
           header: "HIV",
           componentsStats: [
             {
-              name:
-                "Prevention programs for adolescents and youth, in and out of school",
+              name: "Prevention programs for adolescents and youth, in and out of school",
               value: 15173907,
             },
           ],
@@ -402,8 +394,7 @@ export const mockdata3: BudgetsTreemapDataItem[] = [
         },
       },
       {
-        name:
-          "Comprehensive programs for people in prisons and other closed settings",
+        name: "Comprehensive programs for people in prisons and other closed settings",
         value: 1717168,
         formattedValue: "1,717,168 USD",
         color: "#70777E",
@@ -411,8 +402,7 @@ export const mockdata3: BudgetsTreemapDataItem[] = [
           header: "HIV",
           componentsStats: [
             {
-              name:
-                "Comprehensive programs for people in prisons and other closed settings",
+              name: "Comprehensive programs for people in prisons and other closed settings",
               value: 1717168,
             },
           ],
@@ -502,8 +492,7 @@ export const mockdata3: BudgetsTreemapDataItem[] = [
         },
       },
       {
-        name:
-          "RSSH: Human resources for health, including community health workers",
+        name: "RSSH: Human resources for health, including community health workers",
         value: 100790737,
         formattedValue: "100,790,737 USD",
         color: "#70777E",
@@ -511,8 +500,7 @@ export const mockdata3: BudgetsTreemapDataItem[] = [
           header: "Malaria",
           componentsStats: [
             {
-              name:
-                "RSSH: Human resources for health, including community health workers",
+              name: "RSSH: Human resources for health, including community health workers",
               value: 100790737,
             },
           ],
@@ -762,8 +750,7 @@ export const mockdata3: BudgetsTreemapDataItem[] = [
         },
       },
       {
-        name:
-          "Prevention programs for adolescents and youth, in and out of school",
+        name: "Prevention programs for adolescents and youth, in and out of school",
         value: 52414717,
         formattedValue: "52,414,717 USD",
         color: "#70777E",
@@ -771,8 +758,7 @@ export const mockdata3: BudgetsTreemapDataItem[] = [
           header: "TB/HIV",
           componentsStats: [
             {
-              name:
-                "Prevention programs for adolescents and youth, in and out of school",
+              name: "Prevention programs for adolescents and youth, in and out of school",
               value: 52414717,
             },
           ],
@@ -796,8 +782,7 @@ export const mockdata3: BudgetsTreemapDataItem[] = [
         },
       },
       {
-        name:
-          "RSSH: Human resources for health, including community health workers",
+        name: "RSSH: Human resources for health, including community health workers",
         value: 39631961,
         formattedValue: "39,631,961 USD",
         color: "#70777E",
@@ -805,8 +790,7 @@ export const mockdata3: BudgetsTreemapDataItem[] = [
           header: "TB/HIV",
           componentsStats: [
             {
-              name:
-                "RSSH: Human resources for health, including community health workers",
+              name: "RSSH: Human resources for health, including community health workers",
               value: 39631961,
             },
           ],
@@ -862,8 +846,7 @@ export const mockdata3: BudgetsTreemapDataItem[] = [
         },
       },
       {
-        name:
-          "Comprehensive prevention programs for people who inject drugs (PWID) and their partners",
+        name: "Comprehensive prevention programs for people who inject drugs (PWID) and their partners",
         value: 22421852,
         formattedValue: "22,421,852 USD",
         color: "#70777E",
@@ -871,8 +854,7 @@ export const mockdata3: BudgetsTreemapDataItem[] = [
           header: "TB/HIV",
           componentsStats: [
             {
-              name:
-                "Comprehensive prevention programs for people who inject drugs (PWID) and their partners",
+              name: "Comprehensive prevention programs for people who inject drugs (PWID) and their partners",
               value: 22421852,
             },
           ],
@@ -880,8 +862,7 @@ export const mockdata3: BudgetsTreemapDataItem[] = [
         },
       },
       {
-        name:
-          "Comprehensive prevention programs for sex workers and their clients",
+        name: "Comprehensive prevention programs for sex workers and their clients",
         value: 20477783,
         formattedValue: "20,477,783 USD",
         color: "#70777E",
@@ -889,8 +870,7 @@ export const mockdata3: BudgetsTreemapDataItem[] = [
           header: "TB/HIV",
           componentsStats: [
             {
-              name:
-                "Comprehensive prevention programs for sex workers and their clients",
+              name: "Comprehensive prevention programs for sex workers and their clients",
               value: 20477783,
             },
           ],
@@ -1074,8 +1054,7 @@ export const mockdata3: BudgetsTreemapDataItem[] = [
         },
       },
       {
-        name:
-          "Comprehensive programs for people in prisons and other closed settings",
+        name: "Comprehensive programs for people in prisons and other closed settings",
         value: 1324357,
         formattedValue: "1,324,357 USD",
         color: "#70777E",
@@ -1083,8 +1062,7 @@ export const mockdata3: BudgetsTreemapDataItem[] = [
           header: "TB/HIV",
           componentsStats: [
             {
-              name:
-                "Comprehensive programs for people in prisons and other closed settings",
+              name: "Comprehensive programs for people in prisons and other closed settings",
               value: 1324357,
             },
           ],
@@ -1124,8 +1102,7 @@ export const mockdata3: BudgetsTreemapDataItem[] = [
         },
       },
       {
-        name:
-          "Removing human rights and gender related barriers to TB services",
+        name: "Removing human rights and gender related barriers to TB services",
         value: 425376,
         formattedValue: "425,376 USD",
         color: "#70777E",
@@ -1133,8 +1110,7 @@ export const mockdata3: BudgetsTreemapDataItem[] = [
           header: "TB/HIV",
           componentsStats: [
             {
-              name:
-                "Removing human rights and gender related barriers to TB services",
+              name: "Removing human rights and gender related barriers to TB services",
               value: 425376,
             },
           ],
@@ -1240,8 +1216,7 @@ export const mockdata3: BudgetsTreemapDataItem[] = [
         },
       },
       {
-        name:
-          "RSSH: Human resources for health, including community health workers",
+        name: "RSSH: Human resources for health, including community health workers",
         value: 14903301,
         formattedValue: "14,903,301 USD",
         color: "#70777E",
@@ -1249,8 +1224,7 @@ export const mockdata3: BudgetsTreemapDataItem[] = [
           header: "Tuberculosis",
           componentsStats: [
             {
-              name:
-                "RSSH: Human resources for health, including community health workers",
+              name: "RSSH: Human resources for health, including community health workers",
               value: 14903301,
             },
           ],
@@ -1386,8 +1360,7 @@ export const mockdata3: BudgetsTreemapDataItem[] = [
         },
       },
       {
-        name:
-          "Removing human rights and gender related barriers to TB services",
+        name: "Removing human rights and gender related barriers to TB services",
         value: 202142,
         formattedValue: "202,142 USD",
         color: "#70777E",
@@ -1395,8 +1368,7 @@ export const mockdata3: BudgetsTreemapDataItem[] = [
           header: "Tuberculosis",
           componentsStats: [
             {
-              name:
-                "Removing human rights and gender related barriers to TB services",
+              name: "Removing human rights and gender related barriers to TB services",
               value: 202142,
             },
           ],
@@ -1518,8 +1490,7 @@ export const mockdata3: BudgetsTreemapDataItem[] = [
         },
       },
       {
-        name:
-          "RSSH: Human resources for health, including community health workers",
+        name: "RSSH: Human resources for health, including community health workers",
         value: 6356981,
         formattedValue: "6,356,981 USD",
         color: "#70777E",
@@ -1527,8 +1498,7 @@ export const mockdata3: BudgetsTreemapDataItem[] = [
           header: "RSSH",
           componentsStats: [
             {
-              name:
-                "RSSH: Human resources for health, including community health workers",
+              name: "RSSH: Human resources for health, including community health workers",
               value: 6356981,
             },
           ],
@@ -1618,8 +1588,7 @@ export const mockdata3: BudgetsTreemapDataItem[] = [
         },
       },
       {
-        name:
-          "RSSH: Human resources for health, including community health workers",
+        name: "RSSH: Human resources for health, including community health workers",
         value: 11194867,
         formattedValue: "11,194,867 USD",
         color: "#70777E",
@@ -1627,8 +1596,7 @@ export const mockdata3: BudgetsTreemapDataItem[] = [
           header: "Multicomponent",
           componentsStats: [
             {
-              name:
-                "RSSH: Human resources for health, including community health workers",
+              name: "RSSH: Human resources for health, including community health workers",
               value: 11194867,
             },
           ],
@@ -1796,8 +1764,7 @@ export const mockdata3: BudgetsTreemapDataItem[] = [
         },
       },
       {
-        name:
-          "Comprehensive prevention programs for sex workers and their clients",
+        name: "Comprehensive prevention programs for sex workers and their clients",
         value: 489963,
         formattedValue: "489,963 USD",
         color: "#70777E",
@@ -1805,8 +1772,7 @@ export const mockdata3: BudgetsTreemapDataItem[] = [
           header: "Multicomponent",
           componentsStats: [
             {
-              name:
-                "Comprehensive prevention programs for sex workers and their clients",
+              name: "Comprehensive prevention programs for sex workers and their clients",
               value: 489963,
             },
           ],
@@ -1814,8 +1780,7 @@ export const mockdata3: BudgetsTreemapDataItem[] = [
         },
       },
       {
-        name:
-          "Prevention programs for adolescents and youth, in and out of school",
+        name: "Prevention programs for adolescents and youth, in and out of school",
         value: 484000,
         formattedValue: "484,000 USD",
         color: "#70777E",
@@ -1823,8 +1788,7 @@ export const mockdata3: BudgetsTreemapDataItem[] = [
           header: "Multicomponent",
           componentsStats: [
             {
-              name:
-                "Prevention programs for adolescents and youth, in and out of school",
+              name: "Prevention programs for adolescents and youth, in and out of school",
               value: 484000,
             },
           ],

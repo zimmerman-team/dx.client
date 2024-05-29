@@ -160,6 +160,7 @@ export const ReportElementsType = {
   BIG_NUMBER: "bigNumber",
   IMAGE: "image",
   VIDEO: "video",
+  ROW: "row",
 };
 
 const sortByOptions = [

@@ -20,6 +20,8 @@ import {
 } from "app/state/recoil/atoms";
 import { linkDecorator } from "app/modules/common/RichEditor/decorators";
 import { useTitle } from "react-use";
+import ReportUsePanel from "../../components/use-report-panel";
+import HomeFooter from "app/modules/home-module/components/Footer";
 
 export function ReportPreviewView(props: {
   setIsPreviewView: React.Dispatch<React.SetStateAction<boolean>>;
@@ -29,11 +31,8 @@ export function ReportPreviewView(props: {
     }>
   >;
 }) {
-  useTitle(
-    `DX DataXplorer - Report ${
-      location.pathname.endsWith("preview") ? "Preview" : "View"
-    }`
-  );
+  const previewMode = location.pathname.endsWith("preview");
+  useTitle(`DX DataXplorer - Report ${previewMode ? "Preview" : "View"}`);
 
   const { page } = useParams<{ page: string }>();
 
@@ -226,6 +225,12 @@ export function ReportPreviewView(props: {
           })}
         <Box height={45} />
       </Container>
+
+      {location.search.includes("?fromLanding=true") && !isAuthenticated ? (
+        <ReportUsePanel />
+      ) : null}
+
+      {!previewMode ? <HomeFooter /> : null}
     </div>
   );
 }

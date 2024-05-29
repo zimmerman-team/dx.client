@@ -1,6 +1,6 @@
-import React from 'react'
-import { Row, Col } from 'react-bootstrap'
-import ChartOptionSelect from 'app/modules/chart-module/routes/customize/components/ChartOptionSelect'
+import React from "react";
+import { Row, Col } from "react-bootstrap";
+import ChartOptionSelect from "app/modules/chart-module/routes/customize/components/ChartOptionSelect";
 
 const ChartOptionNumber = ({
   value,
@@ -22,30 +22,32 @@ const ChartOptionNumber = ({
         label={label}
         {...props}
       />
-    )
+    );
   }
   return (
     <Row className={props.className}>
-      <Col xs={6} className="d-flex align-items-center nowrap">{label}</Col>
+      <Col xs={6} className="d-flex align-items-center nowrap">
+        {label}
+      </Col>
       <Col xs={6}>
         <input
           className="w-100 form-control text-field"
           type="number"
-          value={value ?? ''}
+          value={value ?? ""}
           step={props.step}
           min={props.min}
           max={props.max}
           disabled={!isEnabled}
           onChange={(e) => {
-            const str = e.target.value
-            if (str === '') {
-              onChange(undefined)
+            const str = e.target.value;
+            if (str === "") {
+              onChange(undefined);
             } else {
-              const n = parseFloat(str)
+              const n = parseFloat(str);
               if (!isNaN(n)) {
-                onChange(n)
+                onChange(n);
               } else {
-                onChange(undefined)
+                onChange(undefined);
               }
             }
           }}
@@ -58,7 +60,7 @@ const ChartOptionNumber = ({
         </small>
       )}
     </Row>
-  )
-}
+  );
+};
 
-export default React.memo(ChartOptionNumber)
+export default React.memo(ChartOptionNumber);

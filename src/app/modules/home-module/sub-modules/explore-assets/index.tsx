@@ -69,7 +69,7 @@ export default function ExploreAssetsModule() {
     clearChartFromReportState();
     setReportPreviewMode(false);
   }, []);
-  const [category, setCategory] = React.useState("");
+  const [categories, setCategories] = React.useState<string[]>([]);
 
   const [tableView, setTableView] = React.useState(false);
   const [searchValue, setSearchValue] = React.useState<string | undefined>(
@@ -104,7 +104,7 @@ export default function ExploreAssetsModule() {
             sortBy={sortByStr}
             searchStr={searchStr}
             tableView={tableView}
-            category={category}
+            categories={categories}
             addCard
           />
         );
@@ -198,9 +198,9 @@ export default function ExploreAssetsModule() {
 
           {display === "data" ? (
             <DatasetCategoryList
-              category={category}
+              categories={categories}
               datasetCategories={datasetCategories}
-              setCategory={setCategory}
+              setCategories={setCategories}
             />
           ) : (
             <Box height={24} />
