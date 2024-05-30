@@ -72,8 +72,14 @@ export default function ChartModule() {
     React.useState<null | boolean>(false);
 
   const chartType = useStoreState((state) => state.charts.chartType.value);
+  const setChartType = useStoreActions(
+    (actions) => actions.charts.chartType.setValue
+  );
   const mapping = useStoreState((state) => state.charts.mapping.value);
-  const dataset = useStoreState((state) => state.charts.dataset.value);
+  const setMapping = useStoreActions(
+    (actions) => actions.charts.mapping.setValue
+  );
+  const datasetId = useStoreState((state) => state.charts.dataset.value);
 
   const dimensions = React.useMemo(() => {
     return get(
@@ -133,11 +139,11 @@ export default function ChartModule() {
 
   const [chartFromReport, setChartFromReport] =
     useRecoilState(chartFromReportAtom);
-  const setMapping = useStoreActions(
-    (actions) => actions.charts.mapping.setValue
-  );
   const appliedFilters = useStoreState(
     (state) => state.charts.appliedFilters.value
+  );
+  const setAllAppliedFilters = useStoreActions(
+    (actions) => actions.charts.appliedFilters.setAll
   );
   const enabledFilterOptionGroups = useStoreState(
     (state) => state.charts.enabledFilterOptionGroups.value
@@ -145,8 +151,7 @@ export default function ChartModule() {
   const loadChart = useStoreActions((actions) => actions.charts.ChartGet.fetch);
 
   const loadedChart = useStoreState(
-    (state) =>
-      (state.charts.ChartGet.crudData ?? emptyChartAPI) as ChartAPIModel
+    (state) => state.charts.ChartGet.crudData as ChartAPIModel
   );
   const chartError401 = useStoreState(
     (state) =>
@@ -191,7 +196,7 @@ export default function ChartModule() {
   const setSelectedAIChart = useStoreActions(
     (actions) => actions.charts.SelectedAIChartState.setValue
   );
-  const setDataset = useStoreActions(
+  const setDatasetId = useStoreActions(
     (actions) => actions.charts.dataset.setValue
   );
   const datasetDetail = useStoreState(
@@ -224,7 +229,7 @@ export default function ChartModule() {
   }, [dataTypes, dataTypesFromRenderedChart]);
 
   const deselectDataset = () => {
-    setDataset(null);
+    setDatasetId(null);
     setChartFromAPI(null);
     setDataError(false);
     setChartError(false);
@@ -236,7 +241,7 @@ export default function ChartModule() {
       authId: user?.sub,
       vizType: chartType,
       mapping,
-      datasetId: dataset,
+      datasetId,
       vizOptions: visualOptions || {},
       dataTypes: dataTypes2,
       appliedFilters,
@@ -312,24 +317,31 @@ export default function ChartModule() {
     if (page === "new" && !hasSubHeaderTitleFocused && datasetDetail) {
       setChartName(datasetDetail?.name as string);
     }
-    if (isEmpty(dataset) && page === "new" && !hasSubHeaderTitleFocused) {
+    if (isEmpty(datasetId) && page === "new" && !hasSubHeaderTitleFocused) {
       setChartName("Untitled Chart");
     }
     //resets mapping and applied filters when dataset becomes null
-    if (dataset === null) {
+    if (datasetId === null) {
       resetMapping();
       resetAppliedFilters();
     }
-  }, [dataset, datasetDetail]);
+  }, [datasetId, datasetDetail]);
 
   React.useEffect(() => {
-    //set chart name to loaded chart name
-    if (page !== "new" && loadedChart.name.length > 0) {
-      setChartName(loadedChart.name);
+    //retrieve chart details from loadedChart details
+    if (loadedChart) {
+      if (page !== "new" && loadedChart?.name.length > 0) {
+        setChartName(loadedChart.name);
+      }
+      loadDataset(`chart/sample-data/${loadedChart.datasetId}`);
+      setSelectedAIChart(loadedChart.isAIAssisted);
+      setIsLoadedChartMappingValid(loadedChart.isMappingValid);
+      setChartType(loadedChart.vizType);
+      setDatasetId(loadedChart.datasetId);
+      setMapping(loadedChart.mapping);
+      setAllAppliedFilters(loadedChart.appliedFilters);
+      setVisualOptions(loadedChart.vizOptions);
     }
-
-    setSelectedAIChart(loadedChart?.isAIAssisted);
-    setIsLoadedChartMappingValid(loadedChart?.isMappingValid);
   }, [loadedChart]);
 
   const mappedData = React.useMemo(
@@ -407,7 +419,6 @@ export default function ChartModule() {
       page: "",
       view: "",
     }));
-    // resetIsAiSwitchActive();
   }
   function clearChartBuilder() {
     console.log("--about to reset chart states");

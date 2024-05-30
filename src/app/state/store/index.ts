@@ -169,7 +169,7 @@ const storeContent: StoreModel = {
   DataPathActiveStep: DataPathActiveStep,
 
   DataSourceSnackbarVisibility: persist(DataSourceSnackbarVisibilityState),
-  AuthToken: AuthTokenState,
+  AuthToken: persist(AuthTokenState),
   // CMS API
   cms: {
     componentsAppBar: persist(componentsAppBar),

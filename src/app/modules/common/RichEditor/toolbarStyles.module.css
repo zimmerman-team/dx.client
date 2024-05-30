@@ -1,5 +1,4 @@
 .toolbar {
-
   border-radius: 8px;
   background: var(--White, #fff);
   width: 100%;
@@ -10,10 +9,8 @@
   display: flex;
   align-items: center;
   gap: 14px;
-
-
 }
-.toolbar button{
+.toolbar button {
   display: flex;
   align-items: center;
   gap: 14px;
@@ -32,5 +29,3 @@
   border-width: 6px;
   margin-left: -6px;
 }
-
-

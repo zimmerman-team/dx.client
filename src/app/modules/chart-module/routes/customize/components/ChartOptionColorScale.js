@@ -8,7 +8,11 @@ import React, {
 import InilineColorPicker from "app/modules/chart-module/routes/customize/components/InlineColorPicker";
 import ColorSchemesDropDown from "app/modules/chart-module/routes/customize/components/ColorSchemesDropDown";
 import { Row, Col, Dropdown } from "react-bootstrap";
-import { ResetBtn, InvertBtn, LockBtn } from "app/modules/chart-module/routes/customize/components/ColorScaleUtils";
+import {
+  ResetBtn,
+  InvertBtn,
+  LockBtn,
+} from "app/modules/chart-module/routes/customize/components/ColorScaleUtils";
 import { SCALES_LABELS } from "app/modules/chart-module/routes/customize/constants";
 import get from "lodash/get";
 import keyBy from "lodash/keyBy";

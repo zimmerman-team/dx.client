@@ -139,7 +139,7 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
       enableAutoSaveSwitch: true,
     });
 
-    if (!loadedChart.isMappingValid) {
+    if (!loadedChart?.isMappingValid) {
       history.push(`/chart/${page}/mapping`);
     } else {
       history.push(`/chart/${page}/customize`);

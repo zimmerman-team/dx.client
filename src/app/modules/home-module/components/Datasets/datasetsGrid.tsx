@@ -16,6 +16,7 @@ import DatasetAddnewCard from "app/modules/home-module/components/Datasets/datas
 import CircleLoader from "app/modules/home-module/components/Loader";
 import { loadedDatasetsAtom } from "app/state/recoil/atoms";
 import { DatasetListItemAPIModel } from "app/modules/dataset-module/data";
+import { useAuth0 } from "@auth0/auth0-react";
 
 interface Props {
   sortBy: string;
@@ -23,7 +24,7 @@ interface Props {
   tableView: boolean;
   addCard?: boolean;
   inChartBuilder?: boolean;
-  category?: string;
+  categories?: string[];
   onItemClick?: (v: string) => void;
   md?: GridSize;
   lg?: GridSize;
@@ -40,6 +41,8 @@ export default function DatasetsGrid(props: Readonly<Props>) {
   const { isObserved } = useInfinityScroll(observerTarget);
   const [loadedDatasets, setLoadedDatasets] =
     useRecoilState(loadedDatasetsAtom);
+
+  const { isAuthenticated } = useAuth0();
 
   const token = useStoreState((state) => state.AuthToken.value);
   const datasets = useStoreState(
@@ -178,9 +181,9 @@ export default function DatasetsGrid(props: Readonly<Props>) {
       const f = datasets.filter(
         (dataset) => !prevDatasetsIds.includes(dataset.id)
       );
-      if (props.category && props.category.length > 0) {
-        return [...prevDatasets, ...f].filter(
-          (d) => d.category === props.category
+      if (props.categories && props.categories.length > 0) {
+        return [...prevDatasets, ...f].filter((d) =>
+          props.categories?.includes(d.category)
         );
       } else {
         return [...prevDatasets, ...f];
@@ -190,7 +193,7 @@ export default function DatasetsGrid(props: Readonly<Props>) {
 
   React.useEffect(() => {
     reloadData();
-  }, [props.sortBy, token, props.category]);
+  }, [props.sortBy, token, props.categories]);
 
   const [,] = useDebounce(
     () => {
@@ -207,7 +210,7 @@ export default function DatasetsGrid(props: Readonly<Props>) {
     <>
       {!props.tableView && (
         <Grid container spacing={!props.inChartBuilder ? 2 : 1}>
-          {props.addCard && <DatasetAddnewCard />}
+          {props.addCard && isAuthenticated ? <DatasetAddnewCard /> : null}
           {loadedDatasets?.map((data, index) => (
             <Grid
               item

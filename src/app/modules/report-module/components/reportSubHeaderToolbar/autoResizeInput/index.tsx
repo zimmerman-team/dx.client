@@ -37,7 +37,7 @@ export default function AutoResizeInput(props: InputProps) {
     if (spanRef) {
       spanAutoResizeWidth = spanRef.current ? spanRef.current.offsetWidth : 0;
     }
-    
+
     const autoResizeInputWidth =
       !minWidth || spanAutoResizeWidth > minWidth
         ? spanAutoResizeWidth

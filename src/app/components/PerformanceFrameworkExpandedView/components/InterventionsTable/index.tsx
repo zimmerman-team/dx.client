@@ -46,9 +46,27 @@ export function InterventionsTable(props: PFIndicatorResultIntervention) {
       <table css={styles.table}>
         <thead css={styles.tablehead}>
           <tr>
-            <th>{get(cmsData, "componentsPerformanceFrameworkComponents.interventionTableInterventions", "")}</th>
-            <th>{get(cmsData, "componentsPerformanceFrameworkComponents.interventionTableAchievementRate", "")}</th>
-            <th>{get(cmsData, "componentsPerformanceFrameworkComponents.interventionTableValueText", "")}</th>
+            <th>
+              {get(
+                cmsData,
+                "componentsPerformanceFrameworkComponents.interventionTableInterventions",
+                ""
+              )}
+            </th>
+            <th>
+              {get(
+                cmsData,
+                "componentsPerformanceFrameworkComponents.interventionTableAchievementRate",
+                ""
+              )}
+            </th>
+            <th>
+              {get(
+                cmsData,
+                "componentsPerformanceFrameworkComponents.interventionTableValueText",
+                ""
+              )}
+            </th>
           </tr>
         </thead>
         <tbody css={styles.tablebody}>

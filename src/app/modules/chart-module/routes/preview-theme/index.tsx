@@ -149,8 +149,8 @@ export function ChartBuilderPreviewTheme(props: ChartBuilderPreviewThemeProps) {
 
   return (
     <div css={commonStyles.container}>
-      {!props.loadedChart.isMappingValid && props.view === undefined ? (
-        <WarningDialog isMappingValid={props.loadedChart.isMappingValid} />
+      {!props.loadedChart?.isMappingValid && props.view === undefined ? (
+        <WarningDialog isMappingValid={props.loadedChart?.isMappingValid} />
       ) : (
         <>
           <div

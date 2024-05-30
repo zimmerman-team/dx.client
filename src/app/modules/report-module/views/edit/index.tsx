@@ -23,7 +23,6 @@ import {
   IRowFrameStructure,
   persistedReportStateAtom,
   reportContentContainerWidth,
-  reportCreationTourStepAtom,
 } from "app/state/recoil/atoms";
 import { IFramesArray } from "../create/data";
 import RowFrame from "../../sub-module/rowStructure";
@@ -31,6 +30,7 @@ import TourGuide from "app/components/Dialogs/TourGuide";
 import useCookie from "@devhammed/use-cookie";
 import { get } from "lodash";
 import { PageLoader } from "app/modules/common/page-loader";
+import { handleDragOverScroll } from "app/utils/handleAutoScroll";
 
 function ReportEditView(props: ReportEditViewProps) {
   useTitle("DX DataXplorer - Edit Report");
@@ -211,11 +211,7 @@ function ReportEditView(props: ReportEditViewProps) {
   }
 
   return (
-    <div
-      css={`
-        /* background: white; */
-      `}
-    >
+    <div onDragOver={handleDragOverScroll}>
       <div
         css={`
           height: 55px;

@@ -1,9 +1,9 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import React from 'react';
-import theme from 'app/theme';
-import { NavLink } from 'react-router-dom';
-import { css } from 'styled-components/macro';
+import React from "react";
+import theme from "app/theme";
+import { NavLink } from "react-router-dom";
+import { css } from "styled-components/macro";
 
 interface TextButtonprops {
   label: string;
@@ -35,7 +35,7 @@ const containercss = css`
 
 export const TextButton = (props: TextButtonprops) => {
   return props.path ? (
-    <NavLink to={props.path || ''} css={containercss}>
+    <NavLink to={props.path || ""} css={containercss}>
       {props.label}
     </NavLink>
   ) : (

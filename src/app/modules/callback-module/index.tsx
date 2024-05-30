@@ -28,6 +28,26 @@ function AuthCallbackModule() {
     });
   };
 
+  const duplicateReport = async (id: string) => {
+    getAccessTokenSilently().then(async (newToken) => {
+      const response = await axios.get(
+        `${process.env.REACT_APP_API}/users/duplicate-landing-report/${id}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${newToken}`,
+          },
+        }
+      );
+      if (response.data) {
+        localStorage.removeItem("duplicateReportAfterSignIn");
+        history.push(`/report/${response.data.id}/edit`);
+      } else {
+        history.replace("/");
+      }
+    });
+  };
+
   React.useEffect(() => {
     if (isAuthenticated) {
       (async () => {
@@ -35,11 +55,20 @@ function AuthCallbackModule() {
         await duplicateAssets();
         setLoading(false);
       })();
-      if (localStorage.getItem("signup-state") == "true") {
-        history.replace("/report/new/initial");
-        localStorage.removeItem("signup-state");
+      const reportId = localStorage.getItem("duplicateReportAfterSignIn");
+      if (reportId) {
+        (async () => {
+          setLoading(true);
+          await duplicateReport(reportId);
+          setLoading(false);
+        })();
       } else {
-        history.replace("/");
+        if (localStorage.getItem("signup-state") == "true") {
+          history.replace("/report/new/initial");
+          localStorage.removeItem("signup-state");
+        } else {
+          history.replace("/");
+        }
       }
     } else {
       getAccessTokenSilently();

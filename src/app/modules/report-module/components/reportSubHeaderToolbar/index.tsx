@@ -224,6 +224,11 @@ export function ReportSubheaderToolbar(
     return isAuthenticated && loadedReport && loadedReport.owner === user?.sub;
   }, [user, isAuthenticated, loadedChart, loadedReport]);
 
+  const handleSignIn = () => {
+    localStorage.setItem("duplicateReportAfterSignIn", page);
+    history.push("/onboarding/login");
+  };
+
   return (
     <div id="subheader-toolbar" css={styles.container(view !== undefined)}>
       {createOrEditChartLoading && <PageLoader />}
@@ -413,16 +418,16 @@ export function ReportSubheaderToolbar(
               {page !== "new" && !view && (
                 <div css={styles.previewEndContainer}>
                   <ExportChartButton filename={props.name} />
-                  {isAuthenticated && (
-                    <Tooltip title="Duplicate">
-                      <IconButton
-                        onClick={handleDuplicate}
-                        data-testid="duplicate-button"
-                      >
-                        <FileCopyIcon htmlColor="#262c34" />
-                      </IconButton>
-                    </Tooltip>
-                  )}
+
+                  <Tooltip title="Duplicate">
+                    <IconButton
+                      onClick={isAuthenticated ? handleDuplicate : handleSignIn}
+                      data-testid="duplicate-button"
+                    >
+                      <FileCopyIcon htmlColor="#262c34" />
+                    </IconButton>
+                  </Tooltip>
+
                   <Tooltip title="Share">
                     <IconButton
                       onClick={handleClick}
