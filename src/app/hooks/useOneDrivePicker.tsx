@@ -52,6 +52,7 @@ export const useOneDrivePicker = ({
     },
     typesAndSources: {
       mode: "files",
+      filters: [".xlsx", ".csv", ".xml", ".xls", ".xhtml"],
       pivots: {
         oneDrive: true,
         recent: true,
