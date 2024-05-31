@@ -1,9 +1,11 @@
 import React from "react";
-import { useStoreState } from "app/state/store/hooks";
+import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import { PageLoader } from "app/modules/common/page-loader";
 import { useDataThemesEchart } from "app/hooks/useDataThemesEchart";
 import { useUpdateEffectOnce } from "app/hooks/useUpdateEffectOnce";
-import GeomapLegend from "../geomap-legend";
+import GeomapLegend from "app/modules/chart-module/components/geomap-legend";
+import { ChartAPIModel } from "app/modules/chart-module/data";
+import { DatasetListItemAPIModel } from "app/modules/dataset-module/data";
 
 export type ChartType =
   | "echartsBarchart"
@@ -44,6 +46,7 @@ interface Props {
 
 export function CommonChart(props: Readonly<Props>) {
   const { render } = useDataThemesEchart();
+  const token = useStoreState((state) => state.AuthToken.value);
 
   const domRef = React.useRef<HTMLDivElement>(null);
   const chartTypeFromState = useStoreState(
@@ -51,7 +54,35 @@ export function CommonChart(props: Readonly<Props>) {
   );
 
   const chartType = props.renderedChartType ?? chartTypeFromState;
+  const loadedChart =
+    useStoreState((state) => state.charts.ChartGet.crudData as ChartAPIModel) ??
+    useStoreState(
+      (state) => state.charts.ChartGetInReport.crudData as ChartAPIModel
+    );
+  const datasetId = loadedChart?.datasetId;
+  const loadDataset = useStoreActions(
+    (actions) => actions.dataThemes.DatasetGet.fetch
+  );
+  const datasetDetails = useStoreState(
+    (state) =>
+      (state.dataThemes.DatasetGet.crudData ?? {}) as DatasetListItemAPIModel
+  );
+  console.log(loadedChart, "datasetDetails");
 
+  React.useEffect(() => {
+    if (token) {
+      loadDataset({
+        token,
+        getId: datasetId as string,
+      });
+    } else {
+      loadDataset({
+        token,
+        getId: datasetId as string,
+        nonAuthCall: !token,
+      });
+    }
+  }, [token, datasetId]);
   useUpdateEffectOnce(() => {
     if (props.containerRef.current) {
       const tmpVisualOptions = {
@@ -160,7 +191,7 @@ export function CommonChart(props: Readonly<Props>) {
     props.renderedChartSsr,
     props.renderedChartMappedData,
   ]);
-
+  console.log(props.renderedChartSsr, "ssr?");
   let content;
   let contentHeight;
   if (!props.chartPreviewInReport && props.renderedChartType !== "bigNumber") {
@@ -274,6 +305,34 @@ export function CommonChart(props: Readonly<Props>) {
             }
           `}
         />
+
+        <p
+          css={`
+            color: #70777e;
+            font-family: "GothamNarrow-Bold", sans-serif;
+
+            font-size: 12px;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            a {
+              font-family: "GothamNarrow-Bold", sans-serif;
+
+              color: #70777e;
+              text-decoration: none;
+              border-bottom: 1px solid #70777e;
+            }
+          `}
+        >
+          Source:{" "}
+          <a
+            href={datasetDetails.sourceUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {datasetDetails.source} - Data file: {datasetDetails.sourceUrl}
+          </a>
+        </p>
         {chartType === "echartsGeomap" && props.visualOptions?.showLegend ? (
           <div
             css={`
