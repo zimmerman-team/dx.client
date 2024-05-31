@@ -7,21 +7,14 @@ import { useRecoilState, useResetRecoilState } from "recoil";
 import { Box, Grid, Container, IconButton, Popover } from "@material-ui/core";
 /* project */
 import { Tab } from "app/components/Styled/tabs";
-import { socialAuth } from "app/utils/socialAuth";
 import HomeFooter from "app/modules/home-module/components/Footer";
 import ChartsGrid from "app/modules/home-module/components/Charts/chartsGrid";
 import ReportsGrid from "app/modules/home-module/components/Reports/reportsGrid";
-import DatasetDetailImage from "app/modules/home-module/assets/dataset-detail.png";
 import DatasetsGrid from "app/modules/home-module/components/Datasets/datasetsGrid";
 import { ReactComponent as SortIcon } from "app/modules/home-module/assets/sort-fill.svg";
 import { ReactComponent as GridIcon } from "app/modules/home-module/assets/grid-fill.svg";
 import { ReactComponent as CloseIcon } from "app/modules/home-module/assets/close-icon.svg";
 import { ReactComponent as SearchIcon } from "app/modules/home-module/assets/search-fill.svg";
-import { ReactComponent as GoogleIcon } from "app/modules/onboarding-module/asset/google-img.svg";
-import { ReactComponent as LinkedInIcon } from "app/modules/onboarding-module/asset/linkedIn-img.svg";
-import { ReactComponent as TopRightEllipse } from "app/modules/home-module/assets/top-right-ellipse.svg";
-import { ReactComponent as BottomLeftEllipse } from "app/modules/home-module/assets/bottom-left-ellipse.svg";
-import { ReactComponent as BottomRightEllipse } from "app/modules/home-module/assets/bottom-right-ellipse.svg";
 import {
   homeDisplayAtom,
   persistedReportStateAtom,
@@ -29,10 +22,6 @@ import {
   unSavedReportPreviewModeAtom,
 } from "app/state/recoil/atoms";
 import {
-  TopRightEllipseCss,
-  bottomLeftEllipseCss,
-  bottomRightEllipseCss,
-  datsetDetailImgcss,
   featuredAssetsCss,
   iconButtonCss,
   rowFlexCss,
@@ -43,6 +32,8 @@ import {
 import DatasetCategoryList from "./components/Datasets/datasetCategoryList";
 import { datasetCategories } from "../dataset-upload-module/upload-steps/metaData";
 import AssetsGrid from "./components/All/assetsGrid";
+import BreadCrumbs from "./components/Breadcrumbs";
+import SmallFooter from "./components/Footer/smallFooter";
 
 export default function HomeModule() {
   useTitle("DX DataXplorer");
@@ -63,7 +54,7 @@ export default function HomeModule() {
     setReportPreviewMode(false);
   }, []);
 
-  const [category, setCategory] = React.useState("");
+  const [categories, setCategories] = React.useState<string[]>([]);
 
   const [tableView, setTableView] = React.useState(false);
   const [searchValue, setSearchValue] = React.useState<string | undefined>(
@@ -106,8 +97,7 @@ export default function HomeModule() {
             sortBy={sortByStr}
             searchStr={searchStr}
             tableView={tableView}
-            category={category}
-            addCard
+            categories={categories}
             fromHome
           />
         );
@@ -117,7 +107,6 @@ export default function HomeModule() {
             sortBy={sortByStr}
             searchStr={searchStr}
             tableView={tableView}
-            addCard
           />
         );
       case "reports":
@@ -127,7 +116,6 @@ export default function HomeModule() {
             searchStr={searchStr}
             tableView={tableView}
             showMenuButton={false}
-            addCard
           />
         );
       case "all":
@@ -137,7 +125,6 @@ export default function HomeModule() {
             searchStr={searchStr}
             tableView={tableView}
             showMenuButton={false}
-            addCard
             fromHome
           />
         );
@@ -166,7 +153,7 @@ export default function HomeModule() {
   }, [display]);
 
   const descriptions = {
-    all: "Explore the collection of Reports, Charts and Datasets",
+    all: "Explore the collection of Assets",
     data: "Explore the collection of Datasets used to create Charts",
     charts: "Explore the collection of Charts used in Reports",
     reports: "Explore the collection of Reports",
@@ -175,132 +162,10 @@ export default function HomeModule() {
   return (
     <div
       css={`
-        background: #ffffff;
+        margin-top: 48px;
+        padding-top: 32px;
       `}
     >
-      {/* <div
-        css={`
-          position: relative;
-          background: linear-gradient(
-            180deg,
-            rgba(255, 255, 255, 0) 0%,
-            #f2f7fd 100%
-          );
-        `}
-      >
-        <Container maxWidth="lg">
-          <Grid
-            container
-            spacing={6}
-            css={turnsDataCss}
-            alignItems="center"
-            alignContent="flex-start"
-          >
-            <Grid item lg={5} md={12} sm={12} xs={12}>
-              <div
-                css={`
-                  max-width: 450px;
-                `}
-              >
-                <h1>Turn data into impact with DataXplorer</h1>
-                <Box height={34} />
-                <p>
-                  <b>
-                    DataXplorer simplifies and empowers visual data reporting
-                    for all.
-                  </b>
-                </p>
-                <Box height={52} />
-                {isAuthenticated && (
-                  <div
-                    css={`
-                      ${rowFlexCss} gap: 32px;
-                      width: 100%;
-                    `}
-                  >
-                    <Link
-                      to="report/new/initial"
-                      css={`
-                        background: #6061e5;
-                      `}
-                    >
-                      CREATE REPORT
-                    </Link>
-                    <button
-                      onClick={exploreReportClick}
-                      css={`
-                        background: #e492bd;
-                      `}
-                    >
-                      EXPLORE REPORTS
-                    </button>
-                  </div>
-                )}
-                {!isAuthenticated && (
-                  <div
-                    css={`
-                      gap: 20px;
-                      width: 100%;
-                      display: flex;
-                      flex-direction: row;
-                      justify-content: center;
-
-                      > button {
-                        gap: 10px;
-                        color: #fff;
-                        display: flex;
-                        padding: 9px 18px;
-                        background: #a1a2ff;
-                        align-items: center;
-                        justify-content: center;
-                        text-transform: uppercase;
-
-                        > svg {
-                          transform: scale(0.8);
-                        }
-                      }
-                    `}
-                  >
-                    <button onClick={() => socialAuth("google-oauth2")}>
-                      <GoogleIcon /> sign in for free
-                    </button>
-                    <button onClick={() => socialAuth("linkedin")}>
-                      <LinkedInIcon /> sign in for free
-                    </button>
-                  </div>
-                )}
-              </div>
-            </Grid>
-            <Grid
-              item
-              lg={7}
-              md={12}
-              sm={12}
-              xs={12}
-              css={`
-                display: flex;
-                justify-content: flex-end;
-                @media screen and (max-width: 1257px) {
-                  justify-content: center;
-                }
-              `}
-            >
-              <img
-                src={DatasetDetailImage}
-                alt="dataset-detail-img"
-                css={datsetDetailImgcss}
-              />
-            </Grid>
-          </Grid>
-        </Container>
-
-
-        
-        <BottomLeftEllipse css={bottomLeftEllipseCss} />
-        <BottomRightEllipse css={bottomRightEllipseCss} />
-        <TopRightEllipse css={TopRightEllipseCss} />
-      </div> */}
-
       <Container
         maxWidth="lg"
         ref={exploreViewRef}
@@ -349,7 +214,7 @@ export default function HomeModule() {
         </div>
         <Box height={24} />
         <Box css={featuredAssetsCss}>
-          <h3>Library:</h3>
+          <BreadCrumbs items={[{ title: "Library" }]} />
           <Box height={24} />
           <Grid
             container
@@ -500,16 +365,14 @@ export default function HomeModule() {
                     </div>
                   ))}
                 </Popover>
-                {display !== "all" && (
-                  <IconButton
-                    onClick={() => {
-                      setTableView(!tableView);
-                    }}
-                    css={iconButtonCss(tableView)}
-                  >
-                    <GridIcon />
-                  </IconButton>
-                )}
+                <IconButton
+                  onClick={() => {
+                    setTableView(!tableView);
+                  }}
+                  css={iconButtonCss(tableView)}
+                >
+                  <GridIcon />
+                </IconButton>
               </div>
             </Grid>
           </Grid>
@@ -525,9 +388,9 @@ export default function HomeModule() {
           </div>
           {display === "data" ? (
             <DatasetCategoryList
-              category={category}
               datasetCategories={datasetCategories}
-              setCategory={setCategory}
+              setCategories={setCategories}
+              categories={categories}
             />
           ) : (
             <Box height={24} />
@@ -545,7 +408,7 @@ export default function HomeModule() {
           {displayGrid(searchValue as string, sortValue)}
         </div>
       </Container>
-      <HomeFooter small />
+      <SmallFooter />
     </div>
   );
 }

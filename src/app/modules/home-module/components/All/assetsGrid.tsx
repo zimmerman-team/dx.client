@@ -22,12 +22,12 @@ import ReportAddnewCard from "../Reports/reportAddNewCard";
 import ColoredReportIcon from "app/assets/icons/ColoredReportIcon";
 import DeleteDatasetDialog from "app/components/Dialogs/deleteDatasetDialog";
 import DeleteReportDialog from "app/components/Dialogs/deleteReportDialog";
+import { HomepageTable } from "../Table";
 
 interface Props {
   sortBy: string;
   searchStr: string;
   tableView: boolean;
-  addCard?: boolean;
   showMenuButton: boolean;
   inChartBuilder?: boolean;
   category?: string;
@@ -236,87 +236,115 @@ export default function AssetsGrid(props: Props) {
 
   return (
     <>
-      <Grid container spacing={2}>
-        {props.addCard && (
-          <>
-            <DatasetAddnewCard />
-            <ChartAddnewCard />
-            <ReportAddnewCard />
-          </>
-        )}
-        {loadedAssets.map((d, index) => (
-          <Grid item key={d.id} xs={12} sm={6} md={4} lg={3}>
-            {
-              {
-                chart: (
-                  <ChartGridItem
-                    id={d.id}
-                    title={d.name}
-                    public={d.public}
-                    date={d.createdDate}
-                    path={`/chart/${d.id}`}
-                    viz={getIcon(d.vizType)}
-                    vizType={d.vizType}
-                    isMappingValid={d.isMappingValid}
-                    handleDelete={() => {
-                      setActiveAssetType(d.assetType as assetType);
-                      handleModal(d.id);
-                    }}
-                    handleDuplicate={() =>
-                      handleDuplicate(d.id, d.assetType as assetType)
-                    }
-                    owner={d.owner}
-                    isAIAssisted={d.isAIAssisted}
-                  />
-                ),
-                dataset: (
-                  <DatasetGridItem
-                    path={`/dataset/${d.id}/edit`}
-                    title={d.name}
-                    date={d.createdDate}
-                    handleDelete={() => {
-                      setActiveAssetType(d.assetType as assetType);
-                      handleModal(d.id);
-                    }}
-                    descr={d.description}
-                    handleDuplicate={() => {
-                      handleDuplicate(d.id, d.assetType as assetType);
-                    }}
-                    showMenu={!props.inChartBuilder}
-                    id={d.id}
-                    owner={d.owner}
-                    inChartBuilder={props.inChartBuilder as boolean}
-                    fromHome={props.fromHome}
-                  />
-                ),
-                report: (
-                  <ReportGridItem
-                    id={d.id}
-                    key={d.id}
-                    descr={d.name}
-                    public={d.public}
-                    date={d.createdDate}
-                    viz={<ColoredReportIcon />}
-                    color={d.backgroundColor}
-                    showMenuButton={props.showMenuButton}
-                    handleDelete={() => {
-                      setActiveAssetType(d.assetType as assetType);
-                      handleModal(d.id);
-                    }}
-                    handleDuplicate={() =>
-                      handleDuplicate(d.id, d.assetType as assetType)
-                    }
-                    title={d.title || d.name}
-                    owner={d.owner}
-                  />
-                ),
-              }[d.assetType as assetType]
+      {props.tableView ? (
+        <HomepageTable
+          fromHome={props.fromHome}
+          onItemClick={props.onItemClick}
+          inChartBuilder={props.inChartBuilder}
+          data={loadedAssets.map((data) => {
+            if (data.assetType === "chart") {
+              return {
+                id: data.id,
+                name: data.name,
+                description: data.title,
+                createdDate: data.createdDate,
+                type: data.assetType,
+              };
+            } else if (data.assetType === "dataset") {
+              return {
+                id: data.id,
+                name: data.name,
+                description: data.description,
+                createdDate: data.createdDate,
+                type: data.assetType,
+              };
             }
 
-            <Box height={16} />
-          </Grid>
-        ))}
-      </Grid>
+            return {
+              id: data.id,
+              name: data.name,
+              description: data.title,
+              createdDate: data.createdDate,
+              type: data.assetType,
+            };
+          })}
+        />
+      ) : (
+        <Grid container spacing={2}>
+          {loadedAssets.map((d, index) => (
+            <Grid item key={d.id} xs={12} sm={6} md={4} lg={3}>
+              {
+                {
+                  chart: (
+                    <ChartGridItem
+                      id={d.id}
+                      title={d.name}
+                      public={d.public}
+                      date={d.createdDate}
+                      path={`/chart/${d.id}`}
+                      viz={getIcon(d.vizType)}
+                      vizType={d.vizType}
+                      isMappingValid={d.isMappingValid}
+                      handleDelete={() => {
+                        setActiveAssetType(d.assetType as assetType);
+                        handleModal(d.id);
+                      }}
+                      handleDuplicate={() =>
+                        handleDuplicate(d.id, d.assetType as assetType)
+                      }
+                      owner={d.owner}
+                      isAIAssisted={d.isAIAssisted}
+                    />
+                  ),
+                  dataset: (
+                    <DatasetGridItem
+                      path={`/dataset/${d.id}/edit`}
+                      title={d.name}
+                      date={d.createdDate}
+                      handleDelete={() => {
+                        setActiveAssetType(d.assetType as assetType);
+                        handleModal(d.id);
+                      }}
+                      descr={d.description}
+                      handleDuplicate={() => {
+                        handleDuplicate(d.id, d.assetType as assetType);
+                      }}
+                      showMenu={!props.inChartBuilder}
+                      id={d.id}
+                      owner={d.owner}
+                      inChartBuilder={props.inChartBuilder as boolean}
+                      fromHome={props.fromHome}
+                    />
+                  ),
+                  report: (
+                    <ReportGridItem
+                      id={d.id}
+                      key={d.id}
+                      descr={d.name}
+                      public={d.public}
+                      date={d.createdDate}
+                      viz={<ColoredReportIcon />}
+                      color={d.backgroundColor}
+                      showMenuButton={props.showMenuButton}
+                      handleDelete={() => {
+                        setActiveAssetType(d.assetType as assetType);
+                        handleModal(d.id);
+                      }}
+                      handleDuplicate={() =>
+                        handleDuplicate(d.id, d.assetType as assetType)
+                      }
+                      title={d.title || d.name}
+                      owner={d.owner}
+                    />
+                  ),
+                }[d.assetType as assetType]
+              }
+
+              <Box height={16} />
+            </Grid>
+          ))}
+        </Grid>
+      )}
 
       <Box height={80} />
 

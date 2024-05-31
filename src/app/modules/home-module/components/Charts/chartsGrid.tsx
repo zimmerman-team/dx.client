@@ -210,7 +210,7 @@ export default function ChartsGrid(props: Props) {
     <>
       {!props.tableView && (
         <Grid container spacing={2}>
-          {props.addCard && isAuthenticated ? <ChartAddnewCard /> : null}
+          {props.addCard ? <ChartAddnewCard /> : null}
           {loadedCharts.map((c, index) => (
             <Grid item key={c.id} xs={12} sm={6} md={4} lg={3}>
               <GridItem
@@ -239,6 +239,7 @@ export default function ChartsGrid(props: Props) {
             name: data.name,
             description: data.title,
             createdDate: data.createdDate,
+            type: "chart",
           }))}
         />
       )}

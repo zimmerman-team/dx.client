@@ -7,7 +7,6 @@ export const turnsDataCss = css`
     justify-content: center;
     align-items: center;
   } */
-  margin-top: 80px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -103,11 +102,14 @@ export const TopRightEllipseCss = css`
   position: absolute;
 `;
 
-export const searchInputCss = (openSearch: boolean) => css`
+export const searchInputCss = (
+  openSearch: boolean,
+  width: string = "385px"
+) => css`
   background: #dadaf8;
   display: flex;
   align-items: center;
-  width: 385px;
+  width: ${width ?? "385px"};
   height: 32px;
   border-radius: 20px;
   opacity: ${openSearch ? 1 : 0};

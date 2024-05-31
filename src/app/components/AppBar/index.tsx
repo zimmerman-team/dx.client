@@ -229,14 +229,15 @@ export function AppBar() {
                   justify-content: flex-end;
                 `}
               >
-                <div css={navLinkcss("why-dataXplorer", navLocation)}>
-                  <NavLink to="/why-dataXplorer" data-cy="nav-why">
-                    <b>Why DataXplorer?</b>
-                  </NavLink>
-                </div>
+                {" "}
                 <div css={navLinkcss("explore", navLocation)}>
                   <NavLink to="/explore" data-cy="nav-explore">
                     <b>Explore </b>
+                  </NavLink>
+                </div>
+                <div css={navLinkcss("why-dataXplorer", navLocation)}>
+                  <NavLink to="/why-dataXplorer" data-cy="nav-why">
+                    <b>Why DataXplorer?</b>
                   </NavLink>
                 </div>
                 <div css={navLinkcss("about", navLocation)}>
@@ -290,7 +291,6 @@ const ActionMenu = () => {
     <div>
       <div
         css={`
-          gap: 1px;
           display: flex;
           position: relative;
 
@@ -309,7 +309,7 @@ const ActionMenu = () => {
               height: 34px;
               border-radius: 24px;
               &:hover {
-                opacity: 1;
+                opacity: 0.8;
               }
             }
             /* :nth-child(2) {
@@ -351,7 +351,7 @@ const ActionMenu = () => {
               min-width: 33px;
               height: 33px;
               display: flex;
-              margin-left: 20px;
+              margin-left: 16px;
               border-radius: 50%;
               align-items: center;
               background: #b5b5db;

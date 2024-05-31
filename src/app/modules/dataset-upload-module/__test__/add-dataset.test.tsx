@@ -17,10 +17,7 @@ jest.mock("react-google-drive-picker", () => {
 
 jest.mock("axios");
 
-const appFn = (
-  mockSetSelectedFile: jest.Mock<any, any, any>,
-  mockSetIsExternalSearch: jest.Mock<any, any, any>
-) => {
+const appFn = (mockSetSelectedFile: jest.Mock<any, any, any>) => {
   const mockStore = createStore({
     AuthToken: AuthTokenState,
   });
@@ -31,7 +28,9 @@ const appFn = (
         onFileSubmit={mockSetSelectedFile}
         disabled={false}
         processingError={null}
-        setIsExternalSearch={mockSetIsExternalSearch}
+        activeOption={null}
+        setActiveOption={jest.fn()}
+        setActiveStep={jest.fn()}
       />
     </StoreProvider>
   );
@@ -39,8 +38,7 @@ const appFn = (
 
 test("local upload of dataset", async () => {
   const mockSetSelectedFile = jest.fn();
-  const mockSetIsExternalSearch = jest.fn();
-  const app = appFn(mockSetSelectedFile, mockSetIsExternalSearch);
+  const app = appFn(mockSetSelectedFile);
   render(app);
 
   const file = new File(["(⌐□_□)"], "chucknorris.csv", { type: "text/csv" });
@@ -61,21 +59,18 @@ test("external search of dataset", async () => {
   const user = userEvent.setup();
 
   const mockSetSelectedFile = jest.fn();
-  const mockSetIsExternalSearch = jest.fn();
 
-  const app = appFn(mockSetSelectedFile, mockSetIsExternalSearch);
+  const app = appFn(mockSetSelectedFile);
 
   render(app);
 
   const searchButton = screen.getByText(/external search/i);
   await user.click(searchButton);
-  expect(mockSetIsExternalSearch).toHaveBeenCalledWith(true);
 });
 
 test("google drive button", async () => {
   const mockSetSelectedFile = jest.fn();
-  const mockSetIsExternalSearch = jest.fn();
-  const app = appFn(mockSetSelectedFile, mockSetIsExternalSearch);
+  const app = appFn(mockSetSelectedFile);
   mockOpenPicker.mockImplementation(({ callbackFunction }) => {
     callbackFunction({ docs: [{ id: "123", name: "test.csv", type: "file" }] });
   });

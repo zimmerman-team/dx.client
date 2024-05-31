@@ -16,19 +16,13 @@ export function HomepageTable(props: {
     name: string;
     description: string;
     createdDate: Date;
+    type: string;
   }[];
   inChartBuilder?: boolean;
   onItemClick?: (v: string) => void;
   fromHome?: boolean;
 }) {
   const history = useHistory();
-  const display = useRecoilState(homeDisplayAtom)[0];
-  const pathBase = {
-    all: "all",
-    data: "dataset",
-    charts: "chart",
-    reports: "report",
-  };
 
   return (
     <TableContainer
@@ -90,8 +84,8 @@ export function HomepageTable(props: {
               onClick={() => {
                 if (!props.inChartBuilder) {
                   history.push(
-                    `/${pathBase[display]}/${data.id}${
-                      display === "data"
+                    `/${data.type}/${data.id}${
+                      data.type === "dataset"
                         ? `/detail?fromHome=${props.fromHome}`
                         : ""
                     }`

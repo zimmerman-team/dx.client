@@ -213,7 +213,7 @@ export default function HomeFooter({ small }: { small?: boolean }) {
             display: flex;
             gap: 38px;
             align-items: center;
-            border-top: 1px solid #d9d9d9;
+            border-top: ${small ? "none" : "1px solid #d9d9d9"};
             padding-top: 4px;
             padding-bottom: 20px;
             font-size: 12px;

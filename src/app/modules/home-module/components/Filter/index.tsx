@@ -20,6 +20,7 @@ export default function Filter(
     setTableView: React.Dispatch<React.SetStateAction<boolean>>;
     tableView: boolean;
     terminateSearch?: () => void;
+    searchInputWidth?: string;
   }>
 ) {
   const inputRef = React.useRef<HTMLInputElement>(null);
@@ -55,7 +56,7 @@ export default function Filter(
           gap: 8px;
         `}
       >
-        <div css={searchInputCss(openSearch)}>
+        <div css={searchInputCss(openSearch, props.searchInputWidth)}>
           <input
             type="text"
             ref={inputRef}

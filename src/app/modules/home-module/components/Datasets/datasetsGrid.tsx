@@ -209,7 +209,7 @@ export default function DatasetsGrid(props: Readonly<Props>) {
     <>
       {!props.tableView && (
         <Grid container spacing={!props.inChartBuilder ? 2 : 1}>
-          {props.addCard && isAuthenticated ? <DatasetAddnewCard /> : null}
+          {props.addCard ? <DatasetAddnewCard /> : null}
           {loadedDatasets?.map((data, index) => (
             <Grid
               item
@@ -281,6 +281,7 @@ export default function DatasetsGrid(props: Readonly<Props>) {
             name: data.name,
             description: data.description,
             createdDate: data.createdDate,
+            type: "dataset",
           }))}
         />
       )}

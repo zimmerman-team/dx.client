@@ -4,137 +4,110 @@ import {
   DropzoneRootProps,
   DropzoneInputProps,
   FileRejection,
+  useDropzone,
 } from "react-dropzone";
-import {
-  uploadAreacss,
-  uploadDatasetcss,
-} from "app/modules/dataset-upload-module/style";
+import { uploadAreacss } from "app/modules/dataset-upload-module/style";
 import { ReactComponent as UploadIcon } from "app/modules/dataset-upload-module/assets/upload.svg";
-import { ReactComponent as LocalUploadIcon } from "app/modules/dataset-upload-module/assets/local-upload.svg";
-import { ReactComponent as GoogleDriveIcon } from "app/modules/dataset-upload-module/assets/google-drive.svg";
-import { ReactComponent as ErrorIcon } from "app/modules/dataset-upload-module/assets/error-icon.svg";
+import { formatBytes } from "app/utils/formatBytes";
 
 export interface DropzoneProps {
-  getRootProps: (props?: DropzoneRootProps) => DropzoneRootProps;
-  getInputProps: (props?: DropzoneInputProps) => DropzoneInputProps;
-  isDragActive: boolean;
-  fileRejections: FileRejection[];
-  acceptedFiles: File[];
-  isFocused?: boolean;
-  isDragAccept?: boolean;
-  isDragReject?: boolean;
-  isFileDialogActive?: boolean;
-  draggedFiles?: File[];
-  rootRef?: React.RefObject<HTMLElement>;
-  inputRef?: React.RefObject<HTMLInputElement>;
-  handleOpenPicker(e: React.MouseEvent<HTMLButtonElement>): void;
   uploadError: boolean;
   disabled: boolean;
-  setIsExternalSearch: React.Dispatch<React.SetStateAction<boolean>>;
+  onDrop: (acceptedFiles: File[], fileRejections: FileRejection[]) => void;
 }
 
 export const DropZone = (props: DropzoneProps) => {
-  const handleExternalSearch = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
-    props.setIsExternalSearch(true);
+  const ACCEPTED_FILES = {
+    "text/csv": [".csv"],
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": [
+      ".xlsx",
+    ],
+    "application/xml": [".xml"],
+    "application/vnd.ms-excel": [".xls"],
+    "application/xhtml+xml": [".xhtml"],
   };
-  return (
-    <div css={uploadDatasetcss} {...props.getRootProps()}>
-      <div>
-        <p>Add your file</p>
-      </div>
-      <div css={uploadAreacss(props.isDragActive)}>
-        <input
-          {...props.getInputProps()}
-          data-testid="local-upload"
-          data-cy="local-upload-input"
-        />
-        {!props.isDragActive && (
-          <>
-            <UploadIcon
-              css={`
-                margin-top: 2rem;
-              `}
-            />
-            <p
-              css={`
-                font-weight: 500;
-                font-size: 12px;
-                color: #231d2c;
-                margin-top: 5px;
-              `}
-            >
-              Supports: XLSX, CSV
-            </p>
-            <p
-              css={`
-                font-size: 20px;
-                line-height: 24px;
-                font-style: normal;
-              `}
-            >
-              Drag and Drop Spreadsheets File here <br /> or connect to Google
-              Drive
-            </p>
-            <Box height={30} />
-            <div
-              css={`
-                display: flex;
-                gap: 1rem;
-              `}
-            >
-              <button
-                onClick={handleExternalSearch}
-                data-cy="external-search-button"
-              >
-                <SearchIcon color="secondary" /> <p>External search</p>
-              </button>
-              <button>
-                <LocalUploadIcon /> <p>Local upload</p>
-              </button>
 
-              <button
-                type="button"
-                onClick={props.handleOpenPicker}
-                data-testid="google-drive-button"
-                data-cy="google-drive-button"
-              >
-                <GoogleDriveIcon /> <p>Connect to google drive</p>
-              </button>
-            </div>
-            <Box height={40} />
-            {/* {props.uploadError && (
-              <div
+  const {
+    getRootProps,
+    getInputProps,
+    isDragActive,
+    acceptedFiles,
+    fileRejections,
+  } = useDropzone({ onDrop: props.onDrop, accept: ACCEPTED_FILES });
+
+  const fileRejectionItems = fileRejections.map(({ file, errors }) => (
+    <li key={file.name}>
+      {file.name} - {formatBytes(file.size)}
+      <ul>
+        {errors.map((e) => (
+          <li key={e.code}>{e.message}</li>
+        ))}
+      </ul>
+    </li>
+  ));
+  return (
+    <>
+      <div
+        css={`
+          border: 1px dashed var(--Dark-01, #13183f);
+          border-radius: 24px;
+          cursor: pointer;
+          background-color: ${isDragActive && !props.disabled
+            ? "#c4c4c4"
+            : "auto"};
+          background-image: ${isDragActive && !props.disabled
+            ? `url(
+              "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='163' height='163' viewBox='0 0 20 20'%3E%3Cg %3E%3Cpolygon fill='%23ffffff' points='20 10 10 0 0 0 20 20'/%3E%3Cpolygon fill='%23ffffff' points='0 10 0 20 10 20'/%3E%3C/g%3E%3C/svg%3E"
+            )`
+            : "unset"};
+        `}
+        {...getRootProps()}
+      >
+        <Box height={112} />
+        <div css={uploadAreacss(isDragActive)}>
+          <input
+            {...getInputProps()}
+            data-testid="local-upload"
+            data-cy="local-upload-input"
+          />
+          {!isDragActive && (
+            <>
+              <UploadIcon />
+              <p
                 css={`
-                  color: #e75656;
-                  font-size: 18;
-                  font-family: " Gotham Narrow", sans-serif;
-                  font-weight: bold;
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                  flex-direction: column;
-                  p {
-                    display: flex;
-                    align-items: center;
-                    gap: 13px;
-                    margin: 0;
-                  }
-                  small {
-                    text-align: center;
-                  }
+                  font-weight: 500;
+                  font-size: 12px;
+                  color: #231d2c;
+                  margin-top: 5px;
+                  font-family: "Inter", sans-serif;
+                  margin: 0;
+                  padding: 0;
+                  margin-top: 18px;
                 `}
               >
-                <p>
-                  <ErrorIcon />{" "}
-                  <span>Unable to upload your file. Please try again!</span>
-                </p>
-                <span>Error</span>
-              </div>
-            )} */}
-          </>
-        )}
+                Supports: XMl, XLSX, CSV
+              </p>
+              <p
+                css={`
+                  font-size: 20px;
+                  line-height: normal;
+                  font-style: normal;
+                  font-family: "GothamNarrow-Book", sans-serif;
+                  font-weight: 325;
+                  margin: 0;
+                  padding: 0;
+                  margin-top: 18px;
+                `}
+              >
+                Drag and Drop Spreadsheets File here
+              </p>
+            </>
+          )}
+        </div>
+        <Box height={131} />
       </div>
-    </div>
+      <Box height={40} />
+      {fileRejections.length > 0 && fileRejectionItems}
+    </>
   );
 };
