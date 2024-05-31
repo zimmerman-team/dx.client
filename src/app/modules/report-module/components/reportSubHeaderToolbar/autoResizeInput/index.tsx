@@ -106,6 +106,7 @@ export default function AutoResizeInput(props: InputProps) {
           ${styles.autoResizeSpan}
           visibility: ${spanVisibility ? "visible" : "hidden"};
           max-width: ${autoResize ? `calc(100% - ${spanBuffer}px)` : "100%"};
+          margin-left: -0.8px;
         `}
       >
         {` ${name}`}
