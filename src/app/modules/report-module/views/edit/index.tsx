@@ -201,7 +201,6 @@ function ReportEditView(props: ReportEditViewProps) {
     return isAuthenticated && reportData?.owner === user?.sub;
   }, [user, isAuthenticated, reportData]);
 
-  // console.log(reportError401, "reportError401");
   if ((reportError401 || !canChartEditDelete) && !loadingReportData) {
     return <NotAuthorizedMessageModule asset="report" action="edit" />;
   }
@@ -260,7 +259,12 @@ function ReportEditView(props: ReportEditViewProps) {
           >
             {props.framesArray?.map((frame, index) => {
               return (
-                <div key={frame.id}>
+                <div
+                  key={frame.id}
+                  css={`
+                    position: relative;
+                  `}
+                >
                   {index === 0 && (
                     <PlaceHolder
                       index={index}
@@ -283,15 +287,24 @@ function ReportEditView(props: ReportEditViewProps) {
                     endReportTour={handleEndReportTour}
                   />
                   <Box height={16} />
-
-                  <PlaceHolder
-                    rowId={frame.id}
-                    deleteFrame={deleteFrame}
-                    framesArray={props.framesArray}
-                    setFramesArray={props.setFramesArray}
-                    handlePersistReportState={props.handlePersistReportState}
-                    handleRowFrameItemResize={props.handleRowFrameItemResize}
-                  />
+                  <div
+                    css={`
+                      position: absolute;
+                      bottom: 0px;
+                      padding: 10px 0;
+                      z-index: 9;
+                      width: 100%;
+                    `}
+                  >
+                    <PlaceHolder
+                      rowId={frame.id}
+                      deleteFrame={deleteFrame}
+                      framesArray={props.framesArray}
+                      setFramesArray={props.setFramesArray}
+                      handlePersistReportState={props.handlePersistReportState}
+                      handleRowFrameItemResize={props.handleRowFrameItemResize}
+                    />
+                  </div>
                 </div>
               );
             })}

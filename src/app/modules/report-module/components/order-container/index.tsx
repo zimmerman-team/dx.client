@@ -49,7 +49,12 @@ function ItemComponent(props: ItemComponentProps) {
   }, [isDragging]);
 
   return (
-    <div style={{ ...style, opacity }}>
+    <div
+      style={{ ...style, opacity }}
+      css={`
+        position: relative;
+      `}
+    >
       <div
         ref={drag}
         id={`item-${id}`}

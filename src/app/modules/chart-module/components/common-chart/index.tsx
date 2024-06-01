@@ -67,7 +67,6 @@ export function CommonChart(props: Readonly<Props>) {
     (state) =>
       (state.dataThemes.DatasetGet.crudData ?? {}) as DatasetListItemAPIModel
   );
-  console.log(loadedChart, "datasetDetails");
 
   React.useEffect(() => {
     if (token) {
@@ -191,7 +190,6 @@ export function CommonChart(props: Readonly<Props>) {
     props.renderedChartSsr,
     props.renderedChartMappedData,
   ]);
-  console.log(props.renderedChartSsr, "ssr?");
   let content;
   let contentHeight;
   if (!props.chartPreviewInReport && props.renderedChartType !== "bigNumber") {
