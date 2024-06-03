@@ -24,8 +24,9 @@ export default function FinishedFragment(props: Props) {
   const history = useHistory();
   const location = useLocation();
 
-  const [display, setDisplay] = useRecoilState(homeDisplayAtom);
-
+  const [_display, setDisplay] = useRecoilState(homeDisplayAtom);
+  const queryParams = new URLSearchParams(location.search);
+  const reportPage = queryParams.get("page") as string;
   const setDatasetId = useStoreActions(
     (actions) => actions.charts.dataset.setValue
   );
@@ -68,7 +69,9 @@ export default function FinishedFragment(props: Props) {
     let redirectTimeout: any;
     if (location.pathname === "/dataset/new/upload") {
       redirectTimeout = setTimeout(() => {
-        history.push(`/dataset/${props.datasetId}/detail`);
+        history.push(
+          `/dataset/${props.datasetId}/detail?fromreport=true&page=${reportPage}`
+        );
       }, 8000);
     }
     return () => {
@@ -180,7 +183,7 @@ export default function FinishedFragment(props: Props) {
           <Link
             to={{
               pathname: `/chart/new/chart-type`,
-              search: "?loadataset=true",
+              search: `?loadataset=true&fromreport=true&page=${reportPage}`,
             }}
             css={`
               pointer-events: ${props.canDatasetEditDelete ? "auto" : "none"};
