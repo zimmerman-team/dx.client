@@ -70,7 +70,7 @@ export default function ExternalSearch(props: {
       const response = await axios.get(
         `${
           process.env.REACT_APP_API
-        }/external-sources/search?q=${searchValue}&source=${"Kaggle,World Bank,WHO,HDX"}&offset=${offset}&limit=${limit}`,
+        }/external-sources/search?q=${searchValue}&source=${"Kaggle,World Bank,WHO,HDX,TGF"}&offset=${offset}&limit=${limit}`,
         {
           signal: abortControllerRef.current.signal,
           headers: {
