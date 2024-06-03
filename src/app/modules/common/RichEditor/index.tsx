@@ -98,9 +98,7 @@ export const RichEditor = (props: {
 
   return (
     <div
-      className={
-        props.editMode ? editorStyles.editor : editorStyles.editorPreview
-      }
+      className={editorStyles.editor}
       onClick={focus}
       css={`
         ${!props.fullWidth && "max-width: 800px !important;"}
