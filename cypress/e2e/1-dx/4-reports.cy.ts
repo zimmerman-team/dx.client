@@ -27,7 +27,7 @@ describe("Testing reports on DX", () => {
   });
 
   it("Can Create report", () => {
-    cy.get('[data-cy="appbar-create-report/login"]').click();
+    cy.get('[data-cy="home-create-report-button"]').click();
 
     cy.contains(
       '[data-cy="report-template-card"]',
