@@ -98,7 +98,6 @@ export default function HomeModule() {
             searchStr={searchStr}
             tableView={tableView}
             categories={categories}
-            fromHome
           />
         );
       case "charts":
@@ -125,7 +124,6 @@ export default function HomeModule() {
             searchStr={searchStr}
             tableView={tableView}
             showMenuButton={false}
-            fromHome
           />
         );
       default:
@@ -191,6 +189,7 @@ export default function HomeModule() {
               css={`
                 background: #e492bd;
               `}
+              data-cy="home-connect-dataset-button"
             >
               CONNECT DATASET
             </Link>
@@ -199,6 +198,7 @@ export default function HomeModule() {
               css={`
                 background: #64afaa;
               `}
+              data-cy="home-create-chart-button"
             >
               CREATE CHART
             </Link>
@@ -207,6 +207,7 @@ export default function HomeModule() {
               css={`
                 background: #6061e5;
               `}
+              data-cy="home-create-report-button"
             >
               CREATE REPORT
             </Link>

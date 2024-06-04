@@ -64,7 +64,7 @@ export default function HomeFooter({ small }: { small?: boolean }) {
                   <Link to="/why-dataXplorer"> Why DataXplorer?</Link>{" "}
                 </li>
                 <li>
-                  <Link to="/explore">Explore</Link>{" "}
+                  <Link to="/">Explore</Link>{" "}
                 </li>
                 <li>
                   <Link to="/about">About</Link>

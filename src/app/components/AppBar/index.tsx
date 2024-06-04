@@ -231,7 +231,7 @@ export function AppBar() {
               >
                 {" "}
                 <div css={navLinkcss("explore", navLocation)}>
-                  <NavLink to="/explore" data-cy="nav-explore">
+                  <NavLink to="/" data-cy="nav-explore">
                     <b>Explore </b>
                   </NavLink>
                 </div>

@@ -290,14 +290,12 @@ function DatasetUploadSteps(props: Props) {
             <UploadTabs activeTab={activeTab} setActiveTab={setActiveTab} />
             <Box height={24} />
             {activeTab === "search" ? (
-              <>
-                <ExternalSearch
-                  setFormDetails={setFormDetails}
-                  setActiveStep={setActiveStep}
-                  setProcessingError={setProcessingError}
-                  handleDownload={handleDownloadExternalDataset}
-                />
-              </>
+              <ExternalSearch
+                setFormDetails={setFormDetails}
+                setActiveStep={setActiveStep}
+                setProcessingError={setProcessingError}
+                handleDownload={handleDownloadExternalDataset}
+              />
             ) : (
               <AddDatasetFragment
                 onFileSubmit={onFileSubmit}

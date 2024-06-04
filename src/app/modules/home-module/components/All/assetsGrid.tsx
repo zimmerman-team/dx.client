@@ -34,7 +34,6 @@ interface Props {
   onItemClick?: (v: string) => void;
   md?: GridSize;
   lg?: GridSize;
-  fromHome?: boolean;
 }
 type assetType = "chart" | "dataset" | "report";
 
@@ -238,7 +237,6 @@ export default function AssetsGrid(props: Props) {
     <>
       {props.tableView ? (
         <HomepageTable
-          fromHome={props.fromHome}
           onItemClick={props.onItemClick}
           inChartBuilder={props.inChartBuilder}
           data={loadedAssets.map((data) => {
@@ -313,7 +311,6 @@ export default function AssetsGrid(props: Props) {
                       id={d.id}
                       owner={d.owner}
                       inChartBuilder={props.inChartBuilder as boolean}
-                      fromHome={props.fromHome}
                     />
                   ),
                   report: (

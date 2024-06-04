@@ -1,13 +1,11 @@
 import React from "react";
 import moment from "moment";
-import { useRecoilState } from "recoil";
 import Table from "@material-ui/core/Table";
 import { useHistory } from "react-router-dom";
 import TableRow from "@material-ui/core/TableRow";
 import TableHead from "@material-ui/core/TableHead";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
-import { homeDisplayAtom } from "app/state/recoil/atoms";
 import TableContainer from "@material-ui/core/TableContainer";
 
 export function HomepageTable(props: {
@@ -20,7 +18,6 @@ export function HomepageTable(props: {
   }[];
   inChartBuilder?: boolean;
   onItemClick?: (v: string) => void;
-  fromHome?: boolean;
 }) {
   const history = useHistory();
 
@@ -85,9 +82,7 @@ export function HomepageTable(props: {
                 if (!props.inChartBuilder) {
                   history.push(
                     `/${data.type}/${data.id}${
-                      data.type === "dataset"
-                        ? `/detail?fromHome=${props.fromHome}`
-                        : ""
+                      data.type === "dataset" ? `/detail?` : ""
                     }`
                   );
                 } else if (props.inChartBuilder && props.onItemClick) {

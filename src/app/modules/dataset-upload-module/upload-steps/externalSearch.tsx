@@ -173,7 +173,7 @@ export default function ExternalSearch(props: {
           sortValue={sortValue}
           tableView={tableView}
           terminateSearch={terminateSearch}
-          searchInputWidth="292px"
+          searchInputWidth="249px"
         />
       </Grid>
 

@@ -27,7 +27,6 @@ interface Props {
   id?: string;
   owner: string;
   inChartBuilder: boolean;
-  fromHome?: boolean;
 }
 
 export default function GridItem(props: Readonly<Props>) {
@@ -64,7 +63,7 @@ export default function GridItem(props: Readonly<Props>) {
       data-cy="dataset-grid-item"
     >
       <Link
-        to={`/dataset/${props.id}/detail?fromHome=${props.fromHome}`}
+        to={`/dataset/${props.id}/detail`}
         css={`
           text-decoration: none;
         `}
