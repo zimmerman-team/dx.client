@@ -1,6 +1,5 @@
-import { useAuth0 } from "@auth0/auth0-react";
 import EmpowerBlock from "../partners/components/empowerBlock";
-import { Container } from "@material-ui/core";
+import { Box, Container } from "@material-ui/core";
 import ReportImage from "app/modules/home-module/sub-modules/landing/assets/report.png";
 import InteractImage from "app/modules/home-module/sub-modules/landing/assets/interact.png";
 import Investment from "app/modules/home-module/sub-modules/landing/assets/investment.png";
@@ -168,6 +167,7 @@ export default function LandingModule() {
           <Subscribe />
         </div>
       </Container>
+      <Box height={19} />
       <HomeFooter />
     </div>
   );

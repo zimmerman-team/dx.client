@@ -235,7 +235,11 @@ export function ReportPreviewView(props: {
         <ReportUsePanel />
       ) : null}
 
-      {!previewMode ? <HomeFooter /> : null}
+      {!previewMode ? (
+        <>
+          <Box height={71} /> <HomeFooter />
+        </>
+      ) : null}
     </div>
   );
 }

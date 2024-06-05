@@ -37,7 +37,7 @@ export default function WhyDX() {
           <TryUsBlock />
         </Container>
       </div>
-      <div css="width: 100%;height: 36px" />
+      <div css="width: 100%;height: 19px" />
       <HomeFooter />
     </>
   );

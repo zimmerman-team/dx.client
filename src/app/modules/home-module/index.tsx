@@ -446,7 +446,7 @@ export default function HomeModule() {
           {displayGrid(searchValue as string, sortValue)}
         </div>
       </Container>
-      <Box height={100} />
+      <Box height={500} />
       <HomeFooter />
     </React.Fragment>
   );
