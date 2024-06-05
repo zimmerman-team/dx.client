@@ -7,7 +7,7 @@ import useResizeObserver from "use-resize-observer";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { GridColumns } from "app/modules/report-module/components/grid-columns";
 import HeaderBlock from "app/modules/report-module/sub-module/components/headerBlock";
-import { ReportOrderContainer } from "app/modules/report-module/components/order-container";
+import { ItemComponent } from "app/modules/report-module/components/order-container";
 import { ReportElementsType } from "app/modules/report-module/components/right-panel-create-view";
 import AddRowFrameButton from "app/modules/report-module/sub-module/rowStructure/addRowFrameButton";
 import RowFrame from "app/modules/report-module/sub-module/rowStructure";
@@ -144,46 +144,46 @@ function ReportCreateView(props: Readonly<ReportCreateViewProps>) {
             handleClose={() => {}}
             open
           />
-          <ReportOrderContainer
-            enabled
-            childrenData={props.framesArray}
-            setFramesArray={props.setFramesArray}
-          >
-            {props.framesArray.map((frame) => {
-              return (
-                <div key={frame.id}>
-                  <div
-                    css={`
-                      position: relative;
-                    `}
-                  >
-                    <RowFrame
-                      {...frame.frame}
-                      setFramesArray={props.setFramesArray}
-                      framesArray={props.framesArray}
-                      view={props.view}
-                      rowContentHeights={frame.contentHeights}
-                      rowContentWidths={frame.contentWidths}
-                      previewItems={
-                        frame.frame.previewItems as (string | object)[]
-                      }
-                      setPlugins={props.setPlugins}
-                      endReportTour={() => {}}
-                    />
-                  </div>
-                  <Box height={38} />
-                  <PlaceHolder
-                    rowId={frame.id}
-                    deleteFrame={props.deleteFrame}
-                    framesArray={props.framesArray}
+
+          {props.framesArray.map((frame, index) => {
+            return (
+              <ItemComponent
+                key={frame.id}
+                id={frame.id}
+                index={index}
+                childrenData={props.framesArray}
+              >
+                <div
+                  css={`
+                    position: relative;
+                  `}
+                >
+                  <RowFrame
+                    {...frame.frame}
                     setFramesArray={props.setFramesArray}
-                    handlePersistReportState={props.handlePersistReportState}
-                    handleRowFrameItemResize={props.handleRowFrameItemResize}
+                    framesArray={props.framesArray}
+                    view={props.view}
+                    rowContentHeights={frame.contentHeights}
+                    rowContentWidths={frame.contentWidths}
+                    previewItems={
+                      frame.frame.previewItems as (string | object)[]
+                    }
+                    setPlugins={props.setPlugins}
+                    endReportTour={() => {}}
                   />
                 </div>
-              );
-            })}
-          </ReportOrderContainer>
+                <Box height={38} />
+                <PlaceHolder
+                  rowId={frame.id}
+                  deleteFrame={props.deleteFrame}
+                  framesArray={props.framesArray}
+                  setFramesArray={props.setFramesArray}
+                  handlePersistReportState={props.handlePersistReportState}
+                  handleRowFrameItemResize={props.handleRowFrameItemResize}
+                />
+              </ItemComponent>
+            );
+          })}
 
           {
             <AddRowFrameButton
@@ -309,10 +309,8 @@ export const PlaceHolder = (props: PlaceholderProps) => {
       ref={drop}
       css={`
         width: 100%;
-        height: 20px;
-        margin: 10px 0;
+        height: 4px;
         display: ${isItemDragging ? "block" : "none"};
-        border: 1px ${isItemDragging ? "dashed" : "none"} #adb5bd;
         background-color: ${placeholderActive() ? "#6061E5" : "#262c34"};
       `}
     />

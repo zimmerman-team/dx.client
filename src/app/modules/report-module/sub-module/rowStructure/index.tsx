@@ -8,7 +8,10 @@ import { itemSpacing, containerGap } from "app/modules/report-module/data";
 import RowstructureDisplay from "app/modules/report-module/sub-module/rowStructure/rowStructureDisplay";
 import { ReactComponent as CloseIcon } from "app/modules/report-module/asset/closeIcon.svg";
 import { ReactComponent as DeleteIcon } from "app/modules/report-module/asset/deleteIcon.svg";
-import { reportCreationTourStepAtom } from "app/state/recoil/atoms";
+import {
+  isDividerOrRowFrameDraggingAtom,
+  reportCreationTourStepAtom,
+} from "app/state/recoil/atoms";
 import {
   blockcss,
   containercss,
@@ -17,6 +20,8 @@ import { cloneDeep } from "lodash";
 import { IFramesArray } from "../../views/create/data";
 import { useOnClickOutside } from "usehooks-ts";
 import { ToolbarPluginsType } from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
+import { useDrag } from "react-dnd";
+import { ReportElementsType } from "../../components/right-panel-create-view";
 
 const _rowStructureDetailItems = [
   [{ rowType: "oneByOne", rowId: "oneByOne-1", width: "100%", factor: 1 }],
@@ -584,7 +589,11 @@ export default function RowFrame(props: RowFrameProps) {
           )}
         </>
       ) : (
-        <Divider delete={deleteFrame} dividerId={props.rowId} />
+        <Divider
+          delete={deleteFrame}
+          dividerId={props.rowId}
+          rowIndex={props.rowIndex}
+        />
       )}
     </>
   );
@@ -748,12 +757,37 @@ const OneByFive = (props: IRowStructureType) => {
 export function Divider(props: {
   dividerId: string;
   delete: (id: string) => void;
+  rowIndex?: number;
 }) {
   const location = useLocation();
   const { page } = useParams<{ page: string }>();
   const dividerRef = useRef(null);
 
   const [handleDisplay, setHandleDisplay] = React.useState(false);
+
+  const [{ isDragging }, drag] = useDrag({
+    type: ReportElementsType.ROW,
+    item: () => {
+      return {
+        id: props.dividerId,
+        index: props.rowIndex,
+        type: ReportElementsType.ROW,
+      };
+    },
+    collect: (monitor: any) => ({
+      isDragging: monitor.isDragging(),
+    }),
+  });
+
+  const [isItemDragging, setIsItemDragging] = useRecoilState(
+    isDividerOrRowFrameDraggingAtom
+  );
+
+  React.useEffect(() => {
+    if (isDragging !== isItemDragging) {
+      setIsItemDragging(isDragging);
+    }
+  }, [isDragging]);
 
   const viewOnlyMode =
     page !== "new" && get(location.pathname.split("/"), "[3]", "") !== "edit";
@@ -773,21 +807,20 @@ export function Divider(props: {
       {...handlers}
       css={`
         width: 100%;
-        height: 25px;
+        height: 100%;
         display: flex;
         align-items: center;
         position: relative;
+        background: pink;
       `}
     >
       {handleDisplay && (
         <div
           ref={dividerRef}
           css={`
-            top: 8%;
             left: -3rem;
             display: flex;
             position: absolute;
-            height: calc(100% + 8px);
           `}
         >
           <div
@@ -820,10 +853,12 @@ export function Divider(props: {
         </div>
       )}
       <div
+        ref={drag}
         css={`
           height: 2px;
           width: 100%;
           background: #cfd4da;
+          cursor: grab;
         `}
       />
     </div>

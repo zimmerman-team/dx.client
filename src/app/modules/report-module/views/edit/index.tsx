@@ -1,7 +1,7 @@
 import React from "react";
 import { v4 } from "uuid";
 import Box from "@material-ui/core/Box";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { useParams } from "react-router-dom";
 import useResizeObserver from "use-resize-observer";
 import Container from "@material-ui/core/Container";
@@ -14,13 +14,14 @@ import { ReportModel, emptyReport } from "app/modules/report-module/data";
 import { ReportEditViewProps } from "app/modules/report-module/views/edit/data";
 import HeaderBlock from "app/modules/report-module/sub-module/components/headerBlock";
 import { NotAuthorizedMessageModule } from "app/modules/common/not-authorized-message";
-import { ReportOrderContainer } from "app/modules/report-module/components/order-container";
+import { ItemComponent } from "app/modules/report-module/components/order-container";
 import { ReportElementsType } from "app/modules/report-module/components/right-panel-create-view";
 import AddRowFrameButton from "app/modules/report-module/sub-module/rowStructure/addRowFrameButton";
 import { GridColumns } from "app/modules/report-module/components/grid-columns";
 
 import {
   IRowFrameStructure,
+  isDividerOrRowFrameDraggingAtom,
   persistedReportStateAtom,
   reportContentContainerWidth,
 } from "app/state/recoil/atoms";
@@ -49,6 +50,7 @@ function ReportEditView(props: ReportEditViewProps) {
   const [containerWidth, setContainerWidth] = useRecoilState(
     reportContentContainerWidth
   );
+  const isItemDragging = useRecoilValue(isDividerOrRowFrameDraggingAtom);
 
   const [persistedReportState] = useRecoilState(persistedReportStateAtom);
   const [rowStructureType, setRowStructuretype] =
@@ -252,29 +254,42 @@ function ReportEditView(props: ReportEditViewProps) {
             handleClose={handleEndReportTour}
             open={openTour}
           />
-          <ReportOrderContainer
-            enabled
-            childrenData={props.framesArray}
-            setFramesArray={props.setFramesArray}
-          >
-            {props.framesArray?.map((frame, index) => {
-              return (
+
+          {props.framesArray?.map((frame, index) => {
+            return (
+              <ItemComponent
+                key={frame.id}
+                id={frame.id}
+                index={index}
+                childrenData={props.framesArray}
+              >
                 <div
-                  key={frame.id}
                   css={`
                     position: relative;
                   `}
                 >
                   {index === 0 && (
-                    <PlaceHolder
-                      index={index}
-                      rowId={frame.id}
-                      deleteFrame={deleteFrame}
-                      framesArray={props.framesArray}
-                      setFramesArray={props.setFramesArray}
-                      handlePersistReportState={props.handlePersistReportState}
-                      handleRowFrameItemResize={props.handleRowFrameItemResize}
-                    />
+                    <div
+                      css={`
+                        position: absolute;
+                        top: ${isItemDragging ? "-12px" : "-10px"};
+                        width: 100%;
+                      `}
+                    >
+                      <PlaceHolder
+                        index={index}
+                        rowId={frame.id}
+                        deleteFrame={deleteFrame}
+                        framesArray={props.framesArray}
+                        setFramesArray={props.setFramesArray}
+                        handlePersistReportState={
+                          props.handlePersistReportState
+                        }
+                        handleRowFrameItemResize={
+                          props.handleRowFrameItemResize
+                        }
+                      />
+                    </div>
                   )}
                   <RowFrame
                     {...frame.frame}
@@ -286,13 +301,11 @@ function ReportEditView(props: ReportEditViewProps) {
                     setPlugins={props.setPlugins}
                     endReportTour={handleEndReportTour}
                   />
-                  <Box height={16} />
+
                   <div
                     css={`
                       position: absolute;
-                      bottom: 0px;
-                      padding: 10px 0;
-                      z-index: 9;
+                      bottom: ${isItemDragging ? "-12px" : "-10px"};
                       width: 100%;
                     `}
                   >
@@ -306,9 +319,15 @@ function ReportEditView(props: ReportEditViewProps) {
                     />
                   </div>
                 </div>
-              );
-            })}
-          </ReportOrderContainer>
+                <div
+                  css={`
+                    height: ${isItemDragging ? "20px" : "16px"};
+                  `}
+                />
+              </ItemComponent>
+            );
+          })}
+
           <AddRowFrameButton
             framesArray={props.framesArray}
             rowStructureType={rowStructureType}
