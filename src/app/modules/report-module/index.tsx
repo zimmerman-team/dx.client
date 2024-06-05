@@ -40,6 +40,8 @@ import {
 import { ReportSubheaderToolbar } from "app/modules/report-module/components/reportSubHeaderToolbar";
 import { ToolbarPluginsType } from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
 import useAutosave from "app/hooks/useAutoSave";
+import { NotAuthorizedMessageModule } from "../common/not-authorized-message";
+import { Box } from "@material-ui/core";
 
 interface RowFrameProps {
   structure:
@@ -412,7 +414,13 @@ export default function ReportModule() {
 
   const reportError401 = useStoreState(
     (state) =>
-      get(state.reports.ReportGet.errorData, "data.error.statusCode", 0) === 401
+      get(state.reports.ReportGet.errorData, "data.error.statusCode", 0) ===
+        401 ||
+      get(state.reports.ReportGet.crudData, "error", "") === "Unauthorized"
+  );
+
+  const errorReportName = useStoreState((state) =>
+    get(state.reports.ReportGet.crudData, "name", "")
   );
 
   React.useEffect(() => {
@@ -558,6 +566,19 @@ export default function ReportModule() {
     );
     return hasTextValue || framesArrayState;
   }, [reportName, framesArray, headerDetails]);
+
+  if (reportError401) {
+    return (
+      <>
+        <Box height={48} />
+        <NotAuthorizedMessageModule
+          asset="report"
+          action="view"
+          name={errorReportName}
+        />
+      </>
+    );
+  }
 
   return (
     <DndProvider backend={HTML5Backend}>

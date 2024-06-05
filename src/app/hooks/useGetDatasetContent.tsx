@@ -16,7 +16,9 @@ const useGetDatasetContent = (datasetId: string, pageSize: number = 10) => {
     setLoading(true);
     axios
       .get(
-        `${process.env.REACT_APP_API}/datasets/${datasetId}/data?page=${nextPageToken}&pageSize=${pageSize}`,
+        `${process.env.REACT_APP_API}/datasets${
+          token ? "" : "/public"
+        }/${datasetId}/data?page=${nextPageToken}&pageSize=${pageSize}`,
         {
           headers: {
             "Content-Type": "application/json",

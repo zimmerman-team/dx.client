@@ -159,6 +159,10 @@ export default function ChartModule() {
         401 ||
       get(state.charts.ChartGet.crudData, "error", "") === "Unauthorized"
   );
+
+  const errorChartName = useStoreState((state) =>
+    get(state.charts.ChartGet.crudData, "name", "")
+  );
   const editChart = useStoreActions(
     (actions) => actions.charts.ChartUpdate.patch
   );
@@ -479,8 +483,12 @@ export default function ChartModule() {
   if (chartError401 || error401) {
     return (
       <>
-        <div css="width: 100%; height: 100px;" />
-        <NotAuthorizedMessageModule asset="chart" action="view" />
+        <div css="width: 100%; height: 48px;" />
+        <NotAuthorizedMessageModule
+          asset="chart"
+          action="view"
+          name={errorChartName}
+        />
       </>
     );
   }
