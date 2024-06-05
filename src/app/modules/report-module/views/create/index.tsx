@@ -278,6 +278,10 @@ export const PlaceHolder = (props: PlaceholderProps) => {
 
   const isItemDragging = useRecoilValue(isDividerOrRowFrameDraggingAtom);
 
+  const itemDragIndex = props.framesArray.findIndex(
+    (frame) => frame.id === isItemDragging.rowId
+  );
+
   const placeholderIndex =
     props.index ??
     props.framesArray.findIndex((frame) => frame.id === props.rowId) + 1;
@@ -302,6 +306,25 @@ export const PlaceHolder = (props: PlaceholderProps) => {
     return false;
   };
 
+  const isDroppable = () => {
+    if (isItemDragging.state) {
+      if (itemDragIndex === -1) {
+        return true;
+      }
+      if (placeholderIndex === itemDragIndex) {
+        return false;
+      }
+      if (placeholderIndex - 1 === itemDragIndex) {
+        return false;
+      }
+      return true;
+    }
+    return false;
+  };
+
+  console.log(isDroppable(), "candrop");
+  console.log(itemDragIndex, "isItemDragging");
+
   return (
     <div
       data-cy="report-row-placeholder"
@@ -310,8 +333,9 @@ export const PlaceHolder = (props: PlaceholderProps) => {
       css={`
         width: 100%;
         height: 4px;
-        display: ${isItemDragging ? "block" : "none"};
+        display: ${isItemDragging.state ? "block" : "none"};
         background-color: ${placeholderActive() ? "#6061E5" : "#262c34"};
+        opacity: ${isDroppable() ? 1 : 0.5};
       `}
     />
   );

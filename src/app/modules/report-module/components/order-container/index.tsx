@@ -36,8 +36,11 @@ export function ItemComponent(props: ItemComponentProps) {
   );
 
   React.useEffect(() => {
-    if (isDragging !== isItemDragging) {
-      setIsItemDragging(isDragging);
+    if (isDragging !== isItemDragging.state) {
+      setIsItemDragging({
+        state: isDragging,
+        rowId: isDragging ? id : null,
+      });
     }
   }, [isDragging]);
 
@@ -62,7 +65,7 @@ export function ItemComponent(props: ItemComponentProps) {
           background: #adb5bd;
           border-radius: 3.45px 0px 0px 3.45px;
           justify-content: center;
-          height: calc(100% - ${isItemDragging ? "20px" : "16px"});
+          height: 100%;
           display: ${props.childrenData[props.index]?.structure === null
             ? "none"
             : "flex"};

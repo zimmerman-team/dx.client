@@ -784,8 +784,11 @@ export function Divider(props: {
   );
 
   React.useEffect(() => {
-    if (isDragging !== isItemDragging) {
-      setIsItemDragging(isDragging);
+    if (isDragging !== isItemDragging.state) {
+      setIsItemDragging({
+        state: isDragging,
+        rowId: props.dividerId,
+      });
     }
   }, [isDragging]);
 

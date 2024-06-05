@@ -257,77 +257,56 @@ function ReportEditView(props: ReportEditViewProps) {
 
           {props.framesArray?.map((frame, index) => {
             return (
-              <ItemComponent
-                key={frame.id}
-                id={frame.id}
-                index={index}
-                childrenData={props.framesArray}
-              >
-                <div
-                  css={`
-                    position: relative;
-                  `}
-                >
-                  {index === 0 && (
-                    <div
-                      css={`
-                        position: absolute;
-                        top: ${isItemDragging ? "-12px" : "-10px"};
-                        width: 100%;
-                      `}
-                    >
-                      <PlaceHolder
-                        index={index}
-                        rowId={frame.id}
-                        deleteFrame={deleteFrame}
-                        framesArray={props.framesArray}
-                        setFramesArray={props.setFramesArray}
-                        handlePersistReportState={
-                          props.handlePersistReportState
-                        }
-                        handleRowFrameItemResize={
-                          props.handleRowFrameItemResize
-                        }
-                      />
-                    </div>
-                  )}
-                  <RowFrame
-                    {...frame.frame}
+              <div key={frame.id}>
+                {index === 0 && (
+                  <PlaceHolder
+                    index={index}
+                    rowId={frame.id}
+                    deleteFrame={deleteFrame}
                     framesArray={props.framesArray}
                     setFramesArray={props.setFramesArray}
-                    view={props.view}
-                    rowContentHeights={frame.contentHeights}
-                    rowContentWidths={frame.contentWidths}
-                    setPlugins={props.setPlugins}
-                    endReportTour={handleEndReportTour}
+                    handlePersistReportState={props.handlePersistReportState}
+                    handleRowFrameItemResize={props.handleRowFrameItemResize}
                   />
-
+                )}
+                <Box height={8} />
+                <ItemComponent
+                  id={frame.id}
+                  index={index}
+                  childrenData={props.framesArray}
+                >
                   <div
                     css={`
-                      position: absolute;
-                      bottom: ${isItemDragging ? "-12px" : "-10px"};
-                      width: 100%;
+                      position: relative;
                     `}
                   >
-                    <PlaceHolder
-                      rowId={frame.id}
-                      deleteFrame={deleteFrame}
+                    <RowFrame
+                      {...frame.frame}
                       framesArray={props.framesArray}
                       setFramesArray={props.setFramesArray}
-                      handlePersistReportState={props.handlePersistReportState}
-                      handleRowFrameItemResize={props.handleRowFrameItemResize}
+                      view={props.view}
+                      rowContentHeights={frame.contentHeights}
+                      rowContentWidths={frame.contentWidths}
+                      setPlugins={props.setPlugins}
+                      endReportTour={handleEndReportTour}
                     />
                   </div>
-                </div>
-                <div
-                  css={`
-                    height: ${isItemDragging ? "20px" : "16px"};
-                  `}
+                </ItemComponent>
+                <Box height={8} />
+
+                <PlaceHolder
+                  rowId={frame.id}
+                  deleteFrame={deleteFrame}
+                  framesArray={props.framesArray}
+                  setFramesArray={props.setFramesArray}
+                  handlePersistReportState={props.handlePersistReportState}
+                  handleRowFrameItemResize={props.handleRowFrameItemResize}
                 />
-              </ItemComponent>
+              </div>
             );
           })}
 
+          <Box height={8} />
           <AddRowFrameButton
             framesArray={props.framesArray}
             rowStructureType={rowStructureType}
