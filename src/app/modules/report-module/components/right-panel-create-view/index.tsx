@@ -58,6 +58,7 @@ import { get } from "lodash";
 import { useSearchMediaSources } from "app/hooks/useSearchMediaSources";
 import { useDebounce } from "react-use";
 import Skeleton from "@material-ui/lab/Skeleton";
+import { useInfinityScroll } from "app/hooks/useInfinityScroll";
 
 interface IHeaderDetails {
   title: string;
@@ -177,7 +178,7 @@ const videoSources = [
 
 const imageSources = [
   { value: "unsplash", label: "Unsplash" },
-  { value: "shutterstock", label: "Shutterstock" },
+  // { value: "shutterstock", label: "Shutterstock" },
 ];
 
 export function ReportRightPanelCreateView(props: Readonly<Props>) {
@@ -848,6 +849,16 @@ function ElementItem(props: {
     props.elementType
   );
 
+  const observerTarget = React.useRef(null);
+  const { isObserved } = useInfinityScroll(observerTarget);
+
+  // Pagination on scroll
+  React.useEffect(() => {
+    if (isObserved && data.length > 0) {
+      search(searchValue, true);
+    }
+  }, [isObserved]);
+
   const [{ isDragging }, drag] = useDrag(() => ({
     type: props.elementType,
     item: {
@@ -967,156 +978,165 @@ function ElementItem(props: {
       </Tooltip>
 
       {isImageElement || isVideoElement ? (
-        <>
-          {dropDown ? (
+        <div
+          css={`
+            ${dropDown ? "" : `height: 0px; overflow: hidden;`}
+          `}
+        >
+          <div
+            css={`
+              padding: 0 8px 0 16px;
+              margin-top: 25px;
+            `}
+          >
             <div
               css={css`
-                padding: 0 8px 0 16px;
-                margin-top: 25px;
+                display: flex;
+                background-color: white;
+                border-radius: 24px;
+                padding-left: 16px;
+                padding-right: 8.78px;
+                align-items: center;
               `}
             >
-              <div
-                css={css`
-                  display: flex;
-                  background-color: white;
-                  border-radius: 24px;
-                  padding-left: 16px;
-                  padding-right: 8.78px;
-                  align-items: center;
+              <input
+                type="text"
+                onChange={(e) => setSearchValue(e.target.value)}
+                value={searchValue}
+                css={`
+                  outline: none;
+                  height: 34px;
+                  width: 100%;
+                  border: none;
                 `}
-              >
-                <input
-                  type="text"
-                  onChange={(e) => setSearchValue(e.target.value)}
-                  value={searchValue}
-                  css={`
-                    outline: none;
-                    height: 34px;
-                    width: 100%;
-                    border: none;
-                  `}
-                />
-                <SearchIcon htmlColor="#495057" />
-              </div>
-
-              <div
-                css={css`
-                  margin-top: 15px;
-                  margin-left: auto;
-                  width: max-content;
-                `}
-              >
-                <Button
-                  disableTouchRipple
-                  onClick={handleClick}
-                  css={`
-                    width: 159px;
-                    height: 35px;
-                    border-radius: 24px;
-                    background: #231d2c;
-                    text-transform: capitalize;
-                    padding: 0 16px;
-                    display: flex;
-                    justify-content: space-between;
-
-                    svg {
-                      margin-left: 10px;
-                      transition: all 0.2s ease-in-out;
-                      transform: rotate(${anchorEl ? "180" : "0"}deg);
-                      > path {
-                        fill: #fff;
-                      }
-                    }
-                  `}
-                >
-                  <span
-                    css={`
-                      color: #fff;
-                      font-size: 14px;
-                      overflow: hidden;
-                      font-weight: 325;
-                      white-space: nowrap;
-                      text-overflow: ellipsis;
-                      font-family: "GothamNarrow-Book", "Helvetica Neue",
-                        sans-serif;
-                    `}
-                  >
-                    {source.label}
-                  </span>
-                  <KeyboardArrowDownIcon />
-                </Button>
-                <StyledMenu
-                  keepMounted
-                  anchorEl={anchorEl}
-                  id="breadcrumb-menu"
-                  onClose={handleClose}
-                  open={Boolean(anchorEl)}
-                >
-                  {get(currentSourceOptions, props.elementType, [{}]).map(
-                    (option: any) => (
-                      <StyledMenuItem
-                        key={option.value}
-                        onClick={() => {
-                          setSource(option);
-                          handleClose();
-                        }}
-                      >
-                        {option.label}
-                      </StyledMenuItem>
-                    )
-                  )}
-                </StyledMenu>
-              </div>
-
-              <div
-                css={css`
-                  margin-top: 21px;
-                  display: grid;
-                  row-gap: 25.75px;
-                  max-height: 40vh;
-                  overflow-y: scroll;
-                  padding-bottom: 15px;
-                `}
-              >
-                {loading
-                  ? Array(4)
-                      .fill(null)
-                      .map((_d, index: number) => (
-                        <Skeleton
-                          animation="wave"
-                          variant="rect"
-                          width="100%"
-                          height="173.25px"
-                          key={`${index}-skeleton`}
-                        />
-                      ))
-                  : data.map((d, i) =>
-                      props.elementType === "video" ? (
-                        <VideoFrame
-                          embedUrl={d.embedUrl}
-                          videoId={d.videoId}
-                          key={d.videoId}
-                          snippet={d.snippet}
-                          source={d.source}
-                          thumbnail={d.thumbnail}
-                          title={d.title}
-                          description={d.description}
-                          ownerThumbnail={d.ownerThumbnail}
-                        />
-                      ) : (
-                        <ImageFrame
-                          imageUrl={d.imageUrl}
-                          imageId={d.imageId}
-                          key={d.imageId}
-                          thumbnail={d.thumbnail}
-                          source={d.source}
-                        />
-                      )
-                    )}
-              </div>
+              />
+              <SearchIcon htmlColor="#495057" />
             </div>
-          ) : null}
-        </>
+
+            <div
+              css={css`
+                margin-top: 15px;
+                margin-left: auto;
+                width: max-content;
+              `}
+            >
+              <Button
+                disableTouchRipple
+                onClick={handleClick}
+                css={`
+                  width: 159px;
+                  height: 35px;
+                  border-radius: 24px;
+                  background: #231d2c;
+                  text-transform: capitalize;
+                  padding: 0 16px;
+                  display: flex;
+                  justify-content: space-between;
+
+                  svg {
+                    margin-left: 10px;
+                    transition: all 0.2s ease-in-out;
+                    transform: rotate(${anchorEl ? "180" : "0"}deg);
+                    > path {
+                      fill: #fff;
+                    }
+                  }
+                `}
+              >
+                <span
+                  css={`
+                    color: #fff;
+                    font-size: 14px;
+                    overflow: hidden;
+                    font-weight: 325;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    font-family: "GothamNarrow-Book", "Helvetica Neue",
+                      sans-serif;
+                  `}
+                >
+                  {source.label}
+                </span>
+                <KeyboardArrowDownIcon />
+              </Button>
+              <StyledMenu
+                keepMounted
+                anchorEl={anchorEl}
+                id="breadcrumb-menu"
+                onClose={handleClose}
+                open={Boolean(anchorEl)}
+              >
+                {get(currentSourceOptions, props.elementType, [{}]).map(
+                  (option: any) => (
+                    <StyledMenuItem
+                      key={option.value}
+                      onClick={() => {
+                        setSource(option);
+                        handleClose();
+                      }}
+                    >
+                      {option.label}
+                    </StyledMenuItem>
+                  )
+                )}
+              </StyledMenu>
+            </div>
+
+            <div
+              css={css`
+                margin-top: 21px;
+                display: grid;
+                row-gap: 25.75px;
+                max-height: 40vh;
+                overflow-y: scroll;
+                padding-bottom: 15px;
+              `}
+            >
+              {data?.map((d, i) =>
+                props.elementType === "video" ? (
+                  <VideoFrame
+                    embedUrl={d.embedUrl}
+                    videoId={d.videoId}
+                    key={d.videoId}
+                    snippet={d.snippet}
+                    source={d.source}
+                    thumbnail={d.thumbnail}
+                    title={d.title}
+                    description={d.description}
+                    ownerThumbnail={d.ownerThumbnail}
+                  />
+                ) : (
+                  <ImageFrame
+                    imageUrl={d.imageUrl}
+                    imageId={d.imageId}
+                    key={d.imageId}
+                    thumbnail={d.thumbnail}
+                    source={d.source}
+                  />
+                )
+              )}
+              {loading
+                ? Array(4)
+                    .fill(null)
+                    .map((_d, index: number) => (
+                      <Skeleton
+                        animation="wave"
+                        variant="rect"
+                        width="100%"
+                        height="173.25px"
+                        key={`${index}-skeleton`}
+                      />
+                    ))
+                : null}
+              <div
+                css={`
+                  height: 1px;
+                `}
+                ref={observerTarget}
+              />
+            </div>
+          </div>
+        </div>
       ) : null}
     </div>
   );
