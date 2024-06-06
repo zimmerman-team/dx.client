@@ -23,12 +23,10 @@ export default function Onboarding() {
   return (
     <Grid
       container
-      spacing={6}
       css={`
-        margin-top: 48px;
         padding-left: 40px;
         position: relative;
-        overflow-y: hidden;
+        height: 100vh;
       `}
     >
       <Grid
@@ -40,7 +38,7 @@ export default function Onboarding() {
           @media (max-width: 1024px) {
             padding-bottom: 7rem;
           }
-          padding-top: 174px;
+          padding-top: 222px;
         `}
       >
         <div
@@ -83,9 +81,7 @@ export default function Onboarding() {
           lg={"auto"}
           css={`
             right: 0;
-            margin-top: -48px;
             width: 54.375%;
-            height: 100vh;
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
