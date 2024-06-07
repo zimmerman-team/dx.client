@@ -34,6 +34,7 @@ const UploadOption = (props: {
         props.onClick(e);
       }}
       data-cy="upload-option-button"
+      data-testid={`${props.name}-option`}
     >
       <div
         css={`
