@@ -9,7 +9,7 @@ export const Tab = {
     display: flex;
     justify-content: flex-start;
     color: #000000;
-    margin: 4% 0%;
+    /* margin: 4% 0%; */
     width: 30%;
     gap: 40px;
     cursor: pointer;

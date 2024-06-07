@@ -20,7 +20,7 @@ import {
 } from "app/modules/report-module/data";
 import ReportCreateView from "app/modules/report-module/views/create";
 import { ReportPreviewView } from "app/modules/report-module/views/preview";
-import { ReportInitialView } from "app/modules/report-module/views/initial";
+import ReportInitialView from "app/modules/report-module/views/initial";
 import { IFramesArray } from "app/modules/report-module/views/create/data";
 import { ReportRightPanel } from "app/modules/report-module/components/right-panel";
 import { ReportElementsType } from "app/modules/report-module/components/right-panel-create-view";

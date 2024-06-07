@@ -5,6 +5,27 @@ import { StoreProvider, createStore } from "easy-peasy";
 import { AuthTokenState } from "app/state/api/action-reducers/sync";
 import axios from "axios";
 
+interface MockProps {
+  onFileSubmit: jest.Mock<any, any, any>;
+  disabled: boolean;
+  processingError: string | null;
+  activeOption: string | null;
+  setActiveOption: jest.Mock<any, any, any>;
+  setActiveStep: jest.Mock<any, any, any>;
+}
+
+const defaultProps = (newProps: Partial<MockProps> = {}): MockProps => {
+  return {
+    onFileSubmit: jest.fn(),
+    disabled: false,
+    processingError: null,
+    activeOption: null,
+    setActiveOption: jest.fn().mockImplementation(() => "Local upload"),
+    setActiveStep: jest.fn(),
+    ...newProps,
+  };
+};
+
 const mockOpenPicker = jest.fn();
 jest.mock("react-google-drive-picker", () => {
   return {
@@ -14,38 +35,64 @@ jest.mock("react-google-drive-picker", () => {
     },
   };
 });
+jest.mock("app/hooks/useOneDrivePicker", () => {
+  return {
+    useOneDrivePicker: () => {
+      return {
+        launchPicker: jest.fn(),
+        clearToken: jest.fn(),
+        connected: true,
+      };
+    },
+  };
+});
 
 jest.mock("axios");
 
-const appFn = (
-  mockSetSelectedFile: jest.Mock<any, any, any>,
-  mockSetIsExternalSearch: jest.Mock<any, any, any>
-) => {
+const appFn = (newProps: Partial<MockProps> = {}) => {
   const mockStore = createStore({
     AuthToken: AuthTokenState,
   });
+  const props = defaultProps(newProps);
 
-  return (
-    <StoreProvider store={mockStore}>
-      <AddDatasetFragment
-        onFileSubmit={mockSetSelectedFile}
-        disabled={false}
-        processingError={null}
-        setIsExternalSearch={mockSetIsExternalSearch}
-      />
-    </StoreProvider>
-  );
+  return {
+    app: (
+      <StoreProvider store={mockStore}>
+        <AddDatasetFragment {...props} />
+      </StoreProvider>
+    ),
+    props,
+  };
 };
 
-test("local upload of dataset", async () => {
+test("open local upload option", async () => {
   const mockSetSelectedFile = jest.fn();
-  const mockSetIsExternalSearch = jest.fn();
-  const app = appFn(mockSetSelectedFile, mockSetIsExternalSearch);
+  const { app, props } = appFn({
+    onFileSubmit: mockSetSelectedFile,
+  });
+  const user = userEvent.setup();
+  render(app);
+  await user.click(
+    screen.getByTestId(/Local upload-option/i) as HTMLInputElement
+  );
+  expect(props.setActiveOption).toHaveBeenCalledWith("Local upload");
+});
+
+test("local file upload of dataset", async () => {
+  const mockSetSelectedFile = jest.fn();
+  const { app, props } = appFn({
+    onFileSubmit: mockSetSelectedFile,
+    activeOption: "Local upload",
+  });
+
   render(app);
 
   const file = new File(["(⌐□_□)"], "chucknorris.csv", { type: "text/csv" });
-  const dndText = screen.getByText(/drag and drop/i);
-  expect(dndText).toBeInTheDocument();
+
+  expect(
+    screen.getByText(/Drag and Drop Spreadsheets File here/i)
+  ).toBeInTheDocument();
+
   const uploadInput = screen.getByTestId("local-upload") as HTMLInputElement;
 
   Object.defineProperty(uploadInput, "files", { value: [file] });
@@ -57,36 +104,22 @@ test("local upload of dataset", async () => {
   });
 });
 
-test("external search of dataset", async () => {
+test("select google drive button", async () => {
+  const mockSetSelectedFile = jest.fn();
   const user = userEvent.setup();
-
-  const mockSetSelectedFile = jest.fn();
-  const mockSetIsExternalSearch = jest.fn();
-
-  const app = appFn(mockSetSelectedFile, mockSetIsExternalSearch);
-
-  render(app);
-
-  const searchButton = screen.getByText(/external search/i);
-  await user.click(searchButton);
-  expect(mockSetIsExternalSearch).toHaveBeenCalledWith(true);
-});
-
-test("google drive button", async () => {
-  const mockSetSelectedFile = jest.fn();
-  const mockSetIsExternalSearch = jest.fn();
-  const app = appFn(mockSetSelectedFile, mockSetIsExternalSearch);
+  const { app, props } = appFn({
+    onFileSubmit: mockSetSelectedFile,
+  });
   mockOpenPicker.mockImplementation(({ callbackFunction }) => {
     callbackFunction({ docs: [{ id: "123", name: "test.csv", type: "file" }] });
   });
   (axios.get as jest.Mock).mockResolvedValueOnce({ data: "access_token" });
 
   render(app);
-  const googleDriveButton = screen.getByTestId("google-drive-button");
-
-  expect(googleDriveButton).toBeInTheDocument();
-  await userEvent.click(googleDriveButton);
-  (axios.get as jest.Mock).mockResolvedValueOnce({ data: [] });
+  await user.click(
+    screen.getByTestId(/Google Drive-option/i) as HTMLInputElement
+  );
+  expect(props.setActiveOption).toHaveBeenCalledWith("Google Drive");
 
   // Assert that openPicker is called with the correct parameters
   expect(mockOpenPicker).toHaveBeenCalledWith({
@@ -94,7 +127,7 @@ test("google drive button", async () => {
     developerKey: expect.any(String),
     viewId: "SPREADSHEETS",
     supportDrives: true,
-    token: "access_token",
+    token: null,
     setSelectFolderEnabled: true,
     callbackFunction: expect.any(Function),
   });

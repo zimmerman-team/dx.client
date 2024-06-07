@@ -88,7 +88,7 @@ export default function EmpowerBlock(props: {
               CREATE REPORT
             </HomePrimaryButton>
           </Link>
-          <Link to="/explore" data-cy="empower-block-explore-reports-link">
+          <Link to="/" data-cy="empower-block-explore-reports-link">
             <HomePrimaryButton color="#E492BD" type="button">
               EXPLORE REPORTS
             </HomePrimaryButton>

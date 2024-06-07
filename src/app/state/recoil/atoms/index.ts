@@ -59,9 +59,9 @@ export const untitledReportAtom = atom({
   default: false,
 });
 
-export const homeDisplayAtom = atom<"data" | "charts" | "reports">({
+export const homeDisplayAtom = atom<"all" | "data" | "charts" | "reports">({
   key: "homeDisplayAtom",
-  default: "reports",
+  default: "all",
 });
 
 export const reportRightPanelViewAtom = atom<

@@ -13,6 +13,6 @@ describe("Login for a test user on DX", () => {
   });
 
   it("Is Logged in", function () {
-    cy.contains("CREATE REPORT").should("be.visible");
+    cy.contains("Welcome").should("be.visible");
   });
 });

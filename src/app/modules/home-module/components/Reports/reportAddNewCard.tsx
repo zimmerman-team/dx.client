@@ -1,7 +1,7 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
 import { Grid, IconButton } from "@material-ui/core";
-import { ReactComponent as AddNewImage } from "../../assets/add-img.svg";
+import { ReactComponent as AddNewImage } from "../../assets/add-img-white.svg";
 
 export default function ReportAddnewCard() {
   const history = useHistory();
@@ -17,10 +17,11 @@ export default function ReportAddnewCard() {
         css={`
           width: 296px;
           height: 161.59px;
-          background: #f2f7fd;
+          background: #6061e5;
           padding: 12px 16px;
           box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.1);
           display: flex;
+          border-radius: 8px;
           align-items: center;
           cursor: pointer;
         `}
@@ -44,27 +45,24 @@ export default function ReportAddnewCard() {
             css={`
               margin: 0;
               height: 49px;
-              background: #231d2c;
+              background: #ffffff;
+              width: 1px;
             `}
           />
           <p>
             <p
               css={`
+                fonrt-family: "GothamNarrow-Bold", sans-serif;
                 margin: auto;
+                color: #ffffff;
+                font-size: 18px;
+                font-style: normal;
+                font-weight: 400;
+                line-height: 20px; /* 111.111% */
+                letter-spacing: 0.5px;
               `}
             >
-              <b>New Report</b>{" "}
-            </p>
-            <p
-              css={`
-                margin: 0;
-                color: #495057;
-                font-size: 12px;
-                font-weight: 325;
-                line-height: 15px;
-              `}
-            >
-              Create a new report in your library
+              <b>Create Report</b>
             </p>
           </p>
         </div>

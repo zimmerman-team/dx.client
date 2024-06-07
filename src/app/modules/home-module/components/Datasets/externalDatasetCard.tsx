@@ -6,6 +6,7 @@ import WHOLogo from "app/modules/home-module/assets/WHO-logo.svg";
 import KaggleLogo from "app/modules/home-module/assets/kaggle-logo.svg";
 import WorldBankLogo from "app/modules/home-module/assets/world-bank-logo.svg";
 import HDXLogo from "app/modules/home-module/assets/hdx-logo.svg";
+import TGFLogo from "app/modules/home-module/assets/tgf-logo.svg";
 import { ReactComponent as ClockIcon } from "app/modules/home-module/assets/clock-icon.svg";
 
 import moment from "moment";
@@ -31,6 +32,8 @@ export default function IExternalDatasetCard(
         return <img src={WorldBankLogo} alt="world-bank-logo" />;
       case "HDX":
         return <img src={HDXLogo} alt="hdx-logo" />;
+      case "TGF":
+        return <img src={TGFLogo} alt="tgf-logo" />;
       default:
         return <div />;
     }

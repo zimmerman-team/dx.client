@@ -287,6 +287,10 @@ export interface StoreModel {
 
     ExternalDatasetDownload: ApiCallModel;
   };
+  assets: {
+    AssetGetList: ApiCallModel;
+    AssetsCount: ApiCallModel;
+  };
   charts: {
     ChartGet: ApiCallModel;
     ChartGetInReport: ApiCallModel;
