@@ -50,7 +50,6 @@ function ReportEditView(props: ReportEditViewProps) {
   const [containerWidth, setContainerWidth] = useRecoilState(
     reportContentContainerWidth
   );
-  const isItemDragging = useRecoilValue(isDividerOrRowFrameDraggingAtom);
 
   const [persistedReportState] = useRecoilState(persistedReportStateAtom);
   const [rowStructureType, setRowStructuretype] =
@@ -76,7 +75,14 @@ function ReportEditView(props: ReportEditViewProps) {
   );
 
   const reportError401 = useStoreState(
-    (state) => state.reports.ReportGet.errorData
+    (state) =>
+      get(state.reports.ReportGet.errorData, "data.error.statusCode", 0) ===
+        401 ||
+      get(state.reports.ReportGet.crudData, "error", "") === "Unauthorized"
+  );
+
+  const errorReportName = useStoreState((state) =>
+    get(state.reports.ReportGet.crudData, "name", "")
   );
 
   function deleteFrame(id: string) {
@@ -100,6 +106,9 @@ function ReportEditView(props: ReportEditViewProps) {
   }, [page, token]);
 
   React.useEffect(() => {
+    if (reportData.id !== page) {
+      return;
+    }
     if (props.localPickedCharts.length === 0) {
       const items = reportData.rows.map((rowFrame, index) =>
         rowFrame.items.filter((item) => typeof item === "string")
@@ -110,7 +119,7 @@ function ReportEditView(props: ReportEditViewProps) {
         pickedItems = [...pickedItems, ...element];
       }
     }
-  }, []);
+  }, [reportData]);
 
   React.useEffect(() => {
     if (width && width !== containerWidth) {
@@ -132,6 +141,9 @@ function ReportEditView(props: ReportEditViewProps) {
   }
 
   useUpdateEffect(() => {
+    if (reportData.id !== page) {
+      return;
+    }
     if (JSON.parse(persistedReportState.framesArray || "[]").length < 1) {
       props.setHasSubHeaderTitleFocused(reportData.name !== "Untitled report");
       props.setReportName(reportData.name);
@@ -203,12 +215,33 @@ function ReportEditView(props: ReportEditViewProps) {
     return isAuthenticated && reportData?.owner === user?.sub;
   }, [user, isAuthenticated, reportData]);
 
-  if ((reportError401 || !canChartEditDelete) && !loadingReportData) {
-    return <NotAuthorizedMessageModule asset="report" action="edit" />;
-  }
-
   if (loadingReportData) {
     return <PageLoader />;
+  }
+
+  if (reportError401) {
+    return (
+      <>
+        <Box height={48} />
+        <NotAuthorizedMessageModule
+          asset="report"
+          action="edit"
+          name={errorReportName}
+        />
+      </>
+    );
+  }
+
+  if (!canChartEditDelete && !loadingReportData) {
+    <>
+      <Box height={48} />
+      <NotAuthorizedMessageModule
+        asset="report"
+        action="edit"
+        name={reportData?.name}
+      />
+      ;
+    </>;
   }
 
   return (

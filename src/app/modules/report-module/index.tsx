@@ -61,7 +61,7 @@ interface RowFrameProps {
 }
 
 export default function ReportModule() {
-  const { user } = useAuth0();
+  const { user, isAuthenticated } = useAuth0();
   const history = useHistory();
   const { page, view } = useParams<{
     page: string;
@@ -567,41 +567,39 @@ export default function ReportModule() {
     return hasTextValue || framesArrayState;
   }, [reportName, framesArray, headerDetails]);
 
-  if (reportError401) {
-    return (
-      <>
-        <Box height={48} />
-        <NotAuthorizedMessageModule
-          asset="report"
-          action="view"
-          name={errorReportName}
-        />
-      </>
-    );
-  }
+  const canChartEditDelete = React.useMemo(() => {
+    return isAuthenticated && reportGetData?.owner === user?.sub;
+  }, [user, isAuthenticated, reportGetData]);
+
+  const inEditAndCanEdit = view === "edit" ? canChartEditDelete : true;
 
   return (
     <DndProvider backend={HTML5Backend}>
-      {!reportError401 && view !== "ai-template" && view !== "initial" && (
-        <ReportSubheaderToolbar
-          autoSave={autoSave.isAutoSaveEnabled}
-          setAutoSave={setAutoSave}
-          onReportSave={onSave}
-          setName={setReportName}
-          setHasSubHeaderTitleFocused={setHasSubHeaderTitleFocused}
-          setHasSubHeaderTitleBlurred={setHasSubHeaderTitleBlurred}
-          isSaveEnabled={isSaveEnabled}
-          name={page !== "new" && !view ? reportGetData.name : reportName}
-          framesArray={framesArray}
-          headerDetails={headerDetails}
-          setStopInitializeFramesWidth={setStopInitializeFramesWidth}
-          handlePersistReportState={handlePersistReportState}
-          isPreviewView={isPreviewView}
-          plugins={plugins}
-        />
-      )}
+      {!reportError401 &&
+        inEditAndCanEdit &&
+        view !== "ai-template" &&
+        view !== "initial" && (
+          <ReportSubheaderToolbar
+            autoSave={autoSave.isAutoSaveEnabled}
+            setAutoSave={setAutoSave}
+            onReportSave={onSave}
+            setName={setReportName}
+            setHasSubHeaderTitleFocused={setHasSubHeaderTitleFocused}
+            setHasSubHeaderTitleBlurred={setHasSubHeaderTitleBlurred}
+            isSaveEnabled={isSaveEnabled}
+            name={page !== "new" && !view ? reportGetData.name : reportName}
+            framesArray={framesArray}
+            headerDetails={headerDetails}
+            setStopInitializeFramesWidth={setStopInitializeFramesWidth}
+            handlePersistReportState={handlePersistReportState}
+            isPreviewView={isPreviewView}
+            plugins={plugins}
+          />
+        )}
       {view &&
+        !reportError401 &&
         view !== "preview" &&
+        canChartEditDelete &&
         view !== "initial" &&
         view !== "ai-template" && (
           <ReportRightPanel
@@ -620,7 +618,11 @@ export default function ReportModule() {
       <div
         css={`
           width: 100%;
-          height: ${view === "ai-template" ? "40px" : "98px"};
+          height: ${view === "ai-template" ||
+          reportError401 ||
+          !inEditAndCanEdit
+            ? "0px"
+            : "98px"};
         `}
       />
       <Switch>
