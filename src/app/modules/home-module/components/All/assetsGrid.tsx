@@ -239,6 +239,7 @@ export default function AssetsGrid(props: Props) {
         <HomepageTable
           onItemClick={props.onItemClick}
           inChartBuilder={props.inChartBuilder}
+          all
           data={loadedAssets.map((data) => {
             if (data.assetType === "chart") {
               return {

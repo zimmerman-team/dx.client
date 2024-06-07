@@ -7,6 +7,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
+import _ from "lodash";
 
 export function HomepageTable(props: {
   data: {
@@ -18,6 +19,7 @@ export function HomepageTable(props: {
   }[];
   inChartBuilder?: boolean;
   onItemClick?: (v: string) => void;
+  all?: boolean;
 }) {
   const history = useHistory();
 
@@ -65,8 +67,9 @@ export function HomepageTable(props: {
         >
           <TableRow>
             <TableCell width="50px"></TableCell>
-            <TableCell width="400px">Name</TableCell>
-            <TableCell width="550px">Description</TableCell>
+            <TableCell width="171px">Name</TableCell>
+            {props.all && <TableCell width="55px">Type</TableCell>}
+            <TableCell width="650px">Description</TableCell>
             <TableCell width="200px">Creation date</TableCell>
           </TableRow>
         </TableHead>
@@ -98,6 +101,7 @@ export function HomepageTable(props: {
             >
               <TableCell>{index + 1}</TableCell>
               <TableCell>{data.name}</TableCell>
+              {props.all && <TableCell>{_.capitalize(data.type)}</TableCell>}
               <TableCell>{data.description}</TableCell>
               <TableCell>
                 {moment(data.createdDate).format("MMMM YYYY")}
