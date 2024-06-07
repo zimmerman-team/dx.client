@@ -5,8 +5,11 @@ import { useStoreState, useStoreActions } from "app/state/store/hooks";
 import { Box } from "@material-ui/core";
 import { useHistory, useParams } from "react-router-dom";
 import ToolboxSubHeader from "app/modules/chart-module/components/toolbox/steps/sub-header";
-import { useResetRecoilState } from "recoil";
-import { isChartAutoMappedAtom } from "app/state/recoil/atoms";
+import { useRecoilValue, useResetRecoilState } from "recoil";
+import {
+  chartFromReportAtom,
+  isChartAutoMappedAtom,
+} from "app/state/recoil/atoms";
 
 export interface IDatasetDetails {
   id: string;
@@ -167,7 +170,7 @@ function ChartToolBoxSelectDataset(props: { deselectDataset: () => void }) {
 
 export const ConnectData = () => {
   const history = useHistory();
-
+  const chartFromReport = useRecoilValue(chartFromReportAtom);
   return (
     <div
       css={`
@@ -204,7 +207,17 @@ export const ConnectData = () => {
       `}
     >
       <p>Or connect new data</p>
-      <button onClick={() => history.push("/dataset/new/upload")}>
+      <button
+        onClick={() =>
+          history.push(
+            `/dataset/new/upload${
+              chartFromReport.state
+                ? `?fromreport=true&page=${chartFromReport.page}`
+                : ""
+            }`
+          )
+        }
+      >
         add new dataset
       </button>
     </div>

@@ -17,6 +17,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import AISwitch from "app/modules/chart-module/components/switch/AISwitch";
 import { useRecoilState, useResetRecoilState } from "recoil";
 import {
+  chartFromReportAtom,
   isChartAIAgentActive,
   isChartAutoMappedAtom,
 } from "app/state/recoil/atoms";
@@ -62,17 +63,22 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
   );
   // access query parameters
   const queryParams = new URLSearchParams(location.search);
-  const paramValue = queryParams.get("loadataset");
+  const loadDatasetParamValue = queryParams.get("loadataset");
+  const fromReportParamValue = queryParams.get("fromreport");
+  const reportPage = queryParams.get("page") as string;
+
   const loadedChart = useStoreState(
     (state) =>
       (state.charts.ChartGet.crudData ?? emptyChartAPI) as ChartAPIModel
   );
+  const [chartFromReport, setChartFromReport] =
+    useRecoilState(chartFromReportAtom);
 
   React.useEffect(() => {
     //if dataset is empty and not loading, redirect to data page
     if (datasetId === null && !props.loading && page === "new") {
       history.push(`/chart/${page}/data`);
-    } else if (paramValue) {
+    } else if (loadDatasetParamValue) {
       //when landing in chart type step from outside the chart module,
       //load the sample data as data step is skipped
       props.loadDataset(`chart/sample-data/${datasetId}`);
@@ -92,6 +98,18 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
       });
     }
   }, [datasetId]);
+
+  React.useEffect(() => {
+    if (fromReportParamValue === "true") {
+      setChartFromReport((prev) => ({
+        ...chartFromReport,
+        state: true,
+        action: "create",
+        page: reportPage,
+        chartId: "new",
+      }));
+    }
+  }, []);
 
   const canChartEditDelete = React.useMemo(() => {
     return isAuthenticated && loadedChart && loadedChart.owner === user?.sub;
