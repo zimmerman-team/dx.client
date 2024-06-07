@@ -343,7 +343,8 @@ const Box = (props: {
     rowId: string,
     itemIndex: number,
     itemContent: string | any,
-    itemContentType: "text" | "divider" | "chart" | "image" | "video"
+    itemContentType: "text" | "divider" | "chart" | "image" | "video",
+    textHeight?: number
   ) => {
     props.setFramesArray((prev) => {
       const tempPrev = prev.map((item) => ({ ...item }));
@@ -353,6 +354,13 @@ const Box = (props: {
       }
       tempPrev[frameId].content[itemIndex] = itemContent;
       tempPrev[frameId].contentTypes[itemIndex] = itemContentType;
+      const heights = tempPrev[frameId].contentHeights;
+      if (textHeight) {
+        //relative to the text content, we only want to increase the height of textbox
+        if (textHeight > heights[itemIndex]) {
+          heights[itemIndex] = textHeight;
+        }
+      }
       return [...tempPrev];
     });
   };
@@ -372,7 +380,7 @@ const Box = (props: {
 
   const containerWidth = useRecoilValue(reportContentContainerWidth);
   const [reportPreviewMode] = useRecoilState(unSavedReportPreviewModeAtom);
-  const [isResizing, setIsResizing] = useRecoilState(
+  const [_isResizing, setIsResizing] = useRecoilState(
     reportContentIsResizingAtom
   );
 
@@ -381,7 +389,7 @@ const Box = (props: {
       get(location.pathname.split("/"), "[3]", "") !== "edit") ||
     reportPreviewMode;
 
-  const [{ isOver, canDrop, item }, drop] = useDrop(() => ({
+  const [{ isOver }, drop] = useDrop(() => ({
     accept:
       props.rowType === "oneByFive"
         ? [ReportElementsType.TEXT, ReportElementsType.BIG_NUMBER]
@@ -439,6 +447,8 @@ const Box = (props: {
       }
     },
   }));
+  const textResizableRef = React.useRef<HTMLDivElement>(null);
+  const editorHeight = textResizableRef.current?.clientHeight;
 
   const [,] = useDebounce(
     () => {
@@ -447,12 +457,13 @@ const Box = (props: {
           props.rowId,
           props.itemIndex,
           textContent,
-          "text"
+          "text",
+          editorHeight
         );
       }
     },
-    1000,
-    [textContent]
+    300,
+    [textContent, editorHeight]
   );
 
   React.useEffect(() => {
@@ -504,8 +515,6 @@ const Box = (props: {
     setIsResizing(true);
   };
 
-  const textResizableRef = React.useRef<HTMLDivElement>(null);
-
   const content = React.useMemo(() => {
     if (displayMode === "text") {
       return (
@@ -516,7 +525,6 @@ const Box = (props: {
           size={{ width: width, height: `${props.height}px` }}
           maxWidth={!viewOnlyMode ? containerWidth : undefined}
           minWidth={78}
-          minHeight={textResizableRef.current?.clientHeight}
           enable={{
             right: !viewOnlyMode,
             bottom: !viewOnlyMode,

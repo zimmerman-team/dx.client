@@ -32,38 +32,33 @@ export default function ContactModule() {
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
   const [message, setMessage] = React.useState("");
 
-  const [contactFormDetails, setContactFormDetails] = React.useState([
-    { name: "email", value: "" },
-    { name: "firstname", value: "" },
-    { name: "lastname", value: "" },
-    { name: "company", value: "" },
-    { name: "message", value: "" },
-  ]);
+  const [contactFormDetails, setContactFormDetails] = React.useState({
+    email: "",
+    firstName: "",
+    lastName: "",
+    company: "",
+    message: "",
+  });
 
   const resetForm = () => {
-    setContactFormDetails([
-      { name: "email", value: "" },
-      { name: "firstname", value: "" },
-      { name: "lastname", value: "" },
-      { name: "company", value: "" },
-      { name: "message", value: "" },
-    ]);
+    setContactFormDetails({
+      email: "",
+      firstName: "",
+      lastName: "",
+      company: "",
+      message: "",
+    });
   };
-  const [contactFormFailed, setContactFormFailed] = React.useState(false);
+  const [_contactFormFailed, setContactFormFailed] = React.useState(false);
 
   const handleContactFormChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const { name, value } = event.target;
-    setContactFormDetails((prevState) => {
-      const newState = prevState.map((item) => {
-        if (item.name === name) {
-          return { ...item, value };
-        }
-        return item;
-      });
-      return newState;
-    });
+    setContactFormDetails((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
   };
 
   const handleContactFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -71,12 +66,8 @@ export default function ContactModule() {
 
     axios
       .post(
-        `https://api.hsforms.com/submissions/v3/integration/submit/${process.env.REACT_APP_HUBSPOT_PORTAL_ID}/${process.env.REACT_APP_HUBSPOT_CONTACT_FORM_ID}`,
-        {
-          portalId: process.env.REACT_APP_HUBSPOT_PORTAL_ID,
-          formGuid: process.env.REACT_APP_HUBSPOT_CONTACT_FORM_ID,
-          fields: contactFormDetails,
-        },
+        `${process.env.REACT_APP_API}/users/send-contact-form-to-intercom`,
+        contactFormDetails,
         {
           headers: {
             "Content-Type": "application/json",
@@ -85,8 +76,11 @@ export default function ContactModule() {
       )
       .then((response: AxiosResponse) => {
         if (response.status === 200) {
+          if (response.data.error) {
+            return setContactFormFailed(true);
+          }
           setOpenSnackbar(true);
-          setMessage(response.data.inlineMessage);
+          setMessage(response.data.message);
           resetForm();
         } else {
           setContactFormFailed(true);
@@ -175,15 +169,15 @@ export default function ContactModule() {
               name="email"
               type="email"
               onChange={handleContactFormChange}
-              value={contactFormDetails[0].value}
+              value={contactFormDetails.email}
             />
             <TextField
               id="standard-basic"
               label="First Name"
               variant="standard"
               fullWidth
-              name="firstname"
-              value={contactFormDetails[1].value}
+              name="firstName"
+              value={contactFormDetails.firstName}
               onChange={handleContactFormChange}
             />
             <TextField
@@ -191,8 +185,8 @@ export default function ContactModule() {
               label="Last Name"
               variant="standard"
               fullWidth
-              name="lastname"
-              value={contactFormDetails[2].value}
+              name="lastName"
+              value={contactFormDetails.lastName}
               onChange={handleContactFormChange}
             />
             <TextField
@@ -201,7 +195,7 @@ export default function ContactModule() {
               variant="standard"
               fullWidth
               name="company"
-              value={contactFormDetails[3].value}
+              value={contactFormDetails.company}
               onChange={handleContactFormChange}
             />
             <TextField
@@ -213,7 +207,7 @@ export default function ContactModule() {
               name="message"
               multiline
               minRows={5}
-              value={contactFormDetails[4].value}
+              value={contactFormDetails.message}
               onChange={handleContactFormChange}
             />
             <Box height={60} />
