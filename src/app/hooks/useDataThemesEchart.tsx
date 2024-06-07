@@ -73,7 +73,7 @@ export function useDataThemesEchart() {
       marginBottom,
       marginLeft,
       realTimeSort,
-      color,
+      barColor,
       splitLineY,
       barRadius,
       barWidth,
@@ -85,6 +85,7 @@ export function useDataThemesEchart() {
       showTooltip,
       isMonetaryValue,
       label,
+      dataZoom,
     } = visualOptions;
 
     const sortedData = sortBy(data, (d) => d.bars);
@@ -126,7 +127,23 @@ export function useDataThemesEchart() {
           show: splitLineY ?? true,
         },
         name: mapping?.size?.value?.[0] ?? "",
+        nameTextStyle: {
+          align: "left",
+        },
       },
+      dataZoom: dataZoom
+        ? [
+            {
+              type: "inside",
+              start: 0,
+              end: 20,
+            },
+            {
+              start: 0,
+              end: 20,
+            },
+          ]
+        : null,
       // xAxis: orientation === "horizontal" ? { type: "value" } : { data: bars },
       // yAxis: orientation === "vertical" ? { type: "value" } : { data: bars },
       // backgroundColor: background,
@@ -139,7 +156,7 @@ export function useDataThemesEchart() {
           data: sizes,
           realtimeSort: realTimeSort ?? true,
           itemStyle: {
-            color: color,
+            color: barColor,
             borderRadius: barRadius,
           },
           emphasis: {
@@ -354,6 +371,7 @@ export function useDataThemesEchart() {
       marginLeft,
       // chart options
       showLegend,
+      dataZoom,
       // Tooltip
       showTooltip,
       isMonetaryValue,
@@ -380,7 +398,23 @@ export function useDataThemesEchart() {
         zlevel: -1,
         z: -1,
         name: mapping?.y?.value?.[0] ?? "",
+        nameTextStyle: {
+          align: "left",
+        },
       },
+      dataZoom: dataZoom
+        ? [
+            {
+              type: "inside",
+              start: 0,
+              end: 20,
+            },
+            {
+              start: 0,
+              end: 20,
+            },
+          ]
+        : null,
       legend: {
         show: showLegend,
         data: filter(
@@ -426,9 +460,10 @@ export function useDataThemesEchart() {
       // Tooltip
       showTooltip,
       isMonetaryValue,
-      dataZoom,
       // Palette
       palette,
+      // chart options
+      dataZoom,
     } = visualOptions;
 
     const convertedData = sortBy(data, (d) => d.x).map((d: any) => [
@@ -466,6 +501,9 @@ export function useDataThemesEchart() {
         type: "value",
         boundaryGap: [0, "100%"],
         name: mapping?.y?.value?.[0] ?? "",
+        nameTextStyle: {
+          align: "left",
+        },
       },
       dataZoom: dataZoom
         ? [
@@ -504,6 +542,7 @@ export function useDataThemesEchart() {
       marginLeft,
       // chart options
       showLegend,
+      dataZoom,
       // Tooltip
       showTooltip,
       isMonetaryValue,
@@ -535,7 +574,23 @@ export function useDataThemesEchart() {
         zlevel: -1,
         z: -1,
         name: mapping?.y?.value?.[0] ?? "",
+        nameTextStyle: {
+          align: "left",
+        },
       },
+      dataZoom: dataZoom
+        ? [
+            {
+              type: "inside",
+              start: 0,
+              end: 20,
+            },
+            {
+              start: 0,
+              end: 20,
+            },
+          ]
+        : null,
       legend: {
         show: showLegend,
         data: filter(
@@ -589,6 +644,8 @@ export function useDataThemesEchart() {
       labelFontSize,
       // Palette
       palette,
+      // chart
+      dataZoom,
     } = visualOptions;
     const groups = Object.keys(data);
 
@@ -630,7 +687,23 @@ export function useDataThemesEchart() {
         },
         scale: true,
         name: mapping?.y?.value?.[0] ?? "",
+        nameTextStyle: {
+          align: "left",
+        },
       },
+      dataZoom: dataZoom
+        ? [
+            {
+              type: "inside",
+              start: 0,
+              end: 20,
+            },
+            {
+              start: 0,
+              end: 20,
+            },
+          ]
+        : null,
       tooltip: {
         trigger: showTooltip ? "item" : "none",
         confine: true,
@@ -690,6 +763,8 @@ export function useDataThemesEchart() {
       symbolSize,
       // Palette
       palette,
+      // chart
+      dataZoom,
     } = visualOptions;
 
     const option = {
@@ -711,7 +786,23 @@ export function useDataThemesEchart() {
       ],
       yAxis: {
         name: mapping?.y?.value?.[0] ?? "",
+        nameTextStyle: {
+          align: "left",
+        },
       },
+      dataZoom: dataZoom
+        ? [
+            {
+              type: "inside",
+              start: 0,
+              end: 20,
+            },
+            {
+              start: 0,
+              end: 20,
+            },
+          ]
+        : null,
       tooltip: {
         trigger: showTooltip ? "item" : "none",
         confine: true,
