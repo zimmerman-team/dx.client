@@ -3,7 +3,11 @@ import { css } from "styled-components/macro";
 export const homeFootercss = css`
   /* width: 100vw; */
   background: #fff;
-  /* padding-top: 27px; */
+  padding-top: 27px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
 
   ul {
     padding: 0;

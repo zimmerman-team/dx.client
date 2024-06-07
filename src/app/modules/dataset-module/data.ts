@@ -6,6 +6,8 @@ export interface DatasetListItemAPIModel {
   category: string;
   createdDate: Date;
   owner: string;
+  source: string;
+  sourceUrl: string;
 }
 export const tHeadData = [
   {

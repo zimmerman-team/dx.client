@@ -60,4 +60,4 @@ export const emptyReport: ReportModel = {
 };
 
 export const itemSpacing = "30px";
-export const containerGap = "60px";
+export const containerGap = "16px";

@@ -9,7 +9,7 @@ import NewsletterForm from "app/modules/common/newsletterForm";
 import { FieldErrors } from "react-hook-form";
 import moment from "moment";
 
-export default function HomeFooter({ small }: { small?: boolean }) {
+export default function HomeFooter() {
   const [isSubscribed, setIsSubscribed] = React.useState(false);
   const [isSubscriptionFailed, setIsSubscriptionFailed] = React.useState(false);
   const [formError, setFormError] = React.useState<
@@ -18,9 +18,14 @@ export default function HomeFooter({ small }: { small?: boolean }) {
     }>
   >({});
   return (
-    <div css={homeFootercss}>
-      <Container maxWidth="lg">
-        {small ? null : (
+    <>
+      <div
+        css={`
+          height: 422px;
+        `}
+      />
+      <div css={homeFootercss}>
+        <Container maxWidth="lg">
           <Grid
             container
             alignContent="space-between"
@@ -64,7 +69,7 @@ export default function HomeFooter({ small }: { small?: boolean }) {
                   <Link to="/why-dataXplorer"> Why DataXplorer?</Link>{" "}
                 </li>
                 <li>
-                  <Link to="/">Explore</Link>{" "}
+                  <Link to="/explore">Explore</Link>{" "}
                 </li>
                 <li>
                   <Link to="/about">About</Link>
@@ -207,60 +212,61 @@ export default function HomeFooter({ small }: { small?: boolean }) {
               </p>
             </Grid>
           </Grid>
-        )}
-        <div
-          css={`
-            display: flex;
-            gap: 38px;
-            align-items: center;
-            border-top: ${small ? "none" : "1px solid #d9d9d9"};
-            padding-top: 4px;
-            padding-bottom: 20px;
-            font-size: 12px;
-
-            margin-top: ${small ? "0px" : "40px"};
-            a {
-              text-decoration: none;
-              color: #000;
-            }
-          `}
-        >
-          <p
+          <div
             css={`
               display: flex;
+              gap: 38px;
               align-items: center;
-              gap: 8px;
-              margin: 0;
-              padding: 0;
+              border-top: 1px solid #d9d9d9;
+              padding-top: 4px;
+              padding-bottom: 20px;
+              font-size: 12px;
+
+              margin-top: 40px;
+              a {
+                text-decoration: none;
+                color: #000;
+              }
             `}
           >
-            <CopyIcon />
-            {moment(new Date()).format("YYYY")} DataXplorer All Rights Reserved
-          </p>
-          <p>
-            {" "}
-            <a
-              href="https://drive.google.com/file/d/1andhlQEoaEq5qDxMbtnApXiZborsg-bG/view"
-              className="privacy-link"
-              target="_blank"
-              rel="noreferrer"
+            <p
+              css={`
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                margin: 0;
+                padding: 0;
+              `}
             >
-              Privacy
-            </a>{" "}
-          </p>
-          <p>
-            {" "}
-            <a
-              href="https://drive.google.com/file/d/1wgY5HYdE5-redIOF85E5fZZJT_YueOWP/view?usp=sharing"
-              className="privacy-link"
-              target="_blank"
-              rel="noreferrer"
-            >
-              Terms and conditions
-            </a>{" "}
-          </p>
-        </div>
-      </Container>
-    </div>
+              <CopyIcon />
+              {moment(new Date()).format("YYYY")} DataXplorer All Rights
+              Reserved
+            </p>
+            <p>
+              {" "}
+              <a
+                href="https://drive.google.com/file/d/1andhlQEoaEq5qDxMbtnApXiZborsg-bG/view"
+                className="privacy-link"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Privacy
+              </a>{" "}
+            </p>
+            <p>
+              {" "}
+              <a
+                href="https://drive.google.com/file/d/1wgY5HYdE5-redIOF85E5fZZJT_YueOWP/view?usp=sharing"
+                className="privacy-link"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Terms and conditions
+              </a>{" "}
+            </p>
+          </div>
+        </Container>
+      </div>
+    </>
   );
 }

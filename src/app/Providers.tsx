@@ -28,7 +28,6 @@ function Providers(props: ProviderProps) {
                 <Router>
                   <div
                     css={`
-                      position: relative;
                       min-height: calc(100vh - 60px);
                     `}
                   >

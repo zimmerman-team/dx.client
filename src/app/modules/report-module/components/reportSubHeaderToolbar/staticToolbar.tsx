@@ -14,6 +14,7 @@ import { TextAlignmentPlugin } from "@draft-js-plugins/text-alignment";
 import { UndoRedoButtonProps } from "@draft-js-plugins/undo";
 import BgColorModal from "app/modules/common/RichEditor/BGColorModal";
 import ColorModal from "app/modules/common/RichEditor/ColorModal";
+import FontSizeController from "app/modules/common/RichEditor/FontSizeController";
 import {
   StrikeThroughButton,
   HiglightPicker,
@@ -112,6 +113,9 @@ export default function StaticToolbar(props: { plugins: ToolbarPluginsType }) {
                     background: #b4b4b4;
                   `}
                 />
+                <div>
+                  <FontSizeController {...externalProps} />
+                </div>
                 <HeaderOneButton {...externalProps} />
                 <HeaderTwoButton {...externalProps} />
                 <BlockquoteButton {...externalProps} />

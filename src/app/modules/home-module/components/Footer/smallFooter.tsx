@@ -5,63 +5,75 @@ import { Container } from "@material-ui/core";
 
 function SmallFooter() {
   return (
-    <div
-      css={`
-        background: white;
-      `}
-    >
-      <Container maxWidth="lg">
-        <div
-          css={`
-            display: flex;
-            gap: 38px;
-            align-items: center;
-            padding-top: 25px;
-            padding-bottom: 28px;
-            font-size: 12px;
-            a {
-              text-decoration: none;
-              color: #000;
-            }
-            p {
-              margin: 0;
-              padding: 0;
-            }
-          `}
-        >
-          <p
+    <>
+      <div
+        css={`
+          height: 77px;
+        `}
+      />
+      <div
+        css={`
+          background: white;
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+        `}
+      >
+        <Container maxWidth="lg">
+          <div
             css={`
               display: flex;
+              gap: 38px;
               align-items: center;
-              gap: 8px;
+              padding-top: 25px;
+              padding-bottom: 28px;
+              font-size: 12px;
+              a {
+                text-decoration: none;
+                color: #000;
+              }
+              p {
+                margin: 0;
+                padding: 0;
+              }
             `}
           >
-            <CopyIcon />
-            {moment(new Date()).format("YYYY")} DataXplorer All Rights Reserved
-          </p>
-          <p>
-            <a
-              href="https://drive.google.com/file/d/1andhlQEoaEq5qDxMbtnApXiZborsg-bG/view"
-              className="privacy-link"
-              target="_blank"
-              rel="noreferrer"
+            <p
+              css={`
+                display: flex;
+                align-items: center;
+                gap: 8px;
+              `}
             >
-              Privacy
-            </a>
-          </p>
-          <p>
-            <a
-              href="https://drive.google.com/file/d/1wgY5HYdE5-redIOF85E5fZZJT_YueOWP/view?usp=sharing"
-              className="privacy-link"
-              target="_blank"
-              rel="noreferrer"
-            >
-              Terms and conditions
-            </a>
-          </p>
-        </div>
-      </Container>
-    </div>
+              <CopyIcon />
+              {moment(new Date()).format("YYYY")} DataXplorer All Rights
+              Reserved
+            </p>
+            <p>
+              <a
+                href="https://drive.google.com/file/d/1andhlQEoaEq5qDxMbtnApXiZborsg-bG/view"
+                className="privacy-link"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Privacy
+              </a>
+            </p>
+            <p>
+              <a
+                href="https://drive.google.com/file/d/1wgY5HYdE5-redIOF85E5fZZJT_YueOWP/view?usp=sharing"
+                className="privacy-link"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Terms and conditions
+              </a>
+            </p>
+          </div>
+        </Container>
+      </div>
+    </>
   );
 }
 

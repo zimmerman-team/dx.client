@@ -218,6 +218,7 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
               margin-bottom: 0px;
               span {
                 color: #359c96;
+                font-family: "GothamNarrow-Bold", sans-serif;
               }
             `}
           >

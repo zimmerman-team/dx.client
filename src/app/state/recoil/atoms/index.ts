@@ -76,9 +76,15 @@ export const isChartDraggingAtom = atom<"chart" | "bigNumber" | null>({
   default: null,
 });
 
-export const isDividerOrRowFrameDraggingAtom = atom<boolean>({
+export const isDividerOrRowFrameDraggingAtom = atom<{
+  state: boolean;
+  rowId: string | null;
+}>({
   key: "isDividerOrRowFrameDraggingAtom",
-  default: false,
+  default: {
+    state: false,
+    rowId: null,
+  },
 });
 export const isChartAIAgentActive = atom<boolean>({
   key: "isChartAIAgentActiveAtom",

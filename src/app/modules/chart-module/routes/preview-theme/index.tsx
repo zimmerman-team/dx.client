@@ -3,7 +3,7 @@ import React from "react";
 import get from "lodash/get";
 import isEmpty from "lodash/isEmpty";
 import useTitle from "react-use/lib/useTitle";
-import { useStoreState } from "app/state/store/hooks";
+import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import { useHistory, useParams } from "react-router-dom";
 /* project */
 import Skeleton from "@material-ui/lab/Skeleton";
@@ -14,9 +14,12 @@ import WarningDialog from "app/modules/chart-module/components/dialog/warningDia
 import { ReactComponent as AIIcon } from "app/modules/chart-module/assets/ai-icon.svg";
 import GeomapLegend from "app/modules/chart-module/components/geomap-legend";
 import ErrorComponent from "app/modules/chart-module/components/dialog/errrorComponent";
+import { ChartAPIModel } from "app/modules/chart-module/data";
+import { DatasetListItemAPIModel } from "app/modules/dataset-module/data";
 
 export function ChartBuilderPreviewTheme(props: ChartBuilderPreviewThemeProps) {
   useTitle("DX DataXplorer - Preview Chart");
+  const token = useStoreState((state) => state.AuthToken.value);
 
   const domRef = React.useRef<HTMLDivElement>(null);
 
@@ -32,6 +35,27 @@ export function ChartBuilderPreviewTheme(props: ChartBuilderPreviewThemeProps) {
     (state) => state.charts.chartType.value
   );
 
+  const loadDataset = useStoreActions(
+    (actions) => actions.dataThemes.DatasetGet.fetch
+  );
+  const datasetDetails = useStoreState(
+    (state) =>
+      (state.dataThemes.DatasetGet.crudData ?? {}) as DatasetListItemAPIModel
+  );
+  React.useEffect(() => {
+    if (token) {
+      loadDataset({
+        token,
+        getId: dataset as string,
+      });
+    } else {
+      loadDataset({
+        token,
+        getId: dataset as string,
+        nonAuthCall: !token,
+      });
+    }
+  }, [token, dataset]);
   React.useEffect(() => {
     //if dataset is empty and not loading, redirect to data page
     //doing this for only new chart because existing chart will have data (gotten from page id)
@@ -243,7 +267,33 @@ export function ChartBuilderPreviewTheme(props: ChartBuilderPreviewThemeProps) {
                 >
                   <AIIcon />
                 </div>
+                <p
+                  css={`
+                    color: #70777e;
+                    font-family: "GothamNarrow-Bold", sans-serif;
+                    font-size: 12px;
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                    a {
+                      font-family: "GothamNarrow-Bold", sans-serif;
 
+                      color: #70777e;
+                      text-decoration: none;
+                      border-bottom: 1px solid #70777e;
+                    }
+                  `}
+                >
+                  Source:{" "}
+                  <a
+                    href={datasetDetails.sourceUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {datasetDetails.source} - Data file:{" "}
+                    {datasetDetails.sourceUrl}
+                  </a>
+                </p>
                 {selectedChartType === "echartsGeomap" &&
                 props.visualOptions?.showLegend ? (
                   <div
