@@ -337,7 +337,7 @@ export default function ChartModule() {
       if (page !== "new" && loadedChart?.name.length > 0) {
         setChartName(loadedChart.name);
       }
-      loadDataset(`chart/sample-data/${loadedChart.datasetId}`);
+      loadDataset(loadedChart.datasetId!);
       setSelectedAIChart(loadedChart.isAIAssisted);
       setIsLoadedChartMappingValid(loadedChart.isMappingValid);
       setChartType(loadedChart.vizType);

@@ -79,7 +79,7 @@ function ChartModuleDataView(
   const handleItemClick = (id: string) => {
     setDataset(id);
     props.setChartFromAPI(null);
-    props.loadDataset(`chart/sample-data/${id}`).then(() => {
+    props.loadDataset(id).then(() => {
       history.push(`/chart/${page}/preview-data`);
     });
   };

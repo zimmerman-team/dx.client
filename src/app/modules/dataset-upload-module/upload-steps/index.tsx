@@ -150,7 +150,7 @@ function DatasetUploadSteps(props: Props) {
       .then((response) => {
         //load dataset and datasets on upload success
         //we do this to load data to populate the table
-        loadDataset(`chart/sample-data/${response.data.id}`);
+        loadDataset(response.data.id);
         //we do this to update the dataset list with the new dataset
         loadDatasets({ token, storeInCrudData: true });
         //set active step to finished

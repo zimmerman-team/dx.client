@@ -60,19 +60,18 @@ export default function DatasetDetail() {
   });
 
   React.useEffect(() => {
+    loadSampleDataset(page);
     if (token) {
       loadDataset({
         token,
         getId: page,
       });
-      loadSampleDataset(`chart/sample-data/${page}`);
     } else {
       loadDataset({
         token,
         getId: page,
         nonAuthCall: !token,
       });
-      loadSampleDataset(`chart/sample-data/public/${page}`);
     }
   }, [token, page]);
 
