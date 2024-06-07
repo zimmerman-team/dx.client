@@ -185,7 +185,7 @@ export function ReportRightPanelCreateView(props: Readonly<Props>) {
   const [currentView, setCurrentView] = useRecoilState(
     reportRightPanelViewAtom
   );
-  const [chartFromReport, setChartFromReport] =
+  const [_chartFromReport, setChartFromReport] =
     useRecoilState(chartFromReportAtom);
   const whiteBackgroundOnly = "background-color: #fff;";
   const whiteBackgroundRoundedBottomRight =
