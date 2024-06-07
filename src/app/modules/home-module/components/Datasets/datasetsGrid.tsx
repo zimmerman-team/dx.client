@@ -28,7 +28,6 @@ interface Props {
   onItemClick?: (v: string) => void;
   md?: GridSize;
   lg?: GridSize;
-  fromHome?: boolean;
 }
 
 export default function DatasetsGrid(props: Readonly<Props>) {
@@ -136,8 +135,7 @@ export default function DatasetsGrid(props: Readonly<Props>) {
     setEnableButton(false);
   };
 
-  const handleDuplicate = (index: number) => {
-    const id = loadedDatasets[index].id;
+  const handleDuplicate = (id: string) => {
     if (!id) {
       return;
     }
@@ -210,7 +208,7 @@ export default function DatasetsGrid(props: Readonly<Props>) {
     <>
       {!props.tableView && (
         <Grid container spacing={!props.inChartBuilder ? 2 : 1}>
-          {props.addCard && isAuthenticated ? <DatasetAddnewCard /> : null}
+          {props.addCard ? <DatasetAddnewCard /> : null}
           {loadedDatasets?.map((data, index) => (
             <Grid
               item
@@ -257,13 +255,12 @@ export default function DatasetsGrid(props: Readonly<Props>) {
                 }}
                 descr={data.description}
                 handleDuplicate={() => {
-                  handleDuplicate(index);
+                  handleDuplicate(data.id);
                 }}
                 showMenu={!props.inChartBuilder}
                 id={data.id}
                 owner={data.owner}
                 inChartBuilder={props.inChartBuilder as boolean}
-                fromHome={props.fromHome}
               />
 
               {!props.inChartBuilder && <Box height={16} />}
@@ -274,7 +271,6 @@ export default function DatasetsGrid(props: Readonly<Props>) {
 
       {props.tableView && (
         <HomepageTable
-          fromHome={props.fromHome}
           onItemClick={props.onItemClick}
           inChartBuilder={props.inChartBuilder}
           data={loadedDatasets?.map((data) => ({
@@ -282,16 +278,17 @@ export default function DatasetsGrid(props: Readonly<Props>) {
             name: data.name,
             description: data.description,
             createdDate: data.createdDate,
+            type: "dataset",
           }))}
         />
       )}
-      <Box height={100} />
+      <Box height={80} />
 
       <div
         ref={observerTarget}
-        css={`
-          height: 10px;
-        `}
+        // css={`
+        //   height: 10px;
+        // `}
       />
       {loading && <CircleLoader />}
       <DeleteDatasetDialog

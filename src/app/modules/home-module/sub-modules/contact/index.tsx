@@ -250,7 +250,7 @@ export default function ContactModule() {
           css={`
             width: 40%;
             margin: auto;
-            margin-top: 213px;
+            margin-top: 97px;
             text-align: center;
             p {
               font-size: 20px;
@@ -300,7 +300,7 @@ export default function ContactModule() {
           </p>
         </div>
       </Container>
-      <div css="width: 100%;height: 232px" />
+      <div css="width: 100%;height: 102px" />
       <HomeFooter />
     </>
   );

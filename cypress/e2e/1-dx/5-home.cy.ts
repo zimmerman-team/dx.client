@@ -14,7 +14,7 @@ describe("Home page tests", () => {
     cy.location("pathname").should("include", "/about");
     cy.get('[data-cy="empower-block-explore-reports-link"]').click();
     cy.wait(2000);
-    cy.location("pathname").should("include", "/explore");
+    cy.location("pathname").should("include", "/");
     cy.get('[data-cy="nav-about"]').click();
     cy.wait(2000);
 

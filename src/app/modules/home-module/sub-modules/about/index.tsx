@@ -110,7 +110,7 @@ export default function AboutModule() {
           </div>
         </Container>
       </div>
-      <div css="width: 100%;height: 132px" />
+      <div css="width: 100%;height: 91px" />
       <HomeFooter />
     </>
   );

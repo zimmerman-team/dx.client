@@ -242,9 +242,9 @@ export function MainRoutes() {
           <RouteWithAppBar exact path="/why-dataXplorer">
             <WhyDXModule />
           </RouteWithAppBar>
-          <RouteWithAppBar exact path="/explore">
+          {/* <RouteWithAppBar exact path="/explore">
             <ExploreAssetsModule />
-          </RouteWithAppBar>
+          </RouteWithAppBar> */}
           <RouteWithAppBar exact path="/report/:page/:view?">
             <ReportModule />
           </RouteWithAppBar>

@@ -198,7 +198,7 @@ export default function ReportsGrid(props: Props) {
     <>
       {!props.tableView && (
         <Grid container spacing={2}>
-          {props.addCard && isAuthenticated ? <ReportAddnewCard /> : null}
+          {props.addCard ? <ReportAddnewCard /> : null}
           {loadedReports.map((data, index) => (
             <Grid item key={data.id} xs={12} sm={6} md={4} lg={3}>
               <ReformedGridItem
@@ -227,10 +227,11 @@ export default function ReportsGrid(props: Props) {
             name: data.name,
             description: data.title,
             createdDate: data.createdDate,
+            type: "report",
           }))}
         />
       )}
-      <Box height={100} />
+      <Box height={80} />
       <div ref={observerTarget} />
       {loading && <CircleLoader />}
       <DeleteReportDialog

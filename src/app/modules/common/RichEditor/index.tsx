@@ -13,7 +13,7 @@ import createUndoPlugin from "@draft-js-plugins/undo";
 import createTextAlignmentPlugin from "@draft-js-plugins/text-alignment";
 import { RedoIcon } from "app/assets/icons/Redo";
 import { UndoIcon } from "app/assets/icons/Undo";
-import { EmojiButton } from "./buttons";
+import { EmojiButton } from "app/modules/common/RichEditor/buttons";
 
 /* stylesheets */
 import "@draft-js-plugins/anchor/lib/plugin.css";
@@ -24,6 +24,7 @@ import alignmentStyles from "./alignmentStyles.module.css";
 import "@draft-js-plugins/inline-toolbar/lib/plugin.css";
 import "@draft-js-plugins/static-toolbar/lib/plugin.css";
 import "@draft-js-plugins/emoji/lib/plugin.css";
+import fontSizeStyleMap from "app/modules/common/RichEditor/FontSizeController/styleMap";
 
 export const RichEditor = (props: {
   editMode: boolean;
@@ -130,9 +131,9 @@ export const RichEditor = (props: {
 
         .public-DraftEditorPlaceholder-inner {
           position: absolute;
-          color: #dfe3e5;
-          font-weight: bold;
-          font-size: 16px;
+          color: #adb5bd;
+          font-size: 14px;
+          font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
         }
       `}
       data-cy="rich-text-editor-container"
@@ -142,10 +143,10 @@ export const RichEditor = (props: {
         customStyleMap={{
           ...bgPicker.bgColorStyleMap,
           ...picker.colorStyleMap,
+          ...fontSizeStyleMap,
           BOLD: {
             fontFamily: "GothamNarrow-Bold",
             fontWeight: "bold",
-            fontSize: "14px",
             lineHeight: "normal",
           },
         }}

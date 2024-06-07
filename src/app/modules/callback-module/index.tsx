@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import { PageLoader } from "app/modules/common/page-loader";
 import axios from "axios";
-import { useTitle } from "react-use";
+import { useCookie, useTitle } from "react-use";
 
 function AuthCallbackModule() {
   useTitle("DX DataXplorer - Auth Callback");
@@ -13,20 +13,7 @@ function AuthCallbackModule() {
   const { error, isAuthenticated, getAccessTokenSilently } = useAuth0();
   const [loading, setLoading] = React.useState(true);
 
-  const duplicateAssets = async () => {
-    getAccessTokenSilently().then(async (newToken) => {
-      await axios.post(
-        `${process.env.REACT_APP_API}/users/duplicate-assets`,
-        {},
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${newToken}`,
-          },
-        }
-      );
-    });
-  };
+  const [googleDriveToken, setGoogleDriveToken] = useCookie("googleDriveToken");
 
   const duplicateReport = async (id: string) => {
     getAccessTokenSilently().then(async (newToken) => {
@@ -48,6 +35,37 @@ function AuthCallbackModule() {
     });
   };
 
+  const duplicateAssets = async () => {
+    getAccessTokenSilently().then(async (newToken) => {
+      await axios.post(
+        `${process.env.REACT_APP_API}/users/duplicate-assets`,
+        {},
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${newToken}`,
+          },
+        }
+      );
+      const response = await axios.get(
+        `${process.env.REACT_APP_API}/users/google-drive/user-token`,
+        {
+          headers: {
+            Authorization: `Bearer ${newToken}`,
+          },
+        }
+      );
+      if (response.data.access_token) {
+        setGoogleDriveToken(response.data.access_token, {
+          expires: new Date(response.data.token_details.exp * 1000),
+          httpsOnly: true,
+          secure: true,
+          sameSite: "strict",
+        });
+      }
+    });
+  };
+
   React.useEffect(() => {
     if (isAuthenticated) {
       (async () => {
@@ -55,6 +73,7 @@ function AuthCallbackModule() {
         await duplicateAssets();
         setLoading(false);
       })();
+
       const reportId = localStorage.getItem("duplicateReportAfterSignIn");
       if (reportId) {
         (async () => {

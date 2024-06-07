@@ -1,10 +1,8 @@
 /** third party */
-import React from "react";
+import React, { useEffect } from "react";
 import axios from "axios";
 import Container from "@material-ui/core/Container";
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
-import { find, set } from "lodash";
-import { useRecoilState } from "recoil";
 /** project */
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import { useChartsRawData } from "app/hooks/useChartsRawData";
@@ -14,7 +12,6 @@ import MetaData from "app/modules/dataset-upload-module/upload-steps/metaData";
 import Processing from "app/modules/dataset-upload-module/upload-steps/processing";
 import FinishedFragment from "app/modules/dataset-upload-module/upload-steps/finishedFragment";
 import AddDatasetFragment from "app/modules/dataset-upload-module/upload-steps/addDatasetFragment";
-import { loadedDatasetsAtom } from "app/state/recoil/atoms";
 import ObjectId from "app/utils/ObjectId";
 import { useOnUploadProgress } from "app/hooks/useOnUploadProgress";
 import ExternalSearch, {
@@ -23,6 +20,10 @@ import ExternalSearch, {
 import Stepper from "app/modules/dataset-upload-module/component/stepper";
 import { Box } from "@material-ui/core";
 import { useTitle } from "react-use";
+import { DatasetListItemAPIModel } from "app/modules/dataset-module/data";
+import BreadCrumbs from "app/modules/home-module/components/Breadcrumbs";
+import UploadTabs from "../component/tabs";
+import SmallFooter from "app/modules/home-module/components/Footer/smallFooter";
 
 interface Props {
   datasetId: string;
@@ -49,8 +50,12 @@ function DatasetUploadSteps(props: Props) {
   );
   const [processed, setProcessed] = React.useState(false);
   const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
-  const [isExternalSearch, setIsExternalSearch] = React.useState(false);
-  const [fromExternalSearch, setFromExternalSearch] = React.useState(false);
+  const [searchValue, setSearchValue] = React.useState<string | undefined>("");
+  const [openSearch, setOpenSearch] = React.useState(false);
+  const [sources, setSources] = React.useState<string[]>([]);
+
+  const [activeTab, setActiveTab] = React.useState<"search" | "file">("search");
+  const [activeOption, setActiveOption] = React.useState<string | null>(null);
 
   const defaultProcessingError =
     "Data could not be processed, please try again or contact your administrator";
@@ -58,11 +63,30 @@ function DatasetUploadSteps(props: Props) {
   const loadDatasets = useStoreActions(
     (actions) => actions.dataThemes.DatasetGetList.fetch
   );
-  const datasets = useStoreState(
-    (state) => state.dataThemes.DatasetGetList.crudData as any[]
+  const loadDatasetDetails = useStoreActions(
+    (actions) => actions.dataThemes.DatasetGet.fetch
   );
-  const [_loadedDatasets, setLoadedDatasets] =
-    useRecoilState(loadedDatasetsAtom);
+  const datasetDetails = useStoreState(
+    (state) =>
+      (state.dataThemes.DatasetGet.crudData ?? {}) as DatasetListItemAPIModel
+  );
+
+  React.useEffect(() => {
+    if (activeStep === 3) {
+      if (token) {
+        loadDatasetDetails({
+          token,
+          getId: props.datasetId,
+        });
+      } else {
+        loadDatasetDetails({
+          token,
+          getId: props.datasetId,
+          nonAuthCall: !token,
+        });
+      }
+    }
+  }, [token, props.datasetId, activeStep]);
 
   const {
     loadedProgress,
@@ -71,13 +95,18 @@ function DatasetUploadSteps(props: Props) {
     setEstUploadTime,
     onUploadProgress,
   } = useOnUploadProgress();
-  const { loadDataset, sampleData, dataTotalCount, dataStats, dataTypes } =
-    useChartsRawData({
-      visualOptions: () => {},
-      setVisualOptions: () => {},
-      setChartFromAPI: () => {},
-      chartFromAPI: null,
-    });
+  const {
+    loadDataset: loadSampleDataset,
+    sampleData,
+    dataTotalCount,
+    dataStats,
+    dataTypes,
+  } = useChartsRawData({
+    visualOptions: () => {},
+    setVisualOptions: () => {},
+    setChartFromAPI: () => {},
+    chartFromAPI: null,
+  });
 
   React.useEffect(() => {
     let timer: any;
@@ -107,12 +136,6 @@ function DatasetUploadSteps(props: Props) {
     setActiveStep(newActiveStep);
   };
 
-  //get description from latest set of api loaded datasets
-  const description = find(
-    datasets,
-    (d: any) => d.id === props.datasetId
-  )?.description;
-
   const handleBack = () => {
     //handles stepper navigation
     if (activeStep > 0) {
@@ -121,11 +144,6 @@ function DatasetUploadSteps(props: Props) {
       setActiveStep(newActiveStep);
     }
   };
-
-  React.useEffect(() => {
-    //update loaded datasets with latest loaded dataset from api
-    setLoadedDatasets(datasets);
-  }, [datasets]);
 
   React.useEffect(() => {
     if (activeStep === 0) {
@@ -150,7 +168,7 @@ function DatasetUploadSteps(props: Props) {
       .then((response) => {
         //load dataset and datasets on upload success
         //we do this to load data to populate the table
-        loadDataset(response.data.id);
+        loadSampleDataset(response.data.id);
         //we do this to update the dataset list with the new dataset
         loadDatasets({ token, storeInCrudData: true });
         //set active step to finished
@@ -203,9 +221,6 @@ function DatasetUploadSteps(props: Props) {
     const id = ObjectId();
     //expose file id to datasetId state; to be used in dataset upload
     props.setDatasetId(id);
-    //set isExternalSearch to false
-    setIsExternalSearch(false);
-    setFromExternalSearch(true);
     //set active step to processing
     setActiveStep(1);
     axios
@@ -249,21 +264,67 @@ function DatasetUploadSteps(props: Props) {
 
   const tryAgain = () => {
     setActiveStep(0);
-    if (fromExternalSearch) {
-      setIsExternalSearch(true);
-    }
   };
+
+  useEffect(() => {
+    if (activeOption) {
+      setActiveOption(null);
+    }
+  }, [activeTab]);
 
   const currentStep = () => {
     switch (activeStep) {
       case 0:
         return (
-          <AddDatasetFragment
-            onFileSubmit={onFileSubmit}
-            disabled={false}
-            processingError={processingError}
-            setIsExternalSearch={setIsExternalSearch}
-          />
+          <>
+            <Box height={32} />
+            <BreadCrumbs
+              items={[
+                { title: "Library", path: "/" },
+                {
+                  title: (
+                    <span
+                      onClick={() => {
+                        if (activeOption) {
+                          setActiveOption(null);
+                        }
+                      }}
+                    >
+                      Connect Data
+                    </span>
+                  ),
+                  path: "#",
+                },
+                ...(activeOption ? [{ title: activeOption }] : []),
+              ]}
+            />
+            <Box height={24} />
+            <UploadTabs activeTab={activeTab} setActiveTab={setActiveTab} />
+            <Box height={24} />
+            {activeTab === "search" ? (
+              <ExternalSearch
+                setFormDetails={setFormDetails}
+                setActiveStep={setActiveStep}
+                setProcessingError={setProcessingError}
+                handleDownload={handleDownloadExternalDataset}
+                searchValue={searchValue}
+                setSearchValue={setSearchValue}
+                openSearch={openSearch}
+                setOpenSearch={setOpenSearch}
+                sources={sources}
+                setSources={setSources}
+              />
+            ) : (
+              <AddDatasetFragment
+                onFileSubmit={onFileSubmit}
+                disabled={false}
+                processingError={processingError}
+                setActiveOption={setActiveOption}
+                activeOption={activeOption}
+                setActiveStep={setActiveStep}
+              />
+            )}
+          </>
         );
       case 1:
         return (
@@ -296,8 +357,12 @@ function DatasetUploadSteps(props: Props) {
               stats={dataStats}
               datasetId={props.datasetId}
               dataTotalCount={dataTotalCount}
-              description={description}
+              description={datasetDetails?.description}
               dataTypes={dataTypes}
+              title={datasetDetails.name}
+              dataCategory={datasetDetails.category}
+              dataSource={datasetDetails.source}
+              dataSourceURL={datasetDetails.sourceUrl}
               canDatasetEditDelete={true} //if user has just uploaded the dataset, then they own it and can edit it.
             />
           </>
@@ -309,7 +374,9 @@ function DatasetUploadSteps(props: Props) {
             onFileSubmit={onFileSubmit}
             disabled={false}
             processingError={processingError}
-            setIsExternalSearch={setIsExternalSearch}
+            setActiveOption={setActiveOption}
+            activeOption={activeOption}
+            setActiveStep={setActiveStep}
           />
         );
     }
@@ -317,38 +384,32 @@ function DatasetUploadSteps(props: Props) {
 
   return (
     <>
-      <Container maxWidth="lg">
-        <div css={stepcss}>
-          {steps.map((tab, index) => (
-            <Stepper
-              activeStep={activeStep}
-              setActiveStep={setActiveStep}
-              index={index}
-              tab={tab}
-              tabs={steps}
-              key={tab}
-              disabled={index > 0 && !processed && activeStep !== index}
-            />
-          ))}
-        </div>
+      <div
+        css={`
+          min-height: calc(100vh - 73px);
+        `}
+      >
+        <Container maxWidth="lg">
+          <div css={stepcss}>
+            {steps.map((tab, index) => (
+              <Stepper
+                activeStep={activeStep}
+                setActiveStep={setActiveStep}
+                index={index}
+                tab={tab}
+                tabs={steps}
+                key={tab}
+                disabled={index > 0 && !processed && activeStep !== index}
+              />
+            ))}
+          </div>
 
-        {isExternalSearch ? (
-          <>
-            <Box height={32} />
-            <ExternalSearch
-              setFormDetails={setFormDetails}
-              setActiveStep={setActiveStep}
-              setProcessingError={setProcessingError}
-              handleDownload={handleDownloadExternalDataset}
-              setIsExternalSearch={setIsExternalSearch}
-            />
-          </>
-        ) : (
           <>
             <PageTopSpacer /> <div>{currentStep()}</div>
           </>
-        )}
-      </Container>
+        </Container>
+      </div>
+      {activeStep === 0 ? <SmallFooter /> : null}
     </>
   );
 }

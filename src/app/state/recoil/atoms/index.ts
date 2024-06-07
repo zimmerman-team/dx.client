@@ -59,9 +59,9 @@ export const untitledReportAtom = atom({
   default: false,
 });
 
-export const homeDisplayAtom = atom<"data" | "charts" | "reports">({
+export const homeDisplayAtom = atom<"all" | "data" | "charts" | "reports">({
   key: "homeDisplayAtom",
-  default: "reports",
+  default: "all",
 });
 
 export const reportRightPanelViewAtom = atom<
@@ -76,9 +76,15 @@ export const isChartDraggingAtom = atom<"chart" | "bigNumber" | null>({
   default: null,
 });
 
-export const isDividerOrRowFrameDraggingAtom = atom<boolean>({
+export const isDividerOrRowFrameDraggingAtom = atom<{
+  state: boolean;
+  rowId: string | null;
+}>({
   key: "isDividerOrRowFrameDraggingAtom",
-  default: false,
+  default: {
+    state: false,
+    rowId: null,
+  },
 });
 export const isChartAIAgentActive = atom<boolean>({
   key: "isChartAIAgentActiveAtom",

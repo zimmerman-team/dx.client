@@ -1,69 +1,59 @@
 /**third party */
-import React, { useCallback, useEffect } from "react";
-import { useDropzone } from "react-dropzone";
-import useDrivePicker from "react-google-drive-picker";
-import {
-  CallbackDoc,
-  PickerCallback,
-} from "react-google-drive-picker/dist/typeDefs";
-import axios from "axios";
+import React, { useCallback } from "react";
+
 /** project */
-import { formatBytes } from "app/utils/formatBytes";
-import { useStoreState } from "app/state/store/hooks";
+
 import { DropZone } from "app/modules/dataset-upload-module/component/dropzone/";
+import { Box } from "@material-ui/core";
+import LocalIcon from "../assets/upload-options-icons/local";
+import GoogleIcon from "../assets/upload-options-icons/google";
+import MicrosoftIcon from "../assets/upload-options-icons/microsoft";
+import ApiIcon from "../assets/upload-options-icons/api";
+import MSSQLIcon from "../assets/upload-options-icons/mssql.png";
+import MYSQLIcon from "../assets/upload-options-icons/mysql.png";
+import PostgresIcon from "../assets/upload-options-icons/postgres";
+import MongoDbIcon from "../assets/upload-options-icons/mongodb";
+import HubspotIcon from "../assets/upload-options-icons/hubspot";
+import UploadOption from "../component/uploadOption";
+import { useCookie } from "react-use";
+import useGoogleDrivePicker from "app/hooks/useGoogleDrivePicker";
+import { useOneDrivePicker } from "app/hooks/useOneDrivePicker";
 
 interface Props {
   disabled: boolean;
   onFileSubmit: (file: File) => void;
   processingError: string | null;
-  setIsExternalSearch: React.Dispatch<React.SetStateAction<boolean>>;
+  activeOption: string | null;
+  setActiveOption: React.Dispatch<React.SetStateAction<string | null>>;
+  setActiveStep: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export default function AddDatasetFragment(props: Props) {
-  const [openPicker] = useDrivePicker();
-  const token = useStoreState((state) => state.AuthToken.value);
+  const [googleDriveToken, setGoogleDriveToken, deleteGoogleDriveToken] =
+    useCookie("googleDriveToken");
 
-  const handleGoogleDriveFilePicker = async (
-    file: CallbackDoc,
-    accessToken: string
-  ) => {
-    try {
-      const response = await axios({
-        url: `https://www.googleapis.com/drive/v3/files/${file.id}${
-          file.type === "file" ? "?alt=media" : "/export?mimeType=text/csv"
-        }`,
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-        responseType: "blob", // important
-      });
+  const { getAccessTokenAndOpenPicker } = useGoogleDrivePicker({
+    onCancel: () => {
+      props.setActiveOption(null);
+    },
+    onFileSubmit: (file: File) => {
+      props.onFileSubmit(file);
+    },
+    googleDriveToken,
+    setGoogleDriveToken,
+  });
 
-      const b = response?.data;
-      const gfile = new File([b], file.name, { type: "text/csv" });
-
-      props.onFileSubmit(gfile);
-    } catch (e) {
-      console.log(e, "handleGoogleDriveFilePicker error");
-    }
-  };
-  useEffect(() => {
-    if (process.env.REACT_APP_CYPRESS_TEST === "true") {
-      window.handleGoogleDriveFilePicker = function (file: any, token: string) {
-        handleGoogleDriveFilePicker(file, token);
-      };
-    }
-  }, []);
-
-  const ACCEPTED_FILES = {
-    "text/csv": [".csv"],
-    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": [
-      ".xlsx",
-    ],
-    "application/xml": [".xml"],
-    "application/vnd.ms-excel": [".xls"],
-    "application/xhtml+xml": [".xhtml"],
-  };
+  const { launchPicker, clearToken, connected } = useOneDrivePicker({
+    onCancel: () => {
+      props.setActiveOption(null);
+    },
+    onFileSubmit: (file: File) => {
+      props.onFileSubmit(file);
+    },
+    onDownloadStart: () => {
+      props.setActiveStep(1);
+    },
+  });
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     if (acceptedFiles.length > 0) {
@@ -71,76 +61,207 @@ export default function AddDatasetFragment(props: Props) {
     }
   }, []);
 
-  const {
-    getRootProps,
-    getInputProps,
-    isDragActive,
-    acceptedFiles,
-    fileRejections,
-  } = useDropzone({ onDrop, accept: ACCEPTED_FILES });
-
-  const getAccessToken = () => {
-    return axios.get(
-      `${process.env.REACT_APP_API}/dataset/google-drive/user-token`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-  };
-
-  const getAccessTokenAndOpenPicker = async () => {
-    try {
-      const res = await getAccessToken();
-
-      //opens google drive picker
-      openPicker({
-        clientId: process.env.REACT_APP_GOOGLE_API_CLIENT_ID as string,
-        developerKey: process.env.REACT_APP_GOOGLE_API_DEV_KEY as string,
-        viewId: "SPREADSHEETS",
-        supportDrives: true,
-        token: res.data,
-        setSelectFolderEnabled: true,
-        callbackFunction: (d: PickerCallback) => {
-          handleGoogleDriveFilePicker(d.docs[0], res.data);
-        },
-      });
-    } catch (e) {
-      console.log(e, "error");
-    }
-  };
-
-  function handleOpenPicker(e: React.MouseEvent<HTMLButtonElement>) {
-    e.stopPropagation();
-    getAccessTokenAndOpenPicker();
-  }
-
-  const fileRejectionItems = fileRejections.map(({ file, errors }) => (
-    <li key={file.name}>
-      {file.name} - {formatBytes(file.size)}
-      <ul>
-        {errors.map((e) => (
-          <li key={e.code}>{e.message}</li>
-        ))}
-      </ul>
-    </li>
-  ));
+  const uploadOptions = [
+    {
+      name: "Local upload",
+      type: "Table Dataset",
+      formats: ["CSV", "XSLX", "JSON", "ODS", "SQLite"],
+      icon: <LocalIcon />,
+      onClick: () => {},
+    },
+    {
+      name: "Google Drive",
+      type: "Upload",
+      formats: [],
+      icon: <GoogleIcon />,
+      onClick: (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.stopPropagation();
+        getAccessTokenAndOpenPicker();
+      },
+      canConnect: true,
+      connected: !!googleDriveToken,
+      onLogout: () => {
+        deleteGoogleDriveToken();
+      },
+    },
+    {
+      name: "Microsoft Cloud",
+      type: "Upload",
+      formats: [],
+      icon: <MicrosoftIcon />,
+      onClick: (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.stopPropagation();
+        launchPicker();
+      },
+      canConnect: true,
+      connected: connected,
+      onLogout: async () => {
+        await clearToken();
+      },
+    },
+    {
+      name: "API Connection",
+      type: "URL, JSON or XML root",
+      formats: ["CSV", "XSLX", "JSON", "ODS", "SQLite"],
+      icon: <ApiIcon />,
+      onClick: () => {},
+    },
+    {
+      name: "MSSQL",
+      type: "DataBase Connection",
+      formats: ["Coming Soon"],
+      icon: <img width={30} height={33.462} src={MSSQLIcon} />,
+      onClick: () => {},
+    },
+    {
+      name: "MSSQL",
+      type: "DataBase Connection",
+      formats: ["Coming Soon"],
+      icon: <img width={30} height={30} src={MYSQLIcon} />,
+      onClick: () => {},
+    },
+    {
+      name: "PostgreSQL",
+      type: "DataBase Connection",
+      formats: ["Coming Soon"],
+      icon: <PostgresIcon />,
+      onClick: () => {},
+    },
+    {
+      name: "MongoDB",
+      type: "DataBase Connection",
+      formats: ["Coming Soon"],
+      icon: <MongoDbIcon />,
+      onClick: () => {},
+    },
+    {
+      name: "Hubspot",
+      type: "DataBase Connection",
+      formats: ["Coming Soon"],
+      icon: <HubspotIcon />,
+      onClick: () => {},
+    },
+  ];
 
   return (
     <>
-      <DropZone
-        disabled={props.disabled}
-        getRootProps={getRootProps}
-        getInputProps={getInputProps}
-        isDragActive={isDragActive}
-        fileRejections={fileRejections}
-        acceptedFiles={acceptedFiles}
-        handleOpenPicker={handleOpenPicker}
-        uploadError={!!props.processingError}
-        setIsExternalSearch={props.setIsExternalSearch}
-      />
-      {fileRejections.length > 0 && fileRejectionItems}
+      <div
+        css={`
+          h1 {
+            font-family: "Inter", sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: #231d2c;
+            margin: 0px;
+          }
+          p {
+            color: #231d2c;
+            font-family: "GothamNarrow-Book";
+            font-size: 14px;
+            font-weight: 325;
+            line-height: 20px;
+            letter-spacing: 0.5px;
+            margin: 0px;
+            padding: 0px;
+          }
+        `}
+      >
+        <h1>File Upload</h1>
+        <Box height={22} />
+        <p>
+          Upload your favourite data effortlessly in DataXplorer, and with just
+          a few clicks, import datasets without the hassle of downloading,{" "}
+          <br />
+          enabling you to visualize and analyse diverse data like never before.
+        </p>
+      </div>
+
+      <Box height={48} />
+
+      {props.activeOption === "Local upload" ? (
+        <>
+          <DropZone
+            disabled={props.disabled}
+            uploadError={!!props.processingError}
+            onDrop={onDrop}
+          />
+        </>
+      ) : (
+        <div>
+          <div
+            css={`
+              padding: 19px 23px;
+              font-size: 14px;
+              font-style: normal;
+              font-weight: 400;
+              line-height: normal;
+              font-family: "GothamNarrow-Bold", sans-serif;
+              background: #dadaf84d;
+              border-radius: 16px 16px 0px 0px;
+              width: 100%;
+            `}
+          >
+            Connect your data
+          </div>
+          <div
+            css={`
+              padding: 24px;
+            `}
+          >
+            <div
+              css={`
+                display: grid;
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                gap: 10px;
+              `}
+            >
+              {uploadOptions.slice(0, 3).map((option) => (
+                <UploadOption
+                  key={option.name}
+                  name={option.name}
+                  type={option.type}
+                  formats={option.formats}
+                  icon={option.icon}
+                  onClick={option.onClick}
+                  setActiveOption={props.setActiveOption}
+                  canConnect={option.canConnect}
+                  connected={option.connected}
+                  onLogout={option.onLogout}
+                />
+              ))}
+            </div>
+            <Box height={32} />
+            <div
+              css={`
+                border-bottom: 1px solid #e2eaee;
+                width: 100%;
+              `}
+            />
+            <Box height={32} />
+            <div
+              css={`
+                display: grid;
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                gap: 10px;
+                opacity: 0.5;
+              `}
+            >
+              {uploadOptions.slice(3).map((option) => (
+                <UploadOption
+                  key={option.name}
+                  name={option.name}
+                  type={option.type}
+                  formats={option.formats}
+                  icon={option.icon}
+                  onClick={option.onClick}
+                  disabled
+                  setActiveOption={props.setActiveOption}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }

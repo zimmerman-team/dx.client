@@ -867,9 +867,12 @@ function ElementItem(props: {
     if (
       (props.elementType === ReportElementsType.DIVIDER ||
         props.elementType === ReportElementsType.ROWFRAME) &&
-      isDragging !== isItemDragging
+      isDragging !== isItemDragging.state
     ) {
-      setIsItemDragging(isDragging);
+      setIsItemDragging({
+        state: isDragging,
+        rowId: null,
+      });
     }
   }, [isDragging]);
 

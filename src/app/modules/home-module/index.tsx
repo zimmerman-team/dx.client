@@ -7,21 +7,14 @@ import { useRecoilState, useResetRecoilState } from "recoil";
 import { Box, Grid, Container, IconButton, Popover } from "@material-ui/core";
 /* project */
 import { Tab } from "app/components/Styled/tabs";
-import { socialAuth } from "app/utils/socialAuth";
 import HomeFooter from "app/modules/home-module/components/Footer";
 import ChartsGrid from "app/modules/home-module/components/Charts/chartsGrid";
 import ReportsGrid from "app/modules/home-module/components/Reports/reportsGrid";
-import DatasetDetailImage from "app/modules/home-module/assets/dataset-detail.png";
 import DatasetsGrid from "app/modules/home-module/components/Datasets/datasetsGrid";
 import { ReactComponent as SortIcon } from "app/modules/home-module/assets/sort-fill.svg";
 import { ReactComponent as GridIcon } from "app/modules/home-module/assets/grid-fill.svg";
 import { ReactComponent as CloseIcon } from "app/modules/home-module/assets/close-icon.svg";
 import { ReactComponent as SearchIcon } from "app/modules/home-module/assets/search-fill.svg";
-import { ReactComponent as GoogleIcon } from "app/modules/onboarding-module/asset/google-img.svg";
-import { ReactComponent as LinkedInIcon } from "app/modules/onboarding-module/asset/linkedIn-img.svg";
-import { ReactComponent as TopRightEllipse } from "app/modules/home-module/assets/top-right-ellipse.svg";
-import { ReactComponent as BottomLeftEllipse } from "app/modules/home-module/assets/bottom-left-ellipse.svg";
-import { ReactComponent as BottomRightEllipse } from "app/modules/home-module/assets/bottom-right-ellipse.svg";
 import {
   homeDisplayAtom,
   persistedReportStateAtom,
@@ -29,10 +22,6 @@ import {
   unSavedReportPreviewModeAtom,
 } from "app/state/recoil/atoms";
 import {
-  TopRightEllipseCss,
-  bottomLeftEllipseCss,
-  bottomRightEllipseCss,
-  datsetDetailImgcss,
   featuredAssetsCss,
   iconButtonCss,
   rowFlexCss,
@@ -40,11 +29,16 @@ import {
   sortByItemCss,
   turnsDataCss,
 } from "app/modules/home-module/style";
+import DatasetCategoryList from "./components/Datasets/datasetCategoryList";
+import { datasetCategories } from "../dataset-upload-module/upload-steps/metaData";
+import AssetsGrid from "./components/All/assetsGrid";
+import BreadCrumbs from "./components/Breadcrumbs";
+import SmallFooter from "./components/Footer/smallFooter";
 
 export default function HomeModule() {
   useTitle("DX DataXplorer");
 
-  const { isAuthenticated } = useAuth0();
+  const { isAuthenticated, user } = useAuth0();
 
   // clear persisted states
   const clearPersistedReportState = useResetRecoilState(
@@ -59,6 +53,8 @@ export default function HomeModule() {
     clearChartFromReportState();
     setReportPreviewMode(false);
   }, []);
+
+  const [categories, setCategories] = React.useState<string[]>([]);
 
   const [tableView, setTableView] = React.useState(false);
   const [searchValue, setSearchValue] = React.useState<string | undefined>(
@@ -81,7 +77,7 @@ export default function HomeModule() {
     { label: "Name", value: "name" },
   ];
 
-  const handleChange = (newValue: "data" | "charts" | "reports") => {
+  const handleChange = (newValue: "all" | "data" | "charts" | "reports") => {
     setDisplay(newValue);
   };
 
@@ -101,8 +97,7 @@ export default function HomeModule() {
             sortBy={sortByStr}
             searchStr={searchStr}
             tableView={tableView}
-            addCard
-            fromHome
+            categories={categories}
           />
         );
       case "charts":
@@ -111,7 +106,6 @@ export default function HomeModule() {
             sortBy={sortByStr}
             searchStr={searchStr}
             tableView={tableView}
-            addCard
           />
         );
       case "reports":
@@ -121,7 +115,15 @@ export default function HomeModule() {
             searchStr={searchStr}
             tableView={tableView}
             showMenuButton={false}
-            addCard
+          />
+        );
+      case "all":
+        return (
+          <AssetsGrid
+            sortBy={sortByStr}
+            searchStr={searchStr}
+            tableView={tableView}
+            showMenuButton={false}
           />
         );
       default:
@@ -141,145 +143,80 @@ export default function HomeModule() {
   const openSortPopover = Boolean(sortPopoverAnchorEl);
 
   React.useEffect(() => {
-    if (display === "data") {
+    if (display === "all" || display === "data") {
       setTabPrevPosition("left");
     } else {
       setTabPrevPosition("right");
     }
   }, [display]);
 
+  const descriptions = {
+    all: "Explore the collection of Assets",
+    data: "Explore the collection of Datasets used to create Charts",
+    charts: "Explore the collection of Charts used in Reports",
+    reports: "Explore the collection of Reports",
+  };
+
   return (
-    <React.Fragment>
-      <div
-        css={`
-          position: relative;
-          background: linear-gradient(
-            180deg,
-            rgba(255, 255, 255, 0) 0%,
-            #f2f7fd 100%
-          );
-        `}
-      >
-        <Container maxWidth="lg">
-          <Grid
-            container
-            spacing={6}
-            css={turnsDataCss}
-            alignItems="center"
-            alignContent="flex-start"
-          >
-            <Grid item lg={5} md={12} sm={12} xs={12}>
-              <div
-                css={`
-                  max-width: 450px;
-                `}
-              >
-                <h1>Turn data into impact with DataXplorer</h1>
-                <Box height={34} />
-                <p>
-                  <b>
-                    DataXplorer simplifies and empowers visual data reporting
-                    for all.
-                  </b>
-                </p>
-                <Box height={52} />
-                {isAuthenticated && (
-                  <div
-                    css={`
-                      ${rowFlexCss} gap: 32px;
-                      width: 100%;
-                    `}
-                  >
-                    <Link
-                      to="report/new/initial"
-                      css={`
-                        background: #6061e5;
-                      `}
-                    >
-                      CREATE REPORT
-                    </Link>
-                    <button
-                      onClick={exploreReportClick}
-                      css={`
-                        background: #e492bd;
-                      `}
-                    >
-                      EXPLORE REPORTS
-                    </button>
-                  </div>
-                )}
-                {!isAuthenticated && (
-                  <div
-                    css={`
-                      gap: 20px;
-                      width: 100%;
-                      display: flex;
-                      flex-direction: row;
-                      justify-content: center;
-
-                      > button {
-                        gap: 10px;
-                        color: #fff;
-                        display: flex;
-                        padding: 9px 18px;
-                        background: #a1a2ff;
-                        align-items: center;
-                        justify-content: center;
-                        text-transform: uppercase;
-
-                        > svg {
-                          transform: scale(0.8);
-                        }
-                      }
-                    `}
-                  >
-                    <button onClick={() => socialAuth("google-oauth2")}>
-                      <GoogleIcon /> sign in for free
-                    </button>
-                    <button onClick={() => socialAuth("linkedin")}>
-                      <LinkedInIcon /> sign in for free
-                    </button>
-                  </div>
-                )}
-              </div>
-            </Grid>
-            <Grid
-              item
-              lg={7}
-              md={12}
-              sm={12}
-              xs={12}
-              css={`
-                display: flex;
-                justify-content: flex-end;
-                @media screen and (max-width: 1257px) {
-                  justify-content: center;
-                }
-              `}
-            >
-              <img
-                src={DatasetDetailImage}
-                alt="dataset-detail-img"
-                css={datsetDetailImgcss}
-              />
-            </Grid>
-          </Grid>
-        </Container>
-        <BottomLeftEllipse css={bottomLeftEllipseCss} />
-        <BottomRightEllipse css={bottomRightEllipseCss} />
-        <TopRightEllipse css={TopRightEllipseCss} />
-      </div>
+    <div
+      css={`
+        margin-top: 48px;
+        padding-top: 32px;
+      `}
+    >
       <Container
         maxWidth="lg"
         ref={exploreViewRef}
         css={`
-          min-height: calc(100vh - 668px);
+          min-height: calc(100vh - 133px);
         `}
       >
-        <Box height={52} />
+        <div css={turnsDataCss}>
+          {isAuthenticated ? (
+            <h1>Welcome {user?.given_name ?? user?.name?.split(" ")[0]}</h1>
+          ) : (
+            <div />
+          )}
+
+          <div
+            css={`
+              ${rowFlexCss} gap: 8px;
+              /* width: 100%; */
+            `}
+          >
+            <Link
+              to="/dataset/new/upload"
+              css={`
+                background: #e492bd;
+              `}
+              data-cy="home-connect-dataset-button"
+            >
+              CONNECT DATASET
+            </Link>
+            <Link
+              to="/chart/new/data"
+              css={`
+                background: #64afaa;
+              `}
+              data-cy="home-create-chart-button"
+            >
+              CREATE CHART
+            </Link>
+            <Link
+              to="/report/new/initial"
+              css={`
+                background: #6061e5;
+              `}
+              data-cy="home-create-report-button"
+            >
+              CREATE REPORT
+            </Link>
+          </div>
+        </div>
+        <Box height={24} />
         <Box css={featuredAssetsCss}>
-          <h3>Featured assets in DX:</h3>
-          <Box height={20} />
+          <BreadCrumbs items={[{ title: "Library" }]} />
+          <Box height={24} />
           <Grid
             container
             alignContent="space-between"
@@ -291,12 +228,20 @@ export default function HomeModule() {
             <Grid item lg={6} md={6} sm={6}>
               <Tab.Container>
                 <Tab.Left
+                  active={display === "all"}
+                  onClick={() => handleChange("all")}
+                  data-cy="home-all-tab"
+                >
+                  All
+                </Tab.Left>
+                <Tab.Center
                   active={display === "data"}
                   onClick={() => handleChange("data")}
+                  position={tabPrevPosition}
                   data-cy="home-data-tab"
                 >
                   Data
-                </Tab.Left>
+                </Tab.Center>
                 <Tab.Center
                   active={display === "charts"}
                   onClick={() => handleChange("charts")}
@@ -432,7 +377,25 @@ export default function HomeModule() {
               </div>
             </Grid>
           </Grid>
-          <Box height={20} />
+          <div
+            css={`
+              padding-top: 24px;
+              font-size: 14px;
+              font-family: GothamNarrow-Book;
+              color: #000000;
+            `}
+          >
+            {descriptions[display]}
+          </div>
+          {display === "data" ? (
+            <DatasetCategoryList
+              datasetCategories={datasetCategories}
+              setCategories={setCategories}
+              categories={categories}
+            />
+          ) : (
+            <Box height={24} />
+          )}
         </Box>
         <div
           id="scrollableDiv"
@@ -446,8 +409,7 @@ export default function HomeModule() {
           {displayGrid(searchValue as string, sortValue)}
         </div>
       </Container>
-      <Box height={100} />
-      <HomeFooter />
-    </React.Fragment>
+      <SmallFooter />
+    </div>
   );
 }

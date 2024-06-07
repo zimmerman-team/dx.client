@@ -19,7 +19,7 @@ export default function DatasetDetail() {
   const { user, isAuthenticated } = useAuth0();
 
   const token = useStoreState((state) => state.AuthToken.value);
-  const dataset = useStoreState(
+  const datasetDetails = useStoreState(
     (state) =>
       (state.dataThemes.DatasetGet.crudData ?? {}) as DatasetListItemAPIModel
   );
@@ -43,8 +43,10 @@ export default function DatasetDetail() {
   );
 
   const canDatasetEditDelete = React.useMemo(() => {
-    return isAuthenticated && dataset && dataset?.owner === user?.sub;
-  }, [user, isAuthenticated, dataset]);
+    return (
+      isAuthenticated && datasetDetails && datasetDetails?.owner === user?.sub
+    );
+  }, [user, isAuthenticated, datasetDetails]);
 
   const {
     loadDataset: loadSampleDataset,
@@ -89,7 +91,7 @@ export default function DatasetDetail() {
   }
   return (
     <Container maxWidth="lg">
-      <DatasetSubHeaderToolbar name={dataset.name} />
+      <DatasetSubHeaderToolbar name={datasetDetails.name} />
       <div
         css={`
           height: 98px;
@@ -102,8 +104,12 @@ export default function DatasetDetail() {
         dataTypes={dataTypes}
         datasetId={page}
         dataTotalCount={dataTotalCount}
-        description={dataset.description}
+        description={datasetDetails.description}
         canDatasetEditDelete={canDatasetEditDelete}
+        title={datasetDetails.name}
+        dataCategory={datasetDetails.category}
+        dataSource={datasetDetails.source}
+        dataSourceURL={datasetDetails.sourceUrl}
       />
     </Container>
   );

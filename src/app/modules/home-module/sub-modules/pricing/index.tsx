@@ -245,8 +245,6 @@ export default function PricingModule() {
           </div>
         </div>
         <Box height={100} />
-        {/* <FAQ />
-        <Box height={100} /> */}
       </Container>
       <HomeFooter />
     </section>

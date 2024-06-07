@@ -1,7 +1,7 @@
 import React from "react";
 import { v4 } from "uuid";
 import Box from "@material-ui/core/Box";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { useParams } from "react-router-dom";
 import useResizeObserver from "use-resize-observer";
 import Container from "@material-ui/core/Container";
@@ -14,13 +14,14 @@ import { ReportModel, emptyReport } from "app/modules/report-module/data";
 import { ReportEditViewProps } from "app/modules/report-module/views/edit/data";
 import HeaderBlock from "app/modules/report-module/sub-module/components/headerBlock";
 import { NotAuthorizedMessageModule } from "app/modules/common/not-authorized-message";
-import { ReportOrderContainer } from "app/modules/report-module/components/order-container";
+import { ItemComponent } from "app/modules/report-module/components/order-container";
 import { ReportElementsType } from "app/modules/report-module/components/right-panel-create-view";
 import AddRowFrameButton from "app/modules/report-module/sub-module/rowStructure/addRowFrameButton";
 import { GridColumns } from "app/modules/report-module/components/grid-columns";
 
 import {
   IRowFrameStructure,
+  isDividerOrRowFrameDraggingAtom,
   persistedReportStateAtom,
   reportContentContainerWidth,
 } from "app/state/recoil/atoms";
@@ -49,6 +50,7 @@ function ReportEditView(props: ReportEditViewProps) {
   const [containerWidth, setContainerWidth] = useRecoilState(
     reportContentContainerWidth
   );
+  const isItemDragging = useRecoilValue(isDividerOrRowFrameDraggingAtom);
 
   const [persistedReportState] = useRecoilState(persistedReportStateAtom);
   const [rowStructureType, setRowStructuretype] =
@@ -201,7 +203,6 @@ function ReportEditView(props: ReportEditViewProps) {
     return isAuthenticated && reportData?.owner === user?.sub;
   }, [user, isAuthenticated, reportData]);
 
-  // console.log(reportError401, "reportError401");
   if ((reportError401 || !canChartEditDelete) && !loadingReportData) {
     return <NotAuthorizedMessageModule asset="report" action="edit" />;
   }
@@ -253,38 +254,13 @@ function ReportEditView(props: ReportEditViewProps) {
             handleClose={handleEndReportTour}
             open={openTour}
           />
-          <ReportOrderContainer
-            enabled
-            childrenData={props.framesArray}
-            setFramesArray={props.setFramesArray}
-          >
-            {props.framesArray?.map((frame, index) => {
-              return (
-                <div key={frame.id}>
-                  {index === 0 && (
-                    <PlaceHolder
-                      index={index}
-                      rowId={frame.id}
-                      deleteFrame={deleteFrame}
-                      framesArray={props.framesArray}
-                      setFramesArray={props.setFramesArray}
-                      handlePersistReportState={props.handlePersistReportState}
-                      handleRowFrameItemResize={props.handleRowFrameItemResize}
-                    />
-                  )}
-                  <RowFrame
-                    {...frame.frame}
-                    framesArray={props.framesArray}
-                    setFramesArray={props.setFramesArray}
-                    view={props.view}
-                    rowContentHeights={frame.contentHeights}
-                    rowContentWidths={frame.contentWidths}
-                    setPlugins={props.setPlugins}
-                    endReportTour={handleEndReportTour}
-                  />
-                  <Box height={38} />
 
+          {props.framesArray?.map((frame, index) => {
+            return (
+              <div key={frame.id}>
+                {index === 0 && (
                   <PlaceHolder
+                    index={index}
                     rowId={frame.id}
                     deleteFrame={deleteFrame}
                     framesArray={props.framesArray}
@@ -292,10 +268,45 @@ function ReportEditView(props: ReportEditViewProps) {
                     handlePersistReportState={props.handlePersistReportState}
                     handleRowFrameItemResize={props.handleRowFrameItemResize}
                   />
-                </div>
-              );
-            })}
-          </ReportOrderContainer>
+                )}
+                <Box height={8} />
+                <ItemComponent
+                  id={frame.id}
+                  index={index}
+                  childrenData={props.framesArray}
+                >
+                  <div
+                    css={`
+                      position: relative;
+                    `}
+                  >
+                    <RowFrame
+                      {...frame.frame}
+                      framesArray={props.framesArray}
+                      setFramesArray={props.setFramesArray}
+                      view={props.view}
+                      rowContentHeights={frame.contentHeights}
+                      rowContentWidths={frame.contentWidths}
+                      setPlugins={props.setPlugins}
+                      endReportTour={handleEndReportTour}
+                    />
+                  </div>
+                </ItemComponent>
+                <Box height={8} />
+
+                <PlaceHolder
+                  rowId={frame.id}
+                  deleteFrame={deleteFrame}
+                  framesArray={props.framesArray}
+                  setFramesArray={props.setFramesArray}
+                  handlePersistReportState={props.handlePersistReportState}
+                  handleRowFrameItemResize={props.handleRowFrameItemResize}
+                />
+              </div>
+            );
+          })}
+
+          <Box height={8} />
           <AddRowFrameButton
             framesArray={props.framesArray}
             rowStructureType={rowStructureType}

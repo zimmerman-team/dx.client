@@ -139,7 +139,12 @@ export function ReportPreviewView(props: {
   }
 
   return (
-    <div id="export-container">
+    <div
+      id="export-container"
+      css={`
+        background: white;
+      `}
+    >
       <HeaderBlock
         previewMode={true}
         headerDetails={{
@@ -185,7 +190,7 @@ export function ReportPreviewView(props: {
                 <div
                   key={"divider" + `${index}`}
                   css={`
-                    margin: 0 0 50px 0;
+                    margin: 0 0 16px 0;
                     height: 2px;
                     width: 100%;
                     background-color: #cfd4da;
@@ -225,14 +230,18 @@ export function ReportPreviewView(props: {
               />
             );
           })}
-        <Box height={45} />
+        <Box height={16} />
       </Container>
 
       {location.search.includes("?fromLanding=true") && !isAuthenticated ? (
         <ReportUsePanel />
       ) : null}
 
-      {!previewMode ? <HomeFooter /> : null}
+      {!previewMode ? (
+        <>
+          <Box height={71} /> <HomeFooter />
+        </>
+      ) : null}
     </div>
   );
 }

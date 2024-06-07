@@ -4,11 +4,11 @@ import { dataSetsCss } from "app/modules/dataset-upload-module/style";
 import { useStoreActions } from "app/state/store/hooks";
 import { DatasetDataTable } from "app/modules/dataset-upload-module/component/data-table";
 import { CssSnackbar, ISnackbarState } from "./previewFragment";
-import { ArrowBack } from "@material-ui/icons";
 import { ReactComponent as FullScreenIcon } from "../assets/full-screen.svg";
 import { ReactComponent as CloseFullScreenIcon } from "../assets/close-full-screen.svg";
-import { homeDisplayAtom } from "app/state/recoil/atoms";
 import { useRecoilState } from "recoil";
+import { homeDisplayAtom } from "app/state/recoil/atoms";
+import { ArrowBack } from "@material-ui/icons";
 
 interface Props {
   data: any[];
@@ -18,6 +18,10 @@ interface Props {
   description: string;
   dataTypes: never[];
   canDatasetEditDelete?: boolean;
+  title: string;
+  dataCategory: string;
+  dataSource: string;
+  dataSourceURL: string;
 }
 
 export default function FinishedFragment(props: Props) {
@@ -81,7 +85,7 @@ export default function FinishedFragment(props: Props) {
       <Link
         to={(() => {
           setDisplay("data");
-          return location.search.includes("?fromHome=true") ? "/" : "/explore";
+          return "/";
         })()}
         css={`
           display: flex;
@@ -113,6 +117,7 @@ export default function FinishedFragment(props: Props) {
             font-size: 16px;
             font-family: "GothamNarrow-Bold", sans-serif;
             line-height: 19px;
+            margin-top: 19px;
           `}
         >
           {props.description}
@@ -291,6 +296,33 @@ export default function FinishedFragment(props: Props) {
           />
         </div>
       </div>
+      <div
+        css={`
+          height: 32px;
+        `}
+      />
+      <div
+        css={`
+          color: #70777e;
+          p {
+            margin-bottom: 8px;
+            margin-top: 0;
+            font-size: 12px;
+            font-family: "GothamNarrow-Book", sans-serif;
+          }
+        `}
+      >
+        <p>Data Title : {props.title}</p>
+        <p>Data Description : {props.description}</p>
+        <p>Data Category : {props.dataCategory}</p>
+        <p>Data Source : {props.dataSource}</p>
+        <p>Link to data source : {props.dataSourceURL}</p>
+      </div>
+      <div
+        css={`
+          height: 50px;
+        `}
+      />
       <CssSnackbar
         anchorOrigin={{
           vertical: snackbarState.vertical,

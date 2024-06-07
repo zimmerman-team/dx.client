@@ -1,14 +1,13 @@
 import React from "react";
 import moment from "moment";
-import { useRecoilState } from "recoil";
 import Table from "@material-ui/core/Table";
 import { useHistory } from "react-router-dom";
 import TableRow from "@material-ui/core/TableRow";
 import TableHead from "@material-ui/core/TableHead";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
-import { homeDisplayAtom } from "app/state/recoil/atoms";
 import TableContainer from "@material-ui/core/TableContainer";
+import _ from "lodash";
 
 export function HomepageTable(props: {
   data: {
@@ -16,18 +15,13 @@ export function HomepageTable(props: {
     name: string;
     description: string;
     createdDate: Date;
+    type: string;
   }[];
   inChartBuilder?: boolean;
   onItemClick?: (v: string) => void;
-  fromHome?: boolean;
+  all?: boolean;
 }) {
   const history = useHistory();
-  const display = useRecoilState(homeDisplayAtom)[0];
-  const pathBase = {
-    data: "dataset",
-    charts: "chart",
-    reports: "report",
-  };
 
   return (
     <TableContainer
@@ -73,8 +67,9 @@ export function HomepageTable(props: {
         >
           <TableRow>
             <TableCell width="50px"></TableCell>
-            <TableCell width="400px">Name</TableCell>
-            <TableCell width="550px">Description</TableCell>
+            <TableCell width="171px">Name</TableCell>
+            {props.all && <TableCell width="55px">Type</TableCell>}
+            <TableCell width="650px">Description</TableCell>
             <TableCell width="200px">Creation date</TableCell>
           </TableRow>
         </TableHead>
@@ -89,10 +84,8 @@ export function HomepageTable(props: {
               onClick={() => {
                 if (!props.inChartBuilder) {
                   history.push(
-                    `/${pathBase[display]}/${data.id}${
-                      display === "data"
-                        ? `/detail?fromHome=${props.fromHome}`
-                        : ""
+                    `/${data.type}/${data.id}${
+                      data.type === "dataset" ? `/detail?` : ""
                     }`
                   );
                 } else if (props.inChartBuilder && props.onItemClick) {
@@ -108,6 +101,7 @@ export function HomepageTable(props: {
             >
               <TableCell>{index + 1}</TableCell>
               <TableCell>{data.name}</TableCell>
+              {props.all && <TableCell>{_.capitalize(data.type)}</TableCell>}
               <TableCell>{data.description}</TableCell>
               <TableCell>
                 {moment(data.createdDate).format("MMMM YYYY")}

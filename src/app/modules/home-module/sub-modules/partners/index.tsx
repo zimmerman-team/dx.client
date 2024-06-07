@@ -206,7 +206,7 @@ export default function PartnersModule() {
         <Box height={150} />
         <BestDecisionBlock />
       </Container>
-      <div css="width: 100%;height: 128px" />
+      <div css="width: 100%;height: 148px;" />
       <HomeFooter />
     </>
   );

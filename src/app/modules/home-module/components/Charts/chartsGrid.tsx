@@ -210,9 +210,9 @@ export default function ChartsGrid(props: Props) {
     <>
       {!props.tableView && (
         <Grid container spacing={2}>
-          {props.addCard && isAuthenticated ? <ChartAddnewCard /> : null}
+          {props.addCard ? <ChartAddnewCard /> : null}
           {loadedCharts.map((c, index) => (
-            <Grid item key={c.id} xs={12} sm={6} md={6} lg={3}>
+            <Grid item key={c.id} xs={12} sm={6} md={4} lg={3}>
               <GridItem
                 id={c.id}
                 title={c.name}
@@ -239,16 +239,17 @@ export default function ChartsGrid(props: Props) {
             name: data.name,
             description: data.title,
             createdDate: data.createdDate,
+            type: "chart",
           }))}
         />
       )}
-      <Box height={100} />
+      <Box height={80} />
 
       <div ref={observerTarget} />
       {loading && <CircleLoader />}
 
       <DeleteChartDialog
-        chartId={chartId}
+        cardId={chartId}
         modalDisplay={modalDisplay}
         enableButton={enableButton}
         handleDelete={handleDelete}

@@ -136,7 +136,8 @@ export const styles = {
     font-size: 24px;
     position: absolute;
     z-index: 1;
-    left: -0.5%;
+    left: -5px;
+
     padding: 5px;
     white-space: pre;
     font-size: 24px;
