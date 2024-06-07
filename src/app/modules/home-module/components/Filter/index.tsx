@@ -21,6 +21,8 @@ export default function Filter(
     tableView: boolean;
     terminateSearch?: () => void;
     searchInputWidth?: string;
+    openSearch: boolean;
+    setOpenSearch: React.Dispatch<React.SetStateAction<boolean>>;
   }>
 ) {
   const inputRef = React.useRef<HTMLInputElement>(null);
@@ -30,7 +32,6 @@ export default function Filter(
     setSortPopoverAnchorEl(null);
   };
   const openSortPopover = Boolean(sortPopoverAnchorEl);
-  const [openSearch, setOpenSearch] = React.useState(false);
   const sortOptions = [
     { label: "Last updated", value: "updatedDate" },
     { label: "Created date", value: "createdDate" },
@@ -56,7 +57,7 @@ export default function Filter(
           gap: 8px;
         `}
       >
-        <div css={searchInputCss(openSearch, props.searchInputWidth)}>
+        <div css={searchInputCss(props.openSearch, props.searchInputWidth)}>
           <input
             type="text"
             ref={inputRef}
@@ -69,7 +70,7 @@ export default function Filter(
             onClick={() => {
               props.setSearchValue("");
               props.terminateSearch && props.terminateSearch();
-              setOpenSearch(false);
+              props.setOpenSearch(false);
             }}
             css={`
               &:hover {
@@ -87,10 +88,10 @@ export default function Filter(
         <IconButton
           data-cy="open-search-button"
           onClick={() => {
-            setOpenSearch(true);
+            props.setOpenSearch(true);
             inputRef.current?.focus();
           }}
-          css={iconButtonCss(openSearch)}
+          css={iconButtonCss(props.openSearch)}
         >
           <SearchIcon />
         </IconButton>

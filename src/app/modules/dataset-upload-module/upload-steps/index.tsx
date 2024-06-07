@@ -54,6 +54,7 @@ function DatasetUploadSteps(props: Props) {
   const [processed, setProcessed] = React.useState(false);
   const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
   const [searchValue, setSearchValue] = React.useState<string | undefined>("");
+  const [openSearch, setOpenSearch] = React.useState(false);
   const [sources, setSources] = React.useState<string[]>([]);
 
   const [activeTab, setActiveTab] = React.useState<"search" | "file">("search");
@@ -298,6 +299,8 @@ function DatasetUploadSteps(props: Props) {
                 handleDownload={handleDownloadExternalDataset}
                 searchValue={searchValue}
                 setSearchValue={setSearchValue}
+                openSearch={openSearch}
+                setOpenSearch={setOpenSearch}
                 sources={sources}
                 setSources={setSources}
               />

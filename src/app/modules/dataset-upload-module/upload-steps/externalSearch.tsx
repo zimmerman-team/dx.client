@@ -35,6 +35,8 @@ export default function ExternalSearch(props: {
   setActiveStep: React.Dispatch<React.SetStateAction<number>>;
   searchValue: string | undefined;
   setSearchValue: React.Dispatch<React.SetStateAction<string | undefined>>;
+  openSearch: boolean;
+  setOpenSearch: React.Dispatch<React.SetStateAction<boolean>>;
   sources: string[];
   setSources: React.Dispatch<React.SetStateAction<string[]>>;
 }) {
@@ -179,6 +181,8 @@ export default function ExternalSearch(props: {
           tableView={tableView}
           terminateSearch={terminateSearch}
           searchInputWidth="249px"
+          openSearch={props.openSearch}
+          setOpenSearch={props.setOpenSearch}
         />
       </Grid>
 
