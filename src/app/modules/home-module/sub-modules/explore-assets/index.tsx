@@ -75,6 +75,7 @@ export default function ExploreAssetsModule() {
   const [searchValue, setSearchValue] = React.useState<string | undefined>(
     undefined
   );
+  const [openSearch, setOpenSearch] = React.useState(false);
   const [sortValue, setSortValue] = React.useState("updatedDate");
   const exploreViewRef = React.useRef<HTMLDivElement>(null);
   const [display, setDisplay] = useRecoilState(homeDisplayAtom);
@@ -90,6 +91,7 @@ export default function ExploreAssetsModule() {
   }, [display]);
 
   const descriptions = {
+    all: "Explore the collection of Reports, Charts and Datasets",
     data: "Explore the collection of Datasets used to create Charts",
     charts: "Explore the collection of Charts used in Reports",
     reports: "Explore the collection of Reports",
@@ -181,6 +183,8 @@ export default function ExploreAssetsModule() {
                 setTableView={setTableView}
                 sortValue={sortValue}
                 tableView={tableView}
+                openSearch={openSearch}
+                setOpenSearch={setOpenSearch}
               />
             </Grid>
           </Grid>

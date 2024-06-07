@@ -25,9 +25,8 @@ describe("Testing create chart on DX", () => {
 
     cy.get('[data-cy="cookie-btn"]').click();
 
-    cy.get('[data-cy="create-report-dropdown"]').click();
     cy.intercept("GET", `${apiUrl}/datasets?filter=*`).as("getDatasets");
-    cy.get('[data-cy="appbar-create-chart"]').click();
+    cy.get('[data-cy="home-create-chart-button"]').click();
     cy.wait("@getDatasets");
 
     cy.intercept("GET", `${apiUrl}/chart/sample-data/*`).as("getDataset");
@@ -190,10 +189,8 @@ describe("Testing Ai chart creation", () => {
     cy.visit("/");
 
     cy.get('[data-cy="cookie-btn"]').click();
-
-    cy.get('[data-cy="create-report-dropdown"]').click();
     cy.intercept("GET", `${apiUrl}/datasets?filter=*`).as("getDatasets");
-    cy.get('[data-cy="appbar-create-chart"]').click();
+    cy.get('[data-cy="home-create-chart-button"]').click();
     cy.wait("@getDatasets");
 
     cy.intercept("GET", `${apiUrl}/chart/sample-data/*`).as("getDataset");

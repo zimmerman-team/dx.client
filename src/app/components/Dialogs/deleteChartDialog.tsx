@@ -3,7 +3,7 @@ import CloseOutlined from "@material-ui/icons/ClearOutlined";
 import { createStyles, IconButton, makeStyles, Modal } from "@material-ui/core";
 
 interface Props {
-  chartId?: string;
+  cardId?: string;
   modalDisplay: boolean;
   enableButton: boolean;
   handleDelete: (id: string) => void;
@@ -39,7 +39,7 @@ export default function DeleteChartDialog(props: Props) {
 
   const onInputEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && e.currentTarget.value === "DELETE") {
-      props.handleDelete(props.chartId as string);
+      props.handleDelete(props.cardId as string);
     }
   };
 
@@ -51,7 +51,7 @@ export default function DeleteChartDialog(props: Props) {
     >
       <div className={classes.paper}>
         <form
-          onSubmit={() => props.handleDelete(props.chartId as string)}
+          onSubmit={() => props.handleDelete(props.cardId as string)}
           data-cy="delete-chart-item-form"
           aria-label="form"
         >

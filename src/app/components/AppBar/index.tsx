@@ -229,14 +229,15 @@ export function AppBar() {
                   justify-content: flex-end;
                 `}
               >
+                {" "}
+                <div css={navLinkcss("explore", navLocation)}>
+                  <NavLink to="/" data-cy="nav-explore">
+                    <b>Explore </b>
+                  </NavLink>
+                </div>
                 <div css={navLinkcss("why-dataXplorer", navLocation)}>
                   <NavLink to="/why-dataXplorer" data-cy="nav-why">
                     <b>Why DataXplorer?</b>
-                  </NavLink>
-                </div>
-                <div css={navLinkcss("explore", navLocation)}>
-                  <NavLink to="/explore" data-cy="nav-explore">
-                    <b>Explore </b>
                   </NavLink>
                 </div>
                 <div css={navLinkcss("about", navLocation)}>
@@ -290,7 +291,6 @@ const ActionMenu = () => {
     <div>
       <div
         css={`
-          gap: 1px;
           display: flex;
           position: relative;
 
@@ -307,19 +307,19 @@ const ActionMenu = () => {
             :nth-child(1) {
               width: ${isAuthenticated ? "146px" : "110px"};
               height: 34px;
-              border-radius: ${isAuthenticated ? "24px 0px 0px 24px" : "24px"};
+              border-radius: 24px;
               &:hover {
-                opacity: 1;
+                opacity: 0.8;
               }
             }
-            :nth-child(2) {
+            /* :nth-child(2) {
               width: 41px;
               height: 34px;
               border-radius: 0px 24px 24px 0px;
               background: ${openActionPopover ? "#b5b5db" : "#dadaf8"};
               &:hover {
                 background: #b5b5db;
-              }
+              } */
             }
             svg {
               ${openActionPopover ? "transform: rotate(180deg)" : ""}
@@ -327,14 +327,12 @@ const ActionMenu = () => {
           }
         `}
       >
-        <Link
-          to={isAuthenticated ? "/report/new/initial" : "/onboarding/login"}
-        >
+        <Link to={isAuthenticated ? "/" : "/onboarding/login"}>
           <button data-cy="appbar-create-report/login">
-            {isAuthenticated ? "Create report" : "Log in"}
+            {isAuthenticated ? "MY DASHBOARD" : "Log in"}
           </button>
         </Link>
-        {isAuthenticated && (
+        {/* {isAuthenticated && (
           <button
             onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
               setActionPopoverAnchorEl(
@@ -345,7 +343,7 @@ const ActionMenu = () => {
           >
             <KeyboardArrowDownIcon />
           </button>
-        )}
+        )} */}
         {isAuthenticated && (
           <button
             onClick={() => history.push("/user-management/profile")}
@@ -353,7 +351,7 @@ const ActionMenu = () => {
               min-width: 33px;
               height: 33px;
               display: flex;
-              margin-left: 20px;
+              margin-left: 16px;
               border-radius: 50%;
               align-items: center;
               background: #b5b5db;

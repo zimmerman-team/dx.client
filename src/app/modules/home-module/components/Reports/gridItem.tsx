@@ -46,11 +46,11 @@ export default function gridItem(props: Props) {
       <Link
         to={`/report/${props.id}`}
         css={`
-          width: 296px;
+          width: 100%;
+          height: 161.59px;
           padding: 12px;
           display: flex;
           color: #262c34;
-          height: 161.59px;
           background: #fff;
           position: relative;
           text-decoration: none;

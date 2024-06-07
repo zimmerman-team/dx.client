@@ -9,6 +9,7 @@ import useDebounce from "react-use/lib/useDebounce";
 import axios from "axios";
 import CircleLoader from "app/modules/home-module/components/Loader";
 import { useInfinityScroll } from "app/hooks/useInfinityScroll";
+import SourceCategoryList from "../component/externalSourcesList";
 
 export interface IExternalDataset {
   name: string;
@@ -32,11 +33,16 @@ export default function ExternalSearch(props: {
   handleDownload: (dataset: IExternalDataset) => void;
   setProcessingError: React.Dispatch<React.SetStateAction<string | null>>;
   setActiveStep: React.Dispatch<React.SetStateAction<number>>;
-  setIsExternalSearch: React.Dispatch<React.SetStateAction<boolean>>;
+  searchValue: string | undefined;
+  setSearchValue: React.Dispatch<React.SetStateAction<string | undefined>>;
+  openSearch: boolean;
+  setOpenSearch: React.Dispatch<React.SetStateAction<boolean>>;
+  sources: string[];
+  setSources: React.Dispatch<React.SetStateAction<string[]>>;
 }) {
   const observerTarget = React.useRef(null);
   const [tableView, setTableView] = React.useState(false);
-  const [searchValue, setSearchValue] = React.useState<string | undefined>("");
+
   const [sortValue, setSortValue] = React.useState("createdDate");
   const token = useStoreState((state) => state.AuthToken.value);
   const history = useHistory();
@@ -44,6 +50,14 @@ export default function ExternalSearch(props: {
   const [offset, setOffset] = React.useState(0);
   const limit = 20;
   const [datasets, setDatasets] = React.useState<IExternalDataset[]>([]);
+
+  const baseSources = [
+    { name: "Kaggle", value: "Kaggle" },
+    { name: "World Bank", value: "World Bank" },
+    { name: "WHO", value: "WHO" },
+    { name: "HDX", value: "HDX" },
+    { name: "TGF", value: "TGF" },
+  ];
 
   const { isObserved } = useInfinityScroll(observerTarget);
 
@@ -53,8 +67,8 @@ export default function ExternalSearch(props: {
   const terminateSearch = () => {
     abortControllerRef.current.abort();
     abortControllerRef.current = new AbortController();
-    setDatasets([]);
-    setOffset(0);
+    // setDatasets([]);
+    // setOffset(0);
   };
 
   // Pagination on scroll
@@ -68,9 +82,13 @@ export default function ExternalSearch(props: {
     try {
       setLoading(true);
       const response = await axios.get(
-        `${
-          process.env.REACT_APP_API
-        }/external-sources/search?q=${searchValue}&source=${"Kaggle,World Bank,WHO,HDX,TGF"}&offset=${offset}&limit=${limit}`,
+        `${process.env.REACT_APP_API}/external-sources/search?q=${
+          props.searchValue
+        }&source=${
+          props.sources.length
+            ? props.sources.join(",")
+            : "Kaggle,World Bank,WHO,HDX,TGF"
+        }&offset=${offset}&limit=${limit}`,
         {
           signal: abortControllerRef.current.signal,
           headers: {
@@ -112,70 +130,69 @@ export default function ExternalSearch(props: {
       }
     },
     500,
-    [searchValue, token]
+    [props.searchValue, token, props.sources]
   );
   return (
     <>
       <div
         css={`
-          display: flex;
-          gap: 80px;
-          align-items: start;
-          padding-top: 97px;
-          button {
-            cursor: pointer;
+          h1 {
+            font-family: "Inter", sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: #231d2c;
+            margin: 0px;
+          }
+          p {
+            color: #231d2c;
+            font-family: "GothamNarrow-Book";
+            font-size: 14px;
+            font-weight: 325;
+            line-height: 20px;
+            letter-spacing: 0.5px;
+            margin: 0px;
             padding: 0px;
-            &:hover {
-              background-color: transparent;
-            }
           }
         `}
       >
-        <IconButton onClick={() => props.setIsExternalSearch(false)}>
-          <ArrowBackIcon htmlColor="#000" />
-        </IconButton>
-        <div
-          css={`
-            h1 {
-              font-family: "Inter", sans-serif;
-              font-size: 24px;
-              font-weight: 700;
-              color: #231d2c;
-              margin: 0px;
-            }
-            p {
-              color: #231d2c;
-              font-family: "GothamNarrow-Book";
-              font-size: 14px;
-              font-weight: 325;
-              line-height: 20px;
-              letter-spacing: 0.5px;
-            }
-          `}
-        >
-          <h1>External Search</h1>
-          <p>
-            Connect to your favourite data sources effortlessly in DataXplorer,
-            and with just a few clicks, import datasets without the hassle of
-            downloading, enabling you to visualize and analyse diverse data like
-            never before.
-          </p>
-        </div>
+        <h1>Federated Search</h1>
+        <Box height={22} />
+        <p>
+          Connect to your favourite data sources effortlessly in DataXplorer,
+          and with just a few clicks, import datasets without the hassle of
+          downloading,
+          <br /> enabling you to visualize and analyse diverse data like never
+          before.
+        </p>
       </div>
-      <Grid container justifyContent="flex-end">
-        <Grid item lg={6} md={6} sm={6}>
-          <Filter
-            searchValue={searchValue as string}
-            setSearchValue={setSearchValue}
-            setSortValue={setSortValue}
-            setTableView={setTableView}
-            sortValue={sortValue}
-            tableView={tableView}
-            terminateSearch={terminateSearch}
-          />
-        </Grid>
+      <Box height={32} />
+      <Grid
+        container
+        justifyContent="space-between"
+        alignItems="center"
+        wrap={"nowrap"}
+      >
+        <SourceCategoryList
+          sources={props.sources}
+          setSources={props.setSources}
+          baseSources={baseSources}
+        />
+
+        <Filter
+          searchValue={props.searchValue as string}
+          setSearchValue={props.setSearchValue}
+          setSortValue={setSortValue}
+          setTableView={setTableView}
+          sortValue={sortValue}
+          tableView={tableView}
+          terminateSearch={terminateSearch}
+          searchInputWidth="249px"
+          openSearch={props.openSearch}
+          setOpenSearch={props.setOpenSearch}
+        />
       </Grid>
-      <Box height={62} />
+
+      <Box height={32} />
       <Grid container spacing={2}>
         {datasets &&
           datasets?.map((dataset, index) => (

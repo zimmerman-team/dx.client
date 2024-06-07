@@ -28,13 +28,11 @@ describe("Testing connecting data on DX", () => {
 
     cy.get('[data-cy="cookie-btn"]').click();
 
-    cy.get('[data-cy="create-report-dropdown"]').click();
-    cy.get('[data-cy="appbar-connect-data"]').click();
+    cy.get('[data-cy="home-connect-dataset-button"]').click();
   });
 
   it("Can import data from External Search", () => {
     cy.intercept(`${apiUrl}/external-sources/search?q=*`).as("getDefaultData");
-    cy.get('[data-cy="external-search-button"]').click();
 
     cy.wait("@getDefaultData").then((interception) => {
       cy.get('[data-cy="external-search-card-Kaggle"]').should(
@@ -129,6 +127,8 @@ describe("Testing connecting data on DX", () => {
   // });
 
   it("Can import data through local upload", () => {
+    cy.get('[data-cy="file-upload-tab"]').click();
+    cy.get('[data-cy="upload-option-button"').first().click();
     cy.get('[data-cy="local-upload-input"]').as("fileInput");
     cy.fixture("football-players.csv").then((fileContent) => {
       cy.get("@fileInput").attachFile({
@@ -154,6 +154,8 @@ describe("Testing connecting data on DX", () => {
   });
 
   it("Can import another dataset through local upload", () => {
+    cy.get('[data-cy="file-upload-tab"]').click();
+    cy.get('[data-cy="upload-option-button"').first().click();
     cy.get('[data-cy="local-upload-input"]').as("fileInput");
     cy.fixture("grossing-movies.csv").then((fileContent) => {
       cy.get("@fileInput").attachFile({
