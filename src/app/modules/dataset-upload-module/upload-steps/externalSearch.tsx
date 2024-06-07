@@ -56,6 +56,7 @@ export default function ExternalSearch(props: {
     { name: "World Bank", value: "World Bank" },
     { name: "WHO", value: "WHO" },
     { name: "HDX", value: "HDX" },
+    { name: "TGF", value: "TGF" },
   ];
 
   const { isObserved } = useInfinityScroll(observerTarget);
@@ -86,7 +87,7 @@ export default function ExternalSearch(props: {
         }&source=${
           props.sources.length
             ? props.sources.join(",")
-            : "Kaggle,World Bank,WHO,HDX"
+            : "Kaggle,World Bank,WHO,HDX,TGF"
         }&offset=${offset}&limit=${limit}`,
         {
           signal: abortControllerRef.current.signal,
@@ -165,7 +166,12 @@ export default function ExternalSearch(props: {
         </p>
       </div>
       <Box height={32} />
-      <Grid container justifyContent="space-between" alignItems="center">
+      <Grid
+        container
+        justifyContent="space-between"
+        alignItems="center"
+        wrap={"nowrap"}
+      >
         <SourceCategoryList
           sources={props.sources}
           setSources={props.setSources}
