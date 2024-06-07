@@ -49,7 +49,7 @@ export default function ContactModule() {
       message: "",
     });
   };
-  const [contactFormFailed, setContactFormFailed] = React.useState(false);
+  const [_contactFormFailed, setContactFormFailed] = React.useState(false);
 
   const handleContactFormChange = (
     event: React.ChangeEvent<HTMLInputElement>
