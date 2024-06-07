@@ -33,10 +33,14 @@ export default function ExternalSearch(props: {
   handleDownload: (dataset: IExternalDataset) => void;
   setProcessingError: React.Dispatch<React.SetStateAction<string | null>>;
   setActiveStep: React.Dispatch<React.SetStateAction<number>>;
+  searchValue: string | undefined;
+  setSearchValue: React.Dispatch<React.SetStateAction<string | undefined>>;
+  sources: string[];
+  setSources: React.Dispatch<React.SetStateAction<string[]>>;
 }) {
   const observerTarget = React.useRef(null);
   const [tableView, setTableView] = React.useState(false);
-  const [searchValue, setSearchValue] = React.useState<string | undefined>("");
+
   const [sortValue, setSortValue] = React.useState("createdDate");
   const token = useStoreState((state) => state.AuthToken.value);
   const history = useHistory();
@@ -45,7 +49,6 @@ export default function ExternalSearch(props: {
   const limit = 20;
   const [datasets, setDatasets] = React.useState<IExternalDataset[]>([]);
 
-  const [sources, setSources] = React.useState<string[]>([]);
   const baseSources = [
     { name: "Kaggle", value: "Kaggle" },
     { name: "World Bank", value: "World Bank" },
@@ -76,10 +79,12 @@ export default function ExternalSearch(props: {
     try {
       setLoading(true);
       const response = await axios.get(
-        `${
-          process.env.REACT_APP_API
-        }/external-sources/search?q=${searchValue}&source=${
-          sources.length ? sources.join(",") : "Kaggle,World Bank,WHO,HDX"
+        `${process.env.REACT_APP_API}/external-sources/search?q=${
+          props.searchValue
+        }&source=${
+          props.sources.length
+            ? props.sources.join(",")
+            : "Kaggle,World Bank,WHO,HDX"
         }&offset=${offset}&limit=${limit}`,
         {
           signal: abortControllerRef.current.signal,
@@ -122,7 +127,7 @@ export default function ExternalSearch(props: {
       }
     },
     500,
-    [searchValue, token, sources]
+    [props.searchValue, token, props.sources]
   );
   return (
     <>
@@ -160,14 +165,14 @@ export default function ExternalSearch(props: {
       <Box height={32} />
       <Grid container justifyContent="space-between" alignItems="center">
         <SourceCategoryList
-          sources={sources}
-          setSources={setSources}
+          sources={props.sources}
+          setSources={props.setSources}
           baseSources={baseSources}
         />
 
         <Filter
-          searchValue={searchValue as string}
-          setSearchValue={setSearchValue}
+          searchValue={props.searchValue as string}
+          setSearchValue={props.setSearchValue}
           setSortValue={setSortValue}
           setTableView={setTableView}
           sortValue={sortValue}
