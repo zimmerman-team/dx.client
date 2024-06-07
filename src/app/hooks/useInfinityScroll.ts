@@ -8,8 +8,8 @@ export const useInfinityScroll = (
     //handle infinity scroll with IntersectionObserver api
 
     const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
+      ([entry]) => {
+        if (entry.isIntersecting) {
           setIsObserved(true);
         } else {
           setIsObserved(false);

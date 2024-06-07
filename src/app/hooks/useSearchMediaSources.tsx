@@ -133,6 +133,12 @@ export function useSearchMediaSources(source: string, elementType: string) {
       });
   };
 
+  const reset = () => {
+    setData([]);
+    setPage(1);
+    setPageToken("");
+  };
+
   const getUnsplashImages = async (q: string, nextPage: boolean) => {
     await axios
       .get(
@@ -178,7 +184,7 @@ export function useSearchMediaSources(source: string, elementType: string) {
   const search = async (q: string, nextPage: boolean = false) => {
     if ((elementType === "video" || elementType === "image") && token) {
       if (!nextPage) {
-        setData([]);
+        reset();
       }
       setLoading(true);
       const sources = sourceGetter[elementType as keyof typeof sourceGetter];
