@@ -135,7 +135,7 @@ export default function RowstructureDisplay(props: RowStructureDisplayProps) {
         width: 100%;
         height: 100%;
         position: relative;
-        margin-bottom: ${!viewOnlyMode ? "0px" : "50px"};
+        margin-bottom: ${!viewOnlyMode ? "0px" : "16px"};
       `}
     >
       <div

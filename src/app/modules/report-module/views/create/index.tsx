@@ -322,9 +322,6 @@ export const PlaceHolder = (props: PlaceholderProps) => {
     return false;
   };
 
-  console.log(isDroppable(), "candrop");
-  console.log(itemDragIndex, "isItemDragging");
-
   return (
     <div
       data-cy="report-row-placeholder"

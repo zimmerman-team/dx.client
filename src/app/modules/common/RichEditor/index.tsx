@@ -147,7 +147,6 @@ export const RichEditor = (props: {
           BOLD: {
             fontFamily: "GothamNarrow-Bold",
             fontWeight: "bold",
-            fontSize: "14px",
             lineHeight: "normal",
           },
         }}

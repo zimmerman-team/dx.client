@@ -6,6 +6,9 @@ import { DatasetDataTable } from "app/modules/dataset-upload-module/component/da
 import { CssSnackbar, ISnackbarState } from "./previewFragment";
 import { ReactComponent as FullScreenIcon } from "../assets/full-screen.svg";
 import { ReactComponent as CloseFullScreenIcon } from "../assets/close-full-screen.svg";
+import { useRecoilState } from "recoil";
+import { homeDisplayAtom } from "app/state/recoil/atoms";
+import { ArrowBack } from "@material-ui/icons";
 
 interface Props {
   data: any[];
@@ -24,6 +27,8 @@ interface Props {
 export default function FinishedFragment(props: Props) {
   const history = useHistory();
   const location = useLocation();
+
+  const [display, setDisplay] = useRecoilState(homeDisplayAtom);
 
   const setDatasetId = useStoreActions(
     (actions) => actions.charts.dataset.setValue
@@ -77,6 +82,25 @@ export default function FinishedFragment(props: Props) {
 
   return (
     <div css={dataSetsCss}>
+      <Link
+        to={(() => {
+          setDisplay("data");
+          return location.search.includes("?fromHome=true") ? "/" : "/explore";
+        })()}
+        css={`
+          display: flex;
+          align-items: center;
+          font-size: 14px;
+          color: #231d2c;
+          text-decoration: none;
+          margin-top: 16px;
+          margin-bottom: 16px;
+          column-gap: 8px;
+        `}
+        data-cy="dataset-back-to-library-btn"
+      >
+        <ArrowBack fontSize={"small"} /> Back to Data Library
+      </Link>
       <div
         css={`
           width: 100%;
@@ -93,7 +117,7 @@ export default function FinishedFragment(props: Props) {
             font-size: 16px;
             font-family: "GothamNarrow-Bold", sans-serif;
             line-height: 19px;
-            margin-top: 29px;
+            margin-top: 19px;
           `}
         >
           {props.description}
@@ -104,7 +128,7 @@ export default function FinishedFragment(props: Props) {
             display: flex;
             margin-bottom: 12px;
             justify-content: space-between;
-            margin-top: 55px;
+            margin-top: 34px;
           `}
         >
           <div
