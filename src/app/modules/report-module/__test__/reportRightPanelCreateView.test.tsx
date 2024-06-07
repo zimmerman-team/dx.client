@@ -41,6 +41,8 @@ import {
 import { mockChartList } from "app/modules/report-module/__test__/data";
 import axios, { AxiosResponse } from "axios";
 import { ChartsAppliedFiltersState } from "app/state/api/action-reducers/sync/charts/filters";
+import { setupIntersectionObserverMock } from "./setupIntersectionObserver";
+setupIntersectionObserverMock();
 
 interface MockProps {
   showHeaderItem: boolean;
