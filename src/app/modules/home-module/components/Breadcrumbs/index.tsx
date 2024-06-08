@@ -16,6 +16,7 @@ function BreadCrumbs(props: BreadCrumbsProps) {
     >
       {props.items.map((item, index) => (
         <div
+          key={index}
           css={`
             display: flex;
             align-items: center;
