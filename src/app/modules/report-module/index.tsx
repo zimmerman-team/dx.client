@@ -567,16 +567,16 @@ export default function ReportModule() {
     return hasTextValue || framesArrayState;
   }, [reportName, framesArray, headerDetails]);
 
-  const canChartEditDelete = React.useMemo(() => {
+  const canEditDeleteReport = React.useMemo(() => {
     return isAuthenticated && reportGetData?.owner === user?.sub;
   }, [user, isAuthenticated, reportGetData]);
 
-  const inEditAndCanEdit = view === "edit" ? canChartEditDelete : true;
+  const showReportHeader = view === "edit" ? canEditDeleteReport : true;
 
   return (
     <DndProvider backend={HTML5Backend}>
       {!reportError401 &&
-        inEditAndCanEdit &&
+        showReportHeader &&
         view !== "ai-template" &&
         view !== "initial" && (
           <ReportSubheaderToolbar
@@ -599,7 +599,7 @@ export default function ReportModule() {
       {view &&
         !reportError401 &&
         view !== "preview" &&
-        canChartEditDelete &&
+        canEditDeleteReport &&
         view !== "initial" &&
         view !== "ai-template" && (
           <ReportRightPanel
@@ -620,7 +620,7 @@ export default function ReportModule() {
           width: 100%;
           height: ${view === "ai-template" ||
           reportError401 ||
-          !inEditAndCanEdit
+          !showReportHeader
             ? "0px"
             : "98px"};
         `}

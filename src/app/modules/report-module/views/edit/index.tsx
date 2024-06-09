@@ -211,7 +211,7 @@ function ReportEditView(props: ReportEditViewProps) {
     }
   }, [reportData]);
 
-  const canChartEditDelete = React.useMemo(() => {
+  const canEditDeleteReport = React.useMemo(() => {
     return isAuthenticated && reportData?.owner === user?.sub;
   }, [user, isAuthenticated, reportData]);
 
@@ -232,7 +232,7 @@ function ReportEditView(props: ReportEditViewProps) {
     );
   }
 
-  if (!canChartEditDelete && !loadingReportData) {
+  if (!canEditDeleteReport && !loadingReportData) {
     <>
       <Box height={48} />
       <NotAuthorizedMessageModule
