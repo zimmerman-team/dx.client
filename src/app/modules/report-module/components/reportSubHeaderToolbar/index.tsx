@@ -259,7 +259,7 @@ export function ReportSubheaderToolbar(
               setName={props.setName}
               placeholder="Title"
               autoResize={true}
-              maxWidth={(titleRef.current?.offsetWidth as number) - 100}
+              maxWidth={(titleRef.current?.offsetWidth ?? 1000) - 100}
               spanBuffer={150}
               minWidth={200}
               spanVisibility={inputSpanVisibiltiy}
