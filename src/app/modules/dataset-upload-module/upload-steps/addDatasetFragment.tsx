@@ -44,7 +44,7 @@ export default function AddDatasetFragment(props: Props) {
   });
 
   const { launchPicker, clearToken, connected } = useOneDrivePicker({
-    clientId: process.env.REACT_APP_ONEDRIVE_CLIENT_ID!,
+    clientId: "a5f756dd-d422-443e-93d2-3361f8a4a6f8",
     onCancel: () => {
       props.setActiveOption(null);
     },
