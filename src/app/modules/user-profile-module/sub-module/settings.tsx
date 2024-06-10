@@ -1,6 +1,7 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import DeleteAccountDialog from "app/components/Dialogs/deleteAccountDialog";
 import { PrimaryButton } from "app/components/Styled/button";
+import { PageLoader } from "app/modules/common/page-loader";
 import axios from "axios";
 import React from "react";
 import { useTitle } from "react-use";
@@ -11,6 +12,8 @@ export default function Settings() {
   const [modalDisplay, setModalDisplay] = React.useState<boolean>(false);
   const [inputValue, setInputValue] = React.useState<string>("");
   const [enableButton, setEnableButton] = React.useState<boolean>(false);
+
+  const [loading, setLoading] = React.useState<boolean>(false);
   const { getAccessTokenSilently, logout } = useAuth0();
 
   const deleteUserAccount = async () => {
@@ -29,8 +32,10 @@ export default function Settings() {
   };
 
   const handleDelete = () => {
+    setLoading(true);
     deleteUserAccount()
       .then(() => {
+        setLoading(false);
         setModalDisplay(false);
         setEnableButton(false);
         logout({
@@ -40,9 +45,11 @@ export default function Settings() {
         });
       })
       .catch((err) => {
+        setLoading(false);
         console.log(err);
       });
   };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
 
@@ -54,6 +61,7 @@ export default function Settings() {
   };
   return (
     <>
+      {loading && <PageLoader />}
       <div
         css={`
           width: 70%;

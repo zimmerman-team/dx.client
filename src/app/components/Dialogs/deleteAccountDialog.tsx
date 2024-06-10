@@ -12,6 +12,12 @@ interface Props {
 }
 
 export default function DeleteAccountDialog(props: Props) {
+  const onInputEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && e.currentTarget.value === "DELETE") {
+      props.handleDelete();
+    }
+  };
+
   const classes = useStyles();
   return (
     <div>
@@ -75,6 +81,7 @@ export default function DeleteAccountDialog(props: Props) {
                 type="text"
                 placeholder='Type "DELETE" to confirm'
                 onChange={props.handleInputChange}
+                onKeyPress={onInputEnter}
                 css={`
                   border: 1px solid #231d2c;
                   border-radius: 10px;
