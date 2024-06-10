@@ -297,7 +297,7 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
               setName={props.setName}
               placeholder="Title"
               autoResize={false}
-              maxWidth={titleRef.current?.offsetWidth as number}
+              maxWidth={titleRef.current?.offsetWidth ?? 1000}
               spanBuffer={0}
               minWidth={100}
               spanVisibility={inputSpanVisibiltiy}

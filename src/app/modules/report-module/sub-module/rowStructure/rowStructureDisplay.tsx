@@ -450,8 +450,15 @@ const Box = (props: {
   const textResizableRef = React.useRef<HTMLDivElement>(null);
   const editorHeight = textResizableRef.current?.clientHeight;
 
+  const firstUpdate = useRef(true);
+
   const [,] = useDebounce(
     () => {
+      if (firstUpdate.current) {
+        firstUpdate.current = false;
+        return;
+      }
+
       if (displayMode === "text") {
         handleRowFrameItemAddition(
           props.rowId,
