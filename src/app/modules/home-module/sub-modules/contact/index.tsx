@@ -6,6 +6,7 @@ import { ReactComponent as FullEllipse } from "app/modules/home-module/assets/co
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { useTitle } from "react-use";
 import Subscribe from "../../components/Subscribe";
+import { PageLoader } from "app/modules/common/page-loader";
 
 const DXLogo = (
   <svg
@@ -31,6 +32,7 @@ export default function ContactModule() {
 
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
   const [message, setMessage] = React.useState("");
+  const [loading, setLoading] = React.useState(false);
 
   const [contactFormDetails, setContactFormDetails] = React.useState({
     email: "",
@@ -63,6 +65,7 @@ export default function ContactModule() {
 
   const handleContactFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);
 
     axios
       .post(
@@ -75,6 +78,7 @@ export default function ContactModule() {
         }
       )
       .then((response: AxiosResponse) => {
+        setLoading(false);
         if (response.status === 200) {
           if (response.data.error) {
             return setContactFormFailed(true);
@@ -87,6 +91,7 @@ export default function ContactModule() {
         }
       })
       .catch((error: AxiosError) => {
+        setLoading(false);
         console.log(error);
         setContactFormFailed(true);
       });
@@ -103,6 +108,7 @@ export default function ContactModule() {
         onClose={() => setOpenSnackbar(false)}
         message={message}
       />
+      {loading && <PageLoader />}
       <EmpowerBlock view="contact" />
       <Container maxWidth="lg">
         <div
