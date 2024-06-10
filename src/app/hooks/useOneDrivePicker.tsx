@@ -6,12 +6,14 @@ interface Props {
   onFileSubmit: (file: File) => void;
   onCancel: () => void;
   onDownloadStart: () => void;
+  clientId: string;
 }
 
 export const useOneDrivePicker = ({
   onCancel,
   onFileSubmit,
   onDownloadStart,
+  clientId,
 }: Props) => {
   const [app, setApp] = useState<PublicClientApplication | null>(null);
   const baseUrl = "https://onedrive.live.com/picker";
@@ -21,7 +23,7 @@ export const useOneDrivePicker = ({
   const msalParams = {
     auth: {
       authority: "https://login.microsoftonline.com/consumers",
-      clientId: process.env.REACT_APP_ONEDRIVE_CLIENT_ID!,
+      clientId: clientId,
       redirectUri: window.location.origin,
     },
   };
