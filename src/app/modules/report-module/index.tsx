@@ -40,6 +40,8 @@ import {
 import { ReportSubheaderToolbar } from "app/modules/report-module/components/reportSubHeaderToolbar";
 import { ToolbarPluginsType } from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
 import useAutosave from "app/hooks/useAutoSave";
+import { NotAuthorizedMessageModule } from "../common/not-authorized-message";
+import { Box } from "@material-ui/core";
 
 interface RowFrameProps {
   structure:
@@ -59,7 +61,7 @@ interface RowFrameProps {
 }
 
 export default function ReportModule() {
-  const { user } = useAuth0();
+  const { user, isAuthenticated } = useAuth0();
   const history = useHistory();
   const { page, view } = useParams<{
     page: string;
@@ -412,7 +414,13 @@ export default function ReportModule() {
 
   const reportError401 = useStoreState(
     (state) =>
-      get(state.reports.ReportGet.errorData, "data.error.statusCode", 0) === 401
+      get(state.reports.ReportGet.errorData, "data.error.statusCode", 0) ===
+        401 ||
+      get(state.reports.ReportGet.crudData, "error", "") === "Unauthorized"
+  );
+
+  const errorReportName = useStoreState((state) =>
+    get(state.reports.ReportGet.crudData, "name", "")
   );
 
   React.useEffect(() => {
@@ -559,28 +567,39 @@ export default function ReportModule() {
     return hasTextValue || framesArrayState;
   }, [reportName, framesArray, headerDetails]);
 
+  const canEditDeleteReport = React.useMemo(() => {
+    return isAuthenticated && reportGetData?.owner === user?.sub;
+  }, [user, isAuthenticated, reportGetData]);
+
+  const showReportHeader = view === "edit" ? canEditDeleteReport : true;
+
   return (
     <DndProvider backend={HTML5Backend}>
-      {!reportError401 && view !== "ai-template" && view !== "initial" && (
-        <ReportSubheaderToolbar
-          autoSave={autoSave.isAutoSaveEnabled}
-          setAutoSave={setAutoSave}
-          onReportSave={onSave}
-          setName={setReportName}
-          setHasSubHeaderTitleFocused={setHasSubHeaderTitleFocused}
-          setHasSubHeaderTitleBlurred={setHasSubHeaderTitleBlurred}
-          isSaveEnabled={isSaveEnabled}
-          name={page !== "new" && !view ? reportGetData.name : reportName}
-          framesArray={framesArray}
-          headerDetails={headerDetails}
-          setStopInitializeFramesWidth={setStopInitializeFramesWidth}
-          handlePersistReportState={handlePersistReportState}
-          isPreviewView={isPreviewView}
-          plugins={plugins}
-        />
-      )}
+      {!reportError401 &&
+        showReportHeader &&
+        view !== "ai-template" &&
+        view !== "initial" && (
+          <ReportSubheaderToolbar
+            autoSave={autoSave.isAutoSaveEnabled}
+            setAutoSave={setAutoSave}
+            onReportSave={onSave}
+            setName={setReportName}
+            setHasSubHeaderTitleFocused={setHasSubHeaderTitleFocused}
+            setHasSubHeaderTitleBlurred={setHasSubHeaderTitleBlurred}
+            isSaveEnabled={isSaveEnabled}
+            name={page !== "new" && !view ? reportGetData.name : reportName}
+            framesArray={framesArray}
+            headerDetails={headerDetails}
+            setStopInitializeFramesWidth={setStopInitializeFramesWidth}
+            handlePersistReportState={handlePersistReportState}
+            isPreviewView={isPreviewView}
+            plugins={plugins}
+          />
+        )}
       {view &&
+        !reportError401 &&
         view !== "preview" &&
+        canEditDeleteReport &&
         view !== "initial" &&
         view !== "ai-template" && (
           <ReportRightPanel
@@ -599,7 +618,11 @@ export default function ReportModule() {
       <div
         css={`
           width: 100%;
-          height: ${view === "ai-template" ? "40px" : "98px"};
+          height: ${view === "ai-template" ||
+          reportError401 ||
+          !showReportHeader
+            ? "0px"
+            : "98px"};
         `}
       />
       <Switch>

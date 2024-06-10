@@ -47,7 +47,7 @@ export function ChartBuilderPreview(props: ChartBuilderPreviewProps) {
     if (datasetId === null && !props.loading && page === "new") {
       history.push(`/chart/${page}/data`);
     } else {
-      props.loadDataset(`chart/sample-data/${datasetId}`);
+      props.loadDataset(datasetId!);
     }
   }, [datasetId]);
 

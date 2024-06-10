@@ -22,6 +22,7 @@ import { linkDecorator } from "app/modules/common/RichEditor/decorators";
 import { useTitle } from "react-use";
 import ReportUsePanel from "../../components/use-report-panel";
 import HomeFooter from "app/modules/home-module/components/Footer";
+import { PageLoader } from "app/modules/common/page-loader";
 
 export function ReportPreviewView(props: {
   setIsPreviewView: React.Dispatch<React.SetStateAction<boolean>>;
@@ -52,12 +53,19 @@ export function ReportPreviewView(props: {
   const reportData = useStoreState(
     (state) => (state.reports.ReportGet.crudData ?? emptyReport) as ReportModel
   );
+  const loadingReportData = useStoreState(
+    (state) => state.reports.ReportGet.loading
+  );
 
-  const Error401 = useStoreState(
+  const reportError401 = useStoreState(
     (state) =>
       get(state.reports.ReportGet.errorData, "data.error.statusCode", 0) ===
         401 ||
       get(state.reports.ReportGet.crudData, "error", "") === "Unauthorized"
+  );
+
+  const errorReportName = useStoreState((state) =>
+    get(state.reports.ReportGet.crudData, "name", "")
   );
 
   const fetchReportData = useStoreActions(
@@ -134,6 +142,23 @@ export function ReportPreviewView(props: {
     }
   }, [persistedReportState]);
 
+  if (loadingReportData) {
+    return <PageLoader />;
+  }
+
+  if (reportError401) {
+    return (
+      <>
+        <Box height={48} />
+        <NotAuthorizedMessageModule
+          asset="report"
+          action="view"
+          name={errorReportName}
+        />
+      </>
+    );
+  }
+
   return (
     <div
       id="export-container"
@@ -160,10 +185,8 @@ export function ReportPreviewView(props: {
       />
       <Container id="content-container" maxWidth="lg" ref={ref}>
         <Box height={45} />
-        {Error401 && (
-          <NotAuthorizedMessageModule asset="report" action="view" />
-        )}
-        {!Error401 &&
+
+        {!reportError401 &&
           get(reportPreviewData, "rows", []).map((rowFrame, index) => {
             const contentTypes = rowFrame.items.map((item) => {
               if (item === null) {
