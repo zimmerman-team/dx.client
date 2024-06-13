@@ -40,8 +40,6 @@ import {
 import { ReportSubheaderToolbar } from "app/modules/report-module/components/reportSubHeaderToolbar";
 import { ToolbarPluginsType } from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
 import useAutosave from "app/hooks/useAutoSave";
-import { NotAuthorizedMessageModule } from "../common/not-authorized-message";
-import { Box } from "@material-ui/core";
 
 interface RowFrameProps {
   structure:
