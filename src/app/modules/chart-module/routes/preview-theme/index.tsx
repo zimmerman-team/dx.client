@@ -14,7 +14,6 @@ import WarningDialog from "app/modules/chart-module/components/dialog/warningDia
 import { ReactComponent as AIIcon } from "app/modules/chart-module/assets/ai-icon.svg";
 import GeomapLegend from "app/modules/chart-module/components/geomap-legend";
 import ErrorComponent from "app/modules/chart-module/components/dialog/errrorComponent";
-import { ChartAPIModel } from "app/modules/chart-module/data";
 import { DatasetListItemAPIModel } from "app/modules/dataset-module/data";
 
 export function ChartBuilderPreviewTheme(props: ChartBuilderPreviewThemeProps) {
@@ -272,9 +271,6 @@ export function ChartBuilderPreviewTheme(props: ChartBuilderPreviewThemeProps) {
                     color: #70777e;
                     font-family: "GothamNarrow-Bold", sans-serif;
                     font-size: 12px;
-                    position: absolute;
-                    bottom: 0;
-                    left: 0;
                     a {
                       font-family: "GothamNarrow-Bold", sans-serif;
 

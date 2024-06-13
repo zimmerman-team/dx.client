@@ -7,6 +7,7 @@ import { CommonChart } from "app/modules/chart-module/components/common-chart";
 import { ChartAPIModel, emptyChartAPI } from "app/modules/chart-module/data";
 import { ReactComponent as AIIcon } from "app/modules/chart-module/assets/ai-icon.svg";
 import { useRenderChartFromAPI } from "./useRenderChartFromAPI";
+import { useLoadDatasetDetails } from "./useLoadDatasetDetailsAPI";
 
 interface Props {
   id: string;
@@ -36,6 +37,8 @@ export function ReportChartWrapper(props: Props) {
   const clearChart = useStoreActions(
     (actions) => actions.charts.ChartGetInReport.clear
   );
+  const [datasetId, setDatasetId] = React.useState<string | null>(null);
+  const { datasetDetails } = useLoadDatasetDetails(datasetId!);
 
   const [_rawViz, setRawViz] = React.useState<any>(null);
   const {
@@ -74,6 +77,7 @@ export function ReportChartWrapper(props: Props) {
   React.useEffect(() => {
     if (loadedChart && loadedChart.id !== "" && loadedChart.id === props.id) {
       setIsAiAssisted(loadedChart.isAIAssisted);
+      setDatasetId(loadedChart.datasetId);
       if (loadedChart.name.length > 0) {
         setChartName(loadedChart.name);
       }
@@ -238,6 +242,8 @@ export function ReportChartWrapper(props: Props) {
         inChartWrapper={true}
         chartPreviewInReport={props.chartPreviewInReport}
         mapping={chartFromAPI?.mapping}
+        source={datasetDetails?.source}
+        sourceUrl={datasetDetails?.sourceUrl}
       />
     </div>
   );

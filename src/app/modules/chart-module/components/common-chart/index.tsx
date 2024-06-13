@@ -42,6 +42,8 @@ interface Props {
   inChartWrapper?: boolean;
   chartPreviewInReport?: boolean;
   mapping?: any;
+  sourceUrl?: string;
+  source?: string;
 }
 
 export function CommonChart(props: Readonly<Props>) {
@@ -54,11 +56,10 @@ export function CommonChart(props: Readonly<Props>) {
   );
 
   const chartType = props.renderedChartType ?? chartTypeFromState;
-  const loadedChart =
-    useStoreState((state) => state.charts.ChartGet.crudData as ChartAPIModel) ??
-    useStoreState(
-      (state) => state.charts.ChartGetInReport.crudData as ChartAPIModel
-    );
+  const loadedChart = useStoreState(
+    (state) => state.charts.ChartGet.crudData as ChartAPIModel
+  );
+
   const datasetId = loadedChart?.datasetId;
   const loadDataset = useStoreActions(
     (actions) => actions.dataThemes.DatasetGet.fetch
@@ -67,6 +68,9 @@ export function CommonChart(props: Readonly<Props>) {
     (state) =>
       (state.dataThemes.DatasetGet.crudData ?? {}) as DatasetListItemAPIModel
   );
+  const dataSourcePHeight = document
+    .getElementById(`datasource-${props.chartId || "1"}`)
+    ?.getBoundingClientRect().height;
 
   React.useEffect(() => {
     if (token) {
@@ -254,7 +258,7 @@ export function CommonChart(props: Readonly<Props>) {
           data-cy="common-chart-container"
           css={`
             width: auto !important;
-            height: 100%;
+            height: calc(100% - ${dataSourcePHeight}px);
 
             > div:first-of-type {
               ${props.renderedChartType === "bigNumber" &&
@@ -294,10 +298,10 @@ export function CommonChart(props: Readonly<Props>) {
         `}
 
               > svg {
-                height: 100%;
+                height: calc(100% - ${dataSourcePHeight}px);
 
                 > rect {
-                  height: 100%;
+                  height: calc(100% - ${dataSourcePHeight}px);
                 }
               }
             }
@@ -305,14 +309,12 @@ export function CommonChart(props: Readonly<Props>) {
         />
 
         <p
+          id={`datasource-${props.chartId || "1"}`}
           css={`
             color: #70777e;
             font-family: "GothamNarrow-Bold", sans-serif;
-
             font-size: 12px;
-            position: absolute;
-            bottom: 0;
-            left: 0;
+            margin: 0;
             a {
               font-family: "GothamNarrow-Bold", sans-serif;
 
@@ -324,11 +326,15 @@ export function CommonChart(props: Readonly<Props>) {
         >
           Source:{" "}
           <a
-            href={datasetDetails.sourceUrl}
+            href={
+              props.inChartWrapper ? props.sourceUrl : datasetDetails.sourceUrl
+            }
             target="_blank"
             rel="noopener noreferrer"
           >
-            {datasetDetails.source} - Data file: {datasetDetails.sourceUrl}
+            {props.inChartWrapper ? props.source : datasetDetails.source} - Data
+            file:{" "}
+            {props.inChartWrapper ? props.sourceUrl : datasetDetails.sourceUrl}
           </a>
         </p>
         {chartType === "echartsGeomap" && props.visualOptions?.showLegend ? (
