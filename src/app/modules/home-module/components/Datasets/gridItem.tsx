@@ -63,7 +63,9 @@ export default function GridItem(props: Readonly<Props>) {
       data-cy="dataset-grid-item"
     >
       <Link
-        to={`/dataset/${props.id}/detail`}
+        to={`/dataset/${props.id}/detail${
+          location.pathname === "/" ? "?fromHome=true" : ""
+        }`}
         css={`
           text-decoration: none;
         `}
