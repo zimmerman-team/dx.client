@@ -293,7 +293,8 @@ export function useChartsRawData(props: {
   React.useEffect(() => {
     //used only in chart detail page
     if (isPreviewMode) {
-      if (loadedChartDetails?.isMappingValid) {
+      if (loadedChartDetails?.isMappingValid && renderChartFromAPIFufilled) {
+        console.log("rendering chart from API");
         renderChartFromAPI();
       } else {
         // No need to call API if mapping is not valid. hence we set loading to false
