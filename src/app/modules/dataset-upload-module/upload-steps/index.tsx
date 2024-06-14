@@ -282,7 +282,12 @@ function DatasetUploadSteps(props: Props) {
             <Box height={32} />
             <BreadCrumbs
               items={[
-                { title: "Library", path: "/" },
+                {
+                  title: "Library",
+                  path: location.search.includes("fromHome=true")
+                    ? "/"
+                    : "/dashboard",
+                },
                 {
                   title: (
                     <span

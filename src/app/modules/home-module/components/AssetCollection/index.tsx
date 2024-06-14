@@ -168,7 +168,9 @@ function AssetsCollection() {
           `}
         >
           <Link
-            to="/dataset/new/upload"
+            to={`/dataset/new/upload${
+              location.pathname === "/" ? "?fromHome=true" : ""
+            }`}
             css={`
               background: #e492bd;
             `}
