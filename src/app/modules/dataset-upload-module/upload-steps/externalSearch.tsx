@@ -4,7 +4,6 @@ import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import Filter from "app/modules/home-module/components/Filter";
 import ExternalDatasetCard from "app/modules/home-module/components/Datasets/externalDatasetCard";
 import { useStoreState } from "app/state/store/hooks";
-import { useHistory } from "react-router-dom";
 import useDebounce from "react-use/lib/useDebounce";
 import axios from "axios";
 import CircleLoader from "app/modules/home-module/components/Loader";
@@ -45,7 +44,6 @@ export default function ExternalSearch(props: {
 
   const [sortValue, setSortValue] = React.useState("createdDate");
   const token = useStoreState((state) => state.AuthToken.value);
-  const history = useHistory();
   const [loading, setLoading] = React.useState(false);
   const [offset, setOffset] = React.useState(0);
   const limit = 20;
@@ -56,7 +54,7 @@ export default function ExternalSearch(props: {
     { name: "World Bank", value: "World Bank" },
     { name: "WHO", value: "WHO" },
     { name: "HDX", value: "HDX" },
-    { name: "TGF", value: "TGF" },
+    { name: "The Global Fund", value: "TGF" },
   ];
 
   const { isObserved } = useInfinityScroll(observerTarget);
@@ -67,8 +65,6 @@ export default function ExternalSearch(props: {
   const terminateSearch = () => {
     abortControllerRef.current.abort();
     abortControllerRef.current = new AbortController();
-    // setDatasets([]);
-    // setOffset(0);
   };
 
   // Pagination on scroll
