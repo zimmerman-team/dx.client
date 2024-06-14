@@ -31,6 +31,22 @@ describe("Testing connecting data on DX", () => {
     cy.get('[data-cy="home-connect-dataset-button"]').click();
   });
 
+  it("Can filter results by source in the federated search", () => {
+    cy.intercept(`${apiUrl}/external-sources/search?q=*`).as("getDefaultData");
+    cy.wait("@getDefaultData").then((interception) => {
+      cy.get('[data-cy="external-search-card-Kaggle"]').should(
+        "have.length.greaterThan",
+        1
+      );
+    });
+
+    cy.contains('[data-cy="source-category-button"]', "WHO").click();
+    cy.wait("@getDefaultData");
+
+    cy.get('[data-cy="external-search-card-Kaggle"]').should("have.length", 0);
+    cy.get('[data-cy="external-search-card-WHO"]').should("be.visible");
+  });
+
   it("Can import data from External Search", () => {
     cy.intercept(`${apiUrl}/external-sources/search?q=*`).as("getDefaultData");
 

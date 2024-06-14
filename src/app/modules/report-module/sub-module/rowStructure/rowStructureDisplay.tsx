@@ -551,6 +551,7 @@ const Box = (props: {
             ref={textResizableRef}
             onMouseEnter={() => setDisplayBoxIcons(true)}
             onMouseLeave={() => setDisplayBoxIcons(false)}
+            data-cy={`row-frame-text-item-${props.rowIndex}-${props.itemIndex}`}
           >
             {!viewOnlyMode && displayBoxIcons && (
               <IconButton
@@ -626,6 +627,7 @@ const Box = (props: {
             onMouseLeave={() => setDisplayBoxIcons(false)}
             onFocus={() => setDisplayBoxIcons(true)}
             onBlur={() => setDisplayBoxIcons(false)}
+            data-cy={`row-frame-chart-item-${props.rowIndex}-${props.itemIndex}`}
           >
             {!viewOnlyMode && displayBoxIcons && (
               <div>
@@ -662,6 +664,7 @@ const Box = (props: {
                 </IconButton>
                 <IconButton
                   onClick={handleEditChart}
+                  data-cy="edit-chart-button"
                   css={`
                     top: 12px;
                     z-index: 1;
@@ -727,6 +730,7 @@ const Box = (props: {
           <div
             onMouseEnter={() => setDisplayBoxIcons(true)}
             onMouseLeave={() => setDisplayBoxIcons(false)}
+            data-cy={`row-frame-video-item-${props.rowIndex}-${props.itemIndex}`}
           >
             {!viewOnlyMode && displayBoxIcons && (
               <IconButton
@@ -808,6 +812,7 @@ const Box = (props: {
           <div
             onMouseEnter={() => setDisplayBoxIcons(true)}
             onMouseLeave={() => setDisplayBoxIcons(false)}
+            data-cy={`row-frame-image-item-${props.rowIndex}-${props.itemIndex}`}
           >
             {!viewOnlyMode && displayBoxIcons && (
               <IconButton

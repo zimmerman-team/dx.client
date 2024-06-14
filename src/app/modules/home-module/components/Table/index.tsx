@@ -54,6 +54,7 @@ export function HomepageTable(props: {
             }
           }
         `}
+        data-cy="homepage-table"
       >
         <TableHead
           css={`
@@ -98,6 +99,7 @@ export function HomepageTable(props: {
                   background: #f1f3f5;
                 }
               `}
+              data-cy={`table-row-${data.type}`}
             >
               <TableCell>{index + 1}</TableCell>
               <TableCell>{data.name}</TableCell>

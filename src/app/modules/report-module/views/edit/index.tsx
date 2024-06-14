@@ -290,7 +290,7 @@ function ReportEditView(props: ReportEditViewProps) {
 
           {props.framesArray?.map((frame, index) => {
             return (
-              <div key={frame.id}>
+              <div key={frame.id} data-cy={`row-frame-container-${index}`}>
                 {index === 0 && (
                   <PlaceHolder
                     index={index}

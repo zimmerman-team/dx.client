@@ -70,6 +70,7 @@ export function ItemComponent(props: ItemComponentProps) {
             ? "none"
             : "flex"};
         `}
+        data-cy="row-frame-handle"
       >
         <RowFrameHandleAdornment />
       </div>
