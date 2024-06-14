@@ -352,6 +352,7 @@ function AssetsCollection() {
                 ))}
               </Popover>
               <IconButton
+                data-cy="home-table-view-button"
                 onClick={() => {
                   setTableView(!tableView);
                 }}
