@@ -51,6 +51,9 @@ const AuthCallbackModule = lazy(() => import("app/modules/callback-module"));
 const OnboardingModule = lazy(() => import("app/modules/onboarding-module"));
 const UserProfileModule = lazy(() => import("app/modules/user-profile-module"));
 const DatasetModule = lazy(() => import("app/modules/dataset-module"));
+const DashboardModule = lazy(
+  () => import("app/modules/home-module/sub-modules/dashboard")
+);
 
 const ProtectedRoute = (props: {
   component: React.ComponentType<any>;
@@ -245,6 +248,9 @@ export function MainRoutes() {
           {/* <RouteWithAppBar exact path="/explore">
             <ExploreAssetsModule />
           </RouteWithAppBar> */}
+          <RouteWithAppBar exact path="/dashboard">
+            <DashboardModule />
+          </RouteWithAppBar>
           <RouteWithAppBar exact path="/report/:page/:view?">
             <ReportModule />
           </RouteWithAppBar>

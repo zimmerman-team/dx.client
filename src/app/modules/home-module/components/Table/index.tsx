@@ -86,7 +86,11 @@ export function HomepageTable(props: {
                 if (!props.inChartBuilder) {
                   history.push(
                     `/${data.type}/${data.id}${
-                      data.type === "dataset" ? `/detail?` : ""
+                      data.type === "dataset"
+                        ? `/detail${
+                            location.pathname === "/" ? "?fromHome=true" : ""
+                          }`
+                        : ""
                     }`
                   );
                 } else if (props.inChartBuilder && props.onItemClick) {

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, Container, Grid, IconButton } from "@material-ui/core";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import Filter from "app/modules/home-module/components/Filter";
@@ -121,9 +121,23 @@ export default function ExternalSearch(props: {
     };
   }, []);
 
+  const firstTimeRef = React.useRef(true);
+
+  useEffect(() => {
+    if (token && firstTimeRef.current) {
+      setDatasets([]);
+      setOffset(0);
+      loadSearch();
+    }
+  }, [token]);
+
   const [,] = useDebounce(
     () => {
       if (token) {
+        if (firstTimeRef.current) {
+          firstTimeRef.current = false;
+          return;
+        }
         setDatasets([]);
         setOffset(0);
         loadSearch();
@@ -193,37 +207,59 @@ export default function ExternalSearch(props: {
       </Grid>
 
       <Box height={32} />
-      <Grid container spacing={2}>
-        {datasets &&
-          datasets?.map((dataset, index) => (
-            <Grid
-              item
-              lg={3}
-              md={4}
-              sm={6}
-              xs={12}
-              key={`${dataset.name}-${index}`}
-            >
-              <ExternalDatasetCard
-                description={dataset.description}
-                name={dataset.name}
-                publishedDate={dataset.datePublished}
-                source={dataset.source}
-                url={dataset.url}
-                handleDownload={() => props.handleDownload(dataset)}
-                dataset={dataset}
-              />
-              <Box height={16} />
-            </Grid>
-          ))}
-
+      {datasets?.length ? (
+        <Grid container spacing={2}>
+          {datasets &&
+            datasets?.map((dataset, index) => (
+              <Grid
+                item
+                lg={3}
+                md={4}
+                sm={6}
+                xs={12}
+                key={`${dataset.name}-${index}`}
+              >
+                <ExternalDatasetCard
+                  description={dataset.description}
+                  name={dataset.name}
+                  publishedDate={dataset.datePublished}
+                  source={dataset.source}
+                  url={dataset.url}
+                  handleDownload={() => props.handleDownload(dataset)}
+                  dataset={dataset}
+                />
+                <Box height={16} />
+              </Grid>
+            ))}
+        </Grid>
+      ) : !loading ? (
         <div
-          ref={observerTarget}
           css={`
-            height: 1px;
+            text-align: center;
+            height: 221px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 325;
+            line-height: normal;
+            letter-spacing: 0.5px;
+            font-family: "GothamNarrow-Book", sans-serif;
           `}
-        />
-      </Grid>
+        >
+          No datasets were found using federated search. Please consider trying
+          a different search description.
+        </div>
+      ) : null}
+
+      <div
+        ref={observerTarget}
+        css={`
+          height: 1px;
+        `}
+      />
+
       <Box display={"flex"} justifyContent={"center"}>
         {loading && <CircleLoader />}
       </Box>

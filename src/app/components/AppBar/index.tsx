@@ -230,7 +230,7 @@ export function AppBar() {
                 `}
               >
                 {" "}
-                <div css={navLinkcss("explore", navLocation)}>
+                <div css={navLinkcss("", navLocation)}>
                   <NavLink to="/" data-cy="nav-explore">
                     <b>Explore </b>
                   </NavLink>
@@ -327,7 +327,7 @@ const ActionMenu = () => {
           }
         `}
       >
-        <Link to={isAuthenticated ? "/" : "/onboarding/login"}>
+        <Link to={isAuthenticated ? "/dashboard" : "/onboarding/login"}>
           <button data-cy="appbar-create-report/login">
             {isAuthenticated ? "MY DASHBOARD" : "Log in"}
           </button>
