@@ -59,6 +59,7 @@ export default function SourceCategoryList(props: Readonly<Props>) {
               props.setSources(fSource);
             }
           }}
+          data-cy="source-category-button"
           style={
             props.sources.includes(s.value)
               ? {

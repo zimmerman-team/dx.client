@@ -90,7 +90,7 @@ export default function FinishedFragment(props: Props) {
       <Link
         to={(() => {
           setDisplay("data");
-          return "/";
+          return location.search.includes("fromHome=true") ? "/" : "/dashboard";
         })()}
         css={`
           display: flex;

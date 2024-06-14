@@ -13,10 +13,19 @@ export const turnsDataCss = css`
 
   h1 {
     font-family: "GothamNarrow-Bold", sans-serif;
+    font-weight: 700;
+    font-size: 40px;
+    line-height: 48px;
+    text-align: center;
+    color: #231d2c;
+    margin: 0;
+    padding: 0;
+  }
+  h2 {
+    font-family: "GothamNarrow-Bold", sans-serif;
     font-weight: 400;
     font-size: 34px;
     line-height: 42px;
-    /* text-align: center; */
     color: #2b3674;
     margin: 0;
     padding: 0;
@@ -35,7 +44,7 @@ export const turnsDataCss = css`
 
   button,
   a {
-    padding: 8px 24px;
+    padding: 8px 27px;
     height: 41px;
     border-radius: 25px;
     outline: none;

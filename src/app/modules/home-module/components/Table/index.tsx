@@ -54,6 +54,7 @@ export function HomepageTable(props: {
             }
           }
         `}
+        data-cy="homepage-table"
       >
         <TableHead
           css={`
@@ -85,7 +86,11 @@ export function HomepageTable(props: {
                 if (!props.inChartBuilder) {
                   history.push(
                     `/${data.type}/${data.id}${
-                      data.type === "dataset" ? `/detail?` : ""
+                      data.type === "dataset"
+                        ? `/detail${
+                            location.pathname === "/" ? "?fromHome=true" : ""
+                          }`
+                        : ""
                     }`
                   );
                 } else if (props.inChartBuilder && props.onItemClick) {
@@ -98,6 +103,7 @@ export function HomepageTable(props: {
                   background: #f1f3f5;
                 }
               `}
+              data-cy={`table-row-${data.type}`}
             >
               <TableCell>{index + 1}</TableCell>
               <TableCell>{data.name}</TableCell>

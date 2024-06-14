@@ -24,6 +24,8 @@ import { DatasetListItemAPIModel } from "app/modules/dataset-module/data";
 import BreadCrumbs from "app/modules/home-module/components/Breadcrumbs";
 import UploadTabs from "../component/tabs";
 import SmallFooter from "app/modules/home-module/components/Footer/smallFooter";
+import { useRecoilState } from "recoil";
+import { dataUploadTabAtom } from "app/state/recoil/atoms";
 
 interface Props {
   datasetId: string;
@@ -54,7 +56,7 @@ function DatasetUploadSteps(props: Props) {
   const [openSearch, setOpenSearch] = React.useState(false);
   const [sources, setSources] = React.useState<string[]>([]);
 
-  const [activeTab, setActiveTab] = React.useState<"search" | "file">("search");
+  const [activeTab, setActiveTab] = useRecoilState(dataUploadTabAtom);
   const [activeOption, setActiveOption] = React.useState<string | null>(null);
 
   const defaultProcessingError =
@@ -280,7 +282,12 @@ function DatasetUploadSteps(props: Props) {
             <Box height={32} />
             <BreadCrumbs
               items={[
-                { title: "Library", path: "/" },
+                {
+                  title: "Library",
+                  path: location.search.includes("fromHome=true")
+                    ? "/"
+                    : "/dashboard",
+                },
                 {
                   title: (
                     <span
