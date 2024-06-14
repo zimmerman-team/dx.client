@@ -56,6 +56,7 @@ export default function DatasetCategoryList(props: Readonly<Props>) {
               props.setCategories(fCategory);
             }
           }}
+          data-cy="dataset-category-button"
           style={
             props.categories.includes(c)
               ? {

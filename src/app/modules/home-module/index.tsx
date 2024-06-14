@@ -371,6 +371,7 @@ export default function HomeModule() {
                     setTableView(!tableView);
                   }}
                   css={iconButtonCss(tableView)}
+                  data-cy="home-table-view-button"
                 >
                   <GridIcon />
                 </IconButton>
