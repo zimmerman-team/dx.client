@@ -74,7 +74,9 @@ export default function FinishedFragment(props: Props) {
     if (location.pathname === "/dataset/new/upload") {
       redirectTimeout = setTimeout(() => {
         history.push(
-          `/dataset/${props.datasetId}/detail?fromreport=true&page=${reportPage}`
+          reportPage
+            ? `/dataset/${props.datasetId}/detail?fromreport=true&page=${reportPage}`
+            : `/dataset/${props.datasetId}/detail`
         );
       }, 8000);
     }
@@ -188,7 +190,9 @@ export default function FinishedFragment(props: Props) {
           <Link
             to={{
               pathname: `/chart/new/chart-type`,
-              search: `?loadataset=true&fromreport=true&page=${reportPage}`,
+              search: `?loadataset=true${
+                reportPage ? `&fromreport=true&page=${reportPage}` : ""
+              }`,
             }}
             css={`
               pointer-events: ${props.canDatasetEditDelete ? "auto" : "none"};

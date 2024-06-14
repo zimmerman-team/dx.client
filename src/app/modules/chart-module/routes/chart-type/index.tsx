@@ -115,15 +115,6 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
     return isAuthenticated && loadedChart && loadedChart.owner === user?.sub;
   }, [user, isAuthenticated, loadedChart]);
 
-  if (!canChartEditDelete && page !== "new") {
-    return (
-      <>
-        <div css="width: 100%; height: 100px;" />
-        <NotAuthorizedMessageModule asset="chart" action="edit" />
-      </>
-    );
-  }
-
   const validAiSuggestions = () => {
     try {
       const validSuggestions:
@@ -214,6 +205,15 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
       setSelectedAIChart(Boolean(aIChartSuggestions(chartTypeId)));
     };
 
+  if (!canChartEditDelete && page !== "new") {
+    return (
+      <>
+        <div css="width: 100%; height: 100px;" />
+        <NotAuthorizedMessageModule asset="chart" action="edit" />
+      </>
+    );
+  }
+
   return (
     <div css={commonStyles.container}>
       <div
@@ -240,10 +240,9 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
               }
             `}
           >
-            Our <span>AI agent</span> has provided you with a suggested chart to
-            communicate your dataset. <br />
-            If you decide to go with any other chart, no worries it’s up to you!
-            Make your pick and tap “Next”.
+            Our <span>AI agent</span> is providing you with one or more
+            suggested charts to communicate your dataset. <br /> Feel free to
+            pick another chart type.
           </p>
           <div
             css={`
