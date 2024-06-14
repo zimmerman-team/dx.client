@@ -65,7 +65,16 @@ export const useOneDrivePicker = ({
 
   async function launchPicker() {
     const authToken = await getToken();
-    win = window.open("", "Picker", "height=600,width=1200");
+    const popupHeight = 500;
+    const popupWidth = 1000;
+    const popupLeft = (window.screen.width - popupWidth) / 2;
+    const popupTop = (window.screen.height - popupHeight) / 2;
+
+    win = window.open(
+      "",
+      "Picker",
+      `width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop}`
+    );
 
     if (win) {
       const queryString = new URLSearchParams({
