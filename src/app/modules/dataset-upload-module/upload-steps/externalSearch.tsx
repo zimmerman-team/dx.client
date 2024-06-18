@@ -65,6 +65,7 @@ export default function ExternalSearch(props: {
   const terminateSearch = () => {
     abortControllerRef.current.abort();
     abortControllerRef.current = new AbortController();
+    setOffset(0);
   };
 
   // Pagination on scroll
@@ -122,7 +123,6 @@ export default function ExternalSearch(props: {
   useEffect(() => {
     if (token && firstTimeRef.current) {
       setDatasets([]);
-      setOffset(0);
       loadSearch();
     }
   }, [token]);
@@ -135,7 +135,6 @@ export default function ExternalSearch(props: {
           return;
         }
         setDatasets([]);
-        setOffset(0);
         loadSearch();
       }
     },
@@ -186,6 +185,7 @@ export default function ExternalSearch(props: {
           sources={props.sources}
           setSources={props.setSources}
           baseSources={baseSources}
+          terminateSearch={terminateSearch}
         />
 
         <Filter

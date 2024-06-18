@@ -10,6 +10,7 @@ interface Props {
   sources: string[];
   setSources: (c: string[]) => void;
   customCss?: { gap: string };
+  terminateSearch?: () => void;
 }
 export default function SourceCategoryList(props: Readonly<Props>) {
   const { customCss } = props;
@@ -52,6 +53,7 @@ export default function SourceCategoryList(props: Readonly<Props>) {
         <button
           key={s.value}
           onClick={() => {
+            props.terminateSearch && props.terminateSearch();
             if (!props.sources.includes(s.value)) {
               props.setSources([...props.sources, s.value]);
             } else {
