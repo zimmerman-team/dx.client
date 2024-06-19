@@ -92,6 +92,7 @@ export default function PreviewTable(props: PreviewTableProps) {
                 return (
                   <TableCell key={val}>
                     <div
+                      title={val}
                       css={`
                         display: flex;
                         justify-content: space-between;

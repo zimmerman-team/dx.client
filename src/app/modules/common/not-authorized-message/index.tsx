@@ -13,6 +13,7 @@ export function NotAuthorizedMessageModule(props: {
   name?: string;
 }) {
   const { isAuthenticated } = useAuth0();
+  const destinationPath = `?to=${location.pathname}`;
   return (
     <>
       <div
@@ -124,10 +125,16 @@ export function NotAuthorizedMessageModule(props: {
               }
             `}
           >
-            <button onClick={() => socialAuth("google-oauth2")}>
+            <button
+              onClick={() =>
+                socialAuth("google-oauth2", undefined, destinationPath)
+              }
+            >
               <GoogleIcon /> sign in for free
             </button>
-            <button onClick={() => socialAuth("linkedin")}>
+            <button
+              onClick={() => socialAuth("linkedin", undefined, destinationPath)}
+            >
               <LinkedInIcon /> sign in for free
             </button>
           </div>

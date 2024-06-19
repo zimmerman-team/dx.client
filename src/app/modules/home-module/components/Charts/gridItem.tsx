@@ -45,7 +45,9 @@ export default function gridItem(props: Props) {
       `}
     >
       <Link
-        to={`/chart/${props.id}`}
+        to={
+          props.public ? `/chart/${props.id}?public=true` : `/chart/${props.id}`
+        }
         title={props.title}
         css={`
           width: 100%;

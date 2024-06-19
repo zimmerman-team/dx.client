@@ -509,6 +509,7 @@ export default function ChartModule() {
         onSave={onSave}
         savedChanges={savedChanges}
       />
+
       <ChartModuleToolBox
         rawViz={rawViz}
         data={sampleData}

@@ -27,7 +27,6 @@ import { useHistory, useParams } from "react-router-dom";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import { useMount, useTitle, useUpdateEffect } from "react-use";
 import { isEmpty } from "lodash";
-import { withAuthenticationRequired } from "@auth0/auth0-react";
 
 function ReportInitialView(props: Readonly<ReportInitialViewProps>) {
   useTitle("DX DataXplorer - New Report");
@@ -296,4 +295,4 @@ function ReportInitialView(props: Readonly<ReportInitialViewProps>) {
   );
 }
 
-export default withAuthenticationRequired(ReportInitialView);
+export default ReportInitialView;

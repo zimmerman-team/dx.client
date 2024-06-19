@@ -2,7 +2,7 @@
 import React, { useEffect } from "react";
 import axios from "axios";
 import Container from "@material-ui/core/Container";
-import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
+import { useAuth0 } from "@auth0/auth0-react";
 /** project */
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import { useChartsRawData } from "app/hooks/useChartsRawData";
@@ -421,4 +421,4 @@ function DatasetUploadSteps(props: Props) {
   );
 }
 
-export default withAuthenticationRequired(DatasetUploadSteps);
+export default DatasetUploadSteps;

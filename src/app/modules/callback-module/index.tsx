@@ -1,6 +1,6 @@
 import React from "react";
 import Box from "@material-ui/core/Box";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import { PageLoader } from "app/modules/common/page-loader";
 import axios from "axios";
@@ -14,6 +14,9 @@ function AuthCallbackModule() {
   const [loading, setLoading] = React.useState(true);
 
   const [googleDriveToken, setGoogleDriveToken] = useCookie("googleDriveToken");
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const destinationPath = queryParams.get("to") as string;
 
   const duplicateReport = async (id: string) => {
     getAccessTokenSilently().then(async (newToken) => {
@@ -73,7 +76,9 @@ function AuthCallbackModule() {
         await duplicateAssets();
         setLoading(false);
       })();
-
+      if (destinationPath) {
+        return history.replace(destinationPath);
+      }
       const reportId = localStorage.getItem("duplicateReportAfterSignIn");
       if (reportId) {
         (async () => {

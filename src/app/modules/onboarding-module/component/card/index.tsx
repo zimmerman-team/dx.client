@@ -5,9 +5,11 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { socialloginbuttoncss, termsOfServiceCss } from "./style";
 import { ReactComponent as GoogleIcon } from "../../asset/google-img.svg";
 import { ReactComponent as LinkedInIcon } from "../../asset/linkedIn-img.svg";
+import { useLocation } from "react-router-dom";
 
 export default function AuthCard(props: { isLogin?: boolean }) {
   const [checked, setChecked] = React.useState(true);
+  const location = useLocation();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked);
@@ -39,10 +41,10 @@ export default function AuthCard(props: { isLogin?: boolean }) {
         disabled={!checked}
         onClick={() => {
           if (props.isLogin) {
-            socialAuth("google-oauth2");
+            socialAuth("google-oauth2", undefined, location.search);
           } else {
             storeSignUpState();
-            socialAuth("google-oauth2");
+            socialAuth("google-oauth2", undefined, location.search);
           }
         }}
       >
@@ -54,10 +56,10 @@ export default function AuthCard(props: { isLogin?: boolean }) {
         disabled={!checked}
         onClick={() => {
           if (props.isLogin) {
-            socialAuth("linkedin");
+            socialAuth("linkedin", undefined, location.search);
           } else {
             storeSignUpState();
-            socialAuth("linkedin");
+            socialAuth("linkedin", undefined, location.search);
           }
         }}
       >

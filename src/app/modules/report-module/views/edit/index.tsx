@@ -1,13 +1,13 @@
 import React from "react";
 import { v4 } from "uuid";
 import Box from "@material-ui/core/Box";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import { useParams } from "react-router-dom";
 import useResizeObserver from "use-resize-observer";
 import Container from "@material-ui/core/Container";
 import { EditorState, RawDraftContentState, convertFromRaw } from "draft-js";
 import { useTitle, useUpdateEffect } from "react-use";
-import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
+import { useAuth0 } from "@auth0/auth0-react";
 import { PlaceHolder } from "app/modules/report-module/views/create";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import { ReportModel, emptyReport } from "app/modules/report-module/data";
@@ -357,4 +357,4 @@ function ReportEditView(props: ReportEditViewProps) {
   );
 }
 
-export default withAuthenticationRequired(ReportEditView);
+export default ReportEditView;

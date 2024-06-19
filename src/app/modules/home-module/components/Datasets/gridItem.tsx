@@ -27,6 +27,7 @@ interface Props {
   id?: string;
   owner: string;
   inChartBuilder: boolean;
+  public: boolean;
 }
 
 export default function GridItem(props: Readonly<Props>) {
@@ -52,6 +53,14 @@ export default function GridItem(props: Readonly<Props>) {
     setDataset(props.id as string);
     setIsAiSwitchActive(true);
   }
+  let destinationPath = `/dataset/${props.id}/detail`;
+  if (props.public && location.pathname === "/") {
+    destinationPath += "?public=true&fromHome=true";
+  } else if (props.public) {
+    destinationPath += "?public=true";
+  } else if (location.pathname === "/") {
+    destinationPath += "?fromHome=true";
+  }
 
   return (
     <div
@@ -63,9 +72,7 @@ export default function GridItem(props: Readonly<Props>) {
       data-cy="dataset-grid-item"
     >
       <Link
-        to={`/dataset/${props.id}/detail${
-          location.pathname === "/" ? "?fromHome=true" : ""
-        }`}
+        to={destinationPath}
         css={`
           text-decoration: none;
         `}

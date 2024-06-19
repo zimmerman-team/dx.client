@@ -240,6 +240,7 @@ export default function ChartsGrid(props: Props) {
             description: data.title,
             createdDate: data.createdDate,
             type: "chart",
+            public: data.public,
           }))}
         />
       )}

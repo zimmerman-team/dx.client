@@ -13,12 +13,9 @@ import CircleLoader from "app/modules/home-module/components/Loader";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import DeleteChartDialog from "app/components/Dialogs/deleteChartDialog";
 import { coloredEchartTypes } from "app/modules/chart-module/routes/chart-type/data";
-import ChartAddnewCard from "app/modules/home-module/components/Charts/chartAddNewCard";
 import ChartGridItem from "app/modules/home-module/components/Charts/gridItem";
 import DatasetGridItem from "app/modules/home-module/components/Datasets/gridItem";
 import ReportGridItem from "app/modules/home-module/components/Reports/gridItem";
-import DatasetAddnewCard from "../Datasets/datasetAddNewCard";
-import ReportAddnewCard from "../Reports/reportAddNewCard";
 import ColoredReportIcon from "app/assets/icons/ColoredReportIcon";
 import DeleteDatasetDialog from "app/components/Dialogs/deleteDatasetDialog";
 import DeleteReportDialog from "app/components/Dialogs/deleteReportDialog";
@@ -248,6 +245,7 @@ export default function AssetsGrid(props: Props) {
                 description: data.title,
                 createdDate: data.createdDate,
                 type: data.assetType,
+                public: data.public,
               };
             } else if (data.assetType === "dataset") {
               return {
@@ -256,6 +254,7 @@ export default function AssetsGrid(props: Props) {
                 description: data.description,
                 createdDate: data.createdDate,
                 type: data.assetType,
+                public: data.public,
               };
             }
 
@@ -265,6 +264,7 @@ export default function AssetsGrid(props: Props) {
               description: data.title,
               createdDate: data.createdDate,
               type: data.assetType,
+              public: data.public,
             };
           })}
         />
@@ -312,6 +312,7 @@ export default function AssetsGrid(props: Props) {
                       id={d.id}
                       owner={d.owner}
                       inChartBuilder={props.inChartBuilder as boolean}
+                      public={d.public}
                     />
                   ),
                   report: (
