@@ -16,10 +16,10 @@ import ChartPlaceholder from "app/modules/chart-module/components/placeholder";
 import { ChartAPIModel, emptyChartAPI } from "app/modules/chart-module/data";
 import { NotAuthorizedMessageModule } from "app/modules/common/not-authorized-message";
 import { ReactComponent as AIIcon } from "app/modules/chart-module/assets/ai-icon.svg";
-import ErrorComponent from "app/modules/chart-module/components/dialog/errrorComponent";
 import { useRecoilState } from "recoil";
 import { chartFromReportAtom } from "app/state/recoil/atoms";
 import { useParams } from "react-router-dom";
+import MappingErrorComponent from "app/modules/chart-module/routes/mapping/error";
 
 function ChartBuilderMapping(props: Readonly<ChartBuilderMappingProps>) {
   useTitle("DX DataXplorer - Mapping");
@@ -27,6 +27,8 @@ function ChartBuilderMapping(props: Readonly<ChartBuilderMappingProps>) {
   const { page, view } = useParams<{ page: string; view?: string }>();
 
   const mapping = useStoreState((state) => state.charts.mapping.value);
+  const chartType = useStoreState((state) => state.charts.chartType.value);
+
   const [requiredFields, setRequiredFields] = React.useState<
     { id: string; name: string }[]
   >([]);
@@ -79,7 +81,7 @@ function ChartBuilderMapping(props: Readonly<ChartBuilderMappingProps>) {
   if (props.dataError || props.chartError) {
     return (
       <>
-        <ErrorComponent
+        <MappingErrorComponent
           chartErrorMessage={props.chartErrorMessage}
           dataError={props.dataError}
           chartError={props.chartError}
