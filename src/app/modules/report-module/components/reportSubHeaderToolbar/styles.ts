@@ -146,4 +146,22 @@ export const styles = {
     text-overflow: ellipsis;
     white-space: nowrap;
   `,
+  highlightPicker: (active: boolean) => css`
+    vertical-align: bottom;
+    border: none;
+    outline: none;
+    color: #70777e;
+    font-size: 18px;
+    background: ${active ? "#f2f2f2" : "transparent"};
+    width: 40px;
+    height: 35px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    &:hover {
+      background: #f2f2f2;
+    }
+  `,
 };

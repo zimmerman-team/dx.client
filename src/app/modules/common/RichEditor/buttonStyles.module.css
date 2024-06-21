@@ -1,4 +1,4 @@
-.button {
+/* .button {
   border: 0;
   color: #70777e;
   font-size: 18px;
@@ -53,7 +53,7 @@
 .undoButton:focus svg path {
   fill: #231d2c;
 
-  outline: 0; /* reset for :focus */
+  outline: 0; 
 }
 
 .undoButton:hover svg path {
@@ -66,6 +66,56 @@
 
 .undoButton:disabled {
   color: #ccc;
+} */
+
+.undoRedoButton {
+  border: none;
+  outline: none;
+  cursor: pointer;
+  border-radius: 8px;
+}
+.undoRedoButton:focus {
+  outline: 0; /* reset for :focus */
+}
+
+.undoRedoButton:disabled {
+  color: #ccc;
+  background-color: transparent;
+}
+
+.buttonWrapper {
+  display: inline-block;
+}
+
+.button {
+  vertical-align: bottom;
+  border: 0;
+  color: #70777e;
+  font-size: 18px;
+  background: transparent;
+  width: 40px;
+  height: 35px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.button svg {
+  fill: #70777e;
+}
+
+.button:hover,
+.button:focus {
+  background: #f2f2f2;
+  outline: 0; /* reset for :focus */
+}
+
+.active {
+  color: #6a9cc9;
+  background: #f2f2f2;
+}
+
+.active svg {
+  /* fill: #6a9cc9; */
 }
 
 .emojiButton {
