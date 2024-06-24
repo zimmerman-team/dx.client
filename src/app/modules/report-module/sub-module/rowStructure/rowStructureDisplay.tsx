@@ -389,16 +389,19 @@ const Box = (props: {
       get(location.pathname.split("/"), "[3]", "") !== "edit") ||
     reportPreviewMode;
 
+  const elementTypes = [
+    ReportElementsType.TEXT,
+    ReportElementsType.BIG_NUMBER,
+    ReportElementsType.CHART,
+    ReportElementsType.IMAGE,
+    ReportElementsType.VIDEO,
+  ];
+
   const [{ isOver }, drop] = useDrop(() => ({
     accept:
       props.rowType === "oneByFive"
-        ? [ReportElementsType.TEXT, ReportElementsType.BIG_NUMBER]
-        : [
-            ReportElementsType.TEXT,
-            ReportElementsType.CHART,
-            ReportElementsType.IMAGE,
-            ReportElementsType.VIDEO,
-          ],
+        ? elementTypes
+        : elementTypes.filter((type) => type !== ReportElementsType.BIG_NUMBER),
     collect: (monitor) => ({
       isOver: monitor.isOver(),
       canDrop: monitor.canDrop(),
