@@ -90,6 +90,11 @@ export default function EditMetaData() {
   return (
     <>
       <Container maxWidth="lg">
+        <div
+          css={`
+            height: 108px;
+          `}
+        />
         <MetaData
           formDetails={formDetails}
           handleBack={handleBack}
