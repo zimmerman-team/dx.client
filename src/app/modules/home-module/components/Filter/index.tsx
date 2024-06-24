@@ -10,6 +10,7 @@ import { ReactComponent as SortIcon } from "app/modules/home-module/assets/sort-
 import { ReactComponent as GridIcon } from "app/modules/home-module/assets/grid-fill.svg";
 import { ReactComponent as CloseIcon } from "app/modules/home-module/assets/close-icon.svg";
 import { ReactComponent as SearchIcon } from "app/modules/home-module/assets/search-fill.svg";
+import { ReactComponent as TableIcon } from "app/modules/home-module/assets/table-icon.svg";
 
 export default function Filter(
   props: Readonly<{
@@ -154,7 +155,7 @@ export default function Filter(
         }}
         css={iconButtonCss(props.tableView)}
       >
-        <GridIcon />
+        {props.tableView ? <TableIcon /> : <GridIcon />}
       </IconButton>
     </div>
   );

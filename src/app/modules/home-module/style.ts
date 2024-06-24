@@ -146,7 +146,7 @@ export const iconButtonCss = (active?: boolean) => css`
     svg > path,
     svg > g > path,
     svg > g > rect {
-      fill: #dadaf8;
+      fill: #fff;
     }`
     : ""}
 
@@ -160,7 +160,7 @@ export const iconButtonCss = (active?: boolean) => css`
     svg > path,
     svg > g > path,
     svg > g > rect {
-      fill: #dadaf8;
+      fill: #fff;
     }
   }
 `;

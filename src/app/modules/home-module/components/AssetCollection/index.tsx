@@ -12,6 +12,7 @@ import ChartsGrid from "app/modules/home-module/components/Charts/chartsGrid";
 import ReportsGrid from "app/modules/home-module/components/Reports/reportsGrid";
 import DatasetsGrid from "app/modules/home-module/components/Datasets/datasetsGrid";
 import { ReactComponent as SortIcon } from "app/modules/home-module/assets/sort-fill.svg";
+import { ReactComponent as TableIcon } from "app/modules/home-module/assets/table-icon.svg";
 import { ReactComponent as GridIcon } from "app/modules/home-module/assets/grid-fill.svg";
 import { ReactComponent as CloseIcon } from "app/modules/home-module/assets/close-icon.svg";
 import { ReactComponent as SearchIcon } from "app/modules/home-module/assets/search-fill.svg";
@@ -358,7 +359,7 @@ function AssetsCollection() {
                 }}
                 css={iconButtonCss(tableView)}
               >
-                <GridIcon />
+                {tableView ? <TableIcon /> : <GridIcon />}
               </IconButton>
             </div>
           </Grid>
