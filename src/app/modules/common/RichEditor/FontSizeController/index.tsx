@@ -11,10 +11,12 @@ export default function FontSizeController(props: Props) {
   const [fontSize, setFontSize] = React.useState(14);
 
   const reduceFontSize = () => {
+    if (fontSize <= 1) return;
     updateEditorStateWithFontSize(fontSize - 1);
     setFontSize((prev) => prev - 1);
   };
   const increaseFontSize = () => {
+    if (fontSize >= 999) return;
     updateEditorStateWithFontSize(fontSize + 1);
 
     setFontSize((prev) => prev + 1);
@@ -36,6 +38,7 @@ export default function FontSizeController(props: Props) {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     //number validation with regex so input only accepts number characters
     if (e.target.value === "" || /^[0-9\b]+$/.test(e.target.value)) {
+      if (e.target.value.length > 3) return;
       updateEditorStateWithFontSize(Number(e.target.value));
       setFontSize(Number(e.target.value));
     }
@@ -76,7 +79,7 @@ export default function FontSizeController(props: Props) {
           }
 
           input {
-            width: 20px;
+            width: 32px;
             height: 100%;
             text-align: center;
             background: transparent;
