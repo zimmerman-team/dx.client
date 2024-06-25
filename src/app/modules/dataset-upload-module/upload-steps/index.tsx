@@ -347,12 +347,19 @@ function DatasetUploadSteps(props: Props) {
         );
       case 2:
         return (
-          <MetaData
-            onSubmit={onSubmitMetadata}
-            handleBack={handleBack}
-            formDetails={formDetails}
-            setFormDetails={setFormDetails}
-          />
+          <>
+            <div
+              css={`
+                height: 40px;
+              `}
+            />
+            <MetaData
+              onSubmit={onSubmitMetadata}
+              handleBack={handleBack}
+              formDetails={formDetails}
+              setFormDetails={setFormDetails}
+            />
+          </>
         );
 
       case 3:

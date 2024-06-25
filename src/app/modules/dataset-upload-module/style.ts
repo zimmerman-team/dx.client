@@ -72,7 +72,6 @@ export const metaDatacss = css`
     font-weight: 500;
     font-size: 48px;
     font-family: "Inter", sans-serif;
-    margin-top: 40px;
 
     margin-bottom: 4.5rem;
   }
