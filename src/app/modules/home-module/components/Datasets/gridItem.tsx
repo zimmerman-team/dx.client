@@ -27,7 +27,6 @@ interface Props {
   id?: string;
   owner: string;
   inChartBuilder: boolean;
-  public: boolean;
 }
 
 export default function GridItem(props: Readonly<Props>) {
@@ -54,11 +53,7 @@ export default function GridItem(props: Readonly<Props>) {
     setIsAiSwitchActive(true);
   }
   let destinationPath = `/dataset/${props.id}/detail`;
-  if (props.public && location.pathname === "/") {
-    destinationPath += "?public=true&fromHome=true";
-  } else if (props.public) {
-    destinationPath += "?public=true";
-  } else if (location.pathname === "/") {
+  if (location.pathname === "/") {
     destinationPath += "?fromHome=true";
   }
 

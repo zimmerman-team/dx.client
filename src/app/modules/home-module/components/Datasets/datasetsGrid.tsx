@@ -261,7 +261,6 @@ export default function DatasetsGrid(props: Readonly<Props>) {
                 id={data.id}
                 owner={data.owner}
                 inChartBuilder={props.inChartBuilder as boolean}
-                public={data.public}
               />
 
               {!props.inChartBuilder && <Box height={16} />}

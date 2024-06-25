@@ -1,5 +1,5 @@
 import React from "react";
-import { useHistory, useLocation } from "react-router-dom";
+import { useHistory, useLocation, matchPath } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import { PageLoader } from "app/modules/common/page-loader";
 
@@ -11,26 +11,36 @@ interface AuthProtectedRouteProps {
 export function AuthProtectedRoute(props: AuthProtectedRouteProps) {
   const { getAccessTokenSilently } = useAuth0();
   const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-  const publicParam = queryParams.get("public") as string;
+  const exemptedRoutes = [
+    "/report/:page",
+    "/chart/:page",
+    "/dataset/:page/detail",
+  ];
   const [loading, setLoading] = React.useState(true);
   const history = useHistory();
-  const destination = history.location.pathname;
+  const destination = location.pathname;
 
   React.useEffect(() => {
     getAccessTokenSilently()
       .then((newToken) => {
         setLoading(false);
-        console.log(newToken, "newToken");
       })
       .catch((error) => {
         setLoading(false);
 
         console.log(error, "error");
-        if (publicParam === "true") {
+        if (
+          matchPath(destination, {
+            path: exemptedRoutes,
+            exact: true,
+            strict: true,
+          })
+        ) {
           return;
         }
-        history.replace(`/onboarding/login?to=${destination}`);
+        history.replace(
+          `/onboarding/login?to=${destination}${location.search}`
+        );
       });
   }, []);
   return (

@@ -15,7 +15,6 @@ interface IData {
   description: string;
   createdDate: Date;
   type: string;
-  public: boolean;
 }
 export function HomepageTable(props: {
   data: IData[];
@@ -26,16 +25,10 @@ export function HomepageTable(props: {
   const history = useHistory();
 
   const getDestinationPath = (data: IData) => {
-    let destinationPath = `/${data.type}/${data.id}${
-      data.public ? "?public=true" : ""
-    }`;
-    if (data.type === "dataset" && data.public) {
-      destinationPath = `/${data.type}/${data.id}/detail?public=true${
-        location.pathname === "/" ? "&fromHome=true" : ""
-      }`;
-    } else if (data.type === "dataset" && !data.public) {
-      destinationPath = `/${data.type}/${data.id}/detail${
-        location.pathname === "/" ? "?fromHome=true" : ""
+    let destinationPath = `/${data.type}/${data.id}`;
+    if (data.type === "dataset") {
+      destinationPath = `/${data.type}/${data.id}/detail?${
+        location.pathname === "/" ? "fromHome=true" : ""
       }`;
     }
     return destinationPath;

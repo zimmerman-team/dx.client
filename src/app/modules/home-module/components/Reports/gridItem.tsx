@@ -16,7 +16,6 @@ interface Props {
   title: string;
   descr: string;
   color: string;
-  public: boolean;
   viz: JSX.Element;
   handleDelete?: (id: string) => void;
   handleDuplicate?: (id: string) => void;
@@ -44,7 +43,7 @@ export default function gridItem(props: Props) {
       `}
     >
       <Link
-        to={`/report/${props.id}${props.public ? "?public=true" : ""}`}
+        to={`/report/${props.id}`}
         css={`
           width: 100%;
           height: 161.59px;

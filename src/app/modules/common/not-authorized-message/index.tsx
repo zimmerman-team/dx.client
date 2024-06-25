@@ -13,7 +13,7 @@ export function NotAuthorizedMessageModule(props: {
   name?: string;
 }) {
   const { isAuthenticated } = useAuth0();
-  const destinationPath = `?to=${location.pathname}`;
+  const destinationPath = `?to=${location.pathname}${location.search}`;
   return (
     <>
       <div

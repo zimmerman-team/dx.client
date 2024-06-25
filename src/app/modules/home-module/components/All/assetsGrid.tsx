@@ -245,7 +245,6 @@ export default function AssetsGrid(props: Props) {
                 description: data.title,
                 createdDate: data.createdDate,
                 type: data.assetType,
-                public: data.public,
               };
             } else if (data.assetType === "dataset") {
               return {
@@ -254,7 +253,6 @@ export default function AssetsGrid(props: Props) {
                 description: data.description,
                 createdDate: data.createdDate,
                 type: data.assetType,
-                public: data.public,
               };
             }
 
@@ -264,7 +262,6 @@ export default function AssetsGrid(props: Props) {
               description: data.title,
               createdDate: data.createdDate,
               type: data.assetType,
-              public: data.public,
             };
           })}
         />
@@ -278,7 +275,6 @@ export default function AssetsGrid(props: Props) {
                     <ChartGridItem
                       id={d.id}
                       title={d.name}
-                      public={d.public}
                       date={d.createdDate}
                       path={`/chart/${d.id}`}
                       viz={getIcon(d.vizType)}
@@ -312,7 +308,6 @@ export default function AssetsGrid(props: Props) {
                       id={d.id}
                       owner={d.owner}
                       inChartBuilder={props.inChartBuilder as boolean}
-                      public={d.public}
                     />
                   ),
                   report: (
@@ -320,7 +315,6 @@ export default function AssetsGrid(props: Props) {
                       id={d.id}
                       key={d.id}
                       descr={d.name}
-                      public={d.public}
                       date={d.createdDate}
                       viz={<ColoredReportIcon />}
                       color={d.backgroundColor}

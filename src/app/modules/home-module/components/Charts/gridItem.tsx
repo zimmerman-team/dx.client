@@ -16,7 +16,6 @@ interface Props {
   title: string;
   date: string;
   vizType: string;
-  public: boolean;
   viz: React.ReactNode;
   isMappingValid: boolean;
   handleDelete?: (id: string) => void;
@@ -45,9 +44,7 @@ export default function gridItem(props: Props) {
       `}
     >
       <Link
-        to={
-          props.public ? `/chart/${props.id}?public=true` : `/chart/${props.id}`
-        }
+        to={`/chart/${props.id}`}
         title={props.title}
         css={`
           width: 100%;

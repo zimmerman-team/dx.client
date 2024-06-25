@@ -203,7 +203,6 @@ export default function ReportsGrid(props: Props) {
                 id={data.id}
                 key={data.id}
                 descr={data.name}
-                public={data.public}
                 date={data.createdDate}
                 viz={<ColoredReportIcon />}
                 color={data.backgroundColor}
@@ -226,7 +225,6 @@ export default function ReportsGrid(props: Props) {
             description: data.title,
             createdDate: data.createdDate,
             type: "report",
-            public: data.public,
           }))}
         />
       )}

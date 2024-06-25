@@ -5,7 +5,6 @@ export function socialAuth(
   login_hint?: string,
   page_params?: string
 ) {
-  console.log(page_params, "page");
   const webAuth = new Auth0JS.WebAuth({
     domain: process.env.REACT_APP_AUTH0_DOMAIN as string,
     clientID: process.env.REACT_APP_AUTH0_CLIENT as string,
