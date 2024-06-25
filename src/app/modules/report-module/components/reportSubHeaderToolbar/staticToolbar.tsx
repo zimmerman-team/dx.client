@@ -22,6 +22,7 @@ import {
   HeaderOneButton,
   HeaderTwoButton,
 } from "app/modules/common/RichEditor/buttons";
+import { styles as commonstyles } from "app/modules/report-module/components/reportSubHeaderToolbar/styles";
 import React from "react";
 
 type UndoRedoType = {
@@ -89,8 +90,9 @@ export default function StaticToolbar(props: { plugins: ToolbarPluginsType }) {
                   onClick={(e) => handleClick(e, "color")}
                   id={colorId}
                   tabIndex={0} // Add tabIndex attribute to make the div focusable
+                  css={commonstyles.highlightPicker(colorOpen)}
                 >
-                  <HiglightPicker {...externalProps} />
+                  {HiglightPicker}
                 </div>
 
                 <div
@@ -98,8 +100,9 @@ export default function StaticToolbar(props: { plugins: ToolbarPluginsType }) {
                   onClick={(e) => handleClick(e, "bg")}
                   id={bgId}
                   tabIndex={0} // Add tabIndex attribute to make the div focusable
+                  css={commonstyles.highlightPicker(bgOpen)}
                 >
-                  <BGHiglightPicker {...externalProps} />
+                  {BGHiglightPicker}
                 </div>
 
                 <div onMouseDown={(e) => e.preventDefault()}>

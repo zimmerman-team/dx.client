@@ -25,6 +25,7 @@ import "@draft-js-plugins/inline-toolbar/lib/plugin.css";
 import "@draft-js-plugins/static-toolbar/lib/plugin.css";
 import "@draft-js-plugins/emoji/lib/plugin.css";
 import fontSizeStyleMap from "app/modules/common/RichEditor/FontSizeController/styleMap";
+import { styles } from "app/modules/report-module/components/reportSubHeaderToolbar/styles";
 
 export const RichEditor = (props: {
   editMode: boolean;
@@ -50,11 +51,10 @@ export const RichEditor = (props: {
     }
   }, []);
 
-  const [localFocus, setLocalFocus] = React.useState(true);
-
   const emojiPlugin = createEmojiPlugin({
-    selectButtonContent: EmojiButton,
-    theme: { emojiSelectButton: buttonStyles.emojiButton },
+    selectButtonContent: (
+      <div css={styles.highlightPicker(false)}>{EmojiButton}</div>
+    ),
   });
   const textAlignmentPlugin = createTextAlignmentPlugin({
     theme: {
@@ -74,7 +74,10 @@ export const RichEditor = (props: {
   const undoPlugin = createUndoPlugin({
     undoContent: <UndoIcon />,
     redoContent: <RedoIcon />,
-    theme: { undo: buttonStyles.undoButton, redo: buttonStyles.undoButton },
+    theme: {
+      undo: buttonStyles.undoRedoButton,
+      redo: buttonStyles.undoRedoButton,
+    },
   });
 
   const plugins = useMemo(() => {
@@ -92,10 +95,8 @@ export const RichEditor = (props: {
   }, []);
 
   React.useEffect(() => {
-    if (localFocus) {
-      props.setPlugins?.(plugins);
-    }
-  }, [localFocus]);
+    props.setPlugins?.(plugins);
+  }, []);
 
   return (
     <div
@@ -153,12 +154,11 @@ export const RichEditor = (props: {
         editorState={props.textContent}
         onChange={props.setTextContent}
         onBlur={() => {
-          setLocalFocus(false);
           if (props.textContent.getCurrentContent().getPlainText().length === 0)
             props.setPlaceholderState(props.placeholder);
         }}
         onFocus={() => {
-          setLocalFocus(true);
+          props.setPlugins?.(plugins);
           props.setPlaceholderState("");
         }}
         placeholder={props.placeholderState}

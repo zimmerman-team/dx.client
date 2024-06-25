@@ -8,41 +8,17 @@ interface Props {
   theme: any;
 }
 export default function FontSizeController(props: Props) {
-  const [fontSize, setFontSize] = React.useState(10);
+  const [fontSize, setFontSize] = React.useState(14);
 
   const reduceFontSize = () => {
-    const editorState = props.getEditorState();
-
-    const currentStyle = editorState.getCurrentInlineStyle();
-
-    let newEditorState = editorState;
-    if (currentStyle.has(`font-size-${fontSize - 1}`)) {
-      newEditorState = RichUtils.toggleInlineStyle(
-        editorState,
-        `font-size-${fontSize - 1}`
-      ); // reset the font size
-    }
-
-    props.setEditorState(
-      RichUtils.toggleInlineStyle(newEditorState, `font-size-${fontSize - 1}`)
-    );
+    if (fontSize <= 1) return;
+    updateEditorStateWithFontSize(fontSize - 1);
     setFontSize((prev) => prev - 1);
   };
   const increaseFontSize = () => {
-    const editorState = props.getEditorState();
-    const currentStyle = editorState.getCurrentInlineStyle();
-    let newEditorState = editorState;
+    if (fontSize >= 999) return;
+    updateEditorStateWithFontSize(fontSize + 1);
 
-    if (currentStyle.has(`font-size-${fontSize + 1}`)) {
-      // reset the font size
-      newEditorState = RichUtils.toggleInlineStyle(
-        editorState,
-        `font-size-${fontSize + 1}`
-      );
-    }
-    props.setEditorState(
-      RichUtils.toggleInlineStyle(newEditorState, `font-size-${fontSize + 1}`)
-    );
     setFontSize((prev) => prev + 1);
   };
 
@@ -54,30 +30,34 @@ export default function FontSizeController(props: Props) {
     if (nfontSize) {
       const size = nfontSize.split("-")[2];
       setFontSize(Number(size));
+    } else {
+      setFontSize(14);
     }
   }, [props.getEditorState().getCurrentInlineStyle()]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //number validation with regex so input only accepts number characters
     if (e.target.value === "" || /^[0-9\b]+$/.test(e.target.value)) {
-      const editorState = props.getEditorState();
-      const currentStyle = editorState.getCurrentInlineStyle();
-      let newEditorState = editorState;
-
-      if (currentStyle.has(`font-size-${e.target.value}`)) {
-        // reset the font size
-        newEditorState = RichUtils.toggleInlineStyle(
-          editorState,
-          `font-size-${e.target.value}`
-        );
-      }
-      props.setEditorState(
-        RichUtils.toggleInlineStyle(
-          newEditorState,
-          `font-size-${e.target.value}`
-        )
-      );
+      if (e.target.value.length > 3) return;
+      updateEditorStateWithFontSize(Number(e.target.value));
       setFontSize(Number(e.target.value));
     }
+  };
+  const updateEditorStateWithFontSize = (fontSize: number) => {
+    const editorState = props.getEditorState();
+    const currentStyle = editorState.getCurrentInlineStyle();
+    let newEditorState = editorState;
+
+    if (currentStyle.has(`font-size-${fontSize}`)) {
+      // reset the font size
+      newEditorState = RichUtils.toggleInlineStyle(
+        editorState,
+        `font-size-${fontSize}`
+      );
+    }
+    props.setEditorState(
+      RichUtils.toggleInlineStyle(newEditorState, `font-size-${fontSize}`)
+    );
   };
 
   return (
@@ -99,7 +79,7 @@ export default function FontSizeController(props: Props) {
           }
 
           input {
-            width: 20px;
+            width: 32px;
             height: 100%;
             text-align: center;
             background: transparent;
@@ -111,7 +91,12 @@ export default function FontSizeController(props: Props) {
           }
         `}
       >
-        <span onClick={() => reduceFontSize()}>-</span>
+        <span
+          onClick={() => reduceFontSize()}
+          onMouseDown={(e) => e.preventDefault()}
+        >
+          -
+        </span>
         <input
           type="text"
           name="font-size"
@@ -120,7 +105,12 @@ export default function FontSizeController(props: Props) {
           value={fontSize}
           min={1}
         />
-        <span onClick={() => increaseFontSize()}>+</span>
+        <span
+          onClick={() => increaseFontSize()}
+          onMouseDown={(e) => e.preventDefault()}
+        >
+          +
+        </span>
       </div>
     </>
   );
