@@ -3,7 +3,6 @@ import axios from "axios";
 import get from "lodash/get";
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
-import { useUpdateEffect } from "react-use";
 import useDebounce from "react-use/lib/useDebounce";
 import { ReportModel } from "app/modules/report-module/data";
 import ColoredReportIcon from "app/assets/icons/ColoredReportIcon";
@@ -14,7 +13,6 @@ import ReformedGridItem from "app/modules/home-module/components/Reports/gridIte
 import ReportAddnewCard from "./reportAddNewCard";
 import { useInfinityScroll } from "app/hooks/useInfinityScroll";
 import CircleLoader from "../Loader";
-import { EditorState, convertFromRaw } from "draft-js";
 import { useAuth0 } from "@auth0/auth0-react";
 
 interface Props {
@@ -205,7 +203,6 @@ export default function ReportsGrid(props: Props) {
                 id={data.id}
                 key={data.id}
                 descr={data.name}
-                public={data.public}
                 date={data.createdDate}
                 viz={<ColoredReportIcon />}
                 color={data.backgroundColor}

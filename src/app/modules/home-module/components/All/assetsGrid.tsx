@@ -13,12 +13,9 @@ import CircleLoader from "app/modules/home-module/components/Loader";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import DeleteChartDialog from "app/components/Dialogs/deleteChartDialog";
 import { coloredEchartTypes } from "app/modules/chart-module/routes/chart-type/data";
-import ChartAddnewCard from "app/modules/home-module/components/Charts/chartAddNewCard";
 import ChartGridItem from "app/modules/home-module/components/Charts/gridItem";
 import DatasetGridItem from "app/modules/home-module/components/Datasets/gridItem";
 import ReportGridItem from "app/modules/home-module/components/Reports/gridItem";
-import DatasetAddnewCard from "../Datasets/datasetAddNewCard";
-import ReportAddnewCard from "../Reports/reportAddNewCard";
 import ColoredReportIcon from "app/assets/icons/ColoredReportIcon";
 import DeleteDatasetDialog from "app/components/Dialogs/deleteDatasetDialog";
 import DeleteReportDialog from "app/components/Dialogs/deleteReportDialog";
@@ -278,7 +275,6 @@ export default function AssetsGrid(props: Props) {
                     <ChartGridItem
                       id={d.id}
                       title={d.name}
-                      public={d.public}
                       date={d.createdDate}
                       path={`/chart/${d.id}`}
                       viz={getIcon(d.vizType)}
@@ -319,7 +315,6 @@ export default function AssetsGrid(props: Props) {
                       id={d.id}
                       key={d.id}
                       descr={d.name}
-                      public={d.public}
                       date={d.createdDate}
                       viz={<ColoredReportIcon />}
                       color={d.backgroundColor}

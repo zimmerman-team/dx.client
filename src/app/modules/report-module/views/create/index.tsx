@@ -21,7 +21,6 @@ import {
   isDividerOrRowFrameDraggingAtom,
 } from "app/state/recoil/atoms";
 import TourGuide from "app/components/Dialogs/TourGuide";
-import { withAuthenticationRequired } from "@auth0/auth0-react";
 import { useTitle } from "react-use";
 
 function ReportCreateView(props: Readonly<ReportCreateViewProps>) {
@@ -204,7 +203,7 @@ function ReportCreateView(props: Readonly<ReportCreateViewProps>) {
   );
 }
 
-export default withAuthenticationRequired(ReportCreateView);
+export default ReportCreateView;
 
 export const PlaceHolder = (props: PlaceholderProps) => {
   const moveCard = React.useCallback((itemId: string) => {

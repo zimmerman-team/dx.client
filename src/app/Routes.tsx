@@ -19,6 +19,7 @@ import {
   withAuthenticationRequired,
 } from "@auth0/auth0-react";
 import axios from "axios";
+import { AuthProtectedRoute } from "./utils/AuthProtectedRoute";
 
 const LandingModule = lazy(
   () => import("app/modules/home-module/sub-modules/landing")
@@ -249,13 +250,19 @@ export function MainRoutes() {
             <ExploreAssetsModule />
           </RouteWithAppBar> */}
           <RouteWithAppBar exact path="/dashboard">
-            <DashboardModule />
+            <AuthProtectedRoute>
+              <DashboardModule />
+            </AuthProtectedRoute>
           </RouteWithAppBar>
           <RouteWithAppBar exact path="/report/:page/:view?">
-            <ReportModule />
+            <AuthProtectedRoute>
+              <ReportModule />
+            </AuthProtectedRoute>
           </RouteWithAppBar>
           <RouteWithAppBar exact path="/dataset/:page/:view?">
-            <DatasetModule />
+            <AuthProtectedRoute>
+              <DatasetModule />
+            </AuthProtectedRoute>
           </RouteWithAppBar>
           <RouteWithAppBar exact path="/about">
             <AboutModule />
@@ -267,19 +274,21 @@ export function MainRoutes() {
             <LandingModule />
           </RouteWithAppBar>
           <RouteWithAppBar exact path="/chart/:page/:view?">
-            <ChartModule />
+            <AuthProtectedRoute>
+              <ChartModule />
+            </AuthProtectedRoute>
           </RouteWithAppBar>
-          <RouteWithAppBar exact path="/dataset/:id/edit">
+          {/* <RouteWithAppBar exact path="/dataset/:id/edit">
             <></>
-          </RouteWithAppBar>
+          </RouteWithAppBar> */}
           <RouteWithAppBar path="/onboarding">
             <OnboardingModule />
           </RouteWithAppBar>
-          <RouteWithAppBar
-            exact
-            path="/user-management/:tab?"
-            element={<ProtectedRoute component={UserProfileModule} />}
-          />
+          <RouteWithAppBar exact path="/user-management/:tab?">
+            <AuthProtectedRoute>
+              <UserProfileModule />
+            </AuthProtectedRoute>
+          </RouteWithAppBar>
           <RouteWithAppBar path="*">
             <NoMatchPage />
           </RouteWithAppBar>

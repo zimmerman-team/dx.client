@@ -279,6 +279,7 @@ export default function DatasetsGrid(props: Readonly<Props>) {
             description: data.description,
             createdDate: data.createdDate,
             type: "dataset",
+            public: data.public,
           }))}
         />
       )}

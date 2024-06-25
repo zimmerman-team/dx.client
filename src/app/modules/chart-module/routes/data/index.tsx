@@ -5,7 +5,7 @@ import Popover from "@material-ui/core/Popover";
 import IconButton from "@material-ui/core/IconButton";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import { useParams, useHistory } from "react-router-dom";
-import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
+import { useAuth0 } from "@auth0/auth0-react";
 /* project */
 import {
   iconButtonCss,
@@ -230,4 +230,4 @@ function ChartModuleDataView(
   );
 }
 
-export default withAuthenticationRequired(ChartModuleDataView);
+export default ChartModuleDataView;

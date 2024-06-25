@@ -2,7 +2,7 @@
 import React from "react";
 import isEmpty from "lodash/isEmpty";
 import useTitle from "react-use/lib/useTitle";
-import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
+import { useAuth0 } from "@auth0/auth0-react";
 import { useStoreState } from "app/state/store/hooks";
 /* project */
 import { CommonChart } from "app/modules/chart-module/components/common-chart";
@@ -195,4 +195,4 @@ function ChartBuilderMappingMessage(
   );
 }
 
-export default withAuthenticationRequired(ChartBuilderMapping);
+export default ChartBuilderMapping;

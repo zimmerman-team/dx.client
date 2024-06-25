@@ -5,7 +5,7 @@ import useTitle from "react-use/lib/useTitle";
 import { CommonChart } from "app/modules/chart-module/components/common-chart";
 import { styles as commonStyles } from "app/modules/chart-module/routes/common/styles";
 import { ChartBuilderCustomizeProps } from "app/modules/chart-module/routes/customize/data";
-import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
+import { useAuth0 } from "@auth0/auth0-react";
 import { useStoreState } from "app/state/store/hooks";
 import { ChartAPIModel, emptyChartAPI } from "app/modules/chart-module/data";
 import { NotAuthorizedMessageModule } from "app/modules/common/not-authorized-message";
@@ -88,4 +88,4 @@ function ChartBuilderCustomize(props: Readonly<ChartBuilderCustomizeProps>) {
   );
 }
 
-export default withAuthenticationRequired(ChartBuilderCustomize);
+export default ChartBuilderCustomize;

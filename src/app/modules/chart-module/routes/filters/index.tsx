@@ -2,7 +2,7 @@
 import React from "react";
 import useTitle from "react-use/lib/useTitle";
 import { useHistory, useParams } from "react-router-dom";
-import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
+import { useAuth0 } from "@auth0/auth0-react";
 import { useStoreState } from "app/state/store/hooks";
 /* project */
 import { ChartAPIModel, emptyChartAPI } from "app/modules/chart-module/data";
@@ -92,4 +92,4 @@ function ChartBuilderFilters(props: Readonly<ChartBuilderFiltersProps>) {
   );
 }
 
-export default withAuthenticationRequired(ChartBuilderFilters);
+export default ChartBuilderFilters;

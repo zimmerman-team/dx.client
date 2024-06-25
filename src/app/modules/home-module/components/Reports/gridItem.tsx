@@ -16,7 +16,6 @@ interface Props {
   title: string;
   descr: string;
   color: string;
-  public: boolean;
   viz: JSX.Element;
   handleDelete?: (id: string) => void;
   handleDuplicate?: (id: string) => void;

@@ -16,7 +16,6 @@ interface Props {
   title: string;
   date: string;
   vizType: string;
-  public: boolean;
   viz: React.ReactNode;
   isMappingValid: boolean;
   handleDelete?: (id: string) => void;

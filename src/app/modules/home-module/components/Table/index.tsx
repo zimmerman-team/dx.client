@@ -9,19 +9,30 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import _ from "lodash";
 
+interface IData {
+  id: string;
+  name: string;
+  description: string;
+  createdDate: Date;
+  type: string;
+}
 export function HomepageTable(props: {
-  data: {
-    id: string;
-    name: string;
-    description: string;
-    createdDate: Date;
-    type: string;
-  }[];
+  data: IData[];
   inChartBuilder?: boolean;
   onItemClick?: (v: string) => void;
   all?: boolean;
 }) {
   const history = useHistory();
+
+  const getDestinationPath = (data: IData) => {
+    let destinationPath = `/${data.type}/${data.id}`;
+    if (data.type === "dataset") {
+      destinationPath = `/${data.type}/${data.id}/detail?${
+        location.pathname === "/" ? "fromHome=true" : ""
+      }`;
+    }
+    return destinationPath;
+  };
 
   return (
     <TableContainer
@@ -84,15 +95,7 @@ export function HomepageTable(props: {
               key={data.id}
               onClick={() => {
                 if (!props.inChartBuilder) {
-                  history.push(
-                    `/${data.type}/${data.id}${
-                      data.type === "dataset"
-                        ? `/detail${
-                            location.pathname === "/" ? "?fromHome=true" : ""
-                          }`
-                        : ""
-                    }`
-                  );
+                  history.push(getDestinationPath(data));
                 } else if (props.inChartBuilder && props.onItemClick) {
                   props.onItemClick(data.id);
                 }

@@ -216,7 +216,6 @@ export default function ChartsGrid(props: Props) {
               <GridItem
                 id={c.id}
                 title={c.name}
-                public={c.public}
                 date={c.createdDate}
                 path={`/chart/${c.id}`}
                 viz={getIcon(c.vizType)}
