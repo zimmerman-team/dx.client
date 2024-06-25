@@ -392,6 +392,7 @@ export function useDataThemesEchart() {
         data: data.xAxisValues || [],
         zlevel: -1,
         z: -1,
+        boundaryGap: false,
       },
       yAxis: {
         type: "value",
