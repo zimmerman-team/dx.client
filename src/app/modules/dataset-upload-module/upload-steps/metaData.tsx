@@ -11,6 +11,7 @@ import {
   metaDatacss,
 } from "app/modules/dataset-upload-module/style";
 import { useLocation } from "react-router-dom";
+import { isValidUrl } from "app/utils/emailValidation";
 
 interface Props {
   onSubmit: (data: IFormDetails) => void;
@@ -113,9 +114,12 @@ export default function MetaData(props: Readonly<Props>) {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { public: isPublic, ...rest } = props.formDetails;
     //reset error state to release focus on input field before typing new value
-    if (Object.values(errorState).some((value) => value === true)) {
+    if (Object.values(errorState).some((value) => value.state === true)) {
       for (const key in rest) {
-        setErrorState((prev) => ({ ...prev, [key]: false }));
+        setErrorState((prev) => ({
+          ...prev,
+          [key]: { state: false, message: "" },
+        }));
       }
     }
     const { name, value } = event.target;
@@ -126,11 +130,11 @@ export default function MetaData(props: Readonly<Props>) {
   };
 
   const [errorState, setErrorState] = React.useState({
-    name: false,
-    description: false,
-    category: false,
-    source: false,
-    sourceUrl: false,
+    name: { state: false, message: "" },
+    description: { state: false, message: "" },
+    category: { state: false, message: "" },
+    source: { state: false, message: "" },
+    sourceUrl: { state: false, message: "" },
   });
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -139,10 +143,25 @@ export default function MetaData(props: Readonly<Props>) {
     //form validation before submitting
     for (const key in rest) {
       if (rest[key as keyof typeof rest] === "") {
-        setErrorState((prev) => ({ ...prev, [key]: true }));
+        setErrorState((prev) => ({
+          ...prev,
+          [key]: { state: true, message: "" },
+        }));
+        return;
+      } else if (
+        key === "sourceUrl" &&
+        !isValidUrl(rest[key as keyof typeof rest])
+      ) {
+        setErrorState((prev) => ({
+          ...prev,
+          [key]: { state: true, message: "Please input a valid URL" },
+        }));
         return;
       } else {
-        setErrorState((prev) => ({ ...prev, [key]: false }));
+        setErrorState((prev) => ({
+          ...prev,
+          [key]: { state: false, message: "" },
+        }));
       }
     }
     //if every key in errorState is false, then submit form
@@ -174,7 +193,9 @@ export default function MetaData(props: Readonly<Props>) {
               value={props.formDetails.name}
               fullWidth
               data-cy="dataset-metadata-title"
-              inputRef={(input) => input && errorState.name && input.focus()}
+              inputRef={(input) =>
+                input && errorState.name.state && input.focus()
+              }
             />
           </Grid>
           <Box height={50} />
@@ -200,7 +221,7 @@ export default function MetaData(props: Readonly<Props>) {
                 name="description"
                 value={props.formDetails.description}
                 inputRef={(input) =>
-                  input && errorState.description && input.focus()
+                  input && errorState.description.state && input.focus()
                 }
               />
               <p
@@ -223,7 +244,7 @@ export default function MetaData(props: Readonly<Props>) {
               onChange={handleChange}
               setFormDetails={props.setFormDetails}
               formDetails={props.formDetails}
-              error={errorState.category}
+              error={errorState.category.state}
             />
           </Grid>
           <Grid lg={7} xs={12} md={7} item>
@@ -238,7 +259,9 @@ export default function MetaData(props: Readonly<Props>) {
               inputProps={{
                 "data-testid": "Source-of-the-data",
               }}
-              inputRef={(input) => input && errorState.source && input.focus()}
+              inputRef={(input) =>
+                input && errorState.source.state && input.focus()
+              }
               value={props.formDetails.source}
             />
           </Grid>
@@ -249,13 +272,14 @@ export default function MetaData(props: Readonly<Props>) {
               variant="outlined"
               onChange={handleChange}
               name="sourceUrl"
+              helperText={errorState.sourceUrl.message}
               fullWidth
               data-cy="dataset-metadata-link"
               inputProps={{
                 "data-testid": "Link-to-data-source",
               }}
               inputRef={(input) =>
-                input && errorState.sourceUrl && input.focus()
+                input && errorState.sourceUrl.state && input.focus()
               }
               value={props.formDetails.sourceUrl}
             />
