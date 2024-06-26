@@ -6,7 +6,8 @@ export interface ReportModel {
   title: string;
   public: boolean;
   showHeader: boolean;
-  subTitle: RawDraftContentState;
+  description: RawDraftContentState;
+  heading: RawDraftContentState;
   rows: {
     structure:
       | null
@@ -48,7 +49,9 @@ export const emptyReport: ReportModel = {
   name: "Untitled report",
   title: "",
   public: false,
-  subTitle: convertToRaw(EditorState.createEmpty().getCurrentContent()),
+  description: convertToRaw(EditorState.createEmpty().getCurrentContent()),
+  heading: convertToRaw(EditorState.createEmpty().getCurrentContent()),
+
   showHeader: false,
   rows: [],
   createdDate: new Date(),

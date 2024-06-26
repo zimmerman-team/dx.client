@@ -14,6 +14,7 @@ import ReportAddnewCard from "./reportAddNewCard";
 import { useInfinityScroll } from "app/hooks/useInfinityScroll";
 import CircleLoader from "../Loader";
 import { useAuth0 } from "@auth0/auth0-react";
+import { EditorState, convertFromRaw } from "draft-js";
 
 interface Props {
   sortBy: string;
@@ -209,7 +210,13 @@ export default function ReportsGrid(props: Props) {
                 showMenuButton={props.showMenuButton}
                 handleDelete={() => handleModal(data.id)}
                 handleDuplicate={() => handleDuplicate(data.id)}
-                title={data.title || data.name}
+                heading={
+                  data.heading
+                    ? EditorState.createWithContent(
+                        convertFromRaw(data.heading)
+                      )
+                    : EditorState.createEmpty()
+                }
                 owner={data.owner}
               />
               <Box height={16} />
@@ -222,7 +229,9 @@ export default function ReportsGrid(props: Props) {
           data={loadedReports.map((data) => ({
             id: data.id,
             name: data.name,
-            description: data.title,
+            heading: data.heading
+              ? EditorState.createWithContent(convertFromRaw(data.heading))
+              : EditorState.createEmpty(),
             createdDate: data.createdDate,
             type: "report",
           }))}

@@ -59,16 +59,8 @@ import { useSearchMediaSources } from "app/hooks/useSearchMediaSources";
 import { useDebounce } from "react-use";
 import Skeleton from "@material-ui/lab/Skeleton";
 import { useInfinityScroll } from "app/hooks/useInfinityScroll";
+import { IHeaderDetails } from "app/modules/report-module/components/right-panel/data";
 
-interface IHeaderDetails {
-  title: string;
-  showHeader: boolean;
-  description: EditorState;
-  backgroundColor: string;
-  titleColor: string;
-  descriptionColor: string;
-  dateColor: string;
-}
 interface Props {
   showHeaderItem: boolean;
   headerDetails: IHeaderDetails;

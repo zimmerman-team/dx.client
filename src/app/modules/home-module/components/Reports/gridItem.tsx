@@ -9,11 +9,12 @@ import { ReactComponent as EditIcon } from "app/modules/home-module/assets/edit.
 import { ReactComponent as DeleteIcon } from "app/modules/home-module/assets/delete.svg";
 import { ReactComponent as ClockIcon } from "app/modules/home-module/assets/clock-icon.svg";
 import { ReactComponent as DuplicateIcon } from "app/modules/home-module/assets/duplicate.svg";
+import { EditorState } from "draft-js";
 
 interface Props {
   date: Date;
   id?: string;
-  title: string;
+  heading: EditorState;
   descr: string;
   color: string;
   viz: JSX.Element;
@@ -85,7 +86,7 @@ export default function gridItem(props: Props) {
             `}
           >
             <p
-              title={props.title}
+              title={props.heading.getCurrentContent().getPlainText()}
               css={`
                 font-size: 14px;
                 line-height: 22px;
@@ -98,7 +99,7 @@ export default function gridItem(props: Props) {
                 margin-bottom: 0;
               `}
             >
-              <b>{props.title}</b>
+              <b>{props.heading.getCurrentContent().getPlainText()}</b>
             </p>
             <p
               title={props.descr}

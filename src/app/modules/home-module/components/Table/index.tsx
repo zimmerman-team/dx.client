@@ -8,11 +8,13 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import _ from "lodash";
+import { EditorState } from "draft-js";
 
 interface IData {
   id: string;
   name: string;
-  description: string;
+  description?: string;
+  heading?: EditorState;
   createdDate: Date;
   type: string;
 }

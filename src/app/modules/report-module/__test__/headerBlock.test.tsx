@@ -28,6 +28,7 @@ interface MockProps {
     title: string;
     showHeader: boolean;
     description: EditorState;
+    heading: EditorState;
     createdDate: Date;
     backgroundColor: string;
     titleColor: string;
@@ -39,6 +40,7 @@ interface MockProps {
 const headerDetailsResult = {
   headerDetails: {
     title: "",
+    heading: EditorState.createEmpty(),
     description: EditorState.createEmpty(),
     backgroundColor: "",
     titleColor: "",
@@ -72,6 +74,7 @@ const defaultProps = (props: Partial<MockProps>): MockProps => {
     headerDetails: {
       title: "Test Title",
       showHeader: true,
+      heading: EditorState.createEmpty(),
       description: EditorState.createEmpty(),
       createdDate: new Date(),
       backgroundColor: "#fff",

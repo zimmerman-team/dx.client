@@ -1,5 +1,5 @@
-import { EditorState } from "draft-js";
 import { ToolbarPluginsType } from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
+import { IHeaderDetails } from "../../components/right-panel/data";
 
 export interface IRowFrame {
   rowIndex: number;
@@ -45,28 +45,10 @@ export interface ReportCreateViewProps {
   setFramesArray: React.Dispatch<React.SetStateAction<IFramesArray[]>>;
   deleteFrame: (id: string) => void;
   framesArray: IFramesArray[];
-  hasSubHeaderTitleFocused: boolean;
+  hasReportNameFocused: boolean;
   handlePersistReportState: () => void;
-  headerDetails: {
-    title: string;
-    showHeader: boolean;
-    description: EditorState;
-    backgroundColor: string;
-    titleColor: string;
-    descriptionColor: string;
-    dateColor: string;
-  };
-  setHeaderDetails: React.Dispatch<
-    React.SetStateAction<{
-      title: string;
-      showHeader: boolean;
-      description: EditorState;
-      backgroundColor: string;
-      titleColor: string;
-      descriptionColor: string;
-      dateColor: string;
-    }>
-  >;
+  headerDetails: IHeaderDetails;
+  setHeaderDetails: React.Dispatch<React.SetStateAction<IHeaderDetails>>;
 
   handleRowFrameItemResize: (
     rowId: string,

@@ -2,7 +2,7 @@ import { IFramesArray } from "app/modules/report-module/views/create/data";
 import { IHeaderDetails } from "app/modules/report-module/components/right-panel/data";
 import { ToolbarPluginsType } from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
 
-export interface SubheaderToolbarProps {
+export interface ChartSubheaderToolbarProps {
   name: string;
   isAiSwitchActive: boolean;
   visualOptions?: any;
@@ -38,8 +38,8 @@ export interface ReportSubheaderToolbarProps {
   setName: (name: string) => void;
   isSaveEnabled?: boolean;
   rawViz?: any;
-  setHasSubHeaderTitleFocused?: (value: boolean) => void;
-  setHasSubHeaderTitleBlurred?: (value: boolean) => void;
+  setHasReportNameFocused?: (value: boolean) => void;
+  setHasReportNameBlurred?: (value: boolean) => void;
   plugins: ToolbarPluginsType;
   headerDetails: IHeaderDetails;
   framesArray: IFramesArray[];

@@ -108,10 +108,8 @@ export default function ReportModule() {
 
   const [rightPanelOpen, setRightPanelOpen] = React.useState(true);
   const [reportName, setReportName] = React.useState("Untitled report");
-  const [hasSubHeaderTitleFocused, setHasSubHeaderTitleFocused] =
-    React.useState(false);
-  const [hasSubHeaderTitleBlurred, setHasSubHeaderTitleBlurred] =
-    React.useState(false);
+  const [hasReportNameFocused, setHasReportNameFocused] = React.useState(false);
+  const [hasReportNameBlurred, setHasReportNameBlurred] = React.useState(false);
 
   const [reportType, setReportType] = React.useState<
     "basic" | "advanced" | "ai" | null
@@ -119,6 +117,7 @@ export default function ReportModule() {
   const [headerDetails, setHeaderDetails] = React.useState({
     title: "",
     description: EditorState.createEmpty(),
+    heading: EditorState.createEmpty(),
     showHeader: true,
     backgroundColor: "#252c34",
     titleColor: "#ffffff",
@@ -131,13 +130,13 @@ export default function ReportModule() {
 
   React.useEffect(() => {
     //set report name back to untitled report if it is empty and user is not focused on subheader title
-    if (reportName === "" && hasSubHeaderTitleBlurred) {
+    if (reportName === "" && hasReportNameBlurred) {
       setReportName("Untitled report");
     }
     return () => {
-      setHasSubHeaderTitleBlurred(false);
+      setHasReportNameBlurred(false);
     };
-  }, [hasSubHeaderTitleBlurred]);
+  }, [hasReportNameBlurred]);
 
   const handleRowFrameItemResize = (
     rowId: string,
@@ -197,6 +196,9 @@ export default function ReportModule() {
       reportName: reportNameRef.current,
       headerDetails: {
         ...headerDetailsRef.current,
+        heading: JSON.stringify(
+          convertToRaw(headerDetailsRef.current.heading.getCurrentContent())
+        ),
         description: JSON.stringify(
           convertToRaw(headerDetailsRef.current.description.getCurrentContent())
         ),
@@ -326,7 +328,9 @@ export default function ReportModule() {
     setReportName(persistedReportState.reportName || "Untitled report");
     setHeaderDetails({
       ...persistedReportState.headerDetails,
-
+      heading: EditorState.createWithContent(
+        convertFromRaw(JSON.parse(persistedReportState.headerDetails.heading))
+      ),
       description: EditorState.createWithContent(
         convertFromRaw(
           JSON.parse(persistedReportState.headerDetails.description)
@@ -445,6 +449,9 @@ export default function ReportModule() {
       reportName: "Untitled report",
       headerDetails: {
         title: "",
+        heading: JSON.stringify(
+          convertToRaw(EditorState.createEmpty().getCurrentContent())
+        ),
         description: JSON.stringify(
           convertToRaw(EditorState.createEmpty().getCurrentContent())
         ),
@@ -460,6 +467,7 @@ export default function ReportModule() {
 
     setHeaderDetails({
       title: "",
+      heading: EditorState.createEmpty(),
       description: EditorState.createEmpty(),
       showHeader: true,
       backgroundColor: "#252c34",
@@ -484,7 +492,12 @@ export default function ReportModule() {
         authId: user?.sub,
         showHeader: headerDetails.showHeader,
         title: headerDetails.showHeader ? headerDetails.title : undefined,
-        subTitle: convertToRaw(
+        heading: convertToRaw(
+          headerDetails.showHeader
+            ? headerDetails.heading.getCurrentContent()
+            : EditorState.createEmpty().getCurrentContent()
+        ),
+        description: convertToRaw(
           headerDetails.showHeader
             ? headerDetails.description.getCurrentContent()
             : EditorState.createEmpty().getCurrentContent()
@@ -570,7 +583,6 @@ export default function ReportModule() {
   }, [user, isAuthenticated, reportGetData]);
 
   const showReportHeader = view === "edit" ? canEditDeleteReport : true;
-
   return (
     <DndProvider backend={HTML5Backend}>
       {!reportError401 &&
@@ -582,8 +594,8 @@ export default function ReportModule() {
             setAutoSave={setAutoSave}
             onReportSave={onSave}
             setName={setReportName}
-            setHasSubHeaderTitleFocused={setHasSubHeaderTitleFocused}
-            setHasSubHeaderTitleBlurred={setHasSubHeaderTitleBlurred}
+            setHasReportNameFocused={setHasReportNameFocused}
+            setHasReportNameBlurred={setHasReportNameBlurred}
             isSaveEnabled={isSaveEnabled}
             name={page !== "new" && !view ? reportGetData.name : reportName}
             framesArray={framesArray}
@@ -640,7 +652,7 @@ export default function ReportModule() {
             setReportName={setReportName}
             reportName={reportName}
             deleteFrame={deleteFrame}
-            hasSubHeaderTitleFocused={hasSubHeaderTitleFocused}
+            hasReportNameFocused={hasReportNameFocused}
             reportType={reportType}
             framesArray={framesArray}
             headerDetails={headerDetails}
@@ -667,8 +679,8 @@ export default function ReportModule() {
             stopInitializeFramesWidth={stopInitializeFramesWidth}
             setStopInitializeFramesWidth={setStopInitializeFramesWidth}
             view={view}
-            hasSubHeaderTitleFocused={hasSubHeaderTitleFocused}
-            setHasSubHeaderTitleFocused={setHasSubHeaderTitleFocused}
+            hasReportNameFocused={hasReportNameFocused}
+            setHasReportNameFocused={setHasReportNameFocused}
             setPlugins={setPlugins}
             setAutoSave={setAutoSave}
             isSaveEnabled={isSaveEnabled}

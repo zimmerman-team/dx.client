@@ -3,6 +3,7 @@ import { IFramesArray } from "../../views/create/data";
 
 export interface IHeaderDetails {
   title: string;
+  heading: EditorState;
   showHeader: boolean;
   description: EditorState;
   backgroundColor: string;

@@ -16,35 +16,17 @@ import { ReactComponent as HeaderHandlesvg } from "app/modules/report-module/ass
 import { Tooltip } from "@material-ui/core";
 import useDebounce from "react-use/lib/useDebounce";
 import { ToolbarPluginsType } from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
+import { IHeaderDetails } from "app/modules/report-module/components/right-panel/data";
 
 interface Props {
   previewMode: boolean;
-  hasSubHeaderTitleFocused?: boolean;
-  setHasSubHeaderTitleFocused?: React.Dispatch<React.SetStateAction<boolean>>;
+  hasReportNameFocused?: boolean;
+  sethasReportNameFocused?: React.Dispatch<React.SetStateAction<boolean>>;
   setReportName?: React.Dispatch<React.SetStateAction<string>>;
   reportName?: string;
   setPlugins: React.Dispatch<React.SetStateAction<ToolbarPluginsType>>;
-  headerDetails: {
-    title: string;
-    showHeader: boolean;
-    description: EditorState;
-    createdDate: Date;
-    backgroundColor: string;
-    titleColor: string;
-    descriptionColor: string;
-    dateColor: string;
-  };
-  setHeaderDetails: React.Dispatch<
-    React.SetStateAction<{
-      title: string;
-      showHeader: boolean;
-      description: EditorState;
-      backgroundColor: string;
-      titleColor: string;
-      descriptionColor: string;
-      dateColor: string;
-    }>
-  >;
+  headerDetails: IHeaderDetails;
+  setHeaderDetails: React.Dispatch<React.SetStateAction<IHeaderDetails>>;
 }
 
 export default function HeaderBlock(props: Props) {
@@ -55,11 +37,14 @@ export default function HeaderBlock(props: Props) {
     reportRightPanelViewAtom
   );
   const [handleDisplay, setHandleDisplay] = React.useState(false);
-  const placeholder = "Add a header description";
+  const descriptionPlaceholder = "Add a header description";
+  const headingPlaceholder = "Add a header title";
+  const [headingPlaceholderState, setHeadingPlaceholderState] =
+    React.useState<string>(headingPlaceholder);
   const [descriptionPlaceholderState, setDescriptionPlaceholderState] =
-    React.useState<string>(placeholder);
+    React.useState<string>(descriptionPlaceholder);
 
-  const [isReportTitleModified, setIsReportTitleModified] =
+  const [isReportHeadingModified, setIsReportHeadingModified] =
     React.useState(false);
 
   const viewOnlyMode =
@@ -78,13 +63,15 @@ export default function HeaderBlock(props: Props) {
   //handles report name state
   const [,] = useDebounce(
     () => {
-      // checks when headerDetails.title is empty and report title has not been focused
-      if (!props.hasSubHeaderTitleFocused && isReportTitleModified) {
-        props.setReportName?.(props.headerDetails.title);
+      // checks when headerDetails.heading is empty and report heading has not been focused
+      if (!props.hasReportNameFocused && isReportHeadingModified) {
+        props.setReportName?.(
+          props.headerDetails.heading.getCurrentContent().getPlainText()
+        );
       }
     },
     500,
-    [props.headerDetails.title]
+    [props.headerDetails.heading]
   );
 
   const [{ isOver }, drop] = useDrop(() => ({
@@ -109,6 +96,16 @@ export default function HeaderBlock(props: Props) {
     });
   };
 
+  const setHeadingContent = (text: EditorState) => {
+    props.setHeaderDetails({
+      ...props.headerDetails,
+      heading: text,
+    });
+    if (text.getCurrentContent().getPlainText().length > 0) {
+      setIsReportHeadingModified(true);
+    }
+  };
+
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -118,7 +115,7 @@ export default function HeaderBlock(props: Props) {
       [name]: value,
     });
     if (name == "title") {
-      setIsReportTitleModified(true);
+      setIsReportHeadingModified(true);
     }
   };
 
@@ -221,17 +218,57 @@ export default function HeaderBlock(props: Props) {
       )}
       <Container maxWidth="lg">
         <div css={headerBlockcss.innerContainer}>
-          <div>
-            <input
-              ref={inputRef}
-              name="title"
-              type="text"
-              placeholder="Add a header title"
-              onChange={handleChange}
-              disabled={props.previewMode}
-              value={props.headerDetails.title}
-              css={headerBlockcss.inputStyle(props.headerDetails.titleColor)}
-              data-cy="report-header-block-title-input"
+          <div
+            css={`
+              width: 60%;
+              overflow-y: hidden;
+              color: ${props.headerDetails.titleColor} !important;
+              font-size: 29px;
+              min-width: 600px;
+              line-height: 16.8px;
+              background: inherit;
+              position: relative;
+              letter-spacing: 0.692603px;
+              ${props.previewMode && "pointer-events: none;"}
+
+              ::placeholder {
+                color: ${props.headerDetails.titleColor};
+              }
+
+              > div {
+                padding: 0;
+                .public-DraftEditorPlaceholder-inner {
+                  position: absolute;
+                  color: ${props.headerDetails.titleColor};
+                  opacity: 0.5;
+                  font-size: 29px; !important;
+                  font-family: "GothamNarrow-Bold", sans-serif;
+                }
+                span {
+                  font-family: "GothamNarrow-Bold", sans-serif;
+                }
+                > div {
+                  > div {
+                    > div {
+                      font-family: "GothamNarrow-Bold", sans-serif;
+
+                      min-height: 32px !important;
+                    }
+                  }
+                }
+              }
+            `}
+          >
+            <RichEditor
+              invertColors
+              editMode={!props.previewMode}
+              setTextContent={setHeadingContent}
+              placeholder={headingPlaceholder}
+              placeholderState={headingPlaceholderState}
+              setPlaceholderState={setHeadingPlaceholderState}
+              textContent={props.headerDetails.heading}
+              setPlugins={props.setPlugins}
+              focusOnMount
             />
           </div>
 
@@ -278,7 +315,7 @@ export default function HeaderBlock(props: Props) {
               invertColors
               editMode={true}
               setTextContent={setDescriptionContent}
-              placeholder={placeholder}
+              placeholder={descriptionPlaceholder}
               placeholderState={descriptionPlaceholderState}
               setPlaceholderState={setDescriptionPlaceholderState}
               textContent={props.headerDetails.description}

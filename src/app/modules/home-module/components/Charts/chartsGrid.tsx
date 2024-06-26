@@ -25,6 +25,16 @@ interface Props {
   addCard?: boolean;
 }
 
+export interface IChartAsset {
+  id: string;
+  name: string;
+  createdDate: Date;
+  vizType: string;
+  isMappingValid: boolean;
+  owner: string;
+  isAIAssisted: boolean;
+}
+
 export default function ChartsGrid(props: Props) {
   const observerTarget = React.useRef(null);
   const [chartId, setChartId] = React.useState<string>("");
@@ -42,7 +52,7 @@ export default function ChartsGrid(props: Props) {
   const { isObserved } = useInfinityScroll(observerTarget);
 
   const charts = useStoreState(
-    (state) => (state.charts.ChartGetList.crudData ?? []) as any[]
+    (state) => (state.charts.ChartGetList.crudData ?? []) as IChartAsset[]
   );
   const loadChartsCount = useStoreActions(
     (actions) => actions.charts.ChartsCount.fetch

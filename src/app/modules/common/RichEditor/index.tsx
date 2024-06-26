@@ -4,7 +4,7 @@ import bgPicker from "app/modules/common/RichEditor/BGColorModal/Picker";
 import { ToolbarPluginsType } from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
 
 /*plugins */
-import { EditorState } from "draft-js";
+import { EditorState, SelectionState } from "draft-js";
 import Editor from "@draft-js-plugins/editor";
 import createLinkPlugin from "@draft-js-plugins/anchor";
 import createEmojiPlugin from "@draft-js-plugins/emoji";
@@ -40,13 +40,34 @@ export const RichEditor = (props: {
   placeholder: string;
 }): ReactElement => {
   const editor = useRef<Editor | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
   const focus = (): void => {
     editor.current?.focus();
   };
 
+  const moveSelectionToEnd = (editorState: EditorState) => {
+    const content = editorState.getCurrentContent();
+    const blockMap = content.getBlockMap();
+
+    const key = blockMap.last().getKey();
+    const length = blockMap.last().getLength();
+
+    // On Chrome and Safari, calling focus on contenteditable focuses the
+    // cursor at the first character. This is something you don't expect when
+    // you're clicking on an input element but not directly on a character.
+    // Put the cursor back where it was before the blur.
+    const selection = new SelectionState({
+      anchorKey: key,
+      anchorOffset: length,
+      focusKey: key,
+      focusOffset: length,
+    });
+    return EditorState.forceSelection(editorState, selection);
+  };
+
   React.useEffect(() => {
-    if (props.focusOnMount) {
+    if (props.focusOnMount && props.editMode) {
       focus();
     }
   }, []);

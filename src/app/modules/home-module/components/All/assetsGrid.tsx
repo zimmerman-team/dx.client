@@ -20,6 +20,10 @@ import ColoredReportIcon from "app/assets/icons/ColoredReportIcon";
 import DeleteDatasetDialog from "app/components/Dialogs/deleteDatasetDialog";
 import DeleteReportDialog from "app/components/Dialogs/deleteReportDialog";
 import { HomepageTable } from "../Table";
+import { EditorState, convertFromRaw } from "draft-js";
+import { IChartAsset } from "app/modules/home-module/components/Charts/chartsGrid";
+import { ReportModel } from "app/modules/report-module/data";
+import { DatasetListItemAPIModel } from "app/modules/dataset-module/data";
 
 interface Props {
   sortBy: string;
@@ -259,7 +263,9 @@ export default function AssetsGrid(props: Props) {
             return {
               id: data.id,
               name: data.name,
-              description: data.title,
+              heading: data.heading
+                ? EditorState.createWithContent(convertFromRaw(data.heading))
+                : EditorState.createEmpty(),
               createdDate: data.createdDate,
               type: data.assetType,
             };
@@ -326,7 +332,13 @@ export default function AssetsGrid(props: Props) {
                       handleDuplicate={() =>
                         handleDuplicate(d.id, d.assetType as assetType)
                       }
-                      title={d.title || d.name}
+                      heading={
+                        d.heading
+                          ? EditorState.createWithContent(
+                              convertFromRaw(d.heading)
+                            )
+                          : EditorState.createEmpty()
+                      }
                       owner={d.owner}
                     />
                   ),

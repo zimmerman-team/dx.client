@@ -25,7 +25,7 @@ import { styles } from "app/modules/chart-module/components/chartSubheaderToolba
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import DeleteChartDialog from "app/components/Dialogs/deleteChartDialog";
 import { ChartAPIModel, emptyChartAPI } from "app/modules/chart-module/data";
-import { SubheaderToolbarProps } from "app/modules/chart-module/components/chartSubheaderToolbar/data";
+import { ChartSubheaderToolbarProps } from "app/modules/chart-module/components/chartSubheaderToolbar/data";
 import { ExportChartButton } from "app/modules/chart-module/components/chartSubheaderToolbar/exportButton";
 import { ISnackbarState } from "app/modules/dataset-upload-module/upload-steps/previewFragment";
 import { chartFromReportAtom, homeDisplayAtom } from "app/state/recoil/atoms";
@@ -36,7 +36,9 @@ import useAutosave from "app/hooks/useAutoSave";
 import { useStyles } from "app/modules/report-module/components/reportSubHeaderToolbar";
 import AutoResizeInput from "app/modules/report-module/components/reportSubHeaderToolbar/autoResizeInput";
 
-export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
+export function ChartSubheaderToolbar(
+  props: Readonly<ChartSubheaderToolbarProps>
+) {
   const classes = useStyles();
   const history = useHistory();
   const { user, isAuthenticated } = useAuth0();
