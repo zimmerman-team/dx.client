@@ -52,7 +52,6 @@ export const useLoadDatasetDetails = (id: string) => {
 
   React.useEffect(() => {
     if (id) {
-      console.log(id, "id");
       loadDatasetDetails();
     }
     return () => {

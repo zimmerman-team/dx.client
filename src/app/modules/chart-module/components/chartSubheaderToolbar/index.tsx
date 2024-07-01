@@ -49,6 +49,8 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
   const [enableButton, setEnableButton] = React.useState<boolean>(false);
   const setHomeTab = useRecoilState(homeDisplayAtom)[1];
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
+  const [hasChangesBeenMade, setHasChangesBeenMade] = React.useState(false);
+
   const [inputSpanVisibiltiy, setInputSpanVisibility] = React.useState(true);
   const [showSnackbar, setShowSnackbar] = React.useState<string | null>(null);
   const [duplicatedChartId, setDuplicatedChartId] = React.useState<
@@ -94,12 +96,6 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
   const canChartEditDelete = React.useMemo(() => {
     return isAuthenticated && loadedChart && loadedChart.owner === user?.sub;
   }, [user, isAuthenticated, loadedChart]);
-
-  const saveStatusDivWidth =
-    (canChartEditDelete && props.savedChanges) ||
-    (canChartEditDelete && editChartLoading)
-      ? 140
-      : 0;
 
   const [snackbarState, setSnackbarState] = React.useState<ISnackbarState>({
     open: false,
@@ -152,6 +148,7 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
     },
     2 * 1000,
     props.autoSave && canChartEditDelete,
+    hasChangesBeenMade,
     [
       props.name,
       props.isAiSwitchActive,
