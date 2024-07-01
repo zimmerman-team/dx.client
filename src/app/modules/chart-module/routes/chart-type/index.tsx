@@ -197,7 +197,9 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
   const onChartTypeChange =
     (chartTypeId: string) => (e: React.MouseEvent<HTMLButtonElement>) => {
       sessionStorage.setItem("visualOptions", JSON.stringify({}));
-      props.setVisualOptions({});
+      props.setVisualOptionsOnChange(
+        chartType === chartTypeId ? null : chartTypeId
+      );
       clearMapping();
       resetIsChartAutoMapped();
       props.setChartFromAPI(null);

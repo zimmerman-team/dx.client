@@ -377,7 +377,7 @@ export default function ChartModule() {
     [renderedChartSsr]
   );
 
-  function setVisualOptionsOnChange() {
+  function setVisualOptionsOnChange(chartType: string | null = null) {
     const options = {
       ...getOptionsConfig(
         get(charts, chartType ?? "echartsBarchart", charts.echartsBarchart)
@@ -394,10 +394,6 @@ export default function ChartModule() {
       width: defaultOptionsValues.width,
     };
     setVisualOptions(tmpVisualOptions);
-  }
-
-  function addVizToLocalStates() {
-    setVisualOptions({});
   }
 
   async function clear() {
@@ -455,12 +451,6 @@ export default function ChartModule() {
   }, [visualOptions, containerRef.current?.clientWidth]);
 
   const { ref } = useResizeObserver<HTMLDivElement>();
-
-  React.useEffect(() => {
-    if (!loading && chartType) {
-      setVisualOptionsOnChange();
-    }
-  }, [chartType, loading]);
 
   React.useEffect(() => {
     if (page !== "new") {
@@ -527,7 +517,6 @@ export default function ChartModule() {
         setVisualOptions={setVisualOptions}
         loading={loading || isChartLoading}
         filterOptionGroups={filterOptionGroups}
-        addVizToLocalStates={addVizToLocalStates}
         openToolbox={toolboxOpen}
         setToolboxOpen={setToolboxOpen}
         dimensions={dimensions}
@@ -627,6 +616,7 @@ export default function ChartModule() {
                 setChartFromAPI={setChartFromAPI}
                 setVisualOptions={setVisualOptions}
                 dataTypes={dataTypes2}
+                setVisualOptionsOnChange={setVisualOptionsOnChange}
               />
             </Route>
             <Route path="/chart/:page/preview-data">

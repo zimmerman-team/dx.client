@@ -47,6 +47,7 @@ export function ChartBuilderPreview(props: ChartBuilderPreviewProps) {
     if (datasetId === null && !props.loading && page === "new") {
       history.push(`/chart/${page}/data`);
     } else {
+      //loads table data
       props.loadDataset(datasetId!);
     }
   }, [datasetId]);
@@ -78,7 +79,6 @@ export function ChartBuilderPreview(props: ChartBuilderPreviewProps) {
 
   return (
     <div css={commonStyles.container}>
-      {props.loading && <PageLoader />}
       <div css={commonStyles.innercontainer}>
         <DatasetDataTable
           data={props.data}

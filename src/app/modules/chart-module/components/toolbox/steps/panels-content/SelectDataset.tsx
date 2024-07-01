@@ -51,7 +51,7 @@ function ChartToolBoxSelectDataset(props: { deselectDataset: () => void }) {
   const token = useStoreState((state) => state.AuthToken.value);
 
   const dataset = useStoreState((state) => state.charts.dataset.value);
-  const fetchDataset = useStoreActions(
+  const fetchDatasetdetails = useStoreActions(
     (actions) => actions.dataThemes.DatasetGet.fetch
   );
   const datasetDetails = useStoreState(
@@ -64,7 +64,7 @@ function ChartToolBoxSelectDataset(props: { deselectDataset: () => void }) {
 
   React.useEffect(() => {
     if (token && dataset) {
-      fetchDataset({
+      fetchDatasetdetails({
         token,
         storeInCrudData: true,
         getId: dataset as string,
