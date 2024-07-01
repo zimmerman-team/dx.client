@@ -30,7 +30,6 @@ import {
   charts,
   ChartAPIModel,
   routeToConfig,
-  emptyChartAPI,
   ChartRenderedItem,
   defaultChartOptions,
 } from "app/modules/chart-module/data";

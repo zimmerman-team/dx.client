@@ -35,6 +35,7 @@ import AutoSaveSwitch from "app/modules/report-module/components/reportSubHeader
 import useAutosave from "app/hooks/useAutoSave";
 import { useStyles } from "app/modules/report-module/components/reportSubHeaderToolbar";
 import AutoResizeInput from "app/modules/report-module/components/reportSubHeaderToolbar/autoResizeInput";
+import { isEqual } from "lodash";
 
 export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
   const classes = useStyles();
@@ -141,6 +142,31 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
       history.push(`/chart/${page}/customize`);
     }
   };
+  const compareStateChanges = () => {
+    if (loadedChart.id !== page) return false;
+    if (
+      !isEqual(props.name, loadedChart.name) ||
+      !isEqual(selectedChartType, loadedChart.vizType) ||
+      !isEqual(mapping, loadedChart.mapping) ||
+      !isEqual(dataset as string, loadedChart.datasetId as string) ||
+      !isEqual(props.visualOptions, loadedChart.vizOptions) ||
+      !isEqual(appliedFilters, loadedChart.appliedFilters)
+    ) {
+      return true;
+    }
+    return false;
+  };
+
+  React.useEffect(() => {
+    setHasChangesBeenMade(compareStateChanges);
+  }, [
+    props.name,
+    selectedChartType,
+    mapping,
+    dataset,
+    props.visualOptions,
+    appliedFilters,
+  ]);
 
   useAutosave(
     () => {
