@@ -54,10 +54,6 @@ export const useLoadDatasetDetails = (id: string) => {
     if (id) {
       loadDatasetDetails();
     }
-    return () => {
-      console.log("unmounting component");
-      //   abortControllerRef.current.abort();
-    };
   }, [token, id]);
 
   return {
