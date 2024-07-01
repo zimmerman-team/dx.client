@@ -183,8 +183,8 @@ function ReportEditView(props: ReportEditViewProps) {
             previewItems: content,
           },
           content,
-          contentWidths: rowFrame.contentWidths?.widths ?? [],
-          contentHeights: rowFrame.contentHeights?.heights ?? [],
+          contentWidths: [...rowFrame.contentWidths?.widths] ?? [],
+          contentHeights: [...rowFrame.contentHeights?.heights] ?? [],
           contentTypes,
         };
       }
@@ -221,7 +221,6 @@ function ReportEditView(props: ReportEditViewProps) {
       framesArrayFromReportData()
     );
 
-    console.log(props.framesArray, framesArrayFromReportData(), "dit");
     props.setHasChangesBeenMade(
       !areFramesArrayStatesEqual ||
         !areHeaderDetailsStatesEqual ||
