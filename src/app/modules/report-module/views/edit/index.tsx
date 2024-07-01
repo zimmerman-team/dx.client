@@ -221,15 +221,20 @@ function ReportEditView(props: ReportEditViewProps) {
       framesArrayFromReportData()
     );
 
-    props.setHasChangesBeenMade(
+    if (
       !areFramesArrayStatesEqual ||
-        !areHeaderDetailsStatesEqual ||
-        reportData.name !== props.reportName
-    );
+      !areHeaderDetailsStatesEqual ||
+      reportData.name !== props.reportName
+    ) {
+      props.setHasChangesBeenMade(true);
+    }
   };
 
   React.useEffect(() => {
     hasChangesBeenMadeCheck();
+    return () => {
+      props.setHasChangesBeenMade(false);
+    };
   }, [
     props.framesArray,
     props.reportName,
