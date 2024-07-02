@@ -8,9 +8,6 @@ import { styles as commonStyles } from "app/modules/chart-module/routes/common/s
 import { FilterGroupModel } from "app/components/ToolBoxPanel/components/filters/data";
 import { DatasetDataTable } from "app/modules/dataset-upload-module/component/data-table";
 import { useHistory, useParams } from "react-router-dom";
-import { useAuth0 } from "@auth0/auth0-react";
-import { ChartAPIModel, emptyChartAPI } from "app/modules/chart-module/data";
-import { NotAuthorizedMessageModule } from "app/modules/common/not-authorized-message";
 import ErrorComponent from "app/modules/chart-module/components/dialog/errrorComponent";
 
 interface ChartBuilderPreviewProps {
@@ -34,14 +31,8 @@ interface ChartBuilderPreviewProps {
 export function ChartBuilderPreview(props: ChartBuilderPreviewProps) {
   useTitle("DX DataXplorer - Preview Data");
   const history = useHistory();
-  const { isAuthenticated, user } = useAuth0();
   const { page } = useParams<{ page: string }>();
   const datasetId = useStoreState((state) => state.charts.dataset.value);
-
-  const loadedChart = useStoreState(
-    (state) =>
-      (state.charts.ChartGet.crudData ?? emptyChartAPI) as ChartAPIModel
-  );
 
   React.useEffect(() => {
     if (datasetId === null && !props.loading && page === "new") {
@@ -51,18 +42,6 @@ export function ChartBuilderPreview(props: ChartBuilderPreviewProps) {
     }
   }, [datasetId]);
 
-  const canChartEditDelete = React.useMemo(() => {
-    return isAuthenticated && loadedChart && loadedChart.owner === user?.sub;
-  }, [user, isAuthenticated, loadedChart]);
-
-  if (!canChartEditDelete && page !== "new") {
-    return (
-      <>
-        <div css="width: 100%; height: 100px;" />
-        <NotAuthorizedMessageModule asset="chart" action="edit" />
-      </>
-    );
-  }
   if (props.dataError) {
     return (
       <>

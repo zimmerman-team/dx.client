@@ -233,15 +233,17 @@ function ReportEditView(props: ReportEditViewProps) {
   }
 
   if (!canEditDeleteReport && !loadingReportData) {
-    <>
-      <Box height={48} />
-      <NotAuthorizedMessageModule
-        asset="report"
-        action="edit"
-        name={reportData?.name}
-      />
-      ;
-    </>;
+    return (
+      <>
+        <Box height={48} />
+        <NotAuthorizedMessageModule
+          asset="report"
+          action="edit"
+          name={reportData?.name}
+        />
+        ;
+      </>
+    );
   }
 
   return (
