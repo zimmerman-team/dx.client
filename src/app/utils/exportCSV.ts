@@ -20,13 +20,14 @@ export function exportCSV(
     investmentsMapView: string;
     donorMapView: string;
     isDetail: boolean;
+    resultsSelectedYear: string;
   }
 ): CommonPropTypes {
   const csvData: any[] = [];
   const isComponent = options.selectedAggregation === "componentName";
   const yearDropdownNode = document.getElementById("generic-dropdown-input");
   switch (pathname) {
-    case "/viz/disbursements/treemap":
+    case "/explore/disbursements/treemap":
       data.forEach((item: any) => {
         if (item._children) {
           item._children.forEach((child: any) => {
@@ -59,7 +60,7 @@ export function exportCSV(
           { label: "Signed (USD)", key: "signed" },
         ],
       };
-    case "/viz/disbursements/time-cycle":
+    case "/explore/disbursements/time-cycle":
       data.forEach((item: any) => {
         if (item.disbursedChildren && item.cumulativeChildren) {
           item.disbursedChildren.forEach((child: any) => {
@@ -86,7 +87,7 @@ export function exportCSV(
           { label: "Cumulative (USD)", key: "cumulative" },
         ],
       };
-    case "/viz/disbursements/map":
+    case "/explore/disbursements/map":
       if (options.investmentsMapView === "countries") {
         data.countries.features.forEach((item: any) => {
           if (item.properties && !isEmpty(item.properties.data)) {
@@ -144,7 +145,7 @@ export function exportCSV(
           { label: "Signed (USD)", key: "signed" },
         ],
       };
-    case "/viz/disbursements/table":
+    case "/explore/disbursements/table":
       data.forEach((item: any) => {
         if (item._children) {
           item._children.forEach((child: any) => {
@@ -177,7 +178,7 @@ export function exportCSV(
           { label: "Signed (USD)", key: "signed" },
         ],
       };
-    case "/viz/signed/treemap":
+    case "/explore/signed/treemap":
       data.forEach((item: any) => {
         if (item._children) {
           item._children.forEach((child: any) => {
@@ -210,7 +211,7 @@ export function exportCSV(
           { label: "Signed (USD)", key: "signed" },
         ],
       };
-    case "/viz/signed/time-cycle":
+    case "/explore/signed/time-cycle":
       data.forEach((item: any) => {
         if (item.disbursedChildren && item.cumulativeChildren) {
           item.disbursedChildren.forEach((child: any) => {
@@ -237,7 +238,7 @@ export function exportCSV(
           { label: "Cumulative (USD)", key: "cumulative" },
         ],
       };
-    case "/viz/signed/map":
+    case "/explore/signed/map":
       if (options.investmentsMapView === "countries") {
         data.countries.features.forEach((item: any) => {
           if (item.properties && !isEmpty(item.properties.data)) {
@@ -295,7 +296,7 @@ export function exportCSV(
           { label: "Signed (USD)", key: "signed" },
         ],
       };
-    case "/viz/signed/table":
+    case "/explore/signed/table":
       data.forEach((item: any) => {
         if (item._children) {
           item._children.forEach((child: any) => {
@@ -328,7 +329,7 @@ export function exportCSV(
           { label: "Signed (USD)", key: "signed" },
         ],
       };
-    case "/viz/commitment/treemap":
+    case "/explore/commitment/treemap":
       data.forEach((item: any) => {
         if (item._children) {
           item._children.forEach((child: any) => {
@@ -361,7 +362,7 @@ export function exportCSV(
           { label: "Signed (USD)", key: "signed" },
         ],
       };
-    case "/viz/commitment/time-cycle":
+    case "/explore/commitment/time-cycle":
       data.forEach((item: any) => {
         if (item.disbursedChildren && item.cumulativeChildren) {
           item.disbursedChildren.forEach((child: any) => {
@@ -388,7 +389,7 @@ export function exportCSV(
           { label: "Cumulative (USD)", key: "cumulative" },
         ],
       };
-    case "/viz/commitment/map":
+    case "/explore/commitment/map":
       if (options.investmentsMapView === "countries") {
         data.countries.features.forEach((item: any) => {
           if (item.properties && !isEmpty(item.properties.data)) {
@@ -446,7 +447,7 @@ export function exportCSV(
           { label: "Signed (USD)", key: "signed" },
         ],
       };
-    case "/viz/commitment/table":
+    case "/explore/commitment/table":
       data.forEach((item: any) => {
         if (item._children) {
           item._children.forEach((child: any) => {
@@ -479,7 +480,7 @@ export function exportCSV(
           { label: "Signed (USD)", key: "signed" },
         ],
       };
-    case "/viz/budgets/flow":
+    case "/explore/budgets/flow":
       return {
         data,
         filename: "budgets-flow.csv",
@@ -489,7 +490,7 @@ export function exportCSV(
           { label: "Budget (USD)", key: "value" },
         ],
       };
-    case "/viz/budgets/time-cycle":
+    case "/explore/budgets/time-cycle":
       data.forEach((item: any) => {
         const dataKeys = filter(
           Object.keys(item),
@@ -513,7 +514,7 @@ export function exportCSV(
           { label: "Budget (USD)", key: "value" },
         ],
       };
-    case "/viz/budgets/map":
+    case "/explore/budgets/map":
       if (options.investmentsMapView === "countries") {
         data.countries.features.forEach((item: any) => {
           if (item.properties && !isEmpty(item.properties.data)) {
@@ -556,7 +557,7 @@ export function exportCSV(
           { label: "Budget (USD)", key: "budget" },
         ],
       };
-    case "/viz/allocations":
+    case "/explore/allocations":
       data.keys.forEach((key: string, index: number) => {
         csvData.push({
           component: key,
@@ -571,7 +572,7 @@ export function exportCSV(
           { label: "Allocation (USD)", key: "value" },
         ],
       };
-    case "/viz/allocations/map":
+    case "/explore/allocations/map":
       if (options.investmentsMapView === "countries") {
         data.countries.features.forEach((item: any) => {
           if (item.properties && !isEmpty(item.properties.data)) {
@@ -614,7 +615,7 @@ export function exportCSV(
           { label: "Budget (USD)", key: "budget" },
         ],
       };
-    case "/viz/allocation":
+    case "/explore/allocations":
       data.keys.forEach((key: string, index: number) => {
         csvData.push({
           component: key,
@@ -629,7 +630,7 @@ export function exportCSV(
           { label: "Allocation (USD)", key: "value" },
         ],
       };
-    case "/viz/eligibility":
+    case "/explore/eligibility":
       if (options.isDetail) {
         filter(data, (comp: any) => comp.id.trim().length > 0).forEach(
           (comp: any) => {
@@ -684,7 +685,7 @@ export function exportCSV(
           { label: "Status", key: "status" },
         ],
       };
-    case "/viz/eligibility/table":
+    case "/explore/eligibility/table":
       if (options.isDetail) {
         filter(data, (comp: any) => comp.id.trim().length > 0).forEach(
           (comp: any) => {
@@ -739,7 +740,7 @@ export function exportCSV(
           { label: "Status", key: "status" },
         ],
       };
-    case "/viz/pledges-contributions/time-cycle":
+    case "/explore/pledges-contributions/time-cycle":
       data.forEach((item: any) => {
         csvData.push({
           year: item.year,
@@ -756,7 +757,7 @@ export function exportCSV(
           { label: "Contribution (USD)", key: "contribution" },
         ],
       };
-    case "/viz/pledges-contributions/treemap":
+    case "/explore/pledges-contributions/treemap":
       const type =
         data && data[0] ? data[0].tooltip.componentsStats[0].name : "Pledge";
       data.forEach((item: any) => {
@@ -773,7 +774,7 @@ export function exportCSV(
           { label: `${type} (USD)`, key: "value" },
         ],
       };
-    case "/viz/pledges-contributions/map":
+    case "/explore/pledges-contributions/map":
       if (options.donorMapView === "Public Sector") {
         data.layers.features.forEach((item: any) => {
           if (item.properties && !isEmpty(item.properties.data)) {
@@ -804,7 +805,7 @@ export function exportCSV(
           { label: "Amount (USD)", key: "value" },
         ],
       };
-    case "/viz/pledges-contributions/table":
+    case "/explore/pledges-contributions/table":
       if (options.donorMapView === "Public Sector") {
         data.layers.features.forEach((item: any) => {
           if (item.properties && !isEmpty(item.properties.data)) {
@@ -865,7 +866,7 @@ export function exportCSV(
           { label: "Signed (USD)", key: "signed" },
         ],
       };
-    case "/viz/grants":
+    case "/explore/grants":
       return {
         data,
         filename: "grants.csv",
@@ -899,7 +900,28 @@ export function exportCSV(
       });
       return {
         data: csvData,
-        filename: "results.csv",
+        filename: `results-${options.resultsSelectedYear}.csv`,
+        headers: [
+          { label: "Title", key: "title" },
+          { label: "Value", key: "value" },
+          { label: "Location", key: "location" },
+          { label: "Component", key: "component" },
+        ],
+      };
+    case "/explore/results":
+      data.forEach((item: any) => {
+        item.geoLocations.forEach((loc: any) => {
+          csvData.push({
+            title: item.title,
+            value: loc.value,
+            component: item.component,
+            location: loc.name,
+          });
+        });
+      });
+      return {
+        data: csvData,
+        filename: `results-${options.resultsSelectedYear}.csv`,
         headers: [
           { label: "Title", key: "title" },
           { label: "Value", key: "value" },

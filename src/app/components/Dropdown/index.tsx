@@ -14,6 +14,7 @@ const BootstrapInput = withStyles((theme: Theme) =>
     },
     input: {
       fontSize: 16,
+      fontWeight: 400,
       outline: "none",
       position: "relative",
       borderRadius: "20px",

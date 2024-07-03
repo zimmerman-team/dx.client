@@ -2,6 +2,7 @@ import React from "react";
 import get from "lodash/get";
 import filter from "lodash/filter";
 import { formatFinancialValue } from "app/utils/formatFinancialValue";
+import { useCMSData } from "app/hooks/useCMSData";
 
 export function BudgetsTimeCycleTooltip(props: Record<string, unknown>) {
   const valueKeys = filter(
@@ -9,15 +10,16 @@ export function BudgetsTimeCycleTooltip(props: Record<string, unknown>) {
     (key: string) =>
       key !== "year" && key.indexOf("Color") === -1 && key !== "amount"
   );
+  const cmsData = useCMSData({ returnData: true });
 
   return (
     <div
       css={`
-        color: #262c34;
-        min-width: 250px;
+        color: #231d2c;
+        min-width: 260px;
         padding: 16px 25px;
         position: relative;
-        background: #f5f5f7;
+        background: #f4f4f4;
         border-radius: 20px;
       `}
     >
@@ -30,7 +32,8 @@ export function BudgetsTimeCycleTooltip(props: Record<string, unknown>) {
           font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
         `}
       >
-        Budgets · {props.year}
+        {get(cmsData, "componentsChartsBudgets.timeCycleTooltipBudgets", "")}{" "}
+        {props.year}
       </div>
       <div
         css={`

@@ -17,10 +17,13 @@ import {
   TooltipButton,
   XsContainer,
 } from "app/components/Charts/common/styles";
+import get from "lodash/get";
+import { useCMSData } from "app/hooks/useCMSData";
 
 export function PledgesContributionsTimeCycle(
   props: PledgesContributionsProps
 ) {
+  const cmsData = useCMSData({ returnData: true });
   const isMobile = useMediaQuery("(max-width: 767px)");
   const [hoveredXIndex, setHoveredXIndex] = React.useState(null);
   const [hoveredLegend, setHoveredLegend] = React.useState(null);
@@ -30,8 +33,14 @@ export function PledgesContributionsTimeCycle(
     "pledgesContributionsBar"
   );
   const legends = [
-    { name: "Pledge", color: "#BFCFEE" },
-    { name: "Contribution", color: "#252C34" },
+    {
+      name: get(cmsData, "componentsChartsPledges.pledge", ""),
+      color: "#BFCFEE",
+    },
+    {
+      name: get(cmsData, "componentsChartsPledges.contribution", ""),
+      color: "#252C34",
+    },
   ];
 
   const Bars = (bprops: any) => {
@@ -83,7 +92,7 @@ export function PledgesContributionsTimeCycle(
             <div
               css={`
                 display: flex;
-                color: #262c34;
+                color: #231d2c;
                 font-size: 14px;
                 font-weight: bold;
                 align-items: center;
@@ -94,7 +103,8 @@ export function PledgesContributionsTimeCycle(
                 }
               `}
             >
-              Replenishment Periods <InfoIcon />
+              {get(cmsData, "componentsChartsPledges.replenishmentPeriods", "")}{" "}
+              <InfoIcon />
             </div>
           </Grid>
           <Grid item xs={12} sm={12} md={9}>
@@ -211,7 +221,7 @@ export function PledgesContributionsTimeCycle(
                     strokeOpacity: 0.3,
                   },
                   text: {
-                    fill: "#262c34",
+                    fill: "#231d2c",
                     fontSize: 12,
                   },
                 },
@@ -248,12 +258,12 @@ export function PledgesContributionsTimeCycle(
               css={`
                 padding: 16px 25px;
                 position: relative;
-                background: #f5f5f7;
+                background: #f4f4f4;
                 border-radius: 20px;
 
                 @media (max-width: 767px) {
                   padding: 25px;
-                  color: #262c34;
+                  color: #231d2c;
                   background: #fff;
                   border-radius: 20px;
                   box-shadow: 0px 0px 10px rgba(152, 161, 170, 0.3);
@@ -309,7 +319,7 @@ export function PledgesContributionsTimeCycle(
                     }
                   }}
                 >
-                  Drilldown
+                  {get(cmsData, "componentsChartsPledges.", "")}
                 </TooltipButton>
               </div>
             </div>

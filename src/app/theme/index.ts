@@ -56,23 +56,22 @@ export const ProjectPalette: ProjectPalette = {
     A200: "#aaaaaa",
   },
   text: {
-    primary: "#222222",
-    // secondary: '#fff',
-    secondary: "#6f7173",
+    primary: "#231d2c",
+    secondary: "#231d2c",
     disabled: "rgba(0, 0, 0, 0.38)",
     hint: "rgba(0, 0, 0, 0.38)",
   },
   divider: "rgba(0, 0, 0, 0.12)",
   primary: {
-    main: "#495057",
-    light: "#2f3b52",
-    dark: "rgb(25, 32, 46)",
+    main: "#6061e5",
+    light: "#6061e5",
+    dark: "#6061e5",
     contrastText: "#fff",
   },
   secondary: {
-    main: "#25baa4",
-    light: "rgb(80,199,182)",
-    dark: "rgb(25, 130, 114)",
+    main: "#f2f7fd",
+    light: "#f2f7fd",
+    dark: "#f2f7fd",
     contrastText: "#ffffff",
   },
   common: { black: "#000", white: "#fff" },
@@ -189,6 +188,49 @@ export default createTheme({
     //     },
     //   },
     // },
+    MuiInputLabel: {
+      outlined: {
+        transform: "translate(14px, 15px) scale(1)",
+      },
+    },
+    MuiFormLabel: {
+      root: {
+        "&.Mui-focused": {
+          color: "#231D2C",
+        },
+      },
+    },
+
+    MuiToggleButtonGroup: {
+      root: {
+        height: "34px",
+        width: "267px",
+        borderRadius: "35px",
+      },
+      groupedHorizontal: {
+        "&:last-child": {
+          borderRadius: "0px 20px 20px 0px",
+        },
+      },
+    },
+    MuiToggleButton: {
+      root: {
+        border: "none",
+        lineHeight: "2",
+        borderRadius: "20px 0px 0px 20px",
+        padding: "8px 22px",
+        background: "#CFD4DA",
+        color: "#373D43",
+        "&:hover": {
+          backgroundColor: "#231D2C !important",
+          color: "#fff !important",
+        },
+        "&.Mui-selected": {
+          background: "#231D2C",
+          color: "#fff",
+        },
+      },
+    },
     MuiTabs: {
       indicator: {
         height: "4px",
@@ -196,7 +238,7 @@ export default createTheme({
     },
     MuiTab: {
       wrapper: {
-        color: ProjectPalette.common.black,
+        color: "inherit",
         fontWeight: 600,
         fontSize: "14px",
       },
@@ -219,7 +261,7 @@ export default createTheme({
     MuiListItem: {
       button: {
         "&:hover": {
-          color: "#262c34",
+          color: "#231d2c",
           backgroundColor: "#fff",
           transition: "background 0.2s ease-in-out",
         },
@@ -236,9 +278,25 @@ export default createTheme({
     MuiBottomNavigationAction: {
       label: {
         fontSize: 12,
-        fontFamily: "GothamNarrow-Book",
+        fontFamily: '"GothamNarrow-Book", "Helvetica Neue", sans-serif',
         "&.Mui-selected": {
           fontSize: 12,
+        },
+      },
+    },
+    MuiListItem: {
+      root: {
+        "&$selected": {
+          color: "#231d2c !important",
+          background: "#f1f3f5",
+          "&:hover": {
+            color: "#231d2c",
+            background: "#f1f3f5",
+          },
+        },
+        "&:hover": {
+          color: "#231d2c",
+          background: "#f1f3f5",
         },
       },
     },

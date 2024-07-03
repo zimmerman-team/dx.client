@@ -26,6 +26,7 @@ import {
   BudgetsFlowTooltip,
   MobileBudgetsFlowTooltip,
 } from "app/components/Charts/Budgets/Flow/components/tooltip";
+import { useCMSData } from "app/hooks/useCMSData";
 
 const container = css`
   width: 100%;
@@ -72,7 +73,7 @@ const container = css`
 
 const header = css`
   > div {
-    color: #262c34;
+    color: #231d2c;
     font-size: 14px;
     font-weight: bold;
     font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
@@ -114,53 +115,15 @@ const getNodeLabel = (label: string, matchesSm: boolean): string => {
 export function BudgetsFlow(props: BudgetsFlowProps) {
   const isMobile = useMediaQuery("(max-width: 767px)");
   const legends = getLegendItems(props.data.nodes);
-  const [
-    xsTooltipData,
-    setXsTooltipData,
-  ] = React.useState<MobileBudgetsFlowTooltipProps | null>(null);
+  const [xsTooltipData, setXsTooltipData] =
+    React.useState<MobileBudgetsFlowTooltipProps | null>(null);
   const totalBudget = sumBy(
     filter(props.data.links, { source: "Budgets" }),
     "value"
   );
-
-  // React.useEffect(() => {
-  //   const node = document.getElementById("sankey");
-  //   if (node) {
-  //     const vizsvgelem = node.querySelector("svg > g");
-  //     if (vizsvgelem) {
-  //       vizsvgelem
-  //         .querySelector("linearGradient")
-  //         ?.setAttribute("id", "genericlineargradient");
-  //     const paths = [...node.querySelectorAll("path")];
-  //     paths.forEach((path) => {
-  //       path.setAttribute("fill", "rgb(199, 205, 209)");
-  //     });
-  //     [...vizsvgelem.querySelectorAll("linearGradient")].forEach(
-  //       (lg, index) => {
-  //         if (index > 0) {
-  //           lg.remove();
-  //         }
-  //       }
-  //     );
-  //     }
-  //     const nodes = [...node.querySelectorAll("linearGradient")];
-  //     nodes.forEach((lg) => {
-  //       const elems = lg.getElementsByTagName("stop");
-  //       if (elems && elems.length === 2) {
-  //         elems[0].setAttribute("stop-color", "rgb(199, 205, 209)");
-  //         elems[1].setAttribute("stop-color", "rgba(199, 205, 209, 0.1)");
-  //       }
-  //     });
-  //   }
-  // }, [props.data]);
+  const cmsData = useCMSData({ returnData: true });
 
   const Nodes = (nProps: any) => {
-    if (
-      nProps.nodes.length > 0 &&
-      props.vizCompData.length !== nProps.nodes.length
-    ) {
-      props.setVizCompData(nProps.nodes);
-    }
     return getNodes(
       nProps.nodes,
       props.selectedNodeId,
@@ -170,15 +133,24 @@ export function BudgetsFlow(props: BudgetsFlowProps) {
   };
 
   return (
-    <div data-cy="budgets-flow" id="sankey">
+    <div
+      data-cy="budgets-flow"
+      id="sankey"
+      css={`
+        position: relative;
+      `}
+    >
       <Grid
         container
         css={header}
-        alignItems="center"
+        alignItems="baseline"
         spacing={!isMobile ? 4 : undefined}
       >
+        <Grid item xs={12} sm={2} css="font-size: 14px !important;">
+          <b>{formatFinancialValue(totalBudget)}</b>
+        </Grid>
         {!isMobile && (
-          <Grid item xs={12}>
+          <Grid item xs={12} sm={10}>
             <div
               css={`
                 gap: 24px;
@@ -221,6 +193,7 @@ export function BudgetsFlow(props: BudgetsFlowProps) {
                     css={`
                       width: 12px;
                       height: 12px;
+                      border: 1px solid #231d2c;
                       background: ${legend.color};
                     `}
                   />
@@ -228,11 +201,6 @@ export function BudgetsFlow(props: BudgetsFlowProps) {
                 </div>
               ))}
             </div>
-          </Grid>
-        )}
-        {isMobile && (
-          <Grid item xs={12} css="font-size: 12px !important;">
-            <b>Total amount: {formatFinancialValue(totalBudget)}</b>
           </Grid>
         )}
         <Grid item xs={3}>
@@ -246,22 +214,17 @@ export function BudgetsFlow(props: BudgetsFlowProps) {
               }
             `}
           >
-            Budget <InfoIcon />
+            {get(cmsData, "componentsChartsBudgets.budget", "")} <InfoIcon />
           </div>
-          {!isMobile && (
-            <div css="font-weight: normal;">
-              {formatFinancialValue(totalBudget)}
-            </div>
-          )}
         </Grid>
         <Grid item xs={3}>
-          Investment Landscape Level 1
+          {get(cmsData, "componentsChartsBudgets.flowLandscapeLevel1", "")}
+        </Grid>
+        <Grid item xs={3} css="text-align: center;">
+          {get(cmsData, "componentsChartsBudgets.flowLandscapeLevel2", "")}
         </Grid>
         <Grid item xs={3} css="text-align: right;">
-          Investment Landscape Level 2
-        </Grid>
-        <Grid item xs={3} css="text-align: right;">
-          Cost category
+          {get(cmsData, "componentsChartsBudgets.flowCostCategory", "")}
         </Grid>
       </Grid>
       {props.data.links.length === 0 ? (
@@ -344,7 +307,7 @@ export function BudgetsFlow(props: BudgetsFlowProps) {
             <XsContainer id="mobile-tooltip-container">
               <div
                 css={`
-                  width: 95%;
+                  width: 100%;
                 `}
               >
                 <MobileBudgetsFlowTooltip

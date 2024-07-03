@@ -3,9 +3,14 @@ import { StoreModel } from "app/state/api/interfaces";
 
 import { AppliedFiltersState } from "app/state/api/action-reducers/sync/filters";
 import {
+  AuthTokenState,
+  DataSourceSnackbarVisibilityState,
+  DataSourceState,
   PageHeaderVizDrilldownsState,
   ToolBoxPanelAggregateByState,
   ToolBoxPanelAllocationsPeriodState,
+  ToolBoxPanelBudgetFlowDrilldownSelectors,
+  ToolBoxPanelBudgetTimeCycleDrilldownYearSelector,
   ToolBoxPanelDisbursementsSliderValues,
   ToolBoxPanelDonorMapTypeState,
   ToolBoxPanelDonorMapViewState,
@@ -16,39 +21,11 @@ import {
   ToolBoxPanelResultsYearState,
 } from "app/state/api/action-reducers/sync";
 
-import GrantsList from "app/state/api/action-reducers/viz/grantsList";
-import Allocations, {
-  AllocationsDrilldown,
-  AllocationsGeomap,
-  AllocationsMCGeomap,
-  AllocationsPeriods,
-} from "app/state/api/action-reducers/viz/allocations";
-import BudgetsFlow, {
-  BudgetsFlowDrilldownLevel1,
-  BudgetsFlowDrilldownLevel2,
-} from "app/state/api/action-reducers/viz/budgetsFlow";
-import Eligibility, {
-  EligibilityYears,
-} from "app/state/api/action-reducers/viz/eligibility";
-import BudgetsTimeCycle, {
-  BudgetsTimeCycleDrilldownLevel1,
-  BudgetsTimeCycleDrilldownLevel2,
-} from "app/state/api/action-reducers/viz/budgetsTimeCycle";
-import DisbursementsGeomap, {
-  DisbursementsGeomapMulticountries,
-} from "app/state/api/action-reducers/viz/disbursementsGeomap";
-import DisbursementsTreemap, {
-  DisbursementsTreemapDrilldown,
-} from "app/state/api/action-reducers/viz/disbursementsTreemap";
-import DisbursementsTimeCycle, {
-  DisbursementsTimeCycleDrilldown,
-} from "app/state/api/action-reducers/viz/disbursementsTimeCycle";
-import PledgesContributionsGeomap from "app/state/api/action-reducers/viz/pledgesContributionsGeomap";
-import PledgesContributionsTimeCycle, {
-  PledgesContributionsTimeCycleDrilldown,
-} from "app/state/api/action-reducers/viz/pledgesContributionsTimeCycle";
-
-import GlobalSearch from "app/state/api/action-reducers/search";
+import GlobalSearch, {
+  GlobalSearchCharts,
+  GlobalSearchDatasets,
+  GlobalSearchReports,
+} from "app/state/api/action-reducers/search";
 
 import DonorFilterOptions from "app/state/api/action-reducers/filters/donors";
 import StatusFilterOptions from "app/state/api/action-reducers/filters/status";
@@ -56,207 +33,108 @@ import LocationFilterOptions from "app/state/api/action-reducers/filters/locatio
 import ComponentFilterOptions from "app/state/api/action-reducers/filters/components";
 import PartnerTypeFilterOptions from "app/state/api/action-reducers/filters/partnerTypes";
 import ReplenishmentPeriodFilterOptions from "app/state/api/action-reducers/filters/replenishmentPeriods";
-import GrantDetailInfo from "app/state/api/action-reducers/grantDetail/infoPanel";
-import GrantDetailDisbursementsTreemap from "app/state/api/action-reducers/grantDetail/disbursementsTreemap";
-import GrantDetailDisbursementsTimeCycle from "app/state/api/action-reducers/grantDetail/disbursementsTimeCycle";
-import GrantDetailPerformanceRating from "app/state/api/action-reducers/grantDetail/performanceRating";
-import GrantDetailPerformanceFramework, {
-  GrantDetailPerformanceFrameworkExpand,
-} from "app/state/api/action-reducers/grantDetail/performanceFramework";
-import Documents from "app/state/api/action-reducers/viz/documents";
-import GrantDetailDocuments from "app/state/api/action-reducers/grantDetail/documents";
-import GrantDetailPeriods from "app/state/api/action-reducers/grantDetail/periods";
-import GrantDetailPeriodInfo from "app/state/api/action-reducers/grantDetail/periodInfo";
-import LocationDetailInfo from "app/state/api/action-reducers/locationDetail/info";
-import EligibilityCountry from "app/state/api/action-reducers/locationDetail/eligibility";
-import LocationDetailDocuments from "app/state/api/action-reducers/locationDetail/documents";
-import GrantDetailBudgetsFlow, {
-  GrantDetailBudgetsFlowDrilldownLevel1,
-  GrantDetailBudgetsFlowDrilldownLevel2,
-} from "app/state/api/action-reducers/grantDetail/budgetsFlow";
-import LocationDetailBudgetsFlow, {
-  LocationDetailBudgetsFlowDrilldownLevel1,
-  LocationDetailBudgetsFlowDrilldownLevel2,
-} from "app/state/api/action-reducers/locationDetail/budgetsFlow";
-import GrantDetailBudgetsTimeCycle, {
-  GrantDetailBudgetsTimeCycleDrilldownLevel1,
-  GrantDetailBudgetsTimeCycleDrilldownLevel2,
-} from "app/state/api/action-reducers/grantDetail/budgetsTimeCycle";
-import LocationDetailBudgetsTimeCycle, {
-  LocationDetailBudgetsTimeCycleDrilldownLevel1,
-  LocationDetailBudgetsTimeCycleDrilldownLevel2,
-} from "app/state/api/action-reducers/locationDetail/budgetsTimeCycle";
-import ResultsList, {
-  ResultsStats,
-  ResultsYears,
-} from "app/state/api/action-reducers/viz/resultsList";
-import LocationDetailDisbursementsTreemap from "../api/action-reducers/locationDetail/disbursementsTreemap";
-import PledgesContributionsTreemap from "../api/action-reducers/viz/pledgesContributionsTreemap";
-import BudgetsGeomap, {
-  BudgetsMCGeomap,
-} from "../api/action-reducers/viz/budgetsGeomap";
-import LocationGrants from "../api/action-reducers/locationDetail/grants";
-import PartnerDetailInfo from "../api/action-reducers/partnerDetail/info";
-import PartnerDetailDisbursementsTreemap, {
-  PartnerDetailDisbursementsTreemapDrilldown,
-} from "../api/action-reducers/partnerDetail/disbursementsTreemap";
-import PartnerDetailBudgetsFlow, {
-  PartnerDetailBudgetsFlowDrilldownLevel1,
-  PartnerDetailBudgetsFlowDrilldownLevel2,
-} from "../api/action-reducers/partnerDetail/budgetsFlow";
-import PartnerDetailBudgetsTimeCycle, {
-  PartnerDetailBudgetsTimeCycleDrilldownLevel1,
-  PartnerDetailBudgetsTimeCycleDrilldownLevel2,
-} from "../api/action-reducers/partnerDetail/budgetsTimeCycle";
-import SignedTreemap, {
-  SignedTimeCycle,
-  SignedTimeCycleDrilldown,
-  SignedTreemapDrilldown,
-} from "../api/action-reducers/viz/signed";
-import CommitmentTreemap, {
-  CommitmentTimeCycle,
-  CommitmentTimeCycleDrilldown,
-  CommitmentTreemapDrilldown,
-} from "../api/action-reducers/viz/commitment";
-import LocationDetailSignedTreemap from "../api/action-reducers/locationDetail/signedTreemap";
-import LocationDetailCommitmentTreemap from "../api/action-reducers/locationDetail/commitmentTreemap";
-import GrantDetailSignedTreemap from "../api/action-reducers/grantDetail/signedTreemap";
-import GrantDetailCommitmentTreemap from "../api/action-reducers/grantDetail/commitmentTreemap";
-import GrantDetailSignedTimeCycle from "../api/action-reducers/grantDetail/signedTimeCycle";
-import GrantDetailCommitmentTimeCycle from "../api/action-reducers/grantDetail/commitmentTimeCycle";
-import PartnerDetailCommitmentTreemap, {
-  PartnerDetailCommitmentTreemapDrilldown,
-} from "../api/action-reducers/partnerDetail/commitmentTreemap";
-import PartnerDetailSignedTreemap, {
-  PartnerDetailSignedTreemapDrilldown,
-} from "../api/action-reducers/partnerDetail/signedTreemap";
+
+import componentsAppBar from "app/state/api/action-reducers/cms/componentsAppBar";
+import componentsChartsBudgets from "app/state/api/action-reducers/cms/componentsChartsBudgets";
+import componentsChartsCommon from "app/state/api/action-reducers/cms/componentsChartsCommon";
+import componentsChartsEligibility from "app/state/api/action-reducers/cms/componentsChartsEligibility";
+import componentsChartsGeomap from "app/state/api/action-reducers/cms/componentsChartsGeomap";
+import componentsChartsGrants from "app/state/api/action-reducers/cms/componentsChartsGrants";
+import componentsChartsInvestments from "app/state/api/action-reducers/cms/componentsChartsInvestments";
+import componentsChartsNetwork from "app/state/api/action-reducers/cms/componentsChartsNetwork";
+import componentsChartsPerformanceRating from "app/state/api/action-reducers/cms/componentsChartsPerformanceRating";
+import componentsChartsPledges from "app/state/api/action-reducers/cms/componentsChartsPledges";
+import componentsCookieDialog from "app/state/api/action-reducers/cms/componentsCookieDialog";
+import componentsDatasetCarousel from "app/state/api/action-reducers/cms/componentsDatasetCarousel";
+import componentsInformationPanel from "app/state/api/action-reducers/cms/componentsInformationPanel";
+import componentsMobile from "app/state/api/action-reducers/cms/componentsMobile";
+import componentsPageHeader from "app/state/api/action-reducers/cms/componentsPageHeader";
+import componentsPerformanceFrameworkComponents from "app/state/api/action-reducers/cms/componentsPerformanceFrameworkComponents";
+import componentsSearch from "app/state/api/action-reducers/cms/componentsSearch";
+import componentsSlideInPanel from "app/state/api/action-reducers/cms/componentsSlideInPanel";
+import modulesLanding from "app/state/api/action-reducers/cms/modulesLanding";
+import modulesAbout from "app/state/api/action-reducers/cms/modulesAbout";
+import modulesCommon from "app/state/api/action-reducers/cms/modulesCommon";
+import modulesCountryDetail from "app/state/api/action-reducers/cms/modulesCountryDetail";
+import modulesDatasets from "app/state/api/action-reducers/cms/modulesDatasets";
+import modulesGrantDetail from "app/state/api/action-reducers/cms/modulesGrantDetail";
+import modulesGrants from "app/state/api/action-reducers/cms/modulesGrants";
+import {
+  DataThemesMappingState,
+  DataThemesStepChartTypeState,
+  DataThemesStepSelectionsState,
+  DataThemesIndexState,
+  DataThemesVizIndexState,
+  DataThemesIdsState,
+  DataThemesActivePanelsState,
+  DataThemesTitlesState,
+  DataThemesTextContentState,
+  DataThemesPublicState,
+  DataThemesVizOrderState,
+  DataThemesVizDeletedState,
+  DataThemesVizDuplicatedState,
+  DataThemesTabDeletedState,
+  DataThemesEnabledFilterOptionGroupsState,
+} from "app/state/api/action-reducers/sync/data-themes";
+import { DataThemesAppliedFiltersState } from "app/state/api/action-reducers/sync/data-themes/filters";
+import {
+  DataThemeCreate,
+  DataThemeDelete,
+  DataThemeDuplicate,
+  DataThemeGet,
+  DataThemeGetList,
+  DataThemeUpdate,
+  DatasetGetList,
+  DatasetCreate,
+  DatasetCount,
+  DatasetGet,
+  ExternalDatasetGet,
+  ExternalDatasetDownload,
+  ExternalDatasetGetLimited,
+} from "app/state/api/action-reducers/data-themes";
+import countrySummary from "app/state/api/action-reducers/cms/countrySummary";
+import notesAndDisclaimers from "app/state/api/action-reducers/cms/notesAndDisclaimers";
+import {
+  DataPathActiveStep,
+  DataPathPanelVisibilityState,
+  DataPathStepsState,
+} from "app/state/api/action-reducers/sync/dataPath";
+
+import {
+  ChartsActivePanelsState,
+  ChartsChartTypeState,
+  ChartsDatasetState,
+  ChartsEnabledFilterOptionGroupsState,
+  ChartsMappingState,
+  SelectedAIChartState,
+} from "app/state/api/action-reducers/sync/charts";
+import { ChartsAppliedFiltersState } from "app/state/api/action-reducers/sync/charts/filters";
+import {
+  ChartCreate,
+  ChartDelete,
+  ChartDuplicate,
+  ChartGet,
+  ChartGetInReport,
+  ChartGetList,
+  ChartTypesSuggest,
+  ChartUpdate,
+  ChartsCount,
+} from "app/state/api/action-reducers/charts";
+import {
+  ReportCreate,
+  ReportDelete,
+  ReportDuplicate,
+  ReportGet,
+  ReportGetList,
+  ReportUpdate,
+  ReportsCount,
+} from "app/state/api/action-reducers/reports";
+import { AssetGetList, AssetsCount } from "../api/action-reducers/assets";
 
 const storeContent: StoreModel = {
-  // data viz api
-  Documents: persist(Documents),
-  GrantsList: persist(GrantsList),
-  BudgetsFlow: persist(BudgetsFlow),
-  BudgetsFlowDrilldownLevel1: persist(BudgetsFlowDrilldownLevel1),
-  BudgetsFlowDrilldownLevel2: persist(BudgetsFlowDrilldownLevel2),
-  Allocations: persist(Allocations),
-  AllocationsPeriods: persist(AllocationsPeriods),
-  AllocationsDrilldown: persist(AllocationsDrilldown),
-  AllocationsGeomap: persist(AllocationsGeomap),
-  AllocationsMCGeomap: persist(AllocationsMCGeomap),
-  Eligibility: persist(Eligibility),
-  EligibilityYears: persist(EligibilityYears),
-  BudgetsGeomap: persist(BudgetsGeomap),
-  BudgetsMCGeomap: persist(BudgetsMCGeomap),
-  BudgetsTimeCycle: persist(BudgetsTimeCycle),
-  BudgetsTimeCycleDrilldownLevel1: persist(BudgetsTimeCycleDrilldownLevel1),
-  BudgetsTimeCycleDrilldownLevel2: persist(BudgetsTimeCycleDrilldownLevel2),
-  DisbursementsGeomap: persist(DisbursementsGeomap),
-  DisbursementsGeomapMulticountries: persist(DisbursementsGeomapMulticountries),
-  DisbursementsTreemap: persist(DisbursementsTreemap),
-  DisbursementsTreemapDrilldown: persist(DisbursementsTreemapDrilldown),
-  DisbursementsTimeCycle: persist(DisbursementsTimeCycle),
-  DisbursementsTimeCycleDrilldown: persist(DisbursementsTimeCycleDrilldown),
-  SignedTreemap: persist(SignedTreemap),
-  SignedTreemapDrilldown: persist(SignedTreemapDrilldown),
-  SignedTimeCycle: persist(SignedTimeCycle),
-  SignedTimeCycleDrilldown: persist(SignedTimeCycleDrilldown),
-  CommitmentTreemap: persist(CommitmentTreemap),
-  CommitmentTreemapDrilldown: persist(CommitmentTreemapDrilldown),
-  CommitmentTimeCycle: persist(CommitmentTimeCycle),
-  CommitmentTimeCycleDrilldown: persist(CommitmentTimeCycleDrilldown),
-  PledgesContributionsGeomap: persist(PledgesContributionsGeomap),
-  PledgesContributionsTimeCycle: persist(PledgesContributionsTimeCycle),
-  PledgesContributionsTimeCycleDrilldown: persist(
-    PledgesContributionsTimeCycleDrilldown
-  ),
-  PledgesContributionsTreemap: persist(PledgesContributionsTreemap),
-  ResultsList: persist(ResultsList),
-  ResultsStats: persist(ResultsStats),
-  ResultsYears: persist(ResultsYears),
   // global search
   GlobalSearch: persist(GlobalSearch),
-  // grant detail api
-  GrantDetailInfo: persist(GrantDetailInfo),
-  GrantDetailPeriods: persist(GrantDetailPeriods),
-  GrantDetailPeriodInfo: persist(GrantDetailPeriodInfo),
-  GrantDetailBudgetsFlow: persist(GrantDetailBudgetsFlow),
-  GrantDetailBudgetsFlowDrilldownLevel1: persist(
-    GrantDetailBudgetsFlowDrilldownLevel1
-  ),
-  GrantDetailBudgetsFlowDrilldownLevel2: persist(
-    GrantDetailBudgetsFlowDrilldownLevel2
-  ),
-  GrantDetailBudgetsTimeCycle: persist(GrantDetailBudgetsTimeCycle),
-  GrantDetailBudgetsTimeCycleDrilldownLevel1: persist(
-    GrantDetailBudgetsTimeCycleDrilldownLevel1
-  ),
-  GrantDetailBudgetsTimeCycleDrilldownLevel2: persist(
-    GrantDetailBudgetsTimeCycleDrilldownLevel2
-  ),
-  GrantDetailDisbursementsTreemap: persist(GrantDetailDisbursementsTreemap),
-  GrantDetailDisbursementsTimeCycle: persist(GrantDetailDisbursementsTimeCycle),
-  GrantDetailSignedTreemap: persist(GrantDetailSignedTreemap),
-  GrantDetailSignedTimeCycle: persist(GrantDetailSignedTimeCycle),
-  GrantDetailCommitmentTreemap: persist(GrantDetailCommitmentTreemap),
-  GrantDetailCommitmentTimeCycle: persist(GrantDetailCommitmentTimeCycle),
-  GrantDetailPerformanceRating: persist(GrantDetailPerformanceRating),
-  GrantDetailPerformanceFramework: persist(GrantDetailPerformanceFramework),
-  GrantDetailPerformanceFrameworkExpand: persist(
-    GrantDetailPerformanceFrameworkExpand
-  ),
-  GrantDetailDocuments: persist(GrantDetailDocuments),
-  // location detail api
-  LocationDetailInfo: persist(LocationDetailInfo),
-  EligibilityCountry: persist(EligibilityCountry),
-  LocationDetailDisbursementsTreemap: persist(
-    LocationDetailDisbursementsTreemap
-  ),
-  LocationDetailSignedTreemap: persist(LocationDetailSignedTreemap),
-  LocationDetailCommitmentTreemap: persist(LocationDetailCommitmentTreemap),
-  LocationDetailDocuments: persist(LocationDetailDocuments),
-  LocationDetailBudgetsFlow: persist(LocationDetailBudgetsFlow),
-  LocationDetailBudgetsFlowDrilldownLevel1: persist(
-    LocationDetailBudgetsFlowDrilldownLevel1
-  ),
-  LocationDetailBudgetsFlowDrilldownLevel2: persist(
-    LocationDetailBudgetsFlowDrilldownLevel2
-  ),
-  LocationDetailBudgetsTimeCycle: persist(LocationDetailBudgetsTimeCycle),
-  LocationDetailBudgetsTimeCycleDrilldownLevel2: persist(
-    LocationDetailBudgetsTimeCycleDrilldownLevel2
-  ),
-  LocationDetailBudgetsTimeCycleDrilldownLevel1: persist(
-    LocationDetailBudgetsTimeCycleDrilldownLevel1
-  ),
-  LocationGrants: persist(LocationGrants),
-  // partner detail api
-  PartnerDetailInfo: persist(PartnerDetailInfo),
-  PartnerDetailDisbursementsTreemap: persist(PartnerDetailDisbursementsTreemap),
-  PartnerDetailDisbursementsTreemapDrilldown: persist(
-    PartnerDetailDisbursementsTreemapDrilldown
-  ),
-  PartnerDetailSignedTreemap: persist(PartnerDetailSignedTreemap),
-  PartnerDetailSignedTreemapDrilldown: persist(
-    PartnerDetailSignedTreemapDrilldown
-  ),
-  PartnerDetailCommitmentTreemap: persist(PartnerDetailCommitmentTreemap),
-  PartnerDetailCommitmentTreemapDrilldown: persist(
-    PartnerDetailCommitmentTreemapDrilldown
-  ),
-  PartnerDetailBudgetsFlow: persist(PartnerDetailBudgetsFlow),
-  PartnerDetailBudgetsFlowDrilldownLevel1: persist(
-    PartnerDetailBudgetsFlowDrilldownLevel1
-  ),
-  PartnerDetailBudgetsFlowDrilldownLevel2: persist(
-    PartnerDetailBudgetsFlowDrilldownLevel2
-  ),
-  PartnerDetailBudgetsTimeCycle: persist(PartnerDetailBudgetsTimeCycle),
-  PartnerDetailBudgetsTimeCycleDrilldownLevel1: persist(
-    PartnerDetailBudgetsTimeCycleDrilldownLevel1
-  ),
-  PartnerDetailBudgetsTimeCycleDrilldownLevel2: persist(
-    PartnerDetailBudgetsTimeCycleDrilldownLevel2
-  ),
+
   // filter options api
   LocationFilterOptions: persist(LocationFilterOptions),
   ComponentFilterOptions: persist(ComponentFilterOptions),
@@ -283,6 +161,122 @@ const storeContent: StoreModel = {
   ToolBoxPanelEligibilityAdvancedCheckboxState: persist(
     ToolBoxPanelEligibilityAdvancedCheckboxState
   ),
+  ToolBoxPanelBudgetFlowDrilldownSelectors,
+  ToolBoxPanelBudgetTimeCycleDrilldownYearSelector,
+  DataSourceState: persist(DataSourceState),
+  // sync data path vars
+  DataPathPanelVisibilityState,
+  DataPathSteps: persist(DataPathStepsState),
+  DataPathActiveStep: DataPathActiveStep,
+
+  DataSourceSnackbarVisibility: persist(DataSourceSnackbarVisibilityState),
+  AuthToken: persist(AuthTokenState),
+  // CMS API
+  cms: {
+    componentsAppBar: persist(componentsAppBar),
+    componentsChartsBudgets: persist(componentsChartsBudgets),
+    componentsChartsCommon: persist(componentsChartsCommon),
+    componentsChartsEligibility: persist(componentsChartsEligibility),
+    componentsChartsGeomap: persist(componentsChartsGeomap),
+    componentsChartsGrants: persist(componentsChartsGrants),
+    componentsChartsInvestments: persist(componentsChartsInvestments),
+    componentsChartsNetwork: persist(componentsChartsNetwork),
+    componentsChartsPerformanceRating: persist(
+      componentsChartsPerformanceRating
+    ),
+    componentsChartsPledges: persist(componentsChartsPledges),
+    componentsCookieDialog: persist(componentsCookieDialog),
+    componentsDatasetCarousel: persist(componentsDatasetCarousel),
+    componentsInformationPanel: persist(componentsInformationPanel),
+    componentsMobile: persist(componentsMobile),
+    componentsPageHeader: persist(componentsPageHeader),
+    componentsPerformanceFrameworkComponents: persist(
+      componentsPerformanceFrameworkComponents
+    ),
+    componentsSearch: persist(componentsSearch),
+    componentsSlideInPanel: persist(componentsSlideInPanel),
+    modulesLanding: persist(modulesLanding),
+    modulesAbout: persist(modulesAbout),
+    modulesCommon: persist(modulesCommon),
+    modulesCountryDetail: persist(modulesCountryDetail),
+    modulesDatasets: persist(modulesDatasets),
+    modulesGrantDetail: persist(modulesGrantDetail),
+    modulesGrants: persist(modulesGrants),
+    countrySummary: persist(countrySummary),
+    notesAndDisclaimers: persist(notesAndDisclaimers),
+  },
+  dataThemes: {
+    activeTabIndex: persist(DataThemesIndexState),
+    activeVizIndex: persist(DataThemesVizIndexState),
+    ids: persist(DataThemesIdsState),
+    activePanels: persist(DataThemesActivePanelsState),
+    titles: persist(DataThemesTitlesState),
+    textContent: persist(DataThemesTextContentState),
+    sync: {
+      stepSelections: persist(DataThemesStepSelectionsState),
+      chartType: persist(DataThemesStepChartTypeState),
+      mapping: persist(DataThemesMappingState),
+      public: persist(DataThemesPublicState),
+      vizOrderData: persist(DataThemesVizOrderState),
+      vizDeleted: persist(DataThemesVizDeletedState),
+      vizDuplicated: persist(DataThemesVizDuplicatedState),
+      tabDeleted: persist(DataThemesTabDeletedState),
+      enabledFilterOptionGroups: persist(
+        DataThemesEnabledFilterOptionGroupsState
+      ),
+    },
+    appliedFilters: persist(DataThemesAppliedFiltersState),
+    DataThemeGet: persist(DataThemeGet),
+    DataThemeCreate: persist(DataThemeCreate),
+    DataThemeUpdate: persist(DataThemeUpdate),
+    DataThemeDelete: persist(DataThemeDelete),
+    DataThemeDuplicate: persist(DataThemeDuplicate),
+    DataThemeGetList: persist(DataThemeGetList),
+    DatasetGetList: DatasetGetList,
+    DatasetGet: persist(DatasetGet),
+    ExternalDatasetGet: persist(ExternalDatasetGet),
+    ExternalDatasetGetLimited: persist(ExternalDatasetGetLimited),
+
+    ExternalDatasetDownload: persist(ExternalDatasetDownload),
+    DatasetCount: persist(DatasetCount),
+    DatasetCreate: persist(DatasetCreate),
+  },
+  assets: {
+    AssetGetList: AssetGetList,
+    AssetsCount: AssetsCount,
+  },
+  charts: {
+    ChartGet: persist(ChartGet),
+    ChartGetInReport: persist(ChartGetInReport),
+    ChartCreate: persist(ChartCreate),
+    ChartUpdate: persist(ChartUpdate),
+    ChartDelete: persist(ChartDelete),
+    ChartDuplicate: persist(ChartDuplicate),
+    ChartGetList: ChartGetList,
+    ChartsCount: persist(ChartsCount),
+    ChartTypesSuggest: persist(ChartTypesSuggest),
+    activePanels: persist(ChartsActivePanelsState),
+    dataset: persist(ChartsDatasetState),
+    mapping: persist(ChartsMappingState),
+    chartType: persist(ChartsChartTypeState),
+    appliedFilters: persist(ChartsAppliedFiltersState),
+    enabledFilterOptionGroups: persist(ChartsEnabledFilterOptionGroupsState),
+    SelectedAIChartState: persist(SelectedAIChartState),
+  },
+  reports: {
+    ReportGet: persist(ReportGet),
+    ReportCreate: persist(ReportCreate),
+    ReportUpdate: persist(ReportUpdate),
+    ReportDelete: persist(ReportDelete),
+    ReportDuplicate: persist(ReportDuplicate),
+    ReportGetList: ReportGetList,
+    ReportsCount: persist(ReportsCount),
+  },
+  search: {
+    charts: persist(GlobalSearchCharts),
+    reports: persist(GlobalSearchReports),
+    datasets: persist(GlobalSearchDatasets),
+  },
 };
 
 export const store = createStore(storeContent);

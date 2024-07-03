@@ -18,7 +18,6 @@ import { SearchResultsTabModel } from "app/components/Search/components/results/
 export function MobileAppbarSearch() {
   const history = useHistory();
   const [open, setOpen] = React.useState(false);
-  const [activeTab, setActiveTab] = React.useState(0);
   const [storedValue, setStoredValue] = useSessionStorage(
     "stored-search-string",
     ""
@@ -33,6 +32,7 @@ export function MobileAppbarSearch() {
       get(state.GlobalSearch.data, "data", []) as SearchResultsTabModel[]
   );
   const isLoading = useStoreState((state) => state.GlobalSearch.loading);
+  const datasource = useStoreState((state) => state.DataSourceState.value);
 
   React.useEffect(() => {
     history.listen(() => {
@@ -43,10 +43,17 @@ export function MobileAppbarSearch() {
   }, [history]);
 
   useUpdateEffect(() => {
+    const gihubBtn = document.getElementById("github-linkbtn");
     if (open) {
       document.body.style.overflowY = "hidden";
+      if (gihubBtn) {
+        gihubBtn.style.display = "none";
+      }
     } else {
       document.body.style.overflowY = "auto";
+      if (gihubBtn) {
+        gihubBtn.style.display = "inherit";
+      }
     }
   }, [open]);
 
@@ -62,7 +69,7 @@ export function MobileAppbarSearch() {
     () => {
       if (value.length > 0) {
         fetchData({
-          filterString: `q=${value}`,
+          filterString: `q=${value}&datasource=${datasource}`,
         });
       } else {
         clearData();
@@ -106,9 +113,8 @@ export function MobileAppbarSearch() {
             results={data}
             loading={isLoading}
             setValue={setValue}
-            activeTab={activeTab}
-            setActiveTab={setActiveTab}
             onClose={() => setOpen(false)}
+            setStoredValue={setStoredValue}
           />
         </div>
       )}

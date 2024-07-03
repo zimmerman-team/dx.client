@@ -23,6 +23,8 @@ import {
   XsContainer,
 } from "app/components/Charts/common/styles";
 import { InvestmentsTimeCycleTooltip } from "./components/tooltip";
+import get from "lodash/get";
+import { useCMSData } from "app/hooks/useCMSData";
 
 function getKeysFromData(data: Record<string, unknown>[]) {
   if (data.length === 0) {
@@ -164,6 +166,8 @@ export function InvestmentsTimeCycle(props: InvestmentsTimeCycleProps) {
     setXsTooltipData(null);
   }
 
+  const cmsData = useCMSData({ returnData: true });
+
   return (
     <React.Fragment>
       <div
@@ -188,7 +192,7 @@ export function InvestmentsTimeCycle(props: InvestmentsTimeCycleProps) {
           spacing={!isMobile ? 4 : 2}
           css={`
             > div {
-              color: #262c34;
+              color: #231d2c;
               font-size: 14px;
             }
           `}
@@ -197,7 +201,8 @@ export function InvestmentsTimeCycle(props: InvestmentsTimeCycleProps) {
             {isMobile && (
               <Grid item xs={12} css="font-size: 12px !important;">
                 <b>
-                  Total amount: {formatFinancialValue(totalInvestmentValue)}
+                  {get(cmsData, "componentsChartsInvestments.totalAmount", "")}:{" "}
+                  {formatFinancialValue(totalInvestmentValue)}
                 </b>
               </Grid>
             )}
@@ -216,7 +221,7 @@ export function InvestmentsTimeCycle(props: InvestmentsTimeCycleProps) {
                     }
                   `}
                 >
-                  {props.type || "Disbursements"} <InfoIcon />
+                  Investments - {props.type || "Disbursement"} <InfoIcon />
                 </div>
                 <div css="font-weight: normal;">
                   {formatFinancialValue(totalInvestmentValue)}
@@ -288,6 +293,7 @@ export function InvestmentsTimeCycle(props: InvestmentsTimeCycleProps) {
                     css={`
                       width: 12px;
                       height: 12px;
+                      border: 1px solid #231d2c;
                       background: ${legend.color};
                     `}
                   />
@@ -327,13 +333,13 @@ export function InvestmentsTimeCycle(props: InvestmentsTimeCycleProps) {
 
                 &::-webkit-scrollbar {
                   height: 5px;
-                  background: #262c34;
+                  background: #231d2c;
                 }
                 &::-webkit-scrollbar-track {
                   background: #dfe3e6;
                 }
                 &::-webkit-scrollbar-thumb {
-                  background: #262c34;
+                  background: #231d2c;
                 }
               }
             `}
@@ -344,8 +350,8 @@ export function InvestmentsTimeCycle(props: InvestmentsTimeCycleProps) {
                 height: 620px;
 
                 @media (max-width: 767px) {
-                  height: 550px;
-                  width: ${props.data.length === 0 ? "100%" : "1000px"};
+                  height: 500px;
+                  width: ${props.data.length < 3 ? "100%" : "700px"};
                 }
               `}
             >
@@ -358,7 +364,7 @@ export function InvestmentsTimeCycle(props: InvestmentsTimeCycleProps) {
                 motionDamping={15}
                 borderColor="inherit:darker(1.6)"
                 layers={["grid", "axes", Bars, "markers", "legends"]}
-                padding={isMobile ? 0.3 : 0.5}
+                padding={isMobile ? 0.6 : 0.5}
                 innerPadding={6}
                 data={props.data}
                 keys={
@@ -417,7 +423,7 @@ export function InvestmentsTimeCycle(props: InvestmentsTimeCycleProps) {
                         strokeOpacity: 0.3,
                       },
                       text: {
-                        fill: "#262c34",
+                        fill: "#231d2c",
                         fontSize: 12,
                       },
                     },
@@ -456,12 +462,12 @@ export function InvestmentsTimeCycle(props: InvestmentsTimeCycleProps) {
               css={`
                 padding: 16px 25px;
                 position: relative;
-                background: #f5f5f7;
+                background: #f4f4f4;
                 border-radius: 20px;
 
                 @media (max-width: 767px) {
                   padding: 25px;
-                  color: #262c34;
+                  color: #231d2c;
                   background: #fff;
                   border-radius: 20px;
                   box-shadow: 0px 0px 10px rgba(152, 161, 170, 0.3);
@@ -517,7 +523,7 @@ export function InvestmentsTimeCycle(props: InvestmentsTimeCycleProps) {
                     }
                   }}
                 >
-                  Drilldown
+                  {get(cmsData, "componentsChartsInvestments.drilldown", "")}
                 </TooltipButton>
               </div>
             </div>

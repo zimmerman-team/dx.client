@@ -1,34 +1,37 @@
 import React from "react";
+import get from "lodash/get";
 import Grid from "@material-ui/core/Grid";
 import { css } from "styled-components/macro";
 import { InfoIcon } from "app/assets/icons/Info";
 import CloseIcon from "@material-ui/icons/Close";
+import { useCMSData } from "app/hooks/useCMSData";
 import IconButton from "@material-ui/core/IconButton";
 import useMousePosition from "app/hooks/useMousePosition";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { NoDataLabel } from "app/components/Charts/common/nodatalabel";
+import { EligibilityType } from "app/components/Charts/Eligibility/Scatterplot/data";
 import {
   DotChartProps,
   DotChartModel,
 } from "app/components/Charts/Eligibility/DotChart/data";
-import { EligibilityType } from "../Scatterplot/data";
 
 const styles = {
   Eligible: css`
-    background: #11ad6b;
-    border: 1px solid #1b2127;
+    background: #6061e5;
+    border: 1px solid #231d2c;
   `,
   "Not Eligible": css`
-    background: #fa7355;
-    border: 1px dotted #1b2127;
+    background: #e75656;
+    border: 1px dotted #231d2c;
   `,
   "Transition Funding": css`
-    background: #ffd646;
-    border: 1px dashed #1b2127;
+    background: #73d3cd;
+    border: 1px dashed #231d2c;
   `,
 };
 
 export function DotChart(props: DotChartProps) {
+  const cmsData = useCMSData({ returnData: true });
   const { x, y } = useMousePosition();
   const isMobile = useMediaQuery("(max-width: 767px)");
   const [hoveredNode, setHoveredNode] = React.useState<{
@@ -44,11 +47,11 @@ export function DotChart(props: DotChartProps) {
         <div
           css={`
             padding: 12px;
-            color: #262c34;
+            color: #231d2c;
             position: fixed;
             top: ${y + 12}px;
             left: ${x + 12}px;
-            background: #f5f5f7;
+            background: #f4f4f4;
             border-radius: 20px;
             box-shadow: 0px 0px 10px rgba(152, 161, 170, 0.1);
 
@@ -166,7 +169,8 @@ export function DotChart(props: DotChartProps) {
                   }
                 `}
               >
-                Year {props.selectedYear}
+                {get(cmsData, "componentsChartsEligibility.year", "")}{" "}
+                {props.selectedYear}
               </div>
             </div>
             <div
@@ -196,10 +200,9 @@ export function DotChart(props: DotChartProps) {
                   font-weight: bold;
                   margin-bottom: 5px;
                   font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
-                  font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
                 `}
               >
-                Eligibility
+                {get(cmsData, "componentsChartsEligibility.eligibility", "")}
               </div>
               <div
                 css={`
@@ -232,7 +235,13 @@ export function DotChart(props: DotChartProps) {
                     ${styles.Eligible}
                   `}
                 />
-                <div>Eligible</div>
+                <div>
+                  {get(
+                    cmsData,
+                    "componentsChartsEligibility.statusEligible",
+                    ""
+                  )}
+                </div>
               </div>
               <div
                 css={`
@@ -265,7 +274,13 @@ export function DotChart(props: DotChartProps) {
                     ${styles["Not Eligible"]}
                   `}
                 />
-                <div>Not Eligible</div>
+                <div>
+                  {get(
+                    cmsData,
+                    "componentsChartsEligibility.statusNotEligible",
+                    ""
+                  )}
+                </div>
               </div>
               <div
                 css={`
@@ -299,7 +314,13 @@ export function DotChart(props: DotChartProps) {
                     ${styles["Transition Funding"]}
                   `}
                 />
-                <div>Transition Funding</div>
+                <div>
+                  {get(
+                    cmsData,
+                    "componentsChartsEligibility.statusTransitionFunding",
+                    ""
+                  )}
+                </div>
               </div>
             </div>
             {props.aggregateBy === "geographicAreaName" && (
@@ -319,7 +340,7 @@ export function DotChart(props: DotChartProps) {
                       sans-serif;
                   `}
                 >
-                  Country Name
+                  {get(cmsData, "componentsChartsEligibility.countryName", "")}
                 </div>
                 <div
                   css={`
@@ -356,7 +377,7 @@ export function DotChart(props: DotChartProps) {
                         position: absolute;
                       `}
                     >
-                      HIV
+                      {get(cmsData, "componentsChartsEligibility.hiv", "")}
                     </div>
                   </div>
                   <div>
@@ -376,7 +397,7 @@ export function DotChart(props: DotChartProps) {
                         position: absolute;
                       `}
                     >
-                      Malaria
+                      {get(cmsData, "componentsChartsEligibility.malaria", "")}
                     </div>
                   </div>
                   {/* <div>
@@ -413,7 +434,11 @@ export function DotChart(props: DotChartProps) {
                         position: absolute;
                       `}
                     >
-                      Tuberculosis
+                      {get(
+                        cmsData,
+                        "componentsChartsEligibility.tuberculosis",
+                        ""
+                      )}
                     </div>
                   </div>
                 </div>

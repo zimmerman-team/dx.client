@@ -9,6 +9,12 @@ import { defaultAppliedFilters } from "app/state/api/action-reducers/sync/filter
 import { FilterGroupProps } from "app/components/ToolBoxPanel/components/filters/data";
 import { FilterGroup } from "app/components/ToolBoxPanel/components/filters/common/group";
 import { ExpandedFilterGroup } from "app/components/ToolBoxPanel/components/filters/common/expandedgroup";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+} from "@material-ui/core";
+import { ArrowDropDownSharp } from "@material-ui/icons";
 
 interface ToolBoxPanelFiltersProps {
   groups: FilterGroupProps[];
@@ -16,10 +22,8 @@ interface ToolBoxPanelFiltersProps {
 
 export function ToolBoxPanelFilters(props: ToolBoxPanelFiltersProps) {
   const filterOptions = useFilterOptions({ returnFilterOptions: true });
-  const [
-    expandedGroup,
-    setExpandedGroup,
-  ] = React.useState<FilterGroupProps | null>(null);
+  const [expandedGroup, setExpandedGroup] =
+    React.useState<FilterGroupProps | null>(null);
 
   const actions = useStoreActions((store) => store.AppliedFiltersState);
   const data = useStoreState((state) => state.AppliedFiltersState);
@@ -30,6 +34,10 @@ export function ToolBoxPanelFilters(props: ToolBoxPanelFiltersProps) {
     }
   }
 
+  if (props.groups.length === 0) {
+    return <React.Fragment />;
+  }
+
   return (
     <div
       css={`
@@ -38,20 +46,19 @@ export function ToolBoxPanelFilters(props: ToolBoxPanelFiltersProps) {
         display: flex;
         max-height: 100%;
         overflow-y: auto;
-        padding: 15px 25px;
         flex-direction: column;
 
         &::-webkit-scrollbar {
           width: 4px;
-          background: #495057;
+          background: #231d2c;
         }
         &::-webkit-scrollbar-track {
           border-radius: 4px;
-          background: #f5f5f7;
+          background: #f4f4f4;
         }
         &::-webkit-scrollbar-thumb {
           border-radius: 4px;
-          background: #495057;
+          background: #231d2c;
         }
 
         @media (max-width: 767px) {
@@ -67,34 +74,67 @@ export function ToolBoxPanelFilters(props: ToolBoxPanelFiltersProps) {
       `}
     >
       {!expandedGroup && (
-        <React.Fragment>
-          <div
+        <Accordion
+          square
+          defaultExpanded
+          css={`
+            background: #f2f7fd;
+          `}
+        >
+          <AccordionSummary
+            expandIcon={<ArrowDropDownSharp htmlColor="#262C34" />}
             css={`
-              display: flex;
-              flex-direction: row;
-              align-items: center;
-              justify-content: space-between;
-              border-bottom: 1px solid #dfe3e6;
-
-              @media (max-width: 767px) {
-                font-size: 18px;
+              border-bottom: 1px solid #e0e0e0;
+              width: 90%;
+              margin: auto;
+              && {
+                > .MuiAccordionSummary-content {
+                  position: relative;
+                }
               }
             `}
           >
-            <b>Filters</b>
-            <IconButton onClick={resetAllFilters}>
+            Filters
+            <IconButton
+              size="small"
+              onClick={resetAllFilters}
+              css={`
+                && {
+                  top: 0;
+                  right: 0;
+                  padding: 0;
+                  position: absolute;
+                }
+              `}
+            >
               <ResetIcon />
             </IconButton>
-          </div>
-          {props.groups.map((group: FilterGroupProps) => (
-            <FilterGroup
-              {...group}
-              key={group.name}
-              options={get(filterOptions, group.name, [])}
-              expandGroup={() => setExpandedGroup(group)}
-            />
-          ))}
-        </React.Fragment>
+          </AccordionSummary>
+
+          <AccordionDetails
+            css={`
+              width: 96%;
+              margin: auto;
+            `}
+          >
+            <div
+              css={`
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+              `}
+            >
+              {props.groups.map((group: FilterGroupProps) => (
+                <FilterGroup
+                  {...group}
+                  key={group.name}
+                  options={get(filterOptions, group.name, [])}
+                  expandGroup={() => setExpandedGroup(group)}
+                />
+              ))}
+            </div>
+          </AccordionDetails>
+        </Accordion>
       )}
       {expandedGroup && (
         <ExpandedFilterGroup

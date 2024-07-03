@@ -1,20 +1,20 @@
 import { css } from "styled-components/macro";
 
-export const container = (focused: boolean) => css`
-  width: 100%;
+export const container = (focused: boolean, withCatMenu: boolean) => css`
   display: flex;
-  background: #fff;
+  background: #f2f7fd;
   position: relative;
   padding: 10px 20px;
-  border-radius: 20px;
   box-shadow: 0px 0px 10px rgba(152, 161, 170, 0.05);
+  width: ${withCatMenu ? "calc(100% - 200px)" : "100%"};
+  border-radius: ${withCatMenu ? "0 20px 20px 0" : "20px"};
 
   @media (max-width: 767px) {
     ${focused
       ? `
       padding: 5px;
       border-radius: 0;
-      border-bottom: 1px solid #262c34;
+      border-bottom: 1px solid #231d2c;
     `
       : ""}
   }
@@ -23,7 +23,11 @@ export const container = (focused: boolean) => css`
 export const mobilecontainer = (focused: boolean) => css`
   width: 100%;
   background: transparent;
-  // transition: background 0.1s ease-in-out;
+
+  @media (min-width: 768px) {
+    display: flex;
+    flex-direction: row;
+  }
 
   @media (max-width: 767px) {
     &:focus-within {
@@ -38,7 +42,7 @@ export const mobilecontainer = (focused: boolean) => css`
       > div {
         padding: 5px;
         border-radius: 0;
-        border-bottom: 1px solid #262c34;
+        border-bottom: 1px solid #231d2c;
 
         > span {
           display: block !important;
@@ -58,7 +62,7 @@ export const mobilecontainer = (focused: boolean) => css`
       > div {
         padding: 5px;
         border-radius: 0;
-        border-bottom: 1px solid #262c34;
+        border-bottom: 1px solid #231d2c;
 
         > span {
           display: block !important;
@@ -72,12 +76,12 @@ export const mobilecontainer = (focused: boolean) => css`
 export const input = css`
   width: 100%;
   outline: none;
-  color: #262c34;
+  color: #231d2c;
   font-size: 14px;
-  background: #fff;
-  font-weight: bold;
+  background: inherit;
+  font-weight: 400;
   border-style: none;
-  font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
+  font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
 
   &:focus::placeholder {
     opacity: 0.3;

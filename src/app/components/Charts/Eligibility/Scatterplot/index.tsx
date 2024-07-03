@@ -1,7 +1,11 @@
 import React from "react";
+import get from "lodash/get";
+import minBy from "lodash/minBy";
+import maxBy from "lodash/maxBy";
 import filter from "lodash/filter";
 import Grid from "@material-ui/core/Grid";
 import CloseIcon from "@material-ui/icons/Close";
+import { useCMSData } from "app/hooks/useCMSData";
 import IconButton from "@material-ui/core/IconButton";
 import { useStoreState } from "app/state/store/hooks";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
@@ -89,6 +93,15 @@ export function ScatterPlot(props: ScatterPlotProps) {
       item.id.toString() !== "dummy1" && item.id.toString() !== "dummy2"
   ).map((item: EligibilityScatterplotDataModel) => item.id);
 
+  const cmsData = useCMSData({ returnData: true });
+
+  const minYear = get(minBy(get(props.data, "[0].data", []), "x"), "x", 2002);
+  const maxYear = get(
+    maxBy(get(props.data, "[0].data", []), "x"),
+    "x",
+    new Date().getFullYear() + 1
+  );
+
   return (
     <React.Fragment>
       {hoveredNode && (
@@ -96,9 +109,9 @@ export function ScatterPlot(props: ScatterPlotProps) {
           css={`
             z-index: 100;
             padding: 12px;
-            color: #262c34;
+            color: #231d2c;
             position: absolute;
-            background: #f5f5f7;
+            background: #f4f4f4;
             border-radius: 20px;
             top: ${hoveredNode.yPosition + 12}px;
             left: ${hoveredNode.xPosition + 12}px;
@@ -130,18 +143,41 @@ export function ScatterPlot(props: ScatterPlotProps) {
             <div>
               {hoveredNode.x} - {hoveredNode.y}
             </div>
-            <IconButton
-              onTouchStart={() => setHoveredNode(null)}
-              css={`
-                padding: 0;
-              `}
-            >
-              <CloseIcon />
-            </IconButton>
+            {isMobile && (
+              <IconButton
+                onTouchStart={() => setHoveredNode(null)}
+                css={`
+                  padding: 0;
+                `}
+              >
+                <CloseIcon />
+              </IconButton>
+            )}
           </div>
-          <div>Eligibility: {hoveredNode.eligibility}</div>
-          <div>Disease Burden: {diseaseBurdens[hoveredNode.diseaseBurden]}</div>
-          <div>Income Level: {incomeLevels[hoveredNode.incomeLevel]}</div>
+          <div>
+            {get(
+              cmsData,
+              "componentsChartsEligibility.scatterPlotEligibility",
+              ""
+            )}{" "}
+            {hoveredNode.eligibility}
+          </div>
+          <div>
+            {get(
+              cmsData,
+              "componentsChartsEligibility.scatterPlotDiseaseBurden",
+              ""
+            )}{" "}
+            {diseaseBurdens[hoveredNode.diseaseBurden]}
+          </div>
+          <div>
+            {get(
+              cmsData,
+              "componentsChartsEligibility.scatterPlotIncomeLevel",
+              ""
+            )}{" "}
+            {incomeLevels[hoveredNode.incomeLevel]}
+          </div>
         </div>
       )}
       <Grid container spacing={2}>
@@ -221,13 +257,13 @@ export function ScatterPlot(props: ScatterPlotProps) {
 
               &::-webkit-scrollbar {
                 height: 5px;
-                background: #262c34;
+                background: #231d2c;
               }
               &::-webkit-scrollbar-track {
                 background: #dfe3e6;
               }
               &::-webkit-scrollbar-thumb {
-                background: #262c34;
+                background: #231d2c;
               }
             `}
           >
@@ -270,7 +306,7 @@ export function ScatterPlot(props: ScatterPlotProps) {
                     tickPadding: 15,
                     tickRotation: 0,
                     format: (e: Value) =>
-                      e !== 2002 && e !== 2022 ? e.toString() : "",
+                      e !== minYear && e !== maxYear ? e.toString() : "",
                   }}
                   axisLeft={null}
                   // axisLeft={{
@@ -307,7 +343,7 @@ export function ScatterPlot(props: ScatterPlotProps) {
                       ticks: {
                         text: {
                           fontSize: 12,
-                          fill: "#262C34",
+                          fill: "#231d2c",
                           fontWeight: "bold",
                         },
                       },

@@ -1,21 +1,24 @@
 import React from "react";
+import get from "lodash/get";
 import { Link } from "react-router-dom";
+import { useCMSData } from "app/hooks/useCMSData";
 
 // cc:refactor this component, inline css need to be moved to proper styled components
 
 export const NoMatchPage = () => {
-  const isLoading = document.getElementById("general-loader");
+  const cmsData = useCMSData({ returnData: true });
+
   return (
     <div
       css={`
-        position: relative;
         width: 100%;
         height: 100%;
-        padding: 50px;
-        display: ${isLoading ? "none" : "flex"};
-        justify-content: center;
+        display: flex;
+        position: relative;
         align-items: center;
         flex-direction: column;
+        justify-content: center;
+        padding: 100px 50px 50px 50px;
       `}
     >
       <div
@@ -27,10 +30,10 @@ export const NoMatchPage = () => {
           font-stretch: normal;
           line-height: 1.71;
           letter-spacing: 0.1px;
-          color: #525252;
+          color: #231d2c;
         `}
       >
-        Oops! Page not found
+        <div>{get(cmsData, "modulesCommon.noMatchOops", "")}</div>
       </div>
       <div
         css={`
@@ -41,10 +44,10 @@ export const NoMatchPage = () => {
           line-height: normal;
           letter-spacing: 2.15px;
           color: #525252;
-          font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
+          font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
         `}
       >
-        404
+        <div>{get(cmsData, "modulesCommon.noMatch404", "")}</div>
       </div>
       <div
         css={`
@@ -56,11 +59,11 @@ export const NoMatchPage = () => {
           line-height: 1.71;
           letter-spacing: 1.25px;
           text-align: center;
-          color: #525252;
+          color: #231d2c;
           margin-bottom: 50px;
         `}
       >
-        We are sorry, but the page you requested was not found
+        <div>{get(cmsData, "modulesCommon.noMatchSorry", "")}</div>
       </div>
       <Link
         to="/"
@@ -75,7 +78,11 @@ export const NoMatchPage = () => {
             align-items: center;
             width: 204px;
             height: 46px;
-            background: #495057;
+<<<<<<< HEAD
+            background: #231d2c;
+=======
+            background: #262c34;
+>>>>>>> 26f3485bf722b77cb35efc4928b6bc98505ccb74
             border-radius: 20px;
           `}
         >
@@ -91,7 +98,7 @@ export const NoMatchPage = () => {
               color: white;
             `}
           >
-            Back to Home Page
+            <div>{get(cmsData, "modulesCommon.noMatchBack", "")}</div>
           </span>
         </div>
       </Link>

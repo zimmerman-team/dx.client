@@ -5,6 +5,7 @@ export function getAPIFormattedFilters(
   extraParams?: {
     page?: number;
     search?: string;
+    datasource?: string;
   }
 ): string {
   const filterArray: string[] = [];
@@ -15,6 +16,9 @@ export function getAPIFormattedFilters(
     }
     if (extraParams.search && extraParams.search.length > 0) {
       filterArray.push(`q=${extraParams.search}`);
+    }
+    if (extraParams.datasource) {
+      filterArray.push(`datasource=${extraParams.datasource}`);
     }
   }
 
@@ -38,8 +42,21 @@ export function getAPIFormattedFilters(
   if (appliedFilters.partners.length > 0) {
     filterArray.push(`partners=${appliedFilters.partners.join(",")}`);
   }
-  if (appliedFilters.donors.length > 0) {
-    filterArray.push(`donors=${appliedFilters.donors.join(",")}`);
+  if (
+    appliedFilters.donors.length > 0 ||
+    appliedFilters.donorSubCategories.length > 0
+  ) {
+    filterArray.push(
+      `donors=${[
+        ...appliedFilters.donors,
+        ...appliedFilters.donorSubCategories,
+      ].join(",")}`
+    );
+  }
+  if (appliedFilters.donorSubCategories.length > 0) {
+    filterArray.push(
+      `donorSubCategories=${appliedFilters.donorSubCategories.join(",")}`
+    );
   }
   if (appliedFilters.donorCategories.length > 0) {
     filterArray.push(

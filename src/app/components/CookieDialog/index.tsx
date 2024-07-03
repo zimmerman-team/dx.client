@@ -11,7 +11,7 @@ const BaseSnackbar = styled((props) => <Snackbar {...props} />)`
   }
 
   & [class*="MuiSnackbarContent-root"] {
-    background: #f5f5f7;
+    background: #f4f4f4;
     border-radius: 21px;
     box-shadow: 0 8px 17px -4px rgba(130, 142, 148, 0.35),
       0 0 4px 0 rgba(130, 142, 148, 0.16), 0 0 2px 0 rgba(130, 142, 148, 0.12);
@@ -85,7 +85,7 @@ export const CookieDialog = () => {
           css={`
             width: 90%;
             @media (min-width: 1280px) {
-              max-width: 1100px;
+              max-width: 1000px;
             }
             @media (max-width: 767px) {
               width: calc(100% - 16px);

@@ -1,16 +1,15 @@
 import React from "react";
-import get from "lodash/get";
 import { formatFinancialValue } from "app/utils/formatFinancialValue";
 
 export function PledgesContributionsTimeCycleTooltip(props: any) {
   return (
     <div
       css={`
-        color: #262c34;
+        color: #231d2c;
         min-width: 250px;
         padding: 16px 25px;
         position: relative;
-        background: #f5f5f7;
+        background: #f4f4f4;
         border-radius: 20px;
       `}
     >

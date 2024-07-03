@@ -1,12 +1,18 @@
 import React from "react";
+import get from "lodash/get";
 import Grid from "@material-ui/core/Grid";
+import { useCMSData } from "app/hooks/useCMSData";
 import { ResponsiveNetwork } from "@nivo/network";
 import { useMediaQuery, Tooltip } from "@material-ui/core";
+import { NetworkVizProps } from "app/components/Charts/Network/data";
 import { NoDataLabel } from "app/components/Charts/common/nodatalabel";
-import { mockdata, NetworkVizProps } from "app/components/Charts/Network/data";
 import { AchievementRateLegend } from "app/components/Charts/Network/components/legends";
 
 export function NetworkViz(props: NetworkVizProps) {
+  const cmsData = useCMSData({ returnData: true });
+  const isMobile = useMediaQuery("(max-width: 767px)");
+  const isSmallScreen = useMediaQuery("(max-width: 960px)");
+
   React.useEffect(() => {
     setTimeout(() => {
       const viz = document.getElementById("performance-framework-network");
@@ -18,7 +24,7 @@ export function NetworkViz(props: NetworkVizProps) {
             "path"
           );
           pathElement.setAttribute("d", "M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2");
-          pathElement.setAttribute("stroke", "#262c34");
+          pathElement.setAttribute("stroke", "#231d2c");
           pathElement.setAttribute("strokeWidth", "0.5");
 
           const patternElement = document.createElementNS(
@@ -73,7 +79,7 @@ export function NetworkViz(props: NetworkVizProps) {
             ${
               props.selectedNodeId && props.selectedNodeId === node.id
                 ? `> circle {
-              stroke-width: 2px;
+              strokeWidth: 2px;
             }
             > text {
               font-weight: bold;
@@ -83,7 +89,7 @@ export function NetworkViz(props: NetworkVizProps) {
             }
             &:hover {
               > circle {
-                stroke-width: 2px;
+                strokeWidth: 2px;
               }
               > text {
                 font-weight: bold;
@@ -152,15 +158,12 @@ export function NetworkViz(props: NetworkVizProps) {
         strokeLinecap="round"
         stroke={
           props.selectedNodeId && props.selectedNodeId === link.source.id
-            ? "#495057"
+            ? "#231d2c"
             : "#DFE3E6"
         }
       />
     ));
   };
-
-  const isMobile = useMediaQuery("(max-width: 767px)");
-  const isSmallScreen = useMediaQuery("(max-width: 960px)");
 
   return (
     <Grid container spacing={2}>
@@ -168,12 +171,12 @@ export function NetworkViz(props: NetworkVizProps) {
         <Grid item xs={12}>
           <div
             css={`
-              color: #262c34;
+              color: #231d2c;
               font-weight: bold;
               font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
             `}
           >
-            Performance Framework
+            {get(cmsData, "componentsChartsNetwork.performanceFramework", "")}
           </div>
         </Grid>
       )}
@@ -212,12 +215,8 @@ export function NetworkViz(props: NetworkVizProps) {
             linkColor="#DFE3E6"
             nodeBorderWidth={1}
             motionStiffness={160}
-            nodes={
-              props.data.nodes.length > 0 ? props.data.nodes : mockdata.nodes
-            }
-            links={
-              props.data.links.length > 0 ? props.data.links : mockdata.links
-            }
+            nodes={props.data.nodes.length > 0 ? props.data.nodes : []}
+            links={props.data.links.length > 0 ? props.data.links : []}
             layers={[Links, Nodes]}
             nodeColor={(e: any) => e.color}
             linkDistance={(e: any) => e.distance}

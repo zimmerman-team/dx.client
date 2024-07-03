@@ -15,15 +15,16 @@ const containercss = (
   isChildTreemap: boolean
 ) => css`
   display: flex;
+  color: #231d2c;
   font-size: 12px;
   position: absolute;
   box-sizing: border-box;
   flex-direction: column;
   background: ${bgcolor};
   align-items: flex-start;
+  border: 1px solid #231d2c;
   transition: background 0.2s ease-in-out;
   overflow: ${!hover ? "visible" : "hidden"};
-  color: ${isChildTreemap ? "#fff" : "#262C34"};
   cursor: ${isChildTreemap ? "pointer" : "default"};
 
   > div {
@@ -102,12 +103,13 @@ export function TreeemapNode(props: any) {
               width: 100%;
               white-space: nowrap;
               text-overflow: ellipsis;
+              font-family: "GothamNarrow-${hasChildren || node.data._children
+                  ? "Bold"
+                  : "Book"}",
+                "Helvetica Neue", sans-serif;
               font-weight: ${hasChildren || node.data._children
                 ? "bold"
                 : "normal"};
-              font-family: "GothamNarrow-${hasChildren || node.data._children
-                  ? "Bold"
-                  : "Book"}", "Helvetica Neue", sans-serif;
             `}
           >
             {node.data.name}

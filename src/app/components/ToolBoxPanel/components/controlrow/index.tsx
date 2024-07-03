@@ -75,8 +75,8 @@ export function ToolBoxPanelControlRow(props: ToolBoxPanelControlRowProps) {
 
                   path {
                     fill: ${props.selected === option.value
-                      ? "#13183F"
-                      : "#868A9D"};
+                      ? "#6061e5"
+                      : "#13183f"};
                   }
 
                   &:hover {
@@ -84,7 +84,7 @@ export function ToolBoxPanelControlRow(props: ToolBoxPanelControlRowProps) {
                     cursor: pointer;
 
                     path {
-                      fill: #13183f;
+                      fill: #6061e5;
                     }
                   }
                 `}
@@ -107,9 +107,9 @@ export function ToolBoxPanelControlRow(props: ToolBoxPanelControlRowProps) {
                 flex-direction: row;
                 border-radius: 20px;
                 align-items: center;
-                color: ${props.selected === option.value ? "#fff" : "#495057"};
+                color: ${props.selected === option.value ? "#fff" : "#262C34"};
                 background: ${props.selected === option.value
-                  ? "#495057"
+                  ? "#262C34"
                   : "#fff"};
 
                 > * {
@@ -125,7 +125,7 @@ export function ToolBoxPanelControlRow(props: ToolBoxPanelControlRowProps) {
                   color: #fff;
                   cursor: pointer;
                   background: ${props.selected === option.value
-                    ? "#495057"
+                    ? "#231d2c"
                     : "#13183F"};
                 }
               `}

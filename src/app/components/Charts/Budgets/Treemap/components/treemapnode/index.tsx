@@ -13,6 +13,7 @@ const containercss = (hover: boolean, selected: boolean) => css`
   box-sizing: border-box;
   flex-direction: column;
   align-items: flex-start;
+  border: 1px solid #231d2c;
   transition: background 0.2s ease-in-out;
   overflow: ${!hover ? "visible" : "hidden"};
 
@@ -27,7 +28,7 @@ export function TreeemapNode(props: any) {
   const bigDevice = useMediaQuery("(min-width: 768px)");
   const hasChildren = node.data._children && node.data._children.length > 0;
 
-  let color = "#262C34";
+  let color = "#231d2c";
   if (props.isChildTreemap || (props.invertColors && !bigDevice)) {
     color = "#fff";
   }

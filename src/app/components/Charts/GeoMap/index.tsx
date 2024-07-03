@@ -41,8 +41,11 @@ import { TooltipButton } from "app/components/Charts/common/styles";
 import { MapPin } from "app/components/Charts/GeoMap/components/pins";
 import { NoDataLabel } from "app/components/Charts/common/nodatalabel";
 import { GeoMapControls } from "app/components/Charts/GeoMap/components/controls";
+import get from "lodash/get";
+import { useCMSData } from "app/hooks/useCMSData";
 
 export function GeoMap(props: GeoMapProps) {
+  const cmsData = useCMSData({ returnData: true });
   const history = useHistory();
   const mapRef = React.useRef<React.Ref<MapRef>>();
   const isMobile = useMediaQuery("(max-width: 767px)");
@@ -128,18 +131,12 @@ export function GeoMap(props: GeoMapProps) {
   };
   const [hoverInfo, setHoverInfo] = React.useState<any>(null);
   const [prevHoverInfo, setPrevHoverInfo] = React.useState<any>(null);
-  const [
-    pinMarkerHoverInfo,
-    setPinMarkerHoverInfo,
-  ] = React.useState<GeoMapPinMarker | null>(null);
-  const [
-    investmentsPinMarkerHoverInfo,
-    setInvestmentsPinMarkerHoverInfo,
-  ] = React.useState<InvestmentsGeoMapPinMarker | null>(null);
-  const [
-    allocationsPinMarkerHoverInfo,
-    setAllocationsPinMarkerHoverInfo,
-  ] = React.useState<AllocationsGeoMapPinMarker | null>(null);
+  const [pinMarkerHoverInfo, setPinMarkerHoverInfo] =
+    React.useState<GeoMapPinMarker | null>(null);
+  const [investmentsPinMarkerHoverInfo, setInvestmentsPinMarkerHoverInfo] =
+    React.useState<InvestmentsGeoMapPinMarker | null>(null);
+  const [allocationsPinMarkerHoverInfo, setAllocationsPinMarkerHoverInfo] =
+    React.useState<AllocationsGeoMapPinMarker | null>(null);
   const [renderedLines, setRenderedLines] = React.useState<string[]>([]);
 
   React.useEffect(() => {
@@ -282,21 +279,25 @@ export function GeoMap(props: GeoMapProps) {
   };
 
   const onClick = React.useCallback((event: any) => {
-    if (isMobile || isTouchDevice()) {
-      // disabled cause was causing a double click on touch devices
-      // onHover(event);
-    } else if (props.allowClickthrough) {
-      const { features } = event;
-      const hoveredFeature = features && features[0];
-      if (
-        hoveredFeature &&
-        hoveredFeature.properties &&
-        hoveredFeature.properties.iso_a3 &&
-        hoveredFeature.properties.value > 0
-      ) {
-        history.push(`/location/${hoveredFeature.properties.iso_a3}/overview`);
-      }
-    }
+    // if (isMobile || isTouchDevice()) {
+    //   // disabled cause was causing a double click on touch devices
+    //   // onHover(event);
+    // } else if (props.allowClickthrough) {
+    //   const { features } = event;
+    //   const hoveredFeature = features && features[0];
+    //   if (
+    //     hoveredFeature &&
+    //     hoveredFeature.properties &&
+    //     hoveredFeature.properties.iso_a3 &&
+    //     hoveredFeature.properties.value > 0
+    //   ) {
+    //     history.push(
+    //       `/location/${hoveredFeature.properties.iso_a3}/${
+    //         props.clickthroughPath || "overview"
+    //       }`
+    //     );
+    //   }
+    // }
   }, []);
 
   function zoomIn() {
@@ -419,7 +420,7 @@ export function GeoMap(props: GeoMapProps) {
                 width: 350px;
                 padding: 20px;
                 position: absolute;
-                background: #f5f5f7;
+                background: #f4f4f4;
                 border-radius: 20px;
 
                 @media (max-width: 767px) {
@@ -463,7 +464,7 @@ export function GeoMap(props: GeoMapProps) {
                 }}
                 investmentSubType={props.investmentSubType}
               />
-              {(isMobile || isTouchDevice()) && (
+              {/* {(isMobile || isTouchDevice()) && (
                 <div
                   css={`
                     display: flex;
@@ -480,10 +481,10 @@ export function GeoMap(props: GeoMapProps) {
                       );
                     }}
                   >
-                    Go to detail page
+                    {get(cmsData, "componentsChartsGeomap.goToDetail", "")}
                   </TooltipButton>
                 </div>
-              )}
+              )} */}
             </div>
           </Popup>
         )}
@@ -494,7 +495,9 @@ export function GeoMap(props: GeoMapProps) {
               key={pin.id}
               marker={pin}
               setMarkerInfo={setAllocationsPinMarkerHoverInfo}
-              onClick={() => history.push(`/location/${pin.code}/overview`)}
+              onClick={() => {
+                // history.push(`/location/${pin.code}/overview`);
+              }}
               {...icons}
             />
           );
@@ -522,7 +525,7 @@ export function GeoMap(props: GeoMapProps) {
                 width: 350px;
                 padding: 20px;
                 position: absolute;
-                background: #f5f5f7;
+                background: #f4f4f4;
                 border-radius: 20px;
 
                 @media (max-width: 767px) {
@@ -576,12 +579,12 @@ export function GeoMap(props: GeoMapProps) {
                   <TooltipButton
                     type="button"
                     onTouchStart={() => {
-                      history.push(
-                        `/location/${allocationsPinMarkerHoverInfo.code}/overview`
-                      );
+                      // history.push(
+                      //   `/location/${allocationsPinMarkerHoverInfo.code}/overview`
+                      // );
                     }}
                   >
-                    Go to detail page
+                    {get(cmsData, "componentsChartsGeomap.goToDetail", "")}
                   </TooltipButton>
                 </div>
               )}
@@ -623,7 +626,7 @@ export function GeoMap(props: GeoMapProps) {
                 width: 350px;
                 padding: 20px;
                 position: absolute;
-                background: #f5f5f7;
+                background: #f4f4f4;
                 border-radius: 20px;
 
                 @media (max-width: 767px) {
@@ -661,7 +664,13 @@ export function GeoMap(props: GeoMapProps) {
             </div>
           </Popup>
         )}
-        <GeoMapControls onZoomIn={zoomIn} onZoomOut={zoomOut} />
+        <GeoMapControls
+          css={`
+            z-index: 200;
+          `}
+          onZoomIn={zoomIn}
+          onZoomOut={zoomOut}
+        />
       </MapGL>
       {hoverInfo &&
         (isHovering || isMobile || isTouchDevice()) &&
@@ -672,7 +681,7 @@ export function GeoMap(props: GeoMapProps) {
               width: 350px;
               padding: 20px;
               position: absolute;
-              background: #f5f5f7;
+              background: #f4f4f4;
               border-radius: 20px;
               top: ${hoverInfo.y + 50}px;
               left: ${hoverInfo.x - 180}px;
@@ -727,12 +736,12 @@ export function GeoMap(props: GeoMapProps) {
                 <TooltipButton
                   type="button"
                   onTouchStart={() => {
-                    history.push(
-                      `/location/${hoverInfo.properties.iso_a3}/overview`
-                    );
+                    // history.push(
+                    //   `/location/${hoverInfo.properties.iso_a3}/overview`
+                    // );
                   }}
                 >
-                  Location detail page
+                  {get(cmsData, "componentsChartsGeomap.locationDetail", "")}
                 </TooltipButton>
               </div>
             )}
@@ -747,7 +756,7 @@ export function GeoMap(props: GeoMapProps) {
               width: 350px;
               padding: 20px;
               position: absolute;
-              background: #f5f5f7;
+              background: #f4f4f4;
               border-radius: 20px;
               top: ${hoverInfo.y + 50}px;
               left: ${hoverInfo.x - 180}px;
@@ -802,12 +811,13 @@ export function GeoMap(props: GeoMapProps) {
                 <TooltipButton
                   type="button"
                   onTouchStart={() => {
-                    history.push(
-                      `/location/${hoverInfo.properties.iso_a3}/overview`
-                    );
+                    // history.push(
+                    //   `/location/${hoverInfo.properties.iso_a3}/overview`
+                    // );
                   }}
                 >
-                  Location detail page
+                  {/* {get(cmsData, "componentsChartsGeomap.locationDetail", "")} */}
+                  Country Detail Page
                 </TooltipButton>
               </div>
             )}
@@ -822,7 +832,7 @@ export function GeoMap(props: GeoMapProps) {
               width: 350px;
               padding: 20px;
               position: absolute;
-              background: #f5f5f7;
+              background: #f4f4f4;
               border-radius: 20px;
               top: ${hoverInfo.y + 50}px;
               left: ${hoverInfo.x - 180}px;

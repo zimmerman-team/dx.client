@@ -83,10 +83,15 @@ export function ScatterplotNode(props: ScatterplotNodeProps) {
           fill="#fff"
           cx={props.x}
           cy={props.y}
-          r={backCircleRadius[props.data.diseaseBurden] / 2}
+          r={
+            props.data.diseaseBurden !== undefined &&
+            props.data.diseaseBurden > -1
+              ? backCircleRadius[props.data.diseaseBurden] / 2
+              : 0
+          }
           css={`
             z-index: 1;
-            stroke: #262c34;
+            stroke: #231d2c;
             stroke-width: 0.5px;
           `}
         />
@@ -102,7 +107,7 @@ export function ScatterplotNode(props: ScatterplotNodeProps) {
         fill={nodeColor[props.data.eligibility]}
         css={`
           z-index: 2;
-          stroke-width: 1px;
+          strokewidth: 1px;
           stroke: ${nodeBorder[props.data.eligibility]};
           stroke-dasharray: ${nodeBorderStyle[props.data.eligibility]};
         `}

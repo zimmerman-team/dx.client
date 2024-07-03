@@ -17,13 +17,14 @@ import { DisbursementsTreemapProps } from "app/components/Charts/Investments/Dis
 import { NoDataTreemap } from "app/components/Charts/Investments/Disbursements/components/nodata";
 import { TreemapTooltip } from "app/components/Charts/Investments/Disbursements/components/tooltip";
 import { TreeemapNode } from "app/components/Charts/Investments/Disbursements/components/treemapnode";
+import get from "lodash/get";
+import { useCMSData } from "app/hooks/useCMSData";
 
 export function DisbursementsTreemap(props: DisbursementsTreemapProps) {
+  const cmsData = useCMSData({ returnData: true });
   const isMobile = useMediaQuery("(max-width: 767px)");
-  const [
-    xsTooltipData,
-    setXsTooltipData,
-  ] = React.useState<TreeMapNodeDatum | null>(null);
+  const [xsTooltipData, setXsTooltipData] =
+    React.useState<TreeMapNodeDatum | null>(null);
 
   function closeXsTooltip() {
     if (props.isChildTreemap && props.setXsTooltipData) {
@@ -47,6 +48,7 @@ export function DisbursementsTreemap(props: DisbursementsTreemapProps) {
           width: 100%;
           height: 600px;
           overflow: hidden;
+          position: relative;
 
           ${!props.isChildTreemap
             ? `
@@ -89,8 +91,8 @@ export function DisbursementsTreemap(props: DisbursementsTreemapProps) {
             }}
             leavesOnly
             labelSkipSize={12}
-            innerPadding={props.isChildTreemap ? 2 : 1}
-            outerPadding={props.isChildTreemap ? 0 : 1}
+            innerPadding={0}
+            outerPadding={0}
             // @ts-ignore
             nodeComponent={(nodeProps: TreeMapNodeDatum) => (
               <TreeemapNode
@@ -145,7 +147,7 @@ export function DisbursementsTreemap(props: DisbursementsTreemapProps) {
                 css={`
                   padding: 16px 25px;
                   position: relative;
-                  background: #f5f5f7;
+                  background: #f4f4f4;
                   border-radius: 20px;
 
                   > div {
@@ -203,7 +205,11 @@ export function DisbursementsTreemap(props: DisbursementsTreemapProps) {
                         );
                       }}
                     >
-                      Drilldown
+                      {get(
+                        cmsData,
+                        "componentsChartsInvestments.drilldown",
+                        ""
+                      )}
                     </TooltipButton>
                   </div>
                 )}

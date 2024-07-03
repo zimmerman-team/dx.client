@@ -131,15 +131,15 @@ export function FilterGroup(props: FilterGroupCompProps) {
 
             &::-webkit-scrollbar {
               height: 4px;
-              background: #495057;
+              background: #231d2c;
             }
             &::-webkit-scrollbar-track {
               border-radius: 4px;
-              background: #f5f5f7;
+              background: #f4f4f4;
             }
             &::-webkit-scrollbar-thumb {
               border-radius: 4px;
-              background: #495057;
+              background: #231d2c;
             }
           `}
         >
@@ -155,7 +155,7 @@ export function FilterGroup(props: FilterGroupCompProps) {
                 css={`
                   gap: 6px;
                   display: flex;
-                  color: #495057;
+                  color: #231d2c;
                   font-size: 10px;
                   background: #fff;
                   padding: 5px 10px;

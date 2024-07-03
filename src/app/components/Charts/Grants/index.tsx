@@ -24,11 +24,13 @@ import {
   ratingColor,
   statusBorderStyle,
 } from "app/components/Charts/Grants/data";
+import { useCMSData } from "app/hooks/useCMSData";
 
 // TODO: clean up component
 // TODO: discuss with Dafei what should happen when only 1 component is in the data.
 // TODO: the labels are a bit iffy when there are 5 components. -> create an algorithm that calculates the middle of the pie.
 export function GrantsViz(props: GrantsVizProps) {
+  const cmsData = useCMSData({ returnData: true });
   const { data } = props;
   const history = useHistory();
   const { x, y } = useMousePosition();
@@ -72,11 +74,11 @@ export function GrantsViz(props: GrantsVizProps) {
             z-index: 101;
             width: 320px;
             padding: 20px;
-            color: #262c34;
+            color: #231d2c;
             top: ${y + 12}px;
             left: ${x + 12}px;
             position: absolute;
-            background: #f5f5f7;
+            background: #f4f4f4;
             border-radius: 20px;
             box-shadow: 0px 0px 10px rgba(152, 161, 170, 0.6);
 
@@ -109,7 +111,7 @@ export function GrantsViz(props: GrantsVizProps) {
             </div>
           )}
           <GrantsRadialTooltip {...hoveredNode} />
-          {(isMobile || isTouchDevice()) && (
+          {/* {(isMobile || isTouchDevice()) && (
             <Button
               onTouchStart={() => {
                 history.push(
@@ -127,7 +129,7 @@ export function GrantsViz(props: GrantsVizProps) {
                 }
 
                 > span {
-                  color: #262c34;
+                  color: #231d2c;
                   font-size: 14px;
                   font-weight: bold;
                   text-transform: none;
@@ -135,9 +137,9 @@ export function GrantsViz(props: GrantsVizProps) {
                 }
               `}
             >
-              Grant detail page
+              {get(cmsData, "componentsChartsGrants.grantsDetailPage", "")}
             </Button>
-          )}
+          )} */}
         </div>
       )}
       <div
@@ -334,7 +336,7 @@ export function ComponentRadarThingies(props: any) {
               &:before {
                 right: -12px;
                 bottom: -35px;
-                color: #262c34;
+                color: #231d2c;
                 font-size: 10px;
                 position: absolute;
                 content: ${showLabel ? `"${year}"` : ""};
@@ -344,7 +346,7 @@ export function ComponentRadarThingies(props: any) {
               &:after {
                 left: -12px;
                 bottom: -35px;
-                color: #262c34;
+                color: #231d2c;
                 font-size: 10px;
                 position: absolute;
                 content: ${showLabel ? `"${year}"` : ""};
@@ -465,17 +467,17 @@ export function ComponentRadarThingies(props: any) {
                               height: 4px;
                               border-radius: 50%;
                               position: absolute;
-                              background: #495057;
+                              background: #231d2c;
                               bottom: ${startHeight}px;
                             `}
                           />
                           <div
                             onClick={() => {
-                              if (!isMobile && !isTouchDevice()) {
-                                history.push(
-                                  `/grant/${item.name}/${subItem.name}/overview`
-                                );
-                              }
+                              // if (!isMobile && !isTouchDevice()) {
+                              //   history.push(
+                              //     `/grant/${item.name}/${subItem.name}/overview`
+                              //   );
+                              // }
                             }}
                             onMouseLeave={() => {
                               if (!isMobile && !isTouchDevice()) {
@@ -512,7 +514,7 @@ export function ComponentRadarThingies(props: any) {
                               border-radius: 50%;
                               position: absolute;
                               left: -${size / 2}px;
-                              border: 1px solid #495057;
+                              border: 1px solid #231d2c;
                               background: ${get(
                                 ratingColor,
                                 subItem.rating,
@@ -588,6 +590,8 @@ export function ComponentDividers(props: any) {
 }
 
 export const RadialChartLegend = (props: any) => {
+  const cmsData = useCMSData({ returnData: true });
+
   const header = css`
     font-weight: bold;
     font-size: 12px;
@@ -648,7 +652,7 @@ export const RadialChartLegend = (props: any) => {
       content: " ";
       display: block;
       height: 0.5px;
-      border-top: 0.5px solid #262c34;
+      border-top: 0.5px solid #231d2c;
       transform: translate(17px, -1px);
       opacity: 0.2;
     }
@@ -657,7 +661,7 @@ export const RadialChartLegend = (props: any) => {
       content: " ";
       display: block;
       height: 0.5px;
-      border-top: 0.5px solid #262c34;
+      border-top: 0.5px solid #231d2c;
       transform: translate(-5px, 17px);
       width: 59px;
       opacity: 0.3;
@@ -665,7 +669,7 @@ export const RadialChartLegend = (props: any) => {
   `;
 
   const line = css`
-    border: 1px solid #262c34;
+    border: 1px solid #231d2c;
     margin: 0;
     height: calc(100% - 38px);
   `;
@@ -682,7 +686,7 @@ export const RadialChartLegend = (props: any) => {
       display: block;
       height: 0.5px;
       width: 35px;
-      border-top: 0.5px solid #262c34;
+      border-top: 0.5px solid #231d2c;
       opacity: 0.2;
     }
   `;
@@ -690,21 +694,21 @@ export const RadialChartLegend = (props: any) => {
   const solid = css`
     max-width: 83px;
     margin: 0;
-    border: 1px solid #262c34;
+    border: 1px solid #231d2c;
     margin-bottom: 7px;
   `;
 
   const dashed = css`
     max-width: 83px;
     margin: 0;
-    border: 1px dashed #262c34;
+    border: 1px dashed #231d2c;
     margin-bottom: 7px;
   `;
 
   const dotted = css`
     max-width: 83px;
     margin: 0;
-    border: 1px dotted #262c34;
+    border: 1px dotted #231d2c;
     margin-bottom: 7px;
   `;
 
@@ -736,7 +740,9 @@ export const RadialChartLegend = (props: any) => {
           justify-content: center;
         `}
       >
-        <div css={header}>Implementation Period</div>
+        <div css={header}>
+          {get(cmsData, "componentsChartsGrants.implementationPeriod", "")}
+        </div>
         <div css={implementationPeriodContainer}>
           <div css={implementationPeriod}>
             <div css={end} />
@@ -750,7 +756,7 @@ export const RadialChartLegend = (props: any) => {
                   transform: translateY(-8px);
                 `}
               >
-                Implementation End
+                {get(cmsData, "componentsChartsGrants.implementationEnd", "")}
               </div>
 
               <div
@@ -760,7 +766,10 @@ export const RadialChartLegend = (props: any) => {
                   line-height: normal;
                 `}
               >
-                Size of the circle: {`\n`} Disbursements {`\n`} (Max value{" "}
+                {get(cmsData, "componentsChartsGrants.circleSize", "")} {`\n`}{" "}
+                {get(cmsData, "componentsChartsGrants.circleContent", "")}{" "}
+                {`\n`} (
+                {get(cmsData, "componentsChartsGrants.circleMaxValue", "")}{" "}
                 {formatFinancialValue(props.maxValue)})
               </div>
             </div>
@@ -769,13 +778,11 @@ export const RadialChartLegend = (props: any) => {
                 transform: translateY(6px);
               `}
             >
-              Implementation Start
+              {get(cmsData, "componentsChartsGrants.implementationStart", "")}
             </div>
           </div>
         </div>
-        <div css={note}>
-          *One grant could contains Multiple Implementation Periods
-        </div>
+        <div css={note}>{get(cmsData, "componentsChartsGrants.note", "")}</div>
       </div>
       <div
         css={`
@@ -796,7 +803,9 @@ export const RadialChartLegend = (props: any) => {
             justify-content: center;
           `}
         >
-          <div css={header}>Latest Rating color code</div>
+          <div css={header}>
+            L{get(cmsData, "componentsChartsGrants.latestRatingColor", "")}
+          </div>
           <div
             css={`
               width: 100%;
@@ -825,13 +834,13 @@ export const RadialChartLegend = (props: any) => {
                 height: 10px;
                 position: relative;
                 border-radius: 50%;
-                border: 0.5px solid #262c34;
+                border: 0.5px solid #231d2c;
 
                 &:before {
                   width: 40px;
                   left: -16px;
                   bottom: -25px;
-                  color: #495057;
+                  color: #231d2c;
                   font-size: 12px;
                   position: absolute;
                   text-align: center;
@@ -897,13 +906,21 @@ export const RadialChartLegend = (props: any) => {
           `}
         >
           <div css="width: 100%;height: 15px;" />
-          <div css={header}>Grant Status</div>
+          <div css={header}>
+            {get(cmsData, "componentsChartsGrants.grantStatus", "")}
+          </div>
           <hr css={solid} />
-          <div css={body}>Active</div>
+          <div css={body}>
+            {get(cmsData, "componentsChartsGrants.active", "")}
+          </div>
           <hr css={dashed} />
-          <div css={body}>In closure</div>
+          <div css={body}>
+            {get(cmsData, "componentsChartsGrants.closure", "")}
+          </div>
           <hr css={dotted} />
-          <div css={body}>Administratly Closed</div>
+          <div css={body}>
+            {get(cmsData, "componentsChartsGrants.closed", "")}
+          </div>
         </div>
       </div>
     </div>

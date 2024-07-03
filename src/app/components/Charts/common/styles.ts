@@ -21,9 +21,11 @@ export const XsContainer = styled.div`
 export const TooltipButton = styled.button`
   width: 100%;
   padding: 12px;
-  color: #262c34;
+  color: #231d2c;
   font-size: 14px;
   border-width: 0px;
   border-radius: 20px;
+  font-weight: 700;
   background: #dfe3e6;
+  font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
 `;

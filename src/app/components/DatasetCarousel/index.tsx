@@ -1,8 +1,10 @@
 import React from "react";
+import get from "lodash/get";
 import { Link } from "react-router-dom";
 // @ts-ignore
 import Carousel from "react-grid-carousel";
 import { useMediaQuery } from "@material-ui/core";
+import { useCMSData } from "app/hooks/useCMSData";
 import { ArrowForwardIcon } from "app/assets/icons/ArrowForward";
 import { BudgetFlowPreview } from "app/assets/dataset-preview/budgetFlow";
 import { GrantsListPreview } from "app/assets/dataset-preview/grantsList";
@@ -18,7 +20,7 @@ const griditem = (content: React.ReactElement, link: string) => (
       css={`
         padding: 20px;
         height: 260px;
-        color: #262c34;
+        color: #231d2c;
         background: #fff;
         border-radius: 20px;
         border: 2px solid #fff;
@@ -50,6 +52,34 @@ const griditem = (content: React.ReactElement, link: string) => (
 
 export function DatasetCarousel() {
   const isSmallScreen = useMediaQuery("(max-width: 960px)");
+  const cmsData = useCMSData({ returnData: true });
+
+  const fpText = {
+    __html: get(
+      cmsData,
+      "componentsDatasetCarousel.financePledgesContributions",
+      ""
+    ),
+  };
+  const fsText = {
+    __html: get(cmsData, "componentsDatasetCarousel.financeSignedAmounts", ""),
+  };
+  const fcText = {
+    __html: get(cmsData, "componentsDatasetCarousel.financeCommitments", ""),
+  };
+  const fdText = {
+    __html: get(cmsData, "componentsDatasetCarousel.financeDisbursements", ""),
+  };
+  const fbText = {
+    __html: get(cmsData, "componentsDatasetCarousel.financeBudgets", ""),
+  };
+  const aeText = {
+    __html: get(cmsData, "componentsDatasetCarousel.accessEligibility", ""),
+  };
+  const aaText = {
+    __html: get(cmsData, "componentsDatasetCarousel.accessAllocations", ""),
+  };
+
   return (
     <div
       css={`
@@ -125,7 +155,7 @@ export function DatasetCarousel() {
           {griditem(
             <>
               <div>
-                <b>Finance</b> · Pledges & Contributions
+                <div dangerouslySetInnerHTML={fpText} />
               </div>
               <InvestmentsTreemapPreview />
             </>,
@@ -136,7 +166,7 @@ export function DatasetCarousel() {
           {griditem(
             <>
               <div>
-                <b>Finance</b> · Signed Amounts
+                <div dangerouslySetInnerHTML={fsText} />
               </div>
               <InvestmentsTreemapPreview />
             </>,
@@ -147,7 +177,7 @@ export function DatasetCarousel() {
           {griditem(
             <>
               <div>
-                <b>Finance</b> · Commitments
+                <div dangerouslySetInnerHTML={fcText} />
               </div>
               <InvestmentsTreemapPreview />
             </>,
@@ -158,7 +188,7 @@ export function DatasetCarousel() {
           {griditem(
             <>
               <div>
-                <b>Finance</b> · Disbursements
+                <div dangerouslySetInnerHTML={fdText} />
               </div>
               <InvestmentsTreemapPreview />
             </>,
@@ -169,7 +199,7 @@ export function DatasetCarousel() {
           {griditem(
             <>
               <div>
-                <b>Finance</b> · Budgets
+                <div dangerouslySetInnerHTML={fbText} />
               </div>
               <BudgetFlowPreview />
             </>,
@@ -180,7 +210,7 @@ export function DatasetCarousel() {
           {griditem(
             <>
               <div>
-                <b>Access to Funding</b> · Eligibility
+                <div dangerouslySetInnerHTML={aeText} />
               </div>
               <EligibilityDotsPreview />
             </>,
@@ -191,7 +221,7 @@ export function DatasetCarousel() {
           {griditem(
             <>
               <div>
-                <b>Access to Funding</b> · Allocations
+                <div dangerouslySetInnerHTML={aaText} />
               </div>
               <AllocationsRadialPreview />
             </>,
@@ -202,7 +232,7 @@ export function DatasetCarousel() {
           {griditem(
             <>
               <div>
-                <b>Grants</b>
+                <b>{get(cmsData, "componentsDatasetCarousel.grants", "")}</b>
               </div>
               <GrantsListPreview />
             </>,
@@ -213,7 +243,7 @@ export function DatasetCarousel() {
           {griditem(
             <>
               <div>
-                <b>Results</b>
+                <b>{get(cmsData, "componentsDatasetCarousel.results", "")}</b>
               </div>
               <ResultsListPreview />
             </>,
@@ -224,7 +254,7 @@ export function DatasetCarousel() {
           {griditem(
             <>
               <div>
-                <b>Documents</b>
+                <b>{get(cmsData, "componentsDatasetCarousel.documents", "")}</b>
               </div>
               <DocumentsTablePreview />
             </>,

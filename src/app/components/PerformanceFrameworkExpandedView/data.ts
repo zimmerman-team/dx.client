@@ -75,8 +75,7 @@ export const mockdata: PFIndicatorSet[] = [
         name: "Differentiated HIV Testing Services",
         indicators: [
           {
-            name:
-              "Number of people who were tested for HIV and received their results during the reporting period",
+            name: "Number of people who were tested for HIV and received their results during the reporting period",
             results: [
               {
                 type: "Percentage",
@@ -131,8 +130,7 @@ export const mockdata: PFIndicatorSet[] = [
             name: "Service delivery infrastructure",
             values: [
               {
-                name:
-                  "Contracts for the work and supervision of the refurbishment of the national reference laboratory (LNR)",
+                name: "Contracts for the work and supervision of the refurbishment of the national reference laboratory (LNR)",
                 achievementRate: null,
                 valueText:
                   "Tender for works and supervision of the refurbishment  of the national reference laboratory (LNR)",
@@ -147,8 +145,7 @@ export const mockdata: PFIndicatorSet[] = [
 
 export const expandindicatorsmockdata: PFIndicator[] = [
   {
-    name:
-      "Percentage of HIV-positive pregnant women who received antiretrovirals to reduce the risk of mother-to-child transmission",
+    name: "Percentage of HIV-positive pregnant women who received antiretrovirals to reduce the risk of mother-to-child transmission",
     results: [
       {
         type: "Percentage",
@@ -383,8 +380,7 @@ export const expandindicatorsmockdata: PFIndicator[] = [
     ],
   },
   {
-    name:
-      "Percentage of infants born to HIV-positive women receiving a virological test for HIV within 2 months of birth",
+    name: "Percentage of infants born to HIV-positive women receiving a virological test for HIV within 2 months of birth",
     results: [
       {
         type: "Percentage",
@@ -457,8 +453,7 @@ export const expandindicatorsmockdata: PFIndicator[] = [
 
 export const expandinterventionsmockdata: PFIndicatorResultIntervention[] = [
   {
-    name:
-      "Ensure the supervision of community service providers and primary healthcare centers (CSPS) (50% of sites performing poorly) by the District Team each semester",
+    name: "Ensure the supervision of community service providers and primary healthcare centers (CSPS) (50% of sites performing poorly) by the District Team each semester",
     values: [
       {
         name: "Prong 3: Preventing vertical HIV transmission",

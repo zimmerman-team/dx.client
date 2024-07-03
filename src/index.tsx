@@ -2,6 +2,10 @@
 
 import React from "react";
 import ReactDOM from "react-dom";
+import "./app/theme/rawgraphs.css";
+import "./app/theme/videoPlayer.css";
+import "./app/modules/common/RichEditor/extraButtonStyles.css";
+
 import "./index.css";
 import { App } from "app";
 
@@ -17,4 +21,4 @@ ReactDOM.render(<App />, document.getElementById("root"));
 
 reportWebVitals();
 
-// serviceWorker.register();
+serviceWorker.unregister();

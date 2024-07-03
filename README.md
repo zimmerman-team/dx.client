@@ -24,6 +24,9 @@ In order to be able to successfully run or build the app you need to create an e
 REACT_APP_API=<data middleware api url>
 REACT_APP_MAPBOX_TOKEN=<mapbox account token>
 REACT_APP_GOOGLE_ANALYTICS_ID=<google analytics app id>
+REACT_APP_CMS_API=<cockpit cms api url>
+REACT_APP_CMS_TOKEN=<cockpit cms api token>
+REACT_APP_USE_DEFAULT_DATASETS=<boolean true or false>
 ```
 
 `REACT_APP_API`: is the url where the data middleware API runs on. If running [Data API Middleware](https://github.com/globalfund/data-explorer-server/) locally then you can use `http://localhost:4200`.
@@ -31,6 +34,14 @@ REACT_APP_GOOGLE_ANALYTICS_ID=<google analytics app id>
 `REACT_APP_MAPBOX_TOKEN`: to get a mapbox token you will need to register on their [website](https://www.mapbox.com).The token will be used to identify you and start serving up map tiles. The service is free until a certain level of traffic is exceeded.
 
 `REACT_APP_GOOGLE_ANALYTICS_ID`(optional): Google Analytics ID in order to be able to make use of Google Analytics services.
+
+`REACT_APP_CMS_API`: is the url where the [Cockpit CMS API](https://github.com/zimmerman-team/the-data-explorer-cms/) runs on.
+
+`REACT_APP_CMS_TOKEN`: is the API token retrieved from the Cockpit CMS interface.
+
+`REACT_APP_USE_DEFAULT_DATASETS`: is the setting to determine whether or not we use the Global Fund default datasets, or external datasets.
+
+`PORT`: can be used to specify on which port to run the client.
 
 ---
 
@@ -57,6 +68,10 @@ The build is minified and the filenames include the hashes.<br />
 Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+
+### `yarn prepare`
+
+Sets up the husky executable script for git hooks
 
 ## Learn More
 

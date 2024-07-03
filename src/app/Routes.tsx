@@ -1,212 +1,299 @@
 // cc:application base#;application routes
 
+// base
+
 import React, { Suspense, lazy } from "react";
-import { useGA } from "app/hooks/useGA";
-import axios, { AxiosResponse } from "axios";
-import { useUrlFilters } from "app/hooks/useUrlFilters";
-import { V1RouteRedirections } from "app/utils/v1Routes";
+import { socialAuth } from "app/utils/socialAuth";
 import { useScrollToTop } from "app/hooks/useScrollToTop";
 import { PageLoader } from "app/modules/common/page-loader";
-import { useFilterOptions } from "app/hooks/useFilterOptions";
+import { RouteWithAppBar } from "app/utils/RouteWithAppBar";
+import { Route, Switch, useHistory } from "react-router-dom";
+import { NoMatchPage } from "app/modules/common/no-match-page";
+import { useGoogleOneTapLogin } from "react-google-one-tap-login";
 import {
-  Route,
-  Switch,
-  Redirect,
-  useHistory,
-  RouteComponentProps,
-} from "react-router-dom";
-// import BigLogo from "app/assets/BigLogo";
-// import useCookie from "@devhammed/use-cookie";
-// import useMediaQuery from "@material-ui/core/useMediaQuery";
+  AppState,
+  Auth0Provider,
+  User,
+  WithAuthenticationRequiredOptions,
+  useAuth0,
+  withAuthenticationRequired,
+} from "@auth0/auth0-react";
+import axios from "axios";
+import { AuthProtectedRoute } from "./utils/AuthProtectedRoute";
 
-const VizModule = lazy(() => import("app/modules/viz-module"));
-const AboutModule = lazy(() => import("app/modules/about-module"));
-const GrantsModule = lazy(() => import("app/modules/grants-module"));
-const ResultsModule = lazy(() => import("app/modules/results-module"));
-const LandingModule = lazy(() => import("app/modules/landing-module"));
-const DatasetsModule = lazy(() => import("app/modules/datasets-module"));
-const DocumentsModule = lazy(() => import("app/modules/documents-module"));
-const GrantDetailModule = lazy(() => import("app/modules/grant-detail-module"));
-const CountryDetailModule = lazy(
-  () => import("app/modules/country-detail-module")
+const LandingModule = lazy(
+  () => import("app/modules/home-module/sub-modules/landing")
 );
-const PartnerDetailModule = lazy(
-  () => import("app/modules/partner-detail-module")
+const HomeModule = lazy(() => import("app/modules/home-module"));
+const PartnersModule = lazy(
+  () => import("app/modules/home-module/sub-modules/partners")
+);
+const ContactModule = lazy(
+  () => import("app/modules/home-module/sub-modules/contact")
+);
+const AboutModule = lazy(
+  () => import("app/modules/home-module/sub-modules/about")
+);
+const WhyDXModule = lazy(
+  () => import("app/modules/home-module/sub-modules/why-dx")
+);
+const ExploreAssetsModule = lazy(
+  () => import("app/modules/home-module/sub-modules/explore-assets")
 );
 
-function GrantPeriodRedirect(props: RouteComponentProps<any>) {
+const PricingModule = lazy(
+  () => import("app/modules/home-module/sub-modules/pricing")
+);
+
+const ChartModule = lazy(() => import("app/modules/chart-module"));
+const ReportModule = lazy(() => import("app/modules/report-module"));
+
+const AuthCallbackModule = lazy(() => import("app/modules/callback-module"));
+const OnboardingModule = lazy(() => import("app/modules/onboarding-module"));
+const UserProfileModule = lazy(() => import("app/modules/user-profile-module"));
+const DatasetModule = lazy(() => import("app/modules/dataset-module"));
+const DashboardModule = lazy(
+  () => import("app/modules/home-module/sub-modules/dashboard")
+);
+
+const ProtectedRoute = (props: {
+  component: React.ComponentType<any>;
+  args?: WithAuthenticationRequiredOptions;
+}) => {
+  const Component = withAuthenticationRequired(props.component, props.args);
+
+  return <Component />;
+};
+
+const Auth0ProviderWithRedirectCallback = (props: {
+  domain: string;
+  clientId: string;
+  authorizationParams: {
+    audience: string;
+    redirect_uri: string;
+  };
+  children: React.ReactNode;
+}) => {
   const history = useHistory();
-  React.useEffect(() => {
-    axios
-      .get(
-        `${process.env.REACT_APP_API}/grant/periods/?grantNumber=${props.match.params.code}`
-      )
-      .then((response: AxiosResponse) => {
-        if (response.data.data && response.data.data.length > 0) {
-          history.replace(
-            `/grant/${props.match.params.code}/${response.data.data[0].number}/overview`
-          );
-        } else {
-          history.replace(`/grant/${props.match.params.code}/1/overview`);
-        }
-      })
-      .catch(() => {
-        history.replace(`/grant/${props.match.params.code}/1/overview`);
-      });
-  }, []);
-  return <PageLoader />;
-}
 
-export function MainRoutes() {
-  // const [showSMNotice, setShowSMNotice] = useCookie("showSMNotice", true);
-  useFilterOptions({});
-  useScrollToTop();
-  useUrlFilters();
-  useGA();
-
-  // const isMobile = useMediaQuery("(max-width: 767px)");
-
-  // if (isMobile && showSMNotice) {
-  //   return (
-  //     <div
-  //       css={`
-  //         width: 100vw;
-  //         height: 100vh;
-  //         display: flex;
-  //         font-size: 16px;
-  //         text-align: center;
-  //         align-items: center;
-  //         flex-direction: column;
-  //         justify-content: center;
-
-  //         > svg {
-  //           width: 90%;
-  //         }
-
-  //         > button {
-  //           color: #fff;
-  //           font-size: 14px;
-  //           appearance: none;
-  //           padding: 9px 16px;
-  //           font-weight: bold;
-  //           line-height: 20px;
-  //           background: #495057;
-  //           border-radius: 20px;
-  //           border-color: #495057;
-  //           text-transform: unset;
-  //         }
-  //       `}
-  //     >
-  //       <BigLogo />
-  //       <br />
-  //       App is not yet optimised for smaller screens.
-  //       <br />
-  //       <br />
-  //       <button
-  //         type="button"
-  //         onClick={() =>
-  //           setShowSMNotice(false, {
-  //             expires: 31556926, // 12 months
-  //             domain: "",
-  //             path: "",
-  //             secure: false,
-  //             httpOnly: false,
-  //             maxAge: 0,
-  //             sameSite: "",
-  //           })
-  //         }
-  //       >
-  //         Continue
-  //       </button>
-  //     </div>
-  //   );
-  // }
+  const onRedirectCallback = (appState?: AppState, user?: User) => {
+    history.push(
+      appState && appState.returnTo
+        ? appState.returnTo
+        : window.location.pathname
+    );
+  };
 
   return (
-    <Suspense fallback={<PageLoader />}>
-      <Switch>
-        <Route exact path="/">
-          <LandingModule />
-        </Route>
+    <Auth0Provider
+      cacheLocation={
+        process.env.REACT_APP_CYPRESS_TEST === "true"
+          ? "localstorage"
+          : "memory"
+      }
+      onRedirectCallback={onRedirectCallback}
+      {...props}
+    >
+      {props.children}
+    </Auth0Provider>
+  );
+};
 
-        <Route exact path="/about">
-          <AboutModule />
-        </Route>
+const AuthLoader = () => {
+  const { isLoading } = useAuth0();
 
-        <Route exact path="/datasets">
-          <DatasetsModule />
-        </Route>
+  if (isLoading) {
+    return (
+      <div
+        css={`
+          > div {
+            background: #fff;
+          }
+        `}
+      >
+        <PageLoader />;
+      </div>
+    );
+  }
 
-        <Route exact path="/grants">
-          <GrantsModule />
-        </Route>
+  return null;
+};
 
-        <Route exact path="/results">
-          <ResultsModule />
-        </Route>
+const OneTapLoginComponent = () => {
+  const { isLoading, isAuthenticated } = useAuth0();
+  const loadRef = React.useRef<HTMLDivElement>(null);
 
-        <Route exact path="/documents">
-          <DocumentsModule />
-        </Route>
+  useGoogleOneTapLogin({
+    disabled: isLoading || isAuthenticated,
+    onError: (error) => console.log(error),
+    onSuccess: (response) => socialAuth("google-oauth2", response.email),
+    googleAccountConfigs: {
+      client_id: process.env.REACT_APP_GOOGLE_API_CLIENT_ID!,
+      cancel_on_tap_outside: false,
+      // @ts-ignore
+      use_fedcm_for_prompt: true,
+    },
+  });
 
-        <Route exact path="/viz/:vizType/:subType?">
-          <VizModule />
-        </Route>
+  const onBeforeUnload = () => {
+    if (loadRef.current) {
+      loadRef.current.style.display = "block";
+    }
+  };
 
-        <Route
-          exact
-          path="/location/:code"
-          render={(props: RouteComponentProps<any>) => (
-            <Redirect to={`/location/${props.match.params.code}/overview`} />
-          )}
-        />
+  React.useEffect(() => {
+    window.onbeforeunload = onBeforeUnload;
+  }, []);
 
-        <Route exact path="/location/:code/:vizType/:subType?">
-          <CountryDetailModule />
-        </Route>
+  return (
+    <div ref={loadRef} style={{ display: "none" }}>
+      <PageLoader />
+    </div>
+  );
+};
 
-        <Route
-          exact
-          path="/partner/:code"
-          render={(props: RouteComponentProps<any>) => (
-            <Redirect
-              to={`/partner/${props.match.params.code}/signed/treemap`}
-            />
-          )}
-        />
+const IntercomBootupComponent = () => {
+  const { isAuthenticated, user, getAccessTokenSilently } = useAuth0();
 
-        <Route exact path="/partner/:code/:vizType/:subType?">
-          <PartnerDetailModule />
-        </Route>
+  const APP_ID = window.location.hostname.includes("dataxplorer.org")
+    ? "tfvurn19"
+    : "hv1bfyau";
 
-        <Route
-          exact
-          path="/grant/:code"
-          render={(props: RouteComponentProps<any>) => (
-            <GrantPeriodRedirect {...props} />
-          )}
-        />
+  React.useEffect(() => {
+    if (window.Intercom) {
+      window.Intercom("update");
+    }
+  }, [location.pathname]);
 
-        <Route
-          exact
-          path="/grant/:code/:period"
-          render={(props: RouteComponentProps<any>) => (
-            <Redirect
-              to={`/grant/${props.match.params.code}/${props.match.params.period}/overview`}
-            />
-          )}
-        />
+  const getIntercomHash = async () => {
+    return getAccessTokenSilently().then(async (newToken) => {
+      return await axios.get(
+        `${process.env.REACT_APP_API}/users/intercom-hash`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${newToken}`,
+          },
+        }
+      );
+    });
+  };
 
-        <Route exact path="/grant/:code/:period/:vizType/:subType?">
-          <GrantDetailModule />
-        </Route>
+  React.useEffect(() => {
+    if (window.Intercom)
+      if (isAuthenticated) {
+        getIntercomHash()
+          .then((res) => {
+            if (res.data.error) {
+              console.error(res.data.error);
+            } else {
+              // @ts-ignore
+              window.Intercom("boot", {
+                api_base: "https://api-iam.intercom.io",
+                app_id: APP_ID,
+                name: user?.name, // Full name
+                email: user?.email, // the email for your user
+                user_id: user?.sub, // user_id as a string
+                created_at: user?.created_at, // Signup date as a Unix timestamp
+                user_hash: res.data.hash,
+              });
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      } else {
+        // @ts-ignore
+        window.Intercom("boot", {
+          api_base: "https://api-iam.intercom.io",
+          app_id: APP_ID,
+        });
+      }
+  }, [isAuthenticated]);
 
-        <Route exact path="/viz">
-          <Redirect to="/datasets" />
-        </Route>
+  return <></>;
+};
 
-        <V1RouteRedirections />
-      </Switch>
-    </Suspense>
+export function MainRoutes() {
+  useScrollToTop();
+
+  return (
+    <Auth0ProviderWithRedirectCallback
+      domain={process.env.REACT_APP_AUTH0_DOMAIN!}
+      clientId={process.env.REACT_APP_AUTH0_CLIENT!}
+      authorizationParams={{
+        audience: process.env.REACT_APP_AUTH0_AUDIENCE!,
+        redirect_uri: `${window.location.origin}/callback`,
+      }}
+    >
+      <AuthLoader />
+      <OneTapLoginComponent />
+      <IntercomBootupComponent />
+      <Suspense fallback={<PageLoader />}>
+        <Switch>
+          <Route exact path="/callback">
+            <AuthCallbackModule />
+          </Route>
+          <RouteWithAppBar exact path="/">
+            <HomeModule />
+          </RouteWithAppBar>
+          <RouteWithAppBar exact path="/partners">
+            <PartnersModule />
+          </RouteWithAppBar>
+          <RouteWithAppBar exact path="/contact">
+            <ContactModule />
+          </RouteWithAppBar>
+          <RouteWithAppBar exact path="/why-dataXplorer">
+            <WhyDXModule />
+          </RouteWithAppBar>
+          {/* <RouteWithAppBar exact path="/explore">
+            <ExploreAssetsModule />
+          </RouteWithAppBar> */}
+          <RouteWithAppBar exact path="/dashboard">
+            <AuthProtectedRoute>
+              <DashboardModule />
+            </AuthProtectedRoute>
+          </RouteWithAppBar>
+          <RouteWithAppBar exact path="/report/:page/:view?">
+            <AuthProtectedRoute>
+              <ReportModule />
+            </AuthProtectedRoute>
+          </RouteWithAppBar>
+          <RouteWithAppBar exact path="/dataset/:page/:view?">
+            <AuthProtectedRoute>
+              <DatasetModule />
+            </AuthProtectedRoute>
+          </RouteWithAppBar>
+          <RouteWithAppBar exact path="/about">
+            <AboutModule />
+          </RouteWithAppBar>
+          <RouteWithAppBar exact path="/pricing">
+            <PricingModule />
+          </RouteWithAppBar>
+          <RouteWithAppBar exact path="/landing">
+            <LandingModule />
+          </RouteWithAppBar>
+          <RouteWithAppBar exact path="/chart/:page/:view?">
+            <AuthProtectedRoute>
+              <ChartModule />
+            </AuthProtectedRoute>
+          </RouteWithAppBar>
+          {/* <RouteWithAppBar exact path="/dataset/:id/edit">
+            <></>
+          </RouteWithAppBar> */}
+          <RouteWithAppBar path="/onboarding">
+            <OnboardingModule />
+          </RouteWithAppBar>
+          <RouteWithAppBar exact path="/user-management/:tab?">
+            <AuthProtectedRoute>
+              <UserProfileModule />
+            </AuthProtectedRoute>
+          </RouteWithAppBar>
+          <RouteWithAppBar path="*">
+            <NoMatchPage />
+          </RouteWithAppBar>
+        </Switch>
+      </Suspense>
+    </Auth0ProviderWithRedirectCallback>
   );
 }

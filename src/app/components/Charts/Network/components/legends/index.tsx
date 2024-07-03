@@ -1,19 +1,23 @@
 import React from "react";
 import { css } from "styled-components/macro";
+import get from "lodash/get";
+import { useCMSData } from "app/hooks/useCMSData";
 
 export function NetworkLegends() {
+  const cmsData = useCMSData({ returnData: true });
+
   return (
     <React.Fragment>
       <div
         css={`
-          color: #262c34;
+          color: #231d2c;
           font-size: 12px;
           font-weight: bold;
           margin-bottom: 10px;
           font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
         `}
       >
-        Achievement Rate
+        {get(cmsData, "componentsChartsNetwork.achievementRate", "")}
       </div>
       <div
         css={`
@@ -29,13 +33,13 @@ export function NetworkLegends() {
             margin: 0 20px;
             position: relative;
             border-radius: 50%;
-            border: 0.5px solid #262c34;
+            border: 0.5px solid #231d2c;
 
             &:before {
               width: 40px;
               left: -15px;
               bottom: -25px;
-              color: #495057;
+              color: #231d2c;
               font-size: 12px;
               position: absolute;
               text-align: center;
@@ -129,13 +133,17 @@ export function NetworkLegends() {
             margin: 0 20px;
             position: relative;
             border-radius: 50%;
-            border: 0.5px solid #262c34;
+            border: 0.5px solid #231d2c;
 
             &:before {
               width: 40px;
               left: -15px;
               bottom: -25px;
-              color: #495057;
+<<<<<<< HEAD
+              color: #231d2c;
+=======
+              color: #262c34;
+>>>>>>> 26f3485bf722b77cb35efc4928b6bc98505ccb74
               font-size: 12px;
               position: absolute;
               text-align: center;
@@ -155,7 +163,7 @@ export function NetworkLegends() {
           css={`
             background: repeating-linear-gradient(
               -45deg,
-              #262c34 0 0.5px,
+              #231d2c 0 0.5px,
               #fff 1.5px 2px
             );
             &:before {
@@ -209,13 +217,13 @@ const styles = {
     justify-content: space-between;
   `,
   title: css`
-    color: #262c34;
+    color: #231d2c;
     font-size: 12px;
     font-weight: bold;
     font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
   `,
   noData: (reported: boolean) => css`
-    color: #495057;
+    color: #231d2c;
     font-size: 12px;
     padding-left: 20px;
     position: relative;
@@ -233,12 +241,12 @@ const styles = {
       height: 13px;
       position: absolute;
       border-radius: 50%;
-      border: 0.5px solid #262c34;
+      border: 0.5px solid #231d2c;
       background: ${reported
         ? "transparent"
         : `repeating-linear-gradient(
         -45deg,
-        #262c34 0 0.5px,
+        #231d2c 0 0.5px,
         #fff 1.5px 2px
       )`};
     }
@@ -277,11 +285,15 @@ const styles = {
 };
 
 export function AchievementRateLegend() {
+  const cmsData = useCMSData({ returnData: true });
+
   return (
     <div css={styles.container}>
       <div css={styles.legendContainer}>
         <div css={styles.top}>
-          <div css={styles.title}>Achievement Rate</div>
+          <div css={styles.title}>
+            {get(cmsData, "componentsChartsNetwork.achievementRate", "")}
+          </div>
         </div>
         <div css={styles.spacer} />
         <div css={styles.legends}>
@@ -298,7 +310,7 @@ export function AchievementRateLegend() {
                   top: 20px;
                   left: -5px;
                   position: relative;
-                  color: color: #495057;
+                  color: color: #231d2c;
                   content: "${item.label}";
                 }
               `}
@@ -307,9 +319,13 @@ export function AchievementRateLegend() {
         </div>
       </div>
       <div css={styles.noDataLegendContainer}>
-        <div css={styles.noData(true)}>N/A</div>
+        <div css={styles.noData(true)}>
+          {get(cmsData, "componentsChartsNetwork.notAvailable", "")}
+        </div>
         <div css={styles.spacer} />
-        <div css={styles.noData(false)}>Not reported</div>
+        <div css={styles.noData(false)}>
+          {get(cmsData, "componentsChartsNetwork.notReported", "")}
+        </div>
       </div>
     </div>
   );
