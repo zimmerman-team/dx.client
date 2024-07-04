@@ -114,7 +114,7 @@ export default function AddDatasetFragment(props: Props) {
       onClick: () => {},
     },
     {
-      name: "MSSQL",
+      name: "MYSQL",
       type: "DataBase Connection",
       formats: ["Coming Soon"],
       icon: <img width={30} height={30} src={MYSQLIcon} />,

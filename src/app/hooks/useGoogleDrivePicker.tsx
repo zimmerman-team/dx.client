@@ -5,7 +5,7 @@ import {
   PickerCallback,
 } from "react-google-drive-picker/dist/typeDefs";
 import axios from "axios";
-import { useCookie } from "react-use";
+import { getCookie } from "app/utils/getCookie";
 
 interface Props {
   onFileSubmit: (file: File) => void;
@@ -81,7 +81,9 @@ function useGoogleDrivePicker({
           if (d.docs?.[0]) {
             handleGoogleDriveFilePicker(
               d.docs[0],
-              googleDriveToken! ?? tokenFromPicker?.access_token
+              googleDriveToken! ??
+                tokenFromPicker?.access_token ??
+                getCookie("googleDriveToken")
             );
           } else if (d.action === "cancel") {
             onCancel();
