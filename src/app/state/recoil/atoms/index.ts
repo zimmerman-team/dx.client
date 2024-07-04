@@ -59,9 +59,22 @@ export const untitledReportAtom = atom({
   default: false,
 });
 
+export const allAssetsViewAtom = atom<"grid" | "table">({
+  key: "allAssetsViewAtom",
+  default: "table",
+  effects_UNSTABLE: [persistAtom],
+});
+
+export const allAssetsSortBy = atom<"name" | "updatedDate" | "createdDate">({
+  key: "allAssetsSortBy",
+  default: "updatedDate",
+  effects_UNSTABLE: [persistAtom],
+});
+
 export const homeDisplayAtom = atom<"all" | "data" | "charts" | "reports">({
   key: "homeDisplayAtom",
   default: "all",
+  effects_UNSTABLE: [persistAtom],
 });
 
 export const reportRightPanelViewAtom = atom<

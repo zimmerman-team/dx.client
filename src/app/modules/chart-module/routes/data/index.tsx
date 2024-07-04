@@ -41,12 +41,14 @@ function ChartModuleDataView(
   const { page } = useParams<{ page: string }>();
 
   const [categories, setCategories] = React.useState<string[]>([]);
-  const [tableView, setTableView] = React.useState(false);
+  const [datasetsView, setDatasetsView] = React.useState<"table" | "grid">(
+    "grid"
+  );
   const [searchValue, setSearchValue] = React.useState<undefined | string>(
     undefined
   );
   const [openSearch, setOpenSearch] = React.useState(false);
-  const [sortValue, setSortValue] = React.useState("createdDate");
+  const [sortValue, setSortValue] = React.useState("updatedDate");
   const [sortPopoverAnchorEl, setSortPopoverAnchorEl] =
     React.useState<HTMLButtonElement | null>(null);
 
@@ -203,9 +205,9 @@ function ChartModuleDataView(
         </Popover>
         <IconButton
           onClick={() => {
-            setTableView(!tableView);
+            setDatasetsView((prev) => (prev === "grid" ? "table" : "grid"));
           }}
-          css={iconButtonCss(tableView)}
+          css={iconButtonCss(datasetsView === "table")}
         >
           <GridIcon />
         </IconButton>
@@ -220,7 +222,7 @@ function ChartModuleDataView(
         inChartBuilder
         sortBy={sortValue}
         categories={categories}
-        tableView={tableView}
+        view={datasetsView}
         searchStr={searchValue as string}
         onItemClick={handleItemClick}
         md={props.toolboxOpen ? 4 : 6}

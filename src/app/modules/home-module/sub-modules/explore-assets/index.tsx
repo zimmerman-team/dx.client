@@ -5,6 +5,7 @@ import { useRecoilState, useResetRecoilState } from "recoil";
 import { Tab, Box, Grid, Tabs, Container, withStyles } from "@material-ui/core";
 /* project */
 import {
+  allAssetsViewAtom,
   chartFromReportAtom,
   homeDisplayAtom,
   persistedReportStateAtom,
@@ -71,7 +72,7 @@ export default function ExploreAssetsModule() {
   }, []);
   const [categories, setCategories] = React.useState<string[]>([]);
 
-  const [tableView, setTableView] = React.useState(false);
+  const [assetsView, setAssetsView] = useRecoilState(allAssetsViewAtom);
   const [searchValue, setSearchValue] = React.useState<string | undefined>(
     undefined
   );
@@ -104,7 +105,7 @@ export default function ExploreAssetsModule() {
           <DatasetsGrid
             sortBy={sortByStr}
             searchStr={searchStr}
-            tableView={tableView}
+            view={assetsView}
             categories={categories}
             addCard
           />
@@ -114,7 +115,7 @@ export default function ExploreAssetsModule() {
           <ChartsGrid
             sortBy={sortByStr}
             searchStr={searchStr}
-            tableView={tableView}
+            view={assetsView}
             addCard
           />
         );
@@ -123,7 +124,7 @@ export default function ExploreAssetsModule() {
           <ReportsGrid
             sortBy={sortByStr}
             searchStr={searchStr}
-            tableView={tableView}
+            view={assetsView}
             showMenuButton={false}
             addCard
           />
@@ -180,9 +181,9 @@ export default function ExploreAssetsModule() {
                 searchValue={searchValue as string}
                 setSearchValue={setSearchValue}
                 setSortValue={setSortValue}
-                setTableView={setTableView}
+                setAssetsView={setAssetsView}
                 sortValue={sortValue}
-                tableView={tableView}
+                assetsView={assetsView}
                 openSearch={openSearch}
                 setOpenSearch={setOpenSearch}
               />

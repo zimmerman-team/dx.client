@@ -63,7 +63,6 @@ export function ReportSubheaderToolbar(
   const [showDeleteDialog, setShowDeleteDialog] = React.useState(false);
   const [enableButton, setEnableButton] = React.useState<boolean>(false);
   const [inputSpanVisibiltiy, setInputSpanVisibility] = React.useState(true);
-  const setHomeTab = useRecoilState(homeDisplayAtom)[1];
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
   const [duplicatedReportId, setDuplicatedReportId] = React.useState<
     string | null
@@ -193,7 +192,6 @@ export function ReportSubheaderToolbar(
         });
       })
       .catch((error) => console.log(error));
-    setHomeTab("reports");
 
     history.replace("/");
   };

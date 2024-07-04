@@ -22,6 +22,8 @@ import {
   persistedReportStateAtom,
   chartFromReportAtom,
   unSavedReportPreviewModeAtom,
+  allAssetsViewAtom,
+  allAssetsSortBy,
 } from "app/state/recoil/atoms";
 import {
   featuredAssetsCss,
@@ -55,12 +57,12 @@ function AssetsCollection() {
 
   const [categories, setCategories] = React.useState<string[]>([]);
 
-  const [tableView, setTableView] = React.useState(false);
+  const [assetsView, setAssetsView] = useRecoilState(allAssetsViewAtom);
   const [searchValue, setSearchValue] = React.useState<string | undefined>(
     undefined
   );
   const [openSearch, setOpenSearch] = React.useState(false);
-  const [sortValue, setSortValue] = React.useState("updatedDate");
+  const [sortValue, setSortValue] = useRecoilState(allAssetsSortBy);
   const [sortPopoverAnchorEl, setSortPopoverAnchorEl] =
     React.useState<HTMLButtonElement | null>(null);
 
@@ -94,7 +96,7 @@ function AssetsCollection() {
           <DatasetsGrid
             sortBy={sortByStr}
             searchStr={searchStr}
-            tableView={tableView}
+            view={assetsView}
             categories={categories}
           />
         );
@@ -103,7 +105,7 @@ function AssetsCollection() {
           <ChartsGrid
             sortBy={sortByStr}
             searchStr={searchStr}
-            tableView={tableView}
+            view={assetsView}
           />
         );
       case "reports":
@@ -111,7 +113,7 @@ function AssetsCollection() {
           <ReportsGrid
             sortBy={sortByStr}
             searchStr={searchStr}
-            tableView={tableView}
+            view={assetsView}
             showMenuButton={false}
           />
         );
@@ -120,7 +122,7 @@ function AssetsCollection() {
           <AssetsGrid
             sortBy={sortByStr}
             searchStr={searchStr}
-            tableView={tableView}
+            view={assetsView}
             showMenuButton={false}
           />
         );
@@ -344,7 +346,9 @@ function AssetsCollection() {
                     key={option.label}
                     css={sortByItemCss(sortValue === option.value)}
                     onClick={() => {
-                      setSortValue(option.value);
+                      setSortValue(
+                        option.value as "updatedDate" | "createdDate" | "name"
+                      );
                       handleCloseSortPopover();
                     }}
                   >
@@ -355,11 +359,11 @@ function AssetsCollection() {
               <IconButton
                 data-cy="home-table-view-button"
                 onClick={() => {
-                  setTableView(!tableView);
+                  setAssetsView((prev) => (prev === "grid" ? "table" : "grid"));
                 }}
-                css={iconButtonCss(tableView)}
+                css={iconButtonCss(assetsView === "table")}
               >
-                {tableView ? <TableIcon /> : <GridIcon />}
+                {assetsView === "table" ? <TableIcon /> : <GridIcon />}
               </IconButton>
             </div>
           </Grid>

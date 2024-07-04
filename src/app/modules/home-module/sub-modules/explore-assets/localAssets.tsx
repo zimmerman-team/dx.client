@@ -7,7 +7,7 @@ export default function LocalAssets(props: {
   display: "data" | "charts" | "reports";
   searchValue: string;
   sortValue: string;
-  tableView: boolean;
+  view: "table" | "grid";
   categories: string[];
 }) {
   const displayGrid = (searchStr: string, sortByStr: string) => {
@@ -17,7 +17,7 @@ export default function LocalAssets(props: {
           <DatasetsGrid
             sortBy={sortByStr}
             searchStr={searchStr}
-            tableView={props.tableView}
+            view={props.view}
             categories={props.categories}
             addCard
           />
@@ -27,7 +27,7 @@ export default function LocalAssets(props: {
           <ChartsGrid
             sortBy={sortByStr}
             searchStr={searchStr}
-            tableView={props.tableView}
+            view={props.view}
             addCard
           />
         );
@@ -36,7 +36,7 @@ export default function LocalAssets(props: {
           <ReportsGrid
             sortBy={sortByStr}
             searchStr={searchStr}
-            tableView={props.tableView}
+            view={props.view}
             showMenuButton={false}
             addCard
           />

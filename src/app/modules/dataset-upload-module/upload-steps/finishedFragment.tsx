@@ -27,17 +27,18 @@ interface Props {
 export default function FinishedFragment(props: Props) {
   const history = useHistory();
   const location = useLocation();
-
-  const [_display, setDisplay] = useRecoilState(homeDisplayAtom);
   const queryParams = new URLSearchParams(location.search);
   const reportPage = queryParams.get("page") as string;
+  const fromHome = location.search.includes("fromHome=true");
+  let redirectPath = `/dataset/${props.datasetId}/detail${
+    fromHome ? "?fromHome=true" : ""
+  }`;
+  if (reportPage) {
+    redirectPath += `?fromreport=true&page=${reportPage}`;
+  }
   const setDatasetId = useStoreActions(
     (actions) => actions.charts.dataset.setValue
   );
-
-  function handleCreateNewChart() {
-    setDatasetId(props.datasetId);
-  }
 
   const [snackbarState, setSnackbarState] = React.useState<ISnackbarState>({
     open: false,
@@ -73,25 +74,21 @@ export default function FinishedFragment(props: Props) {
     let redirectTimeout: any;
     if (location.pathname === "/dataset/new/upload") {
       redirectTimeout = setTimeout(() => {
-        history.push(
-          reportPage
-            ? `/dataset/${props.datasetId}/detail?fromreport=true&page=${reportPage}`
-            : `/dataset/${props.datasetId}/detail`
-        );
+        history.push(redirectPath);
       }, 8000);
     }
     return () => {
       clearTimeout(redirectTimeout);
     };
   }, []);
+  function handleCreateNewChart() {
+    setDatasetId(props.datasetId);
+  }
 
   return (
     <div css={dataSetsCss}>
       <Link
-        to={(() => {
-          setDisplay("data");
-          return location.search.includes("fromHome=true") ? "/" : "/dashboard";
-        })()}
+        to={fromHome ? "/" : "/dashboard"}
         css={`
           display: flex;
           align-items: center;
@@ -101,6 +98,7 @@ export default function FinishedFragment(props: Props) {
           margin-top: 16px;
           margin-bottom: 16px;
           column-gap: 8px;
+          cursor: pointer;
         `}
         data-cy="dataset-back-to-library-btn"
       >
