@@ -34,7 +34,7 @@ export default function TeamBlock() {
           past decade, our unwavering dedication to making a difference has
           consistently pushed the boundaries of data communication.{" "}
         </p>
-        <p> Discover the true potential of data with DataXplorer!</p>
+        <p> Discover the true potential of data with Dataxplorer!</p>
         <p> Let us help you unlock the power of your data!</p>
       </div>
       <Grid

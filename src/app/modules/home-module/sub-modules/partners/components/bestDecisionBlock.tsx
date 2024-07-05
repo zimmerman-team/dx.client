@@ -42,7 +42,7 @@ export default function BestDecisionBlock() {
               margin: 0;
             `}
           >
-            <b>Give DataXplorer a try, on us </b>
+            <b>Give Dataxplorer a try, on us </b>
           </p>{" "}
           <p
             css={`
@@ -52,7 +52,7 @@ export default function BestDecisionBlock() {
               font-family: "GothamNarrow-Light", sans-serif;
             `}
           >
-            DataXplorer turns data into impact in minutes 
+            Dataxplorer turns data into impact in minutes 
           </p>
         </div>
         <div

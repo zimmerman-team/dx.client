@@ -34,7 +34,7 @@ import { PageLoader } from "app/modules/common/page-loader";
 import { handleDragOverScroll } from "app/utils/handleAutoScroll";
 
 function ReportEditView(props: ReportEditViewProps) {
-  useTitle("DX DataXplorer - Edit Report");
+  useTitle("DX Dataxplorer - Edit Report");
 
   const { page } = useParams<{ page: string }>();
   const token = useStoreState((state) => state.AuthToken.value);

@@ -14,7 +14,7 @@ import { ReactComponent as AIIcon } from "app/modules/chart-module/assets/ai-ico
 import ErrorComponent from "app/modules/chart-module/components/dialog/errrorComponent";
 
 function ChartBuilderFilters(props: Readonly<ChartBuilderFiltersProps>) {
-  useTitle("DX DataXplorer - Filters");
+  useTitle("DX Dataxplorer - Filters");
 
   const history = useHistory();
   const { isAuthenticated, user } = useAuth0();

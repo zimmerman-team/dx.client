@@ -12,7 +12,7 @@ import IATILogo from "./assets/iati-logo";
 import FAQ from "./components/faq";
 
 export default function PricingModule() {
-  useTitle("DX DataXplorer - Pricing");
+  useTitle("DX Dataxplorer - Pricing");
 
   const [activeView, setActiveView] = React.useState("monthly");
 

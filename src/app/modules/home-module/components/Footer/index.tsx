@@ -66,7 +66,7 @@ export default function HomeFooter() {
                   </Link>
                 </li>
                 <li>
-                  <Link to="/why-dataXplorer"> Why DataXplorer?</Link>{" "}
+                  <Link to="/why-dataxplorer"> Why Dataxplorer?</Link>{" "}
                 </li>
                 <li>
                   <Link to="/explore">Explore</Link>{" "}
@@ -239,7 +239,7 @@ export default function HomeFooter() {
               `}
             >
               <CopyIcon />
-              {moment(new Date()).format("YYYY")} DataXplorer All Rights
+              {moment(new Date()).format("YYYY")} Dataxplorer All Rights
               Reserved
             </p>
             <p>

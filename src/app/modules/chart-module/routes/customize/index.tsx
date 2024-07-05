@@ -14,7 +14,7 @@ import ErrorComponent from "app/modules/chart-module/components/dialog/errrorCom
 import { useParams } from "react-router-dom";
 
 function ChartBuilderCustomize(props: Readonly<ChartBuilderCustomizeProps>) {
-  useTitle("DX DataXplorer - Customize");
+  useTitle("DX Dataxplorer - Customise");
 
   const { isAuthenticated, user } = useAuth0();
   const { page, view } = useParams<{ page: string; view?: string }>();

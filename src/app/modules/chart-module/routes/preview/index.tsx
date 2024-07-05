@@ -32,7 +32,7 @@ interface ChartBuilderPreviewProps {
 }
 
 export function ChartBuilderPreview(props: ChartBuilderPreviewProps) {
-  useTitle("DX DataXplorer - Preview Data");
+  useTitle("DX Dataxplorer - Preview Data");
   const history = useHistory();
   const { isAuthenticated, user } = useAuth0();
   const { page } = useParams<{ page: string }>();

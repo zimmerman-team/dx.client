@@ -167,7 +167,7 @@ export default function ExternalSearch(props: {
         <h1>Federated Search</h1>
         <Box height={22} />
         <p>
-          Connect to your favourite data sources effortlessly in DataXplorer,
+          Connect to your favourite data sources effortlessly in Dataxplorer,
           and with just a few clicks, import datasets without the hassle of
           downloading,
           <br /> enabling you to visualize and analyse diverse data like never

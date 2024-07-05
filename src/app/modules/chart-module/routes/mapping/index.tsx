@@ -22,7 +22,7 @@ import { useParams } from "react-router-dom";
 import MappingErrorComponent from "app/modules/chart-module/routes/mapping/error";
 
 function ChartBuilderMapping(props: Readonly<ChartBuilderMappingProps>) {
-  useTitle("DX DataXplorer - Mapping");
+  useTitle("DX Dataxplorer - Mapping");
   const { isAuthenticated, user } = useAuth0();
   const { page, view } = useParams<{ page: string; view?: string }>();
 

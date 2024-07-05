@@ -13,7 +13,7 @@ export default function QuoteBlock() {
       <img src={Quote} alt="quote_icon" />
       <p>
         There are multiple facets of data that we needed to be able to splice
-        and dice. DataXplorer is allowing us to do that!
+        and dice. Dataxplorer is allowing us to do that!
       </p>
       <div>
         <b>Murad Hrji</b>

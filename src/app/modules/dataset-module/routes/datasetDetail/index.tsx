@@ -13,7 +13,7 @@ import { useTitle } from "react-use";
 import { NotAuthorizedMessageModule } from "app/modules/common/not-authorized-message";
 
 export default function DatasetDetail() {
-  useTitle("DX DataXplorer - Dataset Detail");
+  useTitle("DX Dataxplorer - Dataset Detail");
 
   const { page } = useParams<{ page: string }>();
   const { user, isAuthenticated } = useAuth0();

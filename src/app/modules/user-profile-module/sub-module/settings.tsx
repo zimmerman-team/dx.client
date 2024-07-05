@@ -7,7 +7,7 @@ import React from "react";
 import { useTitle } from "react-use";
 
 export default function Settings() {
-  useTitle("DX DataXplorer - User Settings");
+  useTitle("DX Dataxplorer - User Settings");
 
   const [modalDisplay, setModalDisplay] = React.useState<boolean>(false);
   const [inputValue, setInputValue] = React.useState<string>("");

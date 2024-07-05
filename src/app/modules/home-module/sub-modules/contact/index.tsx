@@ -28,7 +28,7 @@ const DXLogo = (
 );
 
 export default function ContactModule() {
-  useTitle("DX DataXplorer - Contact");
+  useTitle("DX Dataxplorer - Contact");
 
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
   const [message, setMessage] = React.useState("");
@@ -268,7 +268,6 @@ export default function ContactModule() {
             color: #231d2c;
           `}
         >
-          {DXLogo}
           <p
             css={`
               margin-bottom: 0;
