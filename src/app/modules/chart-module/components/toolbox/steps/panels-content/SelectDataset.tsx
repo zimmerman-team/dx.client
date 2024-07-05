@@ -27,7 +27,7 @@ export interface IDatasetDetails {
 export function DatasetPanel(props: { deselectDataset: () => void }) {
   return (
     <>
-      <ToolboxSubHeader name="Select Dataset" level={1} />
+      <ToolboxSubHeader name="Please select a dataset to use" level={1} />
       <Box height={16} />
 
       <div
@@ -110,7 +110,7 @@ function ChartToolBoxSelectDataset(props: { deselectDataset: () => void }) {
         }
       `}
     >
-      <p>Please select data from Dx</p>
+      <p>Please select a dataset</p>
       <button
         title={get(datasetDetails, "name", "Select data from the list")}
         css={`

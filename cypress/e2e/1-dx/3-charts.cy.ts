@@ -37,7 +37,7 @@ describe("Testing create chart on DX", () => {
 
     cy.wait("@getDataset");
 
-    cy.contains("Please select data from Dx");
+    cy.contains("Please select a dataset");
 
     cy.get('[data-cy="toolbox-selected-dataset"]')
       .contains("Soccer Players")
@@ -201,7 +201,7 @@ describe("Testing Ai chart creation", () => {
 
     cy.wait("@getDataset");
 
-    cy.contains("Please select data from Dx");
+    cy.contains("Please select a datasetDx");
 
     cy.get('[data-cy="toolbox-selected-dataset"]')
       .contains("Grossing Movies")
