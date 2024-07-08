@@ -18,13 +18,15 @@ import { NotAuthorizedMessageModule } from "app/modules/common/not-authorized-me
 import { ReactComponent as AIIcon } from "app/modules/chart-module/assets/ai-icon.svg";
 import { useRecoilState } from "recoil";
 import { chartFromReportAtom } from "app/state/recoil/atoms";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import MappingErrorComponent from "app/modules/chart-module/routes/mapping/error";
 
 function ChartBuilderMapping(props: Readonly<ChartBuilderMappingProps>) {
   useTitle("DX DataXplorer - Mapping");
   const { isAuthenticated, user } = useAuth0();
   const { page, view } = useParams<{ page: string; view?: string }>();
+
+  const location = useLocation();
 
   const mapping = useStoreState((state) => state.charts.mapping.value);
   const chartType = useStoreState((state) => state.charts.chartType.value);

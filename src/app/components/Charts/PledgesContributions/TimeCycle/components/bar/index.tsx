@@ -1,5 +1,5 @@
 import React from "react";
-import { PledgesContributionsTimeCycleTooltip } from "../tooltip";
+import { PledgesContributionsTimeCycleTooltip } from "app/components/Charts/PledgesContributions/TimeCycle/components/tooltip";
 
 export function BarComponent(props: any) {
   const fprops = {

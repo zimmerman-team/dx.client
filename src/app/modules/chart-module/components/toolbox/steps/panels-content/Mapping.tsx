@@ -14,7 +14,7 @@ import { Box, Button, IconButton } from "@material-ui/core";
 import ToolboxSubheader from "app/modules/chart-module/components/toolbox/steps/sub-header";
 import { ReactComponent as DateIcon } from "app/modules/chart-module/assets/date.svg";
 import CloseIcon from "@material-ui/icons/Close";
-import { mappingStyles } from "../../styles";
+import { mappingStyles } from "app/modules/chart-module/components/toolbox/styles";
 import SearchIcon from "@material-ui/icons/Search";
 import { useDebounce } from "react-use";
 import {
@@ -351,6 +351,7 @@ export function ChartToolBoxMapping(props: Readonly<ChartToolBoxMappingProps>) {
         if (dimensionTypes?.includes(type)) {
           validDataTypes[dataTypeName] = type;
         }
+        return null;
       });
     return validDataTypes;
   };

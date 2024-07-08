@@ -24,7 +24,7 @@ import {
   unSavedReportPreviewModeAtom,
   isChartDraggingAtom,
 } from "app/state/recoil/atoms";
-import { IFramesArray } from "../../views/create/data";
+import { IFramesArray } from "app/modules/report-module/views/create/data";
 import { ToolbarPluginsType } from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
 import { css } from "styled-components";
 
@@ -769,6 +769,7 @@ const Box = (props: {
             )}
 
             <iframe
+              title="Video Content"
               src={videoContent?.embedUrl}
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowFullScreen

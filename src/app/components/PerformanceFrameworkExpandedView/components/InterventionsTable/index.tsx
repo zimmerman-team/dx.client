@@ -4,7 +4,7 @@ import {
   PFIndicatorResult,
   PFIndicatorResultIntervention,
   PFIndicatorResultInterventionValue,
-} from "../../data";
+} from "app/components/PerformanceFrameworkExpandedView/data";
 import get from "lodash/get";
 import { useCMSData } from "app/hooks/useCMSData";
 

@@ -129,7 +129,10 @@ import {
   ReportUpdate,
   ReportsCount,
 } from "app/state/api/action-reducers/reports";
-import { AssetGetList, AssetsCount } from "../api/action-reducers/assets";
+import {
+  AssetGetList,
+  AssetsCount,
+} from "app/state/api/action-reducers/assets";
 
 const storeContent: StoreModel = {
   // global search

@@ -18,7 +18,7 @@ import { ReactComponent as ScatterChartPlaceholderImage } from "app/modules/char
 import { ReactComponent as GraphglPlaceholderImage } from "app/modules/chart-module/assets/graphglPlaceholder.svg";
 import { ReactComponent as HeatmapPlaceholderImage } from "app/modules/chart-module/assets/heatmapPlaceholder.svg";
 import { ReactComponent as AreatimeaxisPlaceholderImage } from "app/modules/chart-module/assets/areatimeaxisPlaceholder.svg";
-import { CHART_DEFAULT_HEIGHT } from "../../data";
+import { CHART_DEFAULT_HEIGHT } from "app/modules/chart-module/data";
 
 export default function ChartPlaceholder(props: { loading?: boolean }) {
   const chartType = useStoreState((state) => state.charts.chartType.value);

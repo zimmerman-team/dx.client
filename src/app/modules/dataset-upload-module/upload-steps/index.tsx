@@ -22,10 +22,11 @@ import { Box } from "@material-ui/core";
 import { useTitle } from "react-use";
 import { DatasetListItemAPIModel } from "app/modules/dataset-module/data";
 import BreadCrumbs from "app/modules/home-module/components/Breadcrumbs";
-import UploadTabs from "../component/tabs";
+import UploadTabs from "app/modules/dataset-upload-module/component/tabs";
 import SmallFooter from "app/modules/home-module/components/Footer/smallFooter";
 import { useRecoilState } from "recoil";
 import { dataUploadTabAtom } from "app/state/recoil/atoms";
+import { useLocation } from "react-router-dom";
 
 interface Props {
   datasetId: string;
@@ -36,6 +37,7 @@ function DatasetUploadSteps(props: Props) {
   useTitle("DX DataXplorer - Upload Dataset");
 
   const { user } = useAuth0();
+  const location = useLocation();
   const token = useStoreState((state) => state.AuthToken.value);
   const steps = ["Connect", "Processing Data", "Description", "Finished"];
   const [formDetails, setFormDetails] = React.useState({

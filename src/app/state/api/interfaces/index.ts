@@ -69,7 +69,7 @@ import {
   DataPathActiveStepStateModel,
   DataPathPanelVisibilityStateModel,
   DataPathStepsStateModel,
-} from "../action-reducers/sync/dataPath";
+} from "app/state/api/action-reducers/sync/dataPath";
 import {
   ChartsActivePanelsStateModel,
   ChartsChartTypeStateModel,
@@ -77,8 +77,8 @@ import {
   ChartsEnabledFilterOptionGroupsStateModel,
   ChartsMappingStateModel,
   SelectedAIChartModel,
-} from "../action-reducers/sync/charts";
-import { ChartsAppliedFiltersStateModel } from "../action-reducers/sync/charts/filters";
+} from "app/state/api/action-reducers/sync/charts";
+import { ChartsAppliedFiltersStateModel } from "app/state/api/action-reducers/sync/charts/filters";
 
 export interface RequestValues<T> {
   values?: T;

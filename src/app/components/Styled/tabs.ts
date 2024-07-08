@@ -57,7 +57,7 @@ export const Tab = {
       transform: ${(props) =>
         props.active
           ? "translateX(0%)"
-          : `translateX(${props.position == "left" ? "-100%" : "100%"} )`};
+          : `translateX(${props.position === "left" ? "-100%" : "100%"} )`};
       transition: transform 0.3s linear;
     }
   `,

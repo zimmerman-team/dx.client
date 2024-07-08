@@ -7,7 +7,7 @@ import { socialAuth } from "app/utils/socialAuth";
 import { useScrollToTop } from "app/hooks/useScrollToTop";
 import { PageLoader } from "app/modules/common/page-loader";
 import { RouteWithAppBar } from "app/utils/RouteWithAppBar";
-import { Route, Switch, useHistory } from "react-router-dom";
+import { Route, Switch, useHistory, useLocation } from "react-router-dom";
 import { NoMatchPage } from "app/modules/common/no-match-page";
 import { useGoogleOneTapLogin } from "react-google-one-tap-login";
 import {
@@ -154,6 +154,7 @@ const OneTapLoginComponent = () => {
 
 const IntercomBootupComponent = () => {
   const { isAuthenticated, user, getAccessTokenSilently } = useAuth0();
+  const location = useLocation();
 
   const APP_ID = window.location.hostname.includes("dataxplorer.org")
     ? "tfvurn19"

@@ -1,11 +1,11 @@
-import EmpowerBlock from "../partners/components/empowerBlock";
+import EmpowerBlock from "app/modules/home-module/sub-modules/partners/components/empowerBlock";
 import { Box, Container } from "@material-ui/core";
 import ReportImage from "app/modules/home-module/sub-modules/landing/assets/report.png";
 import InteractImage from "app/modules/home-module/sub-modules/landing/assets/interact.png";
 import Investment from "app/modules/home-module/sub-modules/landing/assets/investment.png";
 import ThePowerImage from "app/modules/home-module/sub-modules/landing/assets/the-power.png";
-import HomeFooter from "../../components/Footer";
-import Subscribe from "../../components/Subscribe";
+import HomeFooter from "app/modules/home-module/components/Footer";
+import Subscribe from "app/modules/home-module/components/Subscribe";
 import { useTitle } from "react-use";
 import { Link } from "react-router-dom";
 
@@ -24,7 +24,7 @@ export default function LandingModule() {
         <Link to="/report/664f406b82350800ca942b92?fromLanding=true">
           <img
             src={ReportImage}
-            alt="report-image"
+            alt="report"
             css={`
               width: 100%;
               margin-top: -140px;
@@ -84,7 +84,7 @@ export default function LandingModule() {
             </div>
             <img
               src={InteractImage}
-              alt="interact-image"
+              alt="interact"
               css={`
                 width: 551px;
                 margin-right: -18.449px;
@@ -102,7 +102,7 @@ export default function LandingModule() {
           >
             <img
               src={Investment}
-              alt="investment-image"
+              alt="investment"
               css={`
                 width: 551px;
                 margin-left: -25px;

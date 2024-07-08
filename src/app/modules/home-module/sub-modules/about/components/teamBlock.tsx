@@ -150,6 +150,7 @@ const TeamCard = (props: {
             border-radius: 50%;
             object-fit: cover;
           `}
+          alt="team-member"
         />
       </div>
       <p

@@ -19,7 +19,7 @@ import ReportGridItem from "app/modules/home-module/components/Reports/gridItem"
 import ColoredReportIcon from "app/assets/icons/ColoredReportIcon";
 import DeleteDatasetDialog from "app/components/Dialogs/deleteDatasetDialog";
 import DeleteReportDialog from "app/components/Dialogs/deleteReportDialog";
-import { HomepageTable } from "../Table";
+import { HomepageTable } from "app/modules/home-module/components/Table";
 
 interface Props {
   sortBy: string;

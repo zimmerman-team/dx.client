@@ -49,6 +49,7 @@ export function SearchResults(props: SearchResultsProps) {
                 css={resultcss}
                 key={result.value}
                 onClick={() => window.open(result.link, "_blank")}
+                href={result.link}
               >
                 {result.type && result.type.length > 0 && getIcon(result.type)}
                 <div>{result.label}</div>

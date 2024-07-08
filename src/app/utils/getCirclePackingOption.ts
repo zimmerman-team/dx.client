@@ -182,7 +182,7 @@ export const drillDown = (
   // removing margins here because they don't apply to the series
   const chartWidth = width - marginLeft - marginRight;
   const chartHeight = height * 0.95 - marginTop - marginBottom; // removing 5% because chart is cutting off by default
-  if (nodeClick == "zoomToNode") {
+  if (nodeClick === "zoomToNode") {
     if (targetId !== null) {
       let y = root.descendants().find((node) => {
         return node.data.path === targetId;

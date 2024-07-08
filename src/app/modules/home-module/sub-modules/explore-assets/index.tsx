@@ -18,7 +18,7 @@ import { datasetCategories } from "app/modules/dataset-upload-module/upload-step
 import DatasetCategoryList from "app/modules/home-module/components/Datasets/datasetCategoryList";
 import Filter from "app/modules/home-module/components/Filter";
 import { useAuth0 } from "@auth0/auth0-react";
-import EmpowerBlock from "../partners/components/empowerBlock";
+import EmpowerBlock from "app/modules/home-module/sub-modules/partners/components/empowerBlock";
 
 const StyledTab = withStyles(() => ({
   root: {

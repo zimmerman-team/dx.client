@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import Processing from "../upload-steps/processing";
+import Processing from "app/modules/dataset-upload-module/upload-steps/processing";
 
 const defaultProcessingError =
   "Data could not be processed, please try again or contact your administrator";

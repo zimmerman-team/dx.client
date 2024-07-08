@@ -12,7 +12,7 @@ import DeleteReportDialog from "app/components/Dialogs/deleteReportDialog";
 import ReformedGridItem from "app/modules/home-module/components/Reports/gridItem";
 import ReportAddnewCard from "./reportAddNewCard";
 import { useInfinityScroll } from "app/hooks/useInfinityScroll";
-import CircleLoader from "../Loader";
+import CircleLoader from "app/modules/home-module/components/Loader";
 import { useAuth0 } from "@auth0/auth0-react";
 
 interface Props {

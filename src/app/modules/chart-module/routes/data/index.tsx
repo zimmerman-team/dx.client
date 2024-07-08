@@ -22,7 +22,7 @@ import { ReactComponent as CloseIcon } from "app/modules/home-module/assets/clos
 import { ReactComponent as SearchIcon } from "app/modules/home-module/assets/search-fill.svg";
 import DatasetCategoryList from "app/modules/home-module/components/Datasets/datasetCategoryList";
 import { ChartRenderedItem } from "app/modules/chart-module/data";
-import { ChartAPIModel, emptyChartAPI } from "../../data";
+import { ChartAPIModel, emptyChartAPI } from "app/modules/chart-module/data";
 import { NotAuthorizedMessageModule } from "app/modules/common/not-authorized-message";
 
 function ChartModuleDataView(

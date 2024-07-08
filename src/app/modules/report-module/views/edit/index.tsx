@@ -25,8 +25,8 @@ import {
   persistedReportStateAtom,
   reportContentContainerWidth,
 } from "app/state/recoil/atoms";
-import { IFramesArray } from "../create/data";
-import RowFrame from "../../sub-module/rowStructure";
+import { IFramesArray } from "app/modules/report-module/views/create/data";
+import RowFrame from "app/modules/report-module/sub-module/rowStructure";
 import TourGuide from "app/components/Dialogs/TourGuide";
 import useCookie from "@devhammed/use-cookie";
 import { get } from "lodash";

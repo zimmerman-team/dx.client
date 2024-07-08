@@ -5,16 +5,16 @@ import React, { useCallback } from "react";
 
 import { DropZone } from "app/modules/dataset-upload-module/component/dropzone/";
 import { Box } from "@material-ui/core";
-import LocalIcon from "../assets/upload-options-icons/local";
-import GoogleIcon from "../assets/upload-options-icons/google";
-import MicrosoftIcon from "../assets/upload-options-icons/microsoft";
-import ApiIcon from "../assets/upload-options-icons/api";
-import MSSQLIcon from "../assets/upload-options-icons/mssql.png";
-import MYSQLIcon from "../assets/upload-options-icons/mysql.png";
-import PostgresIcon from "../assets/upload-options-icons/postgres";
-import MongoDbIcon from "../assets/upload-options-icons/mongodb";
-import HubspotIcon from "../assets/upload-options-icons/hubspot";
-import UploadOption from "../component/uploadOption";
+import LocalIcon from "app/modules/dataset-upload-module/assets/upload-options-icons/local";
+import GoogleIcon from "app/modules/dataset-upload-module/assets/upload-options-icons/google";
+import MicrosoftIcon from "app/modules/dataset-upload-module/assets/upload-options-icons/microsoft";
+import ApiIcon from "app/modules/dataset-upload-module/assets/upload-options-icons/api";
+import MSSQLIcon from "app/modules/dataset-upload-module/assets/upload-options-icons/mssql.png";
+import MYSQLIcon from "app/modules/dataset-upload-module/assets/upload-options-icons/mysql.png";
+import PostgresIcon from "app/modules/dataset-upload-module/assets/upload-options-icons/postgres";
+import MongoDbIcon from "app/modules/dataset-upload-module/assets/upload-options-icons/mongodb";
+import HubspotIcon from "app/modules/dataset-upload-module/assets/upload-options-icons/hubspot";
+import UploadOption from "app/modules/dataset-upload-module/component/uploadOption";
 import { useCookie } from "react-use";
 import useGoogleDrivePicker from "app/hooks/useGoogleDrivePicker";
 import { useOneDrivePicker } from "app/hooks/useOneDrivePicker";
@@ -110,14 +110,14 @@ export default function AddDatasetFragment(props: Props) {
       name: "MSSQL",
       type: "DataBase Connection",
       formats: ["Coming Soon"],
-      icon: <img width={30} height={33.462} src={MSSQLIcon} />,
+      icon: <img width={30} height={33.462} src={MSSQLIcon} alt="mssql-logo" />,
       onClick: () => {},
     },
     {
       name: "MSSQL",
       type: "DataBase Connection",
       formats: ["Coming Soon"],
-      icon: <img width={30} height={30} src={MYSQLIcon} />,
+      icon: <img width={30} height={30} src={MYSQLIcon} alt="mysql-logo" />,
       onClick: () => {},
     },
     {

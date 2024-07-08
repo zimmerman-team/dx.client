@@ -118,6 +118,7 @@ export const GrantsTabCard = () => {
       <a
         target="_blank"
         href="https://data.theglobalfund.org/location/KEN/grants"
+        rel="noreferrer"
       >
         LiveView
       </a>{" "}
@@ -150,6 +151,7 @@ export const BudgetsTabCard = () => {
       <a
         target="_blank"
         href="https://data.theglobalfund.org/location/KEN/budgets/flow"
+        rel="noreferrer"
       >
         LiveView
       </a>{" "}
@@ -182,6 +184,7 @@ export const PerformanceTabCard = () => {
       <a
         target="_blank"
         href="https://data.theglobalfund.org/grant/KEN-H-TNT/3/targets-results"
+        rel="noreferrer"
       >
         LiveView
       </a>{" "}

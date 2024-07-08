@@ -5,7 +5,7 @@ import get from "lodash/get";
 import { css } from "styled-components/macro";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { formatFinancialValue } from "app/utils/formatFinancialValue";
-import { DisbursementsTreemap } from "../..";
+import { DisbursementsTreemap } from "app/components/Charts/Investments/Disbursements";
 import { isTouchDevice } from "app/utils/isTouchDevice";
 
 const containercss = (

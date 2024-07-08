@@ -23,7 +23,7 @@ interface Props {
   owner: string;
 }
 
-export default function gridItem(props: Props) {
+export default function GridItem(props: Props) {
   const { user, isAuthenticated } = useAuth0();
   const [menuOptionsDisplay, setMenuOptionsDisplay] = React.useState(false);
 

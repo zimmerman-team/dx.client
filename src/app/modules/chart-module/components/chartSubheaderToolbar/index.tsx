@@ -18,7 +18,7 @@ import CloudDoneIcon from "@material-ui/icons/CloudDone";
 import CopyToClipboard from "react-copy-to-clipboard";
 import FileCopyIcon from "@material-ui/icons/FileCopy";
 import { PageLoader } from "app/modules/common/page-loader";
-import { Link, useHistory, useParams } from "react-router-dom";
+import { Link, useHistory, useLocation, useParams } from "react-router-dom";
 import Snackbar from "@material-ui/core/Snackbar";
 import SnackbarContent from "@material-ui/core/SnackbarContent";
 import { styles } from "app/modules/chart-module/components/chartSubheaderToolbar/styles";
@@ -30,7 +30,7 @@ import { ExportChartButton } from "app/modules/chart-module/components/chartSubh
 import { ISnackbarState } from "app/modules/dataset-upload-module/upload-steps/previewFragment";
 import { chartFromReportAtom, homeDisplayAtom } from "app/state/recoil/atoms";
 import { InfoSnackbar } from "app/modules/chart-module/components/chartSubheaderToolbar/infoSnackbar";
-import { getRequiredFieldsAndErrors } from "../../routes/mapping/utils";
+import { getRequiredFieldsAndErrors } from "app/modules/chart-module/routes/mapping/utils";
 import AutoSaveSwitch from "app/modules/report-module/components/reportSubHeaderToolbar/autoSaveSwitch";
 import useAutosave from "app/hooks/useAutoSave";
 import { useStyles } from "app/modules/report-module/components/reportSubHeaderToolbar";
@@ -39,6 +39,7 @@ import AutoResizeInput from "app/modules/report-module/components/reportSubHeade
 export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
   const classes = useStyles();
   const history = useHistory();
+  const location = useLocation();
   const { user, isAuthenticated } = useAuth0();
   const token = useStoreState((state) => state.AuthToken.value);
   const titleRef = React.useRef<HTMLDivElement>(null);

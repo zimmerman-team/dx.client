@@ -1,7 +1,7 @@
 import React from "react";
 import moment from "moment";
 import Table from "@material-ui/core/Table";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import TableRow from "@material-ui/core/TableRow";
 import TableHead from "@material-ui/core/TableHead";
 import TableBody from "@material-ui/core/TableBody";
@@ -23,6 +23,8 @@ export function HomepageTable(props: {
   all?: boolean;
 }) {
   const history = useHistory();
+
+  const location = useLocation();
 
   const getDestinationPath = (data: IData) => {
     let destinationPath = `/${data.type}/${data.id}`;

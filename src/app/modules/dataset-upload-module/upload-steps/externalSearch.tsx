@@ -8,7 +8,7 @@ import useDebounce from "react-use/lib/useDebounce";
 import axios from "axios";
 import CircleLoader from "app/modules/home-module/components/Loader";
 import { useInfinityScroll } from "app/hooks/useInfinityScroll";
-import SourceCategoryList from "../component/externalSourcesList";
+import SourceCategoryList from "app/modules/dataset-upload-module/component/externalSourcesList";
 
 export interface IExternalDataset {
   name: string;

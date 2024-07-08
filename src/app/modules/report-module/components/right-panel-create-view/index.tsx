@@ -692,6 +692,7 @@ function VideoFrame(props: {
         <>
           {" "}
           <iframe
+            title="video player"
             src={props.embedUrl + "?autoplay=1"}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen

@@ -117,7 +117,7 @@ export default function HeaderBlock(props: Props) {
       ...props.headerDetails,
       [name]: value,
     });
-    if (name == "title") {
+    if (name === "title") {
       setIsReportTitleModified(true);
     }
   };

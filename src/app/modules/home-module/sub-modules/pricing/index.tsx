@@ -4,7 +4,7 @@ import BgEllipses from "app/modules/home-module/assets/full-bg-ellipses.svg";
 import { Box, Container } from "@material-ui/core";
 import PlanCard from "./components/plan-card";
 
-import HomeFooter from "../../components/Footer";
+import HomeFooter from "app/modules/home-module/components/Footer";
 import Features from "./components/features";
 import MFALogo from "./assets/mfa-logo";
 import TGFLogo from "./assets/tgf-logo";

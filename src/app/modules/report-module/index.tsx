@@ -103,6 +103,7 @@ export default function ReportModule() {
       if (item === "chart") {
         localPickedCharts.push(data.content[index]);
       }
+      return null;
     });
   });
 

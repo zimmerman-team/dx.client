@@ -1,6 +1,6 @@
 import React from "react";
 import get from "lodash/get";
-import { InvestmentsTimeCycleTooltip } from "../tooltip";
+import { InvestmentsTimeCycleTooltip } from "app/components/Charts/Investments/TimeCycle/components/tooltip";
 
 export function BarComponent(props: any) {
   const fprops = {

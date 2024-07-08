@@ -2,7 +2,7 @@
 import React from "react";
 import filter from "lodash/filter";
 import isEmpty from "lodash/isEmpty";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import axios, { AxiosError, AxiosResponse } from "axios";
 /* project */
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
@@ -79,6 +79,7 @@ export function useChartsRawData(props: {
   isLoadedChartMappingValid?: boolean | null;
   setIsLoadedChartMappingValid?: (value: boolean | null) => void;
 }) {
+  const location = useLocation();
   const abortControllerRef = React.useRef<AbortController>(
     new AbortController()
   );

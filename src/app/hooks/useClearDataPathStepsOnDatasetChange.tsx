@@ -1,5 +1,5 @@
 import React from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { useStoreActions } from "app/state/store/hooks";
 
 /*
@@ -18,6 +18,8 @@ import { useStoreActions } from "app/state/store/hooks";
 
 export function useClearDataPathStepsOnDatasetChange() {
   const history = useHistory();
+
+  const location = useLocation();
 
   const [prevLocation, setPrevLocation] = React.useState({
     type: "",

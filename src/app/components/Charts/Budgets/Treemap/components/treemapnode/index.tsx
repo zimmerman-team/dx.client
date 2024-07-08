@@ -4,7 +4,7 @@ import React from "react";
 import { css } from "styled-components/macro";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { formatFinancialValue } from "app/utils/formatFinancialValue";
-import { BudgetsTreemap } from "../..";
+import { BudgetsTreemap } from "app/components/Charts/Budgets/Treemap";
 import { isTouchDevice } from "app/utils/isTouchDevice";
 
 const containercss = (hover: boolean, selected: boolean) => css`

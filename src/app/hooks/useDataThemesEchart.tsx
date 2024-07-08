@@ -1234,9 +1234,9 @@ export function useDataThemesEchart() {
     data.nodes?.forEach(function (node: any) {
       node.symbolSize = (node.value / maxValue) * 50; // making the symbol size relative to the max value but max at 50
       let show = false;
-      if (showLabels == "largeNodes") {
+      if (showLabels === "largeNodes") {
         show = node.symbolSize > 30;
-      } else if (showLabels == "true") {
+      } else if (showLabels === "true") {
         show = true;
       }
       node.label = {

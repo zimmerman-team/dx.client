@@ -557,21 +557,6 @@ export function exportCSV(
           { label: "Budget (USD)", key: "budget" },
         ],
       };
-    case "/explore/allocations":
-      data.keys.forEach((key: string, index: number) => {
-        csvData.push({
-          component: key,
-          value: data.values[index],
-        });
-      });
-      return {
-        data: csvData,
-        filename: "allocations.csv",
-        headers: [
-          { label: "Component", key: "component" },
-          { label: "Allocation (USD)", key: "value" },
-        ],
-      };
     case "/explore/allocations/map":
       if (options.investmentsMapView === "countries") {
         data.countries.features.forEach((item: any) => {
@@ -792,6 +777,7 @@ export function exportCSV(
             type: pin.amounts[0].label,
             value: pin.amounts[0].value,
           });
+          return null;
         });
       }
       return {
@@ -823,6 +809,7 @@ export function exportCSV(
             type: pin.amounts[0].label,
             value: pin.amounts[0].value,
           });
+          return null;
         });
       }
       return {

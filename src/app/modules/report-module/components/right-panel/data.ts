@@ -1,5 +1,5 @@
 import { EditorState } from "draft-js";
-import { IFramesArray } from "../../views/create/data";
+import { IFramesArray } from "app/modules/report-module/views/create/data";
 
 export interface IHeaderDetails {
   title: string;

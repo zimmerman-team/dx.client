@@ -3,7 +3,7 @@ import { ReactComponent as ConnectSVG } from "app/modules/home-module/assets/con
 import { ReactComponent as ConvertSVG } from "app/modules/home-module/assets/convert.svg";
 import { ReactComponent as CommunicateSVG } from "app/modules/home-module/assets/communicate.svg";
 import React from "react";
-import { simpleStepsCss } from "../style";
+import { simpleStepsCss } from "app/modules/home-module/sub-modules/why-dx/style";
 
 export default function SimpleStepsBlock() {
   return (

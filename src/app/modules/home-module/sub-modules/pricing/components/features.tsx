@@ -1,10 +1,10 @@
 import React from "react";
-import BackupIcon from "../assets/backup";
-import AddChartIcon from "../assets/add-chart";
-import GoodIcon from "../assets/good-icon";
-import ReportIcon from "../assets/report";
-import UserShieldIcon from "../assets/user-shied";
-import SupportIcon from "../assets/support";
+import BackupIcon from "app/modules/home-module/sub-modules/pricing/assets/backup";
+import AddChartIcon from "app/modules/home-module/sub-modules/pricing/assets/add-chart";
+import GoodIcon from "app/modules/home-module/sub-modules/pricing/assets/good-icon";
+import ReportIcon from "app/modules/home-module/sub-modules/pricing/assets/report";
+import UserShieldIcon from "app/modules/home-module/sub-modules/pricing/assets/user-shied";
+import SupportIcon from "app/modules/home-module/sub-modules/pricing/assets/support";
 
 const Features = () => {
   const features = [

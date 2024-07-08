@@ -1,6 +1,11 @@
 import { PrimaryButton } from "app/components/Styled/button";
 import React from "react";
-import { avicss, flexContainercss, inputcss, profilecss } from "../style";
+import {
+  avicss,
+  flexContainercss,
+  inputcss,
+  profilecss,
+} from "app/modules/user-profile-module/style";
 import { useTitle } from "react-use";
 import { useAuth0 } from "@auth0/auth0-react";
 import axios from "axios";

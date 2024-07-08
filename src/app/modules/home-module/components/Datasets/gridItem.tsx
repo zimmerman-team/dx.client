@@ -10,7 +10,7 @@ import { ReactComponent as DataCardImg } from "app/modules/home-module/assets/da
 import { ReactComponent as InfoIcon } from "app/modules/home-module/assets/info-icon.svg";
 
 import { Tooltip } from "@material-ui/core";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useStoreActions } from "app/state/store/hooks";
 import { isChartAIAgentActive } from "app/state/recoil/atoms";
@@ -30,6 +30,7 @@ interface Props {
 }
 
 export default function GridItem(props: Readonly<Props>) {
+  const location = useLocation();
   const [menuOptionsDisplay, setMenuOptionsDisplay] = React.useState(false);
   const [displayCreateChartButton, setDisplayCreateChartButton] =
     React.useState(false);

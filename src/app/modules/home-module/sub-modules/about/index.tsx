@@ -1,11 +1,11 @@
 import React from "react";
-import EmpowerBlock from "../partners/components/empowerBlock";
+import EmpowerBlock from "app/modules/home-module/sub-modules/partners/components/empowerBlock";
 import { Container, Grid } from "@material-ui/core";
 import { ReactComponent as MissionImg } from "app/modules/home-module/assets/about-mission.svg";
 import { ReactComponent as DXImg } from "app/modules/home-module/assets/about-dx.svg";
 import Ellipses from "app/modules/home-module/assets/about-ellipses.svg";
 
-import HomeFooter from "../../components/Footer";
+import HomeFooter from "app/modules/home-module/components/Footer";
 import { subParagraphcss } from "./style";
 import TeamBlock from "./components/teamBlock";
 import { useTitle } from "react-use";

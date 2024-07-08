@@ -1,7 +1,7 @@
 import React from "react";
 
 /* third-party */
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useRecoilState, useResetRecoilState } from "recoil";
 import { Box, Grid, Container, IconButton, Popover } from "@material-ui/core";
@@ -38,6 +38,8 @@ import BreadCrumbs from "app/modules/home-module/components/Breadcrumbs";
 
 function AssetsCollection() {
   const { isAuthenticated, user } = useAuth0();
+
+  const location = useLocation();
 
   // clear persisted states
   const clearPersistedReportState = useResetRecoilState(

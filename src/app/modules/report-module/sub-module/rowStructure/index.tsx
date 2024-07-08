@@ -17,11 +17,11 @@ import {
   containercss,
 } from "app/modules/report-module/sub-module/rowStructure/style";
 import { cloneDeep } from "lodash";
-import { IFramesArray } from "../../views/create/data";
+import { IFramesArray } from "app/modules/report-module/views/create/data";
 import { useOnClickOutside } from "usehooks-ts";
 import { ToolbarPluginsType } from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
 import { useDrag } from "react-dnd";
-import { ReportElementsType } from "../../components/right-panel-create-view";
+import { ReportElementsType } from "app/modules/report-module/components/right-panel-create-view";
 
 const _rowStructureDetailItems = [
   [{ rowType: "oneByOne", rowId: "oneByOne-1", width: "100%", factor: 1 }],

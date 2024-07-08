@@ -1,5 +1,5 @@
 import React from "react";
-import SettingsIcon from "../assets/upload-options-icons/settings";
+import SettingsIcon from "app/modules/dataset-upload-module/assets/upload-options-icons/settings";
 
 const UploadOption = (props: {
   name: string;

@@ -29,8 +29,6 @@ function getFileName(
       return "allocations";
     case "/explore/allocations/map":
       return `allocations-${options.investmentsMapView}`;
-    case "/explore/allocations":
-      return "allocations";
     case "/explore/eligibility":
       if (options.isDetail) {
         return "location-eligibility";

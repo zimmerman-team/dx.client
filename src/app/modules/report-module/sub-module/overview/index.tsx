@@ -2,9 +2,9 @@ import { Box, Container, Grid } from "@material-ui/core";
 
 import React from "react";
 
-import BigNumber from "../components/bigNumber";
-import HeaderBlock from "../components/headerBlock";
-import Subheader from "../components/subheader";
+import BigNumber from "app/modules/report-module/sub-module/components/bigNumber";
+import HeaderBlock from "app/modules/report-module/sub-module/components/headerBlock";
+import Subheader from "app/modules/report-module/sub-module/components/subheader";
 
 export default function ReportsOverview() {
   return (

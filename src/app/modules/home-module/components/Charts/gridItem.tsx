@@ -24,7 +24,7 @@ interface Props {
   isAIAssisted: boolean;
 }
 
-export default function gridItem(props: Props) {
+export default function GridItem(props: Props) {
   const { user, isAuthenticated } = useAuth0();
   const [menuOptionsDisplay, setMenuOptionsDisplay] = React.useState(false);
   const showMenuOptions = (e: React.MouseEvent<HTMLButtonElement>) => {

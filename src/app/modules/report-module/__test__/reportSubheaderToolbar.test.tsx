@@ -29,7 +29,7 @@ import {
   ReportUpdate,
 } from "app/state/api/action-reducers/reports";
 import axios, { AxiosResponse } from "axios";
-import { ReportSubheaderToolbar } from "../components/reportSubHeaderToolbar";
+import { ReportSubheaderToolbar } from "app/modules/report-module/components/reportSubHeaderToolbar";
 
 interface MockProps {
   name: string;
