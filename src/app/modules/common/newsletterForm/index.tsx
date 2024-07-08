@@ -32,14 +32,17 @@ export default function NewsletterForm(
     register,
     formState: { errors },
     handleSubmit,
-  } = useForm<{ email: string }>({ resolver: yupResolver(emailSchema) });
-  const [email, setEmail] = React.useState("");
+    setValue,
+  } = useForm<{ email: string }>({
+    resolver: yupResolver(emailSchema),
+    defaultValues: { email: "" },
+  });
 
   React.useEffect(() => {
     props.setFormError(errors);
   }, [errors]);
 
-  const handleSubscribeAction = () => {
+  const handleSubscribeAction = (formValues: { email: string }) => {
     props.setIsSubscribed(false);
     props.setIsSubscriptionFailed(false);
     axios
@@ -51,7 +54,7 @@ export default function NewsletterForm(
           fields: [
             {
               name: "email",
-              value: email,
+              value: formValues.email,
             },
           ],
         },
@@ -63,7 +66,7 @@ export default function NewsletterForm(
       )
       .then((response: AxiosResponse) => {
         if (response.status === 200) {
-          setEmail("");
+          setValue("email", "");
           props.setIsSubscribed(true);
         } else {
           props.setIsSubscriptionFailed(true);
@@ -76,7 +79,7 @@ export default function NewsletterForm(
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     props.setFormError({});
-    setEmail(event.target.value);
+    setValue("email", event.target.value);
   };
 
   return (
@@ -98,7 +101,6 @@ export default function NewsletterForm(
         placeholder={placeholder}
         {...register("email", { required: true })}
         onChange={handleEmailChange}
-        value={email}
         ref={inputRef}
         onFocus={inputRefFocus}
         onBlur={inputRefBlur}
