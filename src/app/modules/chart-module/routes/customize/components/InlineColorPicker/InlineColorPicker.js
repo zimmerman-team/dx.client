@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import styles from "./InlineColorPicker.module.css";
 import { SketchPicker } from "react-color";
+import styles from "./InlineColorPicker.module.css";
 
 export default function InlineColorPicker({
   color: maybeColor,
@@ -10,17 +10,41 @@ export default function InlineColorPicker({
   const [displayColorPicker, setDisplayColorPicker] = useState(false);
   const color = maybeColor ?? "#000000"; // Same as <input type='color' />
 
+  const pickerRef = React.useRef(null);
+
+  const rect = pickerRef?.current?.getBoundingClientRect();
+
+  const heightDifference = rect
+    ? document.documentElement.scrollHeight - (window.scrollY + rect.bottom)
+    : 0;
+
+  const heightCheck = 350;
+
   return (
-    <>
+    <div
+      css={`
+        position: relative;
+      `}
+    >
       <div
         className={styles.swatch}
         onClick={() => setDisplayColorPicker(true)}
+        id="inline-color-picker-swatch"
+        ref={pickerRef}
       >
         <div className={styles.color} style={{ background: color }} />
         {color.toUpperCase()}
       </div>
       {displayColorPicker && (
-        <div className={styles.popover} id="inline-color-picker-popover">
+        <div
+          css={`
+            position: absolute;
+            z-index: 2000;
+            right: 0;
+            ${heightDifference < heightCheck ? "bottom: 100%;" : "top: 100%;"};
+          `}
+          id="inline-color-picker-popover"
+        >
           <div
             className={styles.cover}
             onClick={() => setDisplayColorPicker(false)}
@@ -63,6 +87,6 @@ export default function InlineColorPicker({
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }
