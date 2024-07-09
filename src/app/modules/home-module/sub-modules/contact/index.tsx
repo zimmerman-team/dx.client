@@ -119,7 +119,7 @@ export default function ContactModule() {
             height: 874px;
 
             margin: auto;
-            margin-top: 50px;
+            margin-top: 18px;
 
             display: flex;
             justify-content: center;
@@ -131,6 +131,7 @@ export default function ContactModule() {
             css={`
               position: absolute;
               z-index: -1;
+              top: 0px;
             `}
           />
           <form
@@ -158,6 +159,7 @@ export default function ContactModule() {
               }
               input {
                 font-family: "Inter", sans-serif;
+                color: #231d2c;
               }
             `}
           >
@@ -217,89 +219,38 @@ export default function ContactModule() {
               onChange={handleContactFormChange}
             />
             <Box height={60} />
-            <button
-              type="submit"
+            <div
               css={`
-                border: none;
-                outline: none;
-                background: #6061e5;
-                border-radius: 50.7829px;
-                height: 64px;
+                display: flex;
+                justify-content: center;
                 width: 100%;
-                color: #ffffff;
-                font-weight: 700;
-                font-size: 24px;
-                font-family: "Inter", sans-serif;
-                :hover {
-                  cursor: pointer;
-                  opacity: 0.9;
-                }
               `}
             >
-              SUBMIT
-            </button>
+              <button
+                type="submit"
+                css={`
+                  border: none;
+                  outline: none;
+                  background: #6061e5;
+                  border-radius: 30px;
+                  height: 48px;
+                  width: 133px;
+                  color: #ffffff;
+                  font-weight: 700;
+                  font-size: 20px;
+                  font-family: "Inter", sans-serif;
+                  :hover {
+                    cursor: pointer;
+                    opacity: 0.9;
+                  }
+                `}
+              >
+                SUBMIT
+              </button>
+            </div>
           </form>
         </div>
-        <div
-          css={`
-            height: 97px;
-          `}
-        />
-        <Subscribe />
-        <div
-          css={`
-            width: 40%;
-            margin: auto;
-            margin-top: 97px;
-            text-align: center;
-            p {
-              font-size: 20px;
-              line-height: 29px;
-              font-family: "GothamNarrow-Medium", sans-serif;
-              a {
-                color: #231d2c;
-                text-decoration: none;
-                font-family: "GothamNarrow-Medium", sans-serif;
-                font-size: 20px;
-              }
-            }
-
-            text-align: center;
-            color: #231d2c;
-          `}
-        >
-          <p
-            css={`
-              margin-bottom: 0;
-            `}
-          >
-            Keizersgracht 555 <br /> 1017 DR Amsterdam
-          </p>
-          <p
-            css={`
-              margin-top: 0;
-            `}
-          >
-            The Netherlands
-          </p>
-          <p
-            css={`
-              margin-bottom: 0px;
-            `}
-          >
-            E-mail:{" "}
-            <a href="mailto:contact@dataxplorer.org">contact@dataxplorer.org</a>
-          </p>
-          <p
-            css={`
-              margin-top: 8px;
-            `}
-          >
-            Tel: <a href="tel:0031854015241">+3185 401 5241</a>
-          </p>
-        </div>
       </Container>
-      <div css="width: 100%;height: 102px" />
       <HomeFooter />
     </>
   );

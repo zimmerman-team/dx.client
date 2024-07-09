@@ -26,7 +26,7 @@ export default function EmpowerBlock(props: {
         "Dataxplorer simplifies and empowers visual data reporting for all.";
       break;
     case "contact":
-      mainText = "Discover the True Potential of Data";
+      mainText = "Dataxplorer Equips You with\nInsightful Data";
       subText =
         "Dataxplorer simplifies and empowers visual data reporting for all.";
       break;
