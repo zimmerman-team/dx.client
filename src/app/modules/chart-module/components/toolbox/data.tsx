@@ -26,7 +26,6 @@ export interface ChartToolBoxProps {
   exportView: boolean;
   rawViz: any;
   dataTypes: any;
-  addVizToLocalStates: () => void;
   filterOptionGroups: FilterGroupModel[];
   setVisualOptions: (value: any) => void;
   loadDataset: (endpoint: string) => Promise<boolean>;

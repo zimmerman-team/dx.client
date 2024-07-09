@@ -1386,7 +1386,7 @@ function EditHeaderPanelView(props: Props) {
             `}
           >
             <EditHeaderIcon />
-            Edit header
+            Edit the report header
           </div>
           <span>
             <IconButton

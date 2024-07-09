@@ -13,6 +13,7 @@ export interface ReportEditViewProps {
   framesArray: IFramesArray[];
   localPickedCharts: string[];
   setReportName: React.Dispatch<React.SetStateAction<string>>;
+  autoSave: boolean;
   setAutoSave: React.Dispatch<
     React.SetStateAction<{
       isAutoSaveEnabled: boolean;
@@ -22,7 +23,7 @@ export interface ReportEditViewProps {
   reportName: string;
   headerDetails: IHeaderDetails;
   setHeaderDetails: React.Dispatch<React.SetStateAction<IHeaderDetails>>;
-
+  setHasChangesBeenMade: React.Dispatch<React.SetStateAction<boolean>>;
   handleRowFrameItemResize: (
     rowId: string,
     itemIndex: number,

@@ -23,7 +23,7 @@ import {
 import AssetsCollection from "./components/AssetCollection";
 
 export default function HomeModule() {
-  useTitle("DX DataXplorer");
+  useTitle("DX Dataxplorer");
 
   const { isAuthenticated, user } = useAuth0();
 
@@ -66,11 +66,11 @@ export default function HomeModule() {
                   max-width: 450px;
                 `}
               >
-                <h1>Turn data into impact with DataXplorer</h1>
+                <h1>Turn data into impact with Dataxplorer</h1>
                 <Box height={26} />
                 <p>
                   <b>
-                    DataXplorer simplifies and empowers visual data reporting
+                    Dataxplorer simplifies and empowers visual data reporting
                     for all.
                   </b>
                 </p>

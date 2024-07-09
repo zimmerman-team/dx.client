@@ -90,7 +90,6 @@ export function ReportChartWrapper(props: Props) {
     }
     return () => {
       clearChart();
-      console.log("unmounting --  clearing chart", loadedChart);
     };
   }, [props.id, token]);
 

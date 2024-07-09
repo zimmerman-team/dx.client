@@ -17,7 +17,7 @@ import ErrorComponent from "app/modules/chart-module/components/dialog/errrorCom
 import { DatasetListItemAPIModel } from "app/modules/dataset-module/data";
 
 export function ChartBuilderPreviewTheme(props: ChartBuilderPreviewThemeProps) {
-  useTitle("DX DataXplorer - Preview Chart");
+  useTitle("DX Dataxplorer - Preview Chart");
   const token = useStoreState((state) => state.AuthToken.value);
 
   const domRef = React.useRef<HTMLDivElement>(null);

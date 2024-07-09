@@ -41,7 +41,11 @@ export function ChartToolBoxChartType() {
 
   return (
     <>
-      <ToolboxSubHeader name="Chart type" level={2} />
+      <ToolboxSubHeader
+        name="Chart type"
+        level={2}
+        tooltip="Please select a suitable chart type for your data or let the AI Agent assist you in making a choice."
+      />
       <Box height={16} />
 
       <div

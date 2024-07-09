@@ -24,7 +24,7 @@ import TourGuide from "app/components/Dialogs/TourGuide";
 import { useTitle } from "react-use";
 
 function ReportCreateView(props: Readonly<ReportCreateViewProps>) {
-  useTitle("DX DataXplorer - Create Report");
+  useTitle("DX Dataxplorer - Create Report");
 
   const { ref, width } = useResizeObserver<HTMLDivElement>();
 

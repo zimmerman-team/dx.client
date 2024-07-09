@@ -51,8 +51,7 @@ export const emptyReport: ReportModel = {
   public: false,
   description: convertToRaw(EditorState.createEmpty().getCurrentContent()),
   heading: convertToRaw(EditorState.createEmpty().getCurrentContent()),
-
-  showHeader: false,
+  showHeader: true,
   rows: [],
   createdDate: new Date(),
   backgroundColor: "#252c34",

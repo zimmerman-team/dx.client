@@ -110,6 +110,7 @@
     "react-swipeable-views": "^0.14.0",
     "react-swipeable-views-utils": "^0.14.0",
     "react-toastify": "^7.0.4",
+    "react-tooltip": "^5.27.1",
     "react-use": "^17.2.3",
     "recoil": "^0.6.1",
     "recoil-persist": "^4.0.0",

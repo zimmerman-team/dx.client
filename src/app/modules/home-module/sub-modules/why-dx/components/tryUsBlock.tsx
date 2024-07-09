@@ -48,7 +48,7 @@ export default function TryUsBlock() {
               margin: 0;
             `}
           >
-            Try DataXplorer for free
+            Try Dataxplorer for free
           </p>{" "}
           <p
             css={`
@@ -57,7 +57,7 @@ export default function TryUsBlock() {
               font-family: "GothamNarrow-Bold", sans-serif;
             `}
           >
-            DataXplorer turns data into impact 
+            Dataxplorer turns data into impact 
           </p>
         </div>
         {isAuthenticated && (

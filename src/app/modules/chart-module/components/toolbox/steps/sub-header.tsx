@@ -1,11 +1,13 @@
 import React from "react";
+import { Tooltip } from "react-tooltip";
 import SettingsBackupRestoreIcon from "@material-ui/icons/SettingsBackupRestore";
-import { IconButton } from "@material-ui/core";
+import IconButton from "@material-ui/core/IconButton";
 import { ReactComponent as InfoIcon } from "app/modules/chart-module/assets/info-icon.svg";
 
 export default function ToolboxSubHeader(
   props: Readonly<{
     name: string;
+    tooltip: string;
     level: number;
     showResetButton?: boolean;
     resetFilters?: () => void;
@@ -46,7 +48,24 @@ export default function ToolboxSubHeader(
       <div>
         <p>{props.name}</p>{" "}
         <p>
-          <InfoIcon />
+          <a className="my-anchor-element">
+            <InfoIcon />
+          </a>
+          <Tooltip
+            anchorSelect=".my-anchor-element"
+            place="top"
+            style={{
+              background: "#231D2C",
+              borderRadius: "8px",
+              color: "#fff",
+              fontSize: "12px",
+              fontFamily: "GothamNarrow-Medium",
+              width: "320px",
+              lineHeight: "16px",
+            }}
+          >
+            {props.tooltip}
+          </Tooltip>
         </p>
       </div>
       {props.showResetButton && (

@@ -51,7 +51,7 @@ const StyledTabs = withStyles({
 })(Tabs);
 
 export default function ExploreAssetsModule() {
-  useTitle("DX DataXplorer - Explore");
+  useTitle("DX Dataxplorer - Explore");
   // clear persisted state
   const clearPersistedReportState = useResetRecoilState(
     persistedReportStateAtom

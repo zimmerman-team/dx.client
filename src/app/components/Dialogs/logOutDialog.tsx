@@ -53,15 +53,9 @@ export default function LogOutDialog(props: Props) {
         onClose={() => props.setModalDisplay(false)}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
+        className={classes.modal}
       >
-        <div
-          style={{
-            top: `21vh`,
-            left: `61vh`,
-            height: "264px",
-          }}
-          className={classes.paper}
-        >
+        <div className={classes.paper}>
           <div
             css={`
               width: 80%;

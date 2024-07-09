@@ -21,24 +21,24 @@ export default function EmpowerBlock(props: {
 
   switch (props.view) {
     case "why-dx":
-      mainText = `Turn Data into Impact in Minutes with\nDataXplorer`;
+      mainText = `Turn Data into Impact in Minutes with\nDataxplorer`;
       subText =
-        "DataXplorer simplifies and empowers visual data reporting for all.";
+        "Dataxplorer simplifies and empowers visual data reporting for all.";
       break;
     case "contact":
-      mainText = "Discover the True Potential of Data";
+      mainText = "Dataxplorer Equips You with\nInsightful Data";
       subText =
-        "DataXplorer simplifies and empowers visual data reporting for all.";
+        "Dataxplorer simplifies and empowers visual data reporting for all.";
       break;
     case "about":
-      mainText = `DataXplorer Equips You with\nInsightful Data`;
+      mainText = `Dataxplorer Equips You with\nInsightful Data`;
       subText =
-        "DataXplorer simplifies and empowers visual data reporting for all.";
+        "Dataxplorer simplifies and empowers visual data reporting for all.";
       break;
     case "partners":
-      mainText = `Global Health and International Development\nOrganizations are using DataXplorer`;
+      mainText = `Global Health and International Development\nOrganizations are using Dataxplorer`;
       subText =
-        "DataXplorer simplifies and empowers visual data reporting for all.";
+        "Dataxplorer simplifies and empowers visual data reporting for all.";
       break;
     case "explore":
       mainText = "Explore Empowered Data";
@@ -46,7 +46,7 @@ export default function EmpowerBlock(props: {
         "Dataxplorer simplifies and empowers visual data reporting for all.";
       break;
     case "landing":
-      mainText = "Start Making Impact Today\nwith DataXplorer";
+      mainText = "Start Making Impact Today\nwith Dataxplorer";
       subText = "Create top-notch reports for your business.";
       break;
 

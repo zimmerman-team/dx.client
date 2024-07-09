@@ -16,7 +16,6 @@ import {
   blockcss,
   containercss,
 } from "app/modules/report-module/sub-module/rowStructure/style";
-import { cloneDeep } from "lodash";
 import { IFramesArray } from "../../views/create/data";
 import { useOnClickOutside } from "usehooks-ts";
 import { ToolbarPluginsType } from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
@@ -210,8 +209,7 @@ export default function RowFrame(props: RowFrameProps) {
 
   const deleteFrame = (id: string) => {
     props.setFramesArray((prev) => {
-      const tempPrev = cloneDeep(prev);
-
+      const tempPrev = prev.map((item) => ({ ...item }));
       const frameId = tempPrev.findIndex((frame) => frame.id === id);
 
       tempPrev.splice(frameId, 1);

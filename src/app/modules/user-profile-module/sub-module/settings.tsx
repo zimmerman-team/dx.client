@@ -2,12 +2,13 @@ import { useAuth0 } from "@auth0/auth0-react";
 import DeleteAccountDialog from "app/components/Dialogs/deleteAccountDialog";
 import { PrimaryButton } from "app/components/Styled/button";
 import { PageLoader } from "app/modules/common/page-loader";
+import { useStoreActions } from "app/state/store/hooks";
 import axios from "axios";
 import React from "react";
 import { useTitle } from "react-use";
 
 export default function Settings() {
-  useTitle("DX DataXplorer - User Settings");
+  useTitle("DX Dataxplorer - User Settings");
 
   const [modalDisplay, setModalDisplay] = React.useState<boolean>(false);
   const [inputValue, setInputValue] = React.useState<string>("");
@@ -15,6 +16,25 @@ export default function Settings() {
 
   const [loading, setLoading] = React.useState<boolean>(false);
   const { getAccessTokenSilently, logout } = useAuth0();
+
+  const setToken = useStoreActions((actions) => actions.AuthToken.setValue);
+
+  const clearDatasets = useStoreActions(
+    (actions) => actions.dataThemes.DatasetGetList.clear
+  );
+  const clearCharts = useStoreActions(
+    (actions) => actions.charts.ChartGetList.clear
+  );
+  const clearReports = useStoreActions(
+    (actions) => actions.reports.ReportGetList.clear
+  );
+
+  function clearAssets() {
+    setToken("");
+    clearDatasets();
+    clearCharts();
+    clearReports();
+  }
 
   const deleteUserAccount = async () => {
     return getAccessTokenSilently().then(async (newToken) => {
@@ -35,9 +55,13 @@ export default function Settings() {
     setLoading(true);
     deleteUserAccount()
       .then(() => {
+        if (window.Intercom) {
+          window.Intercom("shutdown");
+        }
         setLoading(false);
         setModalDisplay(false);
         setEnableButton(false);
+        clearAssets();
         logout({
           logoutParams: {
             returnTo: window.location.origin,

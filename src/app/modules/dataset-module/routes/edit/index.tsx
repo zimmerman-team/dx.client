@@ -19,7 +19,7 @@ export interface IDatasetDetail {
   id: string;
 }
 export default function EditMetaData() {
-  useTitle("DX DataXplorer - Edit Meta Data");
+  useTitle("DX Dataxplorer - Edit Meta Data");
 
   const { page } = useParams<{ page: string }>();
   const token = useStoreState((state) => state.AuthToken.value);
@@ -77,6 +77,7 @@ export default function EditMetaData() {
           token,
           nonAuthCall: !token,
           storeInCrudData: true,
+          filterString: `filter={"order":"updatedDate desc","limit":15,"offset":0}`,
         });
         history.goBack();
       })

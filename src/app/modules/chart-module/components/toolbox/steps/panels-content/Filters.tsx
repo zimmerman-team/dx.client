@@ -31,7 +31,8 @@ export function ChartToolBoxFilters(props: ChartToolBoxFiltersProps) {
   return (
     <>
       <ToolboxSubHeader
-        name="Filters"
+        name="Filter the data"
+        tooltip="Refine your chart representation by applying filters from your data to focus on specific items."
         level={4}
         showResetButton
         resetFilters={handleResetFilters}
