@@ -57,6 +57,7 @@ const ChartOptionColor2 = ({
           className={styles.swatch}
           onClick={() => setDisplayColorPicker(true)}
           id="inline-color-picker-swatch"
+          onKeyDown={() => {}}
         >
           <div className={styles.color} style={{ background: color }} />
           {color.toUpperCase()}
