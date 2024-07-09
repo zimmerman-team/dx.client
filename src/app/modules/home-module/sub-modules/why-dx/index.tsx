@@ -9,7 +9,7 @@ import KeyFeaturesBlock from "app/modules/home-module/sub-modules/why-dx/compone
 import { useTitle } from "react-use";
 
 export default function WhyDX() {
-  useTitle("DX DataXplorer - Why Dataxplorer?");
+  useTitle("DX Dataxplorer - Why Dataxplorer?");
 
   return (
     <>
@@ -25,16 +25,21 @@ export default function WhyDX() {
           <KeyFeaturesBlock />
           <div
             css={`
-              height: 90px;
+              height: 50px;
             `}
           />
-          <BenefitsBlock />
+          {/* <BenefitsBlock /> */}
           <div
             css={`
               height: 129px;
             `}
           />
           <TryUsBlock />
+          <div
+            css={`
+              height: 50px;
+            `}
+          />
         </Container>
       </div>
       <div css="width: 100%;height: 19px" />

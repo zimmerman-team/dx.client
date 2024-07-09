@@ -66,7 +66,7 @@ export default function HomeFooter() {
                   </Link>
                 </li>
                 <li>
-                  <Link to="/why-dataXplorer"> Why DataXplorer?</Link>{" "}
+                  <Link to="/why-dataxplorer"> Why Dataxplorer?</Link>{" "}
                 </li>
                 <li>
                   <Link to="/explore">Explore</Link>{" "}
@@ -119,9 +119,9 @@ export default function HomeFooter() {
                   </a>{" "}
                 </li>
                 <li>
-                  <p>Keizersgracht 555</p>
+                  <p>Keizersgracht 520H</p>
 
-                  <p>1017 DR Amsterdam</p>
+                  <p>1017 EK Amsterdam</p>
 
                   <p>The Netherlands</p>
                 </li>
@@ -210,6 +210,25 @@ export default function HomeFooter() {
                   ? "Oops! Something went wrong with the request! Please fill your email again."
                   : "  You will receive occasional emails from DX. You always have choice to unsubscribe within every Email."}
               </p>
+              <a
+                rel="noreferrer noopener"
+                href={`https://${process.env.REACT_APP_AUTH0_DOMAIN}/authorize?response_type=token&client_id=${process.env.REACT_APP_AUTH0_CLIENT}&audience=${process.env.REACT_APP_AUTH0_AUDIENCE}&scope=openid%20profile%20email&redirect_uri=${window.location.origin}/callback`}
+              >
+                <button
+                  css={`
+                    height: 40px;
+                    width: 120px;
+                    border-radius: 10px;
+                    background: "#000";
+                    cursor: pointer;
+                    color: #fff;
+                    border: none;
+                    outline: none;
+                  `}
+                >
+                  Sign In
+                </button>
+              </a>
             </Grid>
           </Grid>
           <div
@@ -239,7 +258,7 @@ export default function HomeFooter() {
               `}
             >
               <CopyIcon />
-              {moment(new Date()).format("YYYY")} DataXplorer All Rights
+              {moment(new Date()).format("YYYY")} Dataxplorer All Rights
               Reserved
             </p>
             <p>

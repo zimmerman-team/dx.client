@@ -113,7 +113,11 @@ export function ChartToolBoxCustomize(props: ChartToolBoxCustomizeProps) {
 
   return (
     <>
-      <ToolboxSubHeader name="Customize" level={5} />
+      <ToolboxSubHeader
+        name="Customise your chart"
+        level={5}
+        tooltip="Customise your chart by adjusting visual elements, like colours, labels, titles and legends."
+      />
 
       <div
         className="chart-options"
@@ -125,6 +129,8 @@ export function ChartToolBoxCustomize(props: ChartToolBoxCustomizeProps) {
           padding-right: 15px;
           flex-direction: column;
           max-height: calc(100vh - 273px);
+          height: calc(100vh - 273px);
+          padding-bottom: 20px;
           &::-webkit-scrollbar {
             display: none;
           }

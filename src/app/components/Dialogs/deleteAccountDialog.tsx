@@ -26,15 +26,9 @@ export default function DeleteAccountDialog(props: Props) {
         onClose={() => props.setModalDisplay(false)}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
+        className={classes.modal}
       >
-        <div
-          style={{
-            top: `21vh`,
-            left: `61vh`,
-            height: "350px",
-          }}
-          className={classes.paper}
-        >
+        <div className={classes.paper}>
           <div
             css={`
               width: 80%;
@@ -78,6 +72,7 @@ export default function DeleteAccountDialog(props: Props) {
               `}
             >
               <input
+                autoFocus
                 type="text"
                 placeholder='Type "DELETE" to confirm'
                 onChange={props.handleInputChange}

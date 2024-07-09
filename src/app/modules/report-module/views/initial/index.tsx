@@ -29,7 +29,7 @@ import { useMount, useTitle, useUpdateEffect } from "react-use";
 import { isEmpty } from "lodash";
 
 function ReportInitialView(props: Readonly<ReportInitialViewProps>) {
-  useTitle("DX DataXplorer - New Report");
+  useTitle("DX Dataxplorer - New Report");
 
   const history = useHistory();
 

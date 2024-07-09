@@ -334,7 +334,7 @@ describe("Edit, duplicate and delete report", () => {
 
     cy.wait("@getDataset");
 
-    cy.contains("Please select data from Dx");
+    cy.contains("Please select a dataset");
 
     cy.get('[data-cy="toolbox-selected-dataset"]')
       .contains("Grossing Movies")

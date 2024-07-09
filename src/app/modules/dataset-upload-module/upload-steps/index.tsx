@@ -33,7 +33,7 @@ interface Props {
 }
 
 function DatasetUploadSteps(props: Props) {
-  useTitle("DX DataXplorer - Upload Dataset");
+  useTitle("DX Dataxplorer - Upload Dataset");
 
   const { user } = useAuth0();
   const token = useStoreState((state) => state.AuthToken.value);

@@ -24,7 +24,7 @@ import TourGuide from "app/components/Dialogs/TourGuide";
 import { useTitle } from "react-use";
 
 function ReportCreateView(props: Readonly<ReportCreateViewProps>) {
-  useTitle("DX DataXplorer - Create Report");
+  useTitle("DX Dataxplorer - Create Report");
 
   const { ref, width } = useResizeObserver<HTMLDivElement>();
 
@@ -113,7 +113,7 @@ function ReportCreateView(props: Readonly<ReportCreateViewProps>) {
       />
       <HeaderBlock
         previewMode={false}
-        headerDetails={{ ...props.headerDetails, createdDate: new Date() }}
+        headerDetails={{ ...props.headerDetails }}
         setHeaderDetails={props.setHeaderDetails}
         setReportName={props.setReportName}
         reportName={props.reportName}

@@ -20,8 +20,8 @@ export function NotAuthorizedMessageModule(props: {
         css={`
           background-color: #f4f4f4;
           height: 50px;
-          display: flex;
           align-items: center;
+          display: ${props.name ? "flex" : "none"};
         `}
       >
         <Container maxWidth="lg">

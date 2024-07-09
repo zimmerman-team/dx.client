@@ -77,7 +77,7 @@ export default function TourStart(props: {
               font-family: "Inter", sans-serif;
             `}
           >
-            Welcome to the Dx report builder!
+            Welcome to the Dataxplorer report builder!
           </p>
           <p
             css={`

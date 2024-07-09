@@ -82,7 +82,7 @@ export function HomepageTable(props: {
             <TableCell width="171px">Name</TableCell>
             {props.all && <TableCell width="55px">Type</TableCell>}
             <TableCell width="650px">Description</TableCell>
-            <TableCell width="200px">Creation date</TableCell>
+            <TableCell width="200px">Date</TableCell>
           </TableRow>
         </TableHead>
         <TableBody
