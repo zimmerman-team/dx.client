@@ -111,7 +111,7 @@ const ChartOptionColor2 = ({
           </div>
           <div
             css={`
-              height: 1px;
+              height: 40px;
             `}
           />
         </>
