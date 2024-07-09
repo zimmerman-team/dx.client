@@ -229,9 +229,11 @@ export default function ReportsGrid(props: Props) {
           data={loadedReports.map((data) => ({
             id: data.id,
             name: data.name,
-            heading: data.heading
+            description: data.heading
               ? EditorState.createWithContent(convertFromRaw(data.heading))
-              : EditorState.createEmpty(),
+                  .getCurrentContent()
+                  .getPlainText()
+              : "",
             createdDate: data.createdDate,
             type: "report",
           }))}

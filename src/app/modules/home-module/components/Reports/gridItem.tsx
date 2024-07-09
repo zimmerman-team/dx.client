@@ -86,7 +86,9 @@ export default function gridItem(props: Props) {
             `}
           >
             <p
-              title={props.heading.getCurrentContent().getPlainText()}
+              title={
+                props.heading.getCurrentContent().getPlainText() || props.descr
+              }
               css={`
                 font-size: 14px;
                 line-height: 22px;
@@ -99,7 +101,10 @@ export default function gridItem(props: Props) {
                 margin-bottom: 0;
               `}
             >
-              <b>{props.heading.getCurrentContent().getPlainText()}</b>
+              <b>
+                {props.heading.getCurrentContent().getPlainText() ||
+                  props.descr}
+              </b>
             </p>
             <p
               title={props.descr}

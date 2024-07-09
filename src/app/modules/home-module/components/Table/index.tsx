@@ -14,7 +14,6 @@ interface IData {
   id: string;
   name: string;
   description?: string;
-  heading?: EditorState;
   createdDate: Date;
   type: string;
 }
