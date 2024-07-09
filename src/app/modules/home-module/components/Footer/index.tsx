@@ -119,9 +119,9 @@ export default function HomeFooter() {
                   </a>{" "}
                 </li>
                 <li>
-                  <p>Keizersgracht 555</p>
+                  <p>Keizersgracht 520H</p>
 
-                  <p>1017 DR Amsterdam</p>
+                  <p>1017 EK Amsterdam</p>
 
                   <p>The Netherlands</p>
                 </li>
