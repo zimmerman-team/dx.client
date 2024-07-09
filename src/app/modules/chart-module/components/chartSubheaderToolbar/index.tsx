@@ -35,6 +35,7 @@ import AutoSaveSwitch from "app/modules/report-module/components/reportSubHeader
 import useAutosave from "app/hooks/useAutoSave";
 import { useStyles } from "app/modules/report-module/components/reportSubHeaderToolbar";
 import AutoResizeInput from "app/modules/report-module/components/reportSubHeaderToolbar/autoResizeInput";
+import { isEqual } from "lodash";
 
 export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
   const classes = useStyles();
@@ -49,6 +50,8 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
   const [enableButton, setEnableButton] = React.useState<boolean>(false);
   const setHomeTab = useRecoilState(homeDisplayAtom)[1];
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
+  const [hasChangesBeenMade, setHasChangesBeenMade] = React.useState(false);
+
   const [inputSpanVisibiltiy, setInputSpanVisibility] = React.useState(true);
   const [showSnackbar, setShowSnackbar] = React.useState<string | null>(null);
   const [duplicatedChartId, setDuplicatedChartId] = React.useState<
@@ -95,12 +98,6 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
     return isAuthenticated && loadedChart && loadedChart.owner === user?.sub;
   }, [user, isAuthenticated, loadedChart]);
 
-  const saveStatusDivWidth =
-    (canChartEditDelete && props.savedChanges) ||
-    (canChartEditDelete && editChartLoading)
-      ? 140
-      : 0;
-
   const [snackbarState, setSnackbarState] = React.useState<ISnackbarState>({
     open: false,
     vertical: "bottom",
@@ -145,6 +142,31 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
       history.push(`/chart/${page}/customize`);
     }
   };
+  const compareStateChanges = () => {
+    if (loadedChart.id !== page) return false;
+    if (
+      !isEqual(props.name, loadedChart.name) ||
+      !isEqual(selectedChartType, loadedChart.vizType) ||
+      !isEqual(mapping, loadedChart.mapping) ||
+      !isEqual(dataset as string, loadedChart.datasetId as string) ||
+      !isEqual(props.visualOptions, loadedChart.vizOptions) ||
+      !isEqual(appliedFilters, loadedChart.appliedFilters)
+    ) {
+      return true;
+    }
+    return false;
+  };
+
+  React.useEffect(() => {
+    setHasChangesBeenMade(compareStateChanges);
+  }, [
+    props.name,
+    selectedChartType,
+    mapping,
+    dataset,
+    props.visualOptions,
+    appliedFilters,
+  ]);
 
   useAutosave(
     () => {
@@ -152,6 +174,7 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
     },
     2 * 1000,
     props.autoSave && canChartEditDelete,
+    hasChangesBeenMade,
     [
       props.name,
       props.isAiSwitchActive,
