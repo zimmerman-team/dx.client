@@ -8,7 +8,7 @@ import { NumberSize, Resizable } from "re-resizable";
 import { Direction } from "re-resizable/lib/resizer";
 import IconButton from "@material-ui/core/IconButton";
 import { EditorState } from "draft-js";
-import { useStoreActions, useStoreState } from "app/state/store/hooks";
+import { useStoreActions } from "app/state/store/hooks";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { useHistory, useLocation, useParams } from "react-router-dom";
 import { RichEditor } from "app/modules/common/RichEditor";

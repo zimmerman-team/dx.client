@@ -4,7 +4,6 @@ import IconButton from "@material-ui/core/IconButton";
 import { IFramesArray } from "app/modules/report-module/views/create/data";
 import { ReactComponent as PlusIcon } from "app/modules/report-module/asset/addButton.svg";
 import { IRowFrameStructure } from "app/state/recoil/atoms";
-import { cloneDeep } from "lodash";
 
 interface Props {
   setFramesArray: React.Dispatch<React.SetStateAction<IFramesArray[]>>;
@@ -27,8 +26,7 @@ export default function AddRowFrameButton(props: Props) {
     props.endTour();
     const id = v4();
     props.setFramesArray((prev) => {
-      const tempPrev = cloneDeep(prev);
-
+      const tempPrev = prev.map((item) => ({ ...item }));
       return [
         ...tempPrev,
         {

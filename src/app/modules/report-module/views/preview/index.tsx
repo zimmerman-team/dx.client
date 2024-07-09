@@ -178,7 +178,6 @@ export function ReportPreviewView(props: {
           titleColor: reportPreviewData.titleColor,
           descriptionColor: reportPreviewData.descriptionColor,
           dateColor: reportPreviewData.dateColor,
-          createdDate: reportPreviewData.createdDate,
         }}
         setPlugins={() => {}}
         setHeaderDetails={() => {}}

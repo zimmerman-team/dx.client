@@ -16,19 +16,13 @@ import ErrorComponent from "app/modules/chart-module/components/dialog/errrorCom
 function ChartBuilderFilters(props: Readonly<ChartBuilderFiltersProps>) {
   useTitle("DX DataXplorer - Filters");
 
-  const history = useHistory();
   const { isAuthenticated, user } = useAuth0();
   const { page } = useParams<{ page: string }>();
-
-  const dataset = useStoreState((state) => state.charts.dataset.value);
-
   const mapping = useStoreState((state) => state.charts.mapping.value);
-
   const loadedChart = useStoreState(
     (state) =>
       (state.charts.ChartGet.crudData ?? emptyChartAPI) as ChartAPIModel
   );
-
   const canChartEditDelete = React.useMemo(() => {
     return isAuthenticated && loadedChart && loadedChart.owner === user?.sub;
   }, [user, isAuthenticated, loadedChart]);
