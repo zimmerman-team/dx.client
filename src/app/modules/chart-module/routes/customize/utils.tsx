@@ -7,7 +7,7 @@ import omit from "lodash/omit";
 import { getTypeName } from "@rawgraphs/rawgraphs-core";
 /* project */
 import CustomizeOptionText from "app/modules/chart-module/routes/customize/components/ChartOptionText";
-import CustomizeOptionColor from "app/modules/chart-module/routes/customize/components/ChartOptionColor";
+import CustomizeOptionColor from "app/modules/chart-module/routes/customize/components/ChartOptionColor2";
 import ChartOptionBoolean from "app/modules/chart-module/routes/customize/components/ChartOptionBoolean";
 import CustomizeOptionNumber from "app/modules/chart-module/routes/customize/components/ChartOptionNumber";
 import ChartOptionColorScaleWrapper from "app/modules/chart-module/routes/customize/components/ChartOptionColorScaleWrapper";

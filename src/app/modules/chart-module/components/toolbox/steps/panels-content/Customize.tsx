@@ -129,6 +129,8 @@ export function ChartToolBoxCustomize(props: ChartToolBoxCustomizeProps) {
           padding-right: 15px;
           flex-direction: column;
           max-height: calc(100vh - 273px);
+          height: calc(100vh - 273px);
+          padding-bottom: 20px;
           &::-webkit-scrollbar {
             display: none;
           }
