@@ -52,13 +52,8 @@ export const useLoadDatasetDetails = (id: string) => {
 
   React.useEffect(() => {
     if (id) {
-      console.log(id, "id");
       loadDatasetDetails();
     }
-    return () => {
-      console.log("unmounting component");
-      //   abortControllerRef.current.abort();
-    };
   }, [token, id]);
 
   return {

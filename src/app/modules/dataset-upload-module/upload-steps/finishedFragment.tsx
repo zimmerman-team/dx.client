@@ -69,22 +69,6 @@ export default function FinishedFragment(props: Props) {
     };
   }, [props.dataTotalCount]);
 
-  React.useEffect(() => {
-    let redirectTimeout: any;
-    if (location.pathname === "/dataset/new/upload") {
-      redirectTimeout = setTimeout(() => {
-        history.push(
-          reportPage
-            ? `/dataset/${props.datasetId}/detail?fromreport=true&page=${reportPage}`
-            : `/dataset/${props.datasetId}/detail`
-        );
-      }, 8000);
-    }
-    return () => {
-      clearTimeout(redirectTimeout);
-    };
-  }, []);
-
   return (
     <div css={dataSetsCss}>
       <Link
@@ -211,7 +195,7 @@ export default function FinishedFragment(props: Props) {
                 font-size: 14px;
                 font-weight: 700;
                 padding: 12px 27px;
-                background: #231d2c;
+                background: #64afaa;
                 border-radius: 30px;
                 text-transform: uppercase;
                 font-family: "GothamNarrow-Bold";

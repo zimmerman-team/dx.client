@@ -2,10 +2,10 @@ import React from "react";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import { PageLoader } from "app/modules/common/page-loader";
 import { useDataThemesEchart } from "app/hooks/useDataThemesEchart";
-import { useUpdateEffectOnce } from "app/hooks/useUpdateEffectOnce";
 import GeomapLegend from "app/modules/chart-module/components/geomap-legend";
 import { ChartAPIModel } from "app/modules/chart-module/data";
 import { DatasetListItemAPIModel } from "app/modules/dataset-module/data";
+import { get } from "lodash";
 
 export type ChartType =
   | "echartsBarchart"
@@ -86,16 +86,19 @@ export function CommonChart(props: Readonly<Props>) {
       });
     }
   }, [token, datasetId]);
-  useUpdateEffectOnce(() => {
-    if (props.containerRef.current) {
+
+  React.useEffect(() => {
+    const visualOptionsWidth = get(props.visualOptions, "width", 0);
+    const containerWidth = props.containerRef.current?.clientWidth;
+    if (props.containerRef.current && visualOptionsWidth !== containerWidth) {
       const tmpVisualOptions = {
         ...props.visualOptions,
-        width: props.containerRef.current.clientWidth,
+        width: containerWidth,
         // height: props.containerRef.current.clientHeight, // removed the setting of visual option height to let user set it in the chart builder
       };
       props.setVisualOptions(tmpVisualOptions);
     }
-  }, [props.containerRef]);
+  }, []);
 
   // server side rendering
   React.useEffect(() => {

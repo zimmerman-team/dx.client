@@ -98,6 +98,7 @@ export default function DeleteReportDialog(props: Props) {
               `}
             >
               <input
+                autoFocus
                 type="text"
                 placeholder='Type "DELETE" to confirm'
                 onChange={props.handleInputChange}

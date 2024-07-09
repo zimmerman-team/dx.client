@@ -77,6 +77,7 @@ export default function EditMetaData() {
           token,
           nonAuthCall: !token,
           storeInCrudData: true,
+          filterString: `filter={"order":"updatedDate desc","limit":15,"offset":0}`,
         });
         history.goBack();
       })

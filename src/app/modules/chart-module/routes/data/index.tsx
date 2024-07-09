@@ -3,9 +3,8 @@ import React from "react";
 import useTitle from "react-use/lib/useTitle";
 import Popover from "@material-ui/core/Popover";
 import IconButton from "@material-ui/core/IconButton";
-import { useStoreActions, useStoreState } from "app/state/store/hooks";
+import { useStoreActions } from "app/state/store/hooks";
 import { useParams, useHistory } from "react-router-dom";
-import { useAuth0 } from "@auth0/auth0-react";
 /* project */
 import {
   iconButtonCss,
@@ -22,8 +21,6 @@ import { ReactComponent as CloseIcon } from "app/modules/home-module/assets/clos
 import { ReactComponent as SearchIcon } from "app/modules/home-module/assets/search-fill.svg";
 import DatasetCategoryList from "app/modules/home-module/components/Datasets/datasetCategoryList";
 import { ChartRenderedItem } from "app/modules/chart-module/data";
-import { ChartAPIModel, emptyChartAPI } from "../../data";
-import { NotAuthorizedMessageModule } from "app/modules/common/not-authorized-message";
 
 function ChartModuleDataView(
   props: Readonly<{
@@ -37,9 +34,7 @@ function ChartModuleDataView(
   useTitle("DX Dataxplorer - Select Data");
 
   const history = useHistory();
-  const { isAuthenticated, user } = useAuth0();
   const { page } = useParams<{ page: string }>();
-
   const [categories, setCategories] = React.useState<string[]>([]);
   const [tableView, setTableView] = React.useState(false);
   const [searchValue, setSearchValue] = React.useState<undefined | string>(
@@ -61,10 +56,6 @@ function ChartModuleDataView(
   const setDataset = useStoreActions(
     (actions) => actions.charts.dataset.setValue
   );
-  const loadedChart = useStoreState(
-    (state) =>
-      (state.charts.ChartGet.crudData ?? emptyChartAPI) as ChartAPIModel
-  );
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
@@ -83,19 +74,6 @@ function ChartModuleDataView(
       history.push(`/chart/${page}/preview-data`);
     });
   };
-
-  const canChartEditDelete = React.useMemo(() => {
-    return isAuthenticated && loadedChart && loadedChart.owner === user?.sub;
-  }, [user, isAuthenticated, loadedChart]);
-
-  if (!canChartEditDelete && page !== "new") {
-    return (
-      <>
-        <div css="width: 100%; height: 100px;" />
-        <NotAuthorizedMessageModule asset="chart" action="edit" />
-      </>
-    );
-  }
 
   return (
     <div css={commonStyles.innercontainer}>

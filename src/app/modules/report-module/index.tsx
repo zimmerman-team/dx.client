@@ -68,6 +68,7 @@ export default function ReportModule() {
   const reportNameRef = React.useRef<string>("");
   const framesArrayRef = React.useRef<IFramesArray[]>([]);
   const headerDetailsRef = React.useRef<IHeaderDetails>({} as IHeaderDetails);
+  const [hasChangesBeenMade, setHasChangesBeenMade] = React.useState(false);
 
   const [autoSave, setAutoSave] = React.useState<{
     isAutoSaveEnabled: boolean;
@@ -82,9 +83,6 @@ export default function ReportModule() {
   const [_rightPanelView, setRightPanelView] = useRecoilState(
     reportRightPanelViewAtom
   );
-
-  const [_chartFromReport, setChartFromReport] =
-    useRecoilState(chartFromReportAtom);
 
   const [_reportPreviewMode, setReportPreviewMode] = useRecoilState(
     unSavedReportPreviewModeAtom
@@ -116,6 +114,48 @@ export default function ReportModule() {
   const [reportType, setReportType] = React.useState<
     "basic" | "advanced" | "ai" | null
   >(null);
+
+  const clearChart = useStoreActions(
+    (actions) => actions.charts.ChartGet.clear
+  );
+
+  const resetDataset = useStoreActions(
+    (actions) => actions.charts.dataset.reset
+  );
+  const resetChartType = useStoreActions(
+    (actions) => actions.charts.chartType.reset
+  );
+  const resetMapping = useStoreActions(
+    (actions) => actions.charts.mapping.reset
+  );
+
+  const reportGetData = useStoreState(
+    (state) => (state.reports.ReportGet.crudData ?? emptyReport) as ReportModel
+  );
+
+  const reportCreate = useStoreActions(
+    (actions) => actions.reports.ReportCreate.post
+  );
+
+  const reportCreateClear = useStoreActions(
+    (actions) => actions.reports.ReportCreate.clear
+  );
+
+  const reportEdit = useStoreActions(
+    (actions) => actions.reports.ReportUpdate.patch
+  );
+
+  const reportEditClear = useStoreActions(
+    (actions) => actions.reports.ReportUpdate.clear
+  );
+
+  const reportError401 = useStoreState(
+    (state) =>
+      get(state.reports.ReportGet.errorData, "data.error.statusCode", 0) ===
+        401 ||
+      get(state.reports.ReportGet.crudData, "error", "") === "Unauthorized"
+  );
+
   const [headerDetails, setHeaderDetails] = React.useState({
     title: "",
     description: EditorState.createEmpty(),
@@ -143,7 +183,6 @@ export default function ReportModule() {
     rowId: string,
     itemIndex: number,
     width: number,
-
     height: number
   ) => {
     setFramesArray((prev) => {
@@ -376,51 +415,6 @@ export default function ReportModule() {
     setFramesArray(localFramesArray);
   }, [persistedReportState]);
 
-  const clearChart = useStoreActions(
-    (actions) => actions.charts.ChartGet.clear
-  );
-
-  const resetDataset = useStoreActions(
-    (actions) => actions.charts.dataset.reset
-  );
-  const resetChartType = useStoreActions(
-    (actions) => actions.charts.chartType.reset
-  );
-  const resetMapping = useStoreActions(
-    (actions) => actions.charts.mapping.reset
-  );
-
-  const reportGetData = useStoreState(
-    (state) => (state.reports.ReportGet.crudData ?? emptyReport) as ReportModel
-  );
-
-  const reportCreate = useStoreActions(
-    (actions) => actions.reports.ReportCreate.post
-  );
-
-  const reportCreateClear = useStoreActions(
-    (actions) => actions.reports.ReportCreate.clear
-  );
-
-  const reportEdit = useStoreActions(
-    (actions) => actions.reports.ReportUpdate.patch
-  );
-
-  const reportEditClear = useStoreActions(
-    (actions) => actions.reports.ReportUpdate.clear
-  );
-
-  const reportError401 = useStoreState(
-    (state) =>
-      get(state.reports.ReportGet.errorData, "data.error.statusCode", 0) ===
-        401 ||
-      get(state.reports.ReportGet.crudData, "error", "") === "Unauthorized"
-  );
-
-  const errorReportName = useStoreState((state) =>
-    get(state.reports.ReportGet.crudData, "name", "")
-  );
-
   React.useEffect(() => {
     return () => {
       resetDataset();
@@ -539,6 +533,7 @@ export default function ReportModule() {
     },
     2 * 1000,
     autoSave.isAutoSaveEnabled,
+    hasChangesBeenMade,
     [framesArray, reportName, headerDetails]
   );
 
@@ -654,7 +649,9 @@ export default function ReportModule() {
         <Route path="/report/:page/edit">
           <ReportEditView
             open={rightPanelOpen}
+            autoSave={autoSave.isAutoSaveEnabled}
             reportType={reportType}
+            setHasChangesBeenMade={setHasChangesBeenMade}
             setReportName={setReportName}
             reportName={reportName}
             localPickedCharts={localPickedCharts}

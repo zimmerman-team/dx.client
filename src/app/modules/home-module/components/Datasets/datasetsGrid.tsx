@@ -38,12 +38,10 @@ export default function DatasetsGrid(props: Readonly<Props>) {
   const limit = 15;
   const [offset, setOffset] = React.useState(0);
   const { isObserved } = useInfinityScroll(observerTarget);
+  const token = useStoreState((state) => state.AuthToken.value);
   const [loadedDatasets, setLoadedDatasets] =
     useRecoilState(loadedDatasetsAtom);
 
-  const { isAuthenticated } = useAuth0();
-
-  const token = useStoreState((state) => state.AuthToken.value);
   const datasets = useStoreState(
     (state) =>
       (state.dataThemes.DatasetGetList.crudData ??
