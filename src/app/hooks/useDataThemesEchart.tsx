@@ -118,6 +118,7 @@ export function useDataThemesEchart() {
           color: xAxisLabelColor || "#000",
           fontSize: xAxisLabelFontSize || 12,
           interval: xAxisLabelInterval || "auto",
+          showMaxLabel: true,
         },
       },
       yAxis: {
@@ -393,6 +394,9 @@ export function useDataThemesEchart() {
         zlevel: -1,
         z: -1,
         boundaryGap: false,
+        axisLabel: {
+          showMaxLabel: true,
+        },
       },
       yAxis: {
         type: "value",
@@ -497,6 +501,9 @@ export function useDataThemesEchart() {
       xAxis: {
         type: "time",
         boundaryGap: false,
+        axisLabel: {
+          showMaxLabel: true,
+        },
       },
       yAxis: {
         type: "value",
@@ -569,6 +576,9 @@ export function useDataThemesEchart() {
         data: data.xAxisValues || [],
         zlevel: -1,
         z: -1,
+        axisLabel: {
+          showMaxLabel: true,
+        },
       },
       yAxis: {
         type: "value",
@@ -678,6 +688,9 @@ export function useDataThemesEchart() {
           lineStyle: {
             type: "dashed",
           },
+        },
+        axisLabel: {
+          showMaxLabel: true,
         },
       },
       yAxis: {
@@ -873,6 +886,9 @@ export function useDataThemesEchart() {
         data: uniqBy(xAxisData, (d: any) => d),
         splitArea: {
           show: true,
+        },
+        axisLabel: {
+          showMaxLabel: true,
         },
       },
       yAxis: {
