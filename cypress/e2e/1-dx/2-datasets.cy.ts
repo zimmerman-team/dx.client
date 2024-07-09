@@ -89,7 +89,7 @@ describe("Testing connecting data on DX", () => {
       "{selectall}{backspace}Rawgraphs"
     );
     cy.get('[data-cy="dataset-metadata-link"]').type(
-      "{selectall}{backspace}Not available"
+      "{selectall}{backspace}notavailable.com"
     );
     cy.get('[data-cy="dataset-metadata-category"]').click();
     cy.get('[data-value="Social"]').click();
@@ -158,7 +158,7 @@ describe("Testing connecting data on DX", () => {
       "Football Players Data"
     );
     cy.get('[data-cy="dataset-metadata-source"]').type("Rawgraphs");
-    cy.get('[data-cy="dataset-metadata-link"]').type("Not available");
+    cy.get('[data-cy="dataset-metadata-link"]').type("notavailable.com");
     cy.get('[data-cy="dataset-metadata-category"]').click();
     cy.get('[data-value="Social"]').click();
     cy.get('[data-cy="dataset-metadata-submit"]').scrollIntoView();
@@ -185,7 +185,7 @@ describe("Testing connecting data on DX", () => {
       "Grossing Movies Data"
     );
     cy.get('[data-cy="dataset-metadata-source"]').type("Rawgraphs");
-    cy.get('[data-cy="dataset-metadata-link"]').type("Not available");
+    cy.get('[data-cy="dataset-metadata-link"]').type("notavailable.com");
     cy.get('[data-cy="dataset-metadata-category"]').click();
     cy.get('[data-value="Social"]').click();
     cy.get('[data-cy="dataset-metadata-submit"]').scrollIntoView();
@@ -234,7 +234,7 @@ describe("Edit, Delete and Duplicate Dataset", () => {
       "{selectall}{backspace} Rawgraphs"
     );
     cy.get('[data-cy="dataset-metadata-link"]').type(
-      "{selectall}{backspace} Not available"
+      "{selectall}{backspace}notavailable.com"
     );
     cy.get('[data-cy="dataset-metadata-category"]').click();
     cy.get('[data-value="Social"]').click();
