@@ -14,7 +14,7 @@ import FAQ from "./components/faq";
 export default function PricingModule() {
   useTitle("DX Dataxplorer - Pricing");
 
-  const [activeView, setActiveView] = React.useState("monthly");
+  const [subscriptionPlan, setSubscriptionPlan] = React.useState("monthly");
 
   const views = [
     {
@@ -55,41 +55,45 @@ export default function PricingModule() {
     {
       name: "Free Plan",
       yearlyPrice: "FREE",
-      monthlyPrice: "FREE",
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-      current: true,
-      recommended: false,
-      buttonText: "Start",
+      monthlyPrice: "Free forever",
+      text: "For individuals or teams just getting started in Dataxplorer",
+      current: false,
+      recommended: true,
+      buttonText: "Activate free trial",
+      discount: "",
       key: "free",
     },
     {
       name: "Pro",
-      yearlyPrice: "€749.25",
-      monthlyPrice: "€83.25",
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      yearlyPrice: "€750",
+      monthlyPrice: "€75",
+      text: "For individual users.",
       current: false,
       recommended: false,
-      buttonText: "Start a free trial",
+      buttonText: "Activate a free trial",
+      discount: "(Save 15%)",
       key: "pro",
     },
     {
       name: "Team",
-      yearlyPrice: "€2,247.75",
-      monthlyPrice: "€249.75",
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      yearlyPrice: "€2,250",
+      monthlyPrice: "€250",
+      text: "Scale to 5 users and connect your team.",
       current: false,
-      recommended: true,
-      buttonText: "Get a demo",
+      recommended: false,
+      buttonText: "Activate free trial",
+      discount: "(Save 15%)",
       key: "team",
     },
     {
       name: "Enterprise",
       yearlyPrice: "Custom",
       monthlyPrice: "Custom",
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      text: "For organisations looking scale into powerful data visualization, with full support and security",
       current: false,
       recommended: false,
-      buttonText: "Get a demo",
+      buttonText: "Contact us",
+      discount: "",
       key: "enterprise",
     },
   ];
@@ -185,7 +189,7 @@ export default function PricingModule() {
               <button
                 key={view.key}
                 css={`
-                  ${activeView === view.key
+                  ${subscriptionPlan === view.key
                     ? `
                 border-radius: 51px;
              
@@ -194,7 +198,7 @@ export default function PricingModule() {
                     : ""}
                   border: none;
                 `}
-                onClick={() => setActiveView(view.key)}
+                onClick={() => setSubscriptionPlan(view.key)}
               >
                 {view.name}
               </button>
@@ -211,7 +215,7 @@ export default function PricingModule() {
           `}
         >
           {plans.map((plan) => (
-            <PlanCard plan={plan} activeView={activeView} />
+            <PlanCard plan={plan} activeView={subscriptionPlan} />
           ))}
         </div>
 
@@ -238,7 +242,7 @@ export default function PricingModule() {
               display: flex;
               justify-content: center;
               align-items: center;
-              column-gap: 85px;
+              column-gap: 200px;
             `}
           >
             <MFALogo /> <TGFLogo /> <IATILogo />
