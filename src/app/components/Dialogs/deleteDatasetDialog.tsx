@@ -124,6 +124,7 @@ export default function DeleteDatasetDialog(props: Props) {
                   `}
                 >
                   <input
+                    autoFocus
                     type="text"
                     placeholder='Type "DELETE" to confirm'
                     onChange={handleInputChange}

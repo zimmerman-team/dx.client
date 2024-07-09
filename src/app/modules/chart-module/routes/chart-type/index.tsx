@@ -13,7 +13,6 @@ import {
   ChartBuilderChartTypeProps,
   chartTypesFromMiddleWare,
 } from "app/modules/chart-module/routes/chart-type/data";
-import { useAuth0 } from "@auth0/auth0-react";
 import AISwitch from "app/modules/chart-module/components/switch/AISwitch";
 import { useRecoilState, useResetRecoilState } from "recoil";
 import {
@@ -21,12 +20,7 @@ import {
   isChartAIAgentActive,
   isChartAutoMappedAtom,
 } from "app/state/recoil/atoms";
-import {
-  ChartAPIModel,
-  charts,
-  emptyChartAPI,
-} from "app/modules/chart-module/data";
-import { NotAuthorizedMessageModule } from "app/modules/common/not-authorized-message";
+import { charts } from "app/modules/chart-module/data";
 import AILoader from "app/modules/chart-module/routes/chart-type/loader";
 import { handleValidityCheckOfDimensionsToBeMapped } from "app/modules/chart-module/components/toolbox/steps/panels-content/Mapping";
 
@@ -34,7 +28,6 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
   useTitle("DX DataXplorer - Chart Type");
 
   const history = useHistory();
-  const { isAuthenticated, user } = useAuth0();
   const { page } = useParams<{ page: string }>();
   const token = useStoreState((state) => state.AuthToken.value);
   const location = useLocation();
@@ -67,10 +60,6 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
   const fromReportParamValue = queryParams.get("fromreport");
   const reportPage = queryParams.get("page") as string;
 
-  const loadedChart = useStoreState(
-    (state) =>
-      (state.charts.ChartGet.crudData ?? emptyChartAPI) as ChartAPIModel
-  );
   const [chartFromReport, setChartFromReport] =
     useRecoilState(chartFromReportAtom);
 
@@ -110,10 +99,6 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
       }));
     }
   }, []);
-
-  const canChartEditDelete = React.useMemo(() => {
-    return isAuthenticated && loadedChart && loadedChart.owner === user?.sub;
-  }, [user, isAuthenticated, loadedChart]);
 
   const validAiSuggestions = () => {
     try {
@@ -206,15 +191,6 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
       setChartType(chartType === chartTypeId ? null : chartTypeId);
       setSelectedAIChart(Boolean(aIChartSuggestions(chartTypeId)));
     };
-
-  if (!canChartEditDelete && page !== "new") {
-    return (
-      <>
-        <div css="width: 100%; height: 100px;" />
-        <NotAuthorizedMessageModule asset="chart" action="edit" />
-      </>
-    );
-  }
 
   return (
     <div css={commonStyles.container}>
