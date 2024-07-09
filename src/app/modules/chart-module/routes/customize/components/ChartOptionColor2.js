@@ -22,6 +22,16 @@ const ChartOptionColor2 = ({
     setDisplayColorPicker(false);
   });
 
+  React.useEffect(() => {
+    if (sketchRef.current) {
+      sketchRef?.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+        inline: "nearest",
+      });
+    }
+  }, [sketchRef.current]);
+
   if (props.options) {
     return (
       <ChartOptionSelect
@@ -36,16 +46,6 @@ const ChartOptionColor2 = ({
   }
 
   const color = value ?? "#000000";
-
-  React.useEffect(() => {
-    if (sketchRef.current) {
-      sketchRef?.current?.scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-        inline: "nearest",
-      });
-    }
-  }, [sketchRef.current]);
 
   return (
     <label className={props.className + " row"}>
