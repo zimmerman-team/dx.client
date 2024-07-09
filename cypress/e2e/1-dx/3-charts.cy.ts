@@ -201,7 +201,7 @@ describe("Testing Ai chart creation", () => {
 
     cy.wait("@getDataset");
 
-    cy.contains("Please select a datasetDx");
+    cy.contains("Please select a dataset");
 
     cy.get('[data-cy="toolbox-selected-dataset"]')
       .contains("Grossing Movies")
