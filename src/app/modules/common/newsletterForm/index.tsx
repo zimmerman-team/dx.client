@@ -33,6 +33,7 @@ export default function NewsletterForm(
     formState: { errors },
     handleSubmit,
     setValue,
+    getValues,
   } = useForm<{ email: string }>({
     resolver: yupResolver(emailSchema),
     defaultValues: { email: "" },
@@ -67,6 +68,7 @@ export default function NewsletterForm(
       .then((response: AxiosResponse) => {
         if (response.status === 200) {
           setValue("email", "");
+          setPlaceholder("Email address");
           props.setIsSubscribed(true);
         } else {
           props.setIsSubscriptionFailed(true);
@@ -98,6 +100,7 @@ export default function NewsletterForm(
     >
       <input
         type="text"
+        value={getValues("email")}
         placeholder={placeholder}
         {...register("email", { required: true })}
         onChange={handleEmailChange}
