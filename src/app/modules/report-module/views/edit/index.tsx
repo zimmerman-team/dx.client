@@ -37,7 +37,7 @@ import {
 } from "app/modules/report-module/views/edit/compareStates";
 
 function ReportEditView(props: ReportEditViewProps) {
-  useTitle("DX DataXplorer - Edit Report");
+  useTitle("DX Dataxplorer - Edit Report");
 
   const { page } = useParams<{ page: string }>();
   const token = useStoreState((state) => state.AuthToken.value);

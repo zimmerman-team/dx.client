@@ -10,7 +10,7 @@ import ErrorComponent from "app/modules/chart-module/components/dialog/errrorCom
 import { useParams } from "react-router-dom";
 
 function ChartBuilderCustomize(props: Readonly<ChartBuilderCustomizeProps>) {
-  useTitle("DX DataXplorer - Customize");
+  useTitle("DX Dataxplorer - Customise");
 
   const { page } = useParams<{ page: string; view?: string }>();
   const mapping = useStoreState((state) => state.charts.mapping.value);

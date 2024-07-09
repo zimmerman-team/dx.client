@@ -29,7 +29,7 @@ import NewsletterForm from "app/modules/common/newsletterForm";
 import { useTitle } from "react-use";
 
 export default function AITemplate() {
-  useTitle("DX DataXplorer - AI Template");
+  useTitle("DX Dataxplorer - AI Template");
 
   const [isSubscribed, setIsSubscribed] = React.useState(false);
   const [isSubscriptionFailed, setIsSubscriptionFailed] = React.useState(false);

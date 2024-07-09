@@ -11,7 +11,7 @@ import TeamBlock from "./components/teamBlock";
 import { useTitle } from "react-use";
 
 export default function AboutModule() {
-  useTitle("DX DataXplorer - About");
+  useTitle("DX Dataxplorer - About");
 
   return (
     <>
@@ -68,7 +68,7 @@ export default function AboutModule() {
             `}
           >
             <h3>
-              <b>DataXplorer</b>
+              <b>Dataxplorer</b>
             </h3>
             <div
               css={`
@@ -91,8 +91,8 @@ export default function AboutModule() {
                 </p>
                 <p>
                   To position your organization as a leader in your field using
-                  the power of data, we offer DataXplorer, an AI-powered,
-                  purpose-driven data platform. DataXplorer equips people with
+                  the power of data, we offer Dataxplorer, an AI-powered,
+                  purpose-driven data platform. Dataxplorer equips people with
                   insightful data for making informed decisions, driving us
                   closer to an equitable future for all.
                 </p>

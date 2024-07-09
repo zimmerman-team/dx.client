@@ -175,7 +175,7 @@ export default function MetaData(props: Readonly<Props>) {
 
   return (
     <div css={metaDatacss}>
-      <h1>Describe your data</h1>
+      <h1>Please describe your data</h1>
       <div
         css={`
           width: 100%;

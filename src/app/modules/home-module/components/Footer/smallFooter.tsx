@@ -47,7 +47,7 @@ function SmallFooter() {
               `}
             >
               <CopyIcon />
-              {moment(new Date()).format("YYYY")} DataXplorer All Rights
+              {moment(new Date()).format("YYYY")} Dataxplorer All Rights
               Reserved
             </p>
             <p>

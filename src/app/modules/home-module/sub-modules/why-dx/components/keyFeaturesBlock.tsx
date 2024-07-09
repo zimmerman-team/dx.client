@@ -41,7 +41,7 @@ export default function KeyFeaturesBlock() {
       `}
     >
       <h3>
-        <b>Unlock the Power of Data with DataXplorer</b>
+        <b>Unlock the Power of Data with Dataxplorer</b>
       </h3>
       <Grid
         container
@@ -58,7 +58,7 @@ export default function KeyFeaturesBlock() {
           <div>
             <p>All-in-One Stack</p>
             <p>
-              DataXplorer consolidates all your data management needs into a
+              Dataxplorer consolidates all your data management needs into a
               single, integrated stack. Whether it's data integration,
               visualization, or report creation, you'll find it all here. No
               more juggling multiple tools or struggling to maintain
@@ -79,7 +79,7 @@ export default function KeyFeaturesBlock() {
           <div>
             <p>Connect Data with Ease</p>
             <p>
-              DataXplorer simplifies the complex task of data integration,
+              Dataxplorer simplifies the complex task of data integration,
               enabling you to seamlessly centralize your crucial datasets. Gone
               are the days of laborious manual data manipulation; we've
               streamlined the process for your convenience. <br /> <br />
@@ -113,7 +113,7 @@ export default function KeyFeaturesBlock() {
           <div>
             <p>Visualize Your Impact</p>
             <p>
-              Your data is a valuable resource, and DataXplorer empowers you to
+              Your data is a valuable resource, and Dataxplorer empowers you to
               make the most of it. Our AI-driven agents are at your disposal,
               ready to generate the most pertinent charts for your specific
               dataset. With just a few clicks, you'll unlock insightful
@@ -134,7 +134,7 @@ export default function KeyFeaturesBlock() {
             <p>Interactive Reports </p>
             <p>
               Transform your data-driven insights into engaging narratives that
-              captivate and inform your stakeholders. DataXplorer allows you to
+              captivate and inform your stakeholders. Dataxplorer allows you to
               effortlessly create interactive reports that captivate and inform
               your stakeholders. <br /> <br />
               Incorporate charts, text, images, and videos seamlessly. Your
@@ -165,11 +165,11 @@ export default function KeyFeaturesBlock() {
             <p>Join The Data Revolution</p>
             <p>
               Become a pioneer in the realm of data-driven decision-making.
-              Embrace the future with DataXplorer and experience the
+              Embrace the future with Dataxplorer and experience the
               transformative power of streamlined data management. Sign up today
               and take the first step towards making a significant impact in the
               international aid development sector. <br /> <br />
-              With DataXplorer, your journey to data-driven excellence begins
+              With Dataxplorer, your journey to data-driven excellence begins
               now.
             </p>
           </div>

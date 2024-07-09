@@ -25,7 +25,7 @@ import AILoader from "app/modules/chart-module/routes/chart-type/loader";
 import { handleValidityCheckOfDimensionsToBeMapped } from "app/modules/chart-module/components/toolbox/steps/panels-content/Mapping";
 
 function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
-  useTitle("DX DataXplorer - Chart Type");
+  useTitle("DX Dataxplorer - Chart Type");
 
   const history = useHistory();
   const { page } = useParams<{ page: string }>();

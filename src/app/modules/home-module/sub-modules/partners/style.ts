@@ -21,8 +21,8 @@ export const empowercss = (view: string) => css`
   h1 {
     margin-top: 0;
     color: #231d2c;
-    font-size: 40px;
-    line-height: 48px;
+    font-size: 48px;
+    line-height: 57.6px;
     white-space: pre-line;
     text-align: center;
     margin-bottom: ${view === "landing" ? "14px" : "26px"};
