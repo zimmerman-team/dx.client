@@ -70,6 +70,10 @@ export default function FinishedFragment(props: Props) {
     };
   }, [props.dataTotalCount]);
 
+  function handleCreateNewChart() {
+    setDatasetId(props.datasetId);
+  }
+
   return (
     <div css={dataSetsCss}>
       <Link
