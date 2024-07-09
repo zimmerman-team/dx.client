@@ -17,3 +17,10 @@ export const emailSchema = yup
       .required(),
   })
   .required();
+
+const urlPattern =
+  /^(https?:\/\/)?((([a-zA-Z0-9$_.+!*'(),;?&=-]|%[0-9a-fA-F]{2})+\.)*([a-zA-Z0-9$_.+!*'(),;?&=-]|%[0-9a-fA-F]{2})+\.[a-zA-Z]{2,})(:\d+)?(\/([a-zA-Z0-9$_.+!*'(),;?&=-]|%[0-9a-fA-F]{2})*)*(\?([a-zA-Z0-9$_.+!*'(),;?&=-]|%[0-9a-fA-F]{2})*)?(#([a-zA-Z0-9$_.+!*'(),;?&=-]|%[0-9a-fA-F]{2})*)?$/;
+
+export function isValidUrl(url: string) {
+  return urlPattern.test(url);
+}
