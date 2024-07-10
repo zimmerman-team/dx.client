@@ -61,7 +61,7 @@ export const untitledReportAtom = atom({
 
 export const allAssetsViewAtom = atom<"grid" | "table">({
   key: "allAssetsViewAtom",
-  default: "table",
+  default: "grid",
   effects_UNSTABLE: [persistAtom],
 });
 

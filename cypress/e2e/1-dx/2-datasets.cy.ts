@@ -27,18 +27,18 @@ describe("Testing connecting data on DX", () => {
     cy.visit("/");
 
     cy.get('[data-cy="cookie-btn"]').click();
-
+    cy.intercept(`${apiUrl}/external-sources/search?q=*`).as("getDefaultData");
     cy.get('[data-cy="home-connect-dataset-button"]').click();
   });
 
   it("Can filter results by source in the federated search", () => {
-    cy.intercept(`${apiUrl}/external-sources/search?q=*`).as("getDefaultData");
     cy.wait("@getDefaultData").then((interception) => {
       cy.get('[data-cy="external-search-card-Kaggle"]').should(
         "have.length.greaterThan",
         1
       );
     });
+    cy.wait(2000);
 
     cy.contains('[data-cy="source-category-button"]', "WHO").click();
     cy.wait("@getDefaultData");
@@ -48,8 +48,6 @@ describe("Testing connecting data on DX", () => {
   });
 
   it("Can import data from External Search", () => {
-    cy.intercept(`${apiUrl}/external-sources/search?q=*`).as("getDefaultData");
-
     cy.wait("@getDefaultData").then((interception) => {
       cy.get('[data-cy="external-search-card-Kaggle"]').should(
         "have.length.greaterThan",
@@ -61,6 +59,7 @@ describe("Testing connecting data on DX", () => {
     cy.intercept(`${apiUrl}/external-sources/search?q=world%20population*`).as(
       "getDefaultData2"
     );
+    cy.wait(2000);
     cy.get('[data-cy="filter-search-input"]').type("world population");
 
     cy.wait("@getDefaultData2").then((interception) => {
