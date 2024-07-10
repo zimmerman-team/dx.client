@@ -21,7 +21,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 interface Props {
   sortBy: string;
   searchStr: string;
-  tableView: boolean;
+  view: "grid" | "table";
   addCard?: boolean;
   inChartBuilder?: boolean;
   categories?: string[];
@@ -204,7 +204,7 @@ export default function DatasetsGrid(props: Readonly<Props>) {
   const lg = props.lg ?? 3;
   return (
     <>
-      {!props.tableView && (
+      {props.view === "grid" && (
         <Grid container spacing={!props.inChartBuilder ? 2 : 1}>
           {props.addCard ? <DatasetAddnewCard /> : null}
           {loadedDatasets?.map((data, index) => (
@@ -267,7 +267,7 @@ export default function DatasetsGrid(props: Readonly<Props>) {
         </Grid>
       )}
 
-      {props.tableView && (
+      {props.view === "table" && (
         <HomepageTable
           onItemClick={props.onItemClick}
           inChartBuilder={props.inChartBuilder}

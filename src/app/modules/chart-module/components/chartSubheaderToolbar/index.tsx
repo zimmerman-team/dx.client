@@ -48,7 +48,6 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
   const { page, view } = useParams<{ page: string; view?: string }>();
   const [showDeleteDialog, setShowDeleteDialog] = React.useState(false);
   const [enableButton, setEnableButton] = React.useState<boolean>(false);
-  const setHomeTab = useRecoilState(homeDisplayAtom)[1];
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
   const [hasChangesBeenMade, setHasChangesBeenMade] = React.useState(false);
 
@@ -222,7 +221,6 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
         });
       })
       .catch((error) => console.log(error));
-    setHomeTab("charts");
 
     history.replace("/");
   };
@@ -281,7 +279,6 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
                 <button
                   onClick={() => {
                     setShowSnackbar(null);
-                    setHomeTab("reports");
                     history.push("/report/new/initial");
                   }}
                 >

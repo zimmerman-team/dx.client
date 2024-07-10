@@ -18,7 +18,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 interface Props {
   sortBy: string;
   searchStr: string;
-  tableView: boolean;
+  view: "grid" | "table";
   showMenuButton: boolean;
   addCard?: boolean;
 }
@@ -194,7 +194,7 @@ export default function ReportsGrid(props: Props) {
 
   return (
     <>
-      {!props.tableView && (
+      {props.view === "grid" && (
         <Grid container spacing={2}>
           {props.addCard ? <ReportAddnewCard /> : null}
           {loadedReports.map((data, index) => (
@@ -217,7 +217,7 @@ export default function ReportsGrid(props: Props) {
           ))}
         </Grid>
       )}
-      {props.tableView && (
+      {props.view === "table" && (
         <HomepageTable
           data={loadedReports.map((data) => ({
             id: data.id,

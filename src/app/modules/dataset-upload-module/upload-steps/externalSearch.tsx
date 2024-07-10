@@ -40,7 +40,7 @@ export default function ExternalSearch(props: {
   setSources: React.Dispatch<React.SetStateAction<string[]>>;
 }) {
   const observerTarget = React.useRef(null);
-  const [tableView, setTableView] = React.useState(false);
+  const [tableView, setTableView] = React.useState<"grid" | "table">("grid");
 
   const [sortValue, setSortValue] = React.useState("createdDate");
   const token = useStoreState((state) => state.AuthToken.value);
@@ -192,9 +192,9 @@ export default function ExternalSearch(props: {
           searchValue={props.searchValue as string}
           setSearchValue={props.setSearchValue}
           setSortValue={setSortValue}
-          setTableView={setTableView}
+          setAssetsView={setTableView}
           sortValue={sortValue}
-          tableView={tableView}
+          assetsView={tableView}
           terminateSearch={terminateSearch}
           searchInputWidth="249px"
           openSearch={props.openSearch}

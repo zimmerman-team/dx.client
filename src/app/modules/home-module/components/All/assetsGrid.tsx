@@ -24,7 +24,7 @@ import { HomepageTable } from "../Table";
 interface Props {
   sortBy: string;
   searchStr: string;
-  tableView: boolean;
+  view: "grid" | "table";
   showMenuButton: boolean;
   inChartBuilder?: boolean;
   category?: string;
@@ -232,7 +232,7 @@ export default function AssetsGrid(props: Props) {
 
   return (
     <>
-      {props.tableView ? (
+      {props.view === "table" ? (
         <HomepageTable
           onItemClick={props.onItemClick}
           inChartBuilder={props.inChartBuilder}

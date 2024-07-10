@@ -34,7 +34,6 @@ export default function DatasetSubHeaderToolbar(
   const history = useHistory();
   const { page } = useParams<{ page: string }>();
   const token = useStoreState((state) => state.AuthToken.value);
-  const setHomeTab = useRecoilState(homeDisplayAtom)[1];
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
   );
@@ -118,7 +117,6 @@ export default function DatasetSubHeaderToolbar(
         });
       })
       .catch((error) => console.log(error));
-    setHomeTab("data");
     history.replace("/");
   }
 

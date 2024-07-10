@@ -32,9 +32,10 @@ function ReportInitialView(props: Readonly<ReportInitialViewProps>) {
   useTitle("DX Dataxplorer - New Report");
 
   const history = useHistory();
-  const { page, view } = useParams<{ page: string; view?: string }>();
 
-  const [tableView, setTableView] = React.useState(false);
+  const [reportsView, setReportsView] = React.useState<"grid" | "table">(
+    "grid"
+  );
   const [searchValue, setSearchValue] = React.useState<undefined | string>(
     undefined
   );
@@ -276,9 +277,9 @@ function ReportInitialView(props: Readonly<ReportInitialViewProps>) {
             </Popover>
             <IconButton
               onClick={() => {
-                setTableView(!tableView);
+                setReportsView((prev) => (prev === "grid" ? "table" : "grid"));
               }}
-              css={iconButtonCss(tableView)}
+              css={iconButtonCss(reportsView === "table")}
             >
               <GridIcon />
             </IconButton>
@@ -288,7 +289,7 @@ function ReportInitialView(props: Readonly<ReportInitialViewProps>) {
       <ReportsGrid
         sortBy={sortValue}
         searchStr={searchValue as string}
-        tableView={tableView}
+        view={reportsView}
         showMenuButton
       />
     </Container>

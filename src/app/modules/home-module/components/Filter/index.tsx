@@ -18,8 +18,8 @@ export default function Filter(
     setSearchValue: (value: React.SetStateAction<string | undefined>) => void;
     setSortValue: React.Dispatch<React.SetStateAction<string>>;
     sortValue: string;
-    setTableView: React.Dispatch<React.SetStateAction<boolean>>;
-    tableView: boolean;
+    setAssetsView: (value: "grid" | "table") => void;
+    assetsView: "table" | "grid";
     terminateSearch?: () => void;
     searchInputWidth?: string;
     openSearch: boolean;
@@ -151,11 +151,11 @@ export default function Filter(
       </Popover>
       <IconButton
         onClick={() => {
-          props.setTableView(!props.tableView);
+          props.setAssetsView(props.assetsView === "table" ? "grid" : "table");
         }}
-        css={iconButtonCss(props.tableView)}
+        css={iconButtonCss(props.assetsView === "table")}
       >
-        {props.tableView ? <TableIcon /> : <GridIcon />}
+        {props.assetsView === "table" ? <TableIcon /> : <GridIcon />}
       </IconButton>
     </div>
   );
