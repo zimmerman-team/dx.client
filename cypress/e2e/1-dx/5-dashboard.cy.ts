@@ -50,8 +50,6 @@ describe("Dashboard", () => {
     cy.get('[data-cy="home-data-tab"]').scrollIntoView().click();
     cy.wait("@fetchDatasets");
 
-    cy.get('[data-cy="home-table-view-button"]').click();
-
     cy.get('[data-cy="homepage-table"]').within(() => {
       cy.get('[data-cy="table-row-dataset"]').first().click();
     });
@@ -63,8 +61,6 @@ describe("Dashboard", () => {
     cy.get('[data-cy="home-charts-tab"]').scrollIntoView().click();
     cy.wait("@fetchCharts");
 
-    cy.get('[data-cy="home-table-view-button"]').click();
-
     cy.get('[data-cy="homepage-table"]').within(() => {
       cy.get('[data-cy="table-row-chart"]').first().click();
     });
@@ -75,8 +71,6 @@ describe("Dashboard", () => {
 
     cy.get('[data-cy="home-reports-tab"]').scrollIntoView().click();
     cy.wait("@fetchReports");
-
-    cy.get('[data-cy="home-table-view-button"]').click();
 
     cy.get('[data-cy="homepage-table"]').within(() => {
       cy.get('[data-cy="table-row-report"]').first().click();
