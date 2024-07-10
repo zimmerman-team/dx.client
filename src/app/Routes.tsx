@@ -155,12 +155,10 @@ const OneTapLoginComponent = () => {
 const IntercomBootupComponent = () => {
   const { isAuthenticated, user, getAccessTokenSilently } = useAuth0();
 
-  const APP_ID = window.location.hostname.includes("dataxplorer.org")
-    ? "tfvurn19"
-    : "hv1bfyau";
+  const APP_ID = "tfvurn19";
 
   React.useEffect(() => {
-    if (window.Intercom) {
+    if (window?.Intercom) {
       window.Intercom("update");
     }
   }, [location.pathname]);
@@ -180,7 +178,7 @@ const IntercomBootupComponent = () => {
   };
 
   React.useEffect(() => {
-    if (window.Intercom)
+    if (window?.Intercom)
       if (isAuthenticated) {
         getIntercomHash()
           .then((res) => {
@@ -228,7 +226,7 @@ export function MainRoutes() {
     >
       <AuthLoader />
       <OneTapLoginComponent />
-      <IntercomBootupComponent />
+      {process.env.ENV_TYPE === "prod" ? <IntercomBootupComponent /> : null}
       <Suspense fallback={<PageLoader />}>
         <Switch>
           <Route exact path="/callback">

@@ -46,43 +46,46 @@
     </script>
     <!-- end of Google tag (gtag.js) -->
     <script>
-      // We pre-filled your app ID in the widget URL: 'https://widget.intercom.io/widget/tfvurn19'
-      const APP_ID = window.location.hostname.includes("dataxplorer.org")
-        ? "tfvurn19"
-        : "hv1bfyau";
-      (function () {
-        var w = window;
-        var ic = w.Intercom;
-        if (typeof ic === "function") {
-          ic("reattach_activator");
-          ic("update", w.intercomSettings);
-        } else {
-          var d = document;
-          var i = function () {
-            i.c(arguments);
-          };
-          i.q = [];
-          i.c = function (args) {
-            i.q.push(args);
-          };
-          w.Intercom = i;
-          var l = function () {
-            var s = d.createElement("script");
-            s.type = "text/javascript";
-            s.async = true;
-            s.src = `https://widget.intercom.io/widget/${APP_ID}`;
-            var x = d.getElementsByTagName("script")[0];
-            x.parentNode.insertBefore(s, x);
-          };
-          if (document.readyState === "complete") {
-            l();
-          } else if (w.attachEvent) {
-            w.attachEvent("onload", l);
+      if (
+        window.location.hostname === "dataxplorer.org" ||
+        window.location.hostname === "www.dataxplorer.org"
+      ) {
+        // We pre-filled your app ID in the widget URL: 'https://widget.intercom.io/widget/tfvurn19'
+        const APP_ID = "tfvurn19";
+        (function () {
+          var w = window;
+          var ic = w.Intercom;
+          if (typeof ic === "function") {
+            ic("reattach_activator");
+            ic("update", w.intercomSettings);
           } else {
-            w.addEventListener("load", l, false);
+            var d = document;
+            var i = function () {
+              i.c(arguments);
+            };
+            i.q = [];
+            i.c = function (args) {
+              i.q.push(args);
+            };
+            w.Intercom = i;
+            var l = function () {
+              var s = d.createElement("script");
+              s.type = "text/javascript";
+              s.async = true;
+              s.src = `https://widget.intercom.io/widget/${APP_ID}`;
+              var x = d.getElementsByTagName("script")[0];
+              x.parentNode.insertBefore(s, x);
+            };
+            if (document.readyState === "complete") {
+              l();
+            } else if (w.attachEvent) {
+              w.attachEvent("onload", l);
+            } else {
+              w.addEventListener("load", l, false);
+            }
           }
-        }
-      })();
+        })();
+      }
     </script>
     <!-- Start of HubSpot Embed Code -->
     <script
@@ -155,10 +158,10 @@
     <!-- end of linkedIn track tag -->
     <!-- LiveSession.io code -->
     <script type="text/javascript">
-       if (
+      if (
         window.location.hostname === "dataxplorer.org" ||
         window.location.hostname === "www.dataxplorer.org"
-      ){       
+      ) {
         window["__ls_namespace"] = "__ls";
         window["__ls_script_url"] = "https://cdn.livesession.io/track.js";
         !(function (w, d, t, u, n) {
