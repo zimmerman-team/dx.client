@@ -97,6 +97,7 @@ export const useOneDrivePicker = ({
       form.submit();
 
       window.addEventListener("message", (event) => {
+        if (event.origin !== "https://onedrive.live.com") return;
         if (event.source && event.source === win) {
           const message = event.data;
 
