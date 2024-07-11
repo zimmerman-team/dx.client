@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Box, Container, Grid, IconButton } from "@material-ui/core";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import Filter from "app/modules/home-module/components/Filter";
-import ExternalDatasetCard from "app/modules/home-module/components/Datasets/externalDatasetCard";
+import ExternalDatasetCard from "app/modules/home-module/components/AssetCollection/Datasets/externalDatasetCard";
 import { useStoreState } from "app/state/store/hooks";
 import useDebounce from "react-use/lib/useDebounce";
 import axios from "axios";
@@ -199,6 +199,7 @@ export default function ExternalSearch(props: {
           searchInputWidth="249px"
           openSearch={props.openSearch}
           setOpenSearch={props.setOpenSearch}
+          searchIconCypressId="open-search-button"
         />
       </Grid>
 
