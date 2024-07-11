@@ -55,7 +55,7 @@ export default function Settings() {
     setLoading(true);
     deleteUserAccount()
       .then(() => {
-        if (window.Intercom) {
+        if (window?.Intercom) {
           window.Intercom("shutdown");
         }
         setLoading(false);
