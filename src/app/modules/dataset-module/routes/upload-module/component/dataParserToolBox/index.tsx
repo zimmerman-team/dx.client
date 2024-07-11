@@ -3,7 +3,7 @@ import Slide from "@material-ui/core/Slide";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { TriangleXSIcon } from "app/assets/icons/TriangleXS";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
-import DataParsingOptions from "app/modules/dataset-upload-module/component/dataParserToolBox/dataParsingOptions";
+import DataParsingOptions from "app/modules/dataset-module/routes/upload-module/component/dataParserToolBox/dataParsingOptions";
 
 interface Props {
   open: boolean;

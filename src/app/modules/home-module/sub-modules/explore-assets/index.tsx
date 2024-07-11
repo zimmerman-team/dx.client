@@ -15,7 +15,7 @@ import { featuredAssetsCss } from "app/modules/home-module/style";
 import DatasetsGrid from "app/modules/home-module/components/Datasets/datasetsGrid";
 import ChartsGrid from "app/modules/home-module/components/Charts/chartsGrid";
 import ReportsGrid from "app/modules/home-module/components/Reports/reportsGrid";
-import { datasetCategories } from "app/modules/dataset-upload-module/upload-steps/metaData";
+import { datasetCategories } from "app/modules/dataset-module/routes/upload-module/upload-steps/metaData";
 import DatasetCategoryList from "app/modules/home-module/components/Datasets/datasetCategoryList";
 import Filter from "app/modules/home-module/components/Filter";
 import { useAuth0 } from "@auth0/auth0-react";

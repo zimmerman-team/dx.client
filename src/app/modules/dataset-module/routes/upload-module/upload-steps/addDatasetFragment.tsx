@@ -3,7 +3,7 @@ import React, { useCallback } from "react";
 
 /** project */
 
-import { DropZone } from "app/modules/dataset-upload-module/component/dropzone/";
+import { DropZone } from "app/modules/dataset-module/routes/upload-module/component/dropzone";
 import { Box } from "@material-ui/core";
 import LocalIcon from "../assets/upload-options-icons/local";
 import GoogleIcon from "../assets/upload-options-icons/google";

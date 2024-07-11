@@ -6,18 +6,18 @@ import { useAuth0 } from "@auth0/auth0-react";
 /** project */
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import { useChartsRawData } from "app/hooks/useChartsRawData";
-import { stepcss } from "app/modules/dataset-upload-module/style";
+import { stepcss } from "app/modules/dataset-module/routes/upload-module/style";
 import { PageTopSpacer } from "app/modules/common/page-top-spacer";
-import MetaData from "app/modules/dataset-upload-module/upload-steps/metaData";
-import Processing from "app/modules/dataset-upload-module/upload-steps/processing";
-import FinishedFragment from "app/modules/dataset-upload-module/upload-steps/finishedFragment";
-import AddDatasetFragment from "app/modules/dataset-upload-module/upload-steps/addDatasetFragment";
+import MetaData from "app/modules/dataset-module/routes/upload-module/upload-steps/metaData";
+import Processing from "app/modules/dataset-module/routes/upload-module/upload-steps/processing";
+import FinishedFragment from "app/modules/dataset-module/routes/upload-module/upload-steps/finishedFragment";
+import AddDatasetFragment from "app/modules/dataset-module/routes/upload-module/upload-steps/addDatasetFragment";
 import ObjectId from "app/utils/ObjectId";
 import { useOnUploadProgress } from "app/hooks/useOnUploadProgress";
 import ExternalSearch, {
   IExternalDataset,
-} from "app/modules/dataset-upload-module/upload-steps/externalSearch";
-import Stepper from "app/modules/dataset-upload-module/component/stepper";
+} from "app/modules/dataset-module/routes/upload-module/upload-steps/externalSearch";
+import Stepper from "app/modules/dataset-module/routes/upload-module/component/stepper";
 import { Box } from "@material-ui/core";
 import { useTitle } from "react-use";
 import { DatasetListItemAPIModel } from "app/modules/dataset-module/data";

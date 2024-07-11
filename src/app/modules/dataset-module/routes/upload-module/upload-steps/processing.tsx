@@ -1,5 +1,5 @@
 import React from "react";
-import { ReactComponent as ErrorICon } from "app/modules/dataset-upload-module/assets/error-icon.svg";
+import { ReactComponent as ErrorICon } from "app/modules/dataset-module/routes/upload-module/assets/error-icon.svg";
 
 export interface ProcessingMetaDataProps {
   setProcessingError: React.Dispatch<React.SetStateAction<string | null>>;

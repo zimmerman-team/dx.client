@@ -27,7 +27,7 @@ import DeleteChartDialog from "app/components/Dialogs/deleteChartDialog";
 import { ChartAPIModel, emptyChartAPI } from "app/modules/chart-module/data";
 import { SubheaderToolbarProps } from "app/modules/chart-module/components/chartSubheaderToolbar/data";
 import { ExportChartButton } from "app/modules/chart-module/components/chartSubheaderToolbar/exportButton";
-import { ISnackbarState } from "app/modules/dataset-upload-module/upload-steps/previewFragment";
+import { ISnackbarState } from "app/modules/dataset-module/routes/upload-module/upload-steps/previewFragment";
 import { chartFromReportAtom, homeDisplayAtom } from "app/state/recoil/atoms";
 import { InfoSnackbar } from "app/modules/chart-module/components/chartSubheaderToolbar/infoSnackbar";
 import { getRequiredFieldsAndErrors } from "../../routes/mapping/utils";

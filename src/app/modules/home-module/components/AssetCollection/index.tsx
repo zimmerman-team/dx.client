@@ -34,7 +34,7 @@ import {
   turnsDataCss,
 } from "app/modules/home-module/style";
 import DatasetCategoryList from "app/modules/home-module/components/Datasets/datasetCategoryList";
-import { datasetCategories } from "app/modules/dataset-upload-module/upload-steps/metaData";
+import { datasetCategories } from "app/modules/dataset-module/routes/upload-module/upload-steps/metaData";
 import AssetsGrid from "app/modules/home-module/components/All/assetsGrid";
 import BreadCrumbs from "app/modules/home-module/components/Breadcrumbs";
 

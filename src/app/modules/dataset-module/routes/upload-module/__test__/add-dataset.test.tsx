@@ -1,5 +1,5 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import AddDatasetFragment from "app/modules/dataset-upload-module/upload-steps/addDatasetFragment";
+import AddDatasetFragment from "app/modules/dataset-module/routes/upload-module/upload-steps/addDatasetFragment";
 import userEvent from "@testing-library/user-event";
 import { StoreProvider, createStore } from "easy-peasy";
 import { AuthTokenState } from "app/state/api/action-reducers/sync";

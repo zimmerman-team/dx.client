@@ -10,7 +10,7 @@ import TGFLogo from "app/modules/home-module/assets/tgf-logo.svg";
 import { ReactComponent as ClockIcon } from "app/modules/home-module/assets/clock-icon.svg";
 
 import moment from "moment";
-import { IExternalDataset } from "app/modules/dataset-upload-module/upload-steps/externalSearch";
+import { IExternalDataset } from "app/modules/dataset-module/routes/upload-module/upload-steps/externalSearch";
 export default function IExternalDatasetCard(
   props: Readonly<{
     name: string;

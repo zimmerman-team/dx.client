@@ -9,7 +9,7 @@ import {
   CssSelectField,
   CssTextField,
   metaDatacss,
-} from "app/modules/dataset-upload-module/style";
+} from "app/modules/dataset-module/routes/upload-module/style";
 import { useLocation } from "react-router-dom";
 import { isValidUrl } from "app/utils/emailValidation";
 

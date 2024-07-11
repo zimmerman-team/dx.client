@@ -6,8 +6,8 @@ import {
   FileRejection,
   useDropzone,
 } from "react-dropzone";
-import { uploadAreacss } from "app/modules/dataset-upload-module/style";
-import { ReactComponent as UploadIcon } from "app/modules/dataset-upload-module/assets/upload.svg";
+import { uploadAreacss } from "app/modules/dataset-module/routes/upload-module/style";
+import { ReactComponent as UploadIcon } from "app/modules/dataset-module/routes/upload-module/assets/upload.svg";
 import { formatBytes } from "app/utils/formatBytes";
 
 export interface DropzoneProps {

@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import MetaData from "app/modules/dataset-upload-module/upload-steps/metaData";
+import MetaData from "app/modules/dataset-module/routes/upload-module/upload-steps/metaData";
 import { DatasetGet } from "app/state/api/action-reducers/data-themes";
 import { StoreProvider, createStore } from "easy-peasy";
 import { Router, Switch } from "react-router-dom";
