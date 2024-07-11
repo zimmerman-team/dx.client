@@ -7,26 +7,15 @@ import {
   ReportInitialViewProps,
   ReportTemplateModel,
 } from "app/modules/report-module/views/initial/data";
-import {
-  iconButtonCss,
-  rowFlexCss,
-  searchInputCss,
-  sortByItemCss,
-} from "app/modules/home-module/style";
-import { ReactComponent as CloseIcon } from "app/modules/home-module/assets/close-icon.svg";
-import { ReactComponent as SearchIcon } from "app/modules/home-module/assets/search-fill.svg";
-import { ReactComponent as SortIcon } from "app/modules/home-module/assets/sort-fill.svg";
-import { ReactComponent as GridIcon } from "app/modules/home-module/assets/grid-fill.svg";
 import { ReportModel, emptyReport } from "app/modules/report-module/data";
-
-import { IconButton, Popover } from "@material-ui/core";
-import ReportsGrid from "app/modules/home-module/components/Reports/reportsGrid";
+import ReportsGrid from "app/modules/home-module/components/AssetCollection/Reports/reportsGrid";
 import { persistedReportStateAtom } from "app/state/recoil/atoms";
 import { useResetRecoilState } from "recoil";
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import { useMount, useTitle, useUpdateEffect } from "react-use";
 import { isEmpty } from "lodash";
+import Filter from "app/modules/home-module/components/Filter";
 
 function ReportInitialView(props: Readonly<ReportInitialViewProps>) {
   useTitle("DX Dataxplorer - New Report");
@@ -41,10 +30,6 @@ function ReportInitialView(props: Readonly<ReportInitialViewProps>) {
   );
   const [openSearch, setOpenSearch] = React.useState(false);
   const [sortValue, setSortValue] = React.useState("updatedDate");
-  const [sortPopoverAnchorEl, setSortPopoverAnchorEl] =
-    React.useState<HTMLButtonElement | null>(null);
-
-  const inputRef = React.useRef<HTMLInputElement>(null);
 
   const reportCreateSuccess = useStoreState(
     (state) => state.reports.ReportCreate.success
@@ -60,19 +45,6 @@ function ReportInitialView(props: Readonly<ReportInitialViewProps>) {
   const clearReportCreate = useStoreActions(
     (actions) => actions.reports.ReportCreate.clear
   );
-
-  const openSortPopover = Boolean(sortPopoverAnchorEl);
-
-  const sortOptions = [
-    { label: "Last updated", value: "updatedDate" },
-    { label: "Created date", value: "createdDate" },
-    { label: "Name", value: "name" },
-  ];
-
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(e.target.value);
-  };
-
   const handleTemplateSelected = (option: ReportTemplateModel) => {
     props.handleSetButtonActive(option.value);
   };
@@ -80,10 +52,6 @@ function ReportInitialView(props: Readonly<ReportInitialViewProps>) {
   const clearPersistedReportState = useResetRecoilState(
     persistedReportStateAtom
   );
-
-  const handleCloseSortPopover = () => {
-    setSortPopoverAnchorEl(null);
-  };
 
   React.useEffect(() => {
     clearPersistedReportState();
@@ -173,117 +141,17 @@ function ReportInitialView(props: Readonly<ReportInitialViewProps>) {
           </h4>
         </Grid>
         <Grid item lg={6} md={6} sm={6}>
-          <div
-            css={`
-              ${rowFlexCss}
-              justify-content: flex-end;
-              gap: 8px;
-            `}
-          >
-            <div
-              css={`
-                display: flex;
-                align-items: center;
-                gap: 8px;
-              `}
-            >
-              <div css={searchInputCss(openSearch)}>
-                <input
-                  type="text"
-                  ref={inputRef}
-                  value={searchValue}
-                  placeholder="eg. Kenya"
-                  onChange={handleSearch}
-                />
-                <IconButton
-                  onClick={() => {
-                    setSearchValue("");
-                    setOpenSearch(false);
-                  }}
-                  css={`
-                    &:hover {
-                      background: transparent;
-                    }
-                  `}
-                >
-                  <CloseIcon
-                    css={`
-                      margin-top: 1px;
-                    `}
-                  />
-                </IconButton>
-              </div>
-              <IconButton
-                onClick={() => {
-                  setOpenSearch(true);
-                  inputRef.current?.focus();
-                }}
-                css={iconButtonCss(openSearch)}
-              >
-                <SearchIcon />
-              </IconButton>
-            </div>
-            <IconButton
-              onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
-                setSortPopoverAnchorEl(
-                  sortPopoverAnchorEl ? null : event.currentTarget
-                );
-              }}
-              css={iconButtonCss(openSortPopover)}
-            >
-              <SortIcon />
-            </IconButton>
-            <Popover
-              open={openSortPopover}
-              anchorEl={sortPopoverAnchorEl}
-              onClose={handleCloseSortPopover}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
-              css={`
-                .MuiPaper-root {
-                  border-radius: 5px;
-                }
-              `}
-            >
-              <div
-                css={`
-                  color: #fff;
-                  font-size: 12px;
-                  padding: 8px 22px;
-                  background: #231d2c;
-                  font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
-                `}
-              >
-                Sort by
-              </div>
-              {sortOptions.map((option) => (
-                <div
-                  key={option.label}
-                  css={sortByItemCss(sortValue === option.value)}
-                  onClick={() => {
-                    setSortValue(option.value);
-                    handleCloseSortPopover();
-                  }}
-                >
-                  {option.label}
-                </div>
-              ))}
-            </Popover>
-            <IconButton
-              onClick={() => {
-                setReportsView((prev) => (prev === "grid" ? "table" : "grid"));
-              }}
-              css={iconButtonCss(reportsView === "table")}
-            >
-              <GridIcon />
-            </IconButton>
-          </div>
+          <Filter
+            searchValue={searchValue as string}
+            setSearchValue={setSearchValue}
+            setSortValue={setSortValue}
+            setAssetsView={setReportsView}
+            sortValue={sortValue}
+            assetsView={reportsView}
+            openSearch={openSearch}
+            setOpenSearch={setOpenSearch}
+            searchIconCypressId="open-search-button"
+          />
         </Grid>
       </Grid>
       <ReportsGrid

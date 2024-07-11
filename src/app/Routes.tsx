@@ -37,9 +37,6 @@ const AboutModule = lazy(
 const WhyDXModule = lazy(
   () => import("app/modules/home-module/sub-modules/why-dx")
 );
-const ExploreAssetsModule = lazy(
-  () => import("app/modules/home-module/sub-modules/explore-assets")
-);
 
 const PricingModule = lazy(
   () => import("app/modules/home-module/sub-modules/pricing")
@@ -244,9 +241,6 @@ export function MainRoutes() {
           <RouteWithAppBar exact path="/why-dataxplorer">
             <WhyDXModule />
           </RouteWithAppBar>
-          {/* <RouteWithAppBar exact path="/explore">
-            <ExploreAssetsModule />
-          </RouteWithAppBar> */}
           <RouteWithAppBar exact path="/dashboard">
             <AuthProtectedRoute>
               <DashboardModule />

@@ -16,7 +16,7 @@ export default function Filter(
   props: Readonly<{
     searchValue: string;
     setSearchValue: (value: React.SetStateAction<string | undefined>) => void;
-    setSortValue: React.Dispatch<React.SetStateAction<string>>;
+    setSortValue: (value: "updatedDate" | "createdDate" | "name") => void;
     sortValue: string;
     setAssetsView: (value: "grid" | "table") => void;
     assetsView: "table" | "grid";
@@ -24,6 +24,7 @@ export default function Filter(
     searchInputWidth?: string;
     openSearch: boolean;
     setOpenSearch: React.Dispatch<React.SetStateAction<boolean>>;
+    searchIconCypressId: string;
   }>
 ) {
   const inputRef = React.useRef<HTMLInputElement>(null);
@@ -87,7 +88,7 @@ export default function Filter(
           </IconButton>
         </div>
         <IconButton
-          data-cy="open-search-button"
+          data-cy={props.searchIconCypressId}
           onClick={() => {
             props.setOpenSearch(true);
             inputRef.current?.focus();
@@ -141,7 +142,9 @@ export default function Filter(
             key={option.label}
             css={sortByItemCss(props.sortValue === option.value)}
             onClick={() => {
-              props.setSortValue(option.value);
+              props.setSortValue(
+                option.value as "name" | "createdDate" | "updatedDate"
+              );
               handleCloseSortPopover();
             }}
           >
