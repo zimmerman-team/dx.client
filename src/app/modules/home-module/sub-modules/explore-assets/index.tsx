@@ -12,11 +12,11 @@ import {
   unSavedReportPreviewModeAtom,
 } from "app/state/recoil/atoms";
 import { featuredAssetsCss } from "app/modules/home-module/style";
-import DatasetsGrid from "app/modules/home-module/components/Datasets/datasetsGrid";
-import ChartsGrid from "app/modules/home-module/components/Charts/chartsGrid";
-import ReportsGrid from "app/modules/home-module/components/Reports/reportsGrid";
+import DatasetsGrid from "app/modules/home-module/components/AssetCollection/Datasets/datasetsGrid";
+import ChartsGrid from "app/modules/home-module/components/AssetCollection/Charts/chartsGrid";
+import ReportsGrid from "app/modules/home-module/components/AssetCollection/Reports/reportsGrid";
 import { datasetCategories } from "app/modules/dataset-upload-module/upload-steps/metaData";
-import DatasetCategoryList from "app/modules/home-module/components/Datasets/datasetCategoryList";
+import DatasetCategoryList from "app/modules/home-module/components/AssetCollection/Datasets/datasetCategoryList";
 import Filter from "app/modules/home-module/components/Filter";
 import { useAuth0 } from "@auth0/auth0-react";
 import EmpowerBlock from "../partners/components/empowerBlock";
@@ -186,6 +186,7 @@ export default function ExploreAssetsModule() {
                 assetsView={assetsView}
                 openSearch={openSearch}
                 setOpenSearch={setOpenSearch}
+                searchIconCypressId="open-search-button"
               />
             </Grid>
           </Grid>
