@@ -11,12 +11,11 @@ import { useInfinityScroll } from "app/hooks/useInfinityScroll";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import { HomepageTable } from "app/modules/home-module/components/Table";
 import DeleteDatasetDialog from "app/components/Dialogs/deleteDatasetDialog";
-import GridItem from "app/modules/home-module/components/Datasets/gridItem";
-import DatasetAddnewCard from "app/modules/home-module/components/Datasets/datasetAddNewCard";
+import GridItem from "app/modules/home-module/components/AssetCollection/Datasets/gridItem";
+import DatasetAddnewCard from "app/modules/home-module/components/AssetCollection/Datasets/datasetAddNewCard";
 import CircleLoader from "app/modules/home-module/components/Loader";
 import { loadedDatasetsAtom } from "app/state/recoil/atoms";
 import { DatasetListItemAPIModel } from "app/modules/dataset-module/data";
-import { useAuth0 } from "@auth0/auth0-react";
 
 interface Props {
   sortBy: string;

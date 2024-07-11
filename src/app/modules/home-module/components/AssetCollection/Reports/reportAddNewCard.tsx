@@ -1,7 +1,7 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
 import { Grid, IconButton } from "@material-ui/core";
-import { ReactComponent as AddNewImage } from "../../assets/add-img-white.svg";
+import { ReactComponent as AddNewImage } from "app/modules/home-module/assets/add-img-white.svg";
 
 export default function ReportAddnewCard() {
   const history = useHistory();

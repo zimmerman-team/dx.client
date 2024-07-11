@@ -1,64 +1,58 @@
-/* third party */
 import React from "react";
 import axios from "axios";
 import get from "lodash/get";
-import find from "lodash/find";
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import useDebounce from "react-use/lib/useDebounce";
-import { useUpdateEffect } from "react-use";
-/* project */
-import { useInfinityScroll } from "app/hooks/useInfinityScroll";
-import CircleLoader from "app/modules/home-module/components/Loader";
+import { ReportModel } from "app/modules/report-module/data";
+import ColoredReportIcon from "app/assets/icons/ColoredReportIcon";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
-import DeleteChartDialog from "app/components/Dialogs/deleteChartDialog";
 import { HomepageTable } from "app/modules/home-module/components/Table";
-import { coloredEchartTypes } from "app/modules/chart-module/routes/chart-type/data";
-import ChartAddnewCard from "app/modules/home-module/components/Charts/chartAddNewCard";
-import GridItem from "app/modules/home-module/components/Charts/gridItem";
+import DeleteReportDialog from "app/components/Dialogs/deleteReportDialog";
+import ReformedGridItem from "app/modules/home-module/components/AssetCollection/Reports/gridItem";
+import ReportAddnewCard from "./reportAddNewCard";
+import { useInfinityScroll } from "app/hooks/useInfinityScroll";
+import CircleLoader from "../../Loader";
 import { useAuth0 } from "@auth0/auth0-react";
 
 interface Props {
   sortBy: string;
   searchStr: string;
   view: "grid" | "table";
+  showMenuButton: boolean;
   addCard?: boolean;
 }
 
-export default function ChartsGrid(props: Props) {
+export default function ReportsGrid(props: Props) {
   const observerTarget = React.useRef(null);
-  const [chartId, setChartId] = React.useState<string>("");
-  const [loadedCharts, setLoadedCharts] = React.useState<any[]>([]);
+  const [cardId, setCardId] = React.useState<string>("");
   const [modalDisplay, setModalDisplay] = React.useState<boolean>(false);
   const [enableButton, setEnableButton] = React.useState<boolean>(false);
+  const [loadedReports, setLoadedReports] = React.useState<ReportModel[]>([]);
+  const limit = 15;
+  //used over usestate to get current offset value in the IntersectionObserver api, as it is not updated in usestate.
+  const [offset, setOffset] = React.useState(0);
+  const { isObserved } = useInfinityScroll(observerTarget);
+  const token = useStoreState((state) => state.AuthToken.value);
 
   const { isAuthenticated } = useAuth0();
 
-  const token = useStoreState((state) => state.AuthToken.value);
-
-  const limit = 15;
-  const [offset, setOffset] = React.useState(0);
-
-  const { isObserved } = useInfinityScroll(observerTarget);
-
-  const charts = useStoreState(
-    (state) => (state.charts.ChartGetList.crudData ?? []) as any[]
+  const reports = useStoreState(
+    (state) => (state.reports.ReportGetList.crudData ?? []) as ReportModel[]
   );
-  const loadChartsCount = useStoreActions(
-    (actions) => actions.charts.ChartsCount.fetch
+  const loadReportsCount = useStoreActions(
+    (actions) => actions.reports.ReportsCount.fetch
   );
-  const chartsCount = useStoreState(
-    (state) => get(state, "charts.ChartsCount.data.count", 0) as number
+  const reportsCount = useStoreState(
+    (state) => get(state, "reports.ReportsCount.data.count", 0) as number
   );
 
-  const loadCharts = useStoreActions(
-    (actions) => actions.charts.ChartGetList.fetch
+  const loadReports = useStoreActions(
+    (actions) => actions.reports.ReportGetList.fetch
   );
-
-  const loading = useStoreState((state) => state.charts.ChartGetList.loading);
-
-  const chartsLoadSuccess = useStoreState(
-    (state) => state.charts.ChartGetList.success
+  const loading = useStoreState((state) => state.reports.ReportGetList.loading);
+  const reportsLoadSuccess = useStoreState(
+    (state) => state.reports.ReportGetList.success
   );
 
   const getFilterString = (fromZeroOffset?: boolean) => {
@@ -79,37 +73,37 @@ export default function ChartsGrid(props: Props) {
 
   const loadData = (fromZeroOffset?: boolean) => {
     if (token) {
-      loadCharts({
+      loadReports({
         token,
         storeInCrudData: true,
         filterString: getFilterString(fromZeroOffset),
       });
     } else {
-      loadCharts({
-        nonAuthCall: true,
+      loadReports({
+        token,
+        nonAuthCall: !token,
         storeInCrudData: true,
-        filterString: getFilterString(fromZeroOffset),
+        filterString: getFilterString(),
       });
     }
   };
 
   const reloadData = () => {
     if (token) {
-      loadChartsCount({ token, filterString: getWhereString() });
+      loadReportsCount({ token, filterString: getWhereString() });
     } else {
-      loadChartsCount({ nonAuthCall: true, filterString: getWhereString() });
+      loadReportsCount({ nonAuthCall: true, filterString: getWhereString() });
     }
-    setLoadedCharts([]);
+    setLoadedReports([]);
     setOffset(0);
-
     loadData(true);
   };
 
   React.useEffect(() => {
     //load data if intersection observer is triggered
-    if (chartsCount > limit) {
-      if (isObserved && chartsLoadSuccess) {
-        if (loadedCharts.length !== chartsCount) {
+    if (reportsCount > limit) {
+      if (isObserved && reportsLoadSuccess) {
+        if (loadedReports.length !== reportsCount) {
           //update the offset value for the next load
           setOffset(offset + limit);
         }
@@ -117,22 +111,21 @@ export default function ChartsGrid(props: Props) {
     }
   }, [isObserved]);
 
-  useUpdateEffect(() => {
+  React.useEffect(() => {
     if (offset === 0) {
       return;
     }
     loadData();
   }, [offset, token]);
 
-  const handleDelete = (id: string) => {
+  const handleDelete = (id?: string) => {
     setModalDisplay(false);
     setEnableButton(false);
-
     if (!id) {
       return;
     }
     axios
-      .delete(`${process.env.REACT_APP_API}/chart/${id}`, {
+      .delete(`${process.env.REACT_APP_API}/report/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -148,7 +141,7 @@ export default function ChartsGrid(props: Props) {
       return;
     }
     axios
-      .get(`${process.env.REACT_APP_API}/chart/duplicate/${id}`, {
+      .get(`${process.env.REACT_APP_API}/report/duplicate/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -168,29 +161,21 @@ export default function ChartsGrid(props: Props) {
   };
 
   const handleModal = (id: string) => {
-    setChartId(id);
+    setCardId(id);
     setModalDisplay(true);
   };
 
-  const getIcon = (vizType: string) => {
-    const type = find(coloredEchartTypes(), { id: vizType });
-    if (type) {
-      return type.icon;
-    }
-    return coloredEchartTypes()[0].icon;
-  };
-
   React.useEffect(() => {
-    if (!chartsLoadSuccess) {
+    if (!reportsLoadSuccess) {
       return;
     }
     //update the loaded reports
-    setLoadedCharts((prevCharts) => {
-      const prevChartsIds = prevCharts.map((c) => c.id);
-      const f = charts.filter((chart) => !prevChartsIds.includes(chart.id));
-      return [...prevCharts, ...f];
+    setLoadedReports((prevReports) => {
+      const prevReportsIds = prevReports.map((r) => r.id);
+      const f = reports.filter((report) => !prevReportsIds.includes(report.id));
+      return [...prevReports, ...f];
     });
-  }, [chartsLoadSuccess]);
+  }, [reportsLoadSuccess]);
 
   React.useEffect(() => {
     reloadData();
@@ -198,6 +183,7 @@ export default function ChartsGrid(props: Props) {
 
   const [,] = useDebounce(
     () => {
+      //calls reloadData 500ms after change in searchStr or sortBy
       if (props.searchStr !== undefined) {
         reloadData();
       }
@@ -210,21 +196,21 @@ export default function ChartsGrid(props: Props) {
     <>
       {props.view === "grid" && (
         <Grid container spacing={2}>
-          {props.addCard ? <ChartAddnewCard /> : null}
-          {loadedCharts.map((c, index) => (
-            <Grid item key={c.id} xs={12} sm={6} md={4} lg={3}>
-              <GridItem
-                id={c.id}
-                title={c.name}
-                date={c.createdDate}
-                path={`/chart/${c.id}`}
-                viz={getIcon(c.vizType)}
-                vizType={c.vizType}
-                isMappingValid={c.isMappingValid}
-                handleDelete={() => handleModal(c.id)}
-                handleDuplicate={() => handleDuplicate(c.id)}
-                owner={c.owner}
-                isAIAssisted={c.isAIAssisted}
+          {props.addCard ? <ReportAddnewCard /> : null}
+          {loadedReports.map((data, index) => (
+            <Grid item key={data.id} xs={12} sm={6} md={4} lg={3}>
+              <ReformedGridItem
+                id={data.id}
+                key={data.id}
+                descr={data.name}
+                date={data.createdDate}
+                viz={<ColoredReportIcon />}
+                color={data.backgroundColor}
+                showMenuButton={props.showMenuButton}
+                handleDelete={() => handleModal(data.id)}
+                handleDuplicate={() => handleDuplicate(data.id)}
+                title={data.title || data.name}
+                owner={data.owner}
               />
               <Box height={16} />
             </Grid>
@@ -233,22 +219,20 @@ export default function ChartsGrid(props: Props) {
       )}
       {props.view === "table" && (
         <HomepageTable
-          data={loadedCharts.map((data) => ({
+          data={loadedReports.map((data) => ({
             id: data.id,
             name: data.name,
             description: data.title,
             createdDate: data.createdDate,
-            type: "chart",
+            type: "report",
           }))}
         />
       )}
       <Box height={80} />
-
       <div ref={observerTarget} />
       {loading && <CircleLoader />}
-
-      <DeleteChartDialog
-        cardId={chartId}
+      <DeleteReportDialog
+        cardId={cardId}
         modalDisplay={modalDisplay}
         enableButton={enableButton}
         handleDelete={handleDelete}

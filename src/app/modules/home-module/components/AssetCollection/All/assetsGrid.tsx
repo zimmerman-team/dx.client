@@ -13,13 +13,13 @@ import CircleLoader from "app/modules/home-module/components/Loader";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import DeleteChartDialog from "app/components/Dialogs/deleteChartDialog";
 import { coloredEchartTypes } from "app/modules/chart-module/routes/chart-type/data";
-import ChartGridItem from "app/modules/home-module/components/Charts/gridItem";
-import DatasetGridItem from "app/modules/home-module/components/Datasets/gridItem";
-import ReportGridItem from "app/modules/home-module/components/Reports/gridItem";
+import ChartGridItem from "app/modules/home-module/components/AssetCollection/Charts/gridItem";
+import DatasetGridItem from "app/modules/home-module/components/AssetCollection/Datasets/gridItem";
+import ReportGridItem from "app/modules/home-module/components/AssetCollection/Reports/gridItem";
 import ColoredReportIcon from "app/assets/icons/ColoredReportIcon";
 import DeleteDatasetDialog from "app/components/Dialogs/deleteDatasetDialog";
 import DeleteReportDialog from "app/components/Dialogs/deleteReportDialog";
-import { HomepageTable } from "../Table";
+import { HomepageTable } from "../../Table";
 
 interface Props {
   sortBy: string;

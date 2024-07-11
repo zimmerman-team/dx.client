@@ -1,7 +1,7 @@
 import React from "react";
-import ChartsGrid from "app/modules/home-module/components/Charts/chartsGrid";
-import DatasetsGrid from "app/modules/home-module/components/Datasets/datasetsGrid";
-import ReportsGrid from "app/modules/home-module/components/Reports/reportsGrid";
+import ChartsGrid from "app/modules/home-module/components/AssetCollection/Charts/chartsGrid";
+import DatasetsGrid from "app/modules/home-module/components/AssetCollection/Datasets/datasetsGrid";
+import ReportsGrid from "app/modules/home-module/components/AssetCollection/Reports/reportsGrid";
 
 export default function LocalAssets(props: {
   display: "data" | "charts" | "reports";
