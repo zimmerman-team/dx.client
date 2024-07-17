@@ -37,7 +37,6 @@ export default function LocalAssets(props: {
             sortBy={sortByStr}
             searchStr={searchStr}
             view={props.view}
-            showMenuButton={false}
             addCard
           />
         );

@@ -125,7 +125,6 @@ export default function ExploreAssetsModule() {
             sortBy={sortByStr}
             searchStr={searchStr}
             view={assetsView}
-            showMenuButton={false}
             addCard
           />
         );

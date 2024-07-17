@@ -19,7 +19,7 @@ interface Props {
   viz: JSX.Element;
   handleDelete?: (id: string) => void;
   handleDuplicate?: (id: string) => void;
-  showMenuButton: boolean;
+  showMenuButton?: boolean;
   owner: string;
 }
 
@@ -129,6 +129,7 @@ export default function gridItem(props: Props) {
                 background: transparent;
               }
             `}
+            aria-label="report-menu-button"
             onClick={showMenuOptions}
             data-cy="report-grid-item-menu-btn"
           >
@@ -181,6 +182,7 @@ export default function gridItem(props: Props) {
       {menuOptionsDisplay && (
         <React.Fragment>
           <div
+            data-testid="report-grid-item-menu-overlay"
             css={`
               top: 0;
               left: 0;
@@ -236,6 +238,8 @@ export default function gridItem(props: Props) {
                   props.handleDuplicate?.(props.id as string);
                   setMenuOptionsDisplay(false);
                 }}
+                disabled={!isAuthenticated}
+                aria-label="report-duplicate-button"
               >
                 <Tooltip
                   title="Duplicate"
@@ -250,7 +254,7 @@ export default function gridItem(props: Props) {
                 !canReportEditDelete ? "opacity: 0.5;pointer-events: none;" : ""
               }
             >
-              <Link to={`/report/${props.id}/edit`}>
+              <Link to={`/report/${props.id}/edit`} aria-label="edit-icon">
                 <Tooltip title="Edit" data-cy="report-grid-item-edit-btn">
                   <EditIcon
                     css={`
@@ -267,6 +271,8 @@ export default function gridItem(props: Props) {
             >
               <IconButton
                 onClick={() => props.handleDelete?.(props.id as string)}
+                aria-label="report-delete-button"
+                disabled={!canReportEditDelete}
               >
                 <Tooltip title="Delete" data-cy="report-grid-item-delete-btn">
                   <DeleteIcon />

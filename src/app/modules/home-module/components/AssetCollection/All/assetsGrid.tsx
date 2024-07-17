@@ -25,7 +25,6 @@ interface Props {
   sortBy: string;
   searchStr: string;
   view: "grid" | "table";
-  showMenuButton: boolean;
   inChartBuilder?: boolean;
   category?: string;
   onItemClick?: (v: string) => void;
@@ -53,6 +52,9 @@ export default function AssetsGrid(props: Props) {
   const assets = useStoreState(
     (state) => (state.assets.AssetGetList.crudData ?? []) as any[]
   );
+  const loadAssets = useStoreActions(
+    (actions) => actions.assets.AssetGetList.fetch
+  );
   const loadAssetsCount = useStoreActions(
     (actions) => actions.assets.AssetsCount.fetch
   );
@@ -60,9 +62,9 @@ export default function AssetsGrid(props: Props) {
     (state) => get(state, "assets.AssetsCount.data.count", 0) as number
   );
 
-  const loadAssets = useStoreActions(
-    (actions) => actions.assets.AssetGetList.fetch
-  );
+  // const loadAssets = useStoreActions(
+  //   (actions) => actions.assets.AssetGetList.fetch
+  // );
 
   const loading = useStoreState((state) => state.assets.AssetGetList.loading);
 
@@ -276,7 +278,6 @@ export default function AssetsGrid(props: Props) {
                       id={d.id}
                       title={d.name}
                       date={d.createdDate}
-                      path={`/chart/${d.id}`}
                       viz={getIcon(d.vizType)}
                       vizType={d.vizType}
                       isMappingValid={d.isMappingValid}
@@ -318,7 +319,6 @@ export default function AssetsGrid(props: Props) {
                       date={d.createdDate}
                       viz={<ColoredReportIcon />}
                       color={d.backgroundColor}
-                      showMenuButton={props.showMenuButton}
                       handleDelete={() => {
                         setActiveAssetType(d.assetType as assetType);
                         handleModal(d.id);

@@ -12,7 +12,6 @@ import { ReactComponent as AIIcon } from "app/modules/chart-module/assets/ai-ico
 
 interface Props {
   id: string;
-  path: string;
   title: string;
   date: string;
   vizType: string;
@@ -24,7 +23,7 @@ interface Props {
   isAIAssisted: boolean;
 }
 
-export default function gridItem(props: Props) {
+export default function GridItem(props: Props) {
   const { user, isAuthenticated } = useAuth0();
   const [menuOptionsDisplay, setMenuOptionsDisplay] = React.useState(false);
   const showMenuOptions = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -100,16 +99,17 @@ export default function gridItem(props: Props) {
             >
               <b>{props.title}</b>
             </p>
-
-            <div
-              css={`
-                display: ${props.isAIAssisted ? "block" : "none"};
-                margin-bottom: -12px;
-              `}
-              data-cy="chart-grid-item-ai-icon"
-            >
-              <AIIcon />
-            </div>
+            {props.isAIAssisted ? (
+              <div
+                css={`
+                  margin-bottom: -12px;
+                `}
+                data-cy="chart-grid-item-ai-icon"
+                data-testid="chart-grid-item-ai-icon"
+              >
+                <AIIcon />
+              </div>
+            ) : null}
           </div>
           <IconButton
             css={`
@@ -123,6 +123,7 @@ export default function gridItem(props: Props) {
             `}
             onClick={showMenuOptions}
             data-cy="chart-grid-item-menu-btn"
+            data-testid="chart-grid-item-menu-btn"
           >
             <MenuIcon />
           </IconButton>
@@ -176,6 +177,7 @@ export default function gridItem(props: Props) {
               height: 100vh;
               position: fixed;
             `}
+            data-testid="chart-grid-item-menu-overlay"
             onClick={() => setMenuOptionsDisplay(false)}
           />
           <div
@@ -223,6 +225,8 @@ export default function gridItem(props: Props) {
                   props.handleDuplicate?.(props.id);
                   setMenuOptionsDisplay(false);
                 }}
+                disabled={!isAuthenticated}
+                aria-label="duplicate-button"
               >
                 <Tooltip
                   title="Duplicate"
@@ -243,6 +247,7 @@ export default function gridItem(props: Props) {
                     ? `/chart/${props.id}/customize`
                     : `/chart/${props.id}/mapping`
                 }
+                aria-label="edit-icon"
               >
                 <Tooltip title="Edit" data-cy="chart-grid-item-edit-btn">
                   <EditIcon
@@ -258,7 +263,11 @@ export default function gridItem(props: Props) {
                 !canChartEditDelete ? "opacity: 0.5;pointer-events: none;" : ""
               }
             >
-              <IconButton onClick={() => props.handleDelete?.(props.id)}>
+              <IconButton
+                onClick={() => props.handleDelete?.(props.id)}
+                aria-label="delete-button"
+                disabled={!canChartEditDelete}
+              >
                 <Tooltip title="Delete" data-cy="chart-grid-item-delete-btn">
                   <DeleteIcon />
                 </Tooltip>

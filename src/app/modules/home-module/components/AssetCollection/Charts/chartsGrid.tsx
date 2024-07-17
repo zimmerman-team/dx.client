@@ -217,7 +217,6 @@ export default function ChartsGrid(props: Props) {
                 id={c.id}
                 title={c.name}
                 date={c.createdDate}
-                path={`/chart/${c.id}`}
                 viz={getIcon(c.vizType)}
                 vizType={c.vizType}
                 isMappingValid={c.isMappingValid}

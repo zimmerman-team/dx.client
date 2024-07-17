@@ -19,7 +19,7 @@ interface Props {
   sortBy: string;
   searchStr: string;
   view: "grid" | "table";
-  showMenuButton: boolean;
+  showMenuButton?: boolean;
   addCard?: boolean;
 }
 

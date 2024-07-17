@@ -35,18 +35,18 @@ function AssetsCollection() {
   const { isAuthenticated, user } = useAuth0();
 
   // clear persisted states
-  const clearPersistedReportState = useResetRecoilState(
-    persistedReportStateAtom
-  );
-  const clearChartFromReportState = useResetRecoilState(chartFromReportAtom);
+  // const clearPersistedReportState = useResetRecoilState(
+  //   persistedReportStateAtom
+  // );
+  // const clearChartFromReportState = useResetRecoilState(chartFromReportAtom);
 
-  const setReportPreviewMode = useRecoilState(unSavedReportPreviewModeAtom)[1];
+  // const setReportPreviewMode = useRecoilState(unSavedReportPreviewModeAtom)[1];
 
-  React.useEffect(() => {
-    clearPersistedReportState();
-    clearChartFromReportState();
-    setReportPreviewMode(false);
-  }, []);
+  // React.useEffect(() => {
+  //   clearPersistedReportState();
+  //   clearChartFromReportState();
+  //   setReportPreviewMode(false);
+  // }, []);
 
   const [categories, setCategories] = React.useState<string[]>([]);
 
@@ -89,7 +89,6 @@ function AssetsCollection() {
             sortBy={sortByStr}
             searchStr={searchStr}
             view={assetsView}
-            showMenuButton={false}
           />
         );
       case "all":
@@ -98,7 +97,6 @@ function AssetsCollection() {
             sortBy={sortByStr}
             searchStr={searchStr}
             view={assetsView}
-            showMenuButton={false}
           />
         );
       default:
