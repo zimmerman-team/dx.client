@@ -300,44 +300,6 @@ describe("Edit, duplicate and delete report", () => {
     cy.get('[data-cy="row-frame-item-drop-zone-0-0"]').should("have.length", 1);
   });
 
-  it("Can Modify the row structure of a row", () => {
-    cy.get("[data-cy=home-search-button]").click();
-    cy.get("[data-cy=home-search-input]").type(
-      `{selectall}{backspace}${reportTestName}`
-    );
-
-    cy.wait("@fetchReports");
-
-    cy.contains('[data-cy="report-grid-item"]', `${reportTestName} - Edited`)
-      .first()
-      .scrollIntoView()
-      .within(() => {
-        cy.get('[data-cy="report-grid-item-menu-btn"]').click();
-      });
-
-    cy.intercept(`${apiUrl}/report/*`).as("fetchReport");
-
-    cy.get('[data-cy="report-grid-item-edit-btn"]').click();
-
-    cy.wait("@fetchReport");
-
-    cy.get('[data-cy="row-frame-chart-item-0-1"]').should("have.length", 1);
-
-    cy.get('[data-cy="row-frame-container-0"]')
-      .trigger("mouseover")
-      .within(() => {
-        cy.get('[data-cy="edit-row-structure-button"]').click();
-      });
-
-    cy.get('[data-cy="empty-row-frame"]')
-      .first()
-      .within(() => {
-        cy.get('[data-cy="one-by-one-type"]').click({ timeout: 2000 });
-      });
-
-    cy.get('[data-cy="row-frame-chart-item-0-1"]').should("have.length", 0);
-  });
-
   it("Can Duplicate a report", () => {
     cy.get("[data-cy=home-search-button]").click();
     cy.get("[data-cy=home-search-input]").type(
@@ -576,6 +538,44 @@ describe("Edit, duplicate and delete report", () => {
       '[data-cy="report-panel-chart-item"]',
       `${chartTestName}-Edited`
     ).should("be.visible");
+  });
+
+  it("Can Modify the row structure of a row", () => {
+    cy.get("[data-cy=home-search-button]").click();
+    cy.get("[data-cy=home-search-input]").type(
+      `{selectall}{backspace}${reportTestName}`
+    );
+
+    cy.wait("@fetchReports");
+
+    cy.contains('[data-cy="report-grid-item"]', `${reportTestName} - Edited`)
+      .first()
+      .scrollIntoView()
+      .within(() => {
+        cy.get('[data-cy="report-grid-item-menu-btn"]').click();
+      });
+
+    cy.intercept(`${apiUrl}/report/*`).as("fetchReport");
+
+    cy.get('[data-cy="report-grid-item-edit-btn"]').click();
+
+    cy.wait("@fetchReport");
+
+    cy.get('[data-cy="row-frame-chart-item-0-1"]').should("have.length", 1);
+
+    cy.get('[data-cy="row-frame-container-0"]')
+      .trigger("mouseover")
+      .within(() => {
+        cy.get('[data-cy="edit-row-structure-button"]').click();
+      });
+
+    cy.get('[data-cy="empty-row-frame"]')
+      .first()
+      .within(() => {
+        cy.get('[data-cy="one-by-one-type"]').click({ timeout: 2000 });
+      });
+
+    cy.get('[data-cy="row-frame-chart-item-0-1"]').should("have.length", 0);
   });
 
   it("Can delete a report", () => {
