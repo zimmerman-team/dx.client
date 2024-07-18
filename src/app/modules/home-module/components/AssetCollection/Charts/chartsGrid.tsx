@@ -31,11 +31,8 @@ export default function ChartsGrid(props: Props) {
   const [loadedCharts, setLoadedCharts] = React.useState<any[]>([]);
   const [modalDisplay, setModalDisplay] = React.useState<boolean>(false);
   const [enableButton, setEnableButton] = React.useState<boolean>(false);
-
-  const { isAuthenticated } = useAuth0();
-
   const token = useStoreState((state) => state.AuthToken.value);
-
+  const initialRender = React.useRef(true);
   const limit = 15;
   const [offset, setOffset] = React.useState(0);
 
@@ -198,9 +195,13 @@ export default function ChartsGrid(props: Props) {
 
   const [,] = useDebounce(
     () => {
-      if (props.searchStr !== undefined) {
-        reloadData();
+      if (initialRender.current) {
+        initialRender.current = false;
+        return;
       }
+      reloadData();
+      // if (props.searchStr !== undefined) {
+      // }
     },
     500,
     [props.searchStr]

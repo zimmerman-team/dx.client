@@ -32,7 +32,6 @@ import {
   Redirect,
 } from "react-router-dom";
 import {
-  chartFromReportAtom,
   persistedReportStateAtom,
   reportRightPanelViewAtom,
   unSavedReportPreviewModeAtom,

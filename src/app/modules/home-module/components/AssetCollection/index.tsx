@@ -3,7 +3,7 @@ import React from "react";
 /* third-party */
 import { Link } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
-import { useRecoilState, useResetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
@@ -14,9 +14,6 @@ import ReportsGrid from "app/modules/home-module/components/AssetCollection/Repo
 import DatasetsGrid from "app/modules/home-module/components/AssetCollection/Datasets/datasetsGrid";
 import {
   homeDisplayAtom,
-  persistedReportStateAtom,
-  chartFromReportAtom,
-  unSavedReportPreviewModeAtom,
   allAssetsViewAtom,
   allAssetsSortBy,
 } from "app/state/recoil/atoms";
@@ -33,30 +30,11 @@ import Filter from "app/modules/home-module/components/Filter";
 
 function AssetsCollection() {
   const { isAuthenticated, user } = useAuth0();
-
-  // clear persisted states
-  // const clearPersistedReportState = useResetRecoilState(
-  //   persistedReportStateAtom
-  // );
-  // const clearChartFromReportState = useResetRecoilState(chartFromReportAtom);
-
-  // const setReportPreviewMode = useRecoilState(unSavedReportPreviewModeAtom)[1];
-
-  // React.useEffect(() => {
-  //   clearPersistedReportState();
-  //   clearChartFromReportState();
-  //   setReportPreviewMode(false);
-  // }, []);
-
   const [categories, setCategories] = React.useState<string[]>([]);
-
   const [assetsView, setAssetsView] = useRecoilState(allAssetsViewAtom);
-  const [searchValue, setSearchValue] = React.useState<string | undefined>(
-    undefined
-  );
+  const [searchValue, setSearchValue] = React.useState<string | undefined>("");
   const [openSearch, setOpenSearch] = React.useState(false);
   const [sortValue, setSortValue] = useRecoilState(allAssetsSortBy);
-
   const [display, setDisplay] = useRecoilState(homeDisplayAtom);
   const [tabPrevPosition, setTabPrevPosition] = React.useState("");
 

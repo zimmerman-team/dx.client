@@ -35,6 +35,7 @@ export default function DatasetsGrid(props: Readonly<Props>) {
   const [enableButton, setEnableButton] = React.useState<boolean>(false);
   const [modalDisplay, setModalDisplay] = React.useState<boolean>(false);
   const limit = 15;
+  const initialRender = React.useRef(true);
   const [offset, setOffset] = React.useState(0);
   const { isObserved } = useInfinityScroll(observerTarget);
   const token = useStoreState((state) => state.AuthToken.value);
@@ -192,9 +193,13 @@ export default function DatasetsGrid(props: Readonly<Props>) {
 
   const [,] = useDebounce(
     () => {
-      if (props.searchStr !== undefined) {
-        reloadData();
+      if (initialRender.current) {
+        initialRender.current = false;
+        return;
       }
+      reloadData();
+      // if (props.searchStr !== undefined) {
+      // }
     },
     500,
     [props.searchStr]

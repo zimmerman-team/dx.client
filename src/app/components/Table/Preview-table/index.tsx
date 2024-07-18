@@ -171,6 +171,7 @@ export default function PreviewTable(props: PreviewTableProps) {
                 {props.columns.map((val, cellIndex) => (
                   <TableCell key={val}>
                     <p
+                      title={data?.[val] as string}
                       css={`
                         margin: 0;
                         overflow: clip;

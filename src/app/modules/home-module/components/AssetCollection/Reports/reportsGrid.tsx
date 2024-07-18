@@ -30,12 +30,10 @@ export default function ReportsGrid(props: Props) {
   const [enableButton, setEnableButton] = React.useState<boolean>(false);
   const [loadedReports, setLoadedReports] = React.useState<ReportModel[]>([]);
   const limit = 15;
-  //used over usestate to get current offset value in the IntersectionObserver api, as it is not updated in usestate.
+  const initialRender = React.useRef(true);
   const [offset, setOffset] = React.useState(0);
   const { isObserved } = useInfinityScroll(observerTarget);
   const token = useStoreState((state) => state.AuthToken.value);
-
-  const { isAuthenticated } = useAuth0();
 
   const reports = useStoreState(
     (state) => (state.reports.ReportGetList.crudData ?? []) as ReportModel[]
@@ -183,10 +181,11 @@ export default function ReportsGrid(props: Props) {
 
   const [,] = useDebounce(
     () => {
-      //calls reloadData 500ms after change in searchStr or sortBy
-      if (props.searchStr !== undefined) {
-        reloadData();
+      if (initialRender.current) {
+        initialRender.current = false;
+        return;
       }
+      reloadData();
     },
     500,
     [props.searchStr]

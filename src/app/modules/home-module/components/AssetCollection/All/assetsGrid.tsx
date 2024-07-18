@@ -41,6 +41,7 @@ export default function AssetsGrid(props: Props) {
   const [activeAssetType, setActiveAssetType] =
     React.useState<assetType | null>(null);
   const [enableButton, setEnableButton] = React.useState<boolean>(false);
+  const initialRender = React.useRef(true);
 
   const token = useStoreState((state) => state.AuthToken.value);
 
@@ -224,9 +225,13 @@ export default function AssetsGrid(props: Props) {
 
   const [,] = useDebounce(
     () => {
-      if (props.searchStr !== undefined) {
-        reloadData();
+      if (initialRender.current) {
+        initialRender.current = false;
+        return;
       }
+      reloadData();
+      // if (props.searchStr !== undefined) {
+      // }
     },
     500,
     [props.searchStr]

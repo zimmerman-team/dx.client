@@ -53,25 +53,8 @@ const StyledTabs = withStyles({
 
 export default function ExploreAssetsModule() {
   useTitle("DX Dataxplorer - Explore");
-  // clear persisted state
-  const clearPersistedReportState = useResetRecoilState(
-    persistedReportStateAtom
-  );
-  const clearChartFromReportState = useResetRecoilState(chartFromReportAtom);
-
-  const [_, setReportPreviewMode] = useRecoilState(
-    unSavedReportPreviewModeAtom
-  );
-
   const { isAuthenticated } = useAuth0();
-
-  React.useEffect(() => {
-    clearPersistedReportState();
-    clearChartFromReportState();
-    setReportPreviewMode(false);
-  }, []);
   const [categories, setCategories] = React.useState<string[]>([]);
-
   const [assetsView, setAssetsView] = useRecoilState(allAssetsViewAtom);
   const [searchValue, setSearchValue] = React.useState<string | undefined>(
     undefined
