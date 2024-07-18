@@ -40,18 +40,6 @@ export const ToolBoxPanelDonorMapViewState: ToolBoxPanelDonorMapTypeStateModel =
     }),
   };
 
-export interface ToolBoxPanelAggregateByStateModel {
-  value: string;
-  setValue: Action<ToolBoxPanelDonorMapViewStateModel, string>;
-}
-
-export const ToolBoxPanelAggregateByState: ToolBoxPanelAggregateByStateModel = {
-  value: "",
-  setValue: action((state, payload: string) => {
-    state.value = payload;
-  }),
-};
-
 export interface ToolBoxPanelPFPeriodStateModel {
   value: number;
   setValue: Action<ToolBoxPanelPFPeriodStateModel, number>;
