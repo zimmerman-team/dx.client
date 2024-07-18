@@ -67,6 +67,7 @@ export default function Filter(
             placeholder="eg. Kenya"
             onChange={handleSearch}
             data-cy="filter-search-input"
+            aria-label="search"
           />
           <IconButton
             onClick={() => {
@@ -74,6 +75,7 @@ export default function Filter(
               props.terminateSearch && props.terminateSearch();
               props.setOpenSearch(false);
             }}
+            aria-label="close-search"
             css={`
               &:hover {
                 background: transparent;
@@ -94,6 +96,7 @@ export default function Filter(
             inputRef.current?.focus();
           }}
           css={iconButtonCss(props.openSearch)}
+          aria-label="search-button"
         >
           <SearchIcon />
         </IconButton>
@@ -105,6 +108,7 @@ export default function Filter(
           );
         }}
         css={iconButtonCss(openSortPopover)}
+        aria-label="sort-button"
       >
         <SortIcon />
       </IconButton>
@@ -157,6 +161,9 @@ export default function Filter(
           props.setAssetsView(props.assetsView === "table" ? "grid" : "table");
         }}
         css={iconButtonCss(props.assetsView === "table")}
+        aria-label={`${
+          props.assetsView === "table" ? "grid" : "table"
+        }-view-button`}
       >
         {props.assetsView === "table" ? <TableIcon /> : <GridIcon />}
       </IconButton>
