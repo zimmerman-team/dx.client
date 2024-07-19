@@ -1,5 +1,8 @@
 import React from "react";
+import axios from "axios";
 import { useTitle } from "react-use";
+import { useAuth0 } from "@auth0/auth0-react";
+import { useStoreState } from "app/state/store/hooks";
 import BgEllipses from "app/modules/home-module/assets/full-bg-ellipses.svg";
 import { Box, Container } from "@material-ui/core";
 import PlanCard from "./components/plan-card";
@@ -9,94 +12,140 @@ import Features from "./components/features";
 import MFALogo from "./assets/mfa-logo";
 import TGFLogo from "./assets/tgf-logo";
 import IATILogo from "./assets/iati-logo";
-import FAQ from "./components/faq";
+
+const views = [
+  {
+    name: "Monthly Plan",
+    key: "monthly",
+  },
+  {
+    name: "Yearly Plan",
+    key: "yearly",
+  },
+];
+
+const plans = [
+  {
+    name: "Free Plan",
+    yearlyPrice: "Free forever",
+    monthlyPrice: "Free forever",
+    text: "For individuals or teams just getting started in Dataxplorer",
+    current: false,
+    recommended: true,
+    buttonText: "Activate free trial",
+    discount: "",
+    key: "free",
+  },
+  {
+    name: "Pro",
+    yearlyPrice: "€750",
+    monthlyPrice: "€75",
+    text: "For individual users.",
+    current: false,
+    recommended: false,
+    buttonText: "Activate a free trial",
+    discount: "(Save 15%)",
+    key: "pro",
+  },
+  {
+    name: "Team",
+    yearlyPrice: "€2,250",
+    monthlyPrice: "€250",
+    text: "Scale to 5 users and connect your team.",
+    current: false,
+    recommended: false,
+    buttonText: "Activate free trial",
+    discount: "(Save 15%)",
+    key: "team",
+  },
+  {
+    name: "Enterprise",
+    yearlyPrice: "Custom",
+    monthlyPrice: "Custom",
+    text: "For organisations looking scale into powerful data visualization, with full support and security",
+    current: false,
+    recommended: false,
+    buttonText: "Contact us",
+    discount: "",
+    key: "enterprise",
+  },
+];
 
 export default function PricingModule() {
   useTitle("DX Dataxplorer - Pricing");
 
+  const { user, isAuthenticated } = useAuth0();
+
   const [subscriptionPlan, setSubscriptionPlan] = React.useState("monthly");
 
-  const views = [
-    {
-      name: "Monthly Plan",
-      key: "monthly",
-    },
-    {
-      name: (
-        <div
-          css={`
-            font-style: normal;
-            font-weight: 400;
-            line-height: normal;
-            font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
-          `}
-        >
-          Yearly Plan
-          <p
-            css={`
-              margin: 0;
-              padding: 0;
-              font-size: 10px;
-              font-style: normal;
-              font-weight: 400;
-              line-height: normal;
-              font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
-            `}
-          >
-            (Save 15% Annually )
-          </p>
-        </div>
-      ),
-      key: "yearly",
-    },
-  ];
+  const token = useStoreState((state) => state.AuthToken.value);
 
-  const plans = [
-    {
-      name: "Free Plan",
-      yearlyPrice: "FREE",
-      monthlyPrice: "Free forever",
-      text: "For individuals or teams just getting started in Dataxplorer",
-      current: false,
-      recommended: true,
-      buttonText: "Activate free trial",
-      discount: "",
-      key: "free",
-    },
-    {
-      name: "Pro",
-      yearlyPrice: "€750",
-      monthlyPrice: "€75",
-      text: "For individual users.",
-      current: false,
-      recommended: false,
-      buttonText: "Activate a free trial",
-      discount: "(Save 15%)",
-      key: "pro",
-    },
-    {
-      name: "Team",
-      yearlyPrice: "€2,250",
-      monthlyPrice: "€250",
-      text: "Scale to 5 users and connect your team.",
-      current: false,
-      recommended: false,
-      buttonText: "Activate free trial",
-      discount: "(Save 15%)",
-      key: "team",
-    },
-    {
-      name: "Enterprise",
-      yearlyPrice: "Custom",
-      monthlyPrice: "Custom",
-      text: "For organisations looking scale into powerful data visualization, with full support and security",
-      current: false,
-      recommended: false,
-      buttonText: "Contact us",
-      discount: "",
-      key: "enterprise",
-    },
-  ];
+  const createNewStripeCustomer = async () => {
+    const customerCreationResponse = await axios.post(
+      `${process.env.REACT_APP_API}/stripe/new-customer`,
+      {
+        name: user?.name,
+        email: user?.email,
+        authUserId: user?.sub,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    const customerId = customerCreationResponse.data.data;
+    return customerId;
+  };
+
+  const createStripeCheckoutSession = async (
+    customerId: string,
+    planName: string
+  ) => {
+    const checkoutSessionResponse = await axios.post(
+      `${process.env.REACT_APP_API}/stripe/checkout-session`,
+      {
+        planName,
+        customerId,
+        licensesNumber: 1,
+        recurrence: subscriptionPlan,
+        domainURL: `${window.location.origin}/payment`,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    const sessionUrl = checkoutSessionResponse.data.data;
+    return sessionUrl;
+  };
+
+  const handlePlanButtonClick = async (key: string) => {
+    switch (key) {
+      case plans[0].key:
+        if (isAuthenticated) {
+          const customerId = await createNewStripeCustomer();
+          if (customerId) {
+            const sessionUrl = await createStripeCheckoutSession(
+              customerId,
+              key
+            );
+            if (sessionUrl) window.location.href = sessionUrl;
+          }
+        } else {
+          // redirect to login page
+        }
+        break;
+      case plans[1].key:
+      case plans[2].key:
+      case plans[3].key:
+      default:
+        break;
+    }
+  };
 
   return (
     <section
@@ -215,7 +264,11 @@ export default function PricingModule() {
           `}
         >
           {plans.map((plan) => (
-            <PlanCard plan={plan} activeView={subscriptionPlan} />
+            <PlanCard
+              plan={plan}
+              activeView={subscriptionPlan}
+              onButtonClick={handlePlanButtonClick}
+            />
           ))}
         </div>
 
