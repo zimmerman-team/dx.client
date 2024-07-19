@@ -75,7 +75,7 @@ interface Props {
   setHeaderDetails: React.Dispatch<React.SetStateAction<IHeaderDetails>>;
   framesArray: IFramesArray[];
   reportName: string;
-  handlePersistReportState: () => void;
+  onSave: (type: "create" | "edit") => Promise<void>;
 }
 
 const Button = withStyles(() => ({
@@ -428,7 +428,7 @@ export function ReportRightPanelCreateView(props: Readonly<Props>) {
           headerDetails={props.headerDetails}
           framesArray={props.framesArray}
           reportName={props.reportName}
-          handlePersistReportState={props.handlePersistReportState}
+          onSave={props.onSave}
         />
       )}
       {currentView === "media" && (
@@ -471,7 +471,7 @@ function ReportRightPanelCreateViewChartList(
     headerDetails: IHeaderDetails;
     framesArray: IFramesArray[];
     reportName: string;
-    handlePersistReportState: () => void;
+    onSave: (type: "create" | "edit") => Promise<void>;
   }>
 ) {
   const token = useStoreState((state) => state.AuthToken.value);
@@ -622,7 +622,7 @@ function ReportRightPanelCreateViewChartList(
           headerDetails={props.headerDetails}
           framesArray={props.framesArray}
           reportName={props.reportName}
-          handlePersistReportState={props.handlePersistReportState}
+          onSave={props.onSave}
         />
         {chartList
           .filter((c) => c.isMappingValid)
@@ -1149,7 +1149,7 @@ function CreateChartCard(props: {
   reportName: string;
   headerDetails: IHeaderDetails;
   framesArray: IFramesArray[];
-  handlePersistReportState: () => void;
+  onSave: (type: "create" | "edit") => Promise<void>;
 }) {
   const history = useHistory();
 
@@ -1184,8 +1184,8 @@ function CreateChartCard(props: {
     setDataset(null);
     setLoadedChart(null);
     setCreateChartData(null);
-    //set persisted report state to current report state
-    props.handlePersistReportState();
+    //save report before exiting
+    props.onSave("edit");
     history.push("/chart/new/data");
   };
   return (

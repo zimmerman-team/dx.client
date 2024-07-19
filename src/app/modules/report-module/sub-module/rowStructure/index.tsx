@@ -16,11 +16,12 @@ import {
   blockcss,
   containercss,
 } from "app/modules/report-module/sub-module/rowStructure/style";
-import { IFramesArray } from "../../views/create/data";
+import { IFramesArray } from "app/modules/report-module/views/create/data";
 import { useOnClickOutside } from "usehooks-ts";
 import { ToolbarPluginsType } from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
 import { useDrag } from "react-dnd";
-import { ReportElementsType } from "../../components/right-panel-create-view";
+import { ReportElementsType } from "app/modules/report-module/components/right-panel-create-view";
+import { usehandleRowFrameItemResize } from "app/hooks/useHandleRowFrameItemResize";
 
 const _rowStructureDetailItems = [
   [{ rowType: "oneByOne", rowId: "oneByOne-1", width: "100%", factor: 1 }],
@@ -126,18 +127,12 @@ export interface RowFrameProps {
   framesArray: IFramesArray[];
   type: "rowFrame" | "divider";
   view: "initial" | "edit" | "create" | "preview" | "ai-template";
-  handleRowFrameItemResize: (
-    rowId: string,
-    itemIndex: number,
-    width: number,
-    height: number
-  ) => void;
   previewItems?: (string | object)[];
-  handlePersistReportState: () => void;
   rowContentHeights: number[];
   rowContentWidths: number[];
   setPlugins: React.Dispatch<React.SetStateAction<ToolbarPluginsType>>;
   endReportTour: () => void;
+  onSave: (type: "create" | "edit") => Promise<void>;
 }
 
 export interface IRowStructureType {
@@ -151,6 +146,9 @@ export interface IRowStructureType {
 export default function RowFrame(props: RowFrameProps) {
   const history = useHistory();
 
+  const { handleRowFrameItemResize } = usehandleRowFrameItemResize(
+    props.setFramesArray
+  );
   const [selectedType, setSelectedType] = React.useState<string>(
     props.forceSelectedType ?? ""
   );
@@ -204,7 +202,7 @@ export default function RowFrame(props: RowFrameProps) {
     width: number,
     height: number
   ) => {
-    props.handleRowFrameItemResize(rowId, itemIndex, width, height);
+    handleRowFrameItemResize(rowId, itemIndex, width, height);
   };
 
   const deleteFrame = (id: string) => {
@@ -397,8 +395,8 @@ export default function RowFrame(props: RowFrameProps) {
         rowStructureDetailItems={rowStructureDetailItems[0]}
         previewItems={props.previewItems}
         onRowBoxItemResize={onRowBoxItemResize}
-        handlePersistReportState={props.handlePersistReportState}
         setPlugins={props.setPlugins}
+        onSave={props.onSave}
       />
     ),
     oneByTwo: (
@@ -419,8 +417,8 @@ export default function RowFrame(props: RowFrameProps) {
         rowStructureDetailItems={rowStructureDetailItems[1]}
         previewItems={props.previewItems}
         onRowBoxItemResize={onRowBoxItemResize}
-        handlePersistReportState={props.handlePersistReportState}
         setPlugins={props.setPlugins}
+        onSave={props.onSave}
       />
     ),
     oneByThree: (
@@ -441,8 +439,8 @@ export default function RowFrame(props: RowFrameProps) {
         rowStructureDetailItems={rowStructureDetailItems[2]}
         previewItems={props.previewItems}
         onRowBoxItemResize={onRowBoxItemResize}
-        handlePersistReportState={props.handlePersistReportState}
         setPlugins={props.setPlugins}
+        onSave={props.onSave}
       />
     ),
     oneByFour: (
@@ -462,8 +460,8 @@ export default function RowFrame(props: RowFrameProps) {
         rowContentHeights={props.rowContentHeights}
         rowContentWidths={props.rowContentWidths}
         deleteFrame={deleteFrame}
-        handlePersistReportState={props.handlePersistReportState}
         setPlugins={props.setPlugins}
+        onSave={props.onSave}
         previewItems={props.previewItems}
       />
     ),
@@ -485,8 +483,8 @@ export default function RowFrame(props: RowFrameProps) {
         rowStructureDetailItems={rowStructureDetailItems[4]}
         previewItems={props.previewItems}
         onRowBoxItemResize={onRowBoxItemResize}
-        handlePersistReportState={props.handlePersistReportState}
         setPlugins={props.setPlugins}
+        onSave={props.onSave}
       />
     ),
   };

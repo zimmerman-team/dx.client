@@ -51,7 +51,6 @@ interface RowStructureDisplayProps {
   }[];
 
   previewItems?: (string | object)[];
-  handlePersistReportState: () => void;
   onRowBoxItemResize: (
     rowId: string,
     itemIndex: number,
@@ -59,6 +58,7 @@ interface RowStructureDisplayProps {
     height: number
   ) => void;
   setPlugins: React.Dispatch<React.SetStateAction<ToolbarPluginsType>>;
+  onSave: (type: "create" | "edit") => Promise<void>;
 }
 
 export default function RowstructureDisplay(props: RowStructureDisplayProps) {
@@ -241,9 +241,9 @@ export default function RowstructureDisplay(props: RowStructureDisplayProps) {
               onRowBoxItemResize={props.onRowBoxItemResize}
               setFramesArray={props.setFramesArray}
               previewItem={get(props.previewItems, `[${index}]`, undefined)}
-              handlePersistReportState={props.handlePersistReportState}
               rowItemsCount={props.rowStructureDetailItems.length}
               setPlugins={props.setPlugins}
+              onSave={props.onSave}
             />
           ))}
         </div>
@@ -258,12 +258,12 @@ const Box = (props: {
   rowId: string;
   rowIndex: number;
   itemIndex: number;
-  handlePersistReportState: () => void;
   rowType: string;
   setPlugins?: React.Dispatch<React.SetStateAction<ToolbarPluginsType>>;
   setFramesArray: (value: React.SetStateAction<IFramesArray[]>) => void;
   rowItemsCount: number;
   previewItem?: string | any;
+  onSave: (type: "create" | "edit") => Promise<void>;
   onRowBoxItemResize: (
     rowId: string,
     itemIndex: number,
@@ -333,9 +333,8 @@ const Box = (props: {
     setCreateChartData(null);
     resetMapping();
 
-    //set persisted report state to current report state
-    props.handlePersistReportState();
-
+    //save report before exiting
+    props.onSave("edit");
     history.push(`/chart/${chartId}/mapping`);
   };
 
