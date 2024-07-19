@@ -27,6 +27,7 @@ import {
 import { IFramesArray } from "../../views/create/data";
 import { ToolbarPluginsType } from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
 import { css } from "styled-components";
+import { Updater } from "use-immer";
 
 interface RowStructureDisplayProps {
   gap: string;
@@ -38,9 +39,8 @@ interface RowStructureDisplayProps {
   selectedTypeHistory: string[];
   rowContentWidths: number[];
   rowContentHeights: number[];
-
   setSelectedType: React.Dispatch<React.SetStateAction<string>>;
-  setFramesArray: (value: React.SetStateAction<IFramesArray[]>) => void;
+  updateFramesArray: Updater<IFramesArray[]>;
   deleteFrame: (id: string) => void;
   setSelectedTypeHistory: React.Dispatch<React.SetStateAction<string[]>>;
   rowStructureDetailItems: {
@@ -49,7 +49,6 @@ interface RowStructureDisplayProps {
     factor: number;
     rowType: string;
   }[];
-
   previewItems?: (string | object)[];
   onRowBoxItemResize: (
     rowId: string,
@@ -108,16 +107,14 @@ export default function RowstructureDisplay(props: RowStructureDisplayProps) {
         height: [142, 142, 142, 142, 142],
       },
     ];
-    props.setFramesArray((prev: IFramesArray[]) => {
-      const tempPrev = prev.map((item) => ({ ...item }));
-      const rowStructure = tempPrev[props.rowIndex].structure;
+    props.updateFramesArray((draft) => {
+      const rowStructure = draft[props.rowIndex].structure;
       const defaultWidths =
         rowSizes.find((row) => row.type === rowStructure)?.width ?? [];
       const defaultHeights =
         rowSizes.find((row) => row.type === rowStructure)?.height ?? [];
-      tempPrev[props.rowIndex].contentWidths = defaultWidths;
-      tempPrev[props.rowIndex].contentHeights = defaultHeights;
-      return [...tempPrev];
+      draft[props.rowIndex].contentWidths = defaultWidths;
+      draft[props.rowIndex].contentHeights = defaultHeights;
     });
   };
 
@@ -239,7 +236,7 @@ export default function RowstructureDisplay(props: RowStructureDisplayProps) {
               rowIndex={props.rowIndex}
               rowType={row.rowType}
               onRowBoxItemResize={props.onRowBoxItemResize}
-              setFramesArray={props.setFramesArray}
+              updateFramesArray={props.updateFramesArray}
               previewItem={get(props.previewItems, `[${index}]`, undefined)}
               rowItemsCount={props.rowStructureDetailItems.length}
               setPlugins={props.setPlugins}
@@ -260,7 +257,7 @@ const Box = (props: {
   itemIndex: number;
   rowType: string;
   setPlugins?: React.Dispatch<React.SetStateAction<ToolbarPluginsType>>;
-  setFramesArray: (value: React.SetStateAction<IFramesArray[]>) => void;
+  updateFramesArray: Updater<IFramesArray[]>;
   rowItemsCount: number;
   previewItem?: string | any;
   onSave: (type: "create" | "edit") => Promise<void>;
@@ -345,35 +342,31 @@ const Box = (props: {
     itemContentType: "text" | "divider" | "chart" | "image" | "video",
     textHeight?: number
   ) => {
-    props.setFramesArray((prev) => {
-      const tempPrev = prev.map((item) => ({ ...item }));
-      const frameId = tempPrev.findIndex((frame) => frame.id === rowId);
+    props.updateFramesArray((draft) => {
+      const frameId = draft.findIndex((frame) => frame.id === rowId);
       if (frameId === -1) {
-        return [...tempPrev];
+        return [...draft];
       }
-      tempPrev[frameId].content[itemIndex] = itemContent;
-      tempPrev[frameId].contentTypes[itemIndex] = itemContentType;
-      const heights = tempPrev[frameId].contentHeights;
+      draft[frameId].content[itemIndex] = itemContent;
+      draft[frameId].contentTypes[itemIndex] = itemContentType;
+      const heights = draft[frameId].contentHeights;
       if (textHeight) {
         //relative to the text content, we only want to increase the height of textbox
         if (textHeight > heights[itemIndex]) {
           heights[itemIndex] = textHeight;
         }
       }
-      return [...tempPrev];
     });
   };
   const handleRowFrameItemRemoval = (rowId: string, itemIndex: number) => {
-    props.setFramesArray((prev) => {
-      const tempPrev = prev.map((item) => ({ ...item }));
-      const frameId = tempPrev.findIndex((frame) => frame.id === rowId);
+    props.updateFramesArray((draft) => {
+      const frameId = draft.findIndex((frame) => frame.id === rowId);
       if (frameId === -1) {
-        return [...tempPrev];
+        return [...draft];
       }
 
-      tempPrev[frameId].content[itemIndex] = null;
-      tempPrev[frameId].contentTypes[itemIndex] = null;
-      return [...tempPrev];
+      draft[frameId].content[itemIndex] = null;
+      draft[frameId].contentTypes[itemIndex] = null;
     });
   };
 

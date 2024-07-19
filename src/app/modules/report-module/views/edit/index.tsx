@@ -89,12 +89,10 @@ function ReportEditView(props: ReportEditViewProps) {
   );
 
   function deleteFrame(id: string) {
-    props.setFramesArray((prev) => {
-      let tempPrev = prev.map((item) => ({ ...item }));
-      const frameId = prev.findIndex((frame) => frame.id === id);
+    props.updateFramesArray((draft) => {
+      const frameId = draft.findIndex((frame) => frame.id === id);
 
-      tempPrev.splice(frameId, 1);
-      return [...tempPrev];
+      draft.splice(frameId, 1);
     });
   }
 
@@ -247,7 +245,7 @@ function ReportEditView(props: ReportEditViewProps) {
     props.setHasSubHeaderTitleFocused(reportData.name !== "Untitled report");
     props.setReportName(reportData.name);
     props.setHeaderDetails(headerDetailsFromReportData());
-    props.setFramesArray(framesArrayFromReportData());
+    props.updateFramesArray(framesArrayFromReportData());
   };
 
   React.useEffect(() => {
@@ -343,7 +341,7 @@ function ReportEditView(props: ReportEditViewProps) {
                     rowId={frame.id}
                     deleteFrame={deleteFrame}
                     framesArray={props.framesArray}
-                    setFramesArray={props.setFramesArray}
+                    updateFramesArray={props.updateFramesArray}
                   />
                 )}
                 <Box height={8} />
@@ -360,7 +358,7 @@ function ReportEditView(props: ReportEditViewProps) {
                     <RowFrame
                       {...frame.frame}
                       framesArray={props.framesArray}
-                      setFramesArray={props.setFramesArray}
+                      updateFramesArray={props.updateFramesArray}
                       view={props.view}
                       rowContentHeights={frame.contentHeights}
                       rowContentWidths={frame.contentWidths}
@@ -376,7 +374,7 @@ function ReportEditView(props: ReportEditViewProps) {
                   rowId={frame.id}
                   deleteFrame={deleteFrame}
                   framesArray={props.framesArray}
-                  setFramesArray={props.setFramesArray}
+                  updateFramesArray={props.updateFramesArray}
                 />
               </div>
             );
@@ -386,7 +384,7 @@ function ReportEditView(props: ReportEditViewProps) {
           <AddRowFrameButton
             framesArray={props.framesArray}
             rowStructureType={rowStructureType}
-            setFramesArray={props.setFramesArray}
+            updateFramesArray={props.updateFramesArray}
             setRowStructureType={setRowStructuretype}
             endTour={handleEndReportTour}
           />

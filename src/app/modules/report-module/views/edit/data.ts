@@ -1,6 +1,7 @@
 import { EditorState } from "draft-js";
 import { IFramesArray } from "app/modules/report-module/views/create/data";
 import { ToolbarPluginsType } from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
+import { Updater } from "use-immer";
 
 export interface ReportEditViewProps {
   open: boolean;
@@ -9,7 +10,7 @@ export interface ReportEditViewProps {
   view: "initial" | "edit" | "create" | "preview" | "ai-template";
   hasSubHeaderTitleFocused: boolean;
   setHasSubHeaderTitleFocused: React.Dispatch<React.SetStateAction<boolean>>;
-  setFramesArray: React.Dispatch<React.SetStateAction<IFramesArray[]>>;
+  updateFramesArray: Updater<IFramesArray[]>;
   framesArray: IFramesArray[];
   localPickedCharts: string[];
   setReportName: React.Dispatch<React.SetStateAction<string>>;

@@ -4,6 +4,7 @@ import get from "lodash/get";
 import isEmpty from "lodash/isEmpty";
 import { DndProvider } from "react-dnd";
 import { useRecoilState } from "recoil";
+import { useImmer } from "use-immer";
 import { useAuth0 } from "@auth0/auth0-react";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { NoMatchPage } from "app/modules/common/no-match-page";
@@ -151,12 +152,10 @@ export default function ReportModule() {
   }, [hasSubHeaderTitleBlurred]);
 
   const deleteFrame = (id: string) => {
-    setFramesArray((prev) => {
-      const tempPrev = prev.map((item) => ({ ...item }));
-      const frameId = tempPrev.findIndex((frame) => frame.id === id);
+    updateFramesArray((draft) => {
+      const frameId = draft.findIndex((frame) => frame.id === id);
 
-      tempPrev.splice(frameId, 1);
-      return [...tempPrev];
+      draft.splice(frameId, 1);
     });
   };
 
@@ -243,8 +242,8 @@ export default function ReportModule() {
     return [];
   }, [reportType]);
 
-  const [framesArray, setFramesArray] =
-    React.useState<IFramesArray[]>(initialFramesArray);
+  const [framesArray, updateFramesArray] =
+    useImmer<IFramesArray[]>(initialFramesArray);
 
   React.useEffect(() => {
     if (view === "edit" && !rightPanelOpen) {
@@ -261,12 +260,12 @@ export default function ReportModule() {
       resetMapping();
       clearChart();
       setRightPanelView("charts");
-      setFramesArray([]);
+      updateFramesArray([]);
     };
   }, []);
 
   const resetReport = () => {
-    setFramesArray(initialFramesArray);
+    updateFramesArray(initialFramesArray);
     setPersistedReportState({
       reportName: "Untitled report",
       headerDetails: {
@@ -343,9 +342,9 @@ export default function ReportModule() {
     if (type === "ai") {
       history.push(`/report/${page}/ai-template`);
     } else if (type === "basic") {
-      setFramesArray(basicReportInitialState());
+      updateFramesArray(basicReportInitialState());
     } else if (type === "advanced") {
-      setFramesArray(advancedReportInitialState());
+      updateFramesArray(advancedReportInitialState());
     }
 
     setReportType(type);
@@ -464,7 +463,7 @@ export default function ReportModule() {
             reportType={reportType}
             framesArray={framesArray}
             headerDetails={headerDetails}
-            setFramesArray={setFramesArray}
+            updateFramesArray={updateFramesArray}
             setHeaderDetails={setHeaderDetails}
             setPlugins={setPlugins}
             onSave={onSave}
@@ -481,7 +480,7 @@ export default function ReportModule() {
             localPickedCharts={localPickedCharts}
             framesArray={framesArray}
             headerDetails={headerDetails}
-            setFramesArray={setFramesArray}
+            updateFramesArray={updateFramesArray}
             setHeaderDetails={setHeaderDetails}
             stopInitializeFramesWidth={stopInitializeFramesWidth}
             setStopInitializeFramesWidth={setStopInitializeFramesWidth}
