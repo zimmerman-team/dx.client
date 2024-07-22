@@ -5,16 +5,8 @@ export interface IRowFrame {
   rowIndex: number;
   rowId: string;
   forceSelectedType?: string;
-
   type: "rowFrame" | "divider";
-  handleRowFrameItemResize: (
-    rowId: string,
-    itemIndex: number,
-    width: number,
-    height: number
-  ) => void;
   previewItems?: (string | object)[];
-  handlePersistReportState: () => void;
 }
 export interface IFramesArray {
   id: string;
@@ -45,8 +37,8 @@ export interface ReportCreateViewProps {
   setFramesArray: React.Dispatch<React.SetStateAction<IFramesArray[]>>;
   deleteFrame: (id: string) => void;
   framesArray: IFramesArray[];
+  onSave: (type: "create" | "edit") => Promise<void>;
   hasSubHeaderTitleFocused: boolean;
-  handlePersistReportState: () => void;
   headerDetails: {
     title: string;
     showHeader: boolean;
@@ -67,31 +59,14 @@ export interface ReportCreateViewProps {
       dateColor: string;
     }>
   >;
-
-  handleRowFrameItemResize: (
-    rowId: string,
-    itemIndex: number,
-    width: number,
-    height: number
-  ) => void;
-
   setPlugins: React.Dispatch<React.SetStateAction<ToolbarPluginsType>>;
 }
 
 export interface PlaceholderProps {
   setFramesArray: React.Dispatch<React.SetStateAction<IFramesArray[]>>;
-
   framesArray: IFramesArray[];
   index?: number;
   disableAddrowStructureButton?: boolean;
   deleteFrame: (id: string) => void;
   rowId: string;
-  handlePersistReportState: () => void;
-
-  handleRowFrameItemResize: (
-    rowId: string,
-    itemIndex: number,
-    width: number,
-    height: number
-  ) => void;
 }

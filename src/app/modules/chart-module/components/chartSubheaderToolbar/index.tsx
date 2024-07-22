@@ -18,7 +18,7 @@ import CloudDoneIcon from "@material-ui/icons/CloudDone";
 import CopyToClipboard from "react-copy-to-clipboard";
 import FileCopyIcon from "@material-ui/icons/FileCopy";
 import { PageLoader } from "app/modules/common/page-loader";
-import { Link, useHistory, useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import Snackbar from "@material-ui/core/Snackbar";
 import SnackbarContent from "@material-ui/core/SnackbarContent";
 import { styles } from "app/modules/chart-module/components/chartSubheaderToolbar/styles";
@@ -27,8 +27,8 @@ import DeleteChartDialog from "app/components/Dialogs/deleteChartDialog";
 import { ChartAPIModel, emptyChartAPI } from "app/modules/chart-module/data";
 import { SubheaderToolbarProps } from "app/modules/chart-module/components/chartSubheaderToolbar/data";
 import { ExportChartButton } from "app/modules/chart-module/components/chartSubheaderToolbar/exportButton";
-import { ISnackbarState } from "app/modules/dataset-upload-module/upload-steps/previewFragment";
-import { chartFromReportAtom, homeDisplayAtom } from "app/state/recoil/atoms";
+import { ISnackbarState } from "app/modules/dataset-module/routes/upload-module/upload-steps/previewFragment";
+import { chartFromReportAtom } from "app/state/recoil/atoms";
 import { InfoSnackbar } from "app/modules/chart-module/components/chartSubheaderToolbar/infoSnackbar";
 import { getRequiredFieldsAndErrors } from "../../routes/mapping/utils";
 import AutoSaveSwitch from "app/modules/report-module/components/reportSubHeaderToolbar/autoSaveSwitch";
@@ -257,7 +257,7 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
   const handleBackToReport = () => {
     const { page: reportPage, view: reportView } = chartFromReport;
     setChartFromReport((prev) => ({ ...prev, chartId: page }));
-    console.log(chartFromReport, "chartFromReport");
+    props.onSave();
     history.push(`/report/${reportPage}/edit`);
   };
 

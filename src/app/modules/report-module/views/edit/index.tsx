@@ -176,8 +176,6 @@ function ReportEditView(props: ReportEditViewProps) {
           frame: {
             rowIndex: index,
             rowId: id,
-            handlePersistReportState: props.handlePersistReportState,
-            handleRowFrameItemResize: props.handleRowFrameItemResize,
             type: isDivider ? "divider" : "rowFrame",
             forceSelectedType: rowFrame.structure ?? undefined,
             previewItems: content,
@@ -246,15 +244,13 @@ function ReportEditView(props: ReportEditViewProps) {
     if (reportData.id !== page) {
       return;
     }
-    if (JSON.parse(persistedReportState.framesArray || "[]").length < 1) {
-      props.setHasSubHeaderTitleFocused(reportData.name !== "Untitled report");
-      props.setReportName(reportData.name);
-      props.setHeaderDetails(headerDetailsFromReportData());
-      props.setFramesArray(framesArrayFromReportData());
-    }
+    props.setHasSubHeaderTitleFocused(reportData.name !== "Untitled report");
+    props.setReportName(reportData.name);
+    props.setHeaderDetails(headerDetailsFromReportData());
+    props.setFramesArray(framesArrayFromReportData());
   };
 
-  useUpdateEffect(() => {
+  React.useEffect(() => {
     updateReportStatesWithReportData().finally(() => {
       props.setAutoSave({ isAutoSaveEnabled: true });
     });
@@ -348,8 +344,6 @@ function ReportEditView(props: ReportEditViewProps) {
                     deleteFrame={deleteFrame}
                     framesArray={props.framesArray}
                     setFramesArray={props.setFramesArray}
-                    handlePersistReportState={props.handlePersistReportState}
-                    handleRowFrameItemResize={props.handleRowFrameItemResize}
                   />
                 )}
                 <Box height={8} />
@@ -371,6 +365,7 @@ function ReportEditView(props: ReportEditViewProps) {
                       rowContentHeights={frame.contentHeights}
                       rowContentWidths={frame.contentWidths}
                       setPlugins={props.setPlugins}
+                      onSave={props.onSave}
                       endReportTour={handleEndReportTour}
                     />
                   </div>
@@ -382,8 +377,6 @@ function ReportEditView(props: ReportEditViewProps) {
                   deleteFrame={deleteFrame}
                   framesArray={props.framesArray}
                   setFramesArray={props.setFramesArray}
-                  handlePersistReportState={props.handlePersistReportState}
-                  handleRowFrameItemResize={props.handleRowFrameItemResize}
                 />
               </div>
             );
@@ -395,8 +388,6 @@ function ReportEditView(props: ReportEditViewProps) {
             rowStructureType={rowStructureType}
             setFramesArray={props.setFramesArray}
             setRowStructureType={setRowStructuretype}
-            handlePersistReportState={props.handlePersistReportState}
-            handleRowFrameItemResize={props.handleRowFrameItemResize}
             endTour={handleEndReportTour}
           />
           <Box height={45} />

@@ -229,9 +229,8 @@ export function ReportPreviewView(props: {
                 setPlugins={() => {}}
                 setFramesArray={() => {}}
                 key={"rowframe" + `${index}`}
-                handlePersistReportState={() => {}}
-                handleRowFrameItemResize={() => {}}
                 endReportTour={() => {}}
+                onSave={async () => {}}
                 forceSelectedType={rowFrame.structure ?? undefined}
                 previewItems={rowFrame.items.map((item, index) => {
                   return contentTypes[index] === "text"

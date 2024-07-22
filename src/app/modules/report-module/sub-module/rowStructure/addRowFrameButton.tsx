@@ -10,14 +10,7 @@ interface Props {
   framesArray: IFramesArray[];
   rowStructureType: IRowFrameStructure;
   setRowStructureType: React.Dispatch<React.SetStateAction<IRowFrameStructure>>;
-  handlePersistReportState: () => void;
   endTour: () => void;
-  handleRowFrameItemResize: (
-    rowId: string,
-    itemIndex: number,
-    width: number,
-    height: number
-  ) => void;
 }
 
 export default function AddRowFrameButton(props: Props) {
@@ -34,9 +27,6 @@ export default function AddRowFrameButton(props: Props) {
           frame: {
             rowId: id,
             rowIndex: tempPrev.length,
-
-            handlePersistReportState: props.handlePersistReportState,
-            handleRowFrameItemResize: props.handleRowFrameItemResize,
             type: "rowFrame",
           },
           content: [],
