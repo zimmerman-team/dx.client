@@ -9,11 +9,11 @@ export const getDatasetDetailsSource = (
   if (datasetDetailsProps) {
     sourceUrl =
       datasetDetailsProps.sourceUrl ||
-      `${window.location.origin}/dataset/${datasetDetailsProps.id}/detail?fromHome=true`;
+      `${window.location.origin}/dataset/${datasetDetailsProps.id}/detail`;
   } else {
     sourceUrl =
       datasetDetails.sourceUrl ||
-      `${window.location.origin}/dataset/${datasetDetails.id}/detail?fromHome=true`;
+      `${window.location.origin}/dataset/${datasetDetails.id}/detail`;
   }
   if (datasetDetailsProps) {
     filename = datasetDetailsProps.sourceUrl || datasetDetailsProps.name;

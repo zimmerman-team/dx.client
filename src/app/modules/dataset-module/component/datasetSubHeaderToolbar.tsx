@@ -51,22 +51,41 @@ export default function DatasetSubHeaderToolbar(
 
   const open = Boolean(anchorEl);
   const popoverId = open ? "simple-popover" : undefined;
+  const loadDataset = useStoreActions(
+    (actions) => actions.dataThemes.DatasetGet.fetch
+  );
+  const datasetDetails = useStoreState(
+    (state) =>
+      (state.dataThemes.DatasetGet.crudData ?? {}) as DatasetListItemAPIModel
+  );
   const loadDatasets = useStoreActions(
     (actions) => actions.dataThemes.DatasetGetList.fetch
   );
-  const loadedDatasets = useStoreState(
-    (state) =>
-      (state.dataThemes.DatasetGetList.crudData ??
-        []) as DatasetListItemAPIModel[]
-  );
-
-  const loadedDataset = loadedDatasets.find((d) => d.id === page);
   const canDatasetEditDelete = React.useMemo(() => {
-    return (
-      isAuthenticated && loadedDatasets && loadedDataset?.owner === user?.sub
-    );
-  }, [user, isAuthenticated, loadedDatasets]);
+    return isAuthenticated && datasetDetails?.owner === user?.sub;
+  }, [user, isAuthenticated, datasetDetails]);
 
+  console.log(
+    "canDatasetEditDelete",
+    user?.sub,
+    isAuthenticated,
+    datasetDetails?.owner,
+    page
+  );
+  React.useEffect(() => {
+    if (token) {
+      loadDataset({
+        token,
+        getId: page as string,
+      });
+    } else {
+      loadDataset({
+        token,
+        getId: page as string,
+        nonAuthCall: !token,
+      });
+    }
+  }, [token, page]);
   const handleDuplicate = () => {
     axios
       .get(`${process.env.REACT_APP_API}/dataset/duplicate/${page}`, {
