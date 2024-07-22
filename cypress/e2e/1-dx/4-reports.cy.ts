@@ -241,6 +241,101 @@ describe("Edit, duplicate and delete report", () => {
     cy.contains(`${reportTestName} - Edited`).should("be.visible");
   });
 
+  it("Can edit a chart from a report", () => {
+    cy.get("[data-cy=home-search-button]").click();
+    cy.get("[data-cy=home-search-input]").type(
+      `{selectall}{backspace}${reportTestName}`
+    );
+
+    cy.wait("@fetchReports");
+
+    cy.contains(
+      '[data-cy="report-grid-item"]',
+      `${reportTestName} - Edited (Copy)`
+    )
+      .first()
+      .scrollIntoView()
+      .within(() => {
+        cy.get('[data-cy="report-grid-item-menu-btn"]').click();
+      });
+
+    cy.intercept(`${apiUrl}/report/*`).as("fetchReport");
+
+    cy.get('[data-cy="report-grid-item-edit-btn"]').click();
+
+    cy.wait("@fetchReport");
+
+    cy.intercept(`${apiUrl}/chart/*`).as("renderChart");
+    cy.intercept(`${apiUrl}/chart/*/render`).as("renderChart2");
+
+    cy.get('[data-cy="row-frame-chart-item-0-1"]')
+      .trigger("mouseover")
+      .within(() => {
+        cy.get('[data-cy="edit-chart-button"]').click();
+      });
+
+    cy.wait("@renderChart");
+    cy.wait("@renderChart2");
+
+    cy.get('[data-cy="chart-toolbox-mapping-tab"]')
+      .invoke("attr", "disabled", false)
+      .trigger("mouseover")
+      .click();
+
+    cy.get('[data-cy="chart-toolbox-mapping-tab"]').click();
+
+    cy.location("pathname").should("include", "/mapping");
+    cy.intercept(`${apiUrl}/chart/*`).as("saveChart2");
+
+    cy.get('[data-cy="report-sub-header-title-input"]').type(
+      `{selectall}{backspace}${chartTestName}-Edited`
+    );
+
+    cy.get('[data-cy="nonstatic-dimension-container"]')
+      .first()
+      .within(() => {
+        cy.get('[data-cy="chart-dimension-mapping-item"]').click();
+      });
+
+    cy.get('[data-cy="chart-dimension-mapping-item"]').eq(2).click();
+
+    cy.intercept(`${apiUrl}/chart/*/render`).as("renderChart");
+
+    cy.get('[data-cy="chart-dimension-mapping-item"]').first().click();
+
+    cy.wait("@renderChart");
+
+    cy.get('[data-cy="common-chart-container"]').should("be.visible");
+
+    cy.get('[data-cy="toolbox-chart-next"]').click();
+
+    // cy.wait("@renderChart");
+
+    cy.get('[data-cy="toolbox-chart-next"]').click();
+
+    // cy.wait("@renderChart");
+
+    cy.get('[data-cy="toolbox-chart-next"]').click();
+
+    cy.wait("@saveChart2");
+
+    cy.intercept(`${apiUrl}/charts?filter=*`).as("fetchCharts");
+
+    cy.get('[data-cy="back-to-report-button"]').click();
+
+    cy.wait("@fetchCharts");
+
+    cy.get('[data-cy="report-panel-chart-search-input"]').type(
+      `${chartTestName}-Edited`
+    );
+    cy.wait("@fetchCharts");
+
+    cy.contains(
+      '[data-cy="report-panel-chart-item"]',
+      `${chartTestName}-Edited`
+    ).should("be.visible");
+  });
+
   it("Can drag and drop rows in a report", () => {
     cy.get("[data-cy=home-search-button]").click();
     cy.get("[data-cy=home-search-input]").type(
@@ -443,101 +538,6 @@ describe("Edit, duplicate and delete report", () => {
     cy.contains('[data-cy="report-panel-chart-item"]', chartTestName).should(
       "be.visible"
     );
-  });
-
-  it("Can edit a chart from a report", () => {
-    cy.get("[data-cy=home-search-button]").click();
-    cy.get("[data-cy=home-search-input]").type(
-      `{selectall}{backspace}${reportTestName}`
-    );
-
-    cy.wait("@fetchReports");
-
-    cy.contains(
-      '[data-cy="report-grid-item"]',
-      `${reportTestName} - Edited (Copy)`
-    )
-      .first()
-      .scrollIntoView()
-      .within(() => {
-        cy.get('[data-cy="report-grid-item-menu-btn"]').click();
-      });
-
-    cy.intercept(`${apiUrl}/report/*`).as("fetchReport");
-
-    cy.get('[data-cy="report-grid-item-edit-btn"]').click();
-
-    cy.wait("@fetchReport");
-
-    cy.intercept(`${apiUrl}/chart/*`).as("renderChart");
-    cy.intercept(`${apiUrl}/chart/*/render`).as("renderChart2");
-
-    cy.get('[data-cy="row-frame-chart-item-0-1"]')
-      .trigger("mouseover")
-      .within(() => {
-        cy.get('[data-cy="edit-chart-button"]').click();
-      });
-
-    cy.wait("@renderChart");
-    cy.wait("@renderChart2");
-
-    cy.get('[data-cy="chart-toolbox-mapping-tab"]')
-      .invoke("attr", "disabled", false)
-      .trigger("mouseover")
-      .click();
-
-    cy.get('[data-cy="chart-toolbox-mapping-tab"]').click();
-
-    cy.location("pathname").should("include", "/mapping");
-    cy.intercept(`${apiUrl}/chart/*`).as("saveChart2");
-
-    cy.get('[data-cy="report-sub-header-title-input"]').type(
-      `{selectall}{backspace}${chartTestName}-Edited`
-    );
-
-    cy.get('[data-cy="nonstatic-dimension-container"]')
-      .first()
-      .within(() => {
-        cy.get('[data-cy="chart-dimension-mapping-item"]').click();
-      });
-
-    cy.get('[data-cy="chart-dimension-mapping-item"]').eq(2).click();
-
-    cy.intercept(`${apiUrl}/chart/*/render`).as("renderChart");
-
-    cy.get('[data-cy="chart-dimension-mapping-item"]').first().click();
-
-    cy.wait("@renderChart");
-
-    cy.get('[data-cy="common-chart-container"]').should("be.visible");
-
-    cy.get('[data-cy="toolbox-chart-next"]').click();
-
-    // cy.wait("@renderChart");
-
-    cy.get('[data-cy="toolbox-chart-next"]').click();
-
-    // cy.wait("@renderChart");
-
-    cy.get('[data-cy="toolbox-chart-next"]').click();
-
-    cy.wait("@saveChart2");
-
-    cy.intercept(`${apiUrl}/charts?filter=*`).as("fetchCharts");
-
-    cy.get('[data-cy="back-to-report-button"]').click();
-
-    cy.wait("@fetchCharts");
-
-    cy.get('[data-cy="report-panel-chart-search-input"]').type(
-      `${chartTestName}-Edited`
-    );
-    cy.wait("@fetchCharts");
-
-    cy.contains(
-      '[data-cy="report-panel-chart-item"]',
-      `${chartTestName}-Edited`
-    ).should("be.visible");
   });
 
   it("Can Modify the row structure of a row", () => {
