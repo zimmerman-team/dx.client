@@ -157,6 +157,7 @@ export default function Filter(
         ))}
       </Popover>
       <IconButton
+        data-cy="home-table-view-button"
         onClick={() => {
           props.setAssetsView(props.assetsView === "table" ? "grid" : "table");
         }}
