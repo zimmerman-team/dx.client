@@ -347,6 +347,7 @@ describe("Edit, Delete and Duplicate Dataset", () => {
     //   .should("not.exist");
 
     cy.get("[data-cy=home-search-button]").click();
+    cy.wait(2000);
     cy.get("[data-cy=filter-search-input]").type(
       `{selectall}{backspace}${testname1}`
     );
@@ -372,6 +373,7 @@ describe("Edit, Delete and Duplicate Dataset", () => {
     cy.wait("@fetchDatasets");
 
     cy.get("[data-cy=home-search-button]").click();
+    cy.wait(2000);
     cy.get("[data-cy=filter-search-input]").type(
       `{selectall}{backspace}${testname1}`
     );
