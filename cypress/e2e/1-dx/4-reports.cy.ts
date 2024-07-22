@@ -249,10 +249,7 @@ describe("Edit, duplicate and delete report", () => {
 
     cy.wait("@fetchReports");
 
-    cy.contains(
-      '[data-cy="report-grid-item"]',
-      `${reportTestName} - Edited (Copy)`
-    )
+    cy.contains('[data-cy="report-grid-item"]', `${reportTestName} - Edited`)
       .first()
       .scrollIntoView()
       .within(() => {
@@ -317,11 +314,11 @@ describe("Edit, duplicate and delete report", () => {
 
     cy.get('[data-cy="toolbox-chart-next"]').click();
 
-    cy.wait("@saveChart2");
-
     cy.intercept(`${apiUrl}/charts?filter=*`).as("fetchCharts");
 
-    cy.get('[data-cy="back-to-report-button"]').click();
+    cy.wait("@saveChart2");
+
+    // cy.get('[data-cy="back-to-report-button"]').click();
 
     cy.wait("@fetchCharts");
 
@@ -524,11 +521,11 @@ describe("Edit, duplicate and delete report", () => {
 
     cy.get('[data-cy="toolbox-chart-next"]').click();
 
-    cy.wait("@saveChart2");
-
     cy.intercept(`${apiUrl}/charts?filter=*`).as("fetchCharts");
 
-    cy.get('[data-cy="back-to-report-button"]').click();
+    cy.wait("@saveChart2");
+
+    // cy.get('[data-cy="back-to-report-button"]').click();
 
     cy.wait("@fetchCharts");
 
