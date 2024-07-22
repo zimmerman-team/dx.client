@@ -23,7 +23,6 @@ import {
   DataSourceStateModel,
   PageHeaderVizDrilldownsStateModel,
   ReportOrderStateModel,
-  ToolBoxPanelAggregateByStateModel,
   ToolBoxPanelAllocationsPeriodStateModel,
   ToolBoxPanelBudgetFlowDrilldownSelectorsModel,
   ToolBoxPanelBudgetTimeCycleDrilldownYearSelectorModel,
@@ -202,7 +201,7 @@ export interface StoreModel {
   AppliedFiltersState: AppliedFiltersStateModel;
   ToolBoxPanelPFPeriodState: ToolBoxPanelPFPeriodStateModel;
   PageHeaderVizDrilldownsState: PageHeaderVizDrilldownsStateModel;
-  ToolBoxPanelAggregateByState: ToolBoxPanelAggregateByStateModel;
+
   ToolBoxPanelResultsYearState: ToolBoxPanelResultsYearStateModel;
   ToolBoxPanelDonorMapTypeState: ToolBoxPanelDonorMapTypeStateModel;
   ToolBoxPanelDonorMapViewState: ToolBoxPanelDonorMapViewStateModel;
