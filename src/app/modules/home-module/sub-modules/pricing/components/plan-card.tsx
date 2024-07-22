@@ -14,9 +14,10 @@ interface PlanCardProps {
     discount: string;
     key: string;
   };
+  onButtonClick: (key: string) => void;
 }
 
-function PlanCard({ activeView, plan }: PlanCardProps) {
+function PlanCard({ activeView, plan, onButtonClick }: PlanCardProps) {
   return (
     <div
       css={`
@@ -154,6 +155,7 @@ function PlanCard({ activeView, plan }: PlanCardProps) {
             }
           `}
           disabled={plan.current}
+          onClick={() => onButtonClick(plan.key)}
         >
           {plan.current ? "Current Plan" : plan.buttonText}
         </button>

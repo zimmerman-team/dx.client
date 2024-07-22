@@ -204,6 +204,7 @@ export default function RowstructureDisplay(props: RowStructureDisplayProps) {
                       "",
                     ]);
                   }}
+                  data-cy="edit-row-structure-button"
                 >
                   <Tooltip title="Edit" placement="right">
                     <EditIcon />
@@ -583,6 +584,7 @@ const Box = (props: {
                     }
                   }
                 `}
+                data-cy="delete-item-button"
               >
                 <DeleteIcon />
               </IconButton>
@@ -659,6 +661,7 @@ const Box = (props: {
                       }
                     }
                   `}
+                  data-cy="delete-item-button"
                 >
                   <Tooltip title="Delete Chart">
                     <DeleteIcon />
@@ -762,6 +765,7 @@ const Box = (props: {
                     }
                   }
                 `}
+                data-cy="delete-item-button"
               >
                 <DeleteIcon />
               </IconButton>
@@ -844,6 +848,7 @@ const Box = (props: {
                     }
                   }
                 `}
+                data-cy="delete-item-button"
               >
                 <DeleteIcon />
               </IconButton>
@@ -904,35 +909,49 @@ const Box = (props: {
 
   return (
     content ?? (
-      <div
-        css={`
-          width: ${width};
-          border: ${border};
-          background: ${viewOnlyMode ? "transparent" : "#dfe3e6"};
-          height: ${props.height}px;
-        `}
-        ref={drop}
-        data-cy={`row-frame-item-drop-zone-${props.rowIndex}-${props.itemIndex}`}
+      <Resizable
+        grid={[5, 5]}
+        onResize={onResize}
+        onResizeStop={onResizeStop}
+        size={{ width: width, height: `${props.height}px` }}
+        maxWidth={!viewOnlyMode ? containerWidth : undefined}
+        minWidth={78}
+        enable={{
+          right: !viewOnlyMode,
+          bottom: !viewOnlyMode,
+          bottomRight: !viewOnlyMode,
+        }}
       >
-        <p
+        <div
           css={`
-            margin: 0;
-            width: 100%;
-            height: 100%;
-            padding: 24px;
-            color: #495057;
-            font-size: 14px;
-            font-weight: 400;
-            font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
-            text-align: center;
-            align-items: center;
-            justify-content: center;
-            display: ${viewOnlyMode ? "none" : "flex"};
+            width: ${width};
+            border: ${border};
+            background: ${viewOnlyMode ? "transparent" : "#dfe3e6"};
+            height: ${props.height}px;
           `}
+          ref={drop}
+          data-cy={`row-frame-item-drop-zone-${props.rowIndex}-${props.itemIndex}`}
         >
-          {isOver ? "Release to drop" : "Drag and drop content here"}
-        </p>
-      </div>
+          <p
+            css={`
+              margin: 0;
+              width: 100%;
+              height: 100%;
+              padding: 24px;
+              color: #495057;
+              font-size: 14px;
+              font-weight: 400;
+              font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
+              text-align: center;
+              align-items: center;
+              justify-content: center;
+              display: ${viewOnlyMode ? "none" : "flex"};
+            `}
+          >
+            {isOver ? "Release to drop" : "Drag and drop content here"}
+          </p>
+        </div>
+      </Resizable>
     )
   );
 };
