@@ -22,8 +22,6 @@ import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import { styles } from "app/modules/dataset-module/component/styles";
 import DeleteDatasetDialog from "app/components/Dialogs/deleteDatasetDialog";
 import { ISnackbarState } from "app/modules/dataset-module/routes/upload-module/upload-steps/previewFragment";
-import { homeDisplayAtom } from "app/state/recoil/atoms";
-import { useRecoilState } from "recoil";
 import { InfoSnackbar } from "app/modules/report-module/components/reportSubHeaderToolbar/infosnackbar";
 import { DatasetListItemAPIModel } from "app/modules/dataset-module/data";
 
@@ -65,13 +63,6 @@ export default function DatasetSubHeaderToolbar(
     return isAuthenticated && datasetDetails?.owner === user?.sub;
   }, [user, isAuthenticated, datasetDetails]);
 
-  console.log(
-    "canDatasetEditDelete",
-    user?.sub,
-    isAuthenticated,
-    datasetDetails?.owner,
-    page
-  );
   React.useEffect(() => {
     if (token) {
       loadDataset({
