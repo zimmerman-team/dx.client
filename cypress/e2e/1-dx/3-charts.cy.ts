@@ -346,7 +346,8 @@ describe("Edit, duplicate and delete chart", () => {
     cy.wait("@fetchCharts");
 
     cy.get("[data-cy=home-search-button]").click();
-    cy.get("[data-cy=home-search-input]").type(
+    cy.wait(2000);
+    cy.get("[data-cy=filter-search-input]").type(
       `{selectall}{backspace}${testname1}`
     );
     cy.wait("@fetchCharts");
@@ -358,7 +359,8 @@ describe("Edit, duplicate and delete chart", () => {
 
   it("Can Delete a chart", () => {
     cy.get("[data-cy=home-search-button]").click();
-    cy.get("[data-cy=home-search-input]").type(
+    cy.wait(2000);
+    cy.get("[data-cy=filter-search-input]").type(
       `{selectall}{backspace}${testname1}`
     );
     cy.wait("@fetchCharts");
@@ -385,7 +387,8 @@ describe("Edit, duplicate and delete chart", () => {
     //   .should("not.exist");
 
     cy.get("[data-cy=home-search-button]").click();
-    cy.get("[data-cy=home-search-input]").type(
+    cy.wait(2000);
+    cy.get("[data-cy=filter-search-input]").type(
       `{selectall}{backspace}${testname2}`
     );
     cy.wait("@fetchCharts");
@@ -413,7 +416,8 @@ describe("Edit, duplicate and delete chart", () => {
     //   .should("not.exist");
 
     cy.get("[data-cy=home-search-button]").click();
-    cy.get("[data-cy=home-search-input]").type(
+    cy.wait(2000);
+    cy.get("[data-cy=filter-search-input]").type(
       `{selectall}{backspace}${testname3}`
     );
     cy.wait("@fetchCharts");

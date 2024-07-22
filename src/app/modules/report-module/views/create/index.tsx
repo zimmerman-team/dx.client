@@ -51,8 +51,6 @@ function ReportCreateView(props: Readonly<ReportCreateViewProps>) {
             rowId: rowOne,
             rowIndex: 0,
             forceSelectedType: "oneByFive",
-            handlePersistReportState: props.handlePersistReportState,
-            handleRowFrameItemResize: props.handleRowFrameItemResize,
             type: "rowFrame",
           },
           content: [null, null, null, null, null],
@@ -67,8 +65,6 @@ function ReportCreateView(props: Readonly<ReportCreateViewProps>) {
             rowId: rowTwo,
             rowIndex: 1,
             forceSelectedType: "oneByOne",
-            handlePersistReportState: props.handlePersistReportState,
-            handleRowFrameItemResize: props.handleRowFrameItemResize,
             type: "rowFrame",
           },
           content: [null],
@@ -84,8 +80,6 @@ function ReportCreateView(props: Readonly<ReportCreateViewProps>) {
             rowId: rowFive,
             rowIndex: 2,
             forceSelectedType: "oneByThree",
-            handlePersistReportState: props.handlePersistReportState,
-            handleRowFrameItemResize: props.handleRowFrameItemResize,
             type: "rowFrame",
           },
           content: [null, null, null],
@@ -167,6 +161,7 @@ function ReportCreateView(props: Readonly<ReportCreateViewProps>) {
                     previewItems={
                       frame.frame.previewItems as (string | object)[]
                     }
+                    onSave={props.onSave}
                     setPlugins={props.setPlugins}
                     endReportTour={() => {}}
                   />
@@ -177,8 +172,6 @@ function ReportCreateView(props: Readonly<ReportCreateViewProps>) {
                   deleteFrame={props.deleteFrame}
                   framesArray={props.framesArray}
                   setFramesArray={props.setFramesArray}
-                  handlePersistReportState={props.handlePersistReportState}
-                  handleRowFrameItemResize={props.handleRowFrameItemResize}
                 />
               </ItemComponent>
             );
@@ -190,8 +183,6 @@ function ReportCreateView(props: Readonly<ReportCreateViewProps>) {
               rowStructureType={rowStructureType}
               setFramesArray={props.setFramesArray}
               setRowStructureType={setRowStructuretype}
-              handlePersistReportState={props.handlePersistReportState}
-              handleRowFrameItemResize={props.handleRowFrameItemResize}
               endTour={() => {}}
             />
           }
@@ -257,8 +248,6 @@ export const PlaceHolder = (props: PlaceholderProps) => {
               rowId: id,
               rowIndex: tempIndex,
 
-              handlePersistReportState: props.handlePersistReportState,
-              handleRowFrameItemResize: props.handleRowFrameItemResize,
               type: item.type,
             },
             content:

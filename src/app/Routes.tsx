@@ -37,13 +37,14 @@ const AboutModule = lazy(
 const WhyDXModule = lazy(
   () => import("app/modules/home-module/sub-modules/why-dx")
 );
-const ExploreAssetsModule = lazy(
-  () => import("app/modules/home-module/sub-modules/explore-assets")
-);
 
 const PricingModule = lazy(
   () => import("app/modules/home-module/sub-modules/pricing")
 );
+import {
+  PaymentSuccessCallbackModule,
+  PaymentCanceledCallbackModule,
+} from "app/modules/callback-module/payment";
 
 const ChartModule = lazy(() => import("app/modules/chart-module"));
 const ReportModule = lazy(() => import("app/modules/report-module"));
@@ -244,9 +245,6 @@ export function MainRoutes() {
           <RouteWithAppBar exact path="/why-dataxplorer">
             <WhyDXModule />
           </RouteWithAppBar>
-          {/* <RouteWithAppBar exact path="/explore">
-            <ExploreAssetsModule />
-          </RouteWithAppBar> */}
           <RouteWithAppBar exact path="/dashboard">
             <AuthProtectedRoute>
               <DashboardModule />
@@ -286,6 +284,12 @@ export function MainRoutes() {
             <AuthProtectedRoute>
               <UserProfileModule />
             </AuthProtectedRoute>
+          </RouteWithAppBar>
+          <RouteWithAppBar exact path="/payment/success">
+            <PaymentSuccessCallbackModule />
+          </RouteWithAppBar>
+          <RouteWithAppBar exact path="/payment/canceled">
+            <PaymentCanceledCallbackModule />
           </RouteWithAppBar>
           <RouteWithAppBar path="*">
             <NoMatchPage />

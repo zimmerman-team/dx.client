@@ -6,7 +6,7 @@ import { useStoreState } from "app/state/store/hooks";
 import { PageLoader } from "app/modules/common/page-loader";
 import { styles as commonStyles } from "app/modules/chart-module/routes/common/styles";
 import { FilterGroupModel } from "app/components/ToolBoxPanel/components/filters/data";
-import { DatasetDataTable } from "app/modules/dataset-upload-module/component/data-table";
+import { DatasetDataTable } from "app/modules/dataset-module/routes/upload-module/component/data-table";
 import { useHistory, useParams } from "react-router-dom";
 import ErrorComponent from "app/modules/chart-module/components/dialog/errrorComponent";
 

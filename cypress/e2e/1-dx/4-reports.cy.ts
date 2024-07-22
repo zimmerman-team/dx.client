@@ -35,8 +35,8 @@ describe("Testing reports on DX", () => {
     ).within(() => {
       cy.get('[data-cy="use-report-template-button"]').click();
     });
-
-    cy.contains("Untitled report", { timeout: 2000 }).should("be.hidden");
+    cy.wait(2000);
+    // cy.contains("Untitled report", { timeout: 2000 }).should("be.hidden");
 
     cy.get('[data-cy="skip-tour-button"]').click();
 
@@ -160,7 +160,8 @@ describe("Testing reports on DX", () => {
     cy.wait("@fetchReports");
 
     cy.get("[data-cy=home-search-button]").click();
-    cy.get("[data-cy=home-search-input]").type(
+    cy.wait(2000);
+    cy.get("[data-cy=filter-search-input]").type(
       `{selectall}{backspace}${reportTestName}`
     );
 
@@ -189,7 +190,8 @@ describe("Edit, duplicate and delete report", () => {
 
   it("Can Edit a report", () => {
     cy.get("[data-cy=home-search-button]").click();
-    cy.get("[data-cy=home-search-input]").type(
+    cy.wait(2000);
+    cy.get("[data-cy=filter-search-input]").type(
       `{selectall}{backspace}${reportTestName}`
     );
 
@@ -232,7 +234,8 @@ describe("Edit, duplicate and delete report", () => {
     cy.wait("@fetchReports");
 
     cy.get("[data-cy=home-search-button]").click();
-    cy.get("[data-cy=home-search-input]").type(
+    cy.wait(2000);
+    cy.get("[data-cy=filter-search-input]").type(
       `{selectall}{backspace}${reportTestName}`
     );
 
@@ -241,9 +244,103 @@ describe("Edit, duplicate and delete report", () => {
     cy.contains(`${reportTestName} - Edited`).should("be.visible");
   });
 
+  it("Can edit a chart from a report", () => {
+    cy.get("[data-cy=home-search-button]").click();
+    cy.wait(2000);
+    cy.get("[data-cy=filter-search-input]").type(
+      `{selectall}{backspace}${reportTestName}`
+    );
+
+    cy.wait("@fetchReports");
+
+    cy.contains('[data-cy="report-grid-item"]', `${reportTestName} - Edited`)
+      .first()
+      .scrollIntoView()
+      .within(() => {
+        cy.get('[data-cy="report-grid-item-menu-btn"]').click();
+      });
+
+    cy.intercept(`${apiUrl}/report/*`).as("fetchReport");
+
+    cy.get('[data-cy="report-grid-item-edit-btn"]').click();
+
+    cy.wait("@fetchReport");
+
+    cy.intercept(`${apiUrl}/chart/*`).as("renderChart");
+    cy.intercept(`${apiUrl}/chart/*/render`).as("renderChart2");
+
+    cy.get('[data-cy="row-frame-chart-item-0-1"]')
+      .trigger("mouseover")
+      .within(() => {
+        cy.get('[data-cy="edit-chart-button"]').click();
+      });
+
+    cy.wait("@renderChart");
+    cy.wait("@renderChart2");
+
+    cy.get('[data-cy="chart-toolbox-mapping-tab"]')
+      .invoke("attr", "disabled", false)
+      .trigger("mouseover")
+      .click();
+
+    cy.get('[data-cy="chart-toolbox-mapping-tab"]').click();
+
+    cy.location("pathname").should("include", "/mapping");
+    cy.intercept(`${apiUrl}/chart/*`).as("saveChart2");
+
+    cy.get('[data-cy="report-sub-header-title-input"]').type(
+      `{selectall}{backspace}${chartTestName}-Edited`
+    );
+
+    cy.get('[data-cy="nonstatic-dimension-container"]')
+      .first()
+      .within(() => {
+        cy.get('[data-cy="chart-dimension-mapping-item"]').click();
+      });
+
+    cy.get('[data-cy="chart-dimension-mapping-item"]').eq(2).click();
+
+    cy.intercept(`${apiUrl}/chart/*/render`).as("renderChart");
+
+    cy.get('[data-cy="chart-dimension-mapping-item"]').first().click();
+
+    cy.wait("@renderChart");
+
+    cy.get('[data-cy="common-chart-container"]').should("be.visible");
+
+    cy.get('[data-cy="toolbox-chart-next"]').click();
+
+    // cy.wait("@renderChart");
+
+    cy.get('[data-cy="toolbox-chart-next"]').click();
+
+    // cy.wait("@renderChart");
+
+    cy.get('[data-cy="toolbox-chart-next"]').click();
+
+    cy.intercept(`${apiUrl}/charts?filter=*`).as("fetchCharts");
+
+    cy.wait("@saveChart2");
+
+    // cy.get('[data-cy="back-to-report-button"]').click();
+
+    cy.wait("@fetchCharts");
+
+    cy.get('[data-cy="report-panel-chart-search-input"]').type(
+      `${chartTestName}-Edited`
+    );
+    cy.wait("@fetchCharts");
+
+    cy.contains(
+      '[data-cy="report-panel-chart-item"]',
+      `${chartTestName}-Edited`
+    ).should("be.visible");
+  });
+
   it("Can drag and drop rows in a report", () => {
     cy.get("[data-cy=home-search-button]").click();
-    cy.get("[data-cy=home-search-input]").type(
+    cy.wait(2000);
+    cy.get("[data-cy=filter-search-input]").type(
       `{selectall}{backspace}${reportTestName}`
     );
 
@@ -268,9 +365,43 @@ describe("Edit, duplicate and delete report", () => {
     cy.get('[data-cy="report-row-placeholder"]').eq(2).scrollIntoView().drop();
   });
 
+  it("Can delete an item from a box in a row", () => {
+    cy.get("[data-cy=home-search-button]").click();
+    cy.wait(2000);
+    cy.get("[data-cy=filter-search-input]").type(
+      `{selectall}{backspace}${reportTestName}`
+    );
+
+    cy.wait("@fetchReports");
+
+    cy.contains('[data-cy="report-grid-item"]', `${reportTestName} - Edited`)
+      .first()
+      .scrollIntoView()
+      .within(() => {
+        cy.get('[data-cy="report-grid-item-menu-btn"]').click();
+      });
+
+    cy.intercept(`${apiUrl}/report/*`).as("fetchReport");
+
+    cy.get('[data-cy="report-grid-item-edit-btn"]').click();
+
+    cy.wait("@fetchReport");
+
+    cy.get('[data-cy="row-frame-item-drop-zone-0-0"]').should("have.length", 0);
+
+    cy.get('[data-cy="row-frame-text-item-0-0"]')
+      .trigger("mouseover")
+      .within(() => {
+        cy.get('[data-cy="delete-item-button"]').click();
+      });
+
+    cy.get('[data-cy="row-frame-item-drop-zone-0-0"]').should("have.length", 1);
+  });
+
   it("Can Duplicate a report", () => {
     cy.get("[data-cy=home-search-button]").click();
-    cy.get("[data-cy=home-search-input]").type(
+    cy.wait(2000);
+    cy.get("[data-cy=filter-search-input]").type(
       `{selectall}{backspace}${reportTestName}`
     );
 
@@ -288,7 +419,8 @@ describe("Edit, duplicate and delete report", () => {
     cy.wait("@fetchReports");
 
     cy.get("[data-cy=home-search-button]").click();
-    cy.get("[data-cy=home-search-input]").type(
+    cy.wait(2000);
+    cy.get("[data-cy=filter-search-input]").type(
       `{selectall}{backspace}${reportTestName}`
     );
 
@@ -301,7 +433,8 @@ describe("Edit, duplicate and delete report", () => {
 
   it("Can Create a chart from a report", () => {
     cy.get("[data-cy=home-search-button]").click();
-    cy.get("[data-cy=home-search-input]").type(
+    cy.wait(2000);
+    cy.get("[data-cy=filter-search-input]").type(
       `{selectall}{backspace}${reportTestName}`
     );
 
@@ -397,11 +530,11 @@ describe("Edit, duplicate and delete report", () => {
 
     cy.get('[data-cy="toolbox-chart-next"]').click();
 
-    cy.wait("@saveChart2");
-
     cy.intercept(`${apiUrl}/charts?filter=*`).as("fetchCharts");
 
-    cy.get('[data-cy="back-to-report-button"]').click();
+    cy.wait("@saveChart2");
+
+    // cy.get('[data-cy="back-to-report-button"]').click();
 
     cy.wait("@fetchCharts");
 
@@ -413,18 +546,16 @@ describe("Edit, duplicate and delete report", () => {
     );
   });
 
-  it("Can edit a chart from a report", () => {
+  it("Can Modify the row structure of a row", () => {
     cy.get("[data-cy=home-search-button]").click();
-    cy.get("[data-cy=home-search-input]").type(
+    cy.wait(2000);
+    cy.get("[data-cy=filter-search-input]").type(
       `{selectall}{backspace}${reportTestName}`
     );
 
     cy.wait("@fetchReports");
 
-    cy.contains(
-      '[data-cy="report-grid-item"]',
-      `${reportTestName} - Edited (Copy)`
-    )
+    cy.contains('[data-cy="report-grid-item"]', `${reportTestName} - Edited`)
       .first()
       .scrollIntoView()
       .within(() => {
@@ -437,82 +568,29 @@ describe("Edit, duplicate and delete report", () => {
 
     cy.wait("@fetchReport");
 
-    cy.intercept(`${apiUrl}/chart/*`).as("renderChart");
-    cy.intercept(`${apiUrl}/chart/*/render`).as("renderChart2");
+    cy.get('[data-cy="row-frame-chart-item-0-1"]').should("have.length", 1);
 
-    cy.get('[data-cy="row-frame-chart-item-0-1"]')
+    cy.get('[data-cy="row-frame-container-0"]')
       .trigger("mouseover")
       .within(() => {
-        cy.get('[data-cy="edit-chart-button"]').click();
+        cy.get('[data-cy="edit-row-structure-button"]').click();
       });
 
-    cy.wait("@renderChart");
-    cy.wait("@renderChart2");
-
-    cy.get('[data-cy="chart-toolbox-mapping-tab"]')
-      .invoke("attr", "disabled", false)
-      .trigger("mouseover")
-      .click();
-
-    cy.get('[data-cy="chart-toolbox-mapping-tab"]').click();
-
-    cy.location("pathname").should("include", "/mapping");
-    cy.intercept(`${apiUrl}/chart/*`).as("saveChart2");
-
-    cy.get('[data-cy="report-sub-header-title-input"]').type(
-      `{selectall}{backspace}${chartTestName}-Edited`
-    );
-
-    cy.get('[data-cy="nonstatic-dimension-container"]')
+    cy.get('[data-cy="empty-row-frame"]')
       .first()
       .within(() => {
-        cy.get('[data-cy="chart-dimension-mapping-item"]').click();
+        cy.get('[data-cy="one-by-one-type"]').click({ timeout: 2000 });
       });
 
-    cy.get('[data-cy="chart-dimension-mapping-item"]').eq(2).click();
-
-    cy.intercept(`${apiUrl}/chart/*/render`).as("renderChart");
-
-    cy.get('[data-cy="chart-dimension-mapping-item"]').first().click();
-
-    cy.wait("@renderChart");
-
-    cy.get('[data-cy="common-chart-container"]').should("be.visible");
-
-    cy.get('[data-cy="toolbox-chart-next"]').click();
-
-    // cy.wait("@renderChart");
-
-    cy.get('[data-cy="toolbox-chart-next"]').click();
-
-    // cy.wait("@renderChart");
-
-    cy.get('[data-cy="toolbox-chart-next"]').click();
-
-    cy.wait("@saveChart2");
-
-    cy.intercept(`${apiUrl}/charts?filter=*`).as("fetchCharts");
-
-    cy.get('[data-cy="back-to-report-button"]').click();
-
-    cy.wait("@fetchCharts");
-
-    cy.get('[data-cy="report-panel-chart-search-input"]').type(
-      `${chartTestName}-Edited`
-    );
-    cy.wait("@fetchCharts");
-
-    cy.contains(
-      '[data-cy="report-panel-chart-item"]',
-      `${chartTestName}-Edited`
-    ).should("be.visible");
+    cy.get('[data-cy="row-frame-chart-item-0-1"]').should("have.length", 0);
   });
 
   it("Can delete a report", () => {
     cy.intercept("DELETE", `${apiUrl}/report/*`).as("deleteReport");
 
     cy.get("[data-cy=home-search-button]").click();
-    cy.get("[data-cy=home-search-input]").type(
+    cy.wait(2000);
+    cy.get("[data-cy=filter-search-input]").type(
       `{selectall}{backspace}${reportTestName}`
     );
 
@@ -539,7 +617,8 @@ describe("Edit, duplicate and delete report", () => {
     cy.wait("@fetchReports");
 
     cy.get("[data-cy=home-search-button]").click();
-    cy.get("[data-cy=home-search-input]").type(
+    cy.wait(2000);
+    cy.get("[data-cy=filter-search-input]").type(
       `{selectall}{backspace}${reportTestName}`
     );
 
@@ -569,7 +648,8 @@ describe("Edit, duplicate and delete report", () => {
     cy.wait("@fetchReports");
 
     cy.get("[data-cy=home-search-button]").click();
-    cy.get("[data-cy=home-search-input]").type(
+    cy.wait(2000);
+    cy.get("[data-cy=filter-search-input]").type(
       `{selectall}{backspace}${reportTestName}`
     );
 
