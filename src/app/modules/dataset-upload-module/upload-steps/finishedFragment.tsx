@@ -310,7 +310,7 @@ export default function FinishedFragment(props: Props) {
         <p>Data Description : {props.description}</p>
         <p>Data Category : {props.dataCategory}</p>
         <p>Data Source : {props.dataSource}</p>
-        <p>Link to data source : {props.dataSourceURL}</p>
+        <p>Link to data source : {props.dataSourceURL || "NIL"}</p>
       </div>
       <div
         css={`
