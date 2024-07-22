@@ -213,34 +213,41 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
               `}
             />
           ) : (
-            <p
-              css={`
-                font-family: "GothamNarrow-Bold", sans-serif;
-                font-size: 18px;
-                color: #231d2c;
-                margin-bottom: 0px;
-                span {
-                  color: #359c96;
-                  font-family: "GothamNarrow-Bold", sans-serif;
-                }
-              `}
-            >
-              {validAiSuggestions() === undefined ||
-              validAiSuggestions()?.length === 0 ? (
-                <>
-                  Our <span>AI agent</span> is unable to recommend a specific
-                  chart for your dataset. Feel free to choose any chart <br />{" "}
-                  that best suits your needs. Your selection is entirely up to
-                  you! Simply make your choice and click "Next."{" "}
-                </>
+            <>
+              {isAiActive ? (
+                <p
+                  css={`
+                    font-family: "GothamNarrow-Bold", sans-serif;
+                    font-size: 18px;
+                    color: #231d2c;
+                    margin-bottom: 0px;
+                    span {
+                      color: #359c96;
+                      font-family: "GothamNarrow-Bold", sans-serif;
+                    }
+                  `}
+                >
+                  {validAiSuggestions() === undefined ||
+                  validAiSuggestions()?.length === 0 ? (
+                    <>
+                      Our <span>AI agent</span> is unable to recommend a
+                      specific chart for your dataset. Feel free to choose any
+                      chart <br /> that best suits your needs. Your selection is
+                      entirely up to you! Simply make your choice and click
+                      "Next."{" "}
+                    </>
+                  ) : (
+                    <>
+                      Our <span>AI agent</span> is providing you with one or
+                      more suggested charts to communicate your dataset. <br />{" "}
+                      Feel free to pick another chart type.
+                    </>
+                  )}
+                </p>
               ) : (
-                <>
-                  Our <span>AI agent</span> is providing you with one or more
-                  suggested charts to communicate your dataset. <br /> Feel free
-                  to pick another chart type.
-                </>
+                <div></div>
               )}
-            </p>
+            </>
           )}
           <div
             css={`
