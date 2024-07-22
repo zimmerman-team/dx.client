@@ -14,6 +14,8 @@ import {
   echartsCirculargraph,
   echartsCirclepacking,
   echartsBubblechart,
+  echartsMultisetBarchart,
+  echartsStackedBarchart,
   echartsScatterchart,
   echartsHeatmap,
   echartsGraphgl,
@@ -37,6 +39,8 @@ export const charts = {
   echartsCirculargraph,
   echartsCirclepacking,
   echartsBubblechart,
+  echartsMultisetBarchart,
+  echartsStackedBarchart,
   echartsScatterchart,
   echartsHeatmap,
   echartsGraphgl,
@@ -267,6 +271,30 @@ export const defaultChartOptions = {
       default: CHART_DEFAULT_HEIGHT,
     },
     ...echartsBubblechart.visualOptions,
+  },
+  echartsMultisetBarchart: {
+    ...baseOptions,
+    width: {
+      ...baseOptions.width,
+      default: CHART_DEFAULT_WIDTH,
+    },
+    height: {
+      ...baseOptions.height,
+      default: CHART_DEFAULT_HEIGHT,
+    },
+    ...echartsMultisetBarchart.visualOptions,
+  },
+  echartsStackedBarchart: {
+    ...baseOptions,
+    width: {
+      ...baseOptions.width,
+      default: CHART_DEFAULT_WIDTH,
+    },
+    height: {
+      ...baseOptions.height,
+      default: CHART_DEFAULT_HEIGHT,
+    },
+    ...echartsStackedBarchart.visualOptions,
   },
   echartsScatterchart: {
     ...baseOptions,
