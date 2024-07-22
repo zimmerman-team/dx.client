@@ -70,7 +70,10 @@ export default function EmpowerBlock(props: {
             margin-top: 34px !important;
           `}
         >
-          <Link to="/report/664f406b82350800ca942b92?fromLanding=true">
+          <Link
+            data-cy="landing-report-link"
+            to="/report/664f406b82350800ca942b92?fromLanding=true"
+          >
             <ClimateButton color="#6061E5" type="button">
               EXPLORE CLIMATE CHANGE IN EUROPE 2022 REPORT
             </ClimateButton>

@@ -204,6 +204,7 @@ export default function RowstructureDisplay(props: RowStructureDisplayProps) {
                       "",
                     ]);
                   }}
+                  data-cy="edit-row-structure-button"
                 >
                   <Tooltip title="Edit" placement="right">
                     <EditIcon />
@@ -584,6 +585,7 @@ const Box = (props: {
                     }
                   }
                 `}
+                data-cy="delete-item-button"
               >
                 <DeleteIcon />
               </IconButton>
@@ -660,6 +662,7 @@ const Box = (props: {
                       }
                     }
                   `}
+                  data-cy="delete-item-button"
                 >
                   <Tooltip title="Delete Chart">
                     <DeleteIcon />
@@ -763,6 +766,7 @@ const Box = (props: {
                     }
                   }
                 `}
+                data-cy="delete-item-button"
               >
                 <DeleteIcon />
               </IconButton>
@@ -845,6 +849,7 @@ const Box = (props: {
                     }
                   }
                 `}
+                data-cy="delete-item-button"
               >
                 <DeleteIcon />
               </IconButton>
