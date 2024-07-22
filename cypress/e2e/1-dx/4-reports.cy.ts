@@ -160,10 +160,10 @@ describe("Testing reports on DX", () => {
     cy.wait("@fetchReports");
 
     cy.get("[data-cy=home-search-button]").click();
+    cy.wait(2000);
     cy.get("[data-cy=filter-search-input]").type(
       `{selectall}{backspace}${reportTestName}`
     );
-    cy.wait(2000);
 
     cy.wait("@fetchReports");
 

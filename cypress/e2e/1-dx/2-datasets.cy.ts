@@ -291,6 +291,7 @@ describe("Edit, Delete and Duplicate Dataset", () => {
 
   it("Can delete dataset", () => {
     cy.get("[data-cy=home-search-button]").click();
+    cy.wait(2000);
     cy.get("[data-cy=filter-search-input]").type("Soccer Players");
 
     cy.wait("@fetchDatasets");

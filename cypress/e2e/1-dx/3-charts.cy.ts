@@ -346,6 +346,7 @@ describe("Edit, duplicate and delete chart", () => {
     cy.wait("@fetchCharts");
 
     cy.get("[data-cy=home-search-button]").click();
+    cy.wait(2000);
     cy.get("[data-cy=filter-search-input]").type(
       `{selectall}{backspace}${testname1}`
     );
@@ -358,6 +359,7 @@ describe("Edit, duplicate and delete chart", () => {
 
   it("Can Delete a chart", () => {
     cy.get("[data-cy=home-search-button]").click();
+    cy.wait(2000);
     cy.get("[data-cy=filter-search-input]").type(
       `{selectall}{backspace}${testname1}`
     );
@@ -385,6 +387,7 @@ describe("Edit, duplicate and delete chart", () => {
     //   .should("not.exist");
 
     cy.get("[data-cy=home-search-button]").click();
+    cy.wait(2000);
     cy.get("[data-cy=filter-search-input]").type(
       `{selectall}{backspace}${testname2}`
     );
@@ -413,6 +416,7 @@ describe("Edit, duplicate and delete chart", () => {
     //   .should("not.exist");
 
     cy.get("[data-cy=home-search-button]").click();
+    cy.wait(2000);
     cy.get("[data-cy=filter-search-input]").type(
       `{selectall}{backspace}${testname3}`
     );
