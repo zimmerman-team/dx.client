@@ -266,7 +266,7 @@ export default function MetaData(props: Readonly<Props>) {
           <Grid lg={12} xs={12} md={12} item>
             <CssTextField
               id="outlined-basic"
-              label="Link to data source*"
+              label="Link to data source"
               variant="outlined"
               onChange={handleChange}
               name="sourceUrl"
