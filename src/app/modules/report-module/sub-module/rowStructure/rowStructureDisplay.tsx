@@ -51,7 +51,6 @@ interface RowStructureDisplayProps {
   }[];
 
   previewItems?: (string | object)[];
-  handlePersistReportState: () => void;
   onRowBoxItemResize: (
     rowId: string,
     itemIndex: number,
@@ -59,6 +58,7 @@ interface RowStructureDisplayProps {
     height: number
   ) => void;
   setPlugins: React.Dispatch<React.SetStateAction<ToolbarPluginsType>>;
+  onSave: (type: "create" | "edit") => Promise<void>;
 }
 
 export default function RowstructureDisplay(props: RowStructureDisplayProps) {
@@ -242,9 +242,9 @@ export default function RowstructureDisplay(props: RowStructureDisplayProps) {
               onRowBoxItemResize={props.onRowBoxItemResize}
               setFramesArray={props.setFramesArray}
               previewItem={get(props.previewItems, `[${index}]`, undefined)}
-              handlePersistReportState={props.handlePersistReportState}
               rowItemsCount={props.rowStructureDetailItems.length}
               setPlugins={props.setPlugins}
+              onSave={props.onSave}
             />
           ))}
         </div>
@@ -259,12 +259,12 @@ const Box = (props: {
   rowId: string;
   rowIndex: number;
   itemIndex: number;
-  handlePersistReportState: () => void;
   rowType: string;
   setPlugins?: React.Dispatch<React.SetStateAction<ToolbarPluginsType>>;
   setFramesArray: (value: React.SetStateAction<IFramesArray[]>) => void;
   rowItemsCount: number;
   previewItem?: string | any;
+  onSave: (type: "create" | "edit") => Promise<void>;
   onRowBoxItemResize: (
     rowId: string,
     itemIndex: number,
@@ -334,9 +334,8 @@ const Box = (props: {
     setCreateChartData(null);
     resetMapping();
 
-    //set persisted report state to current report state
-    props.handlePersistReportState();
-
+    //save report before exiting
+    props.onSave("edit");
     history.push(`/chart/${chartId}/mapping`);
   };
 
@@ -910,35 +909,49 @@ const Box = (props: {
 
   return (
     content ?? (
-      <div
-        css={`
-          width: ${width};
-          border: ${border};
-          background: ${viewOnlyMode ? "transparent" : "#dfe3e6"};
-          height: ${props.height}px;
-        `}
-        ref={drop}
-        data-cy={`row-frame-item-drop-zone-${props.rowIndex}-${props.itemIndex}`}
+      <Resizable
+        grid={[5, 5]}
+        onResize={onResize}
+        onResizeStop={onResizeStop}
+        size={{ width: width, height: `${props.height}px` }}
+        maxWidth={!viewOnlyMode ? containerWidth : undefined}
+        minWidth={78}
+        enable={{
+          right: !viewOnlyMode,
+          bottom: !viewOnlyMode,
+          bottomRight: !viewOnlyMode,
+        }}
       >
-        <p
+        <div
           css={`
-            margin: 0;
-            width: 100%;
-            height: 100%;
-            padding: 24px;
-            color: #495057;
-            font-size: 14px;
-            font-weight: 400;
-            font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
-            text-align: center;
-            align-items: center;
-            justify-content: center;
-            display: ${viewOnlyMode ? "none" : "flex"};
+            width: ${width};
+            border: ${border};
+            background: ${viewOnlyMode ? "transparent" : "#dfe3e6"};
+            height: ${props.height}px;
           `}
+          ref={drop}
+          data-cy={`row-frame-item-drop-zone-${props.rowIndex}-${props.itemIndex}`}
         >
-          {isOver ? "Release to drop" : "Drag and drop content here"}
-        </p>
-      </div>
+          <p
+            css={`
+              margin: 0;
+              width: 100%;
+              height: 100%;
+              padding: 24px;
+              color: #495057;
+              font-size: 14px;
+              font-weight: 400;
+              font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
+              text-align: center;
+              align-items: center;
+              justify-content: center;
+              display: ${viewOnlyMode ? "none" : "flex"};
+            `}
+          >
+            {isOver ? "Release to drop" : "Drag and drop content here"}
+          </p>
+        </div>
+      </Resizable>
     )
   );
 };
