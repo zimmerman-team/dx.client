@@ -160,7 +160,7 @@ describe("Testing reports on DX", () => {
     cy.wait("@fetchReports");
 
     cy.get("[data-cy=home-search-button]").click();
-    cy.get("[data-cy=home-search-input]").type(
+    cy.get("[data-cy=filter-search-input]").type(
       `{selectall}{backspace}${reportTestName}`
     );
 
@@ -189,7 +189,7 @@ describe("Edit, duplicate and delete report", () => {
 
   it("Can Edit a report", () => {
     cy.get("[data-cy=home-search-button]").click();
-    cy.get("[data-cy=home-search-input]").type(
+    cy.get("[data-cy=filter-search-input]").type(
       `{selectall}{backspace}${reportTestName}`
     );
 
@@ -232,7 +232,7 @@ describe("Edit, duplicate and delete report", () => {
     cy.wait("@fetchReports");
 
     cy.get("[data-cy=home-search-button]").click();
-    cy.get("[data-cy=home-search-input]").type(
+    cy.get("[data-cy=filter-search-input]").type(
       `{selectall}{backspace}${reportTestName}`
     );
 
@@ -243,7 +243,7 @@ describe("Edit, duplicate and delete report", () => {
 
   it("Can drag and drop rows in a report", () => {
     cy.get("[data-cy=home-search-button]").click();
-    cy.get("[data-cy=home-search-input]").type(
+    cy.get("[data-cy=filter-search-input]").type(
       `{selectall}{backspace}${reportTestName}`
     );
 
@@ -270,7 +270,7 @@ describe("Edit, duplicate and delete report", () => {
 
   it("Can Duplicate a report", () => {
     cy.get("[data-cy=home-search-button]").click();
-    cy.get("[data-cy=home-search-input]").type(
+    cy.get("[data-cy=filter-search-input]").type(
       `{selectall}{backspace}${reportTestName}`
     );
 
@@ -288,7 +288,7 @@ describe("Edit, duplicate and delete report", () => {
     cy.wait("@fetchReports");
 
     cy.get("[data-cy=home-search-button]").click();
-    cy.get("[data-cy=home-search-input]").type(
+    cy.get("[data-cy=filter-search-input]").type(
       `{selectall}{backspace}${reportTestName}`
     );
 
@@ -301,7 +301,7 @@ describe("Edit, duplicate and delete report", () => {
 
   it("Can Create a chart from a report", () => {
     cy.get("[data-cy=home-search-button]").click();
-    cy.get("[data-cy=home-search-input]").type(
+    cy.get("[data-cy=filter-search-input]").type(
       `{selectall}{backspace}${reportTestName}`
     );
 
@@ -415,7 +415,7 @@ describe("Edit, duplicate and delete report", () => {
 
   it("Can edit a chart from a report", () => {
     cy.get("[data-cy=home-search-button]").click();
-    cy.get("[data-cy=home-search-input]").type(
+    cy.get("[data-cy=filter-search-input]").type(
       `{selectall}{backspace}${reportTestName}`
     );
 
@@ -512,7 +512,7 @@ describe("Edit, duplicate and delete report", () => {
     cy.intercept("DELETE", `${apiUrl}/report/*`).as("deleteReport");
 
     cy.get("[data-cy=home-search-button]").click();
-    cy.get("[data-cy=home-search-input]").type(
+    cy.get("[data-cy=filter-search-input]").type(
       `{selectall}{backspace}${reportTestName}`
     );
 
@@ -539,7 +539,7 @@ describe("Edit, duplicate and delete report", () => {
     cy.wait("@fetchReports");
 
     cy.get("[data-cy=home-search-button]").click();
-    cy.get("[data-cy=home-search-input]").type(
+    cy.get("[data-cy=filter-search-input]").type(
       `{selectall}{backspace}${reportTestName}`
     );
 
@@ -569,7 +569,7 @@ describe("Edit, duplicate and delete report", () => {
     cy.wait("@fetchReports");
 
     cy.get("[data-cy=home-search-button]").click();
-    cy.get("[data-cy=home-search-input]").type(
+    cy.get("[data-cy=filter-search-input]").type(
       `{selectall}{backspace}${reportTestName}`
     );
 

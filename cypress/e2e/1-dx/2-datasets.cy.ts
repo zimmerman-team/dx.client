@@ -291,7 +291,7 @@ describe("Edit, Delete and Duplicate Dataset", () => {
 
   it("Can delete dataset", () => {
     cy.get("[data-cy=home-search-button]").click();
-    cy.get("[data-cy=home-search-input]").type("Soccer Players");
+    cy.get("[data-cy=filter-search-input]").type("Soccer Players");
 
     cy.wait("@fetchDatasets");
 
@@ -318,7 +318,7 @@ describe("Edit, Delete and Duplicate Dataset", () => {
     //   .should("not.exist");
 
     // cy.get("[data-cy=home-search-button]").click();
-    // cy.get("[data-cy=home-search-input]").type(
+    // cy.get("[data-cy=filter-search-input]").type(
     //   "{selectall}{backspace}Wine Tasting"
     // );
 
@@ -347,7 +347,7 @@ describe("Edit, Delete and Duplicate Dataset", () => {
     //   .should("not.exist");
 
     cy.get("[data-cy=home-search-button]").click();
-    cy.get("[data-cy=home-search-input]").type(
+    cy.get("[data-cy=filter-search-input]").type(
       `{selectall}{backspace}${testname1}`
     );
 
@@ -372,7 +372,7 @@ describe("Edit, Delete and Duplicate Dataset", () => {
     cy.wait("@fetchDatasets");
 
     cy.get("[data-cy=home-search-button]").click();
-    cy.get("[data-cy=home-search-input]").type(
+    cy.get("[data-cy=filter-search-input]").type(
       `{selectall}{backspace}${testname1}`
     );
     cy.wait("@fetchDatasets");
