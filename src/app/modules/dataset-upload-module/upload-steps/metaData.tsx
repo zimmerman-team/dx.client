@@ -139,22 +139,13 @@ export default function MetaData(props: Readonly<Props>) {
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
-    const { public: isPublic, ...rest } = props.formDetails;
+    const { public: isPublic, sourceUrl, ...rest } = props.formDetails;
     //form validation before submitting
     for (const key in rest) {
-      if (rest[key as keyof typeof rest] === "") {
+      if (rest[key as keyof typeof rest] === "" && key !== "sourceUrl") {
         setErrorState((prev) => ({
           ...prev,
           [key]: { state: true, message: "" },
-        }));
-        return;
-      } else if (
-        key === "sourceUrl" &&
-        !isValidUrl(rest[key as keyof typeof rest])
-      ) {
-        setErrorState((prev) => ({
-          ...prev,
-          [key]: { state: true, message: "Please input a valid URL" },
         }));
         return;
       } else {
@@ -164,12 +155,19 @@ export default function MetaData(props: Readonly<Props>) {
         }));
       }
     }
-    //if every key in errorState is false, then submit form
+    if (!isValidUrl(sourceUrl)) {
+      setErrorState((prev) => ({
+        ...prev,
+        sourceUrl: { state: true, message: "Please input a valid URL" },
+      }));
+      return;
+    }
+
     if (Object.values(rest).every((value) => value !== "")) {
       console.log("submitting form");
       props.onSubmit(props.formDetails);
     } else {
-      console.log("form errors");
+      console.log("form errors", rest);
     }
   };
 
