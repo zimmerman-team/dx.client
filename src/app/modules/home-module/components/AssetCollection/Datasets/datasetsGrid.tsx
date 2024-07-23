@@ -27,6 +27,7 @@ interface Props {
   onItemClick?: (v: string) => void;
   md?: GridSize;
   lg?: GridSize;
+  userOnly?: boolean;
 }
 
 export default function DatasetsGrid(props: Readonly<Props>) {
@@ -69,15 +70,17 @@ export default function DatasetsGrid(props: Readonly<Props>) {
         ? `"where":{"name":{"like":"${props.searchStr}.*","options":"i"}},`
         : "";
 
-    return `filter={${value}"order":"${
+    return `${props.userOnly ? "userOnly=true&" : ""}filter={${value}"order":"${
       props.sortBy
     } desc","limit":${limit},"offset":${fromZeroOffset ? 0 : offset}}`;
   };
 
   const getWhereString = () => {
-    return props.searchStr?.length > 0
-      ? `where={"name":{"like":"${props.searchStr}.*","options":"i"}}`
-      : "";
+    const value =
+      props.searchStr?.length > 0
+        ? `where={"name":{"like":"${props.searchStr}.*","options":"i"}}`
+        : "";
+    return `${props.userOnly ? "userOnly=true&" : ""}${value}`;
   };
 
   const loadData = (fromZeroOffset?: boolean) => {
