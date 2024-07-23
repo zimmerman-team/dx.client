@@ -3,91 +3,44 @@ import React from "react";
 /* third-party */
 import { Link } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
-import { useRecoilState, useResetRecoilState } from "recoil";
-import { Box, Grid, Container, IconButton, Popover } from "@material-ui/core";
+import { useRecoilState } from "recoil";
+import Box from "@material-ui/core/Box";
+import Grid from "@material-ui/core/Grid";
+import Container from "@material-ui/core/Container";
 /* project */
 import { Tab } from "app/components/Styled/tabs";
-
-import ChartsGrid from "app/modules/home-module/components/Charts/chartsGrid";
-import ReportsGrid from "app/modules/home-module/components/Reports/reportsGrid";
-import DatasetsGrid from "app/modules/home-module/components/Datasets/datasetsGrid";
-import { ReactComponent as SortIcon } from "app/modules/home-module/assets/sort-fill.svg";
-import { ReactComponent as TableIcon } from "app/modules/home-module/assets/table-icon.svg";
-import { ReactComponent as GridIcon } from "app/modules/home-module/assets/grid-fill.svg";
-import { ReactComponent as CloseIcon } from "app/modules/home-module/assets/close-icon.svg";
-import { ReactComponent as SearchIcon } from "app/modules/home-module/assets/search-fill.svg";
-
+import ChartsGrid from "app/modules/home-module/components/AssetCollection/Charts/chartsGrid";
+import ReportsGrid from "app/modules/home-module/components/AssetCollection/Reports/reportsGrid";
+import DatasetsGrid from "app/modules/home-module/components/AssetCollection/Datasets/datasetsGrid";
 import {
   homeDisplayAtom,
-  persistedReportStateAtom,
-  chartFromReportAtom,
-  unSavedReportPreviewModeAtom,
   allAssetsViewAtom,
   allAssetsSortBy,
 } from "app/state/recoil/atoms";
 import {
   featuredAssetsCss,
-  iconButtonCss,
   rowFlexCss,
-  searchInputCss,
-  sortByItemCss,
   turnsDataCss,
 } from "app/modules/home-module/style";
-import DatasetCategoryList from "app/modules/home-module/components/Datasets/datasetCategoryList";
-import { datasetCategories } from "app/modules/dataset-upload-module/upload-steps/metaData";
-import AssetsGrid from "app/modules/home-module/components/All/assetsGrid";
+import DatasetCategoryList from "app/modules/home-module/components/AssetCollection/Datasets/datasetCategoryList";
+import { datasetCategories } from "app/modules/dataset-module/routes/upload-module/upload-steps/metaData";
+import AssetsGrid from "app/modules/home-module/components/AssetCollection/All/assetsGrid";
 import BreadCrumbs from "app/modules/home-module/components/Breadcrumbs";
+import Filter from "app/modules/home-module/components/Filter";
 
 function AssetsCollection() {
   const { isAuthenticated, user } = useAuth0();
-
-  // clear persisted states
-  const clearPersistedReportState = useResetRecoilState(
-    persistedReportStateAtom
-  );
-  const clearChartFromReportState = useResetRecoilState(chartFromReportAtom);
-
-  const setReportPreviewMode = useRecoilState(unSavedReportPreviewModeAtom)[1];
-
-  React.useEffect(() => {
-    clearPersistedReportState();
-    clearChartFromReportState();
-    setReportPreviewMode(false);
-  }, []);
-
   const [categories, setCategories] = React.useState<string[]>([]);
-
   const [assetsView, setAssetsView] = useRecoilState(allAssetsViewAtom);
-  const [searchValue, setSearchValue] = React.useState<string | undefined>(
-    undefined
-  );
+  const [searchValue, setSearchValue] = React.useState<string | undefined>("");
   const [openSearch, setOpenSearch] = React.useState(false);
   const [sortValue, setSortValue] = useRecoilState(allAssetsSortBy);
-  const [sortPopoverAnchorEl, setSortPopoverAnchorEl] =
-    React.useState<HTMLButtonElement | null>(null);
-
-  const inputRef = React.useRef<HTMLInputElement>(null);
-
   const [display, setDisplay] = useRecoilState(homeDisplayAtom);
   const [tabPrevPosition, setTabPrevPosition] = React.useState("");
-
-  const sortOptions = [
-    { label: "Last updated", value: "updatedDate" },
-    { label: "Created date", value: "createdDate" },
-    { label: "Name", value: "name" },
-  ];
 
   const handleChange = (newValue: "all" | "data" | "charts" | "reports") => {
     setDisplay(newValue);
   };
-
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(e.target.value);
-  };
-
-  React.useEffect(() => {
-    setSearchValue(undefined);
-  }, [display]);
 
   const displayGrid = (searchStr: string, sortByStr: string) => {
     switch (display) {
@@ -114,7 +67,6 @@ function AssetsCollection() {
             sortBy={sortByStr}
             searchStr={searchStr}
             view={assetsView}
-            showMenuButton={false}
           />
         );
       case "all":
@@ -123,19 +75,12 @@ function AssetsCollection() {
             sortBy={sortByStr}
             searchStr={searchStr}
             view={assetsView}
-            showMenuButton={false}
           />
         );
       default:
         break;
     }
   };
-
-  const handleCloseSortPopover = () => {
-    setSortPopoverAnchorEl(null);
-  };
-
-  const openSortPopover = Boolean(sortPopoverAnchorEl);
 
   React.useEffect(() => {
     if (display === "all" || display === "data") {
@@ -164,7 +109,6 @@ function AssetsCollection() {
         <div
           css={`
             ${rowFlexCss} gap: 8px;
-            /* width: 100%; */
             a {
               padding: 8px 24px;
             }
@@ -249,123 +193,17 @@ function AssetsCollection() {
             </Tab.Container>
           </Grid>
           <Grid item lg={6} md={6} sm={6}>
-            <div
-              css={`
-                ${rowFlexCss}
-                justify-content: flex-end;
-                gap: 8px;
-              `}
-            >
-              <div
-                css={`
-                  display: flex;
-                  align-items: center;
-                  gap: 8px;
-                `}
-              >
-                <div css={searchInputCss(openSearch)}>
-                  <input
-                    type="text"
-                    ref={inputRef}
-                    value={searchValue ?? ""}
-                    placeholder="eg. Kenya"
-                    onChange={handleSearch}
-                    data-cy="home-search-input"
-                  />
-                  <IconButton
-                    onClick={() => {
-                      setSearchValue("");
-                      setOpenSearch(false);
-                    }}
-                    css={`
-                      &:hover {
-                        background: transparent;
-                      }
-                    `}
-                  >
-                    <CloseIcon
-                      css={`
-                        margin-top: 1px;
-                      `}
-                    />
-                  </IconButton>
-                </div>
-                <IconButton
-                  onClick={() => {
-                    setOpenSearch(true);
-                    inputRef.current?.focus();
-                  }}
-                  css={iconButtonCss(openSearch)}
-                  data-cy="home-search-button"
-                >
-                  <SearchIcon />
-                </IconButton>
-              </div>
-              <IconButton
-                onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
-                  setSortPopoverAnchorEl(
-                    sortPopoverAnchorEl ? null : event.currentTarget
-                  );
-                }}
-                css={iconButtonCss(openSortPopover)}
-              >
-                <SortIcon />
-              </IconButton>
-              <Popover
-                open={openSortPopover}
-                anchorEl={sortPopoverAnchorEl}
-                onClose={handleCloseSortPopover}
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "left",
-                }}
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "left",
-                }}
-                css={`
-                  .MuiPaper-root {
-                    border-radius: 5px;
-                  }
-                `}
-              >
-                <div
-                  css={`
-                    color: #fff;
-                    font-size: 12px;
-                    padding: 8px 22px;
-                    background: #231d2c;
-                    font-family: "GothamNarrow-Bold", "Helvetica Neue",
-                      sans-serif;
-                  `}
-                >
-                  Sort by
-                </div>
-                {sortOptions.map((option) => (
-                  <div
-                    key={option.label}
-                    css={sortByItemCss(sortValue === option.value)}
-                    onClick={() => {
-                      setSortValue(
-                        option.value as "updatedDate" | "createdDate" | "name"
-                      );
-                      handleCloseSortPopover();
-                    }}
-                  >
-                    {option.label}
-                  </div>
-                ))}
-              </Popover>
-              <IconButton
-                data-cy="home-table-view-button"
-                onClick={() => {
-                  setAssetsView((prev) => (prev === "grid" ? "table" : "grid"));
-                }}
-                css={iconButtonCss(assetsView === "table")}
-              >
-                {assetsView === "table" ? <TableIcon /> : <GridIcon />}
-              </IconButton>
-            </div>
+            <Filter
+              searchValue={searchValue as string}
+              setSearchValue={setSearchValue}
+              setSortValue={setSortValue}
+              setAssetsView={setAssetsView}
+              sortValue={sortValue}
+              assetsView={assetsView}
+              openSearch={openSearch}
+              setOpenSearch={setOpenSearch}
+              searchIconCypressId="home-search-button"
+            />
           </Grid>
         </Grid>
         <div

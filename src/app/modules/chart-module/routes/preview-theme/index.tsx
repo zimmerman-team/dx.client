@@ -15,6 +15,7 @@ import { ReactComponent as AIIcon } from "app/modules/chart-module/assets/ai-ico
 import GeomapLegend from "app/modules/chart-module/components/geomap-legend";
 import ErrorComponent from "app/modules/chart-module/components/dialog/errrorComponent";
 import { DatasetListItemAPIModel } from "app/modules/dataset-module/data";
+import { getDatasetDetailsSource } from "app/modules/chart-module/util/getDatasetDetailsSource";
 
 export function ChartBuilderPreviewTheme(props: ChartBuilderPreviewThemeProps) {
   useTitle("DX Dataxplorer - Preview Chart");
@@ -40,6 +41,10 @@ export function ChartBuilderPreviewTheme(props: ChartBuilderPreviewThemeProps) {
   const datasetDetails = useStoreState(
     (state) =>
       (state.dataThemes.DatasetGet.crudData ?? {}) as DatasetListItemAPIModel
+  );
+  const { sourceUrl, filename } = getDatasetDetailsSource(
+    datasetDetails,
+    undefined
   );
   React.useEffect(() => {
     if (token) {
@@ -281,13 +286,8 @@ export function ChartBuilderPreviewTheme(props: ChartBuilderPreviewThemeProps) {
                   `}
                 >
                   Source:{" "}
-                  <a
-                    href={datasetDetails.sourceUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {datasetDetails.source} - Data file:{" "}
-                    {datasetDetails.sourceUrl}
+                  <a href={sourceUrl} target="_blank" rel="noopener noreferrer">
+                    {datasetDetails.source} - Data file: {filename}
                   </a>
                 </p>
                 {selectedChartType === "echartsGeomap" &&

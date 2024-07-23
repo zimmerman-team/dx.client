@@ -6,6 +6,7 @@ import GeomapLegend from "app/modules/chart-module/components/geomap-legend";
 import { ChartAPIModel } from "app/modules/chart-module/data";
 import { DatasetListItemAPIModel } from "app/modules/dataset-module/data";
 import { get } from "lodash";
+import { getDatasetDetailsSource } from "app/modules/chart-module/util/getDatasetDetailsSource";
 
 export type ChartType =
   | "echartsBarchart"
@@ -20,6 +21,8 @@ export type ChartType =
   | "echartsCirculargraph"
   | "echartsCirclepacking"
   | "echartsBubblechart"
+  | "echartsMultisetBarchart"
+  | "echartsStackedBarchart"
   | "echartsScatterchart"
   | "echartsHeatmap"
   | "echartsGraphgl"
@@ -42,8 +45,7 @@ interface Props {
   inChartWrapper?: boolean;
   chartPreviewInReport?: boolean;
   mapping?: any;
-  sourceUrl?: string;
-  source?: string;
+  datasetDetails?: DatasetListItemAPIModel;
 }
 
 export function CommonChart(props: Readonly<Props>) {
@@ -68,6 +70,11 @@ export function CommonChart(props: Readonly<Props>) {
     (state) =>
       (state.dataThemes.DatasetGet.crudData ?? {}) as DatasetListItemAPIModel
   );
+  const { sourceUrl, filename } = getDatasetDetailsSource(
+    datasetDetails,
+    props.datasetDetails
+  );
+
   const dataSourcePHeight = document
     .getElementById(`datasource-${props.chartId || "1"}`)
     ?.getBoundingClientRect().height;
@@ -166,6 +173,8 @@ export function CommonChart(props: Readonly<Props>) {
               | "echartsCirculargraph"
               | "echartsCirclepacking"
               | "echartsBubblechart"
+              | "echartsMultisetBarchart"
+              | "echartsStackedBarchart"
               | "echartsScatterchart"
               | "echartsHeatmap"
               | "echartsGraphgl"
@@ -328,16 +337,9 @@ export function CommonChart(props: Readonly<Props>) {
           `}
         >
           Source:{" "}
-          <a
-            href={
-              props.inChartWrapper ? props.sourceUrl : datasetDetails.sourceUrl
-            }
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {props.inChartWrapper ? props.source : datasetDetails.source} - Data
-            file:{" "}
-            {props.inChartWrapper ? props.sourceUrl : datasetDetails.sourceUrl}
+          <a href={sourceUrl} target="_blank" rel="noopener noreferrer">
+            {props.datasetDetails?.source ?? datasetDetails.source} - Data file:{" "}
+            {filename}
           </a>
         </p>
         {chartType === "echartsGeomap" && props.visualOptions?.showLegend ? (

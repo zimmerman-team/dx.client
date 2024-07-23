@@ -19,7 +19,6 @@ export interface ReportEditViewProps {
       isAutoSaveEnabled: boolean;
     }>
   >;
-  handlePersistReportState: () => void;
   reportName: string;
   setHasChangesBeenMade: React.Dispatch<React.SetStateAction<boolean>>;
   headerDetails: {
@@ -42,15 +41,8 @@ export interface ReportEditViewProps {
       dateColor: string;
     }>
   >;
-
-  handleRowFrameItemResize: (
-    rowId: string,
-    itemIndex: number,
-    width: number,
-    height: number
-  ) => void;
   stopInitializeFramesWidth: boolean;
   setStopInitializeFramesWidth: React.Dispatch<React.SetStateAction<boolean>>;
-
+  onSave: (type: "create" | "edit") => Promise<void>;
   setPlugins: React.Dispatch<React.SetStateAction<ToolbarPluginsType>>;
 }

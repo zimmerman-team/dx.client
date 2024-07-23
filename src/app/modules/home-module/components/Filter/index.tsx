@@ -16,7 +16,7 @@ export default function Filter(
   props: Readonly<{
     searchValue: string;
     setSearchValue: (value: React.SetStateAction<string | undefined>) => void;
-    setSortValue: React.Dispatch<React.SetStateAction<string>>;
+    setSortValue: (value: "updatedDate" | "createdDate" | "name") => void;
     sortValue: string;
     setAssetsView: (value: "grid" | "table") => void;
     assetsView: "table" | "grid";
@@ -24,6 +24,7 @@ export default function Filter(
     searchInputWidth?: string;
     openSearch: boolean;
     setOpenSearch: React.Dispatch<React.SetStateAction<boolean>>;
+    searchIconCypressId: string;
   }>
 ) {
   const inputRef = React.useRef<HTMLInputElement>(null);
@@ -66,6 +67,7 @@ export default function Filter(
             placeholder="eg. Kenya"
             onChange={handleSearch}
             data-cy="filter-search-input"
+            aria-label="search"
           />
           <IconButton
             onClick={() => {
@@ -73,6 +75,7 @@ export default function Filter(
               props.terminateSearch && props.terminateSearch();
               props.setOpenSearch(false);
             }}
+            aria-label="close-search"
             css={`
               &:hover {
                 background: transparent;
@@ -87,12 +90,13 @@ export default function Filter(
           </IconButton>
         </div>
         <IconButton
-          data-cy="open-search-button"
+          data-cy={props.searchIconCypressId}
           onClick={() => {
             props.setOpenSearch(true);
             inputRef.current?.focus();
           }}
           css={iconButtonCss(props.openSearch)}
+          aria-label="search-button"
         >
           <SearchIcon />
         </IconButton>
@@ -104,6 +108,7 @@ export default function Filter(
           );
         }}
         css={iconButtonCss(openSortPopover)}
+        aria-label="sort-button"
       >
         <SortIcon />
       </IconButton>
@@ -141,7 +146,9 @@ export default function Filter(
             key={option.label}
             css={sortByItemCss(props.sortValue === option.value)}
             onClick={() => {
-              props.setSortValue(option.value);
+              props.setSortValue(
+                option.value as "name" | "createdDate" | "updatedDate"
+              );
               handleCloseSortPopover();
             }}
           >
@@ -150,10 +157,14 @@ export default function Filter(
         ))}
       </Popover>
       <IconButton
+        data-cy="home-table-view-button"
         onClick={() => {
           props.setAssetsView(props.assetsView === "table" ? "grid" : "table");
         }}
         css={iconButtonCss(props.assetsView === "table")}
+        aria-label={`${
+          props.assetsView === "table" ? "grid" : "table"
+        }-view-button`}
       >
         {props.assetsView === "table" ? <TableIcon /> : <GridIcon />}
       </IconButton>

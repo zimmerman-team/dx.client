@@ -241,8 +241,7 @@ export function ReportChartWrapper(props: Props) {
         inChartWrapper={true}
         chartPreviewInReport={props.chartPreviewInReport}
         mapping={chartFromAPI?.mapping}
-        source={datasetDetails?.source}
-        sourceUrl={datasetDetails?.sourceUrl}
+        datasetDetails={datasetDetails}
       />
     </div>
   );

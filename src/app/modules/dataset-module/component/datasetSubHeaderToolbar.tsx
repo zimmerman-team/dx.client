@@ -21,9 +21,7 @@ import { useStoreActions, useStoreState } from "app/state/store/hooks";
 /** Project */
 import { styles } from "app/modules/dataset-module/component/styles";
 import DeleteDatasetDialog from "app/components/Dialogs/deleteDatasetDialog";
-import { ISnackbarState } from "app/modules/dataset-upload-module/upload-steps/previewFragment";
-import { homeDisplayAtom } from "app/state/recoil/atoms";
-import { useRecoilState } from "recoil";
+import { ISnackbarState } from "app/modules/dataset-module/routes/upload-module/upload-steps/previewFragment";
 import { InfoSnackbar } from "app/modules/report-module/components/reportSubHeaderToolbar/infosnackbar";
 import { DatasetListItemAPIModel } from "app/modules/dataset-module/data";
 
@@ -51,22 +49,34 @@ export default function DatasetSubHeaderToolbar(
 
   const open = Boolean(anchorEl);
   const popoverId = open ? "simple-popover" : undefined;
+  const loadDataset = useStoreActions(
+    (actions) => actions.dataThemes.DatasetGet.fetch
+  );
+  const datasetDetails = useStoreState(
+    (state) =>
+      (state.dataThemes.DatasetGet.crudData ?? {}) as DatasetListItemAPIModel
+  );
   const loadDatasets = useStoreActions(
     (actions) => actions.dataThemes.DatasetGetList.fetch
   );
-  const loadedDatasets = useStoreState(
-    (state) =>
-      (state.dataThemes.DatasetGetList.crudData ??
-        []) as DatasetListItemAPIModel[]
-  );
-
-  const loadedDataset = loadedDatasets.find((d) => d.id === page);
   const canDatasetEditDelete = React.useMemo(() => {
-    return (
-      isAuthenticated && loadedDatasets && loadedDataset?.owner === user?.sub
-    );
-  }, [user, isAuthenticated, loadedDatasets]);
+    return isAuthenticated && datasetDetails?.owner === user?.sub;
+  }, [user, isAuthenticated, datasetDetails]);
 
+  React.useEffect(() => {
+    if (token) {
+      loadDataset({
+        token,
+        getId: page as string,
+      });
+    } else {
+      loadDataset({
+        token,
+        getId: page as string,
+        nonAuthCall: !token,
+      });
+    }
+  }, [token, page]);
   const handleDuplicate = () => {
     axios
       .get(`${process.env.REACT_APP_API}/dataset/duplicate/${page}`, {
