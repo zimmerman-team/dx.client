@@ -456,7 +456,7 @@ describe("Edit, duplicate and delete report", () => {
 
     cy.wait("@fetchReport");
 
-    cy.intercept("GET", `${apiUrl}/datasets?filter=*`).as("getDatasets");
+    cy.intercept("GET", `${apiUrl}/datasets?**`).as("getDatasets");
     cy.get('[data-cy="report-panel-create-chart-card"]').click();
     cy.wait("@getDatasets");
     cy.intercept("GET", `${apiUrl}/chart/sample-data/*`).as("getDataset");
