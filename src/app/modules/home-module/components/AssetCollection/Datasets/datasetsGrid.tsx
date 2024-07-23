@@ -281,26 +281,16 @@ export default function DatasetsGrid(props: Readonly<Props>) {
               { key: "description", label: "Description" },
               { key: "createdDate", label: "Date" },
             ],
-            data: loadedDatasets,
+            data: loadedDatasets.map((data) => ({
+              ...data,
+              type: "dataset",
+            })),
           }}
-          // data={loadedDatasets?.map((data) => ({
-          //   id: data.id,
-          //   name: data.name,
-          //   description: data.description,
-          //   createdDate: data.createdDate,
-          //   type: "dataset",
-          //   public: data.public,
-          // }))}
         />
       )}
       <Box height={80} />
 
-      <div
-        ref={observerTarget}
-        // css={`
-        //   height: 10px;
-        // `}
-      />
+      <div ref={observerTarget} />
       {loading && <CircleLoader />}
       <DeleteDatasetDialog
         cardId={cardId}

@@ -200,8 +200,6 @@ export default function ChartsGrid(props: Props) {
         return;
       }
       reloadData();
-      // if (props.searchStr !== undefined) {
-      // }
     },
     500,
     [props.searchStr]
@@ -239,15 +237,11 @@ export default function ChartsGrid(props: Props) {
               { key: "title", label: "Description" },
               { key: "createdDate", label: "Date" },
             ],
-            data: loadedCharts,
+            data: loadedCharts.map((data) => ({
+              ...data,
+              type: "chart",
+            })),
           }}
-          // data={loadedCharts.map((data) => ({
-          //   id: data.id,
-          //   name: data.name,
-          //   description: data.title,
-          //   createdDate: data.createdDate,
-          //   type: "chart",
-          // }))}
         />
       )}
       <Box height={80} />
