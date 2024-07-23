@@ -218,13 +218,21 @@ export default function ReportsGrid(props: Props) {
       )}
       {props.view === "table" && (
         <HomepageTable
-          data={loadedReports.map((data) => ({
-            id: data.id,
-            name: data.name,
-            description: data.title,
-            createdDate: data.createdDate,
-            type: "report",
-          }))}
+          tableData={{
+            columns: [
+              { key: "name", label: "Name" },
+              { key: "title", label: "Description" },
+              { key: "createdDate", label: "Date" },
+            ],
+            data: loadedReports,
+          }}
+          // data={loadedReports.map((data) => ({
+          //   id: data.id,
+          //   name: data.name,
+          //   description: data.title,
+          //   createdDate: data.createdDate,
+          //   type: "report",
+          // }))}
         />
       )}
       <Box height={80} />

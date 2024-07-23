@@ -233,13 +233,21 @@ export default function ChartsGrid(props: Props) {
       )}
       {props.view === "table" && (
         <HomepageTable
-          data={loadedCharts.map((data) => ({
-            id: data.id,
-            name: data.name,
-            description: data.title,
-            createdDate: data.createdDate,
-            type: "chart",
-          }))}
+          tableData={{
+            columns: [
+              { key: "name", label: "Name" },
+              { key: "title", label: "Description" },
+              { key: "createdDate", label: "Date" },
+            ],
+            data: loadedCharts,
+          }}
+          // data={loadedCharts.map((data) => ({
+          //   id: data.id,
+          //   name: data.name,
+          //   description: data.title,
+          //   createdDate: data.createdDate,
+          //   type: "chart",
+          // }))}
         />
       )}
       <Box height={80} />

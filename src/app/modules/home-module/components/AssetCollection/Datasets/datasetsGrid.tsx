@@ -275,14 +275,22 @@ export default function DatasetsGrid(props: Readonly<Props>) {
         <HomepageTable
           onItemClick={props.onItemClick}
           inChartBuilder={props.inChartBuilder}
-          data={loadedDatasets?.map((data) => ({
-            id: data.id,
-            name: data.name,
-            description: data.description,
-            createdDate: data.createdDate,
-            type: "dataset",
-            public: data.public,
-          }))}
+          tableData={{
+            columns: [
+              { key: "name", label: "Name" },
+              { key: "description", label: "Description" },
+              { key: "createdDate", label: "Date" },
+            ],
+            data: loadedDatasets,
+          }}
+          // data={loadedDatasets?.map((data) => ({
+          //   id: data.id,
+          //   name: data.name,
+          //   description: data.description,
+          //   createdDate: data.createdDate,
+          //   type: "dataset",
+          //   public: data.public,
+          // }))}
         />
       )}
       <Box height={80} />
