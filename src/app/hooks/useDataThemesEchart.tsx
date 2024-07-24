@@ -880,6 +880,7 @@ export function useDataThemesEchart() {
             type: "dashed",
           },
         },
+        type: mapping.x.mappedType === "date" ? "category" : "value",
       },
       yAxis: {
         splitLine: {
@@ -981,7 +982,9 @@ export function useDataThemesEchart() {
         zlevel: -1,
         z: -1,
       },
-      xAxis: {},
+      xAxis: {
+        type: mapping.x.mappedType === "date" ? "category" : "value",
+      },
       yAxis: {
         name: mapping?.y?.value?.[0] ?? "",
         nameTextStyle: {
