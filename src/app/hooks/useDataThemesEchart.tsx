@@ -888,6 +888,7 @@ export function useDataThemesEchart() {
             type: "dashed",
           },
         },
+        type: mapping.y.mappedType === "date" ? "category" : "value",
         scale: true,
         name: mapping?.y?.value?.[0] ?? "",
         nameTextStyle: {
@@ -986,6 +987,7 @@ export function useDataThemesEchart() {
         type: mapping.x.mappedType === "date" ? "category" : "value",
       },
       yAxis: {
+        type: mapping.y.mappedType === "date" ? "category" : "value",
         name: mapping?.y?.value?.[0] ?? "",
         nameTextStyle: {
           align: "left",
