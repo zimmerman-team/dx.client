@@ -981,11 +981,7 @@ export function useDataThemesEchart() {
         zlevel: -1,
         z: -1,
       },
-      xAxis: [
-        {
-          data: uniqBy(sortBy(data.map((d: any) => d.x)), (d: any) => d),
-        },
-      ],
+      xAxis: {},
       yAxis: {
         name: mapping?.y?.value?.[0] ?? "",
         nameTextStyle: {
@@ -1016,7 +1012,7 @@ export function useDataThemesEchart() {
       series: [
         {
           symbolSize: symbolSize ?? 4,
-          data: data.map((d: any) => d.y),
+          data: data.map((d: any) => [d.x, d.y]),
           type: "scatter",
         },
       ],
