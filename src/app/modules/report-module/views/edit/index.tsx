@@ -66,6 +66,10 @@ function ReportEditView(props: ReportEditViewProps) {
     (actions) => actions.reports.ReportGet.fetch
   );
 
+  const [isReportLoading, setIsReportLoading] = React.useState<boolean | null>(
+    null
+  );
+
   const loadingReportData = useStoreState(
     (state) => state.reports.ReportGet.loading
   );
@@ -256,11 +260,18 @@ function ReportEditView(props: ReportEditViewProps) {
     });
   }, [reportData]);
 
+  React.useEffect(() => {
+    if (!loadingReportData && isReportLoading === null) {
+      return;
+    }
+    setIsReportLoading(loadingReportData);
+  }, [loadingReportData]);
+
   const canEditDeleteReport = React.useMemo(() => {
     return isAuthenticated && reportData?.owner === user?.sub;
   }, [user, isAuthenticated, reportData]);
 
-  if (loadingReportData) {
+  if (loadingReportData || isReportLoading === null) {
     return <PageLoader />;
   }
 
