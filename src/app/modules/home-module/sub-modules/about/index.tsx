@@ -101,7 +101,7 @@ export default function AboutModule() {
               <div
                 css={`
                   position: relative;
-                  z-index: -1;
+                  /* z-index: -1; */
                 `}
               >
                 <DXImg />
