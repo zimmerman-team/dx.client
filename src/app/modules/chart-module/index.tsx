@@ -7,7 +7,13 @@ import { useSessionStorage } from "react-use";
 import Container from "@material-ui/core/Container";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
-import { Switch, Route, useParams, useHistory } from "react-router-dom";
+import {
+  Switch,
+  Route,
+  useParams,
+  useHistory,
+  matchPath,
+} from "react-router-dom";
 import {
   getOptionsConfig,
   getDefaultOptionsValues,
@@ -506,7 +512,13 @@ export default function ChartModule() {
         <PageLoader />
       ) : (
         <>
-          {canChartEditDelete || page === "new" ? (
+          {canChartEditDelete ||
+          !!matchPath(location.pathname, {
+            path: "/chart/:page",
+            exact: true,
+            strict: true,
+          }) ||
+          page === "new" ? (
             <>
               <ChartModuleToolBox
                 rawViz={rawViz}
