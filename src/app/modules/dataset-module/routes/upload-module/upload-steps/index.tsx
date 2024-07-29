@@ -22,10 +22,12 @@ import { Box } from "@material-ui/core";
 import { useTitle } from "react-use";
 import { DatasetListItemAPIModel } from "app/modules/dataset-module/data";
 import BreadCrumbs from "app/modules/home-module/components/Breadcrumbs";
-import UploadTabs from "../component/tabs";
 import SmallFooter from "app/modules/home-module/components/Footer/smallFooter";
 import { useRecoilState } from "recoil";
 import { dataUploadTabAtom } from "app/state/recoil/atoms";
+import BasicSwitch from "app/components/Switch/BasicSwitch";
+import Search from "@material-ui/icons/Search";
+import DesktopWindowsIcon from "@material-ui/icons/DesktopWindows";
 
 interface Props {
   datasetId: string;
@@ -146,7 +148,9 @@ function DatasetUploadSteps(props: Props) {
       setActiveStep(newActiveStep);
     }
   };
-
+  const handleTabSwitch = (tab: "search" | "file") => {
+    setActiveTab(tab);
+  };
   React.useEffect(() => {
     if (activeStep === 0) {
       setProcessingError("");
@@ -306,7 +310,30 @@ function DatasetUploadSteps(props: Props) {
               ]}
             />
             <Box height={24} />
-            <UploadTabs activeTab={activeTab} setActiveTab={setActiveTab} />
+            <div
+              css={`
+                width: 434px;
+                height: 56px;
+              `}
+            >
+              <BasicSwitch
+                activeTab={activeTab}
+                handleSwitch={handleTabSwitch}
+                setActiveTab={setActiveTab}
+                tabs={[
+                  {
+                    label: "Federated search",
+                    value: "search",
+                    icon: <Search />,
+                  },
+                  {
+                    label: "File upload",
+                    value: "file",
+                    icon: <DesktopWindowsIcon />,
+                  },
+                ]}
+              />
+            </div>
             <Box height={24} />
             {activeTab === "search" ? (
               <ExternalSearch
