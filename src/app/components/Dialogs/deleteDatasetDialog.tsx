@@ -79,10 +79,9 @@ export default function DeleteDatasetDialog(props: Props) {
                     position: absolute;
                     right: 20px;
                     top: 18px;
-                    color: "#231D2C";
                   `}
                 >
-                  <CloseOutlined color="inherit" />
+                  <CloseOutlined htmlColor="#231D2C" />
                 </IconButton>
                 <p
                   css={`
