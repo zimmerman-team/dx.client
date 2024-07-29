@@ -50,7 +50,21 @@ export function exportPage(type: string, bgcolor: string, filename: string) {
           unit: "px",
           format: [width, height],
         });
-        pdf.addImage(dataUrl, "PNG", 0, 0, width, height);
+        const imgProps = pdf.getImageProperties(dataUrl);
+
+        const pdfWidth = pdf.internal.pageSize.width;
+        const pdfHeight = pdf.internal.pageSize.height;
+
+        const widthRatio = pdfWidth / imgProps.width;
+        const heightRatio = pdfHeight / imgProps.height;
+        const ratio = Math.min(widthRatio, heightRatio);
+
+        const w = imgProps.width * ratio;
+        const h = imgProps.height * ratio;
+
+        const x = (pdf.internal.pageSize.width - w) / 2;
+
+        pdf.addImage(dataUrl, "PNG", x, 0, w, h);
         pdf.save(`${filename}.pdf`);
       })
       .catch((error: any) => {
