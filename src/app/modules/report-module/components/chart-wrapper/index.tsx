@@ -54,7 +54,7 @@ export function ReportChartWrapper(props: Props) {
     setChartErrorMessage,
     setVisualOptions,
     setNotFound,
-  } = useRenderChartFromAPI(props.id, token);
+  } = useRenderChartFromAPI(token, props.id);
 
   const renderedChart = React.useMemo(() => {
     return chartFromAPI

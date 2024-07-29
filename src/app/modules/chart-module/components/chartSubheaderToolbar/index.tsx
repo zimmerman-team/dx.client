@@ -36,6 +36,7 @@ import useAutosave from "app/hooks/useAutoSave";
 import { useStyles } from "app/modules/report-module/components/reportSubHeaderToolbar";
 import AutoResizeInput from "app/modules/report-module/components/reportSubHeaderToolbar/autoResizeInput";
 import { isEqual } from "lodash";
+import EmbedChartDialog from "app/components/Dialogs/EmbedChartDialog";
 
 export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
   const classes = useStyles();
@@ -48,6 +49,7 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
   const { page, view } = useParams<{ page: string; view?: string }>();
   const [showDeleteDialog, setShowDeleteDialog] = React.useState(false);
   const [enableButton, setEnableButton] = React.useState<boolean>(false);
+  const [displayEmbedModal, setDisplayEmbedModal] = React.useState(false);
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
   const [hasChangesBeenMade, setHasChangesBeenMade] = React.useState(false);
 
@@ -113,8 +115,8 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
     }
   };
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
+  const handleShare = () => {
+    setDisplayEmbedModal(true);
   };
 
   const handleClose = () => {
@@ -530,7 +532,7 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
                     </Tooltip>
                   )}
                   <Tooltip title="Share">
-                    <IconButton onClick={handleClick} aria-label="share-button">
+                    <IconButton onClick={handleShare} aria-label="share-button">
                       <ShareIcon htmlColor="#262c34" />
                     </IconButton>
                   </Tooltip>
@@ -619,6 +621,15 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
         setModalDisplay={setShowDeleteDialog}
         handleInputChange={handleDeleteModalInputChange}
       />
+      {displayEmbedModal && (
+        <EmbedChartDialog
+          modalDisplay={displayEmbedModal}
+          setModalDisplay={setDisplayEmbedModal}
+          chartId={page}
+          chartName={props.name}
+          datasetId={loadedChart.datasetId!}
+        />
+      )}
     </div>
   );
 }
