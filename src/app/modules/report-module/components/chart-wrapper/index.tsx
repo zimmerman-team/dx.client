@@ -38,7 +38,10 @@ export function ReportChartWrapper(props: Props) {
     (actions) => actions.charts.ChartGetInReport.clear
   );
   const [datasetId, setDatasetId] = React.useState<string | null>(null);
-  const { datasetDetails } = useLoadDatasetDetails(datasetId!);
+  const { datasetDetails } = useLoadDatasetDetails(
+    datasetId!,
+    token ?? undefined
+  );
 
   const [_rawViz, setRawViz] = React.useState<any>(null);
   const {
@@ -51,7 +54,7 @@ export function ReportChartWrapper(props: Props) {
     setChartErrorMessage,
     setVisualOptions,
     setNotFound,
-  } = useRenderChartFromAPI(props.id);
+  } = useRenderChartFromAPI(props.id, token);
 
   const renderedChart = React.useMemo(() => {
     return chartFromAPI
