@@ -32,9 +32,8 @@ export default function EmbedOptions(props: {
         <p
           css={`
             color: #231d2c;
-            font-family: "Inter", sans-serif;
+            font-family: "GothamNarrow-Bold", sans-serif;
             font-size: 16px;
-            font-weight: 700;
             margin: 0;
             margin-bottom: 14px;
           `}
@@ -60,7 +59,7 @@ export default function EmbedOptions(props: {
             <p
               css={`
                 color: #231d2c;
-                font-family: "Inter", sans-serif;
+                font-family: "GothamNarrow-Medium", sans-serif;
                 font-size: 14px;
               `}
             >
@@ -85,7 +84,7 @@ export default function EmbedOptions(props: {
             <p
               css={`
                 color: #231d2c;
-                font-family: "Inter", sans-serif;
+                font-family: "GothamNarrow-Medium", sans-serif;
                 font-size: 14px;
               `}
             >
@@ -112,6 +111,8 @@ export default function EmbedOptions(props: {
             height: 41px;
             display: flex;
             align-items: end;
+            font-family: "GothamNarrow-Medium", sans-serif;
+            font-size: 14px;
           `}
         >
           Copy the following link to embed this chart

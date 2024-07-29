@@ -18,6 +18,10 @@ export default function LinkOptions(props: {
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        p {
+          font-family: "GothamNarrow-Medium", sans-serif;
+          font-size: 14px;
+        }
       `}
     >
       <p>Copy the following link to share it</p>

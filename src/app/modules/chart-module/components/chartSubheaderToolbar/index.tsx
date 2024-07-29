@@ -250,7 +250,7 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
   };
 
   const handlePreviewMode = () => {
-    history.push(`/chart/${page}/preview`);
+    history.push(`/chart/${page}`);
   };
 
   const handleBackToEdit = () => {

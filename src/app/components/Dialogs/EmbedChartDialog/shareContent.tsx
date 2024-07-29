@@ -19,7 +19,7 @@ export default function ShareContent(props: {
         border-radius: 8px;
         line-height: 16px;
         background: #f5f5f7;
-        font-family: "Inter", sans-serif;
+        font-family: "GothamNarrow-Medium", sans-serif;
         color: #000;
         font-size: 14px;
       `}

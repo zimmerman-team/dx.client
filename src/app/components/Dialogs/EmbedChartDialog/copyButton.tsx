@@ -17,9 +17,8 @@ export default function CopyButton(props: {
         align-items: center;
         color: #fff;
         text-transform: uppercase;
-        font-family: "Inter", sans-serif;
+        font-family: "GothamNarrow-Bold", sans-serif;
         font-size: 14px;
-        font-weight: 700;
         border: none;
         outline: none;
         cursor: pointer;
