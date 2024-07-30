@@ -18,6 +18,7 @@ import useDebounce from "react-use/lib/useDebounce";
 import { ToolbarPluginsType } from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
 
 interface Props {
+  isToolboxOpen: boolean;
   previewMode: boolean;
   hasSubHeaderTitleFocused?: boolean;
   setHasSubHeaderTitleFocused?: React.Dispatch<React.SetStateAction<boolean>>;
@@ -55,6 +56,8 @@ export default function HeaderBlock(props: Props) {
   );
   const [handleDisplay, setHandleDisplay] = React.useState(false);
   const placeholder = "Add a header description";
+  const [charCount, setCharCount] = React.useState(0);
+  const [maxCharCount, setMaxCharCount] = React.useState(250);
   const [descriptionPlaceholderState, setDescriptionPlaceholderState] =
     React.useState<string>(placeholder);
 
@@ -102,20 +105,27 @@ export default function HeaderBlock(props: Props) {
   }));
 
   const setDescriptionContent = (text: EditorState) => {
-    props.setHeaderDetails({
-      ...props.headerDetails,
-      description: text,
-    });
+    setMaxCharCount(250);
+    if (text.getCurrentContent().getPlainText().length <= 250) {
+      setCharCount(text.getCurrentContent().getPlainText().length);
+      props.setHeaderDetails({
+        ...props.headerDetails,
+        description: text,
+      });
+    }
   };
 
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = event.target;
-    props.setHeaderDetails({
-      ...props.headerDetails,
-      [name]: value,
-    });
+    if (value.length <= 50) {
+      setCharCount(value.length);
+      props.setHeaderDetails({
+        ...props.headerDetails,
+        [name]: value,
+      });
+    }
     if (name == "title") {
       setIsReportTitleModified(true);
     }
@@ -150,7 +160,10 @@ export default function HeaderBlock(props: Props) {
 
   return (
     <div
-      css={headerBlockcss.container(props.headerDetails.backgroundColor)}
+      css={headerBlockcss.container(
+        props.headerDetails.backgroundColor,
+        props.isToolboxOpen
+      )}
       {...handlers}
       data-cy="report-header-block"
       data-testid="header-block"
@@ -220,6 +233,15 @@ export default function HeaderBlock(props: Props) {
       )}
       <Container maxWidth="lg">
         <div css={headerBlockcss.innerContainer}>
+          <div
+            css={`
+              position: absolute;
+              right: 4px;
+              top: 4px;
+            `}
+          >
+            {charCount} / {maxCharCount}
+          </div>
           <div>
             <input
               ref={inputRef}
@@ -231,6 +253,10 @@ export default function HeaderBlock(props: Props) {
               value={props.headerDetails.title}
               css={headerBlockcss.inputStyle(props.headerDetails.titleColor)}
               data-cy="report-header-block-title-input"
+              onFocus={(e) => {
+                setMaxCharCount(50);
+                setCharCount(e.target.value.length);
+              }}
             />
           </div>
 

@@ -310,6 +310,7 @@ function ReportEditView(props: ReportEditViewProps) {
         setHasSubHeaderTitleFocused={props.setHasSubHeaderTitleFocused}
         setHeaderDetails={props.setHeaderDetails}
         setPlugins={props.setPlugins}
+        isToolboxOpen={props.open}
       />
       <Container maxWidth="lg">
         <div
