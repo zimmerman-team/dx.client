@@ -8,7 +8,8 @@ import axios from "axios";
 import CircleLoader from "app/modules/home-module/components/Loader";
 import { useInfinityScroll } from "app/hooks/useInfinityScroll";
 import SourceCategoryList from "../component/externalSourcesList";
-import { HomepageTable } from "app/modules/home-module/components/Table";
+import SaveAltIcon from "@material-ui/icons/SaveAlt";
+import ExternalSearchTable from "../component/table/externalSearchTable";
 
 export interface IExternalDataset {
   name: string;
@@ -234,14 +235,14 @@ export default function ExternalSearch(props: {
             </Grid>
           )}
           {view === "table" && (
-            <HomepageTable
+            <ExternalSearchTable
+              onItemClick={props.handleDownload}
               tableData={{
                 columns: [
-                  { key: "name", label: "Name" },
+                  { key: "name", label: "Title" },
                   { key: "description", label: "Description" },
-                  { key: "datePublished", label: "Date Published" },
-                  { key: "source", label: "Source" },
-                  { key: "url", label: "Source URL" },
+                  { key: "datePublished", label: "Date" },
+                  { key: "source", label: "Source", icon: <SaveAltIcon /> },
                 ],
                 data: datasets,
               }}

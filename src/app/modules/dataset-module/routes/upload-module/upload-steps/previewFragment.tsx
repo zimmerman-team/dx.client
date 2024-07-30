@@ -2,7 +2,7 @@ import React from "react";
 import Box from "@material-ui/core/Box";
 import { withStyles } from "@material-ui/core";
 import Snackbar from "@material-ui/core/Snackbar";
-import { DatasetDataTable } from "app/modules/dataset-module/routes/upload-module/component/data-table";
+import { DatasetDataTable } from "app/modules/dataset-module/routes/upload-module/component/table/data-table";
 import { buttonFlexcss } from "app/modules/dataset-module/routes/upload-module/component/dataParserToolBox/style";
 
 interface Props {
