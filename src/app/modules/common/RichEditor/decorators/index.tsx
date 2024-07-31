@@ -1,12 +1,13 @@
 import { CompositeDecorator, ContentBlock, ContentState } from "draft-js";
 import React from "react";
+
 type Decorator = {
   contentState: ContentState;
   entityKey: string;
   children: string;
 };
 
-export default function strategy(
+function strategy(
   block: ContentBlock,
   callback: (start: number, end: number) => void,
   contentState: ContentState
@@ -20,7 +21,7 @@ export default function strategy(
   }, callback);
 }
 
-export const LinkDecorator = ({
+const LinkDecorator = ({
   contentState,
   entityKey,
   children,

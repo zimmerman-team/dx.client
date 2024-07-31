@@ -1,7 +1,7 @@
 import { EditorState } from "draft-js";
 import { ToolbarPluginsType } from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
 
-export interface IRowFrame {
+interface IRowFrame {
   rowIndex: number;
   rowId: string;
   forceSelectedType?: string;
@@ -22,10 +22,6 @@ export interface IFramesArray {
     | "oneByThree"
     | "oneByFour"
     | "oneByFive";
-}
-
-export interface IFramesArrayWithItems extends IFramesArray {
-  items: (string | object)[];
 }
 
 export interface ReportCreateViewProps {

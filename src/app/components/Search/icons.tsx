@@ -28,7 +28,7 @@ export function getIcon(type: string) {
   }
 }
 
-export const AllCategoriesIcon = () => (
+const AllCategoriesIcon = () => (
   <svg width="24" height="24" viewBox="0 0 24 24">
     <path
       fill="#868A9D"
@@ -37,7 +37,7 @@ export const AllCategoriesIcon = () => (
   </svg>
 );
 
-export const LocationsIcon = () => (
+const LocationsIcon = () => (
   <svg width="24" height="24" viewBox="0 0 24 24">
     <path
       fill="#868A9D"
@@ -46,7 +46,7 @@ export const LocationsIcon = () => (
   </svg>
 );
 
-export const PartnersIcon = () => (
+const PartnersIcon = () => (
   <svg width="24" height="24" viewBox="0 0 24 24">
     <path
       fill="#868A9D"
@@ -59,7 +59,7 @@ export const PartnersIcon = () => (
   </svg>
 );
 
-export const DonorsIcon = () => (
+const DonorsIcon = () => (
   <svg width="24" height="24" viewBox="0 0 24 24">
     <path
       fill="#868A9D"
@@ -70,7 +70,7 @@ export const DonorsIcon = () => (
   </svg>
 );
 
-export const GrantsIcon = () => (
+const GrantsIcon = () => (
   <svg width="24" height="24" viewBox="0 0 24 24">
     <path
       d="M20.625 2.625H3.375C2.96016 2.625 2.625 2.96016 2.625 3.375V20.625C2.625 21.0398 2.96016 21.375 3.375 21.375H20.625C21.0398 21.375 21.375 21.0398 21.375 20.625V3.375C21.375 2.96016 21.0398 2.625 20.625 2.625ZM8.625 17.4375C8.625 17.5406 8.54063 17.625 8.4375 17.625H6.5625C6.45937 17.625 6.375 17.5406 6.375 17.4375V6.5625C6.375 6.45937 6.45937 6.375 6.5625 6.375H8.4375C8.54063 6.375 8.625 6.45937 8.625 6.5625V17.4375ZM13.125 10.875C13.125 10.9781 13.0406 11.0625 12.9375 11.0625H11.0625C10.9594 11.0625 10.875 10.9781 10.875 10.875V6.5625C10.875 6.45937 10.9594 6.375 11.0625 6.375H12.9375C13.0406 6.375 13.125 6.45937 13.125 6.5625V10.875ZM17.625 12.5625C17.625 12.6656 17.5406 12.75 17.4375 12.75H15.5625C15.4594 12.75 15.375 12.6656 15.375 12.5625V6.5625C15.375 6.45937 15.4594 6.375 15.5625 6.375H17.4375C17.5406 6.375 17.625 6.45937 17.625 6.5625V12.5625Z"
@@ -79,7 +79,7 @@ export const GrantsIcon = () => (
   </svg>
 );
 
-export const ResultsIcon = () => (
+const ResultsIcon = () => (
   <svg width="24" height="24" viewBox="0 0 24 24">
     <g clipPath="url(#clip0_7828_725)">
       <path
@@ -95,7 +95,7 @@ export const ResultsIcon = () => (
   </svg>
 );
 
-export const DocumentsIcon = () => (
+const DocumentsIcon = () => (
   <svg width="24" height="24" viewBox="0 0 24 24">
     <path
       fill="#868A9D"

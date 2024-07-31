@@ -13,7 +13,7 @@ interface Props {
   setEnableButton: (value: React.SetStateAction<boolean>) => void;
 }
 
-export const useStyles = makeStyles(() =>
+const useStyles = makeStyles(() =>
   createStyles({
     modal: {
       display: "flex",

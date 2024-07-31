@@ -119,7 +119,7 @@ const _rowStructureDetailItems = [
   ],
 ];
 
-export interface RowFrameProps {
+interface RowFrameProps {
   rowIndex: number;
   rowId: string;
   forceSelectedType?: string;
@@ -135,7 +135,7 @@ export interface RowFrameProps {
   onSave: (type: "create" | "edit") => Promise<void>;
 }
 
-export interface IRowStructureType {
+interface IRowStructureType {
   selectedType: string;
   setSelectedType: React.Dispatch<React.SetStateAction<string>>;
   tourStep: number;
@@ -750,7 +750,7 @@ const OneByFive = (props: IRowStructureType) => {
   );
 };
 
-export function Divider(props: {
+function Divider(props: {
   dividerId: string;
   delete: (id: string) => void;
   rowIndex?: number;
