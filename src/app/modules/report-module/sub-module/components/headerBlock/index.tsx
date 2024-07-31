@@ -1,7 +1,7 @@
 import React from "react";
 import get from "lodash/get";
 import { useDrop } from "react-dnd";
-import { EditorState } from "draft-js";
+import { ContentState, EditorState } from "draft-js";
 import { useRecoilState } from "recoil";
 import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
@@ -106,11 +106,28 @@ export default function HeaderBlock(props: Props) {
 
   const setDescriptionContent = (text: EditorState) => {
     setMaxCharCount(250);
-    if (text.getCurrentContent().getPlainText().length <= 250) {
+    if (
+      props.headerDetails.description.getCurrentContent().getPlainText()
+        .length <= 250 &&
+      text.getCurrentContent().getPlainText().length <= 250
+    ) {
       setCharCount(text.getCurrentContent().getPlainText().length);
       props.setHeaderDetails({
         ...props.headerDetails,
         description: text,
+      });
+    } else {
+      const slicedText = props.headerDetails.description
+        .getCurrentContent()
+        .getPlainText()
+        .slice(0, 250);
+
+      const slicedEditorState = EditorState.createWithContent(
+        ContentState.createFromText(slicedText)
+      );
+      props.setHeaderDetails({
+        ...props.headerDetails,
+        description: EditorState.moveFocusToEnd(slicedEditorState),
       });
     }
   };
@@ -119,13 +136,11 @@ export default function HeaderBlock(props: Props) {
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = event.target;
-    if (value.length <= 50) {
-      setCharCount(value.length);
-      props.setHeaderDetails({
-        ...props.headerDetails,
-        [name]: value,
-      });
-    }
+    setCharCount(value.length);
+    props.setHeaderDetails({
+      ...props.headerDetails,
+      [name]: value,
+    });
     if (name == "title") {
       setIsReportTitleModified(true);
     }
@@ -168,6 +183,16 @@ export default function HeaderBlock(props: Props) {
       data-cy="report-header-block"
       data-testid="header-block"
     >
+      <div
+        css={`
+          position: absolute;
+          right: ${props.isToolboxOpen ? "404px" : "4px"};
+          top: 4px;
+          color: #ffffff;
+        `}
+      >
+        {charCount} / {maxCharCount}
+      </div>
       {(handleDisplay || currentView === "editHeader") && (
         <div
           css={`
@@ -233,15 +258,6 @@ export default function HeaderBlock(props: Props) {
       )}
       <Container maxWidth="lg">
         <div css={headerBlockcss.innerContainer}>
-          <div
-            css={`
-              position: absolute;
-              right: 4px;
-              top: 4px;
-            `}
-          >
-            {charCount} / {maxCharCount}
-          </div>
           <div>
             <input
               ref={inputRef}
@@ -257,6 +273,7 @@ export default function HeaderBlock(props: Props) {
                 setMaxCharCount(50);
                 setCharCount(e.target.value.length);
               }}
+              maxLength={50}
             />
           </div>
 

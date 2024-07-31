@@ -2,7 +2,7 @@ import { css } from "styled-components/macro";
 
 export const headerBlockcss = {
   container: (backgroundColor: string, istoolboxOpen: boolean) => css`
-    width: ${istoolboxOpen ? "calc(100% - 400px)" : "100%"};
+    width: 100%;
     transition: width 225ms cubic-bezier(0, 0, 0.2, 1) 0ms;
     height: 215px;
     padding: 35px 0;
@@ -33,8 +33,6 @@ export const headerBlockcss = {
   `,
   innerContainer: css`
     width: 100%;
-    position: relative;
-    background-color: pink;
   `,
   date: (dateColor: string) => css`
     gap: 0.7rem;
