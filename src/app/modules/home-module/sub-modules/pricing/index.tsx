@@ -19,7 +19,7 @@ const views = [
     key: "monthly",
   },
   {
-    name: "Yearly Plan",
+    name: "Annual Plan",
     key: "yearly",
   },
 ];
@@ -38,24 +38,24 @@ const plans = [
   },
   {
     name: "Pro",
-    yearlyPrice: "€750",
+    yearlyPrice: "€720",
     monthlyPrice: "€75",
     text: "For individual users.",
     current: false,
     recommended: false,
     buttonText: "Activate a free trial",
-    discount: "(Save 15%)",
+    discount: "(Save 20%)",
     key: "pro",
   },
   {
     name: "Team",
-    yearlyPrice: "€2,250",
-    monthlyPrice: "€250",
-    text: "Scale to 5 users and connect your team.",
+    yearlyPrice: "€576",
+    monthlyPrice: "€60",
+    text: "Scale up to 100 users and connect your team.",
     current: false,
     recommended: false,
     buttonText: "Activate free trial",
-    discount: "(Save 15%)",
+    discount: "(Save 20%)",
     key: "team",
   },
   {
@@ -188,7 +188,7 @@ export default function PricingModule() {
           `}
         >
           DATAXPLORER simplifies and empowers visual data reporting for all.
-          Free for all.
+          <b> Free for all.</b>
         </p>
         <Box height={65} />
         <div
@@ -199,24 +199,41 @@ export default function PricingModule() {
             column-gap: 20px;
           `}
         >
-          <p
-            css={`
-              margin: 0;
-              padding: 0;
-              font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
-              color: #231d2c;
-              font-size: 20px;
-              font-weight: 400;
-              line-height: normal;
-            `}
-          >
-            Choose Your Subscription
-          </p>
+          <div>
+            <p
+              css={`
+                margin: 0;
+                padding: 0;
+                font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
+                color: #231d2c;
+                font-size: 20px;
+                font-weight: 400;
+                line-height: normal;
+              `}
+            >
+              Choose Your Subscription
+            </p>
+            <p
+              css={`
+                margin: 0;
+                padding: 0;
+                font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
+                font-size: 14px;
+                font-style: normal;
+                font-weight: 325;
+                line-height: normal;
+                letter-spacing: 0.5px;
+                text-align: center;
+              `}
+            >
+              Save 20% for annual plans
+            </p>
+          </div>
           <div
             css={`
               border-radius: 51px;
               background: #f1f1f1;
-              padding: 7px 9px;
+              padding: 5px 8px;
               display: flex;
               align-items: center;
               button {
@@ -226,7 +243,7 @@ export default function PricingModule() {
                 line-height: normal;
                 font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
                 display: flex;
-                width: 105px;
+                width: 99px;
                 height: 32px;
                 justify-content: center;
                 align-items: center;
