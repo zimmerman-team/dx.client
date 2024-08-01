@@ -103,28 +103,46 @@ export default function HeaderBlock(props: Props) {
       });
     },
   }));
-
+  const getPlainTextFromEditorState = (text: EditorState) => {
+    return text.getCurrentContent().getPlainText();
+  };
   const setDescriptionContent = (text: EditorState) => {
     setMaxCharCount(250);
     if (
-      props.headerDetails.description.getCurrentContent().getPlainText()
-        .length <= 250 &&
-      text.getCurrentContent().getPlainText().length <= 250
+      getPlainTextFromEditorState(props.headerDetails.description).length <=
+        250 &&
+      getPlainTextFromEditorState(text).length <= 250
     ) {
-      setCharCount(text.getCurrentContent().getPlainText().length);
+      setCharCount(getPlainTextFromEditorState(text).length);
       props.setHeaderDetails({
         ...props.headerDetails,
         description: text,
       });
     } else {
-      const slicedText = props.headerDetails.description
-        .getCurrentContent()
-        .getPlainText()
-        .slice(0, 250);
-
-      const slicedEditorState = EditorState.createWithContent(
-        ContentState.createFromText(slicedText)
-      );
+      let slicedEditorState = EditorState.createEmpty();
+      if (
+        getPlainTextFromEditorState(props.headerDetails.description).length >
+        250
+      ) {
+        setCharCount(
+          getPlainTextFromEditorState(props.headerDetails.description).length
+        );
+        slicedEditorState = EditorState.createWithContent(
+          ContentState.createFromText(
+            getPlainTextFromEditorState(props.headerDetails.description).slice(
+              0,
+              250
+            )
+          )
+        );
+      } else if (getPlainTextFromEditorState(text).length > 250) {
+        setCharCount(getPlainTextFromEditorState(text).length);
+        slicedEditorState = EditorState.createWithContent(
+          ContentState.createFromText(
+            getPlainTextFromEditorState(text).slice(0, 250)
+          )
+        );
+      }
       props.setHeaderDetails({
         ...props.headerDetails,
         description: EditorState.moveFocusToEnd(slicedEditorState),
@@ -189,6 +207,7 @@ export default function HeaderBlock(props: Props) {
           right: ${props.isToolboxOpen ? "404px" : "4px"};
           top: 4px;
           color: #ffffff;
+          display: ${maxCharCount === 0 ? "none" : "block"};
         `}
       >
         {charCount} / {maxCharCount}
@@ -273,6 +292,7 @@ export default function HeaderBlock(props: Props) {
                 setMaxCharCount(50);
                 setCharCount(e.target.value.length);
               }}
+              onBlur={() => setMaxCharCount(0)}
               maxLength={50}
             />
           </div>
@@ -325,6 +345,7 @@ export default function HeaderBlock(props: Props) {
               setPlaceholderState={setDescriptionPlaceholderState}
               textContent={props.headerDetails.description}
               setPlugins={props.setPlugins}
+              onBlur={() => setMaxCharCount(0)}
             />
           </div>
         </div>

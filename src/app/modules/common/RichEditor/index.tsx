@@ -38,6 +38,7 @@ export const RichEditor = (props: {
   focusOnMount?: boolean;
   setPlaceholderState: React.Dispatch<React.SetStateAction<string>>;
   placeholder: string;
+  onBlur?: () => void;
 }): ReactElement => {
   const editor = useRef<Editor | null>(null);
 
@@ -154,6 +155,7 @@ export const RichEditor = (props: {
         editorState={props.textContent}
         onChange={props.setTextContent}
         onBlur={() => {
+          props.onBlur?.();
           if (props.textContent.getCurrentContent().getPlainText().length === 0)
             props.setPlaceholderState(props.placeholder);
         }}
