@@ -1,12 +1,10 @@
 import { css } from "styled-components/macro";
 
 export const turnsDataCss = css`
-  /* margin-top: 60px;
-  padding: 0;
-  @media screen and (max-width: 768px) {
+  @media (max-width: 1024px) {
     justify-content: center;
     align-items: center;
-  } */
+  }
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -81,6 +79,10 @@ export const datsetDetailImgcss = css`
   width: 710px;
   height: 428px;
   border-radius: 14px;
+  @media (max-width: 1240px) {
+    width: 100%;
+    object-fit: contain;
+  }
 `;
 
 export const rowFlexCss = css`
