@@ -10,11 +10,6 @@ export default function MobileFooter() {
       <div
         css={`
           height: 113px;
-        `}
-      />
-      <div
-        css={`
-          height: 113px;
           display: flex;
           flex-direction: column;
           justify-content: center;

@@ -14,6 +14,10 @@ const BaseSnackbar = styled((props) => (
 ))`
   && {
     bottom: 0;
+    @media (max-width: 500px) {
+      left: unset;
+      right: unset;
+    }
   }
 
   & [class*="MuiSnackbarContent-root"] {
@@ -23,12 +27,16 @@ const BaseSnackbar = styled((props) => (
     box-shadow: 0 8px 17px -4px rgba(130, 142, 148, 0.35),
       0 0 4px 0 rgba(130, 142, 148, 0.16), 0 0 2px 0 rgba(130, 142, 148, 0.12);
     flex-wrap: nowrap;
-    padding: 0 32px;
     display: flex;
     justify-content: center;
-
-    @media (max-width: 1280px) {
-      width: 100%;
+    align-items: center;
+    @media (max-width: 1300px) {
+      @media (min-width: 501px) {
+        width: 95vw;
+      }
+    }
+    @media (max-width: 500px) {
+      width: 100vw;
     }
   }
 

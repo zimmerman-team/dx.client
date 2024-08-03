@@ -101,49 +101,72 @@ function AssetsCollection() {
     <Container maxWidth="lg">
       <div css={turnsDataCss}>
         {isAuthenticated ? (
-          <h2>Welcome {user?.given_name ?? user?.name?.split(" ")[0]}</h2>
+          <Grid container>
+            <Grid lg={5} md={5} sm={5}>
+              <h2>Welcome {user?.given_name ?? user?.name?.split(" ")[0]}</h2>
+            </Grid>
+            <Grid
+              lg={7}
+              md={7}
+              sm={7}
+              css={`
+                @media (max-width: 600px) {
+                  display: none;
+                }
+              `}
+            >
+              <div
+                css={`
+                  display: flex;
+                  width: 100%;
+                  justify-content: flex-end;
+                  align-items: center;
+                  gap: 8px;
+                  a {
+                    padding: 8px 24px;
+                    white-space: nowrap;
+                    @media (max-width: 700px) {
+                      font-size: 12px;
+                      padding: 8px 19px;
+                    }
+                  }
+                `}
+              >
+                <Link
+                  to={`/dataset/new/upload${
+                    location.pathname === "/" ? "?fromHome=true" : ""
+                  }`}
+                  css={`
+                    background: #e492bd;
+                  `}
+                  data-cy="home-connect-dataset-button"
+                >
+                  CONNECT DATASET
+                </Link>
+                <Link
+                  to="/chart/new/data"
+                  css={`
+                    background: #64afaa;
+                  `}
+                  data-cy="home-create-chart-button"
+                >
+                  CREATE CHART
+                </Link>
+                <Link
+                  to="/report/new/initial"
+                  css={`
+                    background: #6061e5;
+                  `}
+                  data-cy="home-create-report-button"
+                >
+                  CREATE REPORT
+                </Link>
+              </div>
+            </Grid>
+          </Grid>
         ) : (
           <div />
         )}
-
-        <div
-          css={`
-            ${rowFlexCss} gap: 8px;
-            a {
-              padding: 8px 24px;
-            }
-          `}
-        >
-          <Link
-            to={`/dataset/new/upload${
-              location.pathname === "/" ? "?fromHome=true" : ""
-            }`}
-            css={`
-              background: #e492bd;
-            `}
-            data-cy="home-connect-dataset-button"
-          >
-            CONNECT DATASET
-          </Link>
-          <Link
-            to="/chart/new/data"
-            css={`
-              background: #64afaa;
-            `}
-            data-cy="home-create-chart-button"
-          >
-            CREATE CHART
-          </Link>
-          <Link
-            to="/report/new/initial"
-            css={`
-              background: #6061e5;
-            `}
-            data-cy="home-create-report-button"
-          >
-            CREATE REPORT
-          </Link>
-        </div>
       </div>
       <Box height={24} />
       <Box css={featuredAssetsCss}>
@@ -157,7 +180,7 @@ function AssetsCollection() {
             width: 100%;
           `}
         >
-          <Grid item lg={6} md={6} sm={6}>
+          <Grid item lg={6} md={6} sm={6} xs={6}>
             <Tab.Container>
               <Tab.Left
                 active={display === "all"}
@@ -192,7 +215,7 @@ function AssetsCollection() {
               </Tab.Right>
             </Tab.Container>
           </Grid>
-          <Grid item lg={6} md={6} sm={6}>
+          <Grid item lg={6} md={6} sm={6} xs={6}>
             <Filter
               searchValue={searchValue as string}
               setSearchValue={setSearchValue}

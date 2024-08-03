@@ -1,9 +1,15 @@
 import { css } from "styled-components/macro";
 
 export const turnsDataCss = css`
-  @media (max-width: 1024px) {
+  @media (max-width: 1276px) {
     justify-content: center;
     align-items: center;
+    gap: 45px;
+  }
+  @media (max-width: 700px) {
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
   }
   display: flex;
   justify-content: space-between;
@@ -27,6 +33,9 @@ export const turnsDataCss = css`
     color: #2b3674;
     margin: 0;
     padding: 0;
+    @media (max-width: 700px) {
+      font-size: 29px;
+    }
   }
 
   p {
@@ -57,6 +66,7 @@ export const turnsDataCss = css`
     font-style: normal;
     line-height: 24px; /* 171.429% */
     letter-spacing: -0.28px;
+    white-space: nowrap;
 
     :hover {
       opacity: 0.8;
@@ -80,14 +90,19 @@ export const datsetDetailImgcss = css`
   height: 428px;
   border-radius: 14px;
   @media (max-width: 1240px) {
-    width: 100%;
+    width: 70%;
     object-fit: contain;
+    height: 100%;
+  }
+  @media (max-width: 700px) {
+    width: 95%;
+    object-fit: contain;
+    height: 100%;
   }
 `;
 
 export const rowFlexCss = css`
   display: flex;
-
   justify-content: center;
   align-items: center;
 `;
@@ -120,7 +135,7 @@ export const searchInputCss = (
   background: #dadaf8;
   display: flex;
   align-items: center;
-  width: ${width ?? "385px"};
+  width: ${openSearch ? width ?? "385px" : "0px"};
   height: 32px;
   border-radius: 20px;
   opacity: ${openSearch ? 1 : 0};

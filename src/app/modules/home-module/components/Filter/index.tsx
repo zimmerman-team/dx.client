@@ -11,6 +11,7 @@ import { ReactComponent as GridIcon } from "app/modules/home-module/assets/grid-
 import { ReactComponent as CloseIcon } from "app/modules/home-module/assets/close-icon.svg";
 import { ReactComponent as SearchIcon } from "app/modules/home-module/assets/search-fill.svg";
 import { ReactComponent as TableIcon } from "app/modules/home-module/assets/table-icon.svg";
+import { ReactComponent as MenuIcon } from "app/modules/home-module/assets/menu.svg";
 
 export default function Filter(
   props: Readonly<{
@@ -28,6 +29,7 @@ export default function Filter(
   }>
 ) {
   const inputRef = React.useRef<HTMLInputElement>(null);
+  const [displayIcons, setDisplayIcons] = React.useState(false);
   const [sortPopoverAnchorEl, setSortPopoverAnchorEl] =
     React.useState<HTMLButtonElement | null>(null);
   const handleCloseSortPopover = () => {
@@ -43,131 +45,182 @@ export default function Filter(
     props.terminateSearch && props.terminateSearch();
     props.setSearchValue(e.target.value);
   };
+  const handleIconsDisplay = () => {
+    setDisplayIcons(!displayIcons);
+  };
 
   return (
     <div
       css={`
         ${rowFlexCss}
-        justify-content: flex-end;
+        justify-content: flex-start;
+        flex-direction: row-reverse;
         gap: 8px;
       `}
     >
       <div
         css={`
-          display: flex;
-          align-items: center;
-          gap: 8px;
+          ${rowFlexCss}
+          @media (min-width: 768px) {
+            display: none;
+          }
         `}
       >
-        <div css={searchInputCss(props.openSearch, props.searchInputWidth)}>
-          <input
-            type="text"
-            ref={inputRef}
-            value={props.searchValue}
-            placeholder="eg. Kenya"
-            onChange={handleSearch}
-            data-cy="filter-search-input"
-            aria-label="search"
-          />
-          <IconButton
-            onClick={() => {
-              props.setSearchValue("");
-              props.terminateSearch && props.terminateSearch();
-              props.setOpenSearch(false);
-            }}
-            aria-label="close-search"
-            css={`
-              &:hover {
-                background: transparent;
+        <button
+          onClick={handleIconsDisplay}
+          css={`
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            background: ${displayIcons ? "#231D2C" : "#dadaf8"};
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            svg {
+              path {
+                fill: ${displayIcons ? "#fff" : "#231D2C"};
               }
-            `}
-          >
-            <CloseIcon
-              css={`
-                margin-top: 1px;
-              `}
-            />
-          </IconButton>
-        </div>
-        <IconButton
-          data-cy={props.searchIconCypressId}
-          onClick={() => {
-            props.setOpenSearch(true);
-            inputRef.current?.focus();
-          }}
-          css={iconButtonCss(props.openSearch)}
-          aria-label="search-button"
+            }
+          `}
         >
-          <SearchIcon />
-        </IconButton>
+          <MenuIcon />
+        </button>
       </div>
-      <IconButton
-        onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
-          setSortPopoverAnchorEl(
-            sortPopoverAnchorEl ? null : event.currentTarget
-          );
-        }}
-        css={iconButtonCss(openSortPopover)}
-        aria-label="sort-button"
-      >
-        <SortIcon />
-      </IconButton>
-      <Popover
-        open={openSortPopover}
-        anchorEl={sortPopoverAnchorEl}
-        onClose={handleCloseSortPopover}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "left",
-        }}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "left",
-        }}
+      <div
         css={`
-          .MuiPaper-root {
-            border-radius: 5px;
+          ${rowFlexCss}
+          justify-content: flex-end;
+          gap: 8px;
+          @media (max-width: 767px) {
+            opacity: ${displayIcons ? 1 : 0};
+            width: ${displayIcons ? "100%" : "0"};
+            height: ${displayIcons ? "auto" : "0"};
+            transition: all 0.5s ease-in-out 0s;
           }
         `}
       >
         <div
           css={`
-            color: #fff;
-            font-size: 12px;
-            padding: 8px 22px;
-            background: #231d2c;
-            font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 8px;
           `}
         >
-          Sort by
-        </div>
-        {sortOptions.map((option) => (
-          <div
-            key={option.label}
-            css={sortByItemCss(props.sortValue === option.value)}
-            onClick={() => {
-              props.setSortValue(
-                option.value as "name" | "createdDate" | "updatedDate"
-              );
-              handleCloseSortPopover();
-            }}
-          >
-            {option.label}
+          <div css={searchInputCss(props.openSearch, props.searchInputWidth)}>
+            <input
+              type="text"
+              ref={inputRef}
+              value={props.searchValue}
+              placeholder="eg. Kenya"
+              onChange={handleSearch}
+              data-cy="filter-search-input"
+              aria-label="search"
+            />
+            <IconButton
+              onClick={() => {
+                props.setSearchValue("");
+                props.terminateSearch && props.terminateSearch();
+                props.setOpenSearch(false);
+              }}
+              aria-label="close-search"
+              css={`
+                &:hover {
+                  background: transparent;
+                }
+              `}
+            >
+              <CloseIcon
+                css={`
+                  margin-top: 1px;
+                `}
+              />
+            </IconButton>
           </div>
-        ))}
-      </Popover>
-      <IconButton
-        data-cy="home-table-view-button"
-        onClick={() => {
-          props.setAssetsView(props.assetsView === "table" ? "grid" : "table");
-        }}
-        css={iconButtonCss(props.assetsView === "table")}
-        aria-label={`${
-          props.assetsView === "table" ? "grid" : "table"
-        }-view-button`}
-      >
-        {props.assetsView === "table" ? <TableIcon /> : <GridIcon />}
-      </IconButton>
+          <IconButton
+            data-cy={props.searchIconCypressId}
+            onClick={() => {
+              props.setOpenSearch(true);
+              inputRef.current?.focus();
+            }}
+            css={iconButtonCss(props.openSearch)}
+            aria-label="search-button"
+          >
+            <SearchIcon />
+          </IconButton>
+        </div>
+        <IconButton
+          onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
+            setSortPopoverAnchorEl(
+              sortPopoverAnchorEl ? null : event.currentTarget
+            );
+          }}
+          css={iconButtonCss(openSortPopover)}
+          aria-label="sort-button"
+        >
+          <SortIcon />
+        </IconButton>
+        <Popover
+          open={openSortPopover}
+          anchorEl={sortPopoverAnchorEl}
+          onClose={handleCloseSortPopover}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "left",
+          }}
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "left",
+          }}
+          css={`
+            .MuiPaper-root {
+              border-radius: 5px;
+            }
+          `}
+        >
+          <div
+            css={`
+              color: #fff;
+              font-size: 12px;
+              padding: 8px 22px;
+              background: #231d2c;
+              font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
+            `}
+          >
+            Sort by
+          </div>
+          {sortOptions.map((option) => (
+            <div
+              key={option.label}
+              css={sortByItemCss(props.sortValue === option.value)}
+              onClick={() => {
+                props.setSortValue(
+                  option.value as "name" | "createdDate" | "updatedDate"
+                );
+                handleCloseSortPopover();
+              }}
+            >
+              {option.label}
+            </div>
+          ))}
+        </Popover>
+        <IconButton
+          data-cy="home-table-view-button"
+          onClick={() => {
+            props.setAssetsView(
+              props.assetsView === "table" ? "grid" : "table"
+            );
+          }}
+          css={iconButtonCss(props.assetsView === "table")}
+          aria-label={`${
+            props.assetsView === "table" ? "grid" : "table"
+          }-view-button`}
+        >
+          {props.assetsView === "table" ? <TableIcon /> : <GridIcon />}
+        </IconButton>
+      </div>
     </div>
   );
 }
