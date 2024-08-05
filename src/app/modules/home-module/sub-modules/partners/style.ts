@@ -46,6 +46,9 @@ export const empowercss = (view: string) => css`
     margin-top: ${view === "landing" ? "28px" : "50px"};
     align-items: center;
     justify-content: center;
+    @media (max-width: 768px) {
+      gap: 20px;
+    }
   }
   #auth-buttons {
     button,

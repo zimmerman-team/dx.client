@@ -1,10 +1,10 @@
 import React from "react";
 import EmpowerBlock from "../partners/components/empowerBlock";
 import {
-  Box,
   Container,
   Snackbar,
   TextField,
+  useMediaQuery,
   withStyles,
 } from "@material-ui/core";
 import HomeFooter from "../../components/Footer";
@@ -17,15 +17,18 @@ import { FieldErrors } from "react-hook-form";
 
 const CssTextField = withStyles({
   root: {
-    "& .MuiFormControl-root": {
-      marginTop: "unset",
+    ["@media (max-width:938px)"]: {
+      marginTop: "unset !important",
+      "& label": {
+        fontSize: "12px",
+      },
     },
   },
 })(TextField);
 
 export default function ContactModule() {
   useTitle("DX Dataxplorer - Contact");
-
+  const md = useMediaQuery("(max-width: 940px)");
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
   const [message, setMessage] = React.useState("");
   const [loading, setLoading] = React.useState(false);
@@ -129,6 +132,33 @@ export default function ContactModule() {
               margin-top: 56px;
               height: 100%;
             }
+            h4 {
+              font-family: "GothamNarrow-Bold", sans-serif;
+              font-size: 36px;
+              line-height: 43px;
+              color: #231d2c;
+              text-align: center;
+              @media (max-width: 640px) {
+                margin: 0;
+                margin-bottom: 20px;
+              }
+            }
+            p {
+              font-size: 20px;
+              line-height: 24px;
+              text-align: center;
+              font-family: "GothamNarrow-Medium", sans-serif;
+              margin-top: 0;
+
+              /* width: 60%; */
+
+              @media (max-width: 600px) {
+                font-family: "GothamNarrow-Book", sans-serif;
+                font-size: 16px;
+                line-height: 19px;
+                width: auto;
+              }
+            }
           `}
         >
           <FullEllipse
@@ -140,16 +170,21 @@ export default function ContactModule() {
                 @media (min-width: 601px) {
                   width: 100%;
                   height: 100%;
-                  top: 0;
+                  top: 37px;
                 }
               }
               @media (max-width: 600px) {
                 width: 100%;
                 left: -16px;
-                top: -180px;
+                top: -241px;
               }
             `}
           />
+          <h4>Contact us!</h4>
+          <p>
+            Schedule a free demo now or ask us any data related <br /> question
+            you may have.
+          </p>
           <form
             onSubmit={handleContactFormSubmit}
             css={`
@@ -157,24 +192,6 @@ export default function ContactModule() {
               height: 100%;
               margin: auto;
 
-              h4 {
-                font-family: "GothamNarrow-Bold", sans-serif;
-                font-size: 36px;
-                line-height: 43px;
-                color: #231d2c;
-                text-align: center;
-                @media (max-width: 600px) {
-                  margin: 0;
-                  margin-bottom: 20px;
-                }
-              }
-              p {
-                font-size: 20px;
-                line-height: 24px;
-                text-align: center;
-                font-family: "GothamNarrow-Medium", sans-serif;
-                margin-top: 0;
-              }
               .MuiFormControl-root {
                 margin-top: 20px;
               }
@@ -182,12 +199,11 @@ export default function ContactModule() {
                 font-family: "Inter", sans-serif;
                 color: #231d2c;
               }
-              /* background: pink; */
               @media (max-width: 1024px) {
                 width: 450px;
               }
               @media (max-width: 600px) {
-                width: 360px;
+                width: 80%;
                 p {
                   font-family: "GothamNarrow-Book", sans-serif;
                   font-size: 16px;
@@ -196,11 +212,6 @@ export default function ContactModule() {
               }
             `}
           >
-            <h4>Contact us!</h4>
-            <p>
-              Schedule a free demo now or ask us any data related question you
-              may have.
-            </p>
             <CssTextField
               id="standard-basic"
               label="E-mail"
@@ -211,6 +222,7 @@ export default function ContactModule() {
               type="email"
               onChange={handleContactFormChange}
               value={contactFormDetails.email}
+              style={{ fontSize: "12px" }}
             />
             <CssTextField
               id="standard-basic"
@@ -247,11 +259,18 @@ export default function ContactModule() {
               required
               name="message"
               multiline
-              minRows={5}
+              minRows={md ? 4 : 5}
               value={contactFormDetails.message}
               onChange={handleContactFormChange}
             />
-            <Box height={60} />
+            <div
+              css={`
+                height: 60px;
+                @media (max-width: 600px) {
+                  height: 26px;
+                }
+              `}
+            ></div>
             <div
               css={`
                 display: flex;
@@ -317,6 +336,7 @@ export default function ContactModule() {
                 width: 98%;
                 height: 296px;
                 border-radius: 20px;
+                margin: 56px 0;
                 background: #231d2c;
                 box-shadow: 0px 4px 30px 4px rgba(206, 168, 188, 0.08);
                 padding: 0px 16px 0px 23px;
