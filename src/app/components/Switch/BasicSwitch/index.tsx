@@ -1,7 +1,12 @@
 import React from "react";
 
 interface Props {
-  tabs: { value: string; label: string; icon?: React.ReactNode }[];
+  tabs: {
+    value: string;
+    label: string;
+    icon?: React.ReactNode;
+    testId?: string;
+  }[];
   handleSwitch: (key: any) => void;
   activeTab: string;
   setActiveTab: (key: any) => void;
@@ -51,7 +56,7 @@ export default function BasicSwitch(props: Props) {
         <button
           key={tab.value}
           onClick={() => handleTabSwitch(tab.value, index)}
-          data-cy={tab.value}
+          data-cy={tab.testId}
           css={`
             background: transparent;
             font-weight: ${props.activeTab === tab.value ? "bold" : "medium"};

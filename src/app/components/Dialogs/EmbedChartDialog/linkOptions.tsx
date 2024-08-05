@@ -64,7 +64,7 @@ export default function LinkOptions(props: {
         </a>
 
         <a
-          href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+          href={`https://x.com/intent/tweet?url=${encodeURIComponent(
             url
           )}&quote=${encodeURIComponent("")}`}
           target="_blank"

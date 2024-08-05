@@ -324,11 +324,13 @@ function DatasetUploadSteps(props: Props) {
                   {
                     label: "Federated search",
                     value: "search",
+                    testId: "federated-search-tab",
                     icon: <Search />,
                   },
                   {
                     label: "File upload",
                     value: "file",
+                    testId: "file-upload-tab",
                     icon: <DesktopWindowsIcon />,
                   },
                 ]}

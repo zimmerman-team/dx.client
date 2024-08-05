@@ -102,7 +102,7 @@ export default function EmbedChartRoute() {
           }
         `}
       >
-        <p title={loadedChart.name}>{loadChart.name}</p>
+        <p title={loadedChart.name}>{loadedChart.name}</p>
 
         <ChartContainer
           chartFromAPI={chartFromAPI!}
