@@ -67,10 +67,9 @@ export default function DeleteChartDialog(props: Props) {
                 position: absolute;
                 right: -93px;
                 top: -16px;
-                color: "#231D2C";
               `}
             >
-              <CloseOutlined color="inherit" />
+              <CloseOutlined htmlColor="#231D2C" />
             </IconButton>
             <p
               css={`
