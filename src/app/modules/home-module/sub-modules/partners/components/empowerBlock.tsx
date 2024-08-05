@@ -112,12 +112,12 @@ export default function EmpowerBlock(props: {
               gap: 10px;
               color: #fff;
               display: flex;
-              padding: 9px 18px !important;
+              padding: 9px 17px !important;
               background: #a1a2ff;
               align-items: center;
               justify-content: center;
               text-transform: uppercase;
-
+              white-space: nowrap;
               > svg {
                 transform: scale(0.8);
               }

@@ -27,6 +27,10 @@ export const empowercss = (view: string) => css`
     text-align: center;
     margin-bottom: ${view === "landing" ? "14px" : "26px"};
     font-family: "GothamNarrow-Bold", sans-serif;
+    @media (max-width: 768px) {
+      font-size: 40px;
+      line-height: 48px;
+    }
   }
   p {
     margin: 0;
@@ -61,6 +65,11 @@ export const empowercss = (view: string) => css`
       :hover {
         opacity: 0.8;
         cursor: pointer;
+      }
+      @media (max-width: 500px) {
+        font-size: 13px;
+        padding: 8px 16px;
+        width: 185px;
       }
     }
   }
