@@ -85,6 +85,7 @@ function PlanCard({ activeView, plan, onButtonClick }: PlanCardProps) {
               `}
             >
               per {activeView === "monthly" ? "month" : "year"}
+              {plan.key === "team" ? " / per user" : ""}
             </p>
             <p
               css={`

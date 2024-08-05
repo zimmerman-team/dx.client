@@ -7,6 +7,7 @@ import { AppDialogs } from "app/components/Dialogs";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { CookieDialog } from "app/components/Dialogs/CookieDialog";
 import { MobileBottomNavigation } from "app/components/Mobile/BottomNavigation";
+import { PlanDialog } from "./components/Dialogs/PlanDialog";
 
 export function App() {
   const isMobile = useMediaQuery("(max-width: 767px)");
@@ -15,6 +16,7 @@ export function App() {
     <Providers>
       <AppDialogs />
       <CookieDialog open data-testid="cookie-dialog" />
+      <PlanDialog />
       <MainRoutes />
       {isMobile && <MobileBottomNavigation />}
     </Providers>

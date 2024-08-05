@@ -20,7 +20,7 @@ const Features = () => {
       options: [
         {
           name: "Number of  datasets or data size",
-          info: "The amount datasets you can manage",
+          info: "The amount of datasets you can manage",
           values: [
             "5 datasets / 1GB",
             "100 datasets / 10GB",
@@ -31,7 +31,7 @@ const Features = () => {
         {
           name: "Federated search",
           info: "Access to datasources like Worldbank, Kaggle, WHO, HDX and more.",
-          values: ["Max 10 results", "Unlimited", "Unlimited", "Unlimited"],
+          values: ["Max 12 results", "Unlimited", "Unlimited", "Unlimited"],
         },
 
         {

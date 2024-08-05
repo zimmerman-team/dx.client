@@ -9,6 +9,8 @@ import axios from "axios";
 import CircleLoader from "app/modules/home-module/components/Loader";
 import { useInfinityScroll } from "app/hooks/useInfinityScroll";
 import SourceCategoryList from "../component/externalSourcesList";
+import { useSetRecoilState } from "recoil";
+import { planDialogAtom } from "app/state/recoil/atoms";
 
 export interface IExternalDataset {
   name: string;
@@ -48,6 +50,8 @@ export default function ExternalSearch(props: {
   const [offset, setOffset] = React.useState(0);
   const limit = 20;
   const [datasets, setDatasets] = React.useState<IExternalDataset[]>([]);
+  const [planWarning, setPlanWarning] = React.useState<string | null>(null);
+  const setPlanDialog = useSetRecoilState(planDialogAtom);
 
   const baseSources = [
     { name: "Kaggle", value: "Kaggle" },
@@ -68,9 +72,10 @@ export default function ExternalSearch(props: {
     setOffset(0);
   };
 
+  const free = true;
   // Pagination on scroll
   React.useEffect(() => {
-    if (isObserved && datasets.length > 0) {
+    if (isObserved && datasets.length > 0 && !free) {
       loadSearch(true);
     }
   }, [isObserved]);
@@ -98,11 +103,14 @@ export default function ExternalSearch(props: {
         console.log(response.data.error);
         return;
       }
+      if (response.data.planWarning) {
+        setPlanWarning(response.data.planWarning);
+      }
       if (nextPage) {
-        setDatasets([...datasets, ...response.data]);
+        setDatasets([...datasets, ...response.data.result]);
         setOffset(offset + limit);
       } else {
-        setDatasets(response.data);
+        setDatasets(response.data.result);
         setOffset(limit);
       }
     } catch (e) {
@@ -110,6 +118,17 @@ export default function ExternalSearch(props: {
       console.log(e);
     }
   };
+
+  React.useEffect(() => {
+    if (planWarning) {
+      setPlanDialog({
+        open: true,
+        message: planWarning,
+        tryAgain: "",
+        onTryAgain: () => {},
+      });
+    }
+  }, [planWarning]);
 
   React.useEffect(() => {
     const controller = abortControllerRef.current;

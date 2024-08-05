@@ -8,6 +8,7 @@ export interface ProcessingMetaDataProps {
   loaded: string;
   percentageLoaded: number;
   estimatedUploadTime: number;
+  processingMessage: string;
   tryAgain: () => void;
 }
 
@@ -92,76 +93,79 @@ export default function Processing(props: ProcessingMetaDataProps) {
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            height: calc(100vh - 98px);
             flex-direction: column;
           `}
         >
-          <div>
+          <p
+            css={`
+              font-size: 18px;
+              color: #231d2c;
+              text-align: center;
+              margin-bottom: 45px;
+            `}
+            dangerouslySetInnerHTML={{
+              __html: props.processingMessage || "Data is being processed...",
+            }}
+          />
+
+          <div
+            css={`
+              width: 399.71px;
+            `}
+          >
             <p
               css={`
-                font-size: 18px;
-                color: #231d2c;
-                text-align: center;
-                margin-bottom: 45px;
+                color: #000;
+                font-family: "GothamNarrow-Book", sans-serif;
+                font-size: 14px;
               `}
             >
-              Data is being processed...
+              {props.fileName}
             </p>
-
-            <div>
-              <p
-                css={`
-                  color: #000;
+            <div
+              data-testid="progress-bar"
+              css={`
+                display: flex;
+                flex-wrap: wrap;
+                width: 399.71px;
+                justify-content: space-between;
+                align-items: center;
+                p {
                   font-family: "GothamNarrow-Book", sans-serif;
-                  font-size: 14px;
-                `}
-              >
-                {props.fileName}
-              </p>
+                  font-size: 12px;
+                  color: #adb5bd;
+                  margin-top: 0;
+                }
+              `}
+            >
               <div
-                data-testid="progress-bar"
                 css={`
-                  display: flex;
-                  flex-wrap: wrap;
-                  width: 399.71px;
-                  justify-content: space-between;
-                  align-items: center;
-                  p {
-                    font-family: "GothamNarrow-Book", sans-serif;
-                    font-size: 12px;
-                    color: #adb5bd;
-                    margin-top: 0;
-                  }
+                  width: 100%;
+                  height: 6.42px;
+                  border-radius: 3px;
+                  background-color: #dfe3e5;
+
+                  border-radius: 3.211px;
+                  position: relative;
                 `}
               >
                 <div
                   css={`
-                    width: 100%;
-                    height: 6.42px;
-                    border-radius: 3px;
-                    background-color: #dfe3e5;
-
-                    border-radius: 3.211px;
-                    position: relative;
+                    width: ${props.percentageLoaded}%;
+                    height: 100%;
+                    background: linear-gradient(
+                      90deg,
+                      #6466f1 7.48%,
+                      #cea8bc 92.2%
+                    );
                   `}
-                >
-                  <div
-                    css={`
-                      width: ${props.percentageLoaded}%;
-                      height: 100%;
-                      background: linear-gradient(
-                        90deg,
-                        #6466f1 7.48%,
-                        #cea8bc 92.2%
-                      );
-                    `}
-                  />
-                </div>
-                <p>{props.loaded}</p>
-                <p data-testid="estimated-time">
-                  {getTimeInHoursnMins(props.estimatedUploadTime)}
-                </p>
+                />
               </div>
+              <p>{props.loaded}</p>
+              <p data-testid="estimated-time">
+                {getTimeInHoursnMins(props.estimatedUploadTime)}
+              </p>
             </div>
           </div>
         </div>

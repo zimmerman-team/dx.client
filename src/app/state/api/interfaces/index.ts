@@ -110,6 +110,7 @@ export interface Errors {
 export interface ApiModel<QueryModel, ResponseModel> {
   loading: boolean;
   success: boolean;
+  planWarning: string | null;
   data: ResponseData<ResponseModel> | null | ResponseData<ResponseModel>[];
   crudData: object | object[] | null;
   setData: Action<ApiModel<QueryModel, ResponseModel>, any>;
@@ -117,6 +118,8 @@ export interface ApiModel<QueryModel, ResponseModel> {
   errorData: Errors | null;
   onError: Action<ApiModel<QueryModel, ResponseModel>, Errors>;
   setSuccess: Action<ApiModel<QueryModel, ResponseModel>>;
+  setPlanWarning: Action<ApiModel<QueryModel, ResponseModel>, string>;
+  clearPlanWarning: Action<ApiModel<QueryModel, ResponseModel>>;
   onSuccess: Action<
     ApiModel<QueryModel, ResponseModel>,
     ResponseData<ResponseModel> | ResponseData<ResponseModel>[]

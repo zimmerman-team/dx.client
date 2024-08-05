@@ -45,11 +45,17 @@ import useResizeObserver from "use-resize-observer";
 import { ChartType } from "app/modules/chart-module/components/common-chart";
 import { getRequiredFieldsAndErrors } from "app/modules/chart-module/routes/mapping/utils";
 import axios from "axios";
-import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
+import {
+  useRecoilState,
+  useRecoilValue,
+  useResetRecoilState,
+  useSetRecoilState,
+} from "recoil";
 import {
   chartFromReportAtom,
   isChartAIAgentActive,
   isChartAutoMappedAtom,
+  planDialogAtom,
 } from "app/state/recoil/atoms";
 import { IDatasetDetails } from "./components/toolbox/steps/panels-content/SelectDataset";
 
@@ -64,6 +70,8 @@ export default function ChartModule() {
     "visualOptions",
     {}
   );
+
+  const setPlanDialog = useSetRecoilState(planDialogAtom);
 
   const [rawViz, setRawViz] = React.useState<any>(null);
   const [toolboxOpen, setToolboxOpen] = React.useState(Boolean(view));
@@ -295,7 +303,23 @@ export default function ChartModule() {
       });
       if (page === "new") {
         const response = await onSave();
-        const data = response?.data;
+        const data = response?.data?.data;
+        if (response?.data.error && response?.data.errorType === "planError") {
+          return setPlanDialog({
+            open: true,
+            message: response?.data.error,
+            tryAgain: "",
+            onTryAgain: () => {},
+          });
+        }
+        if (response?.data.planWarning) {
+          setPlanDialog({
+            open: true,
+            message: response.data.planWarning,
+            tryAgain: "",
+            onTryAgain: () => {},
+          });
+        }
         history.push(
           `/chart/${data.id}/mapping${
             chartFromReport.state

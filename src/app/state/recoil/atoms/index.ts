@@ -196,3 +196,18 @@ export const dataUploadTabAtom = atom<"search" | "file">({
   default: "search",
   effects_UNSTABLE: [persistAtom],
 });
+
+export const planDialogAtom = atom<{
+  open: boolean;
+  message: string;
+  tryAgain: string;
+  onTryAgain: () => void;
+}>({
+  key: "planDialogAtom",
+  default: {
+    open: false,
+    message: "",
+    tryAgain: "",
+    onTryAgain: () => {},
+  },
+});

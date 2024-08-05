@@ -14,6 +14,8 @@ import ReportAddnewCard from "./reportAddNewCard";
 import { useInfinityScroll } from "app/hooks/useInfinityScroll";
 import CircleLoader from "../../Loader";
 import { useAuth0 } from "@auth0/auth0-react";
+import { useSetRecoilState } from "recoil";
+import { planDialogAtom } from "app/state/recoil/atoms";
 
 interface Props {
   sortBy: string;
@@ -34,6 +36,8 @@ export default function ReportsGrid(props: Props) {
   const [offset, setOffset] = React.useState(0);
   const { isObserved } = useInfinityScroll(observerTarget);
   const token = useStoreState((state) => state.AuthToken.value);
+
+  const setPlanDialog = useSetRecoilState(planDialogAtom);
 
   const reports = useStoreState(
     (state) => (state.reports.ReportGetList.crudData ?? []) as ReportModel[]
@@ -144,7 +148,23 @@ export default function ReportsGrid(props: Props) {
           Authorization: `Bearer ${token}`,
         },
       })
-      .then(() => {
+      .then((response) => {
+        if (response?.data.error && response?.data.errorType === "planError") {
+          return setPlanDialog({
+            open: true,
+            message: response?.data.error,
+            tryAgain: "",
+            onTryAgain: () => {},
+          });
+        }
+        if (response.data.planWarning) {
+          setPlanDialog({
+            open: true,
+            message: response.data.planWarning,
+            tryAgain: "",
+            onTryAgain: () => {},
+          });
+        }
         reloadData();
       })
       .catch((error) => console.log(error));

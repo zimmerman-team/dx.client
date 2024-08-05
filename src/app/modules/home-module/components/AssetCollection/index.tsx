@@ -1,7 +1,7 @@
 import React from "react";
 
 /* third-party */
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useRecoilState } from "recoil";
 import Box from "@material-ui/core/Box";
@@ -27,6 +27,7 @@ import { datasetCategories } from "app/modules/dataset-module/routes/upload-modu
 import AssetsGrid from "app/modules/home-module/components/AssetCollection/All/assetsGrid";
 import BreadCrumbs from "app/modules/home-module/components/Breadcrumbs";
 import Filter from "app/modules/home-module/components/Filter";
+import { useCheckUserPlan } from "app/hooks/useCheckUserPlan";
 
 function AssetsCollection() {
   const { isAuthenticated, user } = useAuth0();
@@ -37,6 +38,10 @@ function AssetsCollection() {
   const [sortValue, setSortValue] = useRecoilState(allAssetsSortBy);
   const [display, setDisplay] = useRecoilState(homeDisplayAtom);
   const [tabPrevPosition, setTabPrevPosition] = React.useState("");
+
+  const { handleClick } = useCheckUserPlan();
+
+  const history = useHistory();
 
   const handleChange = (newValue: "all" | "data" | "charts" | "reports") => {
     setDisplay(newValue);
@@ -114,35 +119,45 @@ function AssetsCollection() {
             }
           `}
         >
-          <Link
-            to={`/dataset/new/upload${
-              location.pathname === "/" ? "?fromHome=true" : ""
-            }`}
+          <button
+            onClick={() =>
+              handleClick("dataset", () =>
+                history.push(
+                  `/dataset/new/upload${
+                    location.pathname === "/" ? "?fromHome=true" : ""
+                  }`
+                )
+              )
+            }
             css={`
               background: #e492bd;
             `}
             data-cy="home-connect-dataset-button"
           >
             CONNECT DATASET
-          </Link>
-          <Link
-            to="/chart/new/data"
+          </button>
+          <button
+            onClick={() =>
+              handleClick("chart", () => history.push("/chart/new/data"))
+            }
             css={`
               background: #64afaa;
             `}
             data-cy="home-create-chart-button"
           >
             CREATE CHART
-          </Link>
-          <Link
-            to="/report/new/initial"
+          </button>
+          <button
+            onClick={() =>
+              handleClick("report", () => history.push("/report/new/initial"))
+            }
             css={`
               background: #6061e5;
             `}
             data-cy="home-create-report-button"
           >
             CREATE REPORT
-          </Link>
+          </button>
         </div>
       </div>
       <Box height={24} />

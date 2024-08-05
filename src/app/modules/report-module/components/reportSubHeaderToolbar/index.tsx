@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { useAuth0 } from "@auth0/auth0-react";
 import Button from "@material-ui/core/Button";
 import SaveIcon from "@material-ui/icons/Save";
@@ -17,7 +17,7 @@ import CopyToClipboard from "react-copy-to-clipboard";
 import FileCopyIcon from "@material-ui/icons/FileCopy";
 import AutorenewIcon from "@material-ui/icons/Autorenew";
 import CloudDoneIcon from "@material-ui/icons/CloudDone";
-import { homeDisplayAtom } from "app/state/recoil/atoms";
+import { homeDisplayAtom, planDialogAtom } from "app/state/recoil/atoms";
 import { PageLoader } from "app/modules/common/page-loader";
 import { createStyles, makeStyles } from "@material-ui/core";
 import { Link, useHistory, useParams } from "react-router-dom";
@@ -67,6 +67,8 @@ export function ReportSubheaderToolbar(
   const [duplicatedReportId, setDuplicatedReportId] = React.useState<
     string | null
   >(null);
+
+  const setPlanDialog = useSetRecoilState(planDialogAtom);
 
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
@@ -204,6 +206,14 @@ export function ReportSubheaderToolbar(
         },
       })
       .then((response) => {
+        if (response?.data.error && response?.data.errorType === "planError") {
+          return setPlanDialog({
+            open: true,
+            message: response?.data.error,
+            tryAgain: "",
+            onTryAgain: () => {},
+          });
+        }
         loadReports({
           token,
           storeInCrudData: true,
