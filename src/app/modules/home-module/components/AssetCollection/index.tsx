@@ -101,49 +101,50 @@ function AssetsCollection() {
     <Container maxWidth="lg">
       <div css={turnsDataCss}>
         {isAuthenticated ? (
-          <h2>Welcome {user?.given_name ?? user?.name?.split(" ")[0]}</h2>
+          <>
+            <h2>Welcome {user?.given_name ?? user?.name?.split(" ")[0]}</h2>
+            <div
+              css={`
+                ${rowFlexCss} gap: 8px;
+                a {
+                  padding: 8px 24px;
+                }
+              `}
+            >
+              <Link
+                to={`/dataset/new/upload${
+                  location.pathname === "/" ? "?fromHome=true" : ""
+                }`}
+                css={`
+                  background: #e492bd;
+                `}
+                data-cy="home-connect-dataset-button"
+              >
+                CONNECT DATASET
+              </Link>
+              <Link
+                to="/chart/new/data"
+                css={`
+                  background: #64afaa;
+                `}
+                data-cy="home-create-chart-button"
+              >
+                CREATE CHART
+              </Link>
+              <Link
+                to="/report/new/initial"
+                css={`
+                  background: #6061e5;
+                `}
+                data-cy="home-create-report-button"
+              >
+                CREATE REPORT
+              </Link>
+            </div>
+          </>
         ) : (
           <div />
         )}
-
-        <div
-          css={`
-            ${rowFlexCss} gap: 8px;
-            a {
-              padding: 8px 24px;
-            }
-          `}
-        >
-          <Link
-            to={`/dataset/new/upload${
-              location.pathname === "/" ? "?fromHome=true" : ""
-            }`}
-            css={`
-              background: #e492bd;
-            `}
-            data-cy="home-connect-dataset-button"
-          >
-            CONNECT DATASET
-          </Link>
-          <Link
-            to="/chart/new/data"
-            css={`
-              background: #64afaa;
-            `}
-            data-cy="home-create-chart-button"
-          >
-            CREATE CHART
-          </Link>
-          <Link
-            to="/report/new/initial"
-            css={`
-              background: #6061e5;
-            `}
-            data-cy="home-create-report-button"
-          >
-            CREATE REPORT
-          </Link>
-        </div>
       </div>
       <Box height={24} />
       <Box css={featuredAssetsCss}>
