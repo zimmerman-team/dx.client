@@ -11,7 +11,7 @@ import { ReactComponent as ClockIcon } from "app/modules/home-module/assets/cloc
 
 import moment from "moment";
 import { IExternalDataset } from "app/modules/dataset-module/routes/upload-module/upload-steps/externalSearch";
-export default function IExternalDatasetCard(
+export default function ExternalDatasetCard(
   props: Readonly<{
     name: string;
     description: string;

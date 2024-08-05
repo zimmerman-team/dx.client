@@ -8,6 +8,7 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import { isValidDate } from "app/utils/isValidDate";
+import { IExternalDataset } from "app/modules/dataset-module/routes/upload-module/upload-steps/externalSearch";
 
 interface IData {
   id: string;
@@ -16,27 +17,13 @@ interface IData {
   createdDate: Date;
   type: string;
 }
-export function HomepageTable(props: {
-  inChartBuilder?: boolean;
-  onItemClick?: (v: string) => void;
-  all?: boolean;
+export default function ExternalSearchTable(props: {
+  onItemClick: (dataset: IExternalDataset) => void;
   tableData: {
     columns: { key: string; label: string; icon?: React.ReactNode }[];
     data: any[];
   };
 }) {
-  const history = useHistory();
-
-  const getDestinationPath = (data: IData) => {
-    let destinationPath = `/${data.type}/${data.id}`;
-    if (data.type === "dataset") {
-      destinationPath = `/${data.type}/${data.id}/detail?${
-        location.pathname === "/" ? "fromHome=true" : ""
-      }`;
-    }
-    return destinationPath;
-  };
-
   return (
     <TableContainer
       css={`
@@ -53,17 +40,19 @@ export function HomepageTable(props: {
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
+            border-right: 1px solid #e4e4e4;
+
             &:nth-of-type(1) {
-              max-width: 50px;
+              max-width: 204px;
             }
             &:nth-of-type(2) {
-              max-width: 400px;
+              max-width: 473px;
             }
             &:nth-of-type(3) {
-              max-width: 550px;
+              max-width: 103px;
             }
             &:nth-of-type(4) {
-              max-width: 200px;
+              width: 184px;
             }
           }
         `}
@@ -76,11 +65,11 @@ export function HomepageTable(props: {
             > tr > th {
               font-size: 14px;
               font-family: "GothamNarrow-Bold", sans-serif;
+              border-right: 1px solid #e4e4e4;
             }
           `}
         >
           <TableRow>
-            <TableCell width="50px"></TableCell>
             {props.tableData.columns.map((val) => (
               <TableCell key={val.key} css={``}>
                 {val.label}
@@ -95,13 +84,9 @@ export function HomepageTable(props: {
         >
           {props.tableData.data.map((data, index) => (
             <TableRow
-              key={data.id}
+              key={`${data.id}-${index}`}
               onClick={() => {
-                if (!props.inChartBuilder) {
-                  history.push(getDestinationPath(data));
-                } else if (props.inChartBuilder && props.onItemClick) {
-                  props.onItemClick(data.id);
-                }
+                props.onItemClick(data);
               }}
               css={`
                 &:hover {
@@ -111,25 +96,34 @@ export function HomepageTable(props: {
               `}
               data-cy={`table-row-${data.type}`}
             >
-              <TableCell>{index + 1}</TableCell>
               {props.tableData.columns.map((val) => (
                 <TableCell key={val.key}>
-                  <p
-                    title={data[val.key] as string}
+                  <div
                     css={`
-                      margin: 0;
-                      overflow: clip;
-                      max-width: 220px;
-                      white-space: nowrap;
-                      text-overflow: ellipsis;
-                      min-width: ${val.key === "id" ? "30px" : "auto"};
-                      text-align: ${val.key === "id" ? "center" : "left"};
+                      display: flex;
+                      align-items: center;
+                      justify-content: space-between;
+                      width: 100%;
                     `}
                   >
-                    {isValidDate(data[val.key])
-                      ? moment(data[val.key]).format("MMMM YYYY")
-                      : data[val.key] ?? ""}
-                  </p>
+                    <p
+                      title={data[val.key] as string}
+                      css={`
+                        margin: 0;
+                        overflow: hidden;
+                        max-width: 99%;
+                        white-space: nowrap;
+                        text-overflow: ellipsis;
+                        min-width: ${val.key === "id" ? "30px" : "auto"};
+                        text-align: ${val.key === "id" ? "center" : "left"};
+                      `}
+                    >
+                      {isValidDate(data[val.key])
+                        ? moment(data[val.key]).format("MMMM YYYY")
+                        : data[val.key] ?? ""}
+                    </p>
+                    {val.icon}
+                  </div>
                 </TableCell>
               ))}
             </TableRow>
