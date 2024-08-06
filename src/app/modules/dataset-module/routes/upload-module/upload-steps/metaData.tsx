@@ -36,7 +36,7 @@ interface Props {
   >;
 }
 
-export interface IFormDetails {
+interface IFormDetails {
   name: string;
   source: string;
   category: string;
@@ -55,7 +55,7 @@ export const datasetCategories = [
   "Social",
 ];
 
-export const SelectCategoryField = (props: {
+const SelectCategoryField = (props: {
   setFormDetails: React.Dispatch<React.SetStateAction<IFormDetails>>;
   formDetails: IFormDetails;
   error: boolean;

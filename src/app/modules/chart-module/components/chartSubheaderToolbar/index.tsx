@@ -87,6 +87,9 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
     (state) =>
       (state.charts.ChartGet.crudData ?? emptyChartAPI) as ChartAPIModel
   );
+  const editChartCrudData = useStoreState(
+    (state) => state.charts.ChartUpdate.crudData
+  ) as ChartAPIModel;
 
   const createChartLoading = useStoreState(
     (state) => state.charts.ChartCreate.loading
@@ -189,9 +192,12 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
 
   const isPreviewDisabled: boolean = React.useMemo(() => {
     const newValue =
-      isEmpty(selectedChartType) || !isMappingValid || view === "preview";
+      isEmpty(selectedChartType) ||
+      !isMappingValid ||
+      view === "preview" ||
+      !editChartCrudData?.isMappingValid;
     return newValue;
-  }, [selectedChartType, mapping, view]);
+  }, [selectedChartType, mapping, view, editChartCrudData]);
 
   const isSavedDisabled: boolean = React.useMemo(() => {
     const newValue = isEmpty(selectedChartType) || !isMappingValid;
@@ -250,6 +256,7 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
   };
 
   const handlePreviewMode = () => {
+    props.onSave();
     history.push(`/chart/${page}`);
   };
 

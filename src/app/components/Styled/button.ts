@@ -27,11 +27,6 @@ export const PrimaryButton = styled.button<Props>`
   }
 `;
 
-export const GreyedButton = styled(PrimaryButton)`
-  background: #dfe3e6;
-  border: 1px solid #ffffff;
-`;
-
 export const HomePrimaryButton = styled.button`
   padding: 9px 27px;
   height: 41px;

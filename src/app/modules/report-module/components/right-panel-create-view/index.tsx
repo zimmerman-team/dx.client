@@ -102,7 +102,7 @@ const Button = withStyles(() => ({
   },
 }))(MuiButton);
 
-export const StyledMenu = withStyles({
+const StyledMenu = withStyles({
   paper: {
     width: 159,
     borderRadius: "10px",
@@ -142,7 +142,7 @@ export const StyledMenu = withStyles({
   />
 ));
 
-export const StyledMenuItem = withStyles(() => ({
+const StyledMenuItem = withStyles(() => ({
   root: {
     width: "100%",
     fontSize: "14px",

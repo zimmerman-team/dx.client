@@ -16,6 +16,7 @@ import GeomapLegend from "app/modules/chart-module/components/geomap-legend";
 import ErrorComponent from "app/modules/chart-module/components/dialog/errrorComponent";
 import { DatasetListItemAPIModel } from "app/modules/dataset-module/data";
 import { getDatasetDetailsSource } from "app/modules/chart-module/util/getDatasetDetailsSource";
+import { ChartAPIModel } from "app/modules/chart-module/data";
 
 export function ChartBuilderPreviewTheme(props: ChartBuilderPreviewThemeProps) {
   useTitle("DX Dataxplorer - Preview Chart");
@@ -34,6 +35,9 @@ export function ChartBuilderPreviewTheme(props: ChartBuilderPreviewThemeProps) {
   const selectedChartType = useStoreState(
     (state) => state.charts.chartType.value
   );
+  const editChartCrudData = useStoreState(
+    (state) => state.charts.ChartUpdate.crudData
+  ) as ChartAPIModel;
 
   const loadDataset = useStoreActions(
     (actions) => actions.dataThemes.DatasetGet.fetch
@@ -175,9 +179,15 @@ export function ChartBuilderPreviewTheme(props: ChartBuilderPreviewThemeProps) {
     );
   }
 
+  const isMappingValid = React.useMemo(() => {
+    return (
+      editChartCrudData?.isMappingValid || props.loadedChart?.isMappingValid
+    );
+  }, [props.loadedChart?.isMappingValid, editChartCrudData?.isMappingValid]);
+
   return (
     <div css={commonStyles.container}>
-      {!props.loadedChart?.isMappingValid && props.view === undefined ? (
+      {!isMappingValid ? (
         <WarningDialog isMappingValid={props.loadedChart?.isMappingValid} />
       ) : (
         <>

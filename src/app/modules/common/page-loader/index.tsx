@@ -24,7 +24,7 @@ const Container = styled.div`
   height: calc(100vh - 45px);
 `;
 
-export const LoadingComp = styled.div`
+const LoadingComp = styled.div`
   top: 0;
   left: 0;
   width: ${(props: { inLoader?: boolean }) =>

@@ -172,7 +172,7 @@ function ChartToolBoxSelectDataset(props: { deselectDataset: () => void }) {
   );
 }
 
-export const ConnectData = () => {
+const ConnectData = () => {
   const history = useHistory();
   const chartFromReport = useRecoilValue(chartFromReportAtom);
   return (
