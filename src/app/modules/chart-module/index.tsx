@@ -517,6 +517,7 @@ export default function ChartModule() {
         enableAutoSaveSwitch={autoSaveState.enableAutoSaveSwitch}
         onSave={onSave}
         savedChanges={savedChanges}
+        isMappingValid={isMappingValid}
       />
       {isChartLoading || isSaveLoading ? (
         <PageLoader />
@@ -680,6 +681,7 @@ export default function ChartModule() {
                         setIsPreviewView={setIsPreviewView}
                         containerRef={containerRef}
                         loadedChart={loadedChart}
+                        isMappingValid={isMappingValid}
                         view={view}
                         isAIAssistedChart={editChartCrudData?.isAIAssisted}
                         dataError={dataError}
@@ -699,6 +701,7 @@ export default function ChartModule() {
                         setIsPreviewView={setIsPreviewView}
                         containerRef={containerRef}
                         loadedChart={loadedChart}
+                        isMappingValid={isMappingValid}
                         view={view}
                         isAIAssistedChart={
                           editChartCrudData?.isAIAssisted ??
