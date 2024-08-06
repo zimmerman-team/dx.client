@@ -65,12 +65,6 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
     useRecoilState(chartFromReportAtom);
 
   const mapping = useStoreState((state) => state.charts.mapping.value);
-  const { updRequiredFields, updMinValuesFields } = getRequiredFieldsAndErrors(
-    mapping,
-    props.dimensions
-  );
-  const isMappingValid =
-    updRequiredFields.length === 0 && updMinValuesFields.length === 0;
 
   const dataset = useStoreState((state) => state.charts.dataset.value);
   const appliedFilters = useStoreState(
@@ -97,16 +91,54 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
   const editChartLoading = useStoreState(
     (state) => state.charts.ChartUpdate.loading
   );
-
   const canChartEditDelete = React.useMemo(() => {
     return isAuthenticated && loadedChart && loadedChart.owner === user?.sub;
   }, [user, isAuthenticated, loadedChart]);
+
+  const isMappingValid = React.useMemo(() => {
+    return loadedChart?.isMappingValid || editChartCrudData?.isMappingValid;
+  }, [loadedChart, editChartCrudData]);
 
   const [snackbarState, setSnackbarState] = React.useState<ISnackbarState>({
     open: false,
     vertical: "bottom",
     horizontal: "center",
   });
+
+  React.useEffect(() => {
+    setHasChangesBeenMade(compareStateChanges);
+  }, [
+    props.name,
+    selectedChartType,
+    mapping,
+    dataset,
+    props.visualOptions,
+    appliedFilters,
+  ]);
+
+  useAutosave(
+    () => {
+      props.onSave();
+    },
+    2 * 1000,
+    props.autoSave && canChartEditDelete,
+    hasChangesBeenMade,
+    [
+      props.name,
+      props.isAiSwitchActive,
+      selectedChartType,
+      mapping,
+      dataset,
+      props.visualOptions,
+      appliedFilters,
+    ]
+  );
+
+  const isPreviewDisabled: boolean = React.useMemo(() => {
+    const newValue =
+      isEmpty(selectedChartType) || !isMappingValid || view === "preview";
+    return newValue;
+  }, [selectedChartType, mapping, view, editChartCrudData]);
 
   const handleDeleteModalInputChange = (
     e: React.ChangeEvent<HTMLInputElement>
@@ -140,7 +172,7 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
       enableAutoSaveSwitch: true,
     });
 
-    if (!loadedChart?.isMappingValid) {
+    if (!props.isMappingValid) {
       history.push(`/chart/${page}/mapping`);
     } else {
       history.push(`/chart/${page}/customize`);
@@ -160,49 +192,6 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
     }
     return false;
   };
-
-  React.useEffect(() => {
-    setHasChangesBeenMade(compareStateChanges);
-  }, [
-    props.name,
-    selectedChartType,
-    mapping,
-    dataset,
-    props.visualOptions,
-    appliedFilters,
-  ]);
-
-  useAutosave(
-    () => {
-      props.onSave();
-    },
-    2 * 1000,
-    props.autoSave && canChartEditDelete,
-    hasChangesBeenMade,
-    [
-      props.name,
-      props.isAiSwitchActive,
-      selectedChartType,
-      mapping,
-      dataset,
-      props.visualOptions,
-      appliedFilters,
-    ]
-  );
-
-  const isPreviewDisabled: boolean = React.useMemo(() => {
-    const newValue =
-      isEmpty(selectedChartType) ||
-      !isMappingValid ||
-      view === "preview" ||
-      !editChartCrudData?.isMappingValid;
-    return newValue;
-  }, [selectedChartType, mapping, view, editChartCrudData]);
-
-  const isSavedDisabled: boolean = React.useMemo(() => {
-    const newValue = isEmpty(selectedChartType) || !isMappingValid;
-    return newValue;
-  }, [mapping, selectedChartType]);
 
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
@@ -489,7 +478,7 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
                       <IconButton
                         onClick={handlePreviewMode}
                         aria-label="preview-button"
-                        disabled={isPreviewDisabled}
+                        // disabled={isPreviewDisabled}
                         data-testid="preview-button"
                         css={`
                           :disabled {
@@ -512,12 +501,6 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
                       <IconButton
                         onClick={props.onSave}
                         aria-label="save-button"
-                        disabled={isSavedDisabled}
-                        css={`
-                          :disabled {
-                            opacity: 0.5;
-                          }
-                        `}
                       >
                         <SaveIcon htmlColor="#262c34" />
                       </IconButton>

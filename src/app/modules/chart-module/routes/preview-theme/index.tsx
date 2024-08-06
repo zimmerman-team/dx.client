@@ -181,14 +181,14 @@ export function ChartBuilderPreviewTheme(props: ChartBuilderPreviewThemeProps) {
 
   const isMappingValid = React.useMemo(() => {
     return (
-      editChartCrudData?.isMappingValid || props.loadedChart?.isMappingValid
+      editChartCrudData?.isMappingValid && props.loadedChart?.isMappingValid
     );
   }, [props.loadedChart?.isMappingValid, editChartCrudData?.isMappingValid]);
 
   return (
     <div css={commonStyles.container}>
-      {!isMappingValid ? (
-        <WarningDialog isMappingValid={props.loadedChart?.isMappingValid} />
+      {!props.isMappingValid ? (
+        <WarningDialog isMappingValid={props.isMappingValid} />
       ) : (
         <>
           <div
