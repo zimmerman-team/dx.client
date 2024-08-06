@@ -146,6 +146,7 @@ export default function Filter(
             key={option.label}
             css={sortByItemCss(props.sortValue === option.value)}
             onClick={() => {
+              props.terminateSearch && props.terminateSearch();
               props.setSortValue(
                 option.value as "name" | "createdDate" | "updatedDate"
               );

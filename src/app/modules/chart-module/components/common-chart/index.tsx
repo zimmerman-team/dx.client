@@ -39,6 +39,7 @@ interface Props {
   setVisualOptions: (value: any) => void;
   containerRef: React.RefObject<HTMLDivElement>;
   chartId?: string;
+  hideChartSource?: boolean;
   setChartError: React.Dispatch<React.SetStateAction<boolean>>;
   setChartErrorMessage: React.Dispatch<React.SetStateAction<string>>;
   renderedChartType?: ChartType;
@@ -51,7 +52,6 @@ interface Props {
 export function CommonChart(props: Readonly<Props>) {
   const { render } = useDataThemesEchart();
   const token = useStoreState((state) => state.AuthToken.value);
-
   const domRef = React.useRef<HTMLDivElement>(null);
   const chartTypeFromState = useStoreState(
     (state) => state.charts.chartType.value
@@ -134,8 +134,8 @@ export function CommonChart(props: Readonly<Props>) {
       }
     }
   }, [props.renderedChart]);
-  // client side rendering
 
+  // client side rendering
   React.useEffect(() => {
     const visualOptions = props.containerRef.current
       ? {
@@ -270,7 +270,7 @@ export function CommonChart(props: Readonly<Props>) {
           data-cy="common-chart-container"
           css={`
             width: auto !important;
-            height: calc(100% - ${dataSourcePHeight}px);
+            height: calc(100% - ${dataSourcePHeight ?? 0}px);
 
             > div:first-of-type {
               ${props.renderedChartType === "bigNumber" &&
@@ -310,10 +310,10 @@ export function CommonChart(props: Readonly<Props>) {
         `}
 
               > svg {
-                height: calc(100% - ${dataSourcePHeight}px);
+                height: calc(100% - ${dataSourcePHeight ?? 0}px);
 
                 > rect {
-                  height: calc(100% - ${dataSourcePHeight}px);
+                  height: calc(100% - ${dataSourcePHeight ?? 0}px);
                 }
               }
             }
@@ -327,6 +327,7 @@ export function CommonChart(props: Readonly<Props>) {
             font-family: "GothamNarrow-Bold", sans-serif;
             font-size: 12px;
             margin: 0;
+            display: ${props.hideChartSource ? "none" : "block"};
             a {
               font-family: "GothamNarrow-Bold", sans-serif;
 

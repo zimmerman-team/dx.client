@@ -4,7 +4,7 @@ import { useUpdateEffect } from "react-use";
 import { SortColumn } from "react-data-grid";
 import PreviewTable from "app/components/Table/Preview-table";
 import { tableToolBoxData } from "app/components/Table/Preview-table/data";
-import { DataThemesDataTableProps } from "app/modules/dataset-module/routes/upload-module/component/data-table/data";
+import { DataThemesDataTableProps } from "app/modules/dataset-module/routes/upload-module/component/table/data-table/data";
 import useGetDatasetContent from "app/hooks/useGetDatasetContent";
 import { useInfinityScroll } from "app/hooks/useInfinityScroll";
 
