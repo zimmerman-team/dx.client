@@ -1,9 +1,11 @@
 import { DatasetListItemAPIModel } from "app/modules/dataset-module/data";
-import { useStoreState } from "app/state/store/hooks";
 import axios from "axios";
 import { isEmpty } from "lodash";
 import React from "react";
-export const useLoadDatasetDetails = (id: string) => {
+export const useLoadDatasetDetails = (
+  id: string,
+  token: string | undefined
+) => {
   const [datasetDetailsLoading, setDatasetDetailsLoading] =
     React.useState(false);
   const [datasetDetails, setDatasetDetails] =
@@ -13,18 +15,16 @@ export const useLoadDatasetDetails = (id: string) => {
   const abortControllerRef = React.useRef<AbortController>(
     new AbortController()
   );
-  const token = useStoreState((state) => state.AuthToken.value);
 
   const loadDatasetDetails = async () => {
     try {
       setDatasetDetailsLoading(true);
       const response = await axios.get(
-        `${process.env.REACT_APP_API}/datasets/${id}`,
+        `${process.env.REACT_APP_API}/datasets${token ? "" : "/public"}/${id}`,
         {
-          signal: abortControllerRef.current.signal,
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            Authorization: (token ? `Bearer ${token}` : undefined) as string,
           },
         }
       );

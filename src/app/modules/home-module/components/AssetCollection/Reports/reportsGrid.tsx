@@ -12,8 +12,7 @@ import DeleteReportDialog from "app/components/Dialogs/deleteReportDialog";
 import ReformedGridItem from "app/modules/home-module/components/AssetCollection/Reports/gridItem";
 import ReportAddnewCard from "./reportAddNewCard";
 import { useInfinityScroll } from "app/hooks/useInfinityScroll";
-import CircleLoader from "../../Loader";
-import { useAuth0 } from "@auth0/auth0-react";
+import CircleLoader from "app/modules/home-module/components/Loader";
 
 interface Props {
   sortBy: string;
@@ -218,13 +217,17 @@ export default function ReportsGrid(props: Props) {
       )}
       {props.view === "table" && (
         <HomepageTable
-          data={loadedReports.map((data) => ({
-            id: data.id,
-            name: data.name,
-            description: data.title,
-            createdDate: data.createdDate,
-            type: "report",
-          }))}
+          tableData={{
+            columns: [
+              { key: "name", label: "Name" },
+              { key: "title", label: "Description" },
+              { key: "createdDate", label: "Date" },
+            ],
+            data: loadedReports.map((data) => ({
+              ...data,
+              type: "report",
+            })),
+          }}
         />
       )}
       <Box height={80} />

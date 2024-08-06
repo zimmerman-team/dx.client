@@ -1,7 +1,8 @@
 import { EditorState } from "draft-js";
 import { ToolbarPluginsType } from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
+import { Updater } from "use-immer";
 
-export interface IRowFrame {
+interface IRowFrame {
   rowIndex: number;
   rowId: string;
   forceSelectedType?: string;
@@ -24,17 +25,13 @@ export interface IFramesArray {
     | "oneByFive";
 }
 
-export interface IFramesArrayWithItems extends IFramesArray {
-  items: (string | object)[];
-}
-
 export interface ReportCreateViewProps {
   open: boolean;
   view: "initial" | "edit" | "create" | "preview" | "ai-template";
   setReportName: React.Dispatch<React.SetStateAction<string>>;
   reportName: string;
   reportType: "basic" | "advanced" | "ai" | null;
-  setFramesArray: React.Dispatch<React.SetStateAction<IFramesArray[]>>;
+  updateFramesArray: Updater<IFramesArray[]>;
   deleteFrame: (id: string) => void;
   framesArray: IFramesArray[];
   onSave: (type: "create" | "edit") => Promise<void>;
@@ -63,7 +60,7 @@ export interface ReportCreateViewProps {
 }
 
 export interface PlaceholderProps {
-  setFramesArray: React.Dispatch<React.SetStateAction<IFramesArray[]>>;
+  updateFramesArray: Updater<IFramesArray[]>;
   framesArray: IFramesArray[];
   index?: number;
   disableAddrowStructureButton?: boolean;

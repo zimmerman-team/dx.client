@@ -107,27 +107,6 @@ export const rowFlexCss = css`
   align-items: center;
 `;
 
-export const bottomLeftEllipseCss = css`
-  left: 0;
-  bottom: 0;
-  z-index: -1;
-  position: absolute;
-`;
-
-export const bottomRightEllipseCss = css`
-  right: 0;
-  bottom: 0;
-  z-index: -1;
-  position: absolute;
-`;
-
-export const TopRightEllipseCss = css`
-  top: 0;
-  right: 0;
-  z-index: -1;
-  position: absolute;
-`;
-
 export const searchInputCss = (
   openSearch: boolean,
   width: string = "385px"

@@ -19,7 +19,6 @@ import {
   rowFlexCss,
   turnsDataCss,
 } from "app/modules/home-module/style";
-
 import AssetsCollection from "./components/AssetCollection";
 
 export default function HomeModule() {
