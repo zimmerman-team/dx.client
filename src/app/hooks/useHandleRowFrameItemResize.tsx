@@ -1,7 +1,8 @@
 import { IFramesArray } from "app/modules/report-module/views/create/data";
+import { Updater } from "use-immer";
 
 export const usehandleRowFrameItemResize = (
-  setFramesArray: React.Dispatch<React.SetStateAction<IFramesArray[]>>
+  updateFramesArray: Updater<IFramesArray[]>
 ) => {
   const handleRowFrameItemResize = (
     rowId: string,
@@ -9,37 +10,35 @@ export const usehandleRowFrameItemResize = (
     width: number,
     height: number
   ) => {
-    setFramesArray((prev) => {
-      const tempPrev = prev.map((item) => ({ ...item }));
-      const frameIndex = tempPrev.findIndex((frame) => frame.id === rowId);
+    updateFramesArray((draft) => {
+      const frameIndex = draft.findIndex((frame) => frame.id === rowId);
       if (frameIndex === -1) {
-        return prev;
+        return draft;
       }
       const contentContainer = document.getElementById("content-container");
       const percentage =
-        ((width + (tempPrev[frameIndex].structure !== "oneByOne" ? 30 : 0)) /
+        ((width + (draft[frameIndex].structure !== "oneByOne" ? 30 : 0)) /
           contentContainer!.offsetWidth) *
         100;
-      tempPrev[frameIndex].contentWidths[itemIndex] = percentage;
-      if (tempPrev[frameIndex].content.length > 1) {
+      draft[frameIndex].contentWidths[itemIndex] = percentage;
+      if (draft[frameIndex].content.length > 1) {
         let remainingWidth = 100 - percentage;
-        tempPrev[frameIndex].content.forEach((_, index) => {
+        draft[frameIndex].content.forEach((_, index) => {
           if (index < itemIndex) {
-            remainingWidth -= tempPrev[frameIndex].contentWidths[index];
+            remainingWidth -= draft[frameIndex].contentWidths[index];
           }
           if (index > itemIndex) {
-            tempPrev[frameIndex].contentWidths[index] =
-              remainingWidth / (tempPrev[frameIndex].content.length - index);
+            draft[frameIndex].contentWidths[index] =
+              remainingWidth / (draft[frameIndex].content.length - index);
           }
         });
       }
-      if (tempPrev[frameIndex].contentHeights) {
-        tempPrev[frameIndex].contentHeights[itemIndex] = height;
+      if (draft[frameIndex].contentHeights) {
+        draft[frameIndex].contentHeights[itemIndex] = height;
       } else {
-        tempPrev[frameIndex].contentHeights = [];
-        tempPrev[frameIndex].contentHeights[itemIndex] = height;
+        draft[frameIndex].contentHeights = [];
+        draft[frameIndex].contentHeights[itemIndex] = height;
       }
-      return [...tempPrev];
     });
   };
 

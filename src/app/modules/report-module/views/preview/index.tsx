@@ -238,7 +238,7 @@ export function ReportPreviewView(props: {
                 rowIndex={index}
                 framesArray={[]}
                 setPlugins={() => {}}
-                setFramesArray={() => {}}
+                updateFramesArray={() => {}}
                 key={"rowframe" + `${index}`}
                 endReportTour={() => {}}
                 onSave={async () => {}}
