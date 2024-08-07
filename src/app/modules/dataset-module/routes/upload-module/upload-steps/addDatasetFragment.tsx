@@ -71,7 +71,7 @@ export default function AddDatasetFragment(props: Props) {
       formats: ["CSV", "XSLX", "JSON", "ODS", "SQLite"],
       icon: <LocalIcon />,
       onClick: () => {},
-      pro: false,
+      upgradeRequired: false,
     },
     {
       name: "Google Drive",
@@ -87,7 +87,7 @@ export default function AddDatasetFragment(props: Props) {
       onLogout: () => {
         deleteGoogleDriveToken();
       },
-      pro: userPlan?.planData.name === "Free",
+      upgradeRequired: userPlan?.planData.name === "Free",
     },
     {
       name: "Microsoft Cloud",
@@ -103,7 +103,7 @@ export default function AddDatasetFragment(props: Props) {
       onLogout: async () => {
         await clearToken();
       },
-      pro: userPlan?.planData.name === "Free",
+      upgradeRequired: userPlan?.planData.name === "Free",
     },
     {
       name: "API Connection",
@@ -111,7 +111,7 @@ export default function AddDatasetFragment(props: Props) {
       formats: ["CSV", "XSLX", "JSON", "ODS", "SQLite"],
       icon: <ApiIcon />,
       onClick: () => {},
-      pro: false,
+      upgradeRequired: false,
     },
     {
       name: "MSSQL",
@@ -119,7 +119,7 @@ export default function AddDatasetFragment(props: Props) {
       formats: ["Coming Soon"],
       icon: <img width={30} height={33.462} src={MSSQLIcon} />,
       onClick: () => {},
-      pro: false,
+      upgradeRequired: false,
     },
     {
       name: "MYSQL",
@@ -127,7 +127,7 @@ export default function AddDatasetFragment(props: Props) {
       formats: ["Coming Soon"],
       icon: <img width={30} height={30} src={MYSQLIcon} />,
       onClick: () => {},
-      pro: false,
+      upgradeRequired: false,
     },
     {
       name: "PostgreSQL",
@@ -135,7 +135,7 @@ export default function AddDatasetFragment(props: Props) {
       formats: ["Coming Soon"],
       icon: <PostgresIcon />,
       onClick: () => {},
-      pro: false,
+      upgradeRequired: false,
     },
     {
       name: "MongoDB",
@@ -143,7 +143,7 @@ export default function AddDatasetFragment(props: Props) {
       formats: ["Coming Soon"],
       icon: <MongoDbIcon />,
       onClick: () => {},
-      pro: false,
+      upgradeRequired: false,
     },
     {
       name: "Hubspot",
@@ -151,7 +151,7 @@ export default function AddDatasetFragment(props: Props) {
       formats: ["Coming Soon"],
       icon: <HubspotIcon />,
       onClick: () => {},
-      pro: false,
+      upgradeRequired: false,
     },
   ];
 
@@ -239,7 +239,7 @@ export default function AddDatasetFragment(props: Props) {
                   canConnect={option.canConnect}
                   connected={option.connected}
                   onLogout={option.onLogout}
-                  pro={option.pro}
+                  upgradeRequired={option.upgradeRequired}
                 />
               ))}
             </div>
@@ -269,7 +269,7 @@ export default function AddDatasetFragment(props: Props) {
                   onClick={option.onClick}
                   disabled
                   setActiveOption={props.setActiveOption}
-                  pro={option.pro}
+                  upgradeRequired={option.upgradeRequired}
                 />
               ))}
             </div>

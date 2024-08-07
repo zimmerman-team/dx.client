@@ -12,6 +12,7 @@ import Features from "./components/features";
 import MFALogo from "./assets/mfa-logo";
 import TGFLogo from "./assets/tgf-logo";
 import IATILogo from "./assets/iati-logo";
+import { useHistory } from "react-router-dom";
 
 const views = [
   {
@@ -24,53 +25,6 @@ const views = [
   },
 ];
 
-const plans = [
-  {
-    name: "Free Plan",
-    yearlyPrice: "Free forever",
-    monthlyPrice: "Free forever",
-    text: "For individuals or teams just getting started in Dataxplorer",
-    current: false,
-    recommended: true,
-    buttonText: "Activate free trial",
-    discount: "",
-    key: "free",
-  },
-  {
-    name: "Pro",
-    yearlyPrice: "€720",
-    monthlyPrice: "€75",
-    text: "For individual users.",
-    current: false,
-    recommended: false,
-    buttonText: "Activate a free trial",
-    discount: "(Save 20%)",
-    key: "pro",
-  },
-  {
-    name: "Team",
-    yearlyPrice: "€576",
-    monthlyPrice: "€60",
-    text: "Scale up to 100 users and connect your team.",
-    current: false,
-    recommended: false,
-    buttonText: "Activate free trial",
-    discount: "(Save 20%)",
-    key: "team",
-  },
-  {
-    name: "Enterprise",
-    yearlyPrice: "Custom",
-    monthlyPrice: "Custom",
-    text: "For organisations looking scale into powerful data visualization, with full support and security",
-    current: false,
-    recommended: false,
-    buttonText: "Contact us",
-    discount: "",
-    key: "enterprise",
-  },
-];
-
 export default function PricingModule() {
   useTitle("DX Dataxplorer - Pricing");
 
@@ -79,6 +33,8 @@ export default function PricingModule() {
   const [subscriptionPlan, setSubscriptionPlan] = React.useState("monthly");
 
   const token = useStoreState((state) => state.AuthToken.value);
+
+  const history = useHistory();
 
   const createNewStripeCustomer = async () => {
     const customerCreationResponse = await axios.post(
@@ -98,6 +54,57 @@ export default function PricingModule() {
     const customerId = customerCreationResponse.data.data;
     return customerId;
   };
+
+  const plans = [
+    {
+      name: "Free Plan",
+      yearlyPrice: "Free forever",
+      monthlyPrice: "Free forever",
+      text: "For individuals or teams just getting started in Dataxplorer",
+      current: isAuthenticated ? true : false,
+      recommended: isAuthenticated ? false : true,
+      buttonText: "Activate",
+      discount: "",
+      key: "free",
+      available: true,
+    },
+    {
+      name: "Pro",
+      yearlyPrice: "€720",
+      monthlyPrice: "€75",
+      text: "For individual users.",
+      current: false,
+      recommended: false,
+      buttonText: "Activate a free trial",
+      discount: "(Save 20%)",
+      key: "pro",
+      available: false,
+    },
+    {
+      name: "Team",
+      yearlyPrice: "€576",
+      monthlyPrice: "€60",
+      text: "Scale up to 100 users and connect your team.",
+      current: false,
+      recommended: false,
+      buttonText: "Activate free trial",
+      discount: "(Save 20%)",
+      key: "team",
+      available: false,
+    },
+    {
+      name: "Enterprise",
+      yearlyPrice: "Custom",
+      monthlyPrice: "Custom",
+      text: "For organisations looking scale into powerful data visualization, with full support and security",
+      current: false,
+      recommended: false,
+      buttonText: "Contact us",
+      discount: "",
+      key: "enterprise",
+      available: false,
+    },
+  ];
 
   const createStripeCheckoutSession = async (
     customerId: string,
@@ -124,19 +131,17 @@ export default function PricingModule() {
   };
 
   const handlePlanButtonClick = async (key: string) => {
+    if (!isAuthenticated) {
+      return history.replace(
+        `/onboarding/login?to=${location.pathname}${location.search}`
+      );
+    }
     switch (key) {
       case plans[0].key:
-        if (isAuthenticated) {
-          const customerId = await createNewStripeCustomer();
-          if (customerId) {
-            const sessionUrl = await createStripeCheckoutSession(
-              customerId,
-              key
-            );
-            if (sessionUrl) window.location.href = sessionUrl;
-          }
-        } else {
-          // redirect to login page
+        const customerId = await createNewStripeCustomer();
+        if (customerId) {
+          const sessionUrl = await createStripeCheckoutSession(customerId, key);
+          if (sessionUrl) window.location.href = sessionUrl;
         }
         break;
       case plans[1].key:

@@ -13,7 +13,7 @@ const UploadOption = (props: {
   connected?: boolean;
   onLogout?: () => void;
   canConnect?: boolean;
-  pro: boolean;
+  upgradeRequired: boolean;
 }) => {
   const [openSettings, setOpenSettings] = React.useState(false);
 
@@ -36,7 +36,7 @@ const UploadOption = (props: {
       `}
       disabled={props.disabled}
       onClick={(e) => {
-        if (props.pro) {
+        if (props.upgradeRequired) {
           return history.push("/pricing");
         }
         props.setActiveOption(props.name);
@@ -89,7 +89,7 @@ const UploadOption = (props: {
           </p>
         </div>
       </div>
-      {props.pro ? (
+      {props.upgradeRequired ? (
         <div
           css={`
             background: #f6c445;
