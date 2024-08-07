@@ -18,57 +18,6 @@ export const container = css`
   }
 `;
 
-export const tabs = css`
-  width: 100%;
-  display: flex;
-  padding: 0 40px;
-  flex-direction: row;
-  align-items: center;
-  padding-bottom: 16px;
-  justify-content: space-between;
-
-  @media (max-width: 767px) {
-    gap: 8px;
-    padding: 0;
-    max-width: 100vw;
-    overflow-x: auto;
-    margin-left: -12px;
-    width: max-content;
-    padding: 0 12px 16px 12px;
-
-    > * {
-      @supports (-webkit-touch-callout: none) and (not (translate: none)) {
-        &:not(:last-child) {
-          margin-right: 8px;
-        }
-      }
-    }
-  }
-`;
-
-export const tab = (active: boolean) => css`
-  color: #231d2c;
-  padding: 5px 0;
-  font-size: 14px;
-  font-weight: bold;
-  white-space: nowrap;
-  font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
-  border-bottom: 2px solid ${active ? "#231d2c" : "transparent"};
-
-  &:hover {
-    cursor: pointer;
-    border-color: #231d2c;
-  }
-
-  @media (max-width: 767px) {
-    padding: 2px 10px;
-    border-radius: 16px;
-    border-bottom-style: none;
-    color: ${active ? "#fff" : "#231d2c"};
-    background: ${active ? "#231d2c" : "#dfe3e6"};
-  }
-`;
-
 export const results = css`
   width: 100%;
   height: 368px;

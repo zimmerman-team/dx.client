@@ -48,7 +48,7 @@ export const charts = {
   echartsPiechart,
 };
 
-export const CHART_DEFAULT_WIDTH = 1000;
+const CHART_DEFAULT_WIDTH = 1000;
 export const CHART_DEFAULT_HEIGHT = 738;
 
 export const defaultChartOptions = {
@@ -373,24 +373,6 @@ export interface ChartRenderedItem {
   ssr: boolean;
   mapping?: any;
 }
-
-export interface DatasetAPIModel {
-  id: string;
-  name: string;
-  description: string;
-  public: boolean;
-  category: string;
-  createdDate: Date;
-}
-
-export const emptyDatasetAPI: DatasetAPIModel = {
-  id: "",
-  name: "",
-  description: "",
-  public: false,
-  category: "",
-  createdDate: new Date(),
-};
 
 interface ChartRoutesConfigModel {
   [key: string]: {

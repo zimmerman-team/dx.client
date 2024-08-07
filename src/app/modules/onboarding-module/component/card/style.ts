@@ -24,30 +24,6 @@ export const socialloginbuttoncss = css`
   }
 `;
 
-export const actionbuttoncss = css`
-  width: 100%;
-  color: #fff;
-  padding: 6px 0;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 700;
-  line-height: 20px;
-  border-style: none;
-  border-radius: 50px;
-  background: #6061e5;
-  height: 48px;
-  margin-bottom: 24px;
-
-  :disabled {
-    opacity: 0.5;
-    pointer-events: none;
-  }
-
-  &:hover {
-    background: #a1aebd;
-  }
-`;
-
 export const termsOfServiceCss = css`
   width: 100%;
   font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;

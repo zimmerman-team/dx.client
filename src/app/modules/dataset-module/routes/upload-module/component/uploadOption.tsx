@@ -218,7 +218,7 @@ const UploadOption = (props: {
             `}
           >
             {props.formats.map((f) => (
-              <span>{f}</span>
+              <span key={f}>{f}</span>
             ))}
           </div>
         )}

@@ -65,7 +65,7 @@ const typeIcon = {
   date: <DateIcon />,
 };
 
-export const AGGREGATIONS_LABELS = {
+const AGGREGATIONS_LABELS = {
   count: "Count",
   mean: "Average",
   median: "Median",

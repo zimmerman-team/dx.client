@@ -53,6 +53,10 @@ export function ReportPreviewView(props: {
   const reportData = useStoreState(
     (state) => (state.reports.ReportGet.crudData ?? emptyReport) as ReportModel
   );
+
+  const [isReportLoading, setIsReportLoading] = React.useState<boolean | null>(
+    null
+  );
   const loadingReportData = useStoreState(
     (state) => state.reports.ReportGet.loading
   );
@@ -142,7 +146,14 @@ export function ReportPreviewView(props: {
     }
   }, [persistedReportState]);
 
-  if (loadingReportData) {
+  React.useEffect(() => {
+    if (!loadingReportData && isReportLoading === null) {
+      return;
+    }
+    setIsReportLoading(loadingReportData);
+  }, [loadingReportData]);
+
+  if (loadingReportData || isReportLoading === null) {
     return <PageLoader />;
   }
 
@@ -227,7 +238,7 @@ export function ReportPreviewView(props: {
                 rowIndex={index}
                 framesArray={[]}
                 setPlugins={() => {}}
-                setFramesArray={() => {}}
+                updateFramesArray={() => {}}
                 key={"rowframe" + `${index}`}
                 endReportTour={() => {}}
                 onSave={async () => {}}

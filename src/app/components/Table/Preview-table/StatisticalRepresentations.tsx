@@ -4,7 +4,7 @@ import isEqual from "lodash/isEqual";
 import { useDataThemesEchart } from "app/hooks/useDataThemesEchart";
 import { formatFinancialValue } from "app/utils/formatFinancialValue";
 
-export interface ChartRepresentationProps {
+interface ChartRepresentationProps {
   data: any;
   containerId: string;
 }

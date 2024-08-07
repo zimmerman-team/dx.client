@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
-import { Box, Container, Grid, IconButton } from "@material-ui/core";
-import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import { Box, Grid } from "@material-ui/core";
 import Filter from "app/modules/home-module/components/Filter";
 import ExternalDatasetCard from "app/modules/home-module/components/AssetCollection/Datasets/externalDatasetCard";
 import { useStoreState } from "app/state/store/hooks";
@@ -11,6 +10,8 @@ import { useInfinityScroll } from "app/hooks/useInfinityScroll";
 import SourceCategoryList from "../component/externalSourcesList";
 import { useSetRecoilState } from "recoil";
 import { planDialogAtom } from "app/state/recoil/atoms";
+import SaveAltIcon from "@material-ui/icons/SaveAlt";
+import ExternalSearchTable from "../component/table/externalSearchTable";
 
 export interface IExternalDataset {
   name: string;
@@ -42,7 +43,7 @@ export default function ExternalSearch(props: {
   setSources: React.Dispatch<React.SetStateAction<string[]>>;
 }) {
   const observerTarget = React.useRef(null);
-  const [tableView, setTableView] = React.useState<"grid" | "table">("grid");
+  const [view, setView] = React.useState<"grid" | "table">("grid");
 
   const [sortValue, setSortValue] = React.useState("createdDate");
   const token = useStoreState((state) => state.AuthToken.value);
@@ -90,7 +91,7 @@ export default function ExternalSearch(props: {
           props.sources.length
             ? props.sources.join(",")
             : "Kaggle,World Bank,WHO,HDX,TGF"
-        }&offset=${offset}&limit=${limit}`,
+        }&offset=${offset}&limit=${limit}&sortBy=${sortValue}`,
         {
           signal: abortControllerRef.current.signal,
           headers: {
@@ -158,8 +159,9 @@ export default function ExternalSearch(props: {
       }
     },
     500,
-    [props.searchValue, token, props.sources]
+    [props.searchValue, token, props.sources, sortValue]
   );
+
   return (
     <>
       <div
@@ -211,9 +213,9 @@ export default function ExternalSearch(props: {
           searchValue={props.searchValue as string}
           setSearchValue={props.setSearchValue}
           setSortValue={setSortValue}
-          setAssetsView={setTableView}
+          setAssetsView={setView}
           sortValue={sortValue}
-          assetsView={tableView}
+          assetsView={view}
           terminateSearch={terminateSearch}
           searchInputWidth="249px"
           openSearch={props.openSearch}
@@ -224,30 +226,48 @@ export default function ExternalSearch(props: {
 
       <Box height={32} />
       {datasets?.length ? (
-        <Grid container spacing={2}>
-          {datasets &&
-            datasets?.map((dataset, index) => (
-              <Grid
-                item
-                lg={3}
-                md={4}
-                sm={6}
-                xs={12}
-                key={`${dataset.name}-${index}`}
-              >
-                <ExternalDatasetCard
-                  description={dataset.description}
-                  name={dataset.name}
-                  publishedDate={dataset.datePublished}
-                  source={dataset.source}
-                  url={dataset.url}
-                  handleDownload={() => props.handleDownload(dataset)}
-                  dataset={dataset}
-                />
-                <Box height={16} />
-              </Grid>
-            ))}
-        </Grid>
+        <>
+          {view === "grid" && (
+            <Grid container spacing={2}>
+              {datasets &&
+                datasets?.map((dataset, index) => (
+                  <Grid
+                    item
+                    lg={3}
+                    md={4}
+                    sm={6}
+                    xs={12}
+                    key={`${dataset.name}-${index}`}
+                  >
+                    <ExternalDatasetCard
+                      description={dataset.description}
+                      name={dataset.name}
+                      publishedDate={dataset.datePublished}
+                      source={dataset.source}
+                      url={dataset.url}
+                      handleDownload={() => props.handleDownload(dataset)}
+                      dataset={dataset}
+                    />
+                    <Box height={16} />
+                  </Grid>
+                ))}
+            </Grid>
+          )}
+          {view === "table" && (
+            <ExternalSearchTable
+              onItemClick={props.handleDownload}
+              tableData={{
+                columns: [
+                  { key: "name", label: "Title" },
+                  { key: "description", label: "Description" },
+                  { key: "datePublished", label: "Date" },
+                  { key: "source", label: "Source", icon: <SaveAltIcon /> },
+                ],
+                data: datasets,
+              }}
+            />
+          )}
+        </>
       ) : !loading ? (
         <div
           css={`

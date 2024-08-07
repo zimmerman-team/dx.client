@@ -5,7 +5,7 @@ import axios from "axios";
 import React from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { useTitle } from "react-use";
-export interface IDatasetDetail {
+interface IDatasetDetail {
   name: string;
   description: string;
   public: boolean;
@@ -18,6 +18,7 @@ export interface IDatasetDetail {
   authId: string;
   id: string;
 }
+
 export default function EditMetaData() {
   useTitle("DX Dataxplorer - Edit Meta Data");
 

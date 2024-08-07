@@ -12,7 +12,7 @@ interface Props {
   handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export const useStyles = makeStyles(() =>
+const useStyles = makeStyles(() =>
   createStyles({
     modal: {
       display: "flex",
@@ -68,10 +68,9 @@ export default function DeleteReportDialog(props: Props) {
                 position: absolute;
                 right: -93px;
                 top: -16px;
-                color: "#231D2C";
               `}
             >
-              <CloseOutlined color="inherit" />
+              <CloseOutlined htmlColor="#231D2C" />
             </IconButton>
             <p
               css={`

@@ -133,6 +133,8 @@ export default function ChartModule() {
   const isSaveLoading = useStoreState(
     (state) => state.charts.ChartCreate.loading
   );
+
+  const [chartLoading, setChartLoading] = React.useState<boolean | null>(null);
   const isChartLoading = useStoreState(
     (state) => state.charts.ChartGet.loading
   );
@@ -256,6 +258,14 @@ export default function ChartModule() {
     setChartError(false);
     clearDatasetDetails();
   };
+
+  React.useEffect(() => {
+    if (!isChartLoading && chartLoading === null) {
+      return;
+    }
+    setChartLoading(isChartLoading);
+  }, [isChartLoading]);
+
   const onSave = async () => {
     const chart = {
       name: chartName,
@@ -531,12 +541,14 @@ export default function ChartModule() {
         enableAutoSaveSwitch={autoSaveState.enableAutoSaveSwitch}
         onSave={onSave}
         savedChanges={savedChanges}
+        isMappingValid={isMappingValid}
       />
       {isChartLoading || isSaveLoading ? (
         <PageLoader />
       ) : (
         <>
-          {canChartEditDelete ||
+          {chartLoading === null ||
+          canChartEditDelete ||
           !!matchPath(location.pathname, {
             path: "/chart/:page",
             exact: true,
@@ -693,6 +705,7 @@ export default function ChartModule() {
                         setIsPreviewView={setIsPreviewView}
                         containerRef={containerRef}
                         loadedChart={loadedChart}
+                        isMappingValid={isMappingValid}
                         view={view}
                         isAIAssistedChart={editChartCrudData?.isAIAssisted}
                         dataError={dataError}
@@ -712,6 +725,7 @@ export default function ChartModule() {
                         setIsPreviewView={setIsPreviewView}
                         containerRef={containerRef}
                         loadedChart={loadedChart}
+                        isMappingValid={isMappingValid}
                         view={view}
                         isAIAssistedChart={
                           editChartCrudData?.isAIAssisted ??

@@ -36,6 +36,7 @@ import useAutosave from "app/hooks/useAutoSave";
 import { useStyles } from "app/modules/report-module/components/reportSubHeaderToolbar";
 import AutoResizeInput from "app/modules/report-module/components/reportSubHeaderToolbar/autoResizeInput";
 import { isEqual } from "lodash";
+import EmbedChartDialog from "app/components/Dialogs/EmbedChartDialog";
 
 export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
   const classes = useStyles();
@@ -48,6 +49,7 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
   const { page, view } = useParams<{ page: string; view?: string }>();
   const [showDeleteDialog, setShowDeleteDialog] = React.useState(false);
   const [enableButton, setEnableButton] = React.useState<boolean>(false);
+  const [displayEmbedModal, setDisplayEmbedModal] = React.useState(false);
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
   const [hasChangesBeenMade, setHasChangesBeenMade] = React.useState(false);
 
@@ -63,12 +65,6 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
     useRecoilState(chartFromReportAtom);
 
   const mapping = useStoreState((state) => state.charts.mapping.value);
-  const { updRequiredFields, updMinValuesFields } = getRequiredFieldsAndErrors(
-    mapping,
-    props.dimensions
-  );
-  const isMappingValid =
-    updRequiredFields.length === 0 && updMinValuesFields.length === 0;
 
   const dataset = useStoreState((state) => state.charts.dataset.value);
   const appliedFilters = useStoreState(
@@ -85,6 +81,9 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
     (state) =>
       (state.charts.ChartGet.crudData ?? emptyChartAPI) as ChartAPIModel
   );
+  const editChartCrudData = useStoreState(
+    (state) => state.charts.ChartUpdate.crudData
+  ) as ChartAPIModel;
 
   const createChartLoading = useStoreState(
     (state) => state.charts.ChartCreate.loading
@@ -92,71 +91,21 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
   const editChartLoading = useStoreState(
     (state) => state.charts.ChartUpdate.loading
   );
-
   const canChartEditDelete = React.useMemo(() => {
     return isAuthenticated && loadedChart && loadedChart.owner === user?.sub;
   }, [user, isAuthenticated, loadedChart]);
 
   const setPlanDialog = useSetRecoilState(planDialogAtom);
 
+  const isMappingValid = React.useMemo(() => {
+    return loadedChart?.isMappingValid || editChartCrudData?.isMappingValid;
+  }, [loadedChart, editChartCrudData]);
+
   const [snackbarState, setSnackbarState] = React.useState<ISnackbarState>({
     open: false,
     vertical: "bottom",
     horizontal: "center",
   });
-
-  const handleDeleteModalInputChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    if (e.target.value === "DELETE") {
-      setEnableButton(true);
-    } else {
-      setEnableButton(false);
-    }
-  };
-
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleCopy = (text: string, result: boolean) => {
-    setOpenSnackbar(result);
-  };
-
-  const handleCloseSnackbar = () => {
-    setOpenSnackbar(false);
-  };
-
-  const handleEdit = () => {
-    props.setAutoSaveState({
-      isAutoSaveEnabled: true,
-      enableAutoSaveSwitch: true,
-    });
-
-    if (!loadedChart?.isMappingValid) {
-      history.push(`/chart/${page}/mapping`);
-    } else {
-      history.push(`/chart/${page}/customize`);
-    }
-  };
-  const compareStateChanges = () => {
-    if (loadedChart.id !== page) return false;
-    if (
-      !isEqual(props.name, loadedChart.name) ||
-      !isEqual(selectedChartType, loadedChart.vizType) ||
-      !isEqual(mapping, loadedChart.mapping) ||
-      !isEqual(dataset as string, loadedChart.datasetId as string) ||
-      !isEqual(props.visualOptions, loadedChart.vizOptions) ||
-      !isEqual(appliedFilters, loadedChart.appliedFilters)
-    ) {
-      return true;
-    }
-    return false;
-  };
 
   React.useEffect(() => {
     setHasChangesBeenMade(compareStateChanges);
@@ -191,12 +140,60 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
     const newValue =
       isEmpty(selectedChartType) || !isMappingValid || view === "preview";
     return newValue;
-  }, [selectedChartType, mapping, view]);
+  }, [selectedChartType, mapping, view, editChartCrudData]);
 
-  const isSavedDisabled: boolean = React.useMemo(() => {
-    const newValue = isEmpty(selectedChartType) || !isMappingValid;
-    return newValue;
-  }, [mapping, selectedChartType]);
+  const handleDeleteModalInputChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    if (e.target.value === "DELETE") {
+      setEnableButton(true);
+    } else {
+      setEnableButton(false);
+    }
+  };
+
+  const handleShare = () => {
+    setDisplayEmbedModal(true);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleCopy = (text: string, result: boolean) => {
+    setOpenSnackbar(result);
+  };
+
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
+  };
+
+  const handleEdit = () => {
+    props.setAutoSaveState({
+      isAutoSaveEnabled: true,
+      enableAutoSaveSwitch: true,
+    });
+
+    if (!props.isMappingValid) {
+      history.push(`/chart/${page}/mapping`);
+    } else {
+      history.push(`/chart/${page}/customize`);
+    }
+  };
+  const compareStateChanges = () => {
+    if (loadedChart.id !== page) return false;
+    if (
+      !isEqual(props.name, loadedChart.name) ||
+      !isEqual(selectedChartType, loadedChart.vizType) ||
+      !isEqual(mapping, loadedChart.mapping) ||
+      !isEqual(dataset as string, loadedChart.datasetId as string) ||
+      !isEqual(props.visualOptions, loadedChart.vizOptions) ||
+      !isEqual(appliedFilters, loadedChart.appliedFilters)
+    ) {
+      return true;
+    }
+    return false;
+  };
 
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
@@ -258,7 +255,8 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
   };
 
   const handlePreviewMode = () => {
-    history.push(`/chart/${page}/preview`);
+    props.onSave();
+    history.push(`/chart/${page}`);
   };
 
   const handleBackToEdit = () => {
@@ -490,7 +488,7 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
                       <IconButton
                         onClick={handlePreviewMode}
                         aria-label="preview-button"
-                        disabled={isPreviewDisabled}
+                        // disabled={isPreviewDisabled}
                         data-testid="preview-button"
                         css={`
                           :disabled {
@@ -513,12 +511,6 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
                       <IconButton
                         onClick={props.onSave}
                         aria-label="save-button"
-                        disabled={isSavedDisabled}
-                        css={`
-                          :disabled {
-                            opacity: 0.5;
-                          }
-                        `}
                       >
                         <SaveIcon htmlColor="#262c34" />
                       </IconButton>
@@ -540,7 +532,7 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
                     </Tooltip>
                   )}
                   <Tooltip title="Share">
-                    <IconButton onClick={handleClick} aria-label="share-button">
+                    <IconButton onClick={handleShare} aria-label="share-button">
                       <ShareIcon htmlColor="#262c34" />
                     </IconButton>
                   </Tooltip>
@@ -629,6 +621,15 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
         setModalDisplay={setShowDeleteDialog}
         handleInputChange={handleDeleteModalInputChange}
       />
+      {displayEmbedModal && (
+        <EmbedChartDialog
+          modalDisplay={displayEmbedModal}
+          setModalDisplay={setDisplayEmbedModal}
+          chartId={page}
+          chartName={props.name}
+          datasetId={loadedChart.datasetId!}
+        />
+      )}
     </div>
   );
 }

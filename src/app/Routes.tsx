@@ -41,6 +41,9 @@ const WhyDXModule = lazy(
 const PricingModule = lazy(
   () => import("app/modules/home-module/sub-modules/pricing")
 );
+const EmbedChartModule = lazy(
+  () => import("app/modules/embed-module/embedChart")
+);
 import {
   PaymentSuccessCallbackModule,
   PaymentCanceledCallbackModule,
@@ -274,6 +277,10 @@ export function MainRoutes() {
               <ChartModule />
             </AuthProtectedRoute>
           </RouteWithAppBar>
+
+          <Route exact path="/chart-embed/:chartId/:datasetId">
+            <EmbedChartModule />
+          </Route>
           {/* <RouteWithAppBar exact path="/dataset/:id/edit">
             <></>
           </RouteWithAppBar> */}

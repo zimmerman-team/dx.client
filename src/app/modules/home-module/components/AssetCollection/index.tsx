@@ -106,59 +106,62 @@ function AssetsCollection() {
     <Container maxWidth="lg">
       <div css={turnsDataCss}>
         {isAuthenticated ? (
-          <h2>Welcome {user?.given_name ?? user?.name?.split(" ")[0]}</h2>
+          <>
+            <h2>Welcome {user?.given_name ?? user?.name?.split(" ")[0]}</h2>
+            <div
+              css={`
+                ${rowFlexCss} gap: 8px;
+                a {
+                  padding: 8px 24px;
+                }
+              `}
+            >
+              <button
+                onClick={() =>
+                  handleClick("dataset", () =>
+                    history.push(
+                      `/dataset/new/upload${
+                        location.pathname === "/" ? "?fromHome=true" : ""
+                      }`
+                    )
+                  )
+                }
+                css={`
+                  background: #e492bd;
+                `}
+                data-cy="home-connect-dataset-button"
+              >
+                CONNECT DATASET
+              </button>
+              <button
+                onClick={() =>
+                  handleClick("chart", () => history.push("/chart/new/data"))
+                }
+                css={`
+                  background: #64afaa;
+                `}
+                data-cy="home-create-chart-button"
+              >
+                CREATE CHART
+              </button>
+              <button
+                onClick={() =>
+                  handleClick("report", () =>
+                    history.push("/report/new/initial")
+                  )
+                }
+                css={`
+                  background: #6061e5;
+                `}
+                data-cy="home-create-report-button"
+              >
+                CREATE REPORT
+              </button>
+            </div>
+          </>
         ) : (
           <div />
         )}
-
-        <div
-          css={`
-            ${rowFlexCss} gap: 8px;
-            a {
-              padding: 8px 24px;
-            }
-          `}
-        >
-          <button
-            onClick={() =>
-              handleClick("dataset", () =>
-                history.push(
-                  `/dataset/new/upload${
-                    location.pathname === "/" ? "?fromHome=true" : ""
-                  }`
-                )
-              )
-            }
-            css={`
-              background: #e492bd;
-            `}
-            data-cy="home-connect-dataset-button"
-          >
-            CONNECT DATASET
-          </button>
-          <button
-            onClick={() =>
-              handleClick("chart", () => history.push("/chart/new/data"))
-            }
-            css={`
-              background: #64afaa;
-            `}
-            data-cy="home-create-chart-button"
-          >
-            CREATE CHART
-          </button>
-          <button
-            onClick={() =>
-              handleClick("report", () => history.push("/report/new/initial"))
-            }
-            css={`
-              background: #6061e5;
-            `}
-            data-cy="home-create-report-button"
-          >
-            CREATE REPORT
-          </button>
-        </div>
       </div>
       <Box height={24} />
       <Box css={featuredAssetsCss}>

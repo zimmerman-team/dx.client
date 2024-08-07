@@ -22,6 +22,7 @@ import DeleteReportDialog from "app/components/Dialogs/deleteReportDialog";
 import { HomepageTable } from "../../Table";
 import { planDialogAtom } from "app/state/recoil/atoms";
 import { useSetRecoilState } from "recoil";
+import { getColumns } from "./data";
 
 interface Props {
   sortBy: string;
@@ -250,8 +251,6 @@ export default function AssetsGrid(props: Props) {
         return;
       }
       reloadData();
-      // if (props.searchStr !== undefined) {
-      // }
     },
     500,
     [props.searchStr]
@@ -264,8 +263,27 @@ export default function AssetsGrid(props: Props) {
           onItemClick={props.onItemClick}
           inChartBuilder={props.inChartBuilder}
           all
-          data={loadedAssets.map((data) => {
-            if (data.assetType === "chart") {
+          tableData={{
+            columns: getColumns("chart" as assetType),
+            data: loadedAssets.map((data) => {
+              if (data.assetType === "chart") {
+                return {
+                  id: data.id,
+                  name: data.name,
+                  description: data.title,
+                  createdDate: data.createdDate,
+                  type: data.assetType,
+                };
+              } else if (data.assetType === "dataset") {
+                return {
+                  id: data.id,
+                  name: data.name,
+                  description: data.description,
+                  createdDate: data.createdDate,
+                  type: data.assetType,
+                };
+              }
+
               return {
                 id: data.id,
                 name: data.name,
@@ -273,24 +291,8 @@ export default function AssetsGrid(props: Props) {
                 createdDate: data.createdDate,
                 type: data.assetType,
               };
-            } else if (data.assetType === "dataset") {
-              return {
-                id: data.id,
-                name: data.name,
-                description: data.description,
-                createdDate: data.createdDate,
-                type: data.assetType,
-              };
-            }
-
-            return {
-              id: data.id,
-              name: data.name,
-              description: data.title,
-              createdDate: data.createdDate,
-              type: data.assetType,
-            };
-          })}
+            }),
+          }}
         />
       ) : (
         <Grid container spacing={2}>
