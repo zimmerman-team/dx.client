@@ -11,6 +11,7 @@ export interface ChartBuilderPreviewThemeProps {
   setIsPreviewView: React.Dispatch<React.SetStateAction<boolean>>;
   containerRef: React.RefObject<HTMLDivElement>;
   loadedChart: ChartAPIModel;
+  isMappingValid: boolean;
   view: string | undefined;
   isAIAssistedChart: boolean;
   chartError: boolean;

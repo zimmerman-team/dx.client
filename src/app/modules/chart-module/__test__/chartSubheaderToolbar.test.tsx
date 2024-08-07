@@ -58,6 +58,7 @@ interface MockProps {
   enableAutoSaveSwitch: boolean;
   savedChanges: boolean;
   isAiSwitchActive: boolean;
+  isMappingValid: boolean;
 }
 type Params = {
   dataset: string | null;
@@ -107,6 +108,7 @@ const defaultProps = (props: Partial<MockProps> = {}): MockProps => {
     enableAutoSaveSwitch: false,
     savedChanges: false,
     isAiSwitchActive: false,
+    isMappingValid: false,
     ...props,
   };
 };
@@ -196,7 +198,7 @@ const appSetup = (params: Params, newProps: Partial<MockProps> = {}) => {
 
 //test cases
 
-test("save & preview buttons should not be clickable when mapping and chart type are empty", async () => {
+test("save & preview buttons should be clickable when mapping and chart type are empty", async () => {
   jest
     .spyOn(Router, "useParams")
     .mockReturnValue({ page: "new", view: "mapping" });
@@ -219,8 +221,8 @@ test("save & preview buttons should not be clickable when mapping and chart type
   const previewButton = screen.getByRole("button", {
     name: "preview-button",
   });
-  expect(saveButton).toBeDisabled();
-  expect(previewButton).toBeDisabled();
+  expect(saveButton).not.toBeDisabled();
+  expect(previewButton).not.toBeDisabled();
 });
 
 test("save & preview buttons should be clickable when mapping and chart type are not empty", async () => {
@@ -646,12 +648,15 @@ test("clicking edit button should reroute to edit page", async () => {
     .spyOn(Router, "useParams")
     .mockReturnValue({ page: "chartid", view: undefined });
 
-  const { app, mockStore } = appSetup({
-    dataset: "12345",
-    mapping: mockMappingValue,
-    chartType: "echartsBarchart",
-    mockActions: false,
-  });
+  const { app, mockStore } = appSetup(
+    {
+      dataset: "12345",
+      mapping: mockMappingValue,
+      chartType: "echartsBarchart",
+      mockActions: false,
+    },
+    { isMappingValid: true }
+  );
   render(app);
 
   act(() => {

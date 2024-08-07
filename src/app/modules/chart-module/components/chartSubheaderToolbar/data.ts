@@ -7,6 +7,7 @@ export interface SubheaderToolbarProps {
   isAiSwitchActive: boolean;
   visualOptions?: any;
   dimensions: any;
+  isMappingValid: boolean;
   setName: (name: string) => void;
   setHasSubHeaderTitleFocused?: (value: boolean) => void;
   setHasSubHeaderTitleBlurred?: (value: boolean) => void;
