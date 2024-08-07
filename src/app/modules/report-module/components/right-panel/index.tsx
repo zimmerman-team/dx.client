@@ -68,7 +68,7 @@ export function ReportRightPanel(props: ReportRightPanelProps) {
             setHeaderDetails={props.setHeaderDetails}
             framesArray={props.framesArray}
             reportName={props.reportName}
-            handlePersistReportState={props.handlePersistReportState}
+            onSave={props.onSave}
           />
         )}
       </div>

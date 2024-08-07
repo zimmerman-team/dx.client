@@ -21,7 +21,6 @@ import { GridColumns } from "app/modules/report-module/components/grid-columns";
 
 import {
   IRowFrameStructure,
-  isDividerOrRowFrameDraggingAtom,
   persistedReportStateAtom,
   reportContentContainerWidth,
 } from "app/state/recoil/atoms";
@@ -32,9 +31,13 @@ import useCookie from "@devhammed/use-cookie";
 import { get } from "lodash";
 import { PageLoader } from "app/modules/common/page-loader";
 import { handleDragOverScroll } from "app/utils/handleAutoScroll";
+import {
+  compareFramesArrayState,
+  compareHeaderDetailsState,
+} from "app/modules/report-module/views/edit/compareStates";
 
 function ReportEditView(props: ReportEditViewProps) {
-  useTitle("DX DataXplorer - Edit Report");
+  useTitle("DX Dataxplorer - Edit Report");
 
   const { page } = useParams<{ page: string }>();
   const token = useStoreState((state) => state.AuthToken.value);
@@ -63,6 +66,10 @@ function ReportEditView(props: ReportEditViewProps) {
     (actions) => actions.reports.ReportGet.fetch
   );
 
+  const [isReportLoading, setIsReportLoading] = React.useState<boolean | null>(
+    null
+  );
+
   const loadingReportData = useStoreState(
     (state) => state.reports.ReportGet.loading
   );
@@ -86,12 +93,10 @@ function ReportEditView(props: ReportEditViewProps) {
   );
 
   function deleteFrame(id: string) {
-    props.setFramesArray((prev) => {
-      let tempPrev = prev.map((item) => ({ ...item }));
-      const frameId = prev.findIndex((frame) => frame.id === id);
+    props.updateFramesArray((draft) => {
+      const frameId = draft.findIndex((frame) => frame.id === id);
 
-      tempPrev.splice(frameId, 1);
-      return [...tempPrev];
+      draft.splice(frameId, 1);
     });
   }
 
@@ -99,7 +104,6 @@ function ReportEditView(props: ReportEditViewProps) {
     if (token) {
       fetchReportData({ token, getId: page });
     }
-    props.setAutoSave({ isAutoSaveEnabled: true });
     return () => {
       clearReportData();
     };
@@ -140,82 +144,132 @@ function ReportEditView(props: ReportEditViewProps) {
     setOpenTour(false);
   }
 
-  useUpdateEffect(() => {
+  const framesArrayFromReportData = () => {
+    const frameArray: IFramesArray[] = reportData.rows?.map(
+      (rowFrame, index) => {
+        const contentTypes = rowFrame.items.map((item) => {
+          if (item === null) {
+            return null;
+          }
+          if (get(item, "embedUrl", null)) {
+            return "video";
+          } else if (get(item, "imageUrl", null)) {
+            return "image";
+          } else if (typeof item === "object") {
+            return "text";
+          } else {
+            return "chart";
+          }
+        });
+        const content = rowFrame.items.map((item, index) => {
+          return contentTypes[index] === "text"
+            ? EditorState.createWithContent(convertFromRaw(item as any))
+            : item;
+        });
+        const isDivider =
+          content &&
+          content.length === 1 &&
+          content[0] === ReportElementsType.DIVIDER;
+        const id = v4();
+
+        return {
+          id,
+          structure: rowFrame.structure,
+          frame: {
+            rowIndex: index,
+            rowId: id,
+            type: isDivider ? "divider" : "rowFrame",
+            forceSelectedType: rowFrame.structure ?? undefined,
+            previewItems: content,
+          },
+          content,
+          contentWidths: [...rowFrame.contentWidths?.widths] ?? [],
+          contentHeights: [...rowFrame.contentHeights?.heights] ?? [],
+          contentTypes,
+        };
+      }
+    );
+    return frameArray;
+  };
+
+  const headerDetailsFromReportData = () => {
+    return {
+      title: reportData.title,
+      showHeader: reportData.showHeader,
+      description: reportData?.subTitle
+        ? EditorState.createWithContent(
+            convertFromRaw(reportData?.subTitle as RawDraftContentState)
+          )
+        : EditorState.createEmpty(),
+      backgroundColor: reportData.backgroundColor,
+      titleColor: reportData.titleColor,
+      descriptionColor: reportData.descriptionColor,
+      dateColor: reportData.dateColor,
+    };
+  };
+
+  const hasChangesBeenMadeCheck = () => {
     if (reportData.id !== page) {
       return;
     }
-    if (JSON.parse(persistedReportState.framesArray || "[]").length < 1) {
-      props.setHasSubHeaderTitleFocused(reportData.name !== "Untitled report");
-      props.setReportName(reportData.name);
-      props.setHeaderDetails({
-        title: reportData.title,
-        showHeader: reportData.showHeader,
-        description: reportData?.subTitle
-          ? EditorState.createWithContent(
-              convertFromRaw(reportData?.subTitle as RawDraftContentState)
-            )
-          : EditorState.createEmpty(),
-        backgroundColor: reportData.backgroundColor,
-        titleColor: reportData.titleColor,
-        descriptionColor: reportData.descriptionColor,
-        dateColor: reportData.dateColor,
-      });
+    const areHeaderDetailsStatesEqual = compareHeaderDetailsState(
+      props.headerDetails,
+      headerDetailsFromReportData()
+    );
+    const areFramesArrayStatesEqual = compareFramesArrayState(
+      props.framesArray,
+      framesArrayFromReportData()
+    );
 
-      const newFrameArray: IFramesArray[] = reportData.rows?.map(
-        (rowFrame, index) => {
-          const contentTypes = rowFrame.items.map((item) => {
-            if (item === null) {
-              return null;
-            }
-            if (get(item, "embedUrl", null)) {
-              return "video";
-            } else if (get(item, "imageUrl", null)) {
-              return "image";
-            } else if (typeof item === "object") {
-              return "text";
-            } else {
-              return "chart";
-            }
-          });
-          const content = rowFrame.items.map((item, index) => {
-            return contentTypes[index] === "text"
-              ? EditorState.createWithContent(convertFromRaw(item as any))
-              : item;
-          });
-          const isDivider =
-            content &&
-            content.length === 1 &&
-            content[0] === ReportElementsType.DIVIDER;
-          const id = v4();
-
-          return {
-            id,
-            structure: rowFrame.structure,
-            frame: {
-              rowIndex: index,
-              rowId: id,
-              handlePersistReportState: props.handlePersistReportState,
-              handleRowFrameItemResize: props.handleRowFrameItemResize,
-              type: isDivider ? "divider" : "rowFrame",
-              forceSelectedType: rowFrame.structure ?? undefined,
-              previewItems: content,
-            },
-            content,
-            contentWidths: rowFrame.contentWidths?.widths ?? [],
-            contentHeights: rowFrame.contentHeights?.heights ?? [],
-            contentTypes,
-          };
-        }
-      );
-      props.setFramesArray(newFrameArray);
+    if (
+      !areFramesArrayStatesEqual ||
+      !areHeaderDetailsStatesEqual ||
+      reportData.name !== props.reportName
+    ) {
+      props.setHasChangesBeenMade(true);
     }
+  };
+
+  React.useEffect(() => {
+    hasChangesBeenMadeCheck();
+    return () => {
+      props.setHasChangesBeenMade(false);
+    };
+  }, [
+    props.framesArray,
+    props.reportName,
+    props.headerDetails,
+    props.autoSave,
+  ]);
+
+  const updateReportStatesWithReportData = async () => {
+    if (reportData.id !== page) {
+      return;
+    }
+    props.setHasSubHeaderTitleFocused(reportData.name !== "Untitled report");
+    props.setReportName(reportData.name);
+    props.setHeaderDetails(headerDetailsFromReportData());
+    props.updateFramesArray(framesArrayFromReportData());
+  };
+
+  React.useEffect(() => {
+    updateReportStatesWithReportData().finally(() => {
+      props.setAutoSave({ isAutoSaveEnabled: true });
+    });
   }, [reportData]);
+
+  React.useEffect(() => {
+    if (!loadingReportData && isReportLoading === null) {
+      return;
+    }
+    setIsReportLoading(loadingReportData);
+  }, [loadingReportData]);
 
   const canEditDeleteReport = React.useMemo(() => {
     return isAuthenticated && reportData?.owner === user?.sub;
   }, [user, isAuthenticated, reportData]);
 
-  if (loadingReportData) {
+  if (loadingReportData || isReportLoading === null) {
     return <PageLoader />;
   }
 
@@ -233,15 +287,17 @@ function ReportEditView(props: ReportEditViewProps) {
   }
 
   if (!canEditDeleteReport && !loadingReportData) {
-    <>
-      <Box height={48} />
-      <NotAuthorizedMessageModule
-        asset="report"
-        action="edit"
-        name={reportData?.name}
-      />
-      ;
-    </>;
+    return (
+      <>
+        <Box height={48} />
+        <NotAuthorizedMessageModule
+          asset="report"
+          action="edit"
+          name={reportData?.name}
+        />
+        ;
+      </>
+    );
   }
 
   return (
@@ -256,7 +312,6 @@ function ReportEditView(props: ReportEditViewProps) {
         previewMode={false}
         headerDetails={{
           ...props.headerDetails,
-          createdDate: reportData.createdDate,
         }}
         reportName={reportData.name}
         setReportName={props.setReportName}
@@ -297,9 +352,7 @@ function ReportEditView(props: ReportEditViewProps) {
                     rowId={frame.id}
                     deleteFrame={deleteFrame}
                     framesArray={props.framesArray}
-                    setFramesArray={props.setFramesArray}
-                    handlePersistReportState={props.handlePersistReportState}
-                    handleRowFrameItemResize={props.handleRowFrameItemResize}
+                    updateFramesArray={props.updateFramesArray}
                   />
                 )}
                 <Box height={8} />
@@ -316,11 +369,12 @@ function ReportEditView(props: ReportEditViewProps) {
                     <RowFrame
                       {...frame.frame}
                       framesArray={props.framesArray}
-                      setFramesArray={props.setFramesArray}
+                      updateFramesArray={props.updateFramesArray}
                       view={props.view}
                       rowContentHeights={frame.contentHeights}
                       rowContentWidths={frame.contentWidths}
                       setPlugins={props.setPlugins}
+                      onSave={props.onSave}
                       endReportTour={handleEndReportTour}
                     />
                   </div>
@@ -331,9 +385,7 @@ function ReportEditView(props: ReportEditViewProps) {
                   rowId={frame.id}
                   deleteFrame={deleteFrame}
                   framesArray={props.framesArray}
-                  setFramesArray={props.setFramesArray}
-                  handlePersistReportState={props.handlePersistReportState}
-                  handleRowFrameItemResize={props.handleRowFrameItemResize}
+                  updateFramesArray={props.updateFramesArray}
                 />
               </div>
             );
@@ -343,10 +395,8 @@ function ReportEditView(props: ReportEditViewProps) {
           <AddRowFrameButton
             framesArray={props.framesArray}
             rowStructureType={rowStructureType}
-            setFramesArray={props.setFramesArray}
+            updateFramesArray={props.updateFramesArray}
             setRowStructureType={setRowStructuretype}
-            handlePersistReportState={props.handlePersistReportState}
-            handleRowFrameItemResize={props.handleRowFrameItemResize}
             endTour={handleEndReportTour}
           />
           <Box height={45} />

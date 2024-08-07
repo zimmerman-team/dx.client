@@ -10,13 +10,19 @@ const Features = () => {
   const features = [
     {
       title: "Connect Data",
-      subtitle: "Lorem ipsum dolor sit amet,\nconsectetur adipiscing elit.",
+      subtitle:
+        "Effortlessly integrate your data from multiple sources with our comprehensive data connection features.",
       color: "#73D3CD",
       icon: BackupIcon,
       options: [
         {
           name: "Number of  datasets or data size",
-          values: ["5 / 1GB", "100 / 10GB", "1000 / 25GB", "10000 / 100GB"],
+          values: [
+            "5 datasets / 1GB",
+            "100 datasets / 10GB",
+            "1.000 datasets / 25GB",
+            "10.000 datasets / 100GB",
+          ],
         },
         {
           name: "Federated search",
@@ -42,20 +48,21 @@ const Features = () => {
     },
     {
       title: "Create charts",
-      subtitle: "Lorem ipsum dolor sit amet,\nconsectetur adipiscing elit.",
+      subtitle:
+        "Create charts for impact with ease using our comprehensive Chartbuilder..",
       color: "rgba(223, 227, 229, 0.50)",
       icon: AddChartIcon,
       options: [
         {
           name: "Number of charts",
-          values: [10, 100, 5000, 50000],
+          values: [10, 100, "5.000", "50.000"],
         },
         {
-          name: "Chartbuilder",
+          name: "Access to the Chartbuilder",
           values: [true, true, true, true],
         },
         {
-          name: "Share Chart Powered by Dx",
+          name: "Share Chart Powered by Dataxplorer",
           values: [true, true, true, true],
         },
         {
@@ -63,60 +70,38 @@ const Features = () => {
           values: [true, true, true, true],
         },
         {
-          name: "Charts Group #1",
-          values: [false, true, true, true],
-        },
-        {
-          name: "Charts Group #2",
-          values: [false, true, true, true],
-        },
-        {
-          name: "Charts Group #3",
+          name: "Advanced Charting",
           values: [false, true, true, true],
         },
         {
           name: "Custom Charting",
+          button: true,
           values: [false, true, true, true],
         },
         {
-          name: "AI agent",
-          values: [false, true, true, true],
-        },
-        {
-          name: "Interoperability",
+          name: "AI Agent",
           values: [false, true, true, true],
         },
       ],
     },
     {
       title: "Create report",
-      subtitle: "Lorem ipsum dolor sit amet,\nconsectetur adipiscing elit.",
+      subtitle:
+        "Create comprehensive reports effortlessly with our versatile report creation tools.",
       color: "#E492BD",
       icon: ReportIcon,
       options: [
         {
           name: "Number of reports",
-          values: [5, 100, 1000, 10000],
+          values: [5, 100, "1.000", "10.000"],
         },
         {
           name: "Basic Templates",
           values: [true, true, true, true],
         },
         {
-          name: "Template Group #1",
+          name: "Advanced Templates",
           values: [true, true, true, true],
-        },
-        {
-          name: "Template Group #2",
-          values: [false, true, true, true],
-        },
-        {
-          name: "Template Group #3",
-          values: [false, true, true, true],
-        },
-        {
-          name: "Custom Templates",
-          values: [false, true, true, true],
         },
         {
           name: "Media / Video support",
@@ -124,17 +109,20 @@ const Features = () => {
         },
         {
           name: "Report AI Chat",
+          button: true,
           values: [false, true, true, true],
         },
         {
           name: "Report AI Builder",
+          button: true,
           values: [false, true, true, true],
         },
       ],
     },
     {
       title: "User management",
-      subtitle: "Lorem ipsum dolor sit amet,\nconsectetur adipiscing elit.",
+      subtitle:
+        "Manage your users effectively with our robust user management.",
       color: "#6061E5",
       icon: UserShieldIcon,
       options: [
@@ -154,7 +142,8 @@ const Features = () => {
     },
     {
       title: "Support",
-      subtitle: "Lorem ipsum dolor sit amet,\nconsectetur adipiscing elit.",
+      subtitle:
+        "Get comprehensive support to ensure your success with our dedicated resources.",
       color: "#63A7E4",
       icon: SupportIcon,
       options: [
@@ -262,81 +251,103 @@ const Features = () => {
                 border-left: 4px solid ${feature.color};
               `}
             >
-              {feature.options.map((option) => (
-                <div
-                  key={option.name}
-                  css={`
-                    display: flex;
-
-                    justify-content: space-between;
-                    border-top: 1px solid rgba(223, 227, 229, 0.5);
-                    :last-of-type {
-                      border-bottom: 1px solid rgba(223, 227, 229, 0.5);
-                    }
-                  `}
-                >
-                  <p
-                    css={`
-                      margin: 0;
-                      padding: 9px 12px;
-                      line-height: normal;
-                      font-family: Inter;
-                      font-size: 14px;
-                      font-style: normal;
-                      font-weight: 500;
-                    `}
-                  >
-                    {option.name}
-                  </p>
-
+              {feature.options.map(
+                (option: { name: string; values: any[]; button?: boolean }) => (
                   <div
+                    key={option.name}
                     css={`
                       display: flex;
-                      column-gap: 24px;
+
+                      justify-content: space-between;
+                      border-top: 1px solid rgba(223, 227, 229, 0.5);
+                      :last-of-type {
+                        border-bottom: 1px solid rgba(223, 227, 229, 0.5);
+                      }
                     `}
                   >
-                    {option.values.map((value) => (
-                      <p
-                        css={`
-                          margin: 0;
-                          line-height: normal;
-                          font-family: Inter;
-                          font-size: 14px;
-                          font-style: normal;
-                          font-weight: 500;
-                          color: #252c34;
-                          /* text-align: center; */
+                    <p
+                      css={`
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+                        margin: 0;
+                        padding: 9px 12px;
+                        line-height: normal;
+                        font-family: "Inter", sans-serif;
+                        font-size: 14px;
+                        font-style: normal;
+                        font-weight: 500;
+                        button {
+                          border: none;
+                          background: none;
+                          outline: none;
+                          width: 88px;
+                          height: 17px;
+                          flex-shrink: 0;
+                          border-radius: 30px;
+                          border: 1px solid #252c34;
                           display: flex;
                           justify-content: center;
-                          background: rgba(202, 202, 202, 0.1);
-                          width: 224px;
-                          padding: 9px 0;
-                          position: relative;
-                        `}
-                      >
-                        {value === ">" || value === "<" ? (
-                          <div
-                            css={`
-                              position: absolute;
-                              width: 24px;
-                              height: 100%;
-                              top: 0;
-                              ${value === ">" ? "right" : "left"}: -24px;
-                              background: rgba(202, 202, 202, 0.1);
-                            `}
-                          />
-                        ) : value === true ? (
-                          <GoodIcon />
-                        ) : value === false ? (
-                          "-"
-                        ) : (
-                          value
-                        )}
-                      </p>
-                    ))}
+                          align-items: center;
+                          text-transform: uppercase;
+                          font-size: 10px;
+                          font-family: "GothamNarrow-Book", sans-serif;
+                        }
+                      `}
+                    >
+                      {option.name}{" "}
+                      {option.button && <button>Coming soon</button>}
+                    </p>
+
+                    <div
+                      css={`
+                        display: flex;
+                        column-gap: 24px;
+                      `}
+                    >
+                      {option.values.map((value) => (
+                        <p
+                          css={`
+                            margin: 0;
+                            line-height: normal;
+                            font-family: "Inter", sans-serif;
+                            font-size: 14px;
+                            font-style: normal;
+                            font-weight: 500;
+                            color: #252c34;
+                            /* text-align: center; */
+                            display: flex;
+                            justify-content: center;
+                            background: rgba(202, 202, 202, 0.1);
+                            width: 224px;
+                            padding: 9px 0;
+                            position: relative;
+                          `}
+                        >
+                          {value === ">" || value === "<" ? (
+                            <div
+                              css={`
+                                position: absolute;
+                                width: 24px;
+                                height: 100%;
+                                top: 0;
+                                ${value === ">" ? "right" : "left"}: -24px;
+                                background: rgba(202, 202, 202, 0.1);
+                              `}
+                            />
+                          ) : value === true ? (
+                            <GoodIcon />
+                          ) : value === false ? (
+                            "-"
+                          ) : (
+                            value
+                          )}
+                        </p>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              ))}
+                )
+              )}
             </div>
           </div>
 

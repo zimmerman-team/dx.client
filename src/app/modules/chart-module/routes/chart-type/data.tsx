@@ -80,6 +80,7 @@ export interface ChartBuilderChartTypeProps {
     value: React.SetStateAction<ChartRenderedItem | null>
   ) => void;
   setVisualOptions: (value: any) => void;
+  setVisualOptionsOnChange: (value: any) => void;
   dataTypes: any;
 }
 
@@ -93,6 +94,8 @@ export interface ChartTypeModel {
 }
 export const chartTypesFromMiddleWare = {
   barchart: "echartsBarchart",
+  multisetbarchart: "echartsMultisetBarchart",
+  stackedbarchart: "echartsStackedBarchart",
   geomap: "echartsGeomap",
   linechart: "echartsLinechart",
   sankey: "echartsSankey",
@@ -120,6 +123,28 @@ export const echartTypes = (big: boolean) => {
       preview: <BarChartPreviewImg />,
       categories: ["Correllations"],
       class: "basic",
+      ssr: false,
+      description:
+        "Bar charts present data by visually displaying and comparing categorical information or discrete values through the use of bars of varying lengths or heights.",
+    },
+    {
+      id: "echartsMultisetBarchart",
+      label: "Multi-set Bar chart",
+      icon: <BarChartIcon big={big} />,
+      preview: <BarChartPreviewImg />,
+      categories: ["Correllations", "Proportions"],
+      class: "advanced",
+      ssr: false,
+      description:
+        "Bar charts present data by visually displaying and comparing categorical information or discrete values through the use of bars of varying lengths or heights.",
+    },
+    {
+      id: "echartsStackedBarchart",
+      label: "Stacked Bar chart",
+      icon: <BarChartIcon big={big} />,
+      preview: <BarChartPreviewImg />,
+      categories: ["Correllations", "Proportions"],
+      class: "advanced",
       ssr: false,
       description:
         "Bar charts present data by visually displaying and comparing categorical information or discrete values through the use of bars of varying lengths or heights.",
@@ -347,6 +372,24 @@ export const coloredEchartTypes = () => {
       label: "Bar chart",
       icon: <ColoredBarChartIcon />,
       categories: ["Correllations"],
+      ssr: false,
+      description:
+        "It displays a categorical dimension and related amounts. Each bar represents a category, width is proportional to the quantitative dimension.",
+    },
+    {
+      id: "echartsMultisetBarchart",
+      label: "Multi-set Bar chart",
+      icon: <ColoredBarChartIcon />,
+      categories: ["Correllations", "Proportions"],
+      ssr: false,
+      description:
+        "It displays a categorical dimension and related amounts. Each bar represents a category, width is proportional to the quantitative dimension.",
+    },
+    {
+      id: "echartsStackedBarchart",
+      label: "Stacked Bar chart",
+      icon: <ColoredBarChartIcon />,
+      categories: ["Correllations", "Proportions"],
       ssr: false,
       description:
         "It displays a categorical dimension and related amounts. Each bar represents a category, width is proportional to the quantitative dimension.",

@@ -6,7 +6,7 @@ import PerfomanceCard from "app/modules/home-module/assets/targets-results.png";
 import { TabCardEllipseCss } from "app/modules/home-module/sub-modules/partners/style";
 import { ReactComponent as FullEliipse } from "app/modules/home-module/assets/full-light-ellipse.svg";
 
-export default function TabCard(props: {
+function TabCard(props: {
   src: string;
   alt: string;
   title: string;

@@ -167,9 +167,6 @@ input[type="text"] {
   background: #f1f3f5;
 }
 
-#inline-color-picker-popover {
-  right: 26px !important;
-}
 .rhcpCard {
   animation-name: shadow-pulse;
   animation-duration: 3s;

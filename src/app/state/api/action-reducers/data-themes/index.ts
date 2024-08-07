@@ -1,47 +1,11 @@
 import { APIModel } from "app/state/api";
 import { ApiCallModel } from "app/state/api/interfaces";
 
-export const DataThemeGet: ApiCallModel = {
-  ...APIModel(`${process.env.REACT_APP_API}/data-themes`),
-};
-
-export const DataThemeCreate: ApiCallModel = {
-  ...APIModel(`${process.env.REACT_APP_API}/data-themes`),
-};
-
-export const DataThemeUpdate: ApiCallModel = {
-  ...APIModel(`${process.env.REACT_APP_API}/data-themes`),
-};
-
-export const DataThemeDelete: ApiCallModel = {
-  ...APIModel(`${process.env.REACT_APP_API}/data-themes`),
-};
-
-export const DataThemeDuplicate: ApiCallModel = {
-  ...APIModel(`${process.env.REACT_APP_API}/data-themes/duplicate`),
-};
-
-export const DataThemeGetList: ApiCallModel = {
-  ...APIModel(`${process.env.REACT_APP_API}/data-themes-with-viz-count`),
-};
-
 export const DatasetGetList: ApiCallModel = {
   ...APIModel(`${process.env.REACT_APP_API}/datasets`),
 };
-export const DatasetGet: ApiCallModel = {
-  ...APIModel(`${process.env.REACT_APP_API}/datasets`),
-};
-export const ExternalDatasetGet: ApiCallModel = {
-  ...APIModel(`${process.env.REACT_APP_API}/external-sources/search`),
-};
-export const ExternalDatasetGetLimited: ApiCallModel = {
-  ...APIModel(`${process.env.REACT_APP_API}/external-sources/search-limited`),
-};
-export const ExternalDatasetDownload: ApiCallModel = {
-  ...APIModel(`${process.env.REACT_APP_API}/external-sources/download`),
-};
 
-export const DatasetCreate: ApiCallModel = {
+export const DatasetGet: ApiCallModel = {
   ...APIModel(`${process.env.REACT_APP_API}/datasets`),
 };
 

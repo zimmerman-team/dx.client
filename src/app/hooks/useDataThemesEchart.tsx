@@ -181,6 +181,207 @@ export function useDataThemesEchart() {
     return option;
   }
 
+  function echartsMultisetBarchart(
+    data: any,
+    visualOptions: any,
+    mapping: any
+  ) {
+    const {
+      marginTop,
+      marginRight,
+      marginBottom,
+      marginLeft,
+      realTimeSort,
+      barRadius,
+      barWidth,
+      barGap,
+      legend,
+      showTooltip,
+      isMonetaryValue,
+      label,
+      labelFontSize,
+      dataZoom,
+      palette,
+    } = visualOptions;
+
+    const option = {
+      color: checkLists.find((item) => item.label === palette)?.value,
+      grid: {
+        top: marginTop,
+        left: marginLeft,
+        right: marginRight,
+        bottom: marginBottom,
+        containLabel: true,
+      },
+      tooltip: {
+        trigger: showTooltip ? "item" : "none",
+        confine: true,
+        formatter: (params: any) => {
+          return `${params.name}: ${
+            isMonetaryValue
+              ? formatFinancialValue(params.value, true)
+              : params.value
+          }`;
+        },
+      },
+      legend: {
+        show: legend,
+        data: data.series.map((d: any) => d.name),
+      },
+      dataZoom: dataZoom
+        ? [
+            {
+              type: "inside",
+              start: 0,
+              end: 20,
+            },
+            {
+              start: 0,
+              end: 20,
+            },
+          ]
+        : null,
+      xAxis: [
+        {
+          type: "category",
+          axisTick: { show: false },
+          data: data.xAxisValues,
+        },
+      ],
+      yAxis: [
+        {
+          type: "value",
+        },
+      ],
+      series: data.series.map((d: any) => ({
+        name: d.name,
+        type: "bar",
+        realtimeSort: realTimeSort ?? true,
+        barGap,
+        itemStyle: {
+          borderRadius: barRadius,
+        },
+        label: {
+          show: label,
+          rotate: 90,
+          formatter: "{c}  {name|{a}}",
+          fontSize: labelFontSize,
+          rich: {
+            name: {},
+          },
+        },
+        emphasis: {
+          focus: "series",
+        },
+        data: data.xAxisValues.map((x: any) => d.values[x] || 0),
+        barWidth,
+      })),
+    };
+
+    return option;
+  }
+
+  function echartsStackedBarchart(data: any, visualOptions: any, mapping: any) {
+    const {
+      marginTop,
+      marginRight,
+      marginBottom,
+      marginLeft,
+      realTimeSort,
+      barRadius,
+      barWidth,
+      legend,
+      showTooltip,
+      isMonetaryValue,
+      label,
+      labelFontSize,
+      dataZoom,
+      palette,
+    } = visualOptions;
+
+    const option = {
+      color: checkLists.find((item) => item.label === palette)?.value,
+      grid: {
+        top: marginTop,
+        left: marginLeft,
+        right: marginRight,
+        bottom: marginBottom,
+        containLabel: true,
+      },
+      tooltip: {
+        trigger: showTooltip ? "item" : "none",
+        confine: true,
+        formatter: (params: any) => {
+          return `${params.name}: ${params.seriesName} - ${
+            isMonetaryValue
+              ? formatFinancialValue(params.value, true)
+              : params.value
+          }`;
+        },
+      },
+      legend: {
+        show: legend,
+        data: data.series.map((d: any) => d.name),
+      },
+      dataZoom: dataZoom
+        ? [
+            {
+              type: "inside",
+              start: 0,
+              end: 20,
+            },
+            {
+              start: 0,
+              end: 20,
+            },
+          ]
+        : null,
+      xAxis: [
+        {
+          type: "category",
+          axisTick: { show: false },
+          data: data.xAxisValues,
+        },
+      ],
+      yAxis: [
+        {
+          type: "value",
+        },
+      ],
+      series: data.series.map((d: any) => ({
+        name: d.name,
+        type: "bar",
+        stack: "total",
+        realtimeSort: realTimeSort ?? true,
+        itemStyle: {
+          borderRadius: barRadius,
+        },
+        label: {
+          show: label,
+          rotate: 90,
+          formatter: (params: any) => {
+            return `${
+              isMonetaryValue
+                ? formatFinancialValue(params.value, true)
+                : params.value
+            }`;
+          },
+          fontSize: labelFontSize,
+          rich: {
+            name: {},
+          },
+        },
+        emphasis: {
+          focus: "series",
+        },
+        data: data.xAxisValues.map((x: any) => d.values[x] || 0),
+        barWidth,
+      })),
+    };
+
+    return option;
+  }
+
   function echartsPiechart(data: any, visualOptions: any) {
     const {
       // artboard
@@ -679,6 +880,7 @@ export function useDataThemesEchart() {
             type: "dashed",
           },
         },
+        type: mapping.x.mappedType === "date" ? "category" : "value",
       },
       yAxis: {
         splitLine: {
@@ -686,6 +888,7 @@ export function useDataThemesEchart() {
             type: "dashed",
           },
         },
+        type: mapping.y.mappedType === "date" ? "category" : "value",
         scale: true,
         name: mapping?.y?.value?.[0] ?? "",
         nameTextStyle: {
@@ -780,12 +983,11 @@ export function useDataThemesEchart() {
         zlevel: -1,
         z: -1,
       },
-      xAxis: [
-        {
-          data: uniqBy(sortBy(data.map((d: any) => d.x)), (d: any) => d),
-        },
-      ],
+      xAxis: {
+        type: mapping.x.mappedType === "date" ? "category" : "value",
+      },
       yAxis: {
+        type: mapping.y.mappedType === "date" ? "category" : "value",
         name: mapping?.y?.value?.[0] ?? "",
         nameTextStyle: {
           align: "left",
@@ -815,7 +1017,7 @@ export function useDataThemesEchart() {
       series: [
         {
           symbolSize: symbolSize ?? 4,
-          data: data.map((d: any) => d.y),
+          data: data.map((d: any) => [d.x, d.y]),
           type: "scatter",
         },
       ],
@@ -1565,6 +1767,8 @@ export function useDataThemesEchart() {
       | "echartsCirculargraph"
       | "echartsPiechart"
       | "echartsBubblechart"
+      | "echartsMultisetBarchart"
+      | "echartsStackedBarchart"
       | "echartsScatterchart"
       | "echartsHeatmap"
       | "echartsGraphgl"
@@ -1591,6 +1795,10 @@ export function useDataThemesEchart() {
 
       const CHART_TYPE_TO_COMPONENT = {
         echartsBarchart: () => echartsBarchart(data, visualOptions, mapping),
+        echartsMultisetBarchart: () =>
+          echartsMultisetBarchart(data, visualOptions, mapping),
+        echartsStackedBarchart: () =>
+          echartsStackedBarchart(data, visualOptions, mapping),
         echartsGeomap: () => echartsGeomap(data, visualOptions),
         echartsLinechart: () => echartsLinechart(data, visualOptions, mapping),
         echartsAreatimeaxis: () =>

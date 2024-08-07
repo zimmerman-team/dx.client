@@ -7,7 +7,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
-import _ from "lodash";
+import { isValidDate } from "app/utils/isValidDate";
 
 interface IData {
   id: string;
@@ -17,10 +17,13 @@ interface IData {
   type: string;
 }
 export function HomepageTable(props: {
-  data: IData[];
   inChartBuilder?: boolean;
   onItemClick?: (v: string) => void;
   all?: boolean;
+  tableData: {
+    columns: { key: string; label: string; icon?: React.ReactNode }[];
+    data: any[];
+  };
 }) {
   const history = useHistory();
 
@@ -52,7 +55,6 @@ export function HomepageTable(props: {
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
-
             &:nth-of-type(1) {
               max-width: 50px;
             }
@@ -81,10 +83,11 @@ export function HomepageTable(props: {
         >
           <TableRow>
             <TableCell width="50px"></TableCell>
-            <TableCell width="171px">Name</TableCell>
-            {props.all && <TableCell width="55px">Type</TableCell>}
-            <TableCell width="650px">Description</TableCell>
-            <TableCell width="200px">Creation date</TableCell>
+            {props.tableData.columns.map((val) => (
+              <TableCell key={val.key} css={``}>
+                {val.label}
+              </TableCell>
+            ))}
           </TableRow>
         </TableHead>
         <TableBody
@@ -92,7 +95,7 @@ export function HomepageTable(props: {
             background: #fff;
           `}
         >
-          {props.data.map((data, index) => (
+          {props.tableData.data.map((data, index) => (
             <TableRow
               key={data.id}
               onClick={() => {
@@ -111,12 +114,26 @@ export function HomepageTable(props: {
               data-cy={`table-row-${data.type}`}
             >
               <TableCell>{index + 1}</TableCell>
-              <TableCell>{data.name}</TableCell>
-              {props.all && <TableCell>{_.capitalize(data.type)}</TableCell>}
-              <TableCell>{data.description}</TableCell>
-              <TableCell>
-                {moment(data.createdDate).format("MMMM YYYY")}
-              </TableCell>
+              {props.tableData.columns.map((val) => (
+                <TableCell key={val.key}>
+                  <p
+                    title={data[val.key] as string}
+                    css={`
+                      margin: 0;
+                      overflow: clip;
+                      max-width: 220px;
+                      white-space: nowrap;
+                      text-overflow: ellipsis;
+                      min-width: ${val.key === "id" ? "30px" : "auto"};
+                      text-align: ${val.key === "id" ? "center" : "left"};
+                    `}
+                  >
+                    {isValidDate(data[val.key])
+                      ? moment(data[val.key]).format("MMMM YYYY")
+                      : data[val.key] ?? ""}
+                  </p>
+                </TableCell>
+              ))}
             </TableRow>
           ))}
         </TableBody>

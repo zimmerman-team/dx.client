@@ -1,4 +1,4 @@
-import FinishedFragment from "app/modules/dataset-upload-module/upload-steps/finishedFragment";
+import FinishedFragment from "app/modules/dataset-module/routes/upload-module/upload-steps/finishedFragment";
 import { useChartsRawData } from "app/hooks/useChartsRawData";
 import React from "react";
 import DatasetSubHeaderToolbar from "app/modules/dataset-module/component/datasetSubHeaderToolbar";
@@ -13,7 +13,7 @@ import { useTitle } from "react-use";
 import { NotAuthorizedMessageModule } from "app/modules/common/not-authorized-message";
 
 export default function DatasetDetail() {
-  useTitle("DX DataXplorer - Dataset Detail");
+  useTitle("DX Dataxplorer - Dataset Detail");
 
   const { page } = useParams<{ page: string }>();
   const { user, isAuthenticated } = useAuth0();

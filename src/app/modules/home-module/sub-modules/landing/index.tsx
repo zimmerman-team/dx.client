@@ -10,7 +10,7 @@ import { useTitle } from "react-use";
 import { Link } from "react-router-dom";
 
 export default function LandingModule() {
-  useTitle("DX DataXplorer - Landing");
+  useTitle("DX Dataxplorer - Landing");
 
   return (
     <div
@@ -73,7 +73,7 @@ export default function LandingModule() {
 
               <p>
                 Transform your data-driven insights into engaging narratives
-                that captivate and inform your stakeholders. DataXplorer allows
+                that captivate and inform your stakeholders. Dataxplorer allows
                 you to effortlessly create interactive reports that captivate
                 and inform your stakeholders.
                 <br /> <br />
@@ -117,7 +117,7 @@ export default function LandingModule() {
               <h2>Visualize Your Impact</h2>
 
               <p>
-                Your data is a valuable resource, and DataXplorer empowers you
+                Your data is a valuable resource, and Dataxplorer empowers you
                 to make the most of it. Our AI-driven agents are at your
                 disposal, ready to generate the most pertinent charts for your
                 specific dataset.
@@ -147,7 +147,7 @@ export default function LandingModule() {
               text-align: center;
             `}
           >
-            Unlock the Power of Data with DataXplorer
+            Unlock the Power of Data with Dataxplorer
           </h2>
           <img
             src={ThePowerImage}

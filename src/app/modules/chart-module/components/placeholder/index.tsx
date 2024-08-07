@@ -45,6 +45,40 @@ export default function ChartPlaceholder(props: { loading?: boolean }) {
       ),
     },
     {
+      id: "echartsMultisetBarchart",
+      placeholder: (
+        <div
+          css={`
+            padding-right: 38px;
+            height: 100%;
+            svg {
+              width: 100%;
+              height: 100%;
+            }
+          `}
+        >
+          <BarChartPlaceholderImage />
+        </div>
+      ),
+    },
+    {
+      id: "echartsStackedBarchart",
+      placeholder: (
+        <div
+          css={`
+            padding-right: 38px;
+            height: 100%;
+            svg {
+              width: 100%;
+              height: 100%;
+            }
+          `}
+        >
+          <BarChartPlaceholderImage />
+        </div>
+      ),
+    },
+    {
       id: "echartsGeomap",
       placeholder: <GeomapPlaceholder />,
     },

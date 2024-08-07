@@ -24,7 +24,7 @@ import TourGuide from "app/components/Dialogs/TourGuide";
 import { useTitle } from "react-use";
 
 function ReportCreateView(props: Readonly<ReportCreateViewProps>) {
-  useTitle("DX DataXplorer - Create Report");
+  useTitle("DX Dataxplorer - Create Report");
 
   const { ref, width } = useResizeObserver<HTMLDivElement>();
 
@@ -44,15 +44,13 @@ function ReportCreateView(props: Readonly<ReportCreateViewProps>) {
       const rowTwo = v4();
 
       const rowFive = v4();
-      props.setFramesArray([
+      props.updateFramesArray([
         {
           id: rowOne,
           frame: {
             rowId: rowOne,
             rowIndex: 0,
             forceSelectedType: "oneByFive",
-            handlePersistReportState: props.handlePersistReportState,
-            handleRowFrameItemResize: props.handleRowFrameItemResize,
             type: "rowFrame",
           },
           content: [null, null, null, null, null],
@@ -67,8 +65,6 @@ function ReportCreateView(props: Readonly<ReportCreateViewProps>) {
             rowId: rowTwo,
             rowIndex: 1,
             forceSelectedType: "oneByOne",
-            handlePersistReportState: props.handlePersistReportState,
-            handleRowFrameItemResize: props.handleRowFrameItemResize,
             type: "rowFrame",
           },
           content: [null],
@@ -84,8 +80,6 @@ function ReportCreateView(props: Readonly<ReportCreateViewProps>) {
             rowId: rowFive,
             rowIndex: 2,
             forceSelectedType: "oneByThree",
-            handlePersistReportState: props.handlePersistReportState,
-            handleRowFrameItemResize: props.handleRowFrameItemResize,
             type: "rowFrame",
           },
           content: [null, null, null],
@@ -113,7 +107,7 @@ function ReportCreateView(props: Readonly<ReportCreateViewProps>) {
       />
       <HeaderBlock
         previewMode={false}
-        headerDetails={{ ...props.headerDetails, createdDate: new Date() }}
+        headerDetails={{ ...props.headerDetails }}
         setHeaderDetails={props.setHeaderDetails}
         setReportName={props.setReportName}
         reportName={props.reportName}
@@ -159,7 +153,7 @@ function ReportCreateView(props: Readonly<ReportCreateViewProps>) {
                 >
                   <RowFrame
                     {...frame.frame}
-                    setFramesArray={props.setFramesArray}
+                    updateFramesArray={props.updateFramesArray}
                     framesArray={props.framesArray}
                     view={props.view}
                     rowContentHeights={frame.contentHeights}
@@ -167,6 +161,7 @@ function ReportCreateView(props: Readonly<ReportCreateViewProps>) {
                     previewItems={
                       frame.frame.previewItems as (string | object)[]
                     }
+                    onSave={props.onSave}
                     setPlugins={props.setPlugins}
                     endReportTour={() => {}}
                   />
@@ -176,9 +171,7 @@ function ReportCreateView(props: Readonly<ReportCreateViewProps>) {
                   rowId={frame.id}
                   deleteFrame={props.deleteFrame}
                   framesArray={props.framesArray}
-                  setFramesArray={props.setFramesArray}
-                  handlePersistReportState={props.handlePersistReportState}
-                  handleRowFrameItemResize={props.handleRowFrameItemResize}
+                  updateFramesArray={props.updateFramesArray}
                 />
               </ItemComponent>
             );
@@ -188,10 +181,8 @@ function ReportCreateView(props: Readonly<ReportCreateViewProps>) {
             <AddRowFrameButton
               framesArray={props.framesArray}
               rowStructureType={rowStructureType}
-              setFramesArray={props.setFramesArray}
+              updateFramesArray={props.updateFramesArray}
               setRowStructureType={setRowStructuretype}
-              handlePersistReportState={props.handlePersistReportState}
-              handleRowFrameItemResize={props.handleRowFrameItemResize}
               endTour={() => {}}
             />
           }
@@ -207,22 +198,19 @@ export default ReportCreateView;
 
 export const PlaceHolder = (props: PlaceholderProps) => {
   const moveCard = React.useCallback((itemId: string) => {
-    props.setFramesArray((prev) => {
-      const tempPrev = prev.map((p) => ({ ...p }));
-      const dragIndex = tempPrev.findIndex((frame) => frame.id === itemId);
+    props.updateFramesArray((draft) => {
+      const dragIndex = draft.findIndex((frame) => frame.id === itemId);
 
       const dropIndex =
-        props.index ??
-        tempPrev.findIndex((frame) => frame.id === props.rowId) + 1;
+        props.index ?? draft.findIndex((frame) => frame.id === props.rowId) + 1;
 
       const fakeId = v4();
-      const tempItem = { ...tempPrev[dragIndex] };
-      tempPrev[dragIndex].id = fakeId;
+      const tempItem = draft[dragIndex];
+      draft[dragIndex].id = fakeId;
 
-      tempPrev.splice(dropIndex, 0, tempItem);
-      const fakeIndex = tempPrev.findIndex((frame) => frame.id === fakeId);
-      tempPrev.splice(fakeIndex, 1);
-      return [...tempPrev];
+      draft.splice(dropIndex, 0, tempItem);
+      const fakeIndex = draft.findIndex((frame) => frame.id === fakeId);
+      draft.splice(fakeIndex, 1);
     });
   }, []);
   const [{ isOver, handlerId, item: dragItem }, drop] = useDrop(() => ({
@@ -243,22 +231,18 @@ export const PlaceHolder = (props: PlaceholderProps) => {
       if (item.type === ReportElementsType.ROW) {
         moveCard(item.id);
       } else {
-        props.setFramesArray((prev) => {
-          const tempPrev = prev.map((p) => ({ ...p }));
-
+        props.updateFramesArray((draft) => {
           const tempIndex =
             props.index ??
-            tempPrev.findIndex((frame) => frame.id === props.rowId) + 1;
+            draft.findIndex((frame) => frame.id === props.rowId) + 1;
 
           const id = v4();
-          tempPrev.splice(tempIndex, 0, {
+          draft.splice(tempIndex, 0, {
             id,
             frame: {
               rowId: id,
               rowIndex: tempIndex,
 
-              handlePersistReportState: props.handlePersistReportState,
-              handleRowFrameItemResize: props.handleRowFrameItemResize,
               type: item.type,
             },
             content:
@@ -269,7 +253,6 @@ export const PlaceHolder = (props: PlaceholderProps) => {
               item.type === ReportElementsType.ROWFRAME ? [] : ["divider"],
             structure: null,
           });
-          return [...tempPrev];
         });
       }
     },

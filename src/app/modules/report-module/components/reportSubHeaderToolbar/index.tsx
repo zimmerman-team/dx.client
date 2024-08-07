@@ -29,7 +29,7 @@ import { ExportChartButton } from "app/modules/chart-module/components/chartSubh
 import { ReportSubheaderToolbarProps } from "app/modules/chart-module/components/chartSubheaderToolbar/data";
 import { ReactComponent as PlayIcon } from "app/modules/report-module/asset/play-icon.svg";
 import { styles } from "app/modules/report-module/components/reportSubHeaderToolbar/styles";
-import { ISnackbarState } from "app/modules/dataset-upload-module/upload-steps/previewFragment";
+import { ISnackbarState } from "app/modules/dataset-module/routes/upload-module/upload-steps/previewFragment";
 import StaticToolbar from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
 import AutoSaveSwitch from "app/modules/report-module/components/reportSubHeaderToolbar/autoSaveSwitch";
 import AutoResizeInput from "app/modules/report-module/components/reportSubHeaderToolbar/autoResizeInput";
@@ -63,7 +63,6 @@ export function ReportSubheaderToolbar(
   const [showDeleteDialog, setShowDeleteDialog] = React.useState(false);
   const [enableButton, setEnableButton] = React.useState<boolean>(false);
   const [inputSpanVisibiltiy, setInputSpanVisibility] = React.useState(true);
-  const setHomeTab = useRecoilState(homeDisplayAtom)[1];
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
   const [duplicatedReportId, setDuplicatedReportId] = React.useState<
     string | null
@@ -193,7 +192,6 @@ export function ReportSubheaderToolbar(
         });
       })
       .catch((error) => console.log(error));
-    setHomeTab("reports");
 
     history.replace("/");
   };

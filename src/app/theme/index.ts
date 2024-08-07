@@ -16,7 +16,7 @@ interface IProjectPalette extends Palette {
   icon: Icon;
 }
 
-export const TextStyle: FontStyle = {
+const TextStyle: FontStyle = {
   fontFamily: '"GothamNarrow-Book", "Helvetica", "Arial", sans-serif',
   fontSize: 14,
   fontWeightLight: 300,
@@ -25,7 +25,7 @@ export const TextStyle: FontStyle = {
   fontWeightBold: 700,
 };
 
-export const ProjectTextStyles = {
+const ProjectTextStyles = {
   explanation: {
     fontFamily: TextStyle.fontFamily,
     fontSize: `${0.8571428571428571}rem`,
@@ -35,7 +35,7 @@ export const ProjectTextStyles = {
   },
 };
 
-export const ProjectPalette: IProjectPalette = {
+const ProjectPalette: ProjectPalette = {
   tonalOffset: 0.2,
   background: { paper: "#fff", default: "#fafafa" },
   contrastThreshold: 3,
@@ -93,7 +93,7 @@ export const ProjectPalette: IProjectPalette = {
   },
 };
 
-export const ProjectTypography: TypographyOptions = {
+const ProjectTypography: TypographyOptions = {
   h1: {
     fontFamily: TextStyle.fontFamily,
     fontSize: `${4}rem`,

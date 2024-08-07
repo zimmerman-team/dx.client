@@ -21,7 +21,7 @@ import {
 } from "app/modules/home-module/sub-modules/partners/components/tabCard";
 import { useTitle } from "react-use";
 
-export const StyledTab = withStyles(() => ({
+const StyledTab = withStyles(() => ({
   root: {
     "&.MuiButtonBase-root": {
       "&.MuiTab-root": {
@@ -54,7 +54,7 @@ export const StyledTab = withStyles(() => ({
   },
 }))(Tab);
 
-export const StyledTabs = withStyles({
+const StyledTabs = withStyles({
   root: {
     "& .MuiTabs-scroller": {
       "& .MuiTabs-flexContainer": {
@@ -103,7 +103,7 @@ const Pagination = (props: {
   </div>
 );
 export default function PartnersModule() {
-  useTitle("DX DataXplorer - Partners");
+  useTitle("DX Dataxplorer - Partners");
 
   const [displayTab, setDisplayTab] = React.useState<number>(0);
   const handleChange = (

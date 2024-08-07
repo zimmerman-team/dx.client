@@ -1,6 +1,5 @@
 import React from "react";
 import get from "lodash/get";
-import { useCMSData } from "app/hooks/useCMSData";
 import { useStoreState } from "app/state/store/hooks";
 import { getIcon } from "app/components/Search/icons";
 import { HashLink as Link } from "react-router-hash-link";
@@ -19,7 +18,6 @@ interface SearchResultsProps {
 }
 
 export function SearchResults(props: SearchResultsProps) {
-  const cmsData = useCMSData({ returnData: true });
   const hasLoaded = useStoreState((state) => state.GlobalSearch.success);
 
   return (
@@ -78,15 +76,9 @@ export function SearchResults(props: SearchResultsProps) {
           );
         })}
         {props.results.length === 0 && !props.loading && hasLoaded && (
-          <div css={noresults}>
-            {get(cmsData, "componentsSearch.noResults", "")}
-          </div>
+          <div css={noresults}>No results found.</div>
         )}
-        {props.loading && (
-          <div css={noresults}>
-            {get(cmsData, "componentsSearch.loading", "")}
-          </div>
-        )}
+        {props.loading && <div css={noresults}>Loading...</div>}
       </div>
     </div>
   );

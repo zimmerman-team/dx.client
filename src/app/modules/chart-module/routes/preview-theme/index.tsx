@@ -15,9 +15,11 @@ import { ReactComponent as AIIcon } from "app/modules/chart-module/assets/ai-ico
 import GeomapLegend from "app/modules/chart-module/components/geomap-legend";
 import ErrorComponent from "app/modules/chart-module/components/dialog/errrorComponent";
 import { DatasetListItemAPIModel } from "app/modules/dataset-module/data";
+import { getDatasetDetailsSource } from "app/modules/chart-module/util/getDatasetDetailsSource";
+import { ChartAPIModel } from "app/modules/chart-module/data";
 
 export function ChartBuilderPreviewTheme(props: ChartBuilderPreviewThemeProps) {
-  useTitle("DX DataXplorer - Preview Chart");
+  useTitle("DX Dataxplorer - Preview Chart");
   const token = useStoreState((state) => state.AuthToken.value);
 
   const domRef = React.useRef<HTMLDivElement>(null);
@@ -33,6 +35,9 @@ export function ChartBuilderPreviewTheme(props: ChartBuilderPreviewThemeProps) {
   const selectedChartType = useStoreState(
     (state) => state.charts.chartType.value
   );
+  const editChartCrudData = useStoreState(
+    (state) => state.charts.ChartUpdate.crudData
+  ) as ChartAPIModel;
 
   const loadDataset = useStoreActions(
     (actions) => actions.dataThemes.DatasetGet.fetch
@@ -40,6 +45,10 @@ export function ChartBuilderPreviewTheme(props: ChartBuilderPreviewThemeProps) {
   const datasetDetails = useStoreState(
     (state) =>
       (state.dataThemes.DatasetGet.crudData ?? {}) as DatasetListItemAPIModel
+  );
+  const { sourceUrl, filename } = getDatasetDetailsSource(
+    datasetDetails,
+    undefined
   );
   React.useEffect(() => {
     if (token) {
@@ -170,10 +179,16 @@ export function ChartBuilderPreviewTheme(props: ChartBuilderPreviewThemeProps) {
     );
   }
 
+  const isMappingValid = React.useMemo(() => {
+    return (
+      editChartCrudData?.isMappingValid && props.loadedChart?.isMappingValid
+    );
+  }, [props.loadedChart?.isMappingValid, editChartCrudData?.isMappingValid]);
+
   return (
     <div css={commonStyles.container}>
-      {!props.loadedChart?.isMappingValid && props.view === undefined ? (
-        <WarningDialog isMappingValid={props.loadedChart?.isMappingValid} />
+      {!props.isMappingValid ? (
+        <WarningDialog isMappingValid={props.isMappingValid} />
       ) : (
         <>
           <div
@@ -281,13 +296,8 @@ export function ChartBuilderPreviewTheme(props: ChartBuilderPreviewThemeProps) {
                   `}
                 >
                   Source:{" "}
-                  <a
-                    href={datasetDetails.sourceUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {datasetDetails.source} - Data file:{" "}
-                    {datasetDetails.sourceUrl}
+                  <a href={sourceUrl} target="_blank" rel="noopener noreferrer">
+                    {datasetDetails.source} - Data file: {filename}
                   </a>
                 </p>
                 {selectedChartType === "echartsGeomap" &&

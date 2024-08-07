@@ -1,6 +1,5 @@
 import { css } from "styled-components/macro";
 import styled from "styled-components/macro";
-
 import Ellipses from "app/modules/home-module/assets/ellipses.svg";
 import Ellipses2 from "app/modules/home-module/assets/ellipses-2.svg";
 
@@ -21,8 +20,8 @@ export const empowercss = (view: string) => css`
   h1 {
     margin-top: 0;
     color: #231d2c;
-    font-size: 40px;
-    line-height: 48px;
+    font-size: 48px;
+    line-height: 57.6px;
     white-space: pre-line;
     text-align: center;
     margin-bottom: ${view === "landing" ? "14px" : "26px"};
@@ -64,33 +63,6 @@ export const empowercss = (view: string) => css`
       }
     }
   }
-`;
-
-export const TopRightEllipseCss = css`
-  top: -48px;
-  right: 0;
-  z-index: 1;
-  position: absolute;
-`;
-
-export const BottomRightEllipseCss = css`
-  bottom: 0%;
-  right: 0;
-  /* z-index: 1; */
-  position: absolute;
-`;
-
-export const BottomLeftEllipseCss = css`
-  bottom: 0%;
-  left: 0;
-  position: absolute;
-`;
-
-export const SmallEllipseCss = css`
-  top: 218.2px;
-  right: 10%;
-  z-index: 0;
-  position: absolute;
 `;
 
 export const TabCardEllipseCss = css`

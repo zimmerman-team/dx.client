@@ -7,7 +7,7 @@ import axios from "axios";
 import { useCookie, useTitle } from "react-use";
 
 function AuthCallbackModule() {
-  useTitle("DX DataXplorer - Auth Callback");
+  useTitle("DX Dataxplorer - Auth Callback");
 
   const history = useHistory();
   const { error, isAuthenticated, getAccessTokenSilently } = useAuth0();

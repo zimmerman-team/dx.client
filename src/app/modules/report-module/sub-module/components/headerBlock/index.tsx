@@ -28,7 +28,6 @@ interface Props {
     title: string;
     showHeader: boolean;
     description: EditorState;
-    createdDate: Date;
     backgroundColor: string;
     titleColor: string;
     descriptionColor: string;

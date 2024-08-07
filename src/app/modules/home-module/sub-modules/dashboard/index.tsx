@@ -4,7 +4,7 @@ import AssetsCollection from "app/modules/home-module/components/AssetCollection
 import SmallFooter from "app/modules/home-module/components/Footer/smallFooter";
 
 function DashboardModule() {
-  useTitle("DX DataXplorer - Dashboard");
+  useTitle("DX Dataxplorer - Dashboard");
 
   return (
     <div

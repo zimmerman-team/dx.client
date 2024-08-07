@@ -31,6 +31,7 @@ interface MockProps {
   setChartFromAPI: jest.Mock<any, any, any>;
   dataTypes: any[];
   setVisualOptions: jest.Mock<any, any, any>;
+  setVisualOptionsOnChange: jest.Mock<any, any, any>;
 }
 
 jest.mock("react-router-dom", () => ({
@@ -60,6 +61,7 @@ const defaultProps = (props: Partial<MockProps> = {}): MockProps => {
     loadDataset: jest.fn(),
     setChartFromAPI: jest.fn(),
     setVisualOptions: jest.fn(),
+    setVisualOptionsOnChange: jest.fn(),
     dataTypes: [],
     ...props,
   };

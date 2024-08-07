@@ -6,7 +6,8 @@ function useAutosave(
   callback: () => void,
   delay: number,
   autoSave: boolean,
-  deps: (IFramesArray[] | string | IHeaderDetails)[]
+  haschangesBeenMade: boolean,
+  deps: any
 ) {
   const savedCallback = React.useRef<() => void>(); // to save the current "fresh" callback
 
@@ -22,13 +23,13 @@ function useAutosave(
       savedCallback.current?.();
     }
 
-    if (autoSave) {
+    if (autoSave && haschangesBeenMade) {
       // run the interval
       let timeout = setTimeout(runCallback, delay);
       // clean up on unmount or dependency change
       return () => clearTimeout(timeout);
     }
-  }, [autoSave, ...deps]);
+  }, [autoSave, haschangesBeenMade, ...deps]);
 }
 
 export default useAutosave;

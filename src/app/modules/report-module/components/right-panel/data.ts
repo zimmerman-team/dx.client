@@ -20,5 +20,5 @@ export interface ReportRightPanelProps {
   setHeaderDetails: React.Dispatch<React.SetStateAction<IHeaderDetails>>;
   framesArray: IFramesArray[];
   reportName: string;
-  handlePersistReportState: () => void;
+  onSave: (type: "create" | "edit") => Promise<void>;
 }

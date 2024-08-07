@@ -38,7 +38,10 @@ export function ReportChartWrapper(props: Props) {
     (actions) => actions.charts.ChartGetInReport.clear
   );
   const [datasetId, setDatasetId] = React.useState<string | null>(null);
-  const { datasetDetails } = useLoadDatasetDetails(datasetId!);
+  const { datasetDetails } = useLoadDatasetDetails(
+    datasetId!,
+    token ?? undefined
+  );
 
   const [_rawViz, setRawViz] = React.useState<any>(null);
   const {
@@ -51,7 +54,7 @@ export function ReportChartWrapper(props: Props) {
     setChartErrorMessage,
     setVisualOptions,
     setNotFound,
-  } = useRenderChartFromAPI(props.id);
+  } = useRenderChartFromAPI(token, props.id);
 
   const renderedChart = React.useMemo(() => {
     return chartFromAPI
@@ -90,7 +93,6 @@ export function ReportChartWrapper(props: Props) {
     }
     return () => {
       clearChart();
-      console.log("unmounting --  clearing chart", loadedChart);
     };
   }, [props.id, token]);
 
@@ -242,8 +244,7 @@ export function ReportChartWrapper(props: Props) {
         inChartWrapper={true}
         chartPreviewInReport={props.chartPreviewInReport}
         mapping={chartFromAPI?.mapping}
-        source={datasetDetails?.source}
-        sourceUrl={datasetDetails?.sourceUrl}
+        datasetDetails={datasetDetails}
       />
     </div>
   );

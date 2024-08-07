@@ -2,7 +2,6 @@
 import React from "react";
 import isEmpty from "lodash/isEmpty";
 import useTitle from "react-use/lib/useTitle";
-import { useAuth0 } from "@auth0/auth0-react";
 import { useStoreState } from "app/state/store/hooks";
 /* project */
 import { CommonChart } from "app/modules/chart-module/components/common-chart";
@@ -13,8 +12,6 @@ import {
   ChartBuilderMappingProps,
 } from "app/modules/chart-module/routes/mapping/data";
 import ChartPlaceholder from "app/modules/chart-module/components/placeholder";
-import { ChartAPIModel, emptyChartAPI } from "app/modules/chart-module/data";
-import { NotAuthorizedMessageModule } from "app/modules/common/not-authorized-message";
 import { ReactComponent as AIIcon } from "app/modules/chart-module/assets/ai-icon.svg";
 import { useRecoilState } from "recoil";
 import { chartFromReportAtom } from "app/state/recoil/atoms";
@@ -22,14 +19,12 @@ import { useLocation, useParams } from "react-router-dom";
 import MappingErrorComponent from "app/modules/chart-module/routes/mapping/error";
 
 function ChartBuilderMapping(props: Readonly<ChartBuilderMappingProps>) {
-  useTitle("DX DataXplorer - Mapping");
-  const { isAuthenticated, user } = useAuth0();
+  useTitle("DX Dataxplorer - Mapping");
   const { page, view } = useParams<{ page: string; view?: string }>();
 
   const location = useLocation();
 
   const mapping = useStoreState((state) => state.charts.mapping.value);
-  const chartType = useStoreState((state) => state.charts.chartType.value);
 
   const [requiredFields, setRequiredFields] = React.useState<
     { id: string; name: string }[]
@@ -38,16 +33,13 @@ function ChartBuilderMapping(props: Readonly<ChartBuilderMappingProps>) {
     { id: string; name: string; minValues: number }[]
   >([]);
 
-  const loadedChart = useStoreState(
-    (state) =>
-      (state.charts.ChartGet.crudData ?? emptyChartAPI) as ChartAPIModel
-  );
   const [chartFromReport, setChartFromReport] =
     useRecoilState(chartFromReportAtom);
   // access query parameters
   const queryParams = new URLSearchParams(location.search);
   const paramValue = queryParams.get("fromreport");
   const reportPage = queryParams.get("page") as string;
+
   React.useEffect(() => {
     const { updRequiredFields, updMinValuesFields } =
       getRequiredFieldsAndErrors(mapping, props.dimensions);
@@ -56,6 +48,7 @@ function ChartBuilderMapping(props: Readonly<ChartBuilderMappingProps>) {
 
     setMinValuesFields(updMinValuesFields);
   }, [mapping, props.dimensions]);
+
   React.useEffect(() => {
     if (paramValue === "true") {
       setChartFromReport((prev) => ({
@@ -68,18 +61,6 @@ function ChartBuilderMapping(props: Readonly<ChartBuilderMappingProps>) {
     }
   }, []);
 
-  const canChartEditDelete = React.useMemo(() => {
-    return isAuthenticated && loadedChart && loadedChart.owner === user?.sub;
-  }, [user, isAuthenticated, loadedChart]);
-
-  if (!canChartEditDelete) {
-    return (
-      <>
-        <div css="width: 100%; height: 100px;" />
-        <NotAuthorizedMessageModule asset="chart" action="edit" />
-      </>
-    );
-  }
   if (props.dataError || props.chartError) {
     return (
       <>

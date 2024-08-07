@@ -1,12 +1,13 @@
 import { ChartRenderedItem } from "app/modules/chart-module/data";
-import { useStoreState } from "app/state/store/hooks";
 import axios from "axios";
-import { isEmpty, isEqual } from "lodash";
+import isEmpty from "lodash/isEmpty";
 import React from "react";
 
-export const useRenderChartFromAPI = (chartId?: string) => {
+export const useRenderChartFromAPI = (
+  token: string | undefined,
+  chartId?: string
+) => {
   const extraLoader = document.getElementById("extra-loader");
-  const token = useStoreState((state) => state.AuthToken.value);
 
   const body = {};
   const [loading, setLoading] = React.useState(false);
@@ -28,7 +29,7 @@ export const useRenderChartFromAPI = (chartId?: string) => {
     await axios
       .post(
         `${process.env.REACT_APP_API}/chart/${id}/render${
-          token === "" ? "/public" : ""
+          token ? "" : "/public"
         }`,
         body,
         {
