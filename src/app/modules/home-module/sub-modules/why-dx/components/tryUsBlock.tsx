@@ -21,6 +21,14 @@ export default function TryUsBlock() {
           margin-bottom: 34px;
           margin-top: 0;
           color: #231d2c;
+          @media (max-width: 1200px) {
+            font-size: 36px;
+            line-height: normal;
+          }
+          @media (max-width: 600px) {
+            font-size: 24px;
+            line-height: normal;
+          }
         `}
       >
         Best decisions are based on data
@@ -36,29 +44,50 @@ export default function TryUsBlock() {
           align-items: center;
           height: 215px;
           width: 100%;
-        `}
-      >
-        <div>
-          <p
-            css={`
+          p {
+            &:nth-of-type(1) {
               color: #ffffff;
               font-size: 40px;
               line-height: 48px;
               font-family: "GothamNarrow-Bold", sans-serif;
               margin: 0;
-            `}
-          >
-            Try Dataxplorer for free
-          </p>{" "}
-          <p
-            css={`
+            }
+            &:nth-of-type(2) {
               font-size: 24px;
               color: #f4f4f4;
               font-family: "GothamNarrow-Bold", sans-serif;
-            `}
-          >
-            Dataxplorer turns data into impact 
-          </p>
+            }
+          }
+          @media (max-width: 900px) {
+            padding: 58px 43px 45px 45px;
+          }
+          @media (max-width: 774px) {
+            padding: 32px 32px;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 20px;
+            height: 296px;
+
+            p {
+              margin: 0;
+              &:nth-of-type(1) {
+                font-size: 31px;
+                font-family: "GothamNarrow-Bold", sans-serif;
+                line-height: normal;
+              }
+              &:nth-of-type(2) {
+                font-size: 18px;
+                font-family: "GothamNarrow-Book", sans-serif;
+                line-height: normal;
+                margin-top: 8px;
+              }
+            }
+          }
+        `}
+      >
+        <div>
+          <p>Try Dataxplorer for free</p>{" "}
+          <p>Dataxplorer turns data into impact </p>
         </div>
         {isAuthenticated && (
           <div
@@ -67,6 +96,9 @@ export default function TryUsBlock() {
               flex-direction: column;
               gap: 42px;
               align-items: center;
+              @media (max-width: 774px) {
+                gap: 22px;
+              }
               button,
               a {
                 outline: none;
@@ -78,6 +110,7 @@ export default function TryUsBlock() {
                 font-size: 14px;
                 font-family: "Inter", sans-serif;
                 border-radius: 30px;
+                white-space: nowrap;
                 text-transform: uppercase;
                 cursor: pointer;
                 :hover {
@@ -127,6 +160,9 @@ export default function TryUsBlock() {
               flex-direction: column;
               gap: 42px;
               align-items: center;
+              @media (max-width: 774px) {
+                gap: 22px;
+              }
               button,
               a {
                 padding: 9px 18px;
@@ -141,6 +177,7 @@ export default function TryUsBlock() {
                 text-transform: uppercase;
                 text-decoration: none;
                 display: flex;
+                white-space: nowrap;
                 align-items: center;
                 justify-content: center;
                 gap: 10px;

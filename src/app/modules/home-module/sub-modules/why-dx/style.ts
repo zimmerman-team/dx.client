@@ -24,11 +24,103 @@ export const benefitscss = css`
   p {
     font-size: 20px;
     line-height: 24px;
-    /* width: 90%; */
     font-family: "GothamNarrow-Medium", sans-serif;
     margin-top: 14px;
   }
 `;
+
+export const keyfeaturescss = {
+  container: css`
+    position: relative;
+    z-index: 1;
+    padding-top: 114px;
+
+    svg {
+      @media (max-width: 1200px) {
+        flex-direction: column;
+        width: 100%;
+        height: 100%;
+        margin: unset;
+      }
+    }
+    h3 {
+      font-size: 48px;
+      line-height: 43px;
+      text-align: center;
+      color: #000000;
+      margin-top: 0;
+      margin-bottom: 83px;
+      font-family: "GothamNarrow-Bold", sans-serif;
+      @media (max-width: 1200px) {
+        font-size: 36px;
+        line-height: normal;
+      }
+      @media (max-width: 600px) {
+        font-size: 24px;
+        line-height: normal;
+        margin-bottom: 48px;
+      }
+    }
+    p:nth-of-type(1) {
+      font-size: 36px;
+      line-height: 20px;
+      font-weight: 350;
+      font-family: "GothamNarrow-Medium", sans-serif;
+      margin-bottom: 25px;
+      margin-top: 0;
+      color: #231d2c;
+      @media (max-width: 600px) {
+        font-size: 24px;
+        line-height: normal;
+        text-align: center;
+      }
+    }
+    p:nth-of-type(2) {
+      font-family: "GothamNarrow-Medium", sans-serif;
+      font-weight: 350;
+      line-height: 30px;
+      letter-spacing: 0.5px;
+      font-size: 20px;
+      color: #231d2c;
+      @media (max-width: 600px) {
+        font-size: 14px;
+        line-height: normal;
+        text-align: center;
+      }
+    }
+    @media (min-width: 750px) {
+      @media (max-width: 1024px) {
+        padding-top: 40px;
+      }
+    }
+    @media (max-width: 600px) {
+      padding-top: 56px;
+    }
+  `,
+  flexContainer: css``,
+  text: css`
+    @media (min-width: 1111px) {
+      @media (max-width: 1279px) {
+        width: 91%;
+      }
+    }
+    @media (max-width: 1110px) {
+      width: 75%;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      margin: auto;
+    }
+    @media (max-width: 600px) {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+  `,
+};
 
 export const firstColcss = css`
   display: grid;

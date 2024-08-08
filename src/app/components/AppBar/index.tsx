@@ -1,56 +1,207 @@
 import React from "react";
-import get from "lodash/get";
 import Grid from "@material-ui/core/Grid";
 import { useAuth0 } from "@auth0/auth0-react";
 import Popover from "@material-ui/core/Popover";
 import Toolbar from "@material-ui/core/Toolbar";
 import MUIAppBar from "@material-ui/core/AppBar";
 import Container from "@material-ui/core/Container";
-import IconButton from "@material-ui/core/IconButton";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
-import IconChevronLeft from "@material-ui/icons/ChevronLeft";
-import { MobileAppbarSearch } from "app/components/Mobile/AppBarSearch";
+import CloseIcon from "@material-ui/icons/CloseOutlined";
 import { NavLink, useLocation, useHistory, Link } from "react-router-dom";
 import { headercss, logocss, navLinkcss } from "app/components/AppBar/style";
 import { isChartAIAgentActive } from "app/state/recoil/atoms";
 import { useRecoilState } from "recoil";
+import MenuIcon from "@material-ui/icons/Menu";
 
-const TextHeader = (label: string) => (
-  <h2
-    css={`
-      font-size: 18px;
-      font-weight: bold;
-      font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
-    `}
-  >
-    {label}
-  </h2>
-);
+const NavList = (props: {
+  navLocation: string;
+  setIsNavExpanded?: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
+  const list = [
+    { name: "Explore", path: "/", cy: "nav-explore", class: "" },
+    {
+      name: "Why Dataxplorer",
+      path: "/why-dataxplorer",
+      cy: "nav-why",
+      class: "why-dataxplorer",
+    },
+    {
+      name: "About",
+      path: "/about",
+      cy: "nav-about",
+    },
+    {
+      name: "Partners",
+      path: "/partners",
+      cy: "nav-partners",
+      class: "partners",
+    },
+    { name: "Pricing", path: "/pricing", cy: "nav-pricing", class: "pricing" },
+    { name: "Contact", path: "/contact", cy: "nav-contact", class: "contact" },
+  ];
+  const handleNavigation = () => {
+    props.setIsNavExpanded?.(false);
+  };
+  return (
+    <>
+      {list.map((item) => (
+        <div
+          key={item.cy}
+          css={navLinkcss(item.class ?? item.path, props.navLocation)}
+          onClick={handleNavigation}
+        >
+          <NavLink to={item.path} data-cy={item.cy}>
+            <b>{item.name}</b>
+          </NavLink>
+        </div>
+      ))}
+    </>
+  );
+};
 
-function MobileHeader() {
+function MobileHeader(props: { navLocation: string }) {
   const history = useHistory();
-
+  const { user, isAuthenticated } = useAuth0();
+  const [isNavExpanded, setIsNavExpanded] = React.useState(false);
+  const handleNavExpand = () => {
+    setIsNavExpanded(!isNavExpanded);
+  };
   return (
     <React.Fragment>
-      <IconButton
-        onClick={() => history.goBack()}
+      <div
         css={`
-          padding-left: 0;
+          height: ${isNavExpanded ? "100vh" : "66px"};
+          overflow: ${isNavExpanded ? "auto" : "hidden"};
+          padding: 0px 16px 16px 16px;
+          width: 100%;
+          background: ${isNavExpanded ? "#F2F7FD" : "transparent"};
+          transition: all cubic-bezier(0.4, 0, 0.2, 1) 0.3s;
+          position: fixed;
+          top: 0;
+          left: 0;
+          z-index: 100;
         `}
       >
-        <IconChevronLeft htmlColor="#fff" />
-      </IconButton>
-      <MobileAppbarSearch />
+        <div
+          css={`
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 66px;
+          `}
+        >
+          <div
+            css={`
+              display: flex;
+              gap: 5px;
+              align-items: center;
+              height: 100%;
+              width: 100%;
+            `}
+          >
+            <button
+              onClick={handleNavExpand}
+              css={`
+                border: none;
+                outline: none;
+                background: transparent;
+                margin-top: 8px;
+              `}
+            >
+              {isNavExpanded ? (
+                <CloseIcon htmlColor="#1C1B1F" />
+              ) : (
+                <MenuIcon htmlColor="#1C1B1F" />
+              )}
+            </button>
+            <NavLink to="/" css={logocss}>
+              <img src="/logo.svg" alt="logo" />
+            </NavLink>
+          </div>
+          <div>
+            {isAuthenticated ? (
+              <button
+                onClick={() => history.push("/user-management/profile")}
+                css={`
+                  min-width: 33px;
+                  height: 33px;
+                  display: flex;
+                  margin-left: 16px;
+                  border-radius: 50%;
+                  align-items: center;
+                  background: #b5b5db;
+                  justify-content: center;
+                  border: none;
+                  font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
+                  font-size: 14px;
+                `}
+              >
+                {user?.given_name?.slice(0, 1) ??
+                  user?.name?.split(" ")[0]?.slice(0, 1)}
+                {user?.family_name?.slice(0, 1) ??
+                  user?.name?.split(" ")[1]?.slice(0, 1)}
+              </button>
+            ) : (
+              <Link
+                to="/onboarding/login"
+                css={`
+                  border-radius: 24.48px;
+                  background: #dadaf8;
+                  display: flex;
+                  width: 110px;
+                  height: 34px;
+                  padding: 9.792px 35.496px;
+                  justify-content: center;
+                  align-items: center;
+                  gap: 8.16px;
+                  color: var(--Primary-Dark, #231d2c);
+                  font-family: "Inter", sans-serif;
+                  font-size: 11.424px;
+                  font-weight: 500;
+                  text-transform: uppercase;
+                  text-decoration: none;
+                  white-space: nowrap;
+                `}
+              >
+                Log in
+              </Link>
+            )}
+          </div>
+        </div>
+        <div
+          css={`
+            padding: 16px 32px;
+            border-bottom: 1px solid #e4e4e4;
+            border-top: 1px solid #e4e4e4;
+            display: flex;
+            flex-direction: column;
+            opacity: ${isNavExpanded ? 1 : 0};
+            background: #f2f7fd;
+            transition: all cubic-bezier(0.4, 0, 0.2, 1) 0.3s;
+            gap: 32px;
+            a {
+              color: #000000;
+              font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
+              font-size: 24px;
+              text-decoration: none;
+            }
+          `}
+        >
+          <NavList
+            navLocation={props.navLocation}
+            setIsNavExpanded={setIsNavExpanded}
+          />
+        </div>
+      </div>
     </React.Fragment>
   );
 }
 
 export function AppBar() {
   const location = useLocation();
-  const isMobile = useMediaQuery("(max-width: 767px)");
+  const isMobile = useMediaQuery("(max-width: 846px)");
   const [openSearch, setOpenSearch] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-
   const navLocation = location.pathname.split("/").join("");
 
   function handleClick(event: React.MouseEvent<HTMLElement>) {
@@ -59,22 +210,6 @@ export function AppBar() {
 
   function handleClose() {
     setAnchorEl(null);
-  }
-
-  function getMobilePageHeader() {
-    switch (location.pathname) {
-      case "/about":
-        return "About";
-      case "/datasets":
-        return (
-          <React.Fragment>
-            {TextHeader("Explore")}
-            <MobileAppbarSearch />
-          </React.Fragment>
-        );
-      default:
-        return <MobileHeader />;
-    }
   }
 
   React.useEffect(() => {
@@ -86,118 +221,89 @@ export function AppBar() {
     }
   }, [location.pathname]);
 
-  if (location.pathname === "/" && isMobile) {
-    return <React.Fragment />;
-  }
-
   return (
-    <MUIAppBar
-      elevation={0}
-      position="fixed"
-      color={location.pathname !== "/" ? "secondary" : "transparent"}
-      css={`
-        display: flex;
-        background-color: #f2f7fd;
-      `}
-    >
-      <Toolbar
-        disableGutters
-        variant="dense"
-        css={`
-          gap: 32px;
-          width: 100%;
-          height: 48px;
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-          justify-content: space-between;
-          @media (min-width: 768px) {
-            #search-container {
-              padding: 3px 20px;
+    <>
+      {isMobile && <MobileHeader navLocation={navLocation} />}
+      {!isMobile && (
+        <MUIAppBar
+          elevation={0}
+          position="fixed"
+          color={location.pathname !== "/" ? "secondary" : "transparent"}
+          css={`
+            display: flex;
+            background-color: #f2f7fd;
+          `}
+        >
+          <Toolbar
+            disableGutters
+            variant="dense"
+            css={`
+              gap: 32px;
+              width: 100%;
+              height: 48px;
+              display: flex;
+              flex-direction: row;
               align-items: center;
-            }
+              justify-content: space-between;
+              @media (min-width: 768px) {
+                #search-container {
+                  padding: 3px 20px;
+                  align-items: center;
+                }
 
-            #search-results-container {
-              top: 40px;
-              box-shadow: 0px 0px 10px rgba(152, 161, 170, 0.6);
+                #search-results-container {
+                  top: 40px;
+                  box-shadow: 0px 0px 10px rgba(152, 161, 170, 0.6);
+                }
+              }
+            `}
+          >
+            {
+              <Container maxWidth="lg">
+                <Grid
+                  container
+                  css={headercss}
+                  alignContent="space-between"
+                  alignItems="center"
+                >
+                  <Grid
+                    item
+                    lg={3}
+                    md={2}
+                    sm={2}
+                    css={`
+                      gap: 180px;
+                      display: flex;
+                      align-items: center;
+                    `}
+                  >
+                    <NavLink to="/" css={logocss}>
+                      <img src="/logo.svg" alt="logo" />
+                    </NavLink>
+                  </Grid>
+                  <Grid
+                    item
+                    lg={9}
+                    md={10}
+                    sm={10}
+                    css={`
+                      gap: 20px;
+                      display: flex;
+                      align-items: center;
+                      justify-content: flex-end;
+                    `}
+                  >
+                    {" "}
+                    <NavList navLocation={navLocation} />
+                    <ActionMenu />
+                  </Grid>
+                </Grid>
+              </Container>
             }
-          }
-        `}
-      >
-        {isMobile && getMobilePageHeader()}
-        {!isMobile && (
-          <Container maxWidth="lg">
-            <Grid
-              container
-              css={headercss}
-              alignContent="space-between"
-              alignItems="center"
-            >
-              <Grid
-                item
-                lg={3}
-                md={2}
-                sm={2}
-                css={`
-                  gap: 180px;
-                  display: flex;
-                  align-items: center;
-                `}
-              >
-                <NavLink to="/" css={logocss}>
-                  <img src="/logo.svg" alt="logo" />
-                </NavLink>
-              </Grid>
-              <Grid
-                item
-                lg={9}
-                md={10}
-                sm={10}
-                css={`
-                  gap: 20px;
-                  display: flex;
-                  align-items: center;
-                  justify-content: flex-end;
-                `}
-              >
-                {" "}
-                <div css={navLinkcss("", navLocation)}>
-                  <NavLink to="/" data-cy="nav-explore">
-                    <b>Explore </b>
-                  </NavLink>
-                </div>
-                <div css={navLinkcss("why-dataxplorer", navLocation)}>
-                  <NavLink to="/why-dataxplorer" data-cy="nav-why">
-                    <b>Why Dataxplorer?</b>
-                  </NavLink>
-                </div>
-                <div css={navLinkcss("about", navLocation)}>
-                  <Link to="/about" data-cy="nav-about">
-                    <b>About</b>
-                  </Link>
-                </div>
-                <div css={navLinkcss("partners", navLocation)}>
-                  <Link to="/partners" data-cy="nav-partners">
-                    <b>Partners </b>
-                  </Link>
-                </div>
-                <div css={navLinkcss("pricing", navLocation)}>
-                  <Link to="/pricing" data-cy="nav-pricing">
-                    <b>Pricing </b>
-                  </Link>
-                </div>
-                <div css={navLinkcss("contact", navLocation)}>
-                  <Link to="/contact" data-cy="nav-contact">
-                    <b>Contact </b>
-                  </Link>
-                </div>
-                <ActionMenu />
-              </Grid>
-            </Grid>
-          </Container>
-        )}
-      </Toolbar>
-    </MUIAppBar>
+          </Toolbar>
+        </MUIAppBar>
+      )}
+    </>
   );
 }
 
