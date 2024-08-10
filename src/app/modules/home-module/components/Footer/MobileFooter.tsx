@@ -9,6 +9,11 @@ export default function MobileFooter() {
     <>
       <div
         css={`
+          height: 60px;
+        `}
+      />
+      <div
+        css={`
           height: 113px;
           display: flex;
           flex-direction: column;
@@ -16,6 +21,10 @@ export default function MobileFooter() {
           align-items: center;
           background: white;
           padding: 16px;
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
         `}
       >
         <Link to="/">

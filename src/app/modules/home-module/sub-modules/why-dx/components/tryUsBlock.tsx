@@ -146,10 +146,10 @@ export default function TryUsBlock() {
             `}
           >
             <Link to="/report/new/initial">
-              <p>CREATE REPORT</p> <RightArr />
+              CREATE REPORT <RightArr />
             </Link>
             <Link to="/contact">
-              <p>Contact sales</p> <RightArr />
+              Contact sales <RightArr />
             </Link>
           </div>
         )}
