@@ -93,7 +93,7 @@ const resultName = {
 };
 const defaultProps = (props: Partial<MockProps> = {}): MockProps => {
   return {
-    name: "Untitled Chart",
+    name: resultName.name,
     setName: jest.fn((newName: string) => (resultName.name = newName)),
     visualOptions: {},
     dimensions: [{}],
@@ -198,6 +198,37 @@ const appSetup = (params: Params, newProps: Partial<MockProps> = {}) => {
 
 //test cases
 
+const saveButtonId = "save-button";
+const previewButtonId = "preview-button";
+
+const defaultObj = {
+  dataset: "12345",
+  mapping: mockMappingValue,
+  chartType: "echartsBarchart",
+  mockActions: false,
+};
+
+const defaultCrudData = {
+  id: "12345",
+  name: "test",
+  owner: "auth0|123",
+};
+
+const setUpdateCrudData = (mockStore: any) => {
+  mockStore.getActions().charts.ChartGet.setCrudData(defaultCrudData);
+  mockStore.getActions().charts.ChartUpdate.setCrudData({
+    ...defaultCrudData,
+    isMappingValid: true,
+  });
+};
+
+const setCrudData = (mockStore: any) => {
+  mockStore.getActions().charts.ChartGet.setCrudData({
+    ...defaultCrudData,
+    isMappingValid: true,
+  });
+};
+
 test("save & preview buttons should be clickable when mapping and chart type are empty", async () => {
   jest
     .spyOn(Router, "useParams")
@@ -211,15 +242,11 @@ test("save & preview buttons should be clickable when mapping and chart type are
   });
   render(app);
   act(() => {
-    mockStore.getActions().charts.ChartGet.setCrudData({
-      id: "12345",
-      name: "test",
-      owner: "auth0|123",
-    });
+    mockStore.getActions().charts.ChartGet.setCrudData(defaultCrudData);
   });
-  const saveButton = screen.getByRole("button", { name: "save-button" });
+  const saveButton = screen.getByRole("button", { name: saveButtonId });
   const previewButton = screen.getByRole("button", {
-    name: "preview-button",
+    name: previewButtonId,
   });
   expect(saveButton).not.toBeDisabled();
   expect(previewButton).not.toBeDisabled();
@@ -230,30 +257,14 @@ test("save & preview buttons should be clickable when mapping and chart type are
     .spyOn(Router, "useParams")
     .mockReturnValue({ page: "new", view: "mapping" });
 
-  const { app, mockStore } = appSetup({
-    dataset: "12345",
-    mapping: mockMappingValue,
-    chartType: "echartsBarchart",
-    mockActions: false,
-  });
+  const { app, mockStore } = appSetup(defaultObj);
   render(app);
   act(() => {
-    mockStore.getActions().charts.ChartGet.setCrudData({
-      id: "12345",
-      name: "test",
-      owner: "auth0|123",
-    });
-
-    mockStore.getActions().charts.ChartUpdate.setCrudData({
-      id: "12345",
-      name: "test",
-      owner: "auth0|123",
-      isMappingValid: true,
-    });
+    setUpdateCrudData(mockStore);
   });
-  const saveButton = screen.getByRole("button", { name: "save-button" });
+  const saveButton = screen.getByRole("button", { name: saveButtonId });
   const previewButton = screen.getByRole("button", {
-    name: "preview-button",
+    name: previewButtonId,
   });
   expect(saveButton).toBeEnabled();
   expect(previewButton).toBeEnabled();
@@ -265,28 +276,13 @@ test("clicking preview button should go to preview page", async () => {
     .spyOn(Router, "useParams")
     .mockReturnValue({ page: "chartid", view: "mapping" });
 
-  const { app, mockStore } = appSetup({
-    dataset: "12345",
-    mapping: mockMappingValue,
-    chartType: "echartsBarchart",
-    mockActions: false,
-  });
+  const { app, mockStore } = appSetup(defaultObj);
   render(app);
   act(() => {
-    mockStore.getActions().charts.ChartGet.setCrudData({
-      id: "12345",
-      name: "test",
-      owner: "auth0|123",
-    });
-    mockStore.getActions().charts.ChartUpdate.setCrudData({
-      id: "12345",
-      name: "test",
-      owner: "auth0|123",
-      isMappingValid: true,
-    });
+    setUpdateCrudData(mockStore);
   });
   const previewButton = screen.getByRole("button", {
-    name: "preview-button",
+    name: previewButtonId,
   });
   //click preview button
   expect(previewButton).toBeEnabled();
@@ -320,7 +316,7 @@ test("clicking preview button should go to preview page", async () => {
 //   expect(history.location.pathname).toBe("/chart/chartid");
 //   expect(
 //     screen.getByRole("button", {
-//       name: "preview-button",
+//       name: previewButtonId,
 //     })
 //   ).not.toBeEnabled();
 //   const backButton = screen.getByTestId("back-to-edit-button");
@@ -349,12 +345,12 @@ test("typing in text input should edit chart title", async () => {
       chartType: "echartsBarchart",
       mockActions: true,
     },
-    { name: "Untitled Chart" }
+    { name: resultName.name }
   );
 
   render(app);
 
-  expect(screen.getByPlaceholderText("Title")).toHaveValue("Untitled Chart");
+  expect(screen.getByPlaceholderText("Title")).toHaveValue(resultName.name);
   fireEvent.focus(screen.getByPlaceholderText("Title"));
   expect(props.setHasSubHeaderTitleFocused).toHaveBeenCalledWith(true);
   fireEvent.blur(screen.getByPlaceholderText("Title"));
@@ -380,25 +376,10 @@ test("clicking preview button should reroute to preview page", async () => {
     .spyOn(Router, "useParams")
     .mockReturnValue({ page: "new", view: "mapping" });
 
-  const { app, mockStore } = appSetup({
-    dataset: "12345",
-    mapping: mockMappingValue,
-    chartType: "echartsBarchart",
-    mockActions: false,
-  });
+  const { app, mockStore } = appSetup(defaultObj);
   render(app);
   act(() => {
-    mockStore.getActions().charts.ChartGet.setCrudData({
-      id: "12345",
-      name: "test",
-      owner: "auth0|123",
-    });
-    mockStore.getActions().charts.ChartUpdate.setCrudData({
-      id: "12345",
-      name: "test",
-      owner: "auth0|123",
-      isMappingValid: true,
-    });
+    setUpdateCrudData(mockStore);
   });
   const previewButton = screen.getByRole("button", {
     name: "preview-button",
@@ -414,22 +395,13 @@ test("clicking save button should create chart", async () => {
     .spyOn(Router, "useParams")
     .mockReturnValue({ page: "new", view: "mapping" });
 
-  const { app, mockStore, props } = appSetup({
-    dataset: "12345",
-    mapping: mockMappingValue,
-    chartType: "echartsBarchart",
-    mockActions: false,
-  });
+  const { app, mockStore, props } = appSetup(defaultObj);
   act(() => {
-    mockStore.getActions().charts.ChartGet.setCrudData({
-      id: "12345",
-      name: "test",
-      owner: "auth0|123",
-    });
+    mockStore.getActions().charts.ChartGet.setCrudData(defaultCrudData);
   });
   render(app);
   // click save button
-  const saveButton = screen.getByRole("button", { name: "save-button" });
+  const saveButton = screen.getByRole("button", { name: saveButtonId });
   expect(saveButton).toBeEnabled();
   axios.post = jest.fn().mockResolvedValueOnce({ data: { id: "12345" } });
   await user.click(saveButton);
@@ -444,23 +416,14 @@ test("clicking document body should close create chart snackbar", async () => {
     .spyOn(Router, "useParams")
     .mockReturnValue({ page: "new", view: "mapping" });
 
-  const { app, mockStore, props } = appSetup({
-    dataset: "12345",
-    mapping: mockMappingValue,
-    chartType: "echartsBarchart",
-    mockActions: false,
-  });
+  const { app, mockStore, props } = appSetup(defaultObj);
   render(app);
   act(() => {
-    mockStore.getActions().charts.ChartGet.setCrudData({
-      id: "12345",
-      name: "test",
-      owner: "auth0|123",
-    });
+    mockStore.getActions().charts.ChartGet.setCrudData(defaultCrudData);
   });
   axios.post = jest.fn().mockResolvedValueOnce({ data: { id: "12345" } });
 
-  await user.click(screen.getByRole("button", { name: "save-button" }));
+  await user.click(screen.getByRole("button", { name: saveButtonId }));
   expect(props.onSave).toHaveBeenCalled();
 });
 
@@ -502,32 +465,25 @@ test("clicking back to report button should reroute to report path ", async () =
   );
 });
 
+const deleteButtonId = "delete-button";
+const duplicateButtonId = "duplicate-button";
+const editButtonId = "edit-button";
+
 test("all buttons should be visible and active when page is not new", async () => {
   jest
     .spyOn(Router, "useParams")
     .mockReturnValue({ page: "chartid", view: undefined });
 
-  const { app, mockStore } = appSetup({
-    dataset: "12345",
-    mapping: mockMappingValue,
-    chartType: "echartsBarchart",
-    mockActions: false,
-  });
+  const { app, mockStore } = appSetup(defaultObj);
   render(app);
   act(() => {
-    mockStore.getActions().charts.ChartGet.setCrudData({
-      id: "12345",
-      name: "test",
-      owner: "auth0|123",
-    });
+    mockStore.getActions().charts.ChartGet.setCrudData(defaultCrudData);
   });
 
   expect(screen.getByRole("button", { name: "export-button" })).toBeVisible();
-  expect(
-    screen.getByRole("button", { name: "duplicate-button" })
-  ).toBeVisible();
-  expect(screen.getByRole("button", { name: "edit-button" })).toBeVisible();
-  expect(screen.getByRole("button", { name: "delete-button" })).toBeVisible();
+  expect(screen.getByRole("button", { name: duplicateButtonId })).toBeVisible();
+  expect(screen.getByRole("button", { name: editButtonId })).toBeVisible();
+  expect(screen.getByRole("button", { name: deleteButtonId })).toBeVisible();
   expect(screen.getByRole("button", { name: "share-button" })).toBeVisible();
 });
 
@@ -544,25 +500,16 @@ test("clicking delete button should display delete modal", async () => {
     .spyOn(Router, "useParams")
     .mockReturnValue({ page: "chartid", view: undefined });
 
-  const { app, mockStore } = appSetup({
-    dataset: "12345",
-    mapping: mockMappingValue,
-    chartType: "echartsBarchart",
-    mockActions: false,
-  });
+  const { app, mockStore } = appSetup(defaultObj);
 
   render(app);
 
   act(() => {
-    mockStore.getActions().charts.ChartGet.setCrudData({
-      id: "12345",
-      name: "test",
-      owner: "auth0|123",
-    });
+    mockStore.getActions().charts.ChartGet.setCrudData(defaultCrudData);
   });
 
-  expect(screen.getByRole("button", { name: "delete-button" })).toBeVisible();
-  await user.click(screen.getByRole("button", { name: "delete-button" }));
+  expect(screen.getByRole("button", { name: deleteButtonId })).toBeVisible();
+  await user.click(screen.getByRole("button", { name: deleteButtonId }));
   expect(screen.getByRole("form")).toBeInTheDocument();
   expect(
     screen.getByText("Absolutely sure you want to delete the chart(s)?")
@@ -574,6 +521,7 @@ test("clicking delete button should display delete modal", async () => {
   fireEvent.submit(screen.getByRole("form"));
   expect(mockedAxios).toHaveBeenCalled();
 });
+const goToChart = "GO TO CHART";
 
 test("clicking duplicate button should duplicate chart", async () => {
   const user = userEvent.setup();
@@ -596,7 +544,7 @@ test("clicking duplicate button should duplicate chart", async () => {
   });
   render(app);
 
-  await user.click(screen.getByRole("button", { name: "duplicate-button" }));
+  await user.click(screen.getByRole("button", { name: duplicateButtonId }));
   expect(mockedAxios).toHaveBeenCalled();
 
   expect(screen.getByTestId("duplicated-chart-snackbar")).toBeVisible();
@@ -604,9 +552,9 @@ test("clicking duplicate button should duplicate chart", async () => {
     screen.getByText("Chart has been duplicated successfully!")
   ).toBeVisible();
 
-  expect(screen.getByRole("button", { name: "GO TO CHART" })).toBeVisible();
-  await user.click(screen.getByRole("button", { name: "GO TO CHART" }));
-  expect(screen.getByRole("button", { name: "GO TO CHART" })).not.toBeVisible();
+  expect(screen.getByRole("button", { name: goToChart })).toBeVisible();
+  await user.click(screen.getByRole("button", { name: goToChart }));
+  expect(screen.getByRole("button", { name: goToChart })).not.toBeVisible();
   expect(history.location.pathname).toBe("/chart/chart-id");
 });
 test("clicking document body should close duplicate snackbar", async () => {
@@ -630,7 +578,7 @@ test("clicking document body should close duplicate snackbar", async () => {
   });
   render(app);
 
-  await user.click(screen.getByRole("button", { name: "duplicate-button" }));
+  await user.click(screen.getByRole("button", { name: duplicateButtonId }));
   expect(mockedAxios).toHaveBeenCalled();
 
   expect(screen.getByTestId("duplicated-chart-snackbar")).toBeVisible();
@@ -639,7 +587,7 @@ test("clicking document body should close duplicate snackbar", async () => {
   ).toBeVisible();
 
   await user.click(document.body);
-  expect(screen.getByRole("button", { name: "GO TO CHART" })).not.toBeVisible();
+  expect(screen.getByRole("button", { name: goToChart })).not.toBeVisible();
 });
 
 test("clicking edit button should reroute to edit page", async () => {
@@ -660,17 +608,12 @@ test("clicking edit button should reroute to edit page", async () => {
   render(app);
 
   act(() => {
-    mockStore.getActions().charts.ChartGet.setCrudData({
-      id: "12345",
-      name: "test",
-      owner: "auth0|123",
-      isMappingValid: true,
-    });
+    setCrudData(mockStore);
   });
 
-  expect(screen.getByRole("button", { name: "edit-button" })).toBeVisible();
+  expect(screen.getByRole("button", { name: editButtonId })).toBeVisible();
 
-  await user.click(screen.getByRole("button", { name: "edit-button" }));
+  await user.click(screen.getByRole("button", { name: editButtonId }));
   expect(history.location.pathname).toBe("/chart/chartid/customize");
 });
 
@@ -701,15 +644,10 @@ test('should call onSave function when "save" button is clicked', async () => {
   render(app);
 
   act(() => {
-    mockStore.getActions().charts.ChartGet.setCrudData({
-      id: "12345",
-      name: "test",
-      owner: "auth0|123",
-      isMappingValid: true,
-    });
+    setCrudData(mockStore);
   });
 
-  const saveButton = screen.getByRole("button", { name: "save-button" });
+  const saveButton = screen.getByRole("button", { name: saveButtonId });
   expect(saveButton).toBeEnabled();
   axios.patch = jest.fn().mockResolvedValueOnce({ data: { id: "12345" } });
   await user.click(saveButton);

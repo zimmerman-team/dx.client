@@ -72,73 +72,28 @@ export function ExpandedFilterGroup(props: ExpandedFilterGroupProps) {
   const handleSearch = (value: string) => {
     if (value.length === 0) {
       setOptionsToShow(props.options);
-    } else {
-      const options: FilterGroupOptionModel[] = [];
-      props.options.forEach((option: FilterGroupOptionModel) => {
+      return;
+    }
+    const searchOptions = (options: FilterGroupOptionModel[]) => {
+      const results: FilterGroupOptionModel[] = [];
+
+      options.forEach((option) => {
         if (option.label.toLowerCase().indexOf(value.toLowerCase()) > -1) {
-          options.push(option);
-        } else if (option.subOptions) {
-          option.subOptions.forEach((subOption: FilterGroupOptionModel) => {
-            if (
-              subOption.label.toLowerCase().indexOf(value.toLowerCase()) > -1
-            ) {
-              const fParentIndex = findIndex(options, { label: option.label });
-              if (fParentIndex > -1) {
-                options[fParentIndex].subOptions?.push(subOption);
-              } else {
-                options.push({
-                  ...option,
-                  subOptions: [subOption],
-                });
-              }
-            } else if (subOption.subOptions) {
-              subOption.subOptions.forEach(
-                (subSubOption: FilterGroupOptionModel) => {
-                  if (
-                    (subSubOption.label || "")
-                      .toLowerCase()
-                      .indexOf(value.toLowerCase()) > -1
-                  ) {
-                    const fGrandParentIndex = findIndex(options, {
-                      label: option.label,
-                    });
-                    if (fGrandParentIndex > -1) {
-                      const fParentIndex = findIndex(
-                        options[fGrandParentIndex]?.subOptions,
-                        { label: subOption.label }
-                      );
-                      if (fParentIndex > -1) {
-                        // @ts-ignore
-                        options[fGrandParentIndex]?.subOptions[
-                          fParentIndex
-                        ]?.subOptions.push(subSubOption);
-                      } else {
-                        // @ts-ignore
-                        options[fGrandParentIndex]?.subOptions.push({
-                          ...subOption,
-                          subOptions: [subSubOption],
-                        });
-                      }
-                    } else {
-                      options.push({
-                        ...option,
-                        subOptions: [
-                          {
-                            ...subOption,
-                            subOptions: [subSubOption],
-                          },
-                        ],
-                      });
-                    }
-                  }
-                }
-              );
-            }
-          });
+          results.push(option);
+        } else if (option?.subOptions) {
+          const searchResponse = searchOptions(option.subOptions);
+
+          if (searchResponse.length) {
+            results.push({
+              ...option,
+              subOptions: searchResponse,
+            });
+          }
         }
       });
-      setOptionsToShow(options);
-    }
+      return results;
+    };
+    setOptionsToShow(searchOptions(props.options));
   };
 
   function handleChangeAll(event: React.ChangeEvent<HTMLInputElement>) {

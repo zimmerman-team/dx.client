@@ -16,7 +16,7 @@ module.exports = {
     "eslint-config-react-app",
     "react-app",
     // "airbnb-typescript-prettier",
-    // "plugin:sonarjs/recommended",
+    "plugin:sonarjs/recommended",
   ],
   plugins: ["sonarjs", "no-relative-import-paths"],
   rules: {
@@ -33,6 +33,7 @@ module.exports = {
     "@typescript-eslint/ban-ts-ignore ": 0,
     "@typescript-eslint/no-unused-vars": 0,
     "react-hooks/exhaustive-deps": 0,
+    "sonarjs/cognitive-complexity": ["error", 20],
     // "no-restricted-imports": [
     //   "error",
     //   {

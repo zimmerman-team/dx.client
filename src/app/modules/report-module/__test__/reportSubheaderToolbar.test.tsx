@@ -242,6 +242,8 @@ test("clicking view report button should save report and go to report detail pag
   });
 });
 
+const autoSaveSwitchId = "auto-save-switch";
+
 test("autosave switch should toggle autosave state from false to true", async () => {
   const user = userEvent.setup();
 
@@ -251,9 +253,9 @@ test("autosave switch should toggle autosave state from false to true", async ()
     .mockReturnValue({ page: "65dcb26aaf4c8500693f1ab7", view: "edit" });
   render(app);
 
-  expect(screen.getByTestId("auto-save-switch")).not.toBeChecked();
+  expect(screen.getByTestId(autoSaveSwitchId)).not.toBeChecked();
 
-  await user.click(screen.getByTestId("auto-save-switch"));
+  await user.click(screen.getByTestId(autoSaveSwitchId));
   expect(props.setAutoSave).toHaveBeenCalledWith({
     isAutoSaveEnabled: true,
     enableAutoSaveSwitch: true,
@@ -269,9 +271,9 @@ test("autosave switch should toggle autosave state from true to false", async ()
     .spyOn(Router, "useParams")
     .mockReturnValue({ page: "65dcb26aaf4c8500693f1ab7", view: "edit" });
   render(app);
-  expect(screen.getByTestId("auto-save-switch")).toBeChecked();
+  expect(screen.getByTestId(autoSaveSwitchId)).toBeChecked();
 
-  await user.click(screen.getByTestId("auto-save-switch"));
+  await user.click(screen.getByTestId(autoSaveSwitchId));
   expect(props.setAutoSave).toHaveBeenCalledWith({
     isAutoSaveEnabled: false,
     enableAutoSaveSwitch: true,
@@ -337,6 +339,14 @@ test("savedChanges state should be true after edit success", async () => {
   // expect(setTimeout).toHaveBeenCalledWith(expect.any(Function), 3000);
 });
 
+const setDefaultCrudData = (mockStore: any) => {
+  mockStore.getActions().reports.ReportGet.setCrudData({
+    id: "12345",
+    name: "test",
+    owner: "auth0|123",
+  });
+};
+
 test("export, duplicate, share, edit, delete buttons should be visible in report detail mode", async () => {
   const { app, mockStore } = appSetup(
     { mockActions: false },
@@ -345,13 +355,7 @@ test("export, duplicate, share, edit, delete buttons should be visible in report
   jest
     .spyOn(Router, "useParams")
     .mockReturnValue({ page: "65dcb26aaf4c8500693f1ab7", view: undefined });
-  act(() => {
-    mockStore.getActions().reports.ReportGet.setCrudData({
-      id: "12345",
-      name: "test",
-      owner: "auth0|123",
-    });
-  });
+  act(() => setDefaultCrudData(mockStore));
   render(app);
   expect(screen.getByRole("button", { name: "export-button" })).toBeVisible();
 
@@ -369,13 +373,7 @@ test("input field should be disabled in report detail page", async () => {
   jest
     .spyOn(Router, "useParams")
     .mockReturnValue({ page: "65dcb26aaf4c8500693f1ab7", view: undefined });
-  act(() => {
-    mockStore.getActions().reports.ReportGet.setCrudData({
-      id: "12345",
-      name: "test",
-      owner: "auth0|123",
-    });
-  });
+  act(() => setDefaultCrudData(mockStore));
   render(app);
   expect(screen.getByRole("textbox")).toBeDisabled();
 });
@@ -389,13 +387,7 @@ test("clicking on export button should open export menu", async () => {
   jest
     .spyOn(Router, "useParams")
     .mockReturnValue({ page: "65dcb26aaf4c8500693f1ab7", view: undefined });
-  act(() => {
-    mockStore.getActions().reports.ReportGet.setCrudData({
-      id: "12345",
-      name: "test",
-      owner: "auth0|123",
-    });
-  });
+  act(() => setDefaultCrudData(mockStore));
   render(app);
   await user.click(screen.getByRole("button", { name: "export-button" }));
   expect(screen.getByRole("menu")).toBeVisible();
@@ -417,13 +409,7 @@ test("clicking on duplicate button should open duplicate dialog", async () => {
   jest
     .spyOn(Router, "useParams")
     .mockReturnValue({ page: "12345", view: undefined });
-  act(() => {
-    mockStore.getActions().reports.ReportGet.setCrudData({
-      id: "12345",
-      name: "test",
-      owner: "auth0|123",
-    });
-  });
+  act(() => setDefaultCrudData(mockStore));
   render(app);
   await user.click(screen.getByTestId("duplicate-button"));
   expect(axiosMock).toHaveBeenCalled();
@@ -431,11 +417,11 @@ test("clicking on duplicate button should open duplicate dialog", async () => {
   expect(
     screen.getByText("Report has been duplicated successfully!")
   ).toBeVisible();
-
-  expect(screen.getByRole("button", { name: "GO TO REPORT" })).toBeVisible();
-  await user.click(screen.getByRole("button", { name: "GO TO REPORT" }));
+  const goToReportString = "GO TO REPORT";
+  expect(screen.getByRole("button", { name: goToReportString })).toBeVisible();
+  await user.click(screen.getByRole("button", { name: goToReportString }));
   expect(
-    screen.getByRole("button", { name: "GO TO REPORT" })
+    screen.getByRole("button", { name: goToReportString })
   ).not.toBeVisible();
 
   expect(history.location.pathname).toBe("/report/12345");
@@ -457,13 +443,7 @@ test("clicking on share button should open share dialog", async () => {
   jest
     .spyOn(Router, "useParams")
     .mockReturnValue({ page: "12345", view: undefined });
-  act(() => {
-    mockStore.getActions().reports.ReportGet.setCrudData({
-      id: "12345",
-      name: "test",
-      owner: "auth0|123",
-    });
-  });
+  act(() => setDefaultCrudData(mockStore));
   render(app);
   await user.click(screen.getByTestId("share-button"));
   expect(screen.getByRole("button", { name: "Copy link" })).toBeVisible();
@@ -480,13 +460,7 @@ test("clicking on edit button should redirect to report edit page", async () => 
   jest
     .spyOn(Router, "useParams")
     .mockReturnValue({ page: "12345", view: undefined });
-  act(() => {
-    mockStore.getActions().reports.ReportGet.setCrudData({
-      id: "12345",
-      name: "test",
-      owner: "auth0|123",
-    });
-  });
+  act(() => setDefaultCrudData(mockStore));
   render(app);
   await user.click(screen.getByTestId("edit-button"));
   expect(history.location.pathname).toBe("/report/12345/edit");
@@ -511,13 +485,7 @@ test("clicking on delete button should open delete dialog", async () => {
   jest
     .spyOn(Router, "useParams")
     .mockReturnValue({ page: "12345", view: undefined });
-  act(() => {
-    mockStore.getActions().reports.ReportGet.setCrudData({
-      id: "12345",
-      name: "test",
-      owner: "auth0|123",
-    });
-  });
+  act(() => setDefaultCrudData(mockStore));
   render(app);
   await user.click(screen.getByTestId("delete-button"));
   expect(screen.getByRole("button", { name: "Delete" })).toBeVisible();

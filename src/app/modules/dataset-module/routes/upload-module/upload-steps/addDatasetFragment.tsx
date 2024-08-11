@@ -5,16 +5,16 @@ import React, { useCallback } from "react";
 
 import { DropZone } from "app/modules/dataset-module/routes/upload-module/component/dropzone";
 import { Box } from "@material-ui/core";
-import LocalIcon from "app/modules/dataset-upload-module/assets/upload-options-icons/local";
-import GoogleIcon from "app/modules/dataset-upload-module/assets/upload-options-icons/google";
-import MicrosoftIcon from "app/modules/dataset-upload-module/assets/upload-options-icons/microsoft";
-import ApiIcon from "app/modules/dataset-upload-module/assets/upload-options-icons/api";
-import MSSQLIcon from "app/modules/dataset-upload-module/assets/upload-options-icons/mssql.png";
-import MYSQLIcon from "app/modules/dataset-upload-module/assets/upload-options-icons/mysql.png";
-import PostgresIcon from "app/modules/dataset-upload-module/assets/upload-options-icons/postgres";
-import MongoDbIcon from "app/modules/dataset-upload-module/assets/upload-options-icons/mongodb";
-import HubspotIcon from "app/modules/dataset-upload-module/assets/upload-options-icons/hubspot";
-import UploadOption from "app/modules/dataset-upload-module/component/uploadOption";
+import LocalIcon from "app/modules/dataset-module/routes/upload-module/assets/upload-options-icons/local";
+import GoogleIcon from "app/modules/dataset-module/routes/upload-module/assets/upload-options-icons/google";
+import MicrosoftIcon from "app/modules/dataset-module/routes/upload-module/assets/upload-options-icons/microsoft";
+import ApiIcon from "app/modules/dataset-module/routes/upload-module/assets/upload-options-icons/api";
+import MSSQLIcon from "app/modules/dataset-module/routes/upload-module/assets/upload-options-icons/mssql.png";
+import MYSQLIcon from "app/modules/dataset-module/routes/upload-module/assets/upload-options-icons/mysql.png";
+import PostgresIcon from "app/modules/dataset-module/routes/upload-module/assets/upload-options-icons/postgres";
+import MongoDbIcon from "app/modules/dataset-module/routes/upload-module/assets/upload-options-icons/mongodb";
+import HubspotIcon from "app/modules/dataset-module/routes/upload-module/assets/upload-options-icons/hubspot";
+import UploadOption from "app/modules/dataset-module/routes/upload-module/component/uploadOption";
 import { useCookie } from "react-use";
 import useGoogleDrivePicker from "app/hooks/useGoogleDrivePicker";
 import { useOneDrivePicker } from "app/hooks/useOneDrivePicker";
@@ -60,6 +60,9 @@ export default function AddDatasetFragment(props: Props) {
       props.onFileSubmit(acceptedFiles[0]);
     }
   }, []);
+
+  const databaseConnection = "DataBase Connection";
+  const comingSoon = "Coming Soon";
 
   const uploadOptions = [
     {
@@ -108,36 +111,36 @@ export default function AddDatasetFragment(props: Props) {
     },
     {
       name: "MSSQL",
-      type: "DataBase Connection",
-      formats: ["Coming Soon"],
+      type: databaseConnection,
+      formats: [comingSoon],
       icon: <img width={30} height={33.462} src={MSSQLIcon} alt="mssql-logo" />,
       onClick: () => {},
     },
     {
       name: "MYSQL",
-      type: "DataBase Connection",
-      formats: ["Coming Soon"],
+      type: databaseConnection,
+      formats: [comingSoon],
       icon: <img width={30} height={30} src={MYSQLIcon} alt="mysql-logo" />,
       onClick: () => {},
     },
     {
       name: "PostgreSQL",
-      type: "DataBase Connection",
-      formats: ["Coming Soon"],
+      type: databaseConnection,
+      formats: [comingSoon],
       icon: <PostgresIcon />,
       onClick: () => {},
     },
     {
       name: "MongoDB",
-      type: "DataBase Connection",
-      formats: ["Coming Soon"],
+      type: databaseConnection,
+      formats: [comingSoon],
       icon: <MongoDbIcon />,
       onClick: () => {},
     },
     {
       name: "Hubspot",
-      type: "DataBase Connection",
-      formats: ["Coming Soon"],
+      type: databaseConnection,
+      formats: [comingSoon],
       icon: <HubspotIcon />,
       onClick: () => {},
     },

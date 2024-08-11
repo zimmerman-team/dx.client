@@ -72,6 +72,7 @@ export function ChartBuilderPreviewTheme(props: ChartBuilderPreviewThemeProps) {
     }
   }, [dataset]);
 
+  // eslint-disable-next-line sonarjs/cognitive-complexity
   React.useEffect(() => {
     if (
       domRef &&
@@ -80,6 +81,12 @@ export function ChartBuilderPreviewTheme(props: ChartBuilderPreviewThemeProps) {
       !isEmpty(visualOptions)
     ) {
       const loader = document.getElementById("chart-placeholder");
+
+      const removeLoader = () => {
+        if (loader) {
+          loader.style.display = "none";
+        }
+      };
 
       try {
         new Promise((resolve, reject) => {
@@ -118,26 +125,18 @@ export function ChartBuilderPreviewTheme(props: ChartBuilderPreviewThemeProps) {
               console.log("chart error", e);
             }
 
-            if (loader) {
-              loader.style.display = "none";
-            }
+            removeLoader();
             reject(0);
           }
         })
           .then(() => {
-            if (loader) {
-              loader.style.display = "none";
-            }
+            removeLoader();
           })
           .catch(() => {
-            if (loader) {
-              loader.style.display = "none";
-            }
+            removeLoader();
           });
       } catch (e) {
-        if (loader) {
-          loader.style.display = "none";
-        }
+        removeLoader();
 
         while (domRef.current.firstChild) {
           domRef.current.removeChild(domRef.current.firstChild);
@@ -166,6 +165,13 @@ export function ChartBuilderPreviewTheme(props: ChartBuilderPreviewThemeProps) {
       props.setIsPreviewView(false);
     };
   }, []);
+
+  const isMappingValid = React.useMemo(() => {
+    return (
+      editChartCrudData?.isMappingValid && props.loadedChart?.isMappingValid
+    );
+  }, [props.loadedChart?.isMappingValid, editChartCrudData?.isMappingValid]);
+
   if (props.dataError || props.chartError) {
     return (
       <>
@@ -178,12 +184,6 @@ export function ChartBuilderPreviewTheme(props: ChartBuilderPreviewThemeProps) {
       </>
     );
   }
-
-  const isMappingValid = React.useMemo(() => {
-    return (
-      editChartCrudData?.isMappingValid && props.loadedChart?.isMappingValid
-    );
-  }, [props.loadedChart?.isMappingValid, editChartCrudData?.isMappingValid]);
 
   return (
     <div css={commonStyles.container}>

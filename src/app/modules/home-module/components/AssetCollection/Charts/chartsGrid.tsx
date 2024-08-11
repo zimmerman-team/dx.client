@@ -104,13 +104,14 @@ export default function ChartsGrid(props: Props) {
 
   React.useEffect(() => {
     //load data if intersection observer is triggered
-    if (chartsCount > limit) {
-      if (isObserved && chartsLoadSuccess) {
-        if (loadedCharts.length !== chartsCount) {
-          //update the offset value for the next load
-          setOffset(offset + limit);
-        }
-      }
+    if (
+      chartsCount > limit &&
+      isObserved &&
+      chartsLoadSuccess &&
+      loadedCharts.length !== chartsCount
+    ) {
+      //update the offset value for the next load
+      setOffset(offset + limit);
     }
   }, [isObserved]);
 

@@ -1,7 +1,7 @@
 import React from "react";
 import CloseOutlined from "@material-ui/icons/ClearOutlined";
 import Modal from "@material-ui/core/Modal";
-import { useStyles } from "../deleteChartDialog";
+import { useStyles } from "app/components/Dialogs/deleteChartDialog";
 import { useRenderChartFromAPI } from "app/modules/report-module/components/chart-wrapper/useRenderChartFromAPI";
 import IconButton from "@material-ui/core/IconButton";
 import Snackbar from "@material-ui/core/Snackbar";
@@ -35,8 +35,9 @@ export default function EmbedChartDialog(props: {
   const [widthValue, setWidthValue] = React.useState<number>(0);
   const [heightValue, setHeightValue] = React.useState<number>(0);
   const [copyAlert, setCopyAlert] = React.useState<boolean>(false);
+  const defaultSwitchTab = "embed-code";
   const [activeSwitchTab, setActiveSwitchTab] =
-    React.useState<string>("embed-code");
+    React.useState<string>(defaultSwitchTab);
 
   const {
     loading,
@@ -57,7 +58,7 @@ export default function EmbedChartDialog(props: {
     { value: "compact", label: "Compact" },
   ];
   const switchTabs = [
-    { value: "embed-code", label: "Embed Code" },
+    { value: defaultSwitchTab, label: "Embed Code" },
     { value: "lishared-link", label: "Shared Link" },
   ];
 
@@ -96,7 +97,7 @@ export default function EmbedChartDialog(props: {
   };
 
   const handleCopyToClipboard = async () => {
-    copyToClipboard("embed-code").then(() => {
+    copyToClipboard(defaultSwitchTab).then(() => {
       setCopyAlert(true);
     });
   };
@@ -240,7 +241,7 @@ export default function EmbedChartDialog(props: {
               </p>
             </div>
           </div>
-          {activeSwitchTab === "embed-code" ? (
+          {activeSwitchTab === defaultSwitchTab ? (
             <EmbedOptions
               chartId={props.chartId}
               displayMode={displayMode}

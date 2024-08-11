@@ -170,6 +170,106 @@ const Features = () => {
       ],
     },
   ];
+
+  const renderFeatureOptions = (option: {
+    name: string;
+    values: any[];
+    button?: boolean;
+  }) => (
+    <div
+      key={option.name}
+      css={`
+        display: flex;
+
+        justify-content: space-between;
+        border-top: 1px solid rgba(223, 227, 229, 0.5);
+        :last-of-type {
+          border-bottom: 1px solid rgba(223, 227, 229, 0.5);
+        }
+      `}
+    >
+      <p
+        css={`
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          margin: 0;
+          padding: 9px 12px;
+          line-height: normal;
+          font-family: "Inter", sans-serif;
+          font-size: 14px;
+          font-style: normal;
+          font-weight: 500;
+          button {
+            border: none;
+            background: none;
+            outline: none;
+            width: 88px;
+            height: 17px;
+            flex-shrink: 0;
+            border-radius: 30px;
+            border: 1px solid #252c34;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-transform: uppercase;
+            font-size: 10px;
+            font-family: "GothamNarrow-Book", sans-serif;
+          }
+        `}
+      >
+        {option.name} {option.button && <button>Coming soon</button>}
+      </p>
+
+      <div
+        css={`
+          display: flex;
+          column-gap: 24px;
+        `}
+      >
+        {option.values.map((value) => (
+          <p
+            css={`
+              margin: 0;
+              line-height: normal;
+              font-family: "Inter", sans-serif;
+              font-size: 14px;
+              font-style: normal;
+              font-weight: 500;
+              color: #252c34;
+              /* text-align: center; */
+              display: flex;
+              justify-content: center;
+              background: rgba(202, 202, 202, 0.1);
+              width: 224px;
+              padding: 9px 0;
+              position: relative;
+            `}
+          >
+            {value === ">" || value === "<" ? (
+              <div
+                css={`
+                  position: absolute;
+                  width: 24px;
+                  height: 100%;
+                  top: 0;
+                  ${value === ">" ? "right" : "left"}: -24px;
+                  background: rgba(202, 202, 202, 0.1);
+                `}
+              />
+            ) : value === true ? (
+              <GoodIcon />
+            ) : value === false ? (
+              "-"
+            ) : (
+              value
+            )}
+          </p>
+        ))}
+      </div>
+    </div>
+  );
+
   return (
     <section>
       {features.map((feature, idx) => (
@@ -251,103 +351,7 @@ const Features = () => {
                 border-left: 4px solid ${feature.color};
               `}
             >
-              {feature.options.map(
-                (option: { name: string; values: any[]; button?: boolean }) => (
-                  <div
-                    key={option.name}
-                    css={`
-                      display: flex;
-
-                      justify-content: space-between;
-                      border-top: 1px solid rgba(223, 227, 229, 0.5);
-                      :last-of-type {
-                        border-bottom: 1px solid rgba(223, 227, 229, 0.5);
-                      }
-                    `}
-                  >
-                    <p
-                      css={`
-                        display: flex;
-                        align-items: center;
-                        gap: 8px;
-                        margin: 0;
-                        padding: 9px 12px;
-                        line-height: normal;
-                        font-family: "Inter", sans-serif;
-                        font-size: 14px;
-                        font-style: normal;
-                        font-weight: 500;
-                        button {
-                          border: none;
-                          background: none;
-                          outline: none;
-                          width: 88px;
-                          height: 17px;
-                          flex-shrink: 0;
-                          border-radius: 30px;
-                          border: 1px solid #252c34;
-                          display: flex;
-                          justify-content: center;
-                          align-items: center;
-                          text-transform: uppercase;
-                          font-size: 10px;
-                          font-family: "GothamNarrow-Book", sans-serif;
-                        }
-                      `}
-                    >
-                      {option.name}{" "}
-                      {option.button && <button>Coming soon</button>}
-                    </p>
-
-                    <div
-                      css={`
-                        display: flex;
-                        column-gap: 24px;
-                      `}
-                    >
-                      {option.values.map((value) => (
-                        <p
-                          css={`
-                            margin: 0;
-                            line-height: normal;
-                            font-family: "Inter", sans-serif;
-                            font-size: 14px;
-                            font-style: normal;
-                            font-weight: 500;
-                            color: #252c34;
-                            /* text-align: center; */
-                            display: flex;
-                            justify-content: center;
-                            background: rgba(202, 202, 202, 0.1);
-                            width: 224px;
-                            padding: 9px 0;
-                            position: relative;
-                          `}
-                        >
-                          {value === ">" || value === "<" ? (
-                            <div
-                              css={`
-                                position: absolute;
-                                width: 24px;
-                                height: 100%;
-                                top: 0;
-                                ${value === ">" ? "right" : "left"}: -24px;
-                                background: rgba(202, 202, 202, 0.1);
-                              `}
-                            />
-                          ) : value === true ? (
-                            <GoodIcon />
-                          ) : value === false ? (
-                            "-"
-                          ) : (
-                            value
-                          )}
-                        </p>
-                      ))}
-                    </div>
-                  </div>
-                )
-              )}
+              {feature.options.map(renderFeatureOptions)}
             </div>
           </div>
 

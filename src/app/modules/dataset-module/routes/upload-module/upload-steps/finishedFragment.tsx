@@ -4,8 +4,8 @@ import { dataSetsCss } from "app/modules/dataset-module/routes/upload-module/sty
 import { useStoreActions } from "app/state/store/hooks";
 import { DatasetDataTable } from "app/modules/dataset-module/routes/upload-module/component/table/data-table";
 import { CssSnackbar, ISnackbarState } from "./previewFragment";
-import { ReactComponent as FullScreenIcon } from "app/modules/dataset-upload-module/assets/full-screen.svg";
-import { ReactComponent as CloseFullScreenIcon } from "app/modules/dataset-upload-module/assets/close-full-screen.svg";
+import { ReactComponent as FullScreenIcon } from "app/modules/dataset-module/routes/upload-module/assets/full-screen.svg";
+import { ReactComponent as CloseFullScreenIcon } from "app/modules/dataset-module/routes/upload-module/assets/close-full-screen.svg";
 import { useRecoilState } from "recoil";
 import { homeDisplayAtom } from "app/state/recoil/atoms";
 import { ArrowBack } from "@material-ui/icons";

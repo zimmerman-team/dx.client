@@ -95,8 +95,7 @@ export default function PricingModule() {
         },
       }
     );
-    const customerId = customerCreationResponse.data.data;
-    return customerId;
+    return customerCreationResponse.data.data;
   };
 
   const createStripeCheckoutSession = async (
@@ -119,8 +118,7 @@ export default function PricingModule() {
         },
       }
     );
-    const sessionUrl = checkoutSessionResponse.data.data;
-    return sessionUrl;
+    return checkoutSessionResponse.data.data;
   };
 
   const handlePlanButtonClick = async (key: string) => {

@@ -136,9 +136,7 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
   );
 
   const isPreviewDisabled: boolean = React.useMemo(() => {
-    const newValue =
-      isEmpty(selectedChartType) || !isMappingValid || view === "preview";
-    return newValue;
+    return isEmpty(selectedChartType) || !isMappingValid || view === "preview";
   }, [selectedChartType, mapping, view, editChartCrudData]);
 
   const handleDeleteModalInputChange = (
@@ -181,17 +179,14 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
   };
   const compareStateChanges = () => {
     if (loadedChart.id !== page) return false;
-    if (
+    return (
       !isEqual(props.name, loadedChart.name) ||
       !isEqual(selectedChartType, loadedChart.vizType) ||
       !isEqual(mapping, loadedChart.mapping) ||
       !isEqual(dataset as string, loadedChart.datasetId as string) ||
       !isEqual(props.visualOptions, loadedChart.vizOptions) ||
       !isEqual(appliedFilters, loadedChart.appliedFilters)
-    ) {
-      return true;
-    }
-    return false;
+    );
   };
 
   const open = Boolean(anchorEl);

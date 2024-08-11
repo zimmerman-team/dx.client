@@ -11,7 +11,7 @@ import { matchPath } from "react-router-dom";
 
 export function App() {
   const isMobile = useMediaQuery("(max-width: 767px)");
-  const match = matchPath(location.pathname, {
+  const match = matchPath(window.location.pathname, {
     path: "/chart-embed/:chartId/:datasetId",
     exact: true,
     strict: true,

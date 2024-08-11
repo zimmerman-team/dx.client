@@ -20,21 +20,6 @@ export const getColumns = (assetType: "chart" | "report" | "dataset") => {
         },
       ];
     case "dataset":
-      return [
-        {
-          key: "name",
-          label: "Name",
-        },
-
-        {
-          key: "description",
-          label: "Description",
-        },
-        {
-          key: "createdDate",
-          label: "Created Date",
-        },
-      ];
     case "report":
       return [
         {

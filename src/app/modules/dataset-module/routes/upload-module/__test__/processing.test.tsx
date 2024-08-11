@@ -1,8 +1,10 @@
 import { render, screen } from "@testing-library/react";
-import Processing from "app/modules/dataset-upload-module/upload-steps/processing";
+import Processing from "app/modules/dataset-module/routes/upload-module/upload-steps/processing";
 
 const defaultProcessingError =
   "Data could not be processed, please try again or contact your administrator";
+
+const estimatedTimeId = "estimated-time";
 
 test("data should be processing", async () => {
   const mockSetProcessingError = jest.fn();
@@ -22,7 +24,7 @@ test("data should be processing", async () => {
 
   const processingText = screen.getByText("Data is being processed...");
   const progressBar = screen.getByTestId("progress-bar");
-  const estimatedTime = screen.getByTestId("estimated-time");
+  const estimatedTime = screen.getByTestId(estimatedTimeId);
   expect(estimatedTime).toHaveTextContent("seconds (estimated)");
   expect(processingText).toBeInTheDocument();
   expect(progressBar).toBeInTheDocument();
@@ -43,7 +45,7 @@ test("when estimated times <=0, it should display 'finishing up...'", async () =
       tryAgain={mockTryAgain}
     />
   );
-  const estimatedTime = screen.getByTestId("estimated-time");
+  const estimatedTime = screen.getByTestId(estimatedTimeId);
   expect(estimatedTime).toHaveTextContent("Finishing up...");
 });
 
@@ -62,7 +64,7 @@ test('when estimated times > 60, it should display "minutes and seconds (estimat
       tryAgain={mockTryAgain}
     />
   );
-  const estimatedTime = screen.getByTestId("estimated-time");
+  const estimatedTime = screen.getByTestId(estimatedTimeId);
   expect(estimatedTime).toHaveTextContent("minutes and ");
 });
 

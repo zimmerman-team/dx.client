@@ -101,9 +101,7 @@ function getOptionForCirclepacking(data: any[], visualOptions: any) {
     };
   };
 
-  const option: echarts.ComposeOption<
-    CustomSeriesOption | TooltipComponentOption | VisualMapComponentOption
-  > = {
+  return {
     tooltip: {
       trigger: showTooltip ? "item" : "none",
       formatter: (params: any) => {
@@ -139,7 +137,6 @@ function getOptionForCirclepacking(data: any[], visualOptions: any) {
       data: data,
     },
   };
-  return option;
 }
 
 const stratify = (dataset: any) => {
@@ -182,14 +179,12 @@ export const drillDown = (
   // removing margins here because they don't apply to the series
   const chartWidth = width - marginLeft - marginRight;
   const chartHeight = height * 0.95 - marginTop - marginBottom; // removing 5% because chart is cutting off by default
-  if (nodeClick === "zoomToNode") {
-    if (targetId !== null) {
-      let y = root.descendants().find((node) => {
-        return node.data.path === targetId;
-      });
-      if (y) {
-        root = y;
-      }
+  if (nodeClick === "zoomToNode" && targetId !== null) {
+    let y = root.descendants().find((node) => {
+      return node.data.path === targetId;
+    });
+    if (y) {
+      root = y;
     }
   }
 
@@ -197,10 +192,8 @@ export const drillDown = (
   // Reset
 
   d3.pack<any>().size([chartWidth, chartHeight]).padding(3)(root);
-  const option = getOptionForCirclepacking(
+  return getOptionForCirclepacking(
     convertData(root as d3.HierarchyCircularNode<any>),
     visualOptions
   );
-
-  return option;
 };

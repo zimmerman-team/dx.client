@@ -20,6 +20,10 @@ import {
 } from "@auth0/auth0-react";
 import axios from "axios";
 import { AuthProtectedRoute } from "./utils/AuthProtectedRoute";
+import {
+  PaymentSuccessCallbackModule,
+  PaymentCanceledCallbackModule,
+} from "app/modules/callback-module/payment";
 
 const LandingModule = lazy(
   () => import("app/modules/home-module/sub-modules/landing")
@@ -44,10 +48,6 @@ const PricingModule = lazy(
 const EmbedChartModule = lazy(
   () => import("app/modules/embed-module/embedChart")
 );
-import {
-  PaymentSuccessCallbackModule,
-  PaymentCanceledCallbackModule,
-} from "app/modules/callback-module/payment";
 
 const ChartModule = lazy(() => import("app/modules/chart-module"));
 const ReportModule = lazy(() => import("app/modules/report-module"));

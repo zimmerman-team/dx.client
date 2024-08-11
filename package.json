@@ -108,7 +108,7 @@
     "depcheck": "^1.4.7",
     "eslint-config-airbnb-typescript-prettier": "^4.2.0",
     "eslint-plugin-no-relative-import-paths": "^1.5.5",
-    "eslint-plugin-sonarjs": "^0.6.0",
+    "eslint-plugin-sonarjs": "0.13.0",
     "prettier": "^2.2.1",
     "source-map-explorer": "^2.5.2",
     "typescript": "^4.2.4",

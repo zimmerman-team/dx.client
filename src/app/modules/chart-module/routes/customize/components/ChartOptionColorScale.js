@@ -59,6 +59,7 @@ const ChartOptionColorScale = ({
   colorDataType,
   hasAnyMapping,
   ...props
+  // eslint-disable-next-line sonarjs/cognitive-complexity
 }) => {
   // here we leverage injection of the __loaded prop in the color scale, see App.js
   const initialValue = useRef(!!value.__loaded);
@@ -73,8 +74,7 @@ const ChartOptionColorScale = ({
   const [locked, setLocked] = useState(get(value, "locked"));
 
   const availableScaleTypes = useMemo(() => {
-    const nextTypes = getAvailableScaleTypes(colorDataType, colorDataset);
-    return nextTypes;
+    return getAvailableScaleTypes(colorDataType, colorDataset);
   }, [colorDataType, colorDataset]);
 
   const [interpolators, setInterpolators] = useState(
@@ -111,15 +111,13 @@ const ChartOptionColorScale = ({
         return;
       }
 
-      const previewScale = getColorScale(
+      return getColorScale(
         colorDataset, //the array of values of the dataset mapped on the color dimension
         colorDataType,
         scaleType, //
         interpolator,
         userValuesForFinalScale
       );
-
-      return previewScale;
     },
     [colorDataType, colorDataset]
   );

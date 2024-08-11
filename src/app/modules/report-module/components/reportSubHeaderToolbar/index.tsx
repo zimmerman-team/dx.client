@@ -464,25 +464,26 @@ export function ReportSubheaderToolbar(
                     </div>
                   </Popover>
                   {canReportEditDelete && (
-                    <Tooltip title="Edit">
-                      <IconButton
-                        component={Link}
-                        to={`/report/${page}/edit`}
-                        data-testid="edit-button"
-                      >
-                        <EditIcon htmlColor="#262c34" />
-                      </IconButton>
-                    </Tooltip>
-                  )}
-                  {canReportEditDelete && (
-                    <Tooltip title="Delete">
-                      <IconButton
-                        onClick={handleModalDisplay}
-                        data-testid="delete-button"
-                      >
-                        <DeleteIcon htmlColor="#262c34" />
-                      </IconButton>
-                    </Tooltip>
+                    <>
+                      <Tooltip title="Edit">
+                        <IconButton
+                          component={Link}
+                          to={`/report/${page}/edit`}
+                          data-testid="edit-button"
+                        >
+                          <EditIcon htmlColor="#262c34" />
+                        </IconButton>
+                      </Tooltip>
+
+                      <Tooltip title="Delete">
+                        <IconButton
+                          onClick={handleModalDisplay}
+                          data-testid="delete-button"
+                        >
+                          <DeleteIcon htmlColor="#262c34" />
+                        </IconButton>
+                      </Tooltip>
+                    </>
                   )}
                 </div>
               )}

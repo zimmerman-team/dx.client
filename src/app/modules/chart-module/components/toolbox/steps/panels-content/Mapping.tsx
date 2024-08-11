@@ -107,7 +107,7 @@ const DimensionContainerSkeleton = () => {
   );
 };
 const fetchAISuggestedChartTypes = async (token: string, datasetId: string) => {
-  const response = await axios.get(
+  return await axios.get(
     `${process.env.REACT_APP_API}/chart-types/ai-suggestions?id=${datasetId}`,
     {
       headers: {
@@ -115,13 +115,13 @@ const fetchAISuggestedChartTypes = async (token: string, datasetId: string) => {
       },
     }
   );
-  return response;
 };
 
 export const handleValidityCheckOfDimensionsToBeMapped = (
   selectedChartDimension: any,
   dimension: any,
   dataTypes: any
+  // eslint-disable-next-line sonarjs/cognitive-complexity
 ) => {
   //get selected data types
   let selectedDataTypes: string[] = [];
@@ -158,11 +158,7 @@ export const handleValidityCheckOfDimensionsToBeMapped = (
     //check validity of selected data types
     if (selectedDataTypes.length > 0) {
       for (let c of selectedDataTypes as string[]) {
-        if (dimension.validTypes?.includes(c)) {
-          return true;
-        } else {
-          return false;
-        }
+        return !!dimension.validTypes?.includes(c);
       }
     }
 
@@ -217,55 +213,58 @@ export function ChartToolBoxMapping(props: Readonly<ChartToolBoxMappingProps>) {
 
   const autoMap = async () => {
     try {
-      if (selectedAIChart && !isChartAutoMapped && isEmpty(mapping)) {
-        const response = await fetchAISuggestedChartTypes(
-          token,
-          datasetId as string
-        );
-        const data = response.data;
-        //update Crud Data value with data from non-easy-peasy API  call
-        setChartSuggestionsCrudData(data);
-        const selectedChart = selectedAIChartSuggestion(data);
-        if (!isEmpty(selectedChart) && !isEmpty(props.dataTypes)) {
-          const localMapping: any = {};
-          //get mapping from selected ai suggested chart
-          props.dimensions.forEach((d) => {
-            const { isValid, selectedDataTypes } =
-              handleValidityCheckOfDimensionsToBeMapped(
-                selectedChart[d.id],
-                d,
-                props.dataTypes
-              );
-
-            if (isValid()) {
-              localMapping[d.id] = {
-                config: d.aggregation
-                  ? {
-                      aggregation:
-                        typeof selectedChart[d.id] === "object"
-                          ? Object.values(selectedChart[d.id]) ?? [
-                              d.aggregationDefault,
-                            ]
-                          : d.aggregationDefault,
-                    }
-                  : undefined,
-                ids:
-                  typeof selectedChart[d.id] === "object"
-                    ? Object.keys(selectedChart[d.id]).map(() => uniqueId())
-                    : [uniqueId()],
-                value:
-                  typeof selectedChart[d.id] === "object"
-                    ? Object.keys(selectedChart[d.id])
-                    : [selectedChart[d.id]],
-                mappedType: selectedDataTypes,
-                isValid: isValid(),
-              };
-            }
-          });
-          setMapping(localMapping);
-          setIsChartAutoMapped(true);
-        }
+      if (!(selectedAIChart && !isChartAutoMapped && isEmpty(mapping))) {
+        return;
       }
+      const response = await fetchAISuggestedChartTypes(
+        token,
+        datasetId as string
+      );
+      const data = response.data;
+      //update Crud Data value with data from non-easy-peasy API  call
+      setChartSuggestionsCrudData(data);
+      const selectedChart = selectedAIChartSuggestion(data);
+      if (isEmpty(selectedChart) || isEmpty(props.dataTypes)) {
+        return;
+      }
+      const localMapping: any = {};
+      //get mapping from selected ai suggested chart
+      props.dimensions.forEach((d) => {
+        const { isValid, selectedDataTypes } =
+          handleValidityCheckOfDimensionsToBeMapped(
+            selectedChart[d.id],
+            d,
+            props.dataTypes
+          );
+
+        if (!isValid()) {
+          return;
+        }
+        localMapping[d.id] = {
+          config: d.aggregation
+            ? {
+                aggregation:
+                  typeof selectedChart[d.id] === "object"
+                    ? Object.values(selectedChart[d.id]) ?? [
+                        d.aggregationDefault,
+                      ]
+                    : d.aggregationDefault,
+              }
+            : undefined,
+          ids:
+            typeof selectedChart[d.id] === "object"
+              ? Object.keys(selectedChart[d.id]).map(() => uniqueId())
+              : [uniqueId()],
+          value:
+            typeof selectedChart[d.id] === "object"
+              ? Object.keys(selectedChart[d.id])
+              : [selectedChart[d.id]],
+          mappedType: selectedDataTypes,
+          isValid: isValid(),
+        };
+      });
+      setMapping(localMapping);
+      setIsChartAutoMapped(true);
     } catch (e) {
       console.log("error in ai suggestions", e);
     }
@@ -732,69 +731,69 @@ function ChartToolBoxMappingItem(
       dimension.validTypes?.length === 0 ||
       dimension.validTypes?.includes(columnDataType);
 
-    if (isValid) {
-      props.handleNonStaticDimensionsUpdate(
-        props.nonStaticDimensionsId,
-        props.mappingItemValue
-      );
+    if (!isValid) {
+      return;
+    }
+    props.handleNonStaticDimensionsUpdate(
+      props.nonStaticDimensionsId,
+      props.mappingItemValue
+    );
 
-      const mappingFromStorage = get(
-        JSON.parse(
-          sessionStorage.getItem("[EasyPeasyStore][0][charts.mapping]") ?? ""
-        ),
-        "data.value",
-        {}
-      ) as { [key: string]: any };
+    const mappingFromStorage = get(
+      JSON.parse(
+        sessionStorage.getItem("[EasyPeasyStore][0][charts.mapping]") ?? ""
+      ),
+      "data.value",
+      {}
+    ) as { [key: string]: any };
 
-      const localDimensionMapping = get(mappingFromStorage, dimension.id, {});
+    const localDimensionMapping = get(mappingFromStorage, dimension.id, {});
 
-      const defaulAggregation = dimension.aggregation
-        ? getDefaultDimensionAggregation(
-            dimension,
-            dataTypes[props.mappingItemValue as any]
-          )
-        : null;
+    const defaulAggregation = dimension.aggregation
+      ? getDefaultDimensionAggregation(
+          dimension,
+          dataTypes[props.mappingItemValue as any]
+        )
+      : null;
 
-      if (
-        props.nonStaticDimensions[props.nonStaticDimensionsIndex]
-          .mappedValues &&
-        !props.nonStaticDimensions[props.nonStaticDimensionsIndex]?.multiple
-      ) {
-        //replace mapping
-        setMapping({
-          [dimension.id]: {
-            ids: [uniqueId()],
-            value: [props.mappingItemValue],
-            isValid: isValid,
-            mappedType: columnDataType,
-            config: dimension.aggregation
-              ? {
-                  aggregation: [defaulAggregation],
-                }
-              : undefined,
-          },
-        });
-      } else {
-        setMapping({
-          [dimension.id]: {
-            ids: (localDimensionMapping.ids || []).concat(uniqueId()),
-            value: [
-              ...(localDimensionMapping.value || []),
-              props.mappingItemValue,
-            ],
-            isValid: isValid,
-            mappedType: columnDataType,
-            config: dimension.aggregation
-              ? {
-                  aggregation: [
-                    ...(get(localDimensionMapping, "config.aggregation") || []),
-                    defaulAggregation,
-                  ],
-                }
-              : undefined,
-          },
-        });
-      }
+    if (
+      props.nonStaticDimensions[props.nonStaticDimensionsIndex].mappedValues &&
+      !props.nonStaticDimensions[props.nonStaticDimensionsIndex]?.multiple
+    ) {
+      //replace mapping
+      setMapping({
+        [dimension.id]: {
+          ids: [uniqueId()],
+          value: [props.mappingItemValue],
+          isValid: isValid,
+          mappedType: columnDataType,
+          config: dimension.aggregation
+            ? {
+                aggregation: [defaulAggregation],
+              }
+            : undefined,
+        },
+      });
+    } else {
+      setMapping({
+        [dimension.id]: {
+          ids: (localDimensionMapping.ids || []).concat(uniqueId()),
+          value: [
+            ...(localDimensionMapping.value || []),
+            props.mappingItemValue,
+          ],
+          isValid: isValid,
+          mappedType: columnDataType,
+          config: dimension.aggregation
+            ? {
+                aggregation: [
+                  ...(get(localDimensionMapping, "config.aggregation") || []),
+                  defaulAggregation,
+                ],
+              }
+            : undefined,
+        },
+      });
     }
   };
 

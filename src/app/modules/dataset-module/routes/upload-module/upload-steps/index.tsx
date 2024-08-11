@@ -188,6 +188,8 @@ function DatasetUploadSteps(props: Props) {
       });
   };
 
+  const dataUploadError = "Dataset upload error";
+
   const onFileSubmit = (file: File) => {
     setSelectedFile(file);
     const formData = new FormData();
@@ -212,14 +214,14 @@ function DatasetUploadSteps(props: Props) {
         //go to next step - metadata
         if (response.data.error) {
           setProcessingError(response.data.error);
-          console.debug("Dataset upload error", response.data.error);
+          console.debug(dataUploadError, response.data.error);
         } else {
           setActiveStep(2);
           setProcessed(true);
         }
       })
       .catch((error) => {
-        console.debug("Dataset upload error", error);
+        console.debug(dataUploadError, error);
         setProcessingError(defaultProcessingError);
         setSelectedFile(null);
       });
@@ -248,7 +250,7 @@ function DatasetUploadSteps(props: Props) {
 
         if (response.data.error) {
           setProcessingError(response.data.error);
-          console.debug("Dataset upload error", response.data.error);
+          console.debug(dataUploadError, response.data.error);
         } else {
           setFormDetails({
             category: "",
@@ -264,7 +266,7 @@ function DatasetUploadSteps(props: Props) {
         }
       })
       .catch((error) => {
-        console.debug("Dataset upload error", error);
+        console.debug(dataUploadError, error);
         setActiveStep(0);
         setProcessingError(defaultProcessingError);
       });
@@ -274,10 +276,14 @@ function DatasetUploadSteps(props: Props) {
     setActiveStep(0);
   };
 
-  useEffect(() => {
+  const disableActiveOption = () => {
     if (activeOption) {
       setActiveOption(null);
     }
+  };
+
+  useEffect(() => {
+    disableActiveOption();
   }, [activeTab]);
 
   const currentStep = () => {
@@ -298,9 +304,7 @@ function DatasetUploadSteps(props: Props) {
                   title: (
                     <span
                       onClick={() => {
-                        if (activeOption) {
-                          setActiveOption(null);
-                        }
+                        disableActiveOption();
                       }}
                     >
                       Connect Data

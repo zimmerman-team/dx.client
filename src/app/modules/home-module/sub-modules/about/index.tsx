@@ -48,6 +48,8 @@ export default function AboutModule() {
     },
   ];
 
+  const uiUx = "UI/UX Design Intern";
+
   const team = [
     {
       img: SiemAvi,
@@ -82,7 +84,7 @@ export default function AboutModule() {
     {
       img: AylinAvi,
       name: "Aylin Paçaci",
-      role: "UI/UX Design Intern",
+      role: uiUx,
       linkedIn: "https://tr.linkedin.com/in/aylinpacaci",
     },
     {
@@ -100,13 +102,13 @@ export default function AboutModule() {
     {
       img: VeronikaAvi,
       name: "Veronika Ivanova",
-      role: "UI/UX Design Intern",
+      role: uiUx,
       linkedIn: "https://nl.linkedin.com/in/veronika-ivanova-448b6b1b6",
     },
     {
       img: AnsonAvi,
       name: "Shiyi Anson Chen",
-      role: "UI/UX Design Intern",
+      role: uiUx,
       linkedIn: "",
     },
   ];

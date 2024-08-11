@@ -113,7 +113,7 @@ function AssetsCollection() {
             >
               <Link
                 to={`/dataset/new/upload${
-                  location.pathname === "/" ? "?fromHome=true" : ""
+                  window.location.pathname === "/" ? "?fromHome=true" : ""
                 }`}
                 css={`
                   background: #e492bd;

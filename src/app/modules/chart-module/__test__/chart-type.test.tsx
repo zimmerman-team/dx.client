@@ -136,14 +136,16 @@ test("clicking AI switch should toggle switch", async () => {
     "/chart/new/type"
   );
 
+  const aiAgentSwitchId = "ai-agent-switch";
+
   render(app);
-  expect(screen.getByTestId("ai-agent-switch")).toBeInTheDocument();
+  expect(screen.getByTestId(aiAgentSwitchId)).toBeInTheDocument();
   //turn on switch
-  await userEvent.click(screen.getByTestId("ai-agent-switch"));
-  expect(screen.getByTestId("ai-agent-switch")).toBeChecked();
+  await userEvent.click(screen.getByTestId(aiAgentSwitchId));
+  expect(screen.getByTestId(aiAgentSwitchId)).toBeChecked();
   //turn off switch
-  await userEvent.click(screen.getByTestId("ai-agent-switch"));
-  expect(screen.getByTestId("ai-agent-switch")).not.toBeChecked();
+  await userEvent.click(screen.getByTestId(aiAgentSwitchId));
+  expect(screen.getByTestId(aiAgentSwitchId)).not.toBeChecked();
 });
 
 test("should select a chart type", async () => {

@@ -58,6 +58,8 @@ export default function GridItem(props: Readonly<Props>) {
     destinationPath += "?fromHome=true";
   }
 
+  const disabledStyle = "opacity: 0.5;pointer-events: none;";
+
   return (
     <div
       onMouseEnter={() => setDisplayCreateChartButton(true)}
@@ -285,9 +287,7 @@ export default function GridItem(props: Readonly<Props>) {
               }
             `}
           >
-            <div
-              css={!isAuthenticated ? "opacity: 0.5;pointer-events: none;" : ""}
-            >
+            <div css={!isAuthenticated ? disabledStyle : ""}>
               <Tooltip
                 title="Duplicate"
                 data-cy="dataset-grid-item-duplicate-btn"
@@ -299,13 +299,7 @@ export default function GridItem(props: Readonly<Props>) {
                 </IconButton>
               </Tooltip>
             </div>
-            <div
-              css={
-                !canDatasetEditDelete
-                  ? "opacity: 0.5;pointer-events: none;"
-                  : ""
-              }
-            >
+            <div css={!canDatasetEditDelete ? disabledStyle : ""}>
               <Link to={props.path}>
                 <Tooltip title="Edit" data-cy="dataset-grid-item-edit-btn">
                   <EditIcon
@@ -316,13 +310,7 @@ export default function GridItem(props: Readonly<Props>) {
                 </Tooltip>
               </Link>
             </div>
-            <div
-              css={
-                !canDatasetEditDelete
-                  ? "opacity: 0.5;pointer-events: none;"
-                  : ""
-              }
-            >
+            <div css={!canDatasetEditDelete ? disabledStyle : ""}>
               <Tooltip title="Delete" data-cy="dataset-grid-item-delete-btn">
                 <IconButton
                   onClick={() => props.handleDelete?.(props.id as string)}

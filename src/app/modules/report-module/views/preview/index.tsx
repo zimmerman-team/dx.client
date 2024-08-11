@@ -97,13 +97,16 @@ export function ReportPreviewView(props: {
 
   React.useEffect(() => {
     props.setAutoSave({ isAutoSaveEnabled: false });
-    if (!isLoading) {
-      if (token) {
-        fetchReportData({ token, getId: page });
-      } else if (!isAuthenticated) {
-        fetchReportData({ nonAuthCall: true, getId: page });
-      }
+
+    if (isLoading) {
+      return;
     }
+    if (token) {
+      fetchReportData({ token, getId: page });
+    } else if (!isAuthenticated) {
+      fetchReportData({ nonAuthCall: true, getId: page });
+    }
+
     return () => {
       clearReportData();
     };

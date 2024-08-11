@@ -1,5 +1,5 @@
 import { IHeaderDetails } from "app/modules/report-module/components/right-panel/data";
-import { IFramesArray } from "../create/data";
+import { IFramesArray } from "app/modules/report-module/views/create/data";
 import _ from "lodash";
 import { EditorState } from "draft-js";
 
@@ -47,6 +47,7 @@ export const compareHeaderDetailsState = (
 export const compareFramesArrayState = (
   framesArrayProps: IFramesArray[],
   framesArrayState: IFramesArray[]
+  // eslint-disable-next-line sonarjs/cognitive-complexity
 ) => {
   if (framesArrayProps.length !== framesArrayState.length) {
     return false;

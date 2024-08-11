@@ -66,6 +66,12 @@ export function useDataThemesEchart() {
     });
   }
 
+  const valueFormatter3 = (params: any, isMonetaryValue: boolean) => {
+    return `${params.name}: ${
+      isMonetaryValue ? formatFinancialValue(params.value, true) : params.value
+    }`;
+  };
+
   function echartsBarchart(data: any, visualOptions: any, mapping: any) {
     const {
       marginTop,
@@ -93,7 +99,7 @@ export function useDataThemesEchart() {
     const bars = sortedData.map((d: any) => d.bars);
     const sizes = sortedData.map((d: any) => d.size);
 
-    const option = {
+    return {
       grid: {
         top: marginTop,
         left: marginLeft,
@@ -168,17 +174,9 @@ export function useDataThemesEchart() {
       tooltip: {
         trigger: showTooltip ? "item" : "none",
         confine: true,
-        formatter: (params: any) => {
-          return `${params.name}: ${
-            isMonetaryValue
-              ? formatFinancialValue(params.value, true)
-              : params.value
-          }`;
-        },
+        formatter: (params: any) => valueFormatter3(params, isMonetaryValue),
       },
     };
-
-    return option;
   }
 
   function echartsMultisetBarchart(
@@ -204,7 +202,7 @@ export function useDataThemesEchart() {
       palette,
     } = visualOptions;
 
-    const option = {
+    return {
       color: checkLists.find((item) => item.label === palette)?.value,
       grid: {
         top: marginTop,
@@ -216,13 +214,7 @@ export function useDataThemesEchart() {
       tooltip: {
         trigger: showTooltip ? "item" : "none",
         confine: true,
-        formatter: (params: any) => {
-          return `${params.name}: ${
-            isMonetaryValue
-              ? formatFinancialValue(params.value, true)
-              : params.value
-          }`;
-        },
+        formatter: (params: any) => valueFormatter3(params, isMonetaryValue),
       },
       legend: {
         show: legend,
@@ -277,8 +269,6 @@ export function useDataThemesEchart() {
         barWidth,
       })),
     };
-
-    return option;
   }
 
   function echartsStackedBarchart(data: any, visualOptions: any, mapping: any) {
@@ -299,7 +289,7 @@ export function useDataThemesEchart() {
       palette,
     } = visualOptions;
 
-    const option = {
+    return {
       color: checkLists.find((item) => item.label === palette)?.value,
       grid: {
         top: marginTop,
@@ -378,8 +368,6 @@ export function useDataThemesEchart() {
         barWidth,
       })),
     };
-
-    return option;
   }
 
   function echartsPiechart(data: any, visualOptions: any) {
@@ -405,18 +393,12 @@ export function useDataThemesEchart() {
     const thicknessPercent =
       defaultRadius - (arcThickness / 100) * defaultRadius;
 
-    const option = {
+    return {
       color: checkLists.find((item) => item.label === palette)?.value,
       tooltip: {
         trigger: showTooltip ? "item" : "none",
         confine: true,
-        formatter: (params: any) => {
-          return `${params.name}: ${
-            isMonetaryValue
-              ? formatFinancialValue(params.value, true)
-              : params.value
-          }`;
-        },
+        formatter: (params: any) => valueFormatter3(params, isMonetaryValue),
       },
       legend: {
         top: "5%",
@@ -453,7 +435,6 @@ export function useDataThemesEchart() {
         },
       ],
     };
-    return option;
   }
 
   function echartsGeomap(data: any, visualOptions: any) {
@@ -505,7 +486,7 @@ export function useDataThemesEchart() {
     const top = height - newHeight > 0 ? (height - newHeight) / 2 : 0;
     const left = width - newWidth > 0 ? (width - newWidth) / 2 : 0;
 
-    const option = {
+    return {
       tooltip: {
         trigger: showTooltip ? "item" : "none",
         showDelay: 0,
@@ -558,9 +539,12 @@ export function useDataThemesEchart() {
         },
       ],
     };
-
-    return option;
   }
+
+  const valueFormatter2 = (value: number | string, isMonetaryValue: boolean) =>
+    isMonetaryValue
+      ? formatFinancialValue(parseInt(value.toString(), 10), true)
+      : value;
 
   function echartsLinechart(data: any, visualOptions: any, mapping: any) {
     const {
@@ -577,7 +561,7 @@ export function useDataThemesEchart() {
       showTooltip,
       isMonetaryValue,
     } = visualOptions;
-    const option = {
+    return {
       grid: {
         top: marginTop,
         left: marginLeft,
@@ -642,13 +626,9 @@ export function useDataThemesEchart() {
 
         confine: true,
         valueFormatter: (value: number | string) =>
-          isMonetaryValue
-            ? formatFinancialValue(parseInt(value.toString(), 10), true)
-            : value,
+          valueFormatter2(value, isMonetaryValue),
       },
     };
-
-    return option;
   }
 
   function echartsAreatimeaxis(data: any, visualOptions: any, mapping: any) {
@@ -673,7 +653,7 @@ export function useDataThemesEchart() {
       d.y,
     ]);
 
-    const option = {
+    return {
       color: checkLists.find((item) => item.label === palette)?.value,
       grid: {
         top: marginTop,
@@ -691,9 +671,7 @@ export function useDataThemesEchart() {
           return [pt[0], "10%"];
         },
         valueFormatter: (value: number | string) =>
-          isMonetaryValue
-            ? formatFinancialValue(parseInt(value.toString(), 10), true)
-            : value,
+          valueFormatter2(value, isMonetaryValue),
       },
       xAxis: {
         type: "time",
@@ -730,8 +708,6 @@ export function useDataThemesEchart() {
         },
       ],
     };
-
-    return option;
   }
 
   function echartsAreastack(data: any, visualOptions: any, mapping: any) {
@@ -752,7 +728,7 @@ export function useDataThemesEchart() {
       palette,
     } = visualOptions;
 
-    const option = {
+    return {
       color: checkLists.find((item) => item.label === palette)?.value,
       grid: {
         top: marginTop,
@@ -820,13 +796,9 @@ export function useDataThemesEchart() {
 
         confine: true,
         valueFormatter: (value: number | string) =>
-          isMonetaryValue
-            ? formatFinancialValue(parseInt(value.toString(), 10), true)
-            : value,
+          valueFormatter2(value, isMonetaryValue),
       },
     };
-
-    return option;
   }
 
   function echartsBubblechart(data: any, visualOptions: any, mapping: any) {
@@ -859,7 +831,7 @@ export function useDataThemesEchart() {
       )
     );
 
-    const option = {
+    return {
       color: checkLists.find((item) => item.label === palette)?.value,
       legend: {
         right: "10%",
@@ -950,7 +922,6 @@ export function useDataThemesEchart() {
         },
       })),
     };
-    return option;
   }
 
   function echartsScatterchart(data: any, visualOptions: any, mapping: any) {
@@ -971,7 +942,7 @@ export function useDataThemesEchart() {
       dataZoom,
     } = visualOptions;
 
-    const option = {
+    return {
       color: checkLists.find((item) => item.label === palette)?.value,
       grid: {
         top: marginTop,
@@ -1010,9 +981,7 @@ export function useDataThemesEchart() {
         trigger: showTooltip ? "item" : "none",
         confine: true,
         valueFormatter: (value: number | string) =>
-          isMonetaryValue
-            ? formatFinancialValue(parseInt(value.toString(), 10), true)
-            : value,
+          valueFormatter2(value, isMonetaryValue),
       },
       series: [
         {
@@ -1022,7 +991,6 @@ export function useDataThemesEchart() {
         },
       ],
     };
-    return option;
   }
 
   function echartsHeatmap(data: any, visualOptions: any) {
@@ -1047,21 +1015,18 @@ export function useDataThemesEchart() {
 
     const xAxisData = sortBy(data.filter((d: any) => d.x).map((d: any) => d.x));
 
-    const isXAxisYear = xAxisData.every((d: any) => {
+    const isYear = (d: any) => {
       if (isNaN(d)) {
         return false;
       }
       return d > 1000 && d <= new Date().getFullYear();
-    });
+    };
+
+    const isXAxisYear = xAxisData.every(isYear);
 
     const yAxisData = sortBy(data.filter((d: any) => d.y).map((d: any) => d.y));
 
-    const isYAxisYear = yAxisData.every((d: any) => {
-      if (isNaN(d)) {
-        return false;
-      }
-      return d > 1000 && d <= new Date().getFullYear();
-    });
+    const isYAxisYear = yAxisData.every(isYear);
 
     const seriesData = data.map((item: any) => [
       isXAxisYear ? String(item.x) : item.x,
@@ -1069,7 +1034,7 @@ export function useDataThemesEchart() {
       item.size,
     ]);
 
-    const option = {
+    return {
       xAxis: {
         type: "category",
         data: uniqBy(xAxisData, (d: any) => d),
@@ -1088,9 +1053,7 @@ export function useDataThemesEchart() {
         trigger: showTooltip ? "item" : "none",
         confine: true,
         valueFormatter: (value: number | string) =>
-          isMonetaryValue
-            ? formatFinancialValue(parseInt(value.toString(), 10), true)
-            : value,
+          valueFormatter2(value, isMonetaryValue),
       },
       visualMap: {
         min: Math.min(...data.map((item: any) => item.size)),
@@ -1129,7 +1092,6 @@ export function useDataThemesEchart() {
         },
       ],
     };
-    return option;
   }
 
   function echartsRadarchart(data: any, visualOptions: any) {
@@ -1146,7 +1108,7 @@ export function useDataThemesEchart() {
       palette,
     } = visualOptions;
 
-    const option = {
+    return {
       grid: {
         top: marginTop,
         left: marginLeft,
@@ -1157,9 +1119,7 @@ export function useDataThemesEchart() {
       tooltip: {
         trigger: showTooltip ? "item" : "none",
         valueFormatter: (value: number | string) =>
-          isMonetaryValue
-            ? formatFinancialValue(parseInt(value.toString(), 10), true)
-            : value,
+          valueFormatter2(value, isMonetaryValue),
       },
       legend: {
         type: "scroll",
@@ -1194,9 +1154,42 @@ export function useDataThemesEchart() {
         ],
       })),
     };
-
-    return option;
   }
+
+  const formatSankeyTooltip = (params: any, isMonetaryValue: boolean) => {
+    let result = "";
+    if (params.data.source && params.data.target && params.data.value) {
+      let source = "";
+      let target = "";
+      let splits = params.data.source.split("-");
+      if (splits.length === 1) {
+        source = params.data.source;
+      } else {
+        source = splits.slice(1).join("-");
+      }
+      splits = params.data.target.split("-");
+      if (splits.length === 1) {
+        target = params.data.target;
+      } else {
+        target = splits.slice(1).join("-");
+      }
+      result = `${source} - ${target}: ${
+        isMonetaryValue
+          ? formatFinancialValue(params.data.value, true)
+          : params.data.value
+      }`;
+    } else {
+      let name = "";
+      let splits = params.name.split("-");
+      if (splits.length === 1) {
+        name = params.name;
+      } else {
+        name = splits.slice(1).join("-");
+      }
+      result = name;
+    }
+    return result;
+  };
 
   function echartsSankey(data: any, visualOptions: any) {
     const {
@@ -1231,7 +1224,7 @@ export function useDataThemesEchart() {
     });
     nodes = uniqBy(nodes, "name");
 
-    const option = {
+    return {
       // backgroundColor: background,
       backgroundColor: "transparent",
       series: [
@@ -1276,45 +1269,25 @@ export function useDataThemesEchart() {
       tooltip: {
         trigger: showTooltip ? "item" : "none",
         confine: true,
-        formatter: (params: any) => {
-          let result = "";
-          if (params.data.source && params.data.target && params.data.value) {
-            let source = "";
-            let target = "";
-            let splits = params.data.source.split("-");
-            if (splits.length === 1) {
-              source = params.data.source;
-            } else {
-              source = splits.slice(1).join("-");
-            }
-            splits = params.data.target.split("-");
-            if (splits.length === 1) {
-              target = params.data.target;
-            } else {
-              target = splits.slice(1).join("-");
-            }
-            result = `${source} - ${target}: ${
-              isMonetaryValue
-                ? formatFinancialValue(params.data.value, true)
-                : params.data.value
-            }`;
-          } else {
-            let name = "";
-            let splits = params.name.split("-");
-            if (splits.length === 1) {
-              name = params.name;
-            } else {
-              name = splits.slice(1).join("-");
-            }
-            result = name;
-          }
-          return result;
-        },
+        formatter: (params: any) =>
+          formatSankeyTooltip(params, isMonetaryValue),
       },
     };
-
-    return option;
   }
+
+  const valueFormatter1 = (params: any, isMonetaryValue: boolean) => {
+    return `${params.name}: ${
+      isMonetaryValue
+        ? formatFinancialValue(params.data.value, true)
+        : params.data.value
+    }`;
+  };
+
+  const setLinkOpacity = (link: any, linksOpacity: number) => {
+    link.lineStyle = {
+      opacity: linksOpacity,
+    };
+  };
 
   function echartsForcegraph(data: any, visualOptions: any) {
     const {
@@ -1349,13 +1322,9 @@ export function useDataThemesEchart() {
       node.symbolSize = nodeSize;
     });
 
-    data.links?.forEach(function (link: any) {
-      link.lineStyle = {
-        opacity: linksOpacity,
-      };
-    });
+    data.links?.forEach((link: any) => setLinkOpacity(link, linksOpacity));
 
-    const option = {
+    return {
       color: checkLists.find((item) => item.label === palette)?.value,
       legend: [
         {
@@ -1367,13 +1336,7 @@ export function useDataThemesEchart() {
       ],
       tooltip: {
         trigger: showTooltip ? "item" : "none",
-        formatter: (params: any) => {
-          return `${params.name}: ${
-            isMonetaryValue
-              ? formatFinancialValue(params.data.value, true)
-              : params.data.value
-          }`;
-        },
+        formatter: (params: any) => valueFormatter1(params, isMonetaryValue),
       },
       series: [
         {
@@ -1400,7 +1363,6 @@ export function useDataThemesEchart() {
         },
       ],
     };
-    return option;
   }
 
   function echartsCirculargraph(data: any, visualOptions: any) {
@@ -1446,11 +1408,7 @@ export function useDataThemesEchart() {
       };
     });
 
-    data.links?.forEach(function (link: any) {
-      link.lineStyle = {
-        opacity: linksOpacity,
-      };
-    });
+    data.links?.forEach((link: any) => setLinkOpacity(link, linksOpacity));
 
     const nodes = uniqBy(data.nodes, "name");
 
@@ -1468,13 +1426,7 @@ export function useDataThemesEchart() {
       ],
       tooltip: {
         trigger: showTooltip ? "item" : "none",
-        formatter: (params: any) => {
-          return `${params.name}: ${
-            isMonetaryValue
-              ? formatFinancialValue(params.data.value, true)
-              : params.data.value
-          }`;
-        },
+        formatter: (params: any) => valueFormatter1(params, isMonetaryValue),
       },
       animationDurationUpdate: 1500,
       animationEasingUpdate: "quinticInOut",
@@ -1542,7 +1494,7 @@ export function useDataThemesEchart() {
 
     const nodes = uniqBy(data.nodes, "name");
 
-    const option = {
+    return {
       color: checkLists.find((item) => item.label === palette)?.value,
       series: [
         {
@@ -1574,7 +1526,6 @@ export function useDataThemesEchart() {
         },
       ],
     };
-    return option;
   }
 
   function echartsTreemap(data: any, visualOptions: any) {
@@ -1595,7 +1546,7 @@ export function useDataThemesEchart() {
       isMonetaryValue,
     } = visualOptions;
 
-    const option = {
+    return {
       // backgroundColor: background,
       backgroundColor: "transparent",
       series: [
@@ -1625,17 +1576,9 @@ export function useDataThemesEchart() {
       tooltip: {
         trigger: showTooltip ? "item" : "none",
         confine: true,
-        formatter: (params: any) => {
-          return `${params.name}: ${
-            isMonetaryValue
-              ? formatFinancialValue(params.data.value, true)
-              : params.data.value
-          }`;
-        },
+        formatter: (params: any) => valueFormatter1(params, isMonetaryValue),
       },
     };
-
-    return option;
   }
 
   function echartsCirclepacking(
@@ -1643,8 +1586,7 @@ export function useDataThemesEchart() {
     visualOptions: any,
     targetPath: string | null
   ) {
-    const option = drillDown(data, targetPath, visualOptions);
-    return option;
+    return drillDown(data, targetPath, visualOptions);
   }
 
   function echartsSunburst(data: any, visualOptions: any) {
@@ -1679,19 +1621,13 @@ export function useDataThemesEchart() {
     };
     countDepth(data);
 
-    const option = {
+    return {
       // backgroundColor: background,
       backgroundColor: "transparent",
       color: checkLists.find((item) => item.label === palette)?.value,
       tooltip: {
         trigger: showTooltip ? "item" : "none",
-        formatter: (params: any) => {
-          return `${params.name}: ${
-            isMonetaryValue
-              ? formatFinancialValue(params.data.value, true)
-              : params.data.value
-          }`;
-        },
+        formatter: (params: any) => valueFormatter1(params, isMonetaryValue),
       },
       series: [
         {
@@ -1734,8 +1670,6 @@ export function useDataThemesEchart() {
         },
       ],
     };
-
-    return option;
   }
   function bigNumberRender(data: any, node: HTMLElement) {
     const formatedData = {

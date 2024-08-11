@@ -37,9 +37,10 @@ import useAutosave from "app/hooks/useAutoSave";
 export default function ReportModule() {
   const { user, isAuthenticated } = useAuth0();
   const history = useHistory();
+  const aiTemplateString = "ai-template";
   const { page, view } = useParams<{
     page: string;
-    view: "initial" | "edit" | "create" | "preview" | "ai-template";
+    view: "initial" | "edit" | "create" | "preview" | typeof aiTemplateString;
   }>();
   const [hasChangesBeenMade, setHasChangesBeenMade] = React.useState(false);
   const [autoSave, setAutoSave] = React.useState<{
@@ -77,8 +78,10 @@ export default function ReportModule() {
     });
   });
 
+  const defaultReportTitle = "Untitled report";
+
   const [rightPanelOpen, setRightPanelOpen] = React.useState(true);
-  const [reportName, setReportName] = React.useState("Untitled report");
+  const [reportName, setReportName] = React.useState(defaultReportTitle);
   const [hasSubHeaderTitleFocused, setHasSubHeaderTitleFocused] =
     React.useState(false);
   const [hasSubHeaderTitleBlurred, setHasSubHeaderTitleBlurred] =
@@ -145,7 +148,7 @@ export default function ReportModule() {
   React.useEffect(() => {
     //set report name back to untitled report if it is empty and user is not focused on subheader title
     if (reportName === "" && hasSubHeaderTitleBlurred) {
-      setReportName("Untitled report");
+      setReportName(defaultReportTitle);
     }
     return () => {
       setHasSubHeaderTitleBlurred(false);
@@ -268,7 +271,7 @@ export default function ReportModule() {
   const resetReport = () => {
     updateFramesArray(initialFramesArray);
     setPersistedReportState({
-      reportName: "Untitled report",
+      reportName: defaultReportTitle,
       headerDetails: {
         title: "",
         description: JSON.stringify(
@@ -293,7 +296,7 @@ export default function ReportModule() {
       descriptionColor: "#ffffff",
       dateColor: "#ffffff",
     });
-    setReportName("Untitled report");
+    setReportName(defaultReportTitle);
     setRightPanelView("charts");
     setRightPanelOpen(true);
     setReportPreviewMode(false);
@@ -371,7 +374,7 @@ export default function ReportModule() {
 
   const isSaveEnabled = React.useMemo(() => {
     let hasTextValue = !(
-      reportName === "Untitled report" &&
+      reportName === defaultReportTitle &&
       !headerDetails.description.getCurrentContent().hasText() &&
       isEmpty(headerDetails.title) &&
       framesArray.length === 1
@@ -396,7 +399,7 @@ export default function ReportModule() {
     <DndProvider backend={HTML5Backend}>
       {!reportError401 &&
         showReportHeader &&
-        view !== "ai-template" &&
+        view !== aiTemplateString &&
         view !== "initial" && (
           <ReportSubheaderToolbar
             autoSave={autoSave.isAutoSaveEnabled}
@@ -419,7 +422,7 @@ export default function ReportModule() {
         view !== "preview" &&
         canEditDeleteReport &&
         view !== "initial" &&
-        view !== "ai-template" && (
+        view !== aiTemplateString && (
           <ReportRightPanel
             open={rightPanelOpen}
             currentView={view}
@@ -436,7 +439,7 @@ export default function ReportModule() {
       <div
         css={`
           width: 100%;
-          height: ${view === "ai-template" ||
+          height: ${view === aiTemplateString ||
           reportError401 ||
           !showReportHeader
             ? "0px"

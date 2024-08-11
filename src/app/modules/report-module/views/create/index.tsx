@@ -280,10 +280,7 @@ export const PlaceHolder = (props: PlaceholderProps) => {
       if (placeholderIndex === dragIndex) {
         return false;
       }
-      if (placeholderIndex - 1 === dragIndex) {
-        return false;
-      }
-      return true;
+      return placeholderIndex - 1 !== dragIndex;
     }
     return false;
   };
@@ -296,10 +293,7 @@ export const PlaceHolder = (props: PlaceholderProps) => {
       if (placeholderIndex === itemDragIndex) {
         return false;
       }
-      if (placeholderIndex - 1 === itemDragIndex) {
-        return false;
-      }
-      return true;
+      return placeholderIndex - 1 !== itemDragIndex;
     }
     return false;
   };

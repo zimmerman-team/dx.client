@@ -370,28 +370,26 @@ export default function ChartPlaceholder(props: { loading?: boolean }) {
   };
 
   const displayPlaceholder = () => {
-    switch (activePanels) {
-      case "mapping":
-        return (
+    if (activePanels !== "mapping") {
+      return;
+    }
+    return (
+      <div
+        css={`
+          position: relative;
+        `}
+      >
+        {!props.loading && (
           <div
             css={`
-              position: relative;
+              height: ${CHART_DEFAULT_HEIGHT}px;
             `}
           >
-            {!props.loading && (
-              <div
-                css={`
-                  height: ${CHART_DEFAULT_HEIGHT}px;
-                `}
-              >
-                {getChartPlaceholder()}
-              </div>
-            )}
+            {getChartPlaceholder()}
           </div>
-        );
-      default:
-        return;
-    }
+        )}
+      </div>
+    );
   };
 
   return <div css={commonStyles.container}>{displayPlaceholder()}</div>;

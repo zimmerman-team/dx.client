@@ -44,7 +44,7 @@ export function MobileBottomNavigation() {
   const history = useHistory();
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
-  const actionButtons = CreateActionButtons();
+  const actionButtons = createActionButtons();
 
   function getIsActive(path: string) {
     switch (path) {

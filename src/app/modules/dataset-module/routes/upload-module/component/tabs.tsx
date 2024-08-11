@@ -1,5 +1,5 @@
 import React from "react";
-import ComputerIcon from "app/modules/dataset-upload-module/assets/computer-icon";
+import ComputerIcon from "app/modules/dataset-module/routes/upload-module/assets/computer-icon";
 import { Search } from "@material-ui/icons";
 
 interface Props {

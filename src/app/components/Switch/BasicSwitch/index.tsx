@@ -63,7 +63,7 @@ export default function BasicSwitch(props: Props) {
             color: ${props.activeTab === tab.value ? "white" : "#231D2C"};
           `}
         >
-          {tab.icon && tab.icon} {tab.label}
+          {tab.icon ? tab.icon : null} {tab.label}
         </button>
       ))}
 
