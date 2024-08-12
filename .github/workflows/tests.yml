@@ -44,7 +44,7 @@ env:
 
 jobs:
   jest-run:
-    runs-on: [self-hosted, tests]
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -55,8 +55,14 @@ jobs:
           node-version: '16'
           cache: 'yarn'
 
+      - name: Cache Yarn
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache
+          key: cypress-${{ runner.os }}-cypress-${{ hashFiles('**/package-lock.json') }}
+
       - name: Install packages
-        run: yarn install && yarn add "https://github.com/zimmerman-team/rawgraphs-charts.git#b86c928" 
+        run: yarn install --frozen-lockfile && yarn add "https://github.com/zimmerman-team/rawgraphs-charts.git#b86c928" 
 
       - name: Build rawgraphs package
         run: |
@@ -72,7 +78,7 @@ jobs:
         run: yarn test
 
   cypress-run:
-    runs-on: [self-hosted, tests]
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -83,8 +89,14 @@ jobs:
           node-version: '16'
           cache: 'yarn'
 
+      - name: Cache Yarn
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache
+          key: cypress-${{ runner.os }}-cypress-${{ hashFiles('**/package-lock.json') }}
+
       - name: Install packages
-        run: yarn install && yarn add "https://github.com/zimmerman-team/rawgraphs-charts.git#b86c928" 
+        run: yarn install --frozen-lockfile && yarn add "https://github.com/zimmerman-team/rawgraphs-charts.git#b86c928" 
 
       - name: Build rawgraphs package
         run: |
@@ -104,7 +116,7 @@ jobs:
           # https://docs.cypress.io/guides/continuous-integration/introduction#Boot-your-server
           start: yarn start
           wait-on: "http://127.0.0.1:3000" # Waits for above
-          wait-on-timeout: 180
+          wait-on-timeout: 200
           # Records to Cypress Cloud
           # https://docs.cypress.io/guides/cloud/projects#Set-up-a-project-to-record
           record: true
