@@ -55,12 +55,6 @@ jobs:
           node-version: '16'
           cache: 'yarn'
 
-      - name: Cache Yarn
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache
-          key: cypress-${{ runner.os }}-cypress-${{ hashFiles('**/package-lock.json') }}
-
       - name: Install packages
         run: yarn install --frozen-lockfile && yarn add "https://github.com/zimmerman-team/rawgraphs-charts.git#b86c928" 
 
@@ -88,12 +82,6 @@ jobs:
         with:
           node-version: '16'
           cache: 'yarn'
-
-      - name: Cache Yarn
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache
-          key: cypress-${{ runner.os }}-cypress-${{ hashFiles('**/package-lock.json') }}
 
       - name: Install packages
         run: yarn install --frozen-lockfile && yarn add "https://github.com/zimmerman-team/rawgraphs-charts.git#b86c928" 
