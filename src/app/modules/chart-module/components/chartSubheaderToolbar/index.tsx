@@ -18,7 +18,7 @@ import CloudDoneIcon from "@material-ui/icons/CloudDone";
 import CopyToClipboard from "react-copy-to-clipboard";
 import FileCopyIcon from "@material-ui/icons/FileCopy";
 import { PageLoader } from "app/modules/common/page-loader";
-import { useHistory, useLocation, useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import Snackbar from "@material-ui/core/Snackbar";
 import SnackbarContent from "@material-ui/core/SnackbarContent";
 import { styles } from "app/modules/chart-module/components/chartSubheaderToolbar/styles";
@@ -41,7 +41,6 @@ import EmbedChartDialog from "app/components/Dialogs/EmbedChartDialog";
 export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
   const classes = useStyles();
   const history = useHistory();
-  const location = useLocation();
   const { user, isAuthenticated } = useAuth0();
   const token = useStoreState((state) => state.AuthToken.value);
   const titleRef = React.useRef<HTMLDivElement>(null);
@@ -259,7 +258,7 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
     <div id="subheader-toolbar" css={styles.container}>
       {createChartLoading && <PageLoader />}
       <InfoSnackbar
-        gap={location.pathname.includes("report")}
+        gap={window.location.pathname.includes("report")}
         data-testid="create-chart-snackbar"
         onClose={() => setShowSnackbar(null)}
         open={showSnackbar !== null && showSnackbar !== ""}
@@ -269,7 +268,7 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
           aria-describedby="create-chart-snackbar-content"
           action={
             <>
-              {!location.pathname.includes("report") && (
+              {!window.location.pathname.includes("report") && (
                 <button
                   onClick={() => {
                     setShowSnackbar(null);

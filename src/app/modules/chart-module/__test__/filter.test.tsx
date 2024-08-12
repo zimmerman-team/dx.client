@@ -202,9 +202,9 @@ test("applied filters list should decrease by 1 when an applied filter is clicke
     expect(appliedFilter).toBeInTheDocument();
     fireEvent.click(appliedFilter);
   });
-  expect(
-    mockStore.getState().charts.appliedFilters.value[props.name]
-  ).toBeNull();
+  expect(mockStore.getState().charts.appliedFilters.value[props.name]).toBe(
+    undefined
+  );
 });
 
 test("expanded filter group should close when back button is clicked", async () => {
