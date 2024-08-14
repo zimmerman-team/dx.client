@@ -1,10 +1,10 @@
 import React from "react";
 
-import { Box, Container, Grid } from "@material-ui/core";
+import { Box, Container } from "@material-ui/core";
 import { ReactComponent as MissionImg } from "app/modules/home-module/assets/about-mission.svg";
 import { ReactComponent as DXImg } from "app/modules/home-module/assets/about-dx.svg";
 import { ReactComponent as StoryImg } from "app/modules/home-module/assets/about-story.svg";
-import Ellipses from "app/modules/home-module/assets/about-page-ellipses.svg";
+import EllipsesMobile from "app/modules/home-module/assets/about-page-ellipses-mobile.svg";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
 import HomeFooter from "../../components/Footer";
@@ -172,7 +172,7 @@ export default function AboutModule() {
         to={"/contact"}
         css={`
           margin-top: 32px;
-          font-family: Inter;
+          font-family: "Inter", sans-serif;
           font-size: 20px;
           font-style: normal;
           font-weight: 700;
@@ -188,6 +188,10 @@ export default function AboutModule() {
           padding: 12px 27px;
           border: none;
           text-decoration: none;
+          @media (max-width: 500px) {
+            font-size: 16px;
+            padding: 12px 24px;
+          }
         `}
       >
         Join Our Team
@@ -199,7 +203,7 @@ export default function AboutModule() {
   return (
     <section
       css={`
-        background-image: url(${Ellipses});
+        background-image: url(${EllipsesMobile});
         background-repeat: no-repeat;
         background-position: 40% 0%;
         height: 100%;
@@ -336,7 +340,7 @@ export default function AboutModule() {
                     @media (max-width: 425px) {
                       flex-direction: column;
                       button {
-                        width: 51%;
+                        width: 100%;
                       }
                     }
                     > button {

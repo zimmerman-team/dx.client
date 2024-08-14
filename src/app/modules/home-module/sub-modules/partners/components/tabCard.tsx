@@ -18,8 +18,6 @@ function TabCard(props: {
         css={`
           position: relative;
           z-index: 1;
-          background: linear-gradient(180deg, #a4a0ff -61.62%, #f8fcfc 114.5%);
-          border-radius: 29px;
           width: 100%;
           display: flex;
           justify-content: center;
@@ -27,6 +25,7 @@ function TabCard(props: {
           font-family: "GothamNarrow-Bold", sans-serif;
           padding: 72px 40px 100px 88px;
           color: #231d2c;
+          overflow-x: hidden;
 
           a {
             text-decoration: none;
@@ -54,18 +53,62 @@ function TabCard(props: {
             white-space: pre-line;
             font-weight: 400;
             line-height: 19px;
+            color: #231d2c;
+            font-size: 16px;
           }
-          @media (max-width: 768px) {
+          @media (max-width: 1179px) {
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            height: 644px;
+            gap: 22px;
+            padding: unset;
+            div:nth-child(1) {
+              width: auto;
+            }
+            @media (max-width: 761px) {
+              height: 100%;
+              padding-top: 40px;
+              h4 {
+                font-size: 20px;
+                line-height: 24px;
+              }
+              p {
+                font-size: 16px;
+                line-height: 19.2px;
+              }
+              div:nth-child(1) {
+                img {
+                  width: 100%;
+                  height: 100%;
+                }
+              }
+            }
           }
         `}
       >
         <div>
           <img src={props.src} alt={props.alt} />
         </div>
-        <div>
+        <div
+          css={`
+            @media (max-width: 1179px) {
+              margin-top: -4%;
+              width: 100%;
+              padding: 0 calc((100% - 551px) / 2);
+            }
+            @media (max-width: 769px) {
+              margin-top: -4%;
+              width: 92%;
+              padding: 0;
+            }
+            @media (max-width: 600px) {
+              margin-top: -4%;
+              width: 91%;
+              padding: 0;
+            }
+          `}
+        >
           <h4>
             <b>{props.title}</b>
           </h4>
@@ -79,7 +122,7 @@ function TabCard(props: {
 
 export const AboutTabCard = () => {
   const description = (
-    <div>
+    <p>
       The Global Fund&apos;s Data Explorer is one of the key transparency tools
       of the organization.
       <br />
@@ -95,7 +138,7 @@ export const AboutTabCard = () => {
       >
         Visit the Global Fund Data Explorer
       </a>
-    </div>
+    </p>
   );
   return (
     <TabCard

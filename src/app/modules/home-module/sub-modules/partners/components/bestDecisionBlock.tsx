@@ -30,6 +30,22 @@ export default function BestDecisionBlock() {
           a {
             text-decoration: none;
           }
+          @media (max-width: 800px) {
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding-top: 35px;
+            padding-left: 22px;
+            height: 100%;
+          }
+          @media (max-width: 600px) {
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 35px;
+            padding-left: 22px;
+            height: 100%;
+          }
         `}
       >
         <div>
@@ -40,6 +56,10 @@ export default function BestDecisionBlock() {
               line-height: 48px;
               font-family: "GothamNarrow-Bold", sans-serif;
               margin: 0;
+              @media (max-width: 1024px) {
+                font-size: 34px;
+                line-height: 40.8px;
+              }
             `}
           >
             <b>Give Dataxplorer a try, on us </b>
@@ -50,6 +70,14 @@ export default function BestDecisionBlock() {
               font-size: 24px;
               color: #f4f4f4;
               font-family: "GothamNarrow-Light", sans-serif;
+              @media (max-width: 1024px) {
+                font-size: 20px;
+                line-height: 24px;
+              }
+              @media (max-width: 600px) {
+                font-size: 16px;
+                line-height: 19.36px;
+              }
             `}
           >
             Dataxplorer turns data into impact in minutes 
@@ -62,10 +90,18 @@ export default function BestDecisionBlock() {
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            margin-top: 20px;
             button {
               margin-bottom: 20px;
+              white-space: nowrap;
             }
-            margin-top: 20px;
+            @media (max-width: 600px) {
+              align-items: flex-start;
+              width: 100%;
+              button {
+                margin-bottom: 16px;
+              }
+            }
           `}
         >
           {!isAuthenticated && (

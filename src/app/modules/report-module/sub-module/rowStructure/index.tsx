@@ -807,7 +807,6 @@ function Divider(props: {
         display: flex;
         align-items: center;
         position: relative;
-        background: pink;
       `}
     >
       {handleDisplay && (

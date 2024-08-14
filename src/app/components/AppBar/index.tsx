@@ -29,6 +29,7 @@ const NavList = (props: {
       name: "About",
       path: "/about",
       cy: "nav-about",
+      class: "about",
     },
     {
       name: "Partners",
@@ -41,6 +42,7 @@ const NavList = (props: {
   ];
   const handleNavigation = () => {
     props.setIsNavExpanded?.(false);
+    document.body.style.overflow = "auto";
   };
   return (
     <>
@@ -64,6 +66,11 @@ function MobileHeader(props: { navLocation: string }) {
   const { user, isAuthenticated } = useAuth0();
   const [isNavExpanded, setIsNavExpanded] = React.useState(false);
   const handleNavExpand = () => {
+    if (!isNavExpanded) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
     setIsNavExpanded(!isNavExpanded);
   };
   return (
@@ -74,7 +81,7 @@ function MobileHeader(props: { navLocation: string }) {
           overflow: ${isNavExpanded ? "auto" : "hidden"};
           padding: 0px 16px 16px 16px;
           width: 100%;
-          background: ${isNavExpanded ? "#F2F7FD" : "transparent"};
+          background: ${isNavExpanded ? "#F2F7FD" : "#fff"};
           transition: all cubic-bezier(0.4, 0, 0.2, 1) 0.3s;
           position: fixed;
           top: 0;
@@ -96,7 +103,7 @@ function MobileHeader(props: { navLocation: string }) {
               gap: 5px;
               align-items: center;
               height: 100%;
-              width: 100%;
+              /* width: 100%; */
             `}
           >
             <button
@@ -118,7 +125,13 @@ function MobileHeader(props: { navLocation: string }) {
               <img src="/logo.svg" alt="logo" />
             </NavLink>
           </div>
-          <div>
+          <div
+            css={`
+              width: 100%;
+              display: flex;
+              justify-content: flex-end;
+            `}
+          >
             {isAuthenticated ? (
               <button
                 onClick={() => history.push("/user-management/profile")}
@@ -148,9 +161,9 @@ function MobileHeader(props: { navLocation: string }) {
                   border-radius: 24.48px;
                   background: #dadaf8;
                   display: flex;
-                  width: 110px;
+                  width: 100%;
+                  max-width: 110px;
                   height: 34px;
-                  padding: 9.792px 35.496px;
                   justify-content: center;
                   align-items: center;
                   gap: 8.16px;
