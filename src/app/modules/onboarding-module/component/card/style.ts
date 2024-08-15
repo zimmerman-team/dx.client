@@ -9,7 +9,7 @@ export const socialloginbuttoncss = css`
   padding: 6px 0;
   font-size: 14px;
   cursor: pointer;
-  font-family: "GothamNarrow-Book";
+  font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
   line-height: 20px;
   border: 1px solid #231d2c;
   border-radius: 10px;

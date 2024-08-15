@@ -373,7 +373,8 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
                 <p
                   css={`
                     color: #70777e;
-                    font-family: "GothamNarrow-Book", sans-serif;
+                    font-family: "GothamNarrow-Book", "Helvetica Neue",
+                      sans-serif;
                     font-size: 12px;
                     font-weight: 325;
                     margin: 0px;
@@ -401,7 +402,8 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
                 <p
                   css={`
                     color: #70777e;
-                    font-family: "GothamNarrow-Book", sans-serif;
+                    font-family: "GothamNarrow-Book", "Helvetica Neue",
+                      sans-serif;
                     font-size: 12px;
                     font-weight: 325;
                     margin: 0px;
@@ -450,7 +452,8 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
                       css={`
                         color: #000;
 
-                        font-family: "GothamNarrow-Book", sans-serif;
+                        font-family: "GothamNarrow-Book", "Helvetica Neue",
+                          sans-serif;
                         font-size: 12px;
                         font-style: normal;
                         font-weight: 325;

@@ -50,7 +50,7 @@ export default function ChartContainer(props: {
             p:nth-of-type(1) {
               color: #e75656;
               text-align: center;
-              font-family: "GothamNarrow-Bold", sans-serif;
+              font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
               font-size: 18px;
               margin-top: 16px;
               margin-bottom: 0;
@@ -58,7 +58,7 @@ export default function ChartContainer(props: {
             p:nth-of-type(2) {
               color: #e75656;
               text-align: center;
-              font-family: "GothamNarrow-Book", sans-serif;
+              font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
               font-size: 14px;
               margin-top: 16px;
             }

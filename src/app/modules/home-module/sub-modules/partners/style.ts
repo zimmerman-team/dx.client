@@ -8,7 +8,7 @@ export const empowercss = (view: string) => css`
   position: relative;
   margin-top: 48px;
   padding: 78px 0 55px 0;
-  font-family: "GothamNarrow-Bold", sans-serif;
+  font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
   background: url(${view === "landing" ? Ellipses2 : Ellipses}),
     linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #f2f7fd 100%);
   background-repeat: no-repeat;
@@ -25,7 +25,7 @@ export const empowercss = (view: string) => css`
     white-space: pre-line;
     text-align: center;
     margin-bottom: ${view === "landing" ? "14px" : "26px"};
-    font-family: "GothamNarrow-Bold", sans-serif;
+    font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
   }
   p {
     margin: 0;
@@ -33,7 +33,7 @@ export const empowercss = (view: string) => css`
     font-size: 18px;
     line-height: 22px;
     text-align: center;
-    font-family: "GothamNarrow-Bold", sans-serif;
+    font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
   }
   div {
     gap: 34px;
@@ -87,13 +87,13 @@ export const useDXcss = css`
     font-size: 40px;
     line-height: 48px;
     text-align: center;
-    font-family: "GothamNarrow-Medium", sans-serif;
+    font-family: "GothamNarrow-Medium", "Helvetica Neue", sans-serif;
     margin-top: 0;
   }
   h3 {
     font-size: 24px;
     line-height: 29px;
-    font-family: "GothamNarrow-Bold", sans-serif;
+    font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
     text-align: center;
     margin-bottom: 0;
     margin-top: 48px;
@@ -102,7 +102,7 @@ export const useDXcss = css`
     font-size: 20px;
     line-height: 24px;
     text-align: center;
-    font-family: "GothamNarrow-Medium", sans-serif;
+    font-family: "GothamNarrow-Medium", "Helvetica Neue", sans-serif;
     width: 85%;
     margin: 16px auto 0 auto;
   }
@@ -120,7 +120,7 @@ export const quotecss = css`
     font-size: 40px;
     line-height: 48px;
     text-align: center;
-    font-family: "GothamNarrow-Medium", sans-serif;
+    font-family: "GothamNarrow-Medium", "Helvetica Neue", sans-serif;
 
     margin: 0;
   }
@@ -138,7 +138,7 @@ export const quotecss = css`
       font-size: 16px;
       line-height: 19px;
       text-align: center;
-      font-family: "GothamNarrow-Bold", sans-serif;
+      font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
     }
   }
 `;
@@ -148,7 +148,7 @@ export const bestDecisioncss = css`
     font-size: 48px;
     line-height: 58px;
     text-align: center;
-    font-family: "GothamNarrow-Bold", sans-serif;
+    font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
     color: #231d2c;
     margin: 0;
     margin-bottom: 36px;

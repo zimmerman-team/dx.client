@@ -91,7 +91,7 @@ export default function EmbedChartRoute() {
           padding: 24px;
           > p {
             color: #231d2c;
-            font-family: "GothamNarrow-Bold", sans-serif;
+            font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
             font-size: 18px;
             width: 100%;
             overflow: hidden;
@@ -137,11 +137,11 @@ export default function EmbedChartRoute() {
             id={`datasource-${loadedChart.id || "1"}`}
             css={`
               color: #70777e;
-              font-family: "GothamNarrow-Bold", sans-serif;
+              font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
               font-size: 12px;
               margin: 0;
               a {
-                font-family: "GothamNarrow-Bold", sans-serif;
+                font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
                 color: #70777e;
                 text-decoration: none;
                 border-bottom: 1px solid #70777e;

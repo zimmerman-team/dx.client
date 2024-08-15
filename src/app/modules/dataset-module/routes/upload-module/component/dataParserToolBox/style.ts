@@ -4,7 +4,7 @@ export const optionscss = css`
   p {
     font-size: 24px;
     color: #231d2c;
-    font-family: "GothamNarrow-Book";
+    font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
   }
   input {
     background: #ffffff;

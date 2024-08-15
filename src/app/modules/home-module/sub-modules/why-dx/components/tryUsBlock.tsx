@@ -14,7 +14,7 @@ export default function TryUsBlock() {
       <p
         css={`
           text-align: center;
-          font-family: "GothamNarrow-Bold", sans-serif;
+          font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
           font-size: 48px;
           font-style: normal;
           line-height: normal;
@@ -44,7 +44,7 @@ export default function TryUsBlock() {
               color: #ffffff;
               font-size: 40px;
               line-height: 48px;
-              font-family: "GothamNarrow-Bold", sans-serif;
+              font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
               margin: 0;
             `}
           >
@@ -54,7 +54,7 @@ export default function TryUsBlock() {
             css={`
               font-size: 24px;
               color: #f4f4f4;
-              font-family: "GothamNarrow-Bold", sans-serif;
+              font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
             `}
           >
             Dataxplorer turns data into impact 

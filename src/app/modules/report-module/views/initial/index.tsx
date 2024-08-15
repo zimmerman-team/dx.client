@@ -134,7 +134,7 @@ function ReportInitialView(props: Readonly<ReportInitialViewProps>) {
               font-size: 18px;
               line-height: 22px;
               color: #000000;
-              font-family: "GothamNarrow-Bold", sans-serif;
+              font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
             `}
           >
             Explore or duplicate reports

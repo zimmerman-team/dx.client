@@ -64,7 +64,7 @@ export default function ExternalSearchTable(props: {
 
             > tr > th {
               font-size: 14px;
-              font-family: "GothamNarrow-Bold", sans-serif;
+              font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
               border-right: 1px solid #e4e4e4;
             }
           `}

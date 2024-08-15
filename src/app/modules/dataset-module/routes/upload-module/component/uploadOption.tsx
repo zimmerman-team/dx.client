@@ -55,7 +55,7 @@ const UploadOption = (props: {
               font-weight: 400;
               line-height: 20px; /* 111.111% */
               letter-spacing: 0.5px;
-              font-family: "GothamNarrow-Bold", sans-serif;
+              font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
               margin: 0;
               padding: 0;
               text-align: left;
@@ -70,7 +70,7 @@ const UploadOption = (props: {
               font-weight: 325;
               line-height: 20px; /* 111.111% */
               letter-spacing: 0.5px;
-              font-family: "GothamNarrow-Book", sans-serif;
+              font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
               margin: 0;
               padding: 0;
               text-align: left;
@@ -106,7 +106,7 @@ const UploadOption = (props: {
                 font-weight: 325;
                 line-height: 15px; /* 125% */
                 letter-spacing: 0.5px;
-                font-family: "GothamNarrow-Book", sans-serif;
+                font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
                 color: #6b727b;
               `}
             >
@@ -155,7 +155,8 @@ const UploadOption = (props: {
                       line-height: 15px; /* 125% */
                       letter-spacing: 0.5px;
                       color: white;
-                      font-family: "GothamNarrow-Bold", sans-serif;
+                      font-family: "GothamNarrow-Bold", "Helvetica Neue",
+                        sans-serif;
                       border-radius: 12px;
                       background: #6061e5;
                       border: none;

@@ -8,11 +8,11 @@ export const subParagraphcss = css`
     font-style: normal;
     font-weight: 350;
     line-height: normal;
-    font-family: "GothamNarrow-Medium", sans-serif;
+    font-family: "GothamNarrow-Medium", "Helvetica Neue", sans-serif;
   }
   p {
     margin: 0;
-    font-family: "GothamNarrow-Medium", sans-serif;
+    font-family: "GothamNarrow-Medium", "Helvetica Neue", sans-serif;
     font-size: 20px;
     font-style: normal;
     font-weight: 350;

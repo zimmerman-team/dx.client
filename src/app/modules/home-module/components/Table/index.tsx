@@ -75,7 +75,7 @@ export function HomepageTable(props: {
 
             > tr > th {
               font-size: 14px;
-              font-family: "GothamNarrow-Bold", sans-serif;
+              font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
             }
           `}
         >
