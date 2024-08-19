@@ -86,7 +86,7 @@ function MobileHeader(props: { navLocation: string }) {
           position: fixed;
           top: 0;
           left: 0;
-          z-index: 100;
+          z-index: 101;
         `}
       >
         <div
@@ -100,7 +100,7 @@ function MobileHeader(props: { navLocation: string }) {
           <div
             css={`
               display: flex;
-              gap: 5px;
+              gap: 8px;
               align-items: center;
               height: 100%;
               /* width: 100%; */
@@ -112,7 +112,9 @@ function MobileHeader(props: { navLocation: string }) {
                 border: none;
                 outline: none;
                 background: transparent;
-                margin-top: 8px;
+                display: flex;
+                align-items: center;
+                padding: 0px;
               `}
             >
               {isNavExpanded ? (
@@ -212,7 +214,7 @@ function MobileHeader(props: { navLocation: string }) {
 
 export function AppBar() {
   const location = useLocation();
-  const isMobile = useMediaQuery("(max-width: 846px)");
+  const isMobile = useMediaQuery("(max-width: 881px)");
   const [openSearch, setOpenSearch] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const navLocation = location.pathname.split("/").join("");

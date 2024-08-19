@@ -22,6 +22,11 @@ export default function ShareContent(props: {
         font-family: "GothamNarrow-Medium", sans-serif;
         color: #000;
         font-size: 14px;
+        @media (max-width: 768px) {
+          height: 100%;
+          word-break: break-all;
+          padding: 16px 4px;
+        }
       `}
       id="embed-code"
     >

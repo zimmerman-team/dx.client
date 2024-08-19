@@ -29,7 +29,6 @@ import { SubheaderToolbarProps } from "app/modules/chart-module/components/chart
 import { ExportChartButton } from "app/modules/chart-module/components/chartSubheaderToolbar/exportButton";
 import { ISnackbarState } from "app/modules/dataset-module/routes/upload-module/upload-steps/previewFragment";
 import { chartFromReportAtom } from "app/state/recoil/atoms";
-import { InfoSnackbar } from "app/modules/chart-module/components/chartSubheaderToolbar/infoSnackbar";
 import { getRequiredFieldsAndErrors } from "../../routes/mapping/utils";
 import AutoSaveSwitch from "app/modules/report-module/components/reportSubHeaderToolbar/autoSaveSwitch";
 import useAutosave from "app/hooks/useAutoSave";
@@ -37,10 +36,15 @@ import { useStyles } from "app/modules/report-module/components/reportSubHeaderT
 import AutoResizeInput from "app/modules/report-module/components/reportSubHeaderToolbar/autoResizeInput";
 import { isEqual } from "lodash";
 import EmbedChartDialog from "app/components/Dialogs/EmbedChartDialog";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+import DuplicateMessage from "app/modules/common/mobile-duplicate-message";
+import { InfoSnackbar } from "app/modules/report-module/components/reportSubHeaderToolbar/infosnackbar";
 
 export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
   const classes = useStyles();
   const history = useHistory();
+  const isMobile = useMediaQuery("(max-width: 599px)");
+  const isSmallScreen = useMediaQuery("(max-width: 800px)"); //at this breakpoint, we limit user creation abilities
   const { user, isAuthenticated } = useAuth0();
   const token = useStoreState((state) => state.AuthToken.value);
   const titleRef = React.useRef<HTMLDivElement>(null);
@@ -248,7 +252,12 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
     props.onSave();
     history.push(`/chart/${page}`);
   };
+  const handleViewDuplicatedChart = () => {
+    setSnackbarState({ ...snackbarState, open: false });
 
+    history.push(`/chart/${duplicatedChartId}`);
+    setDuplicatedChartId(null);
+  };
   const handleBackToEdit = () => {
     history.go(-1);
   };
@@ -345,14 +354,7 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
             />
           </div>
 
-          <div
-            css={`
-              ${styles.endContainer}
-              margin-right: ${`calc(((100vw - ${
-                (innerContainerWidth as number) + 48
-              }px) / 2) * -1)`};
-            `}
-          >
+          <div css={styles.endContainer}>
             {editChartLoading && canChartEditDelete && (
               <div
                 css={`
@@ -510,7 +512,9 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
               )}
               {page !== "new" && !view && (
                 <React.Fragment>
-                  <ExportChartButton filename={props.name} />
+                  {!isSmallScreen && (
+                    <ExportChartButton filename={props.name} />
+                  )}
                   {isAuthenticated && (
                     <Tooltip title="Duplicate">
                       <IconButton
@@ -556,14 +560,14 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
                       </CopyToClipboard>
                     </div>
                   </Popover>
-                  {canChartEditDelete && (
+                  {canChartEditDelete && !isSmallScreen && (
                     <Tooltip title="Edit">
                       <IconButton onClick={handleEdit} aria-label="edit-button">
                         <EditIcon htmlColor="#262c34" />
                       </IconButton>
                     </Tooltip>
                   )}
-                  {canChartEditDelete && (
+                  {canChartEditDelete && !isSmallScreen && (
                     <Tooltip title="Delete">
                       <IconButton
                         onClick={handleModalDisplay}
@@ -580,29 +584,53 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
         </div>
       </Container>
 
-      <InfoSnackbar
-        anchorOrigin={{
-          vertical: snackbarState.vertical,
-          horizontal: snackbarState.horizontal,
-        }}
-        data-testid="duplicated-chart-snackbar"
-        open={snackbarState.open}
-        onClose={() => setSnackbarState({ ...snackbarState, open: false })}
-        message={`Chart has been duplicated successfully!`}
-        key={snackbarState.vertical + snackbarState.horizontal}
-        action={
-          <button
-            onClick={() => {
-              setSnackbarState({ ...snackbarState, open: false });
-
-              history.push(`/chart/${duplicatedChartId}`);
-              setDuplicatedChartId(null);
+      <>
+        {isMobile ? (
+          <InfoSnackbar
+            anchorOrigin={{
+              vertical: snackbarState.vertical,
+              horizontal: snackbarState.horizontal,
             }}
+            open={snackbarState.open}
+            autoHideDuration={6000}
+            onClose={() => setSnackbarState({ ...snackbarState, open: false })}
+            key={snackbarState.vertical + snackbarState.horizontal}
           >
-            GO TO CHART
-          </button>
-        }
-      />
+            <DuplicateMessage
+              action={handleViewDuplicatedChart}
+              closeSnackbar={() =>
+                setSnackbarState({ ...snackbarState, open: false })
+              }
+              name={loadedChart.name}
+              type="chart"
+            />
+          </InfoSnackbar>
+        ) : (
+          <InfoSnackbar
+            anchorOrigin={{
+              vertical: snackbarState.vertical,
+              horizontal: snackbarState.horizontal,
+            }}
+            data-testid="duplicated-chart-snackbar"
+            open={snackbarState.open}
+            onClose={() => setSnackbarState({ ...snackbarState, open: false })}
+            message={`Chart has been duplicated successfully!`}
+            key={snackbarState.vertical + snackbarState.horizontal}
+            action={
+              <button
+                onClick={() => {
+                  setSnackbarState({ ...snackbarState, open: false });
+
+                  history.push(`/chart/${duplicatedChartId}`);
+                  setDuplicatedChartId(null);
+                }}
+              >
+                GO TO CHART
+              </button>
+            }
+          />
+        )}
+      </>
 
       <DeleteChartDialog
         modalDisplay={showDeleteDialog}

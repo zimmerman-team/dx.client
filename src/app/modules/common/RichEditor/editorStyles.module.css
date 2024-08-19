@@ -8,6 +8,11 @@
   background: none;
   width: 100%;
 }
+@media (max-width: 1024px) {
+  .editor{
+    max-width:100% !important;
+  }
+}
 
 .editorPreview {
   left: 0;

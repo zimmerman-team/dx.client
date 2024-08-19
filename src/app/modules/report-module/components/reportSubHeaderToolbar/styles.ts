@@ -14,6 +14,9 @@ export const styles = {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    @media (max-width: 881px) {
+      top: 66px;
+    }
   `,
   innercontainer: css`
     display: flex;
@@ -23,11 +26,7 @@ export const styles = {
 
     @media (max-width: 1280px) {
       margin-left: 0;
-      width: calc(100vw - 400px);
-    }
-
-    @media (max-width: 600px) {
-      padding: 13px 16px 0 16px;
+      width: 100%;
     }
   `,
   viewReportBtn: css`
@@ -108,6 +107,9 @@ export const styles = {
     z-index: 2;
     padding-left: 0px;
     outline: none;
+    @media (max-width: 600px) {
+      font-size: 20px;
+    }
   `,
   endContainer: css`
     display: flex;
@@ -144,6 +146,9 @@ export const styles = {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    @media (max-width: 600px) {
+      font-size: 20px;
+    }
   `,
   highlightPicker: (active: boolean) => css`
     vertical-align: bottom;

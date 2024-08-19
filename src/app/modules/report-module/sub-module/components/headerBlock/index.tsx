@@ -271,6 +271,18 @@ export default function HeaderBlock(props: Props) {
                   }
                 }
               }
+              @media (max-width: 1024px) {
+                width: 100%;
+              }
+              @media (max-width: 600px) {
+                max-height: 100%;
+                overflow-y: hidden;
+                display: -webkit-box;
+                width: 100%;
+                min-width: unset;
+                -webkit-line-clamp: 6;
+                -webkit-box-orient: vertical;
+              }
             `}
           >
             <RichEditor

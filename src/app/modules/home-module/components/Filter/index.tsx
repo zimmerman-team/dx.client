@@ -99,6 +99,7 @@ export default function Filter(
             width: ${displayIcons ? "100%" : "0"};
             height: ${displayIcons ? "auto" : "0"};
             transition: all 0.5s ease-in-out 0s;
+            overflow: hidden;
           }
         `}
       >

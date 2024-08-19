@@ -400,12 +400,8 @@ function DatasetUploadSteps(props: Props) {
               stats={dataStats}
               datasetId={props.datasetId}
               dataTotalCount={dataTotalCount}
-              description={datasetDetails?.description}
               dataTypes={dataTypes}
-              title={datasetDetails.name}
-              dataCategory={datasetDetails.category}
-              dataSource={datasetDetails.source}
-              dataSourceURL={datasetDetails.sourceUrl}
+              datasetDetails={datasetDetails}
               canDatasetEditDelete={true} //if user has just uploaded the dataset, then they own it and can edit it.
             />
           </>

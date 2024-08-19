@@ -100,6 +100,33 @@ export const dataSetsCss = css`
     text-decoration: none;
   }
 `;
+export const mobileDescriptioncss = css`
+  display: none;
+  @media (max-width: 450px) {
+    display: flex;
+    padding: 24px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+    border-radius: 10px;
+    background: #fff;
+    box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    height: 100%;
+    div {
+      p {
+        margin: 0px;
+        &:nth-of-type(1) {
+          color: #231d2c;
+          font-family: "GothamNarrow-Bold", sans-serif;
+        }
+        &:nth-of-type(2) {
+          font-family: "GothamNarrow-Book", sans-serif;
+        }
+      }
+    }
+  }
+`;
 
 export const CssTextField = withStyles({
   root: {
