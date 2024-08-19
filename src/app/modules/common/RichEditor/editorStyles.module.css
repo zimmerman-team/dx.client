@@ -9,8 +9,8 @@
   width: 100%;
 }
 @media (max-width: 1024px) {
-  .editor{
-    max-width:100% !important;
+  .editor {
+    max-width: 100% !important;
   }
 }
 
