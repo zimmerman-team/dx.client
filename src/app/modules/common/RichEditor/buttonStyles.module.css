@@ -31,9 +31,10 @@
 
 @media (min-width: 801px) {
   @media (max-width: 853px) {
-  .button {
-    width: 30px;
-  }}
+    .button {
+      width: 30px;
+    }
+  }
 }
 @media (max-width: 1055px) {
   .button {
