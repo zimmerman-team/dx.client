@@ -11,6 +11,7 @@ import { LinkIcon } from "app/assets/icons/Link";
 import Snackbar from "@material-ui/core/Snackbar";
 import DeleteIcon from "@material-ui/icons/Delete";
 import Container from "@material-ui/core/Container";
+import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import IconButton from "@material-ui/core/IconButton";
 import CopyToClipboard from "react-copy-to-clipboard";
 import FileCopyIcon from "@material-ui/icons/FileCopy";
@@ -244,16 +245,7 @@ export function ReportSubheaderToolbar(
   return (
     <div id="subheader-toolbar" css={styles.container(view !== undefined)}>
       {createOrEditChartLoading && <PageLoader />}
-      <Snackbar
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "left",
-        }}
-        open={openSnackbar}
-        autoHideDuration={5000}
-        onClose={handleCloseSnackbar}
-        message="Link copied to clipboard"
-      />
+
       <Container maxWidth="lg">
         <div css={styles.innercontainer}>
           <div
@@ -264,8 +256,14 @@ export function ReportSubheaderToolbar(
               gap: 28px;
               position: relative;
               width: 70%;
+              @media (min-width: 801px) {
+                @media (max-width: 1199px) {
+                  width: 49%;
+                }
+              }
             `}
           >
+            {isMobile && <ArrowBackIosIcon onClick={() => history.go(-1)} />}
             <AutoResizeInput
               name={props.name}
               setName={props.setName}
@@ -304,6 +302,11 @@ export function ReportSubheaderToolbar(
                 display: flex;
                 flex-shrink: 0;
                 gap: 12px;
+                @media (min-width: 801px) {
+                  @media (max-width: 1200px) {
+                    display: none;
+                  }
+                }
               `}
             >
               {view === "edit" && (
@@ -407,6 +410,35 @@ export function ReportSubheaderToolbar(
                       setAutoSave={props.setAutoSave}
                     />
                   </div>
+                  {view === "edit" && (
+                    <Tooltip title="view report">
+                      <IconButton
+                        onClick={handleViewReport}
+                        css={`
+                          padding: 0px;
+                          :disabled {
+                            opacity: 0.5;
+                          }
+                          display: none;
+                          @media (min-width: 801px) {
+                            @media (max-width: 1200px) {
+                              display: block;
+                            }
+                          }
+                        `}
+                        data-cy="view-report-button"
+                        aria-label="view report button"
+                      >
+                        <svg width="20" height="19" viewBox="0 0 20 19">
+                          <rect width="20" height="19" rx="3" fill="#262C34" />
+                          <path
+                            fill="#EFEFEF"
+                            d="M14 9L6.5 13.3301L6.5 4.66987L14 9Z"
+                          />
+                        </svg>
+                      </IconButton>
+                    </Tooltip>
+                  )}
                   <Tooltip title="Save">
                     <span>
                       <IconButton
@@ -414,7 +446,7 @@ export function ReportSubheaderToolbar(
                         disabled={!props.isSaveEnabled}
                         aria-label="save button"
                         css={`
-                          padding: 4px;
+                          padding: 0px;
                           :disabled {
                             opacity: 0.5;
                           }
@@ -556,6 +588,16 @@ export function ReportSubheaderToolbar(
           />
         )}
       </>
+      <Snackbar
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
+        }}
+        open={openSnackbar}
+        autoHideDuration={5000}
+        onClose={handleCloseSnackbar}
+        message="Link copied to clipboard"
+      />
       <ShareModal
         datasetDetails={loadedReport}
         isShareModalOpen={isShareModalOpen}

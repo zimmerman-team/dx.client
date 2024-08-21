@@ -26,7 +26,8 @@ export interface IFramesArray {
 }
 
 export interface ReportCreateViewProps {
-  open: boolean;
+  rightPanelOpen: boolean;
+  handleRightPanelOpen: () => void;
   view: "initial" | "edit" | "create" | "preview" | "ai-template";
   setReportName: React.Dispatch<React.SetStateAction<string>>;
   reportName: string;

@@ -454,7 +454,8 @@ export default function ReportModule() {
         </Route>
         <Route path="/report/:page/create">
           <ReportCreateView
-            open={rightPanelOpen}
+            rightPanelOpen={rightPanelOpen}
+            handleRightPanelOpen={() => setRightPanelOpen(true)}
             view={view}
             setReportName={setReportName}
             reportName={reportName}
@@ -471,7 +472,8 @@ export default function ReportModule() {
         </Route>
         <Route path="/report/:page/edit">
           <ReportEditView
-            open={rightPanelOpen}
+            rightPanelOpen={rightPanelOpen}
+            handleRightPanelOpen={() => setRightPanelOpen(true)}
             autoSave={autoSave.isAutoSaveEnabled}
             reportType={reportType}
             setHasChangesBeenMade={setHasChangesBeenMade}

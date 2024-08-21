@@ -10,6 +10,29 @@
   align-items: center;
   gap: 14px;
 }
+@media (min-width: 801px) {
+  @media (max-width: 920px) {
+    .toolbar {
+      padding: 6px 9px;
+      gap: 6px;
+    }}
+}
+@media (min-width: 921px){
+  @media (max-width: 1083px){
+  .toolbar {
+    padding: 6px 14px;
+    gap: 11px;
+  }}
+}
+@media (min-width: 1084px){
+@media (max-width: 1109px){
+  .toolbar {
+    padding: 6px 13px;
+    gap: 13px;
+  }
+}
+}
+
 .toolbar button {
   display: flex;
   align-items: center;

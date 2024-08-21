@@ -29,6 +29,10 @@ export const containercss = css`
   padding: 5px 40px;
   position: relative;
   border: 1px dashed #adb5bd;
+  @media (max-width: 1440px) {
+    height: 100%;
+    padding-bottom: 20px;
+  }
 
   p {
     font-size: 12px;

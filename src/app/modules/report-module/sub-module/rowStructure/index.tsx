@@ -146,7 +146,6 @@ interface IRowStructureType {
 
 export default function RowFrame(props: RowFrameProps) {
   const history = useHistory();
-
   const { handleRowFrameItemResize } = usehandleRowFrameItemResize(
     props.updateFramesArray
   );
@@ -394,6 +393,7 @@ export default function RowFrame(props: RowFrameProps) {
         onRowBoxItemResize={onRowBoxItemResize}
         setPlugins={props.setPlugins}
         onSave={props.onSave}
+        forceSelectedType={props.forceSelectedType}
       />
     ),
     oneByTwo: (
@@ -416,6 +416,7 @@ export default function RowFrame(props: RowFrameProps) {
         onRowBoxItemResize={onRowBoxItemResize}
         setPlugins={props.setPlugins}
         onSave={props.onSave}
+        forceSelectedType={props.forceSelectedType}
       />
     ),
     oneByThree: (
@@ -438,6 +439,7 @@ export default function RowFrame(props: RowFrameProps) {
         onRowBoxItemResize={onRowBoxItemResize}
         setPlugins={props.setPlugins}
         onSave={props.onSave}
+        forceSelectedType={props.forceSelectedType}
       />
     ),
     oneByFour: (
@@ -460,6 +462,7 @@ export default function RowFrame(props: RowFrameProps) {
         setPlugins={props.setPlugins}
         onSave={props.onSave}
         previewItems={props.previewItems}
+        forceSelectedType={props.forceSelectedType}
       />
     ),
     oneByFive: (
@@ -482,6 +485,7 @@ export default function RowFrame(props: RowFrameProps) {
         onRowBoxItemResize={onRowBoxItemResize}
         setPlugins={props.setPlugins}
         onSave={props.onSave}
+        forceSelectedType={props.forceSelectedType}
       />
     ),
   };

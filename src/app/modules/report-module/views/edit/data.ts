@@ -4,7 +4,8 @@ import { ToolbarPluginsType } from "app/modules/report-module/components/reportS
 import { Updater } from "use-immer";
 
 export interface ReportEditViewProps {
-  open: boolean;
+  rightPanelOpen: boolean;
+  handleRightPanelOpen: () => void;
   reportType: "basic" | "advanced" | "ai" | null;
   isSaveEnabled: boolean;
   view: "initial" | "edit" | "create" | "preview" | "ai-template";

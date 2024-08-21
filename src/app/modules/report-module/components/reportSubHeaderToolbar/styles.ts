@@ -118,6 +118,11 @@ export const styles = {
     width: 30%;
     justify-content: flex-end;
     flex-shrink: 0;
+    @media (min-width: 801px) {
+      @media (max-width: 1199px) {
+        width: 51%;
+      }
+    }
   `,
   previewEndContainer: css`
     display: flex;
@@ -148,6 +153,7 @@ export const styles = {
     white-space: nowrap;
     @media (max-width: 600px) {
       font-size: 20px;
+      left: 25px;
     }
   `,
   highlightPicker: (active: boolean) => css`
@@ -166,6 +172,9 @@ export const styles = {
     cursor: pointer;
     &:hover {
       background: #f2f2f2;
+    }
+    @media (max-width: 1050px) {
+      width: 24px;
     }
   `,
 };

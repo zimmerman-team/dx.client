@@ -23,6 +23,7 @@ interface Props {
   setHasSubHeaderTitleFocused?: React.Dispatch<React.SetStateAction<boolean>>;
   setReportName?: React.Dispatch<React.SetStateAction<string>>;
   reportName?: string;
+  handleRightPanelOpen: () => void;
   setPlugins: React.Dispatch<React.SetStateAction<ToolbarPluginsType>>;
   headerDetails: {
     title: string;
@@ -123,6 +124,7 @@ export default function HeaderBlock(props: Props) {
 
   const onEdit = () => {
     setCurrentView("editHeader");
+    props.handleRightPanelOpen();
   };
 
   const onRemove = () => {
@@ -165,6 +167,14 @@ export default function HeaderBlock(props: Props) {
             gap: 4px;
             z-index: 101;
             position: absolute;
+            @media (max-width: 881px) {
+              top: 16.5px;
+              svg {
+                rect {
+                  height: 91%;
+                }
+              }
+            }
           `}
         >
           <HeaderHandlesvg />

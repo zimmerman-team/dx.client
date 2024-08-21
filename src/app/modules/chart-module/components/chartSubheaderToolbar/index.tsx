@@ -15,6 +15,7 @@ import Container from "@material-ui/core/Container";
 import IconButton from "@material-ui/core/IconButton";
 import AutorenewIcon from "@material-ui/icons/Autorenew";
 import CloudDoneIcon from "@material-ui/icons/CloudDone";
+import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import CopyToClipboard from "react-copy-to-clipboard";
 import FileCopyIcon from "@material-ui/icons/FileCopy";
 import { PageLoader } from "app/modules/common/page-loader";
@@ -271,42 +272,7 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
   return (
     <div id="subheader-toolbar" css={styles.container}>
       {createChartLoading && <PageLoader />}
-      <InfoSnackbar
-        gap={location.pathname.includes("report")}
-        data-testid="create-chart-snackbar"
-        onClose={() => setShowSnackbar(null)}
-        open={showSnackbar !== null && showSnackbar !== ""}
-      >
-        <SnackbarContent
-          message={showSnackbar}
-          aria-describedby="create-chart-snackbar-content"
-          action={
-            <>
-              {!location.pathname.includes("report") && (
-                <button
-                  onClick={() => {
-                    setShowSnackbar(null);
-                    history.push("/report/new/initial");
-                  }}
-                >
-                  CREATE NEW REPORT
-                </button>
-              )}
-            </>
-          }
-        />
-      </InfoSnackbar>
-      <Snackbar
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "left",
-        }}
-        open={openSnackbar}
-        autoHideDuration={5000}
-        onClose={handleCloseSnackbar}
-        message="Link copied to clipboard"
-        data-testid="copied-link-snackbar"
-      />
+
       <Container maxWidth="lg">
         <div css={styles.innercontainer} ref={innerContainerRef}>
           <div
@@ -319,6 +285,7 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
               position: relative;
             `}
           >
+            {isMobile && <ArrowBackIosIcon onClick={() => history.go(-1)} />}
             <AutoResizeInput
               name={props.name}
               setName={props.setName}
@@ -631,7 +598,42 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
           />
         )}
       </>
-
+      <InfoSnackbar
+        gap={location.pathname.includes("report")}
+        data-testid="create-chart-snackbar"
+        onClose={() => setShowSnackbar(null)}
+        open={showSnackbar !== null && showSnackbar !== ""}
+      >
+        <SnackbarContent
+          message={showSnackbar}
+          aria-describedby="create-chart-snackbar-content"
+          action={
+            <>
+              {!location.pathname.includes("report") && (
+                <button
+                  onClick={() => {
+                    setShowSnackbar(null);
+                    history.push("/report/new/initial");
+                  }}
+                >
+                  CREATE NEW REPORT
+                </button>
+              )}
+            </>
+          }
+        />
+      </InfoSnackbar>
+      <Snackbar
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
+        }}
+        open={openSnackbar}
+        autoHideDuration={5000}
+        onClose={handleCloseSnackbar}
+        message="Link copied to clipboard"
+        data-testid="copied-link-snackbar"
+      />
       <DeleteChartDialog
         modalDisplay={showDeleteDialog}
         enableButton={enableButton}

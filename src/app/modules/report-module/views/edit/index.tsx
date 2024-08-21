@@ -319,6 +319,7 @@ function ReportEditView(props: ReportEditViewProps) {
         setHasSubHeaderTitleFocused={props.setHasSubHeaderTitleFocused}
         setHeaderDetails={props.setHeaderDetails}
         setPlugins={props.setPlugins}
+        handleRightPanelOpen={props.handleRightPanelOpen}
       />
       <Container maxWidth="lg">
         <div
@@ -326,19 +327,16 @@ function ReportEditView(props: ReportEditViewProps) {
           id="content-container"
           css={`
             transition: width 225ms cubic-bezier(0, 0, 0.2, 1) 0ms;
-            width: ${props.open
+            width: ${props.rightPanelOpen
               ? "calc(100vw - ((100vw - 1280px) / 2) - 400px - 50px)"
               : "100%"};
             position: relative;
-            @media (max-width: 1280px) {
-              width: calc(100vw - 400px);
-            }
           `}
         >
           <Box height={50} />
           <TourGuide
             reportType={props.reportType ?? "basic"}
-            toolBoxOpen={props.open}
+            toolBoxOpen={props.rightPanelOpen}
             handleClose={handleEndReportTour}
             open={openTour}
           />
