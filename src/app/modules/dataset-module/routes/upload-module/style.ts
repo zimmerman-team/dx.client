@@ -15,7 +15,9 @@ export const stepcss = css`
   background: #f4f4f4;
   gap: 1rem;
   @media (min-width: 768px) {
-    height: 50px;
+    @media (max-width: 881px) {
+      top: 66px;
+    }
   }
 `;
 
@@ -74,6 +76,12 @@ export const metaDatacss = css`
     font-family: "Inter", sans-serif;
 
     margin-bottom: 4.5rem;
+    @media (min-width: 768px) {
+      @media (max-width: 1024px) {
+        margin-top: 10px;
+        margin-bottom: 3.5rem;
+      }
+    }
   }
   button {
     border-radius: 30px;

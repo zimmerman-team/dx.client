@@ -576,6 +576,11 @@ export default function ChartModule() {
                       : "100%"};
 
                     transition: width 225ms cubic-bezier(0, 0, 0.2, 1) 0ms;
+                    @media (min-width: 768px) {
+                      @media (max-width: 1024px) {
+                        width: 100%;
+                      }
+                    }
                   `}
                   ref={ref}
                 >

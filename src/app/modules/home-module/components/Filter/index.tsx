@@ -29,7 +29,7 @@ export default function Filter(
   }>
 ) {
   const inputRef = React.useRef<HTMLInputElement>(null);
-  const [displayIcons, setDisplayIcons] = React.useState(false);
+  const [displayIcons, setDisplayIcons] = React.useState(true);
   const [sortPopoverAnchorEl, setSortPopoverAnchorEl] =
     React.useState<HTMLButtonElement | null>(null);
   const handleCloseSortPopover = () => {
@@ -61,46 +61,8 @@ export default function Filter(
       <div
         css={`
           ${rowFlexCss}
-          @media (min-width: 768px) {
-            display: none;
-          }
-        `}
-      >
-        <button
-          onClick={handleIconsDisplay}
-          css={`
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            border: none;
-            outline: none;
-            cursor: pointer;
-            background: ${displayIcons ? "#231D2C" : "#dadaf8"};
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            svg {
-              path {
-                fill: ${displayIcons ? "#fff" : "#231D2C"};
-              }
-            }
-          `}
-        >
-          <MenuIcon />
-        </button>
-      </div>
-      <div
-        css={`
-          ${rowFlexCss}
           justify-content: flex-end;
           gap: 8px;
-          @media (max-width: 767px) {
-            opacity: ${displayIcons ? 1 : 0};
-            width: ${displayIcons ? "100%" : "0"};
-            height: ${displayIcons ? "auto" : "0"};
-            transition: all 0.5s ease-in-out 0s;
-            overflow: hidden;
-          }
         `}
       >
         <div

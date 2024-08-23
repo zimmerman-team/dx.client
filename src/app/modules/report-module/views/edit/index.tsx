@@ -327,10 +327,9 @@ function ReportEditView(props: ReportEditViewProps) {
           id="content-container"
           css={`
             transition: width 225ms cubic-bezier(0, 0, 0.2, 1) 0ms;
-            /* width: ${props.rightPanelOpen
+            width: ${props.rightPanelOpen
               ? "calc(100vw - ((100vw - 1280px) / 2) - 400px - 50px)"
-              : "100%"}; */
-            width: 100%;
+              : "100%"};
             position: relative;
           `}
         >

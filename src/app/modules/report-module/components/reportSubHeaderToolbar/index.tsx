@@ -59,7 +59,7 @@ export function ReportSubheaderToolbar(
   const classes = useStyles();
   const { user, isAuthenticated } = useAuth0();
   const isMobile = useMediaQuery("(max-width: 599px)");
-  const isSmallScreen = useMediaQuery("(max-width: 800px)"); //at this breakpoint, we limit user creation abilities
+  const isTabletView = useMediaQuery("(min-width: 768px)"); //at this breakpoint, we limit user creation abilities
   const titleRef = React.useRef<HTMLDivElement>(null);
   const { page, view } = useParams<{ page: string; view?: string }>();
   const token = useStoreState((state) => state.AuthToken.value);
@@ -256,6 +256,11 @@ export function ReportSubheaderToolbar(
               gap: 28px;
               position: relative;
               width: 70%;
+              @media (min-width: 768px) {
+                @media (max-width: 800px) {
+                  width: 48%;
+                }
+              }
               @media (min-width: 801px) {
                 @media (max-width: 1199px) {
                   width: 49%;
@@ -302,7 +307,7 @@ export function ReportSubheaderToolbar(
                 display: flex;
                 flex-shrink: 0;
                 gap: 12px;
-                @media (min-width: 801px) {
+                @media (min-width: 768px) {
                   @media (max-width: 1200px) {
                     display: none;
                   }
@@ -420,7 +425,7 @@ export function ReportSubheaderToolbar(
                             opacity: 0.5;
                           }
                           display: none;
-                          @media (min-width: 801px) {
+                          @media (min-width: 768px) {
                             @media (max-width: 1200px) {
                               display: block;
                             }
@@ -461,9 +466,7 @@ export function ReportSubheaderToolbar(
               )}
               {page !== "new" && !view && (
                 <div css={styles.previewEndContainer}>
-                  {!isSmallScreen && (
-                    <ExportChartButton filename={props.name} />
-                  )}
+                  {isTabletView && <ExportChartButton filename={props.name} />}
 
                   <Tooltip title="Duplicate">
                     <IconButton
@@ -511,7 +514,7 @@ export function ReportSubheaderToolbar(
                       </CopyToClipboard>
                     </div>
                   </Popover>
-                  {canReportEditDelete && !isSmallScreen && (
+                  {canReportEditDelete && isTabletView && (
                     <Tooltip title="Edit">
                       <IconButton
                         component={Link}
@@ -522,7 +525,7 @@ export function ReportSubheaderToolbar(
                       </IconButton>
                     </Tooltip>
                   )}
-                  {canReportEditDelete && !isSmallScreen && (
+                  {canReportEditDelete && isTabletView && (
                     <Tooltip title="Delete">
                       <IconButton
                         onClick={handleModalDisplay}

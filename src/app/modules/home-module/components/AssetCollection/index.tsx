@@ -102,16 +102,20 @@ function AssetsCollection() {
       <div css={turnsDataCss}>
         {isAuthenticated ? (
           <Grid container>
-            <Grid lg={5} md={5} sm={5}>
+            <Grid lg={5} md={5} sm={12} xs={11}>
               <h2>Welcome {user?.given_name ?? user?.name?.split(" ")[0]}</h2>
             </Grid>
             <Grid
               lg={7}
               md={7}
-              sm={7}
+              sm={12}
+              xs={1}
               css={`
-                @media (max-width: 600px) {
-                  display: none;
+                @media (max-width: 965px) {
+                  margin-top: 16px;
+                  @media (max-width: 767px) {
+                    display: none;
+                  }
                 }
               `}
             >
@@ -178,9 +182,12 @@ function AssetsCollection() {
           alignItems="center"
           css={`
             width: 100%;
+            @media (max-width: 599px) {
+              flex-flow: wrap-reverse;
+            }
           `}
         >
-          <Grid item lg={6} md={6} sm={6} xs={6}>
+          <Grid item lg={6} md={6} sm={6} xs={12}>
             <Tab.Container>
               <Tab.Left
                 active={display === "all"}
@@ -215,7 +222,8 @@ function AssetsCollection() {
               </Tab.Right>
             </Tab.Container>
           </Grid>
-          <Grid item lg={6} md={6} sm={6} xs={6}>
+
+          <Grid item lg={6} md={6} sm={6} xs={12}>
             <Filter
               searchValue={searchValue as string}
               setSearchValue={setSearchValue}
@@ -227,13 +235,22 @@ function AssetsCollection() {
               setOpenSearch={setOpenSearch}
               searchIconCypressId="home-search-button"
             />
+            <div
+              css={`
+                display: none;
+                @media (max-width: 599px) {
+                  height: 20px;
+                  display: block;
+                }
+              `}
+            />
           </Grid>
         </Grid>
         <div
           css={`
             padding-top: 24px;
             font-size: 14px;
-            font-family: GothamNarrow-Book;
+            font-family: "GothamNarrow-Book", sans-serif;
             color: #000000;
           `}
         >

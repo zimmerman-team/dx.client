@@ -255,6 +255,7 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
               align-items: center;
               justify-content: end;
               gap: 5px;
+              flex-shrink: 0;
               span {
                 color: #000000;
                 font-size: 12px;

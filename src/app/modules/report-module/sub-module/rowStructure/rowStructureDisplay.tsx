@@ -226,7 +226,7 @@ export default function RowstructureDisplay(props: RowStructureDisplayProps) {
             overflow: hidden;
             gap: ${props.gap};
             border: ${border};
-            @media (max-width: 768px) {
+            @media (max-width: 767px) {
               display: grid;
               grid-template-columns: ${props.forceSelectedType ===
                 "oneByFive" || props.forceSelectedType === "oneByFour"
@@ -281,7 +281,7 @@ const Box = (props: {
   const location = useLocation();
   const history = useHistory();
   const { page, view } = useParams<{ page: string; view: string }>();
-  const smScreen = useMediaQuery("(max-width: 768px)");
+  const smScreen = useMediaQuery("(max-width: 767px)");
   const setDataset = useStoreActions(
     (actions) => actions.charts.dataset.setValue
   );
@@ -536,7 +536,7 @@ const Box = (props: {
           onResizeStop={onResizeStop}
           size={{
             width: smScreen ? "100%" : width,
-            height: `height: 100%`,
+            height: `${props.height}px`,
           }}
           maxWidth={!viewOnlyMode ? containerWidth : undefined}
           minWidth={78}

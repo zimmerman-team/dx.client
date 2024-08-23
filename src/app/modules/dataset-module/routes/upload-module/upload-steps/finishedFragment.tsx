@@ -26,7 +26,7 @@ interface Props {
 
 export default function FinishedFragment(props: Props) {
   const location = useLocation();
-  const isSmallScreen = useMediaQuery("(max-width: 800px)"); //at this breakpoint, we limit user creation abilities
+  const isSmallScreen = useMediaQuery("(max-width:767px)"); //at this breakpoint, we limit user creation abilities
   const queryParams = new URLSearchParams(location.search);
   const reportPage = queryParams.get("page") as string;
   const fromHome = location.search.includes("fromHome=true");

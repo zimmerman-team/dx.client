@@ -118,7 +118,8 @@ export const searchInputCss = (
   height: 32px;
   border-radius: 20px;
   opacity: ${openSearch ? 1 : 0};
-  transition: all 0.5s ease-in-out 0s;
+  transition: opacity 0.5s ease-in-out 0s;
+  overflow: hidden;
   input {
     outline: none;
     height: 100%;
@@ -130,6 +131,14 @@ export const searchInputCss = (
     border-radius: 20px;
 
     padding: 6px 16px !important;
+  }
+  @media (min-width: 768px) {
+    @media (max-width: 900px) {
+      width: ${openSearch ? "250px" : "0px"};
+    }
+  }
+  @media (max-width: 599px) {
+    width: ${openSearch ? "100%" : "0px"};
   }
 `;
 

@@ -290,6 +290,12 @@ export default function MetaData(props: Readonly<Props>) {
             justify-content: flex-end;
             margin-top: 12rem;
             gap: 1rem;
+            @media (min-width: 768px) {
+              @media (max-width: 13004px) {
+                margin-top: 4rem;
+                padding-bottom: 10px;
+              }
+            }
           `}
         >
           <button

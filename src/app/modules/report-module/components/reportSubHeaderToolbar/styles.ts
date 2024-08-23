@@ -118,6 +118,11 @@ export const styles = {
     width: 30%;
     justify-content: flex-end;
     flex-shrink: 0;
+    @media (min-width: 768px) {
+      @media (max-width: 800px) {
+        width: 52%;
+      }
+    }
     @media (min-width: 801px) {
       @media (max-width: 1199px) {
         width: 51%;

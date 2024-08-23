@@ -45,7 +45,7 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
   const classes = useStyles();
   const history = useHistory();
   const isMobile = useMediaQuery("(max-width: 599px)");
-  const isSmallScreen = useMediaQuery("(max-width: 800px)"); //at this breakpoint, we limit user creation abilities
+  const isSmallScreen = useMediaQuery("(max-width:788px)"); //at this breakpoint, we limit user creation abilities
   const { user, isAuthenticated } = useAuth0();
   const token = useStoreState((state) => state.AuthToken.value);
   const titleRef = React.useRef<HTMLDivElement>(null);
@@ -283,6 +283,21 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
               gap: 12px;
               width: 72%;
               position: relative;
+              @media (min-width: 768px) {
+                @media (max-width: 828px) {
+                  width: ${canChartEditDelete ? "50%" : "90%"};
+                }
+              }
+              @media (min-width: 829px) {
+                @media (max-width: 1040px) {
+                  width: 55%;
+                }
+              }
+              @media (min-width: 1041px) {
+                @media (max-width: 1373px) {
+                  width: 64%;
+                }
+              }
             `}
           >
             {isMobile && <ArrowBackIosIcon onClick={() => history.go(-1)} />}
