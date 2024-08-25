@@ -2255,6 +2255,11 @@
   dependencies:
     "@types/node" "*"
 
+"@types/css-mediaquery@^0.1.4":
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/@types/css-mediaquery/-/css-mediaquery-0.1.4.tgz#8efbebbc0cebaf34c77db2b63892711e19143c63"
+  integrity sha512-DZyHAz716ZUctpqkUU2COwUoZ4gI6mZK2Q1oIz/fvNS6XHVpKSJgDnE7vRxZUBn9vjJHDVelCVW0dkshKOLFsA==
+
 "@types/d3-hierarchy@^3.1.6":
   version "3.1.6"
   resolved "https://registry.yarnpkg.com/@types/d3-hierarchy/-/d3-hierarchy-3.1.6.tgz#8d3638df273ec90da34b3ac89d8784c59708cb0d"
@@ -4444,6 +4449,11 @@ css-loader@^6.5.1:
     postcss-modules-values "^4.0.0"
     postcss-value-parser "^4.1.0"
     semver "^7.3.5"
+
+css-mediaquery@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/css-mediaquery/-/css-mediaquery-0.1.2.tgz#6a2c37344928618631c54bd33cedd301da18bea0"
+  integrity sha512-COtn4EROW5dBGlE/4PiKnh6rZpAPxDeFLaEEwt4i10jpDMFt2EhQGS79QmmrO+iKCHv0PU/HrOWEhijFd1x99Q==
 
 css-minimizer-webpack-plugin@^3.2.0:
   version "3.4.1"

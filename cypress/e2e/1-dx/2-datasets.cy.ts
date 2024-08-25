@@ -33,6 +33,9 @@ describe("Testing connecting data on DX", () => {
 
   it("Can filter results by source in the federated search", () => {
     cy.wait("@getDefaultData").then((interception) => {
+      cy.wait(2000);
+      cy.contains('[data-cy="source-category-button"]', "Kaggle").click();
+      cy.wait("@getDefaultData");
       cy.get('[data-cy="external-search-card-Kaggle"]').should(
         "have.length.greaterThan",
         1
@@ -49,6 +52,9 @@ describe("Testing connecting data on DX", () => {
 
   it("Can import data from External Search", () => {
     cy.wait("@getDefaultData").then((interception) => {
+      cy.wait(2000);
+      cy.contains('[data-cy="source-category-button"]', "Kaggle").click();
+      cy.wait("@getDefaultData");
       cy.get('[data-cy="external-search-card-Kaggle"]').should(
         "have.length.greaterThan",
         1
@@ -56,11 +62,11 @@ describe("Testing connecting data on DX", () => {
     });
 
     cy.get('[data-cy="open-search-button"]').click();
-    cy.intercept(`${apiUrl}/external-sources/search?q=world%20population*`).as(
-      "getDefaultData2"
-    );
+    cy.intercept(
+      `${apiUrl}/external-sources/search?q=Exclusive%20breastfeeding*`
+    ).as("getDefaultData2");
     cy.wait(2000);
-    cy.get('[data-cy="filter-search-input"]').type("world population");
+    cy.get('[data-cy="filter-search-input"]').type("Exclusive breastfeeding");
 
     cy.wait("@getDefaultData2").then((interception) => {
       cy.get('[data-cy="external-search-card-Kaggle"]').should(

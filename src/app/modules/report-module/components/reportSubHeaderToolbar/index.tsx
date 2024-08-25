@@ -431,8 +431,8 @@ export function ReportSubheaderToolbar(
                             }
                           }
                         `}
-                        data-cy="view-report-button"
-                        aria-label="view report button"
+                        data-cy="view-report-button-tablet"
+                        aria-label="view-report-button-tablet"
                       >
                         <svg width="20" height="19" viewBox="0 0 20 19">
                           <rect width="20" height="19" rx="3" fill="#262C34" />
