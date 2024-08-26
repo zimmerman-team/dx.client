@@ -42,6 +42,7 @@ describe("Testing connecting data on DX", () => {
       );
     });
     cy.wait(2000);
+    cy.contains('[data-cy="source-category-button"]', "Kaggle").click();
 
     cy.contains('[data-cy="source-category-button"]', "WHO").click();
     cy.wait("@getDefaultData");
