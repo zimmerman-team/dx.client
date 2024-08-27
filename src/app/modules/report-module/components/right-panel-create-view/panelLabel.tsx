@@ -38,7 +38,7 @@ export default function PanelLabel(props: {
         }
         p {
           font-size: 14px;
-          font-family: "GothamNarrow-Bold", sans-serif;
+          font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
           color: #262c34;
           text-transform: capitalize;
         }
@@ -56,7 +56,7 @@ export default function PanelLabel(props: {
           borderRadius: "8px",
           color: "#fff",
           fontSize: "12px",
-          fontFamily: "GothamNarrow-Medium",
+          fontFamily: "GothamNarrow-Medium, 'Helvetica Neue', sans-serif",
           width: "320px",
           lineHeight: "16px",
           zIndex: 1,

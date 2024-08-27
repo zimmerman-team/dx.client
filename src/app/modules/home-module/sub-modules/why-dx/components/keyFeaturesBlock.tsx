@@ -25,13 +25,13 @@ export default function KeyFeaturesBlock() {
           font-size: 36px;
           line-height: 20px;
           font-weight: 350;
-          font-family: "GothamNarrow-Medium", sans-serif;
+          font-family: "GothamNarrow-Medium", "Helvetica Neue", sans-serif;
           margin-bottom: 25px;
           margin-top: 0;
           color: #231d2c;
         }
         p :nth-of-type(2) {
-          font-family: "GothamNarrow-Medium", sans-serif;
+          font-family: "GothamNarrow-Medium", "Helvetica Neue", sans-serif;
           font-weight: 350;
           line-height: 30px;
           letter-spacing: 0.5px;

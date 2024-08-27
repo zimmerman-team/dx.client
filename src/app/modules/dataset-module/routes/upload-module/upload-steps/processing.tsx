@@ -117,7 +117,7 @@ export default function Processing(props: ProcessingMetaDataProps) {
             <p
               css={`
                 color: #000;
-                font-family: "GothamNarrow-Book", sans-serif;
+                font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
                 font-size: 14px;
               `}
             >
@@ -132,7 +132,7 @@ export default function Processing(props: ProcessingMetaDataProps) {
                 justify-content: space-between;
                 align-items: center;
                 p {
-                  font-family: "GothamNarrow-Book", sans-serif;
+                  font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
                   font-size: 12px;
                   color: #adb5bd;
                   margin-top: 0;

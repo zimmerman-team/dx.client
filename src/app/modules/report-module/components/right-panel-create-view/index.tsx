@@ -87,7 +87,7 @@ const Button = withStyles(() => ({
     fontSize: "14px",
     borderRadius: "0px",
     backgroundColor: "#C7CDD1",
-    fontFamily: "GothamNarrow-Bold, sans-serif",
+    fontFamily: "GothamNarrow-Bold, 'Helvetica Neue', sans-serif",
     "&:first-child": {
       borderRight: "1px solid #f1f3f5",
     },
@@ -99,7 +99,7 @@ const Button = withStyles(() => ({
     color: "#fff",
     fontSize: "14px",
     textTransform: "none",
-    fontFamily: "GothamNarrow-Book, sans-serif",
+    fontFamily: "GothamNarrow-Book, 'Helvetica Neue', sans-serif",
   },
 }))(MuiButton);
 
@@ -1346,7 +1346,7 @@ function CreateChartCard(props: {
         <div
           css={`
             h1 {
-              font-family: "GothamNarrow-Bold", sans-serif;
+              font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
               color: #262c34;
               font-size: 18px;
               line-height: 20px;
@@ -1354,7 +1354,7 @@ function CreateChartCard(props: {
               font-weight: bold;
             }
             p {
-              font-family: "GothamNarrow", sans-serif;
+              font-family: "GothamNarrow", "Helvetica Neue", sans-serif;
               color: #495057;
               font-size: 10px;
               line-height: 15px;

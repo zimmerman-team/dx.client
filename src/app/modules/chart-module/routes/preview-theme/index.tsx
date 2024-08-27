@@ -284,10 +284,12 @@ export function ChartBuilderPreviewTheme(props: ChartBuilderPreviewThemeProps) {
                 <p
                   css={`
                     color: #70777e;
-                    font-family: "GothamNarrow-Bold", sans-serif;
+                    font-family: "GothamNarrow-Bold", "Helvetica Neue",
+                      sans-serif;
                     font-size: 12px;
                     a {
-                      font-family: "GothamNarrow-Bold", sans-serif;
+                      font-family: "GothamNarrow-Bold", "Helvetica Neue",
+                        sans-serif;
 
                       color: #70777e;
                       text-decoration: none;

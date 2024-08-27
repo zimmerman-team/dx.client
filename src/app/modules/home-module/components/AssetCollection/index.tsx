@@ -228,7 +228,7 @@ function AssetsCollection() {
           css={`
             padding-top: 24px;
             font-size: 14px;
-            font-family: GothamNarrow-Book;
+            font-family: GothamNarrow-Book, "Helvetica Neue", sans-serif;
             color: #000000;
           `}
         >

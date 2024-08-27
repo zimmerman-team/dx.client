@@ -141,7 +141,7 @@ export default function ContactModule() {
               height: 100%;
               margin: auto;
               h4 {
-                font-family: "GothamNarrow-Bold", sans-serif;
+                font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
                 font-size: 36px;
                 line-height: 43px;
                 color: #231d2c;
@@ -151,7 +151,7 @@ export default function ContactModule() {
                 font-size: 20px;
                 line-height: 24px;
                 text-align: center;
-                font-family: "GothamNarrow-Medium", sans-serif;
+                font-family: "GothamNarrow-Medium", "Helvetica Neue", sans-serif;
                 margin-top: 0;
               }
               .MuiFormControl-root {

@@ -175,7 +175,7 @@ export default function ExternalSearch(props: {
           }
           p {
             color: #231d2c;
-            font-family: "GothamNarrow-Book";
+            font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
             font-size: 14px;
             font-weight: 325;
             line-height: 20px;
@@ -281,7 +281,7 @@ export default function ExternalSearch(props: {
             font-weight: 325;
             line-height: normal;
             letter-spacing: 0.5px;
-            font-family: "GothamNarrow-Book", sans-serif;
+            font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
           `}
         >
           No datasets were found using federated search. Please consider trying

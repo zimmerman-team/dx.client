@@ -20,7 +20,7 @@ export const styles = {
     flex-direction: row;
     justify-content: space-between;
     p {
-      font-family: "GothamNarrow-Bold";
+      font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
       font-style: normal;
       font-weight: 700;
       font-size: 24px;

@@ -19,7 +19,7 @@ export default function LinkOptions(props: {
         justify-content: center;
         align-items: center;
         p {
-          font-family: "GothamNarrow-Medium", sans-serif;
+          font-family: "GothamNarrow-Medium", "Helvetica Neue", sans-serif;
           font-size: 14px;
         }
       `}
