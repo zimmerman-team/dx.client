@@ -346,7 +346,7 @@ export default function FinishedFragment(props: Props) {
       <div
         css={`
           display: none;
-          @media (max-width: 450px) {
+          @media (max-width: 500px) {
             display: block;
             height: 24px;
           }

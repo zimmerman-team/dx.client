@@ -110,7 +110,7 @@ export const dataSetsCss = css`
 `;
 export const mobileDescriptioncss = css`
   display: none;
-  @media (max-width: 450px) {
+  @media (max-width: 500px) {
     display: flex;
     padding: 24px;
     flex-direction: column;

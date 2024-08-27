@@ -17,6 +17,8 @@ import ErrorComponent from "app/modules/chart-module/components/dialog/errrorCom
 import { DatasetListItemAPIModel } from "app/modules/dataset-module/data";
 import { getDatasetDetailsSource } from "app/modules/chart-module/util/getDatasetDetailsSource";
 import { ChartAPIModel } from "app/modules/chart-module/data";
+import { mobileDescriptioncss } from "app/modules/dataset-module/routes/upload-module/style";
+import moment from "moment";
 
 export function ChartBuilderPreviewTheme(props: ChartBuilderPreviewThemeProps) {
   useTitle("DX Dataxplorer - Preview Chart");
@@ -323,6 +325,40 @@ export function ChartBuilderPreviewTheme(props: ChartBuilderPreviewThemeProps) {
           </>
         </>
       )}
+      <div css={mobileDescriptioncss}>
+        <div>
+          <p>Source</p>
+          <p>{datasetDetails.description}</p>
+        </div>
+      </div>
+      <div
+        css={`
+          display: none;
+          @media (max-width: 500px) {
+            display: block;
+            height: 24px;
+          }
+        `}
+      />
+      <div css={mobileDescriptioncss}>
+        <div>
+          <p>Published date</p>
+          <p>{moment(datasetDetails.createdDate).format("MMMM YYYY")}</p>
+        </div>
+        <div>
+          <p>Last edit time</p>
+          <p>{moment(datasetDetails.createdDate).format("MMMM YYYY")}</p>
+        </div>
+      </div>
+      <div
+        css={`
+          display: none;
+          @media (max-width: 500px) {
+            display: block;
+            height: 24px;
+          }
+        `}
+      />
     </div>
   );
 }
