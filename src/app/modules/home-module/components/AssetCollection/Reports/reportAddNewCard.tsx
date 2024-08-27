@@ -52,7 +52,7 @@ export default function ReportAddnewCard() {
           <p>
             <p
               css={`
-                fonrt-family: "GothamNarrow-Bold", sans-serif;
+                fonrt-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
                 margin: auto;
                 color: #ffffff;
                 font-size: 18px;

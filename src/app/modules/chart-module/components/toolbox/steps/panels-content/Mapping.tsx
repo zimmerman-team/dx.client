@@ -532,7 +532,7 @@ const NonStaticDimensionContainer = (props: {
           <div
             css={`
               font-size: 14px;
-              font-family: "GothamNarrow-Bold", sans-serif;
+              font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
 
               color: #262c34;
             `}
@@ -1058,7 +1058,7 @@ const StaticDimensionContainer = (props: { dimension: any }) => {
             css={`
               font-size: 14px;
               color: #262c34;
-              font-family: "GothamNarrow-Bold", sans-serif; ;
+              font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
             `}
           >
             {props.dimension.name}

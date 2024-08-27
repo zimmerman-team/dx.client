@@ -9,12 +9,12 @@ export const benefitscss = css`
     line-height: 43px;
     text-align: center;
     color: #000000;
-    font-family: "GothamNarrow-Bold", sans-serif;
+    font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
     margin-bottom: 66px;
     margin-top: 0px;
   }
   h3 {
-    font-family: "GothamNarrow-Bold", sans-serif;
+    font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
     font-weight: 400;
     font-size: 40px;
     line-height: 48px;
@@ -25,7 +25,7 @@ export const benefitscss = css`
     font-size: 20px;
     line-height: 24px;
     /* width: 90%; */
-    font-family: "GothamNarrow-Medium", sans-serif;
+    font-family: "GothamNarrow-Medium", "Helvetica Neue", sans-serif;
     margin-top: 14px;
   }
 `;

@@ -32,7 +32,7 @@ export default function EmbedOptions(props: {
         <p
           css={`
             color: #231d2c;
-            font-family: "GothamNarrow-Bold", sans-serif;
+            font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
             font-size: 16px;
             margin: 0;
             margin-bottom: 14px;
@@ -59,7 +59,7 @@ export default function EmbedOptions(props: {
             <p
               css={`
                 color: #231d2c;
-                font-family: "GothamNarrow-Medium", sans-serif;
+                font-family: "GothamNarrow-Medium", "Helvetica Neue", sans-serif;
                 font-size: 14px;
               `}
             >
@@ -84,7 +84,7 @@ export default function EmbedOptions(props: {
             <p
               css={`
                 color: #231d2c;
-                font-family: "GothamNarrow-Medium", sans-serif;
+                font-family: "GothamNarrow-Medium", "Helvetica Neue", sans-serif;
                 font-size: 14px;
               `}
             >
@@ -111,7 +111,7 @@ export default function EmbedOptions(props: {
             height: 41px;
             display: flex;
             align-items: end;
-            font-family: "GothamNarrow-Medium", sans-serif;
+            font-family: "GothamNarrow-Medium", "Helvetica Neue", sans-serif;
             font-size: 14px;
           `}
         >

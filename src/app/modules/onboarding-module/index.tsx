@@ -53,7 +53,7 @@ export default function Onboarding() {
               font-size: 24px;
               font-weight: 700;
               font-style: normal;
-              font-family: "GothamNarrow-Bold";
+              font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
               padding: 0;
               margin: 0;
             `}

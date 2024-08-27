@@ -44,7 +44,7 @@ export default function SourceCategoryList(props: Readonly<Props>) {
           background: #fff;
           border-radius: 30px;
           border: 0.5px solid #231d2c;
-          font-family: "GothamNarrow-Book", sans-serif;
+          font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
           padding: 12px 0px;
         }
       `}
@@ -69,7 +69,7 @@ export default function SourceCategoryList(props: Readonly<Props>) {
                   background: "#6061E5",
                   border: "none",
                   fontWeight: 400,
-                  fontFamily: "GothamNarrow-Bold, sans-serif",
+                  fontFamily: "GothamNarrow-Bold, 'Helvetica Neue', sans-serif",
                 }
               : {}
           }

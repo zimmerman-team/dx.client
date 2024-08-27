@@ -92,7 +92,7 @@ export const DropZone = (props: DropzoneProps) => {
                   font-size: 20px;
                   line-height: normal;
                   font-style: normal;
-                  font-family: "GothamNarrow-Book", sans-serif;
+                  font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
                   font-weight: 325;
                   margin: 0;
                   padding: 0;

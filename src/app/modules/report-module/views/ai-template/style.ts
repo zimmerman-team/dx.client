@@ -20,7 +20,7 @@ export const newsletterIllustrationcss = css`
   }
   p {
     font-size: 18px;
-    font-family: "GothamNarrow-Bold", sans-serif;
+    font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
     color: #231d2c;
     margin-top: 44px;
     margin-bottom: 24px;
@@ -54,10 +54,10 @@ export const subscribedcss = css`
       font-size: 18px;
       line-height: 22px;
       color: #231d2c;
-      font-family: "GothamNarrow-Bold", sans-serif;
+      font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
     }
     p {
-      font-family: "GothamNarrow-Bold", sans-serif;
+      font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
 
       text-align: center;
     }
@@ -89,7 +89,7 @@ export const notSubscribedcss = (error: boolean) => css`
     font-weight: 325;
     font-size: 14px;
     line-height: 17px;
-    font-family: "GothamNarrow-Book", sans-serif;
+    font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
   }
   input {
     background: #f7f7f7;

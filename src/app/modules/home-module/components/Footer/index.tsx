@@ -41,7 +41,8 @@ export default function HomeFooter() {
                   font-size: 16px;
                   text-decoration: none;
                   color: #000;
-                  font-family: "GothamNarrow-Medium", sans-serif;
+                  font-family: "GothamNarrow-Medium", "Helvetica Neue",
+                    sans-serif;
                 }
               `}
             >
@@ -91,7 +92,8 @@ export default function HomeFooter() {
                   margin-top: 20px;
                   color: #000;
                   font-weight: 325;
-                  font-family: "GothamNarrow-Medium", sans-serif;
+                  font-family: "GothamNarrow-Medium", "Helvetica Neue",
+                    sans-serif;
                 }
                 a {
                   text-decoration: none;
@@ -134,7 +136,8 @@ export default function HomeFooter() {
                   font-size: 16px;
                   font-weight: 350;
                   color: #000;
-                  font-family: "GothamNarrow-Medium", sans-serif;
+                  font-family: "GothamNarrow-Medium", "Helvetica Neue",
+                    sans-serif;
                 `}
               >
                 Subscribe to our newsletter

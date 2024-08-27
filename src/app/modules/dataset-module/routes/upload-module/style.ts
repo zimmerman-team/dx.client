@@ -108,7 +108,7 @@ export const CssTextField = withStyles({
     },
     "&.MuiInputLabel-outlined": {
       fontSize: "16px",
-      fontFamily: "'GothamNarrow-Book', sans-serif",
+      fontFamily: "'GothamNarrow-Book', 'Helvetica Neue', sans-serif",
       color: "#231D2C",
     },
     "& .MuiOutlinedInput-input": {
@@ -151,7 +151,7 @@ export const CssSelectField = withStyles({
     },
     "&.MuiInputLabel-outlined": {
       fontSize: "16px",
-      fontFamily: "'GothamNarrow-Book', sans-serif",
+      fontFamily: "'GothamNarrow-Book', 'Helvetica Neue', sans-serif",
       color: "#231D2C",
     },
     "&.MuiSelect-outlined": {

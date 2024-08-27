@@ -56,7 +56,7 @@ export default function ExternalDatasetCard(
         position: relative;
         p:nth-of-type(1) {
           color: #262c34;
-          font-family: "GothamNarrow-Bold", sans-serif;
+          font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
           font-size: 14px;
           margin: 0;
           margin-bottom: 4.05px;
@@ -67,7 +67,7 @@ export default function ExternalDatasetCard(
         }
         p:nth-of-type(2) {
           color: #495057;
-          font-family: "GothamNarrow-Book", sans-serif;
+          font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
           font-size: 10px;
           margin: 0;
           height: 24px;
@@ -82,7 +82,7 @@ export default function ExternalDatasetCard(
         }
         p:nth-of-type(3) {
           color: #495057;
-          font-family: "GothamNarrow-Book", sans-serif;
+          font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
           font-size: 10px;
           text-decoration-line: underline;
           margin: 0;

@@ -37,12 +37,12 @@ const BaseSnackbar = styled((props) => (
     height: 32px;
   }
   & [class*="MuiTypography-root"] {
-    font-weight: bold;
+    font-weight: 400;
     font-size: 18px;
-    font-family: "GothamNarrow-Bold", sans-serif;
+    font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
 
     > a {
-      font-family: "GothamNarrow-Bold", sans-serif;
+      font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
     }
   }
 
@@ -54,7 +54,7 @@ const BaseSnackbar = styled((props) => (
 
   & [class*="MuiSnackbarContent-action"] {
     padding-left: 64px;
-    font-family: "GothamNarrow-Bold", sans-serif;
+    font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
   }
 `;
 

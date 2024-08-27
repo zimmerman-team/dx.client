@@ -217,13 +217,15 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
               {isAiActive ? (
                 <p
                   css={`
-                    font-family: "GothamNarrow-Bold", sans-serif;
+                    font-family: "GothamNarrow-Bold", "Helvetica Neue",
+                      sans-serif;
                     font-size: 18px;
                     color: #231d2c;
                     margin-bottom: 0px;
                     span {
                       color: #359c96;
-                      font-family: "GothamNarrow-Bold", sans-serif;
+                      font-family: "GothamNarrow-Bold", "Helvetica Neue",
+                        sans-serif;
                     }
                   `}
                 >
@@ -258,7 +260,7 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
               span {
                 color: #000000;
                 font-size: 12px;
-                font-family: "GothamNarrow-Book", sans-serif;
+                font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
               }
             `}
           >
@@ -281,7 +283,7 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
           <p
             css={`
               color: #000000;
-              font-family: "GothamNarrow-Bold", sans-serif;
+              font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
               font-size: 24px;
               margin: 0;
               margin-bottom: 15px;
@@ -395,7 +397,8 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
                             height: 16px;
                             color: #373d43;
                             font-size: 10px;
-                            font-family: "GothamNarrow-Book", sans-serif;
+                            font-family: "GothamNarrow-Book", "Helvetica Neue",
+                              sans-serif;
                           `}
                           data-cy="ai-suggestion-icon"
                         >
@@ -417,7 +420,7 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
           <p
             css={`
               color: #000000;
-              font-family: "GothamNarrow-Bold", sans-serif;
+              font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
 
               font-size: 24px;
               margin: 0;
@@ -532,7 +535,8 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
                             height: 16px;
                             color: #373d43;
                             font-size: 10px;
-                            font-family: "GothamNarrow-Book", sans-serif;
+                            font-family: "GothamNarrow-Book", "Helvetica Neue",
+                              sans-serif;
                           `}
                           data-cy="ai-suggestion-icon"
                         >
@@ -555,7 +559,7 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
           <p
             css={`
               color: #000000;
-              font-family: "GothamNarrow-Bold", sans-serif;
+              font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
               font-size: 24px;
               margin: 0;
               margin-bottom: 15px;
@@ -669,7 +673,8 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
                             height: 16px;
                             color: #373d43;
                             font-size: 10px;
-                            font-family: "GothamNarrow-Book", sans-serif;
+                            font-family: "GothamNarrow-Book", "Helvetica Neue",
+                              sans-serif;
                           `}
                           data-cy="ai-suggestion-icon"
                         >
