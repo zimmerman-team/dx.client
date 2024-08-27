@@ -3,10 +3,10 @@ import React from "react";
 import get from "lodash/get";
 import isEmpty from "lodash/isEmpty";
 import useTitle from "react-use/lib/useTitle";
-import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import { useHistory, useParams } from "react-router-dom";
-/* project */
 import Skeleton from "@material-ui/lab/Skeleton";
+/* project */
+import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import { useDataThemesEchart } from "app/hooks/useDataThemesEchart";
 import { styles as commonStyles } from "app/modules/chart-module/routes/common/styles";
 import { ChartBuilderPreviewThemeProps } from "app/modules/chart-module/routes/preview-theme/data";
@@ -16,29 +16,20 @@ import GeomapLegend from "app/modules/chart-module/components/geomap-legend";
 import ErrorComponent from "app/modules/chart-module/components/dialog/errrorComponent";
 import { DatasetListItemAPIModel } from "app/modules/dataset-module/data";
 import { getDatasetDetailsSource } from "app/modules/chart-module/util/getDatasetDetailsSource";
-import { ChartAPIModel } from "app/modules/chart-module/data";
 
 export function ChartBuilderPreviewTheme(props: ChartBuilderPreviewThemeProps) {
   useTitle("DX Dataxplorer - Preview Chart");
+  const { visualOptions } = props;
   const token = useStoreState((state) => state.AuthToken.value);
-
   const domRef = React.useRef<HTMLDivElement>(null);
-
   const { page } = useParams<{ page: string; view: string }>();
   const dataset = useStoreState((state) => state.charts.dataset.value);
   const history = useHistory();
   const { render } = useDataThemesEchart();
-
-  const { visualOptions } = props;
-
   const mapping = useStoreState((state) => state.charts.mapping.value);
   const selectedChartType = useStoreState(
     (state) => state.charts.chartType.value
   );
-  const editChartCrudData = useStoreState(
-    (state) => state.charts.ChartUpdate.crudData
-  ) as ChartAPIModel;
-
   const loadDataset = useStoreActions(
     (actions) => actions.dataThemes.DatasetGet.fetch
   );
@@ -80,70 +71,29 @@ export function ChartBuilderPreviewTheme(props: ChartBuilderPreviewThemeProps) {
       !isEmpty(visualOptions)
     ) {
       const loader = document.getElementById("chart-placeholder");
-
+      if (loader) {
+        loader.style.display = "flex";
+      }
       try {
-        new Promise((resolve, reject) => {
-          try {
-            if (loader) {
-              loader.style.display = "flex";
-            }
-            if (props.renderedChartSsr) {
-              const element = document.createElement("div");
-              element.innerHTML = props.renderedChart.trim();
-              if (domRef.current?.firstChild) {
-                while (domRef.current.firstChild) {
-                  domRef.current.removeChild(domRef.current.firstChild);
-                }
-              }
-              // @ts-ignore
-              domRef.current.appendChild(
-                selectedChartType === "bigNumber"
-                  ? element.children[0].children[0].children[0]
-                  : element.firstChild || element
-              );
-            } else {
-              render(
-                props.renderedChartMappedData,
-                // @ts-ignore
-                domRef.current,
-                selectedChartType || "echartsBarchart",
-                visualOptions,
-                mapping,
-                "common-chart-render-container"
-              );
-            }
-            resolve(1);
-          } catch (e) {
-            if (process.env.NODE_ENV === "development") {
-              console.log("chart error", e);
-            }
-
-            if (loader) {
-              loader.style.display = "none";
-            }
-            reject(0);
-          }
-        })
-          .then(() => {
-            if (loader) {
-              loader.style.display = "none";
-            }
-          })
-          .catch(() => {
-            if (loader) {
-              loader.style.display = "none";
-            }
-          });
-      } catch (e) {
         if (loader) {
           loader.style.display = "none";
         }
-
-        while (domRef.current.firstChild) {
-          domRef.current.removeChild(domRef.current.firstChild);
-        }
+        render(
+          props.renderedChartMappedData,
+          // @ts-ignore
+          domRef.current,
+          selectedChartType ?? "echartsBarchart",
+          visualOptions,
+          mapping,
+          "common-chart-render-container"
+        );
+      } catch (e) {
         if (process.env.NODE_ENV === "development") {
           console.log("chart error", e);
+        }
+
+        if (loader) {
+          loader.style.display = "none";
         }
       }
     }
@@ -151,21 +101,22 @@ export function ChartBuilderPreviewTheme(props: ChartBuilderPreviewThemeProps) {
     mapping,
     visualOptions,
     props.renderedChart,
-    props.renderedChartSsr,
     props.renderedChartMappedData,
   ]);
 
-  const handleVizClick = () => {
-    if (page === "new" || props.editable) {
-      history.push(`/chart/${page}/customize`);
-    }
-  };
   React.useEffect(() => {
     props.setIsPreviewView(true);
     return () => {
       props.setIsPreviewView(false);
     };
   }, []);
+
+  const handleVizClick = () => {
+    if (page === "new" || props.editable) {
+      history.push(`/chart/${page}/customize`);
+    }
+  };
+
   if (props.dataError || props.chartError) {
     return (
       <>
@@ -178,12 +129,6 @@ export function ChartBuilderPreviewTheme(props: ChartBuilderPreviewThemeProps) {
       </>
     );
   }
-
-  const isMappingValid = React.useMemo(() => {
-    return (
-      editChartCrudData?.isMappingValid && props.loadedChart?.isMappingValid
-    );
-  }, [props.loadedChart?.isMappingValid, editChartCrudData?.isMappingValid]);
 
   return (
     <div css={commonStyles.container}>
@@ -248,22 +193,16 @@ export function ChartBuilderPreviewTheme(props: ChartBuilderPreviewThemeProps) {
                   onClick={handleVizClick}
                   id="common-chart-render-container"
                   css={`
-                    ${props.renderedChartSsr
-                      ? `overflow-x: auto;`
-                      : `height: ${get(visualOptions, "height", 500)}px;`}
+                    height: ${get(visualOptions, "height", 500)}px;
 
                     ${selectedChartType === "bigNumber" &&
                     window.location.pathname.indexOf("/chart/") > -1 &&
                     `
-           
-      
-                  > div {
-                    width: 135px;
-                  }
+                    > div {
+                      width: 135px;
+                    }
                 `}
-
-
-              * {
+                    * {
                       font-family: "GothamNarrow-Book", "Helvetica Neue",
                         sans-serif !important;
                     }

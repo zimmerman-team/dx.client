@@ -23,6 +23,7 @@ import {
 import { charts } from "app/modules/chart-module/data";
 import AILoader from "app/modules/chart-module/routes/chart-type/loader";
 import { handleValidityCheckOfDimensionsToBeMapped } from "app/modules/chart-module/components/toolbox/steps/panels-content/Mapping";
+import { IChartType } from "app/state/api/action-reducers/sync/charts";
 
 function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
   useTitle("DX Dataxplorer - Chart Type");
@@ -180,7 +181,7 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
   }
 
   const onChartTypeChange =
-    (chartTypeId: string) => (e: React.MouseEvent<HTMLButtonElement>) => {
+    (chartTypeId: IChartType) => (e: React.MouseEvent<HTMLButtonElement>) => {
       sessionStorage.setItem("visualOptions", JSON.stringify({}));
       props.setVisualOptionsOnChange(
         chartType === chartTypeId ? null : chartTypeId

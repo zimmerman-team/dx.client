@@ -33,7 +33,6 @@ interface Props {
   visualOptions: any;
   withHeader?: boolean;
   renderedChart: string;
-  renderedChartSsr: boolean;
   renderedChartMappedData: any;
   setRawViz?: React.Dispatch<any>;
   setVisualOptions: (value: any) => void;
@@ -79,6 +78,14 @@ export function CommonChart(props: Readonly<Props>) {
     .getElementById(`datasource-${props.chartId || "1"}`)
     ?.getBoundingClientRect().height;
 
+  let content;
+  let contentHeight;
+  if (!props.chartPreviewInReport && props.renderedChartType !== "bigNumber") {
+    contentHeight = props.visualOptions?.height - 28 + "px";
+  } else {
+    contentHeight = "auto";
+  }
+
   React.useEffect(() => {
     if (token) {
       loadDataset({
@@ -107,34 +114,6 @@ export function CommonChart(props: Readonly<Props>) {
     }
   }, []);
 
-  // server side rendering
-  React.useEffect(() => {
-    if (props.renderedChartSsr && domRef && domRef.current) {
-      try {
-        while (domRef.current.firstChild) {
-          domRef.current.removeChild(domRef.current.firstChild);
-        }
-      } catch (e) {}
-      try {
-        const element = document.createElement("div");
-        element.innerHTML = props.renderedChart.trim();
-        const newRawViz = domRef.current.appendChild(
-          chartType === "bigNumber"
-            ? element.children[0].children[0].children[0]
-            : element.firstChild || element
-        );
-        props.setRawViz && props.setRawViz(newRawViz);
-      } catch (e) {
-        while (domRef.current.firstChild) {
-          domRef.current.removeChild(domRef.current.firstChild);
-        }
-        if (process.env.NODE_ENV === "development") {
-          console.log("chart error", e);
-        }
-      }
-    }
-  }, [props.renderedChart]);
-
   // client side rendering
   React.useEffect(() => {
     const visualOptions = props.containerRef.current
@@ -147,13 +126,7 @@ export function CommonChart(props: Readonly<Props>) {
             : props.visualOptions.height,
         }
       : props.visualOptions;
-    if (
-      !props.renderedChartSsr &&
-      domRef &&
-      domRef.current &&
-      chartType &&
-      props.containerRef.current
-    ) {
+    if (domRef && domRef.current && chartType && props.containerRef.current) {
       try {
         render(
           props.renderedChartMappedData,
@@ -200,82 +173,34 @@ export function CommonChart(props: Readonly<Props>) {
         }
       }
     }
-  }, [
-    chartType,
-    props.visualOptions,
-    props.renderedChartSsr,
-    props.renderedChartMappedData,
-  ]);
-  let content;
-  let contentHeight;
-  if (!props.chartPreviewInReport && props.renderedChartType !== "bigNumber") {
-    contentHeight = props.visualOptions?.height - 28 + "px";
-  } else {
-    contentHeight = "auto";
-  }
+  }, [chartType, props.visualOptions, props.renderedChartMappedData]);
 
-  if (props.renderedChartSsr) {
-    content = (
+  content = (
+    <div
+      css={`
+        width: 100%;
+        overflow: hidden;
+        position: relative;
+        height: ${contentHeight};
+        * {
+          font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif !important;
+        }
+      `}
+    >
       <div
         ref={domRef}
         id={`common-chart-render-container-${props.chartId || "1"}-${
           props.chartPreviewInReport
         }`}
-        data-cy="common-chart-container-ssr"
+        data-cy="common-chart-container"
         css={`
-          overflow-x: auto;
-          margin-top: 40px;
+          width: auto !important;
+          height: calc(100% - ${dataSourcePHeight ?? 0}px);
 
-          ${chartType === "bigNumber" &&
-          window.location.pathname.indexOf("/chart/") > -1 &&
-          `
-            > div {
-              width: 135px;
-            }
-          `}
-          ${chartType === "bigNumber" &&
-          props.inChartWrapper &&
-          `
-        > div {
-       ::nth-child(1) {
-        font-size: 10px !important;
-       }
-            }
-        `}
-
-          * {
-            font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif !important;
-          }
-        `}
-      />
-    );
-  } else {
-    content = (
-      <div
-        css={`
-          width: 100%;
-          overflow: hidden;
-          position: relative;
-          height: ${contentHeight};
-          * {
-            font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif !important;
-          }
-        `}
-      >
-        <div
-          ref={domRef}
-          id={`common-chart-render-container-${props.chartId || "1"}-${
-            props.chartPreviewInReport
-          }`}
-          data-cy="common-chart-container"
-          css={`
-            width: auto !important;
-            height: calc(100% - ${dataSourcePHeight ?? 0}px);
-
-            > div:first-of-type {
-              ${props.renderedChartType === "bigNumber" &&
-              props.inChartWrapper &&
-              `
+          > div:first-of-type {
+            ${props.renderedChartType === "bigNumber" &&
+            props.inChartWrapper &&
+            `
               div:nth-child(1) {
               font-size: 12px !important;
               padding-bottom: 6px !important;
@@ -309,58 +234,57 @@ export function CommonChart(props: Readonly<Props>) {
               }
         `}
 
-              > svg {
-                height: calc(100% - ${dataSourcePHeight ?? 0}px);
+            > svg {
+              height: calc(100% - ${dataSourcePHeight ?? 0}px);
 
-                > rect {
-                  height: calc(100% - ${dataSourcePHeight ?? 0}px);
-                }
+              > rect {
+                height: calc(100% - ${dataSourcePHeight ?? 0}px);
               }
             }
-          `}
-        />
+          }
+        `}
+      />
 
-        <p
-          id={`datasource-${props.chartId || "1"}`}
-          css={`
-            color: #70777e;
+      <p
+        id={`datasource-${props.chartId || "1"}`}
+        css={`
+          color: #70777e;
+          font-family: "GothamNarrow-Bold", sans-serif;
+          font-size: 12px;
+          margin: 0;
+          display: ${props.hideChartSource ? "none" : "block"};
+          a {
             font-family: "GothamNarrow-Bold", sans-serif;
-            font-size: 12px;
-            margin: 0;
-            display: ${props.hideChartSource ? "none" : "block"};
-            a {
-              font-family: "GothamNarrow-Bold", sans-serif;
 
-              color: #70777e;
-              text-decoration: none;
-              border-bottom: 1px solid #70777e;
-            }
+            color: #70777e;
+            text-decoration: none;
+            border-bottom: 1px solid #70777e;
+          }
+        `}
+      >
+        Source:{" "}
+        <a href={sourceUrl} target="_blank" rel="noopener noreferrer">
+          {props.datasetDetails?.source ?? datasetDetails.source} - Data file:{" "}
+          {filename}
+        </a>
+      </p>
+      {chartType === "echartsGeomap" && props.visualOptions?.showLegend ? (
+        <div
+          css={`
+            position: absolute;
+            bottom: 0;
+            right: 0;
           `}
         >
-          Source:{" "}
-          <a href={sourceUrl} target="_blank" rel="noopener noreferrer">
-            {props.datasetDetails?.source ?? datasetDetails.source} - Data file:{" "}
-            {filename}
-          </a>
-        </p>
-        {chartType === "echartsGeomap" && props.visualOptions?.showLegend ? (
-          <div
-            css={`
-              position: absolute;
-              bottom: 0;
-              right: 0;
-            `}
-          >
-            <GeomapLegend
-              data={props.renderedChartMappedData}
-              visualOptions={props.visualOptions}
-              mapping={props.mapping}
-            />
-          </div>
-        ) : null}
-      </div>
-    );
-  }
+          <GeomapLegend
+            data={props.renderedChartMappedData}
+            visualOptions={props.visualOptions}
+            mapping={props.mapping}
+          />
+        </div>
+      ) : null}
+    </div>
+  );
 
   return (
     <>
