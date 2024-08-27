@@ -10,7 +10,7 @@ export const empowercss = (view: string) => css`
   background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #f2f7fd 100%);
   background-repeat: no-repeat;
   background-size: 100% 100%, auto;
-  overflow-x: hidden;
+  overflow: hidden;
   z-index: 0;
   @media (max-width: 641px) {
     height: 100%;
@@ -165,12 +165,7 @@ export const quotecss = css`
     font-size: 40px;
     line-height: 48px;
     text-align: center;
-<<<<<<< HEAD
-    font-family: "GothamNarrow-Medium", sans-serif;
-=======
     font-family: "GothamNarrow-Medium", "Helvetica Neue", sans-serif;
-
->>>>>>> db32d54e69ebec5355e034485b0f6fbce32a5cef
     margin: 0;
     @media (max-width: 1024px) {
       font-size: 34px;
@@ -195,15 +190,11 @@ export const quotecss = css`
       font-size: 16px;
       line-height: 19px;
       text-align: center;
-<<<<<<< HEAD
-      font-family: "GothamNarrow-Bold", sans-serif;
+      font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
       @media (max-width: 1024px) {
         font-size: 14px;
         line-height: 16.8px;
       }
-=======
-      font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
->>>>>>> db32d54e69ebec5355e034485b0f6fbce32a5cef
     }
   }
 `;
