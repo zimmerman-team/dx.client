@@ -103,14 +103,14 @@ export default function FinishedFragment(props: Props) {
           font-size: 14px;
           font-weight: 400;
           font-style: normal;
-          font-family: "GothamNarrow-Book";
+          font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
         `}
       >
         <div
           css={`
             color: #231d2c;
             font-size: 16px;
-            font-family: "GothamNarrow-Bold", sans-serif;
+            font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
             line-height: 19px;
             margin-top: 19px;
             @media (max-width: 450px) {
@@ -174,7 +174,7 @@ export default function FinishedFragment(props: Props) {
             <p
               css={`
                 font-size: 16px;
-                font-family: "GothamNarrow-Book", sans-serif;
+                font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
                 padding: 0;
                 margin: 0;
                 @media (max-width: 450px) {
@@ -320,7 +320,7 @@ export default function FinishedFragment(props: Props) {
             margin-bottom: 8px;
             margin-top: 0;
             font-size: 12px;
-            font-family: "GothamNarrow-Book", sans-serif;
+            font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
           }
           @media (max-width: 450px) {
             display: none;

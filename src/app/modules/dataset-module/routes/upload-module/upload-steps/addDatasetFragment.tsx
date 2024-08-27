@@ -156,7 +156,7 @@ export default function AddDatasetFragment(props: Props) {
           }
           p {
             color: #231d2c;
-            font-family: "GothamNarrow-Book";
+            font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
             font-size: 14px;
             font-weight: 325;
             line-height: 20px;
@@ -195,8 +195,7 @@ export default function AddDatasetFragment(props: Props) {
               font-style: normal;
               font-weight: 400;
               line-height: normal;
-              font-family: "GothamNarrow-Bold", sans-serif;
-              background: #dadaf84d;
+              font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
               border-radius: 16px 16px 0px 0px;
               width: 100%;
               @media (max-width: 1024px) {

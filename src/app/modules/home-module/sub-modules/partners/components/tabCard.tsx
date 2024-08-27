@@ -22,7 +22,7 @@ function TabCard(props: {
           display: flex;
           justify-content: center;
           gap: 39px;
-          font-family: "GothamNarrow-Bold", sans-serif;
+          font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
           padding: 72px 40px 100px 88px;
           color: #231d2c;
           overflow-x: hidden;
@@ -49,7 +49,7 @@ function TabCard(props: {
             margin-bottom: 11px;
           }
           p {
-            font-family: "GothamNarrow-Light", sans-serif;
+            font-family: "GothamNarrow-Light", "Helvetica Neue", sans-serif;
             white-space: pre-line;
             font-weight: 400;
             line-height: 19px;

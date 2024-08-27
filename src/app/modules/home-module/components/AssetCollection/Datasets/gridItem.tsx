@@ -111,7 +111,7 @@ export default function GridItem(props: Readonly<Props>) {
                   margin-top: -5px;
                   font-size: 14px;
                   line-height: 22px;
-                  font-family: "GothamNarrow-Bold", sans-serif;
+                  font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
                   overflow: hidden;
                   margin-bottom: 2px;
                   white-space: nowrap;
@@ -211,7 +211,7 @@ export default function GridItem(props: Readonly<Props>) {
                 height: 20px;
                 border-radius: 20px;
                 color: #ffffff;
-                font-family: "GothamNarrow-Book", sans-serif;
+                font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
                 right: 8px;
                 bottom: 30px;
                 z-index: 2;

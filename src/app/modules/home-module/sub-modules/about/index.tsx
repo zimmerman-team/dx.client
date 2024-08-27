@@ -257,7 +257,7 @@ export default function AboutModule() {
           >
             <h1
               css={`
-                font-family: "GothamNarrow-Bold", sans-serif;
+                font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
                 font-size: 64px;
                 font-style: normal;
                 font-weight: 400;
@@ -276,9 +276,9 @@ export default function AboutModule() {
                 font-style: normal;
                 font-weight: 350;
                 line-height: normal;
-                font-family: "GothamNarrow-Medium", sans-serif;
+                font-family: "GothamNarrow-Medium", "Helvetica Neue", sans-serif;
                 @media (max-width: 1024px) {
-                  font-family: "GothamNarrow-Book", sans-serif;
+                  font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
                 }
               `}
             >
@@ -451,7 +451,8 @@ export default function AboutModule() {
               >
                 <h2
                   css={`
-                    font-family: "GothamNarrow-Bold";
+                    font-family: "GothamNarrow-Bold", "Helvetica Neue",
+                      sans-serif;
                     font-size: 36px;
                     font-style: normal;
                     font-weight: 400;
@@ -466,7 +467,8 @@ export default function AboutModule() {
                 <p
                   css={`
                     font-size: 24px;
-                    font-family: "GothamNarrow-Bold";
+                    font-family: "GothamNarrow-Bold", "Helvetica Neue",
+                      sans-serif;
                     font-style: normal;
                     font-weight: 400;
                     line-height: 130%;
@@ -480,7 +482,8 @@ export default function AboutModule() {
                 <p
                   css={`
                     color: #fff;
-                    font-family: "GothamNarrow-Book";
+                    font-family: "GothamNarrow-Book", "Helvetica Neue",
+                      sans-serif;
                     white-space: pre-line;
                     width: 66%;
                     margin: 16px auto 0 auto;
@@ -498,7 +501,7 @@ export default function AboutModule() {
       <Container maxWidth="lg">
         <h2
           css={`
-            font-family: "GothamNarrow-Bold";
+            font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
             font-size: 36px;
             font-style: normal;
             font-weight: 400;
@@ -514,7 +517,7 @@ export default function AboutModule() {
           css={`
             text-align: center;
             font-size: 20px;
-            font-family: "GothamNarrow-Book";
+            font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
             font-style: normal;
             font-weight: 325;
             line-height: normal;
@@ -611,7 +614,7 @@ export default function AboutModule() {
                   margin: 0;
                   margin-top: 32px;
                   font-size: 24px;
-                  font-family: "GothamNarrow-Bold";
+                  font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
                   font-style: normal;
                   font-weight: 400;
                   line-height: normal;
@@ -628,7 +631,7 @@ export default function AboutModule() {
                   font-style: normal;
                   font-weight: 325;
                   line-height: normal;
-                  font-family: "GothamNarrow-Book";
+                  font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
                   color: #231d2c;
                 `}
               >

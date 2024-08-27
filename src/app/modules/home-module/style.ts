@@ -16,7 +16,7 @@ export const turnsDataCss = css`
   align-items: center;
 
   h1 {
-    font-family: "GothamNarrow-Bold", sans-serif;
+    font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
     font-weight: 700;
     font-size: 40px;
     line-height: 48px;
@@ -26,7 +26,7 @@ export const turnsDataCss = css`
     padding: 0;
   }
   h2 {
-    font-family: "GothamNarrow-Bold", sans-serif;
+    font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
     font-weight: 400;
     font-size: 34px;
     line-height: 42px;
@@ -40,7 +40,7 @@ export const turnsDataCss = css`
 
   p {
     color: #495057;
-    font-family: "GothamNarrow-Bold", sans-serif;
+    font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
     font-size: 18px;
     line-height: 22px;
     text-align: center;
@@ -57,7 +57,7 @@ export const turnsDataCss = css`
     outline: none;
     border: none;
     color: #ffffff;
-    font-family: "GothamNarrow-Bold", sans-serif;
+    font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
     font-weight: 400;
     font-size: 14px;
     text-transform: uppercase;
@@ -78,7 +78,7 @@ export const turnsDataCss = css`
 export const featuredAssetsCss = css`
   h3 {
     font-size: 24px;
-    font-family: "GothamNarrow-Bold", sans-serif;
+    font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
     line-height: 29px;
     color: #000000;
     margin: 0;
@@ -174,7 +174,7 @@ export const sortByItemCss = (active: boolean) => css`
   color: #231d2c;
   font-size: 12px;
   padding: 8px 22px;
-  font-family: "GothamNarrow-Book", sans-serif;
+  font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
   background: ${active ? "#f1f3f5" : "transparent"};
 
   &:hover {

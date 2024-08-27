@@ -191,7 +191,6 @@ export default function ContactModule() {
               width: 522px;
               height: 100%;
               margin: auto;
-
               .MuiFormControl-root {
                 margin-top: 20px;
               }

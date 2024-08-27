@@ -51,7 +51,7 @@ export const styles = {
     align-items: center;
     height: 32px;
     padding: 10px 20px;
-    font-family: "GothamNarrow-Bold", sans-serif;
+    font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
     gap: 10px;
     outline: none;
     border: none;

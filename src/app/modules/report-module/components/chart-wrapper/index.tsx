@@ -143,7 +143,7 @@ export function ReportChartWrapper(props: Props) {
           font-size: ${parseInt(props.width) > 250 ? "14px" : "10px"};
           line-height: 15px;
           font-weight: bold;
-          font-family: "GothamNarrow-Bold", sans-serif;
+          font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
           text-align: center;
         `}
       >
@@ -210,7 +210,7 @@ export function ReportChartWrapper(props: Props) {
           css={`
             margin: 0;
             margin-bottom: 12px;
-            font-family: "GothamNarrow-bold", sans-serif;
+            font-family: "GothamNarrow-bold", "Helvetica Neue", sans-serif;
             font-size: 14px;
             color: #231d2c;
             letter-spacing: 0.5px;

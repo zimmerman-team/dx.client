@@ -90,7 +90,7 @@ export default function gridItem(props: Props) {
               css={`
                 font-size: 14px;
                 line-height: 22px;
-                font-family: "GothamNarrow-Bold", sans-serif;
+                font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
                 margin-top: 2px;
 
                 overflow: hidden;
@@ -106,7 +106,7 @@ export default function gridItem(props: Props) {
               css={`
                 font-size: 10px;
                 line-height: 14px;
-                font-family: "Gotham Narrow ", sans-serif;
+                font-family: "Gotham Narrow ", "Helvetica Neue", sans-serif;
                 margin-top: 1px;
                 overflow: hidden;
                 display: -webkit-box;

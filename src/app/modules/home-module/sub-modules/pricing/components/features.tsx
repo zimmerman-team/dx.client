@@ -291,7 +291,8 @@ const Features = () => {
                           align-items: center;
                           text-transform: uppercase;
                           font-size: 10px;
-                          font-family: "GothamNarrow-Book", sans-serif;
+                          font-family: "GothamNarrow-Book", "Helvetica Neue",
+                            sans-serif;
                         }
                       `}
                     >

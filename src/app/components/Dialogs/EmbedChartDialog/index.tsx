@@ -171,7 +171,7 @@ export default function EmbedChartDialog(props: {
                 width: 73%;
                 > p {
                   color: #231d2c;
-                  font-family: "GothamNarrow-Bold", sans-serif;
+                  font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
                   font-size: 14px;
                   overflow: hidden;
                   text-overflow: ellipsis;
@@ -212,14 +212,16 @@ export default function EmbedChartDialog(props: {
                   margin: 0;
                   span:nth-of-type(1) {
                     color: #70777e;
-                    font-family: "GothamNarrow-Medium", sans-serif;
+                    font-family: "GothamNarrow-Medium", "Helvetica Neue",
+                      sans-serif;
                     font-size: 12px;
                     margin: 0;
                     line-height: 14.52px;
                   }
                   span:nth-of-type(2) {
                     color: #231d2c;
-                    font-family: "GothamNarrow-Medium", sans-serif;
+                    font-family: "GothamNarrow-Medium", "Helvetica Neue",
+                      sans-serif;
                     font-size: 12px;
                     margin: 0;
                     line-height: 14.52px;

@@ -23,7 +23,7 @@ export const previewTablecss = css`
     height: 35px;
     font-weight: 400;
     font-size: 14px;
-    font-family: "GothamNarrow-Book";
+    font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
   }
 
   tr {

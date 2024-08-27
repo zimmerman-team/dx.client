@@ -512,7 +512,7 @@ export default function RowFrame(props: RowFrameProps) {
                 css={`
                   margin-bottom: 0;
                   color: #000;
-                  font-family: "GothamNarrow-bold", sans-serif;
+                  font-family: "GothamNarrow-bold", "Helvetica Neue", sans-serif;
                 `}
               >
                 Select your row structure

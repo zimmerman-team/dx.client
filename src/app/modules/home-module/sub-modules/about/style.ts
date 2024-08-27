@@ -19,7 +19,7 @@ export const subParagraphcss = css`
     font-style: normal;
     font-weight: 350;
     line-height: normal;
-    font-family: "GothamNarrow-Medium", sans-serif;
+    font-family: "GothamNarrow-Medium", "Helvetica Neue", sans-serif;
     display: none;
     @media (max-width: 1024px) {
       display: block;
@@ -45,7 +45,7 @@ export const subParagraphcss = css`
   }
   p {
     margin: 0;
-    font-family: "GothamNarrow-Medium", sans-serif;
+    font-family: "GothamNarrow-Medium", "Helvetica Neue", sans-serif;
     font-size: 20px;
     font-style: normal;
     font-weight: 350;
