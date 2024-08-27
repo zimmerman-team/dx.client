@@ -192,6 +192,7 @@ export function ReportPreviewView(props: {
         }}
         setPlugins={() => {}}
         setHeaderDetails={() => {}}
+        handleRightPanelOpen={() => {}}
       />
       <Container id="content-container" maxWidth="lg" ref={ref}>
         <Box height={45} />

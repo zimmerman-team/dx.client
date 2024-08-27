@@ -12,10 +12,6 @@ export const styles = {
     padding: 67px 0px 0 0;
     align-self: flex-start;
     min-height: calc(100vh - 98px);
-
-    @media (max-width: 1280px) {
-      width: calc(100vw - 400px);
-    }
   `,
   previewInnercontainer: (isEditMode: boolean) => css`
     left: 0;

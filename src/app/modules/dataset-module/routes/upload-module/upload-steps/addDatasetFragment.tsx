@@ -198,6 +198,9 @@ export default function AddDatasetFragment(props: Props) {
               font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
               border-radius: 16px 16px 0px 0px;
               width: 100%;
+              @media (max-width: 1024px) {
+                margin-bottom: 40px;
+              }
             `}
           >
             Connect your data

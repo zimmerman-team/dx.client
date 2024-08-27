@@ -210,6 +210,7 @@ export function ReportChartWrapper(props: Props) {
             font-size: 14px;
             color: #231d2c;
             letter-spacing: 0.5px;
+            word-break: break-all;
           `}
         >
           {chartName}

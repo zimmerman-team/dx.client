@@ -1,7 +1,5 @@
 import { css } from "styled-components/macro";
 import styled from "styled-components/macro";
-import Ellipses from "app/modules/home-module/assets/ellipses.svg";
-import Ellipses2 from "app/modules/home-module/assets/ellipses-2.svg";
 
 export const empowercss = (view: string) => css`
   height: ${view === "landing" ? "533px" : "418px"};
@@ -9,10 +7,19 @@ export const empowercss = (view: string) => css`
   margin-top: 48px;
   padding: 78px 0 55px 0;
   font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
-  background: url(${view === "landing" ? Ellipses2 : Ellipses}),
-    linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #f2f7fd 100%);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #f2f7fd 100%);
   background-repeat: no-repeat;
   background-size: 100% 100%, auto;
+  overflow: hidden;
+  z-index: 0;
+  @media (max-width: 641px) {
+    height: 100%;
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0) 0%,
+      #f2f7fd 100%
+    );
+  }
   a {
     text-decoration: none;
   }
@@ -26,6 +33,10 @@ export const empowercss = (view: string) => css`
     text-align: center;
     margin-bottom: ${view === "landing" ? "14px" : "26px"};
     font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
+    @media (max-width: 1024px) {
+      font-size: 40px;
+      line-height: 48px;
+    }
   }
   p {
     margin: 0;
@@ -41,6 +52,9 @@ export const empowercss = (view: string) => css`
     margin-top: ${view === "landing" ? "28px" : "50px"};
     align-items: center;
     justify-content: center;
+    @media (max-width: 768px) {
+      gap: 20px;
+    }
   }
   #auth-buttons {
     button,
@@ -61,6 +75,11 @@ export const empowercss = (view: string) => css`
         opacity: 0.8;
         cursor: pointer;
       }
+      @media (max-width: 500px) {
+        font-size: 13px;
+        padding: 8px 16px;
+        width: 185px;
+      }
     }
   }
 `;
@@ -70,6 +89,11 @@ export const TabCardEllipseCss = css`
   right: 25%;
   z-index: -1;
   position: absolute;
+  @media (max-width: 500px) {
+    top: 7%;
+    right: -180px;
+    width: 100%;
+  }
 `;
 
 export const quotesEllipseCss = css`
@@ -77,6 +101,11 @@ export const quotesEllipseCss = css`
   left: -8.1%;
   z-index: -1;
   position: absolute;
+  @media (max-width: 500px) {
+    width: 100%;
+    height: 100%;
+    left: -51%;
+  }
 `;
 
 export const useDXcss = css`
@@ -89,6 +118,13 @@ export const useDXcss = css`
     text-align: center;
     font-family: "GothamNarrow-Medium", "Helvetica Neue", sans-serif;
     margin-top: 0;
+    @media (max-width: 1024px) {
+      font-family: "GothamNarrow-Bold", sans-serif;
+    }
+    @media (max-width: 600px) {
+      font-size: 32px;
+      line-height: 38.4px;
+    }
   }
   h3 {
     font-size: 24px;
@@ -105,6 +141,15 @@ export const useDXcss = css`
     font-family: "GothamNarrow-Medium", "Helvetica Neue", sans-serif;
     width: 85%;
     margin: 16px auto 0 auto;
+    @media (max-width: 1024px) {
+      font-size: 16px;
+      line-height: 19.24px;
+      width: 67%;
+      font-family: "GothamNarrow-Book", sans-serif;
+      @media (max-width: 600px) {
+        width: 97%;
+      }
+    }
   }
 `;
 
@@ -121,8 +166,15 @@ export const quotecss = css`
     line-height: 48px;
     text-align: center;
     font-family: "GothamNarrow-Medium", "Helvetica Neue", sans-serif;
-
     margin: 0;
+    @media (max-width: 1024px) {
+      font-size: 34px;
+      line-height: 40.8px;
+    }
+    @media (max-width: 1024px) {
+      font-size: 24px;
+      line-height: 28.8px;
+    }
   }
   img {
     margin-bottom: 15px;
@@ -139,6 +191,10 @@ export const quotecss = css`
       line-height: 19px;
       text-align: center;
       font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
+      @media (max-width: 1024px) {
+        font-size: 14px;
+        line-height: 16.8px;
+      }
     }
   }
 `;
@@ -152,6 +208,10 @@ export const bestDecisioncss = css`
     color: #231d2c;
     margin: 0;
     margin-bottom: 36px;
+    @media (max-width: 1024px) {
+      font-size: 34px;
+      line-height: 40.8px;
+    }
   }
   div {
     button {
@@ -189,6 +249,8 @@ export const bestDecisioncss = css`
       display: flex;
       justify-content: center;
       align-items: center;
+      flex-shrink: 0;
+      white-space: nowrap;
       padding: 12px 27px;
       gap: 10px;
       p {
@@ -197,6 +259,7 @@ export const bestDecisioncss = css`
         font-weight: 700;
         font-size: 14px;
         color: #231d2c;
+        white-space: nowrap;
       }
       :hover {
         opacity: 0.95;

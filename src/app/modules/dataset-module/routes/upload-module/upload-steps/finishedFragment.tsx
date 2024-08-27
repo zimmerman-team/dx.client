@@ -1,32 +1,32 @@
 import React from "react";
-import { Link, useHistory, useLocation } from "react-router-dom";
-import { dataSetsCss } from "app/modules/dataset-module/routes/upload-module/style";
+import { Link, useLocation } from "react-router-dom";
+import {
+  dataSetsCss,
+  mobileDescriptioncss,
+} from "app/modules/dataset-module/routes/upload-module/style";
 import { useStoreActions } from "app/state/store/hooks";
 import { DatasetDataTable } from "app/modules/dataset-module/routes/upload-module/component/table/data-table";
 import { CssSnackbar, ISnackbarState } from "./previewFragment";
 import { ReactComponent as FullScreenIcon } from "../assets/full-screen.svg";
 import { ReactComponent as CloseFullScreenIcon } from "../assets/close-full-screen.svg";
-import { useRecoilState } from "recoil";
-import { homeDisplayAtom } from "app/state/recoil/atoms";
 import { ArrowBack } from "@material-ui/icons";
+import { useMediaQuery } from "usehooks-ts";
+import { DatasetListItemAPIModel } from "app/modules/dataset-module/data";
+import moment from "moment";
 
 interface Props {
   data: any[];
   stats: any[];
   datasetId: string;
   dataTotalCount: number;
-  description: string;
   dataTypes: never[];
   canDatasetEditDelete?: boolean;
-  title: string;
-  dataCategory: string;
-  dataSource: string;
-  dataSourceURL: string;
+  datasetDetails: DatasetListItemAPIModel;
 }
 
 export default function FinishedFragment(props: Props) {
-  const history = useHistory();
   const location = useLocation();
+  const isSmallScreen = useMediaQuery("(max-width:767px)"); //at this breakpoint, we limit user creation abilities
   const queryParams = new URLSearchParams(location.search);
   const reportPage = queryParams.get("page") as string;
   const fromHome = location.search.includes("fromHome=true");
@@ -88,6 +88,9 @@ export default function FinishedFragment(props: Props) {
           margin-bottom: 16px;
           column-gap: 8px;
           cursor: pointer;
+          @media (max-width: 450px) {
+            display: none;
+          }
         `}
         data-cy="dataset-back-to-library-btn"
       >
@@ -110,9 +113,12 @@ export default function FinishedFragment(props: Props) {
             font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
             line-height: 19px;
             margin-top: 19px;
+            @media (max-width: 450px) {
+              display: none;
+            }
           `}
         >
-          {props.description}
+          {props.datasetDetails.description}
         </div>
         <div
           css={`
@@ -136,6 +142,9 @@ export default function FinishedFragment(props: Props) {
                 height: 40px;
                 cursor: pointer;
                 position: relative;
+                @media (max-width: 450px) {
+                  display: none;
+                }
               `}
               onMouseOver={() => setOpenFullScreenTooltip(true)}
               onMouseLeave={() => setOpenFullScreenTooltip(false)}
@@ -168,56 +177,65 @@ export default function FinishedFragment(props: Props) {
                 font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
                 padding: 0;
                 margin: 0;
+                @media (max-width: 450px) {
+                  font-size: 12px;
+                }
               `}
             >
               {props.dataTotalCount} rows &{" "}
               {Object.keys(props.data[0] || {}).length} columns
             </p>
           </div>
-          <Link
-            to={{
-              pathname: `/chart/new/chart-type`,
-              search: `?loadataset=true${
-                reportPage ? `&fromreport=true&page=${reportPage}` : ""
-              }`,
-            }}
-            css={`
-              pointer-events: ${props.canDatasetEditDelete ? "auto" : "none"};
-            `}
-          >
-            <button
-              disabled={
-                props.canDatasetEditDelete ? !props.canDatasetEditDelete : false
-              }
+          {isSmallScreen ? (
+            <></>
+          ) : (
+            <Link
+              to={{
+                pathname: `/chart/new/chart-type`,
+                search: `?loadataset=true${
+                  reportPage ? `&fromreport=true&page=${reportPage}` : ""
+                }`,
+              }}
               css={`
-                opacity: ${props.canDatasetEditDelete ? "1" : "0.5"};
-                color: #fff;
-                width: 100%;
-                width: 200px;
-                height: 41px;
-                font-size: 14px;
-                font-weight: 700;
-                padding: 12px 27px;
-                background: #64afaa;
-                border-radius: 30px;
-                text-transform: uppercase;
-                font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
-                outline: none;
-                border: none;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-
-                :hover {
-                  opacity: 0.8;
-                  cursor: pointer;
-                }
+                pointer-events: ${props.canDatasetEditDelete ? "auto" : "none"};
               `}
-              onClick={handleCreateNewChart}
             >
-              create new chart
-            </button>
-          </Link>
+              <button
+                disabled={
+                  props.canDatasetEditDelete
+                    ? !props.canDatasetEditDelete
+                    : false
+                }
+                css={`
+                  opacity: ${props.canDatasetEditDelete ? "1" : "0.5"};
+                  color: #fff;
+                  width: 100%;
+                  width: 200px;
+                  height: 41px;
+                  font-size: 14px;
+                  font-weight: 700;
+                  padding: 12px 27px;
+                  background: #64afaa;
+                  border-radius: 30px;
+                  text-transform: uppercase;
+                  font-family: "GothamNarrow-Bold";
+                  outline: none;
+                  border: none;
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+
+                  :hover {
+                    opacity: 0.8;
+                    cursor: pointer;
+                  }
+                `}
+                onClick={handleCreateNewChart}
+              >
+                create new chart
+              </button>
+            </Link>
+          )}
         </div>
         <DatasetDataTable
           data={props.data}
@@ -304,14 +322,47 @@ export default function FinishedFragment(props: Props) {
             font-size: 12px;
             font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
           }
+          @media (max-width: 450px) {
+            display: none;
+          }
         `}
       >
-        <p>Data Title : {props.title}</p>
-        <p>Data Description : {props.description}</p>
-        <p>Data Category : {props.dataCategory}</p>
-        <p>Data Source : {props.dataSource}</p>
-        <p>Link to data source : {props.dataSourceURL || "NIL"}</p>
+        <p>Data Title : {props.datasetDetails.name}</p>
+        <p>Data Description : {props.datasetDetails.description}</p>
+        <p>Data Category : {props.datasetDetails.category}</p>
+        <p>Data Source : {props.datasetDetails.source}</p>
+        <p>Link to data source : {props.datasetDetails.sourceUrl || "NIL"}</p>
       </div>
+      <div css={mobileDescriptioncss}>
+        <div>
+          <p>Details</p>
+          <p>{props.datasetDetails.description}</p>
+        </div>
+        <div>
+          <p>category</p>
+          {props.datasetDetails.category}
+        </div>
+      </div>
+      <div
+        css={`
+          display: none;
+          @media (max-width: 500px) {
+            display: block;
+            height: 24px;
+          }
+        `}
+      />
+      <div css={mobileDescriptioncss}>
+        <div>
+          <p>Published date</p>
+          <p>{moment(props.datasetDetails.createdDate).format("MMMM YYYY")}</p>
+        </div>
+        <div>
+          <p>Last edit time</p>
+          <p>{moment(props.datasetDetails.createdDate).format("MMMM YYYY")}</p>
+        </div>
+      </div>
+
       <div
         css={`
           height: 50px;

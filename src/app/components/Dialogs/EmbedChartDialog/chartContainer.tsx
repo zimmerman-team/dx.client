@@ -53,6 +53,9 @@ export default function ChartContainer(props: {
               font-size: 18px;
               margin-top: 16px;
               margin-bottom: 0;
+              @media (max-width: 599px) {
+                font-size: 16px;
+              }
             }
             p:nth-of-type(2) {
               color: #e75656;

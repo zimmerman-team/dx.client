@@ -9,7 +9,7 @@ import { ReactComponent as MenuIcon } from "app/modules/home-module/assets/menu.
 import { ReactComponent as DataCardImg } from "app/modules/home-module/assets/data-card-img.svg";
 import { ReactComponent as InfoIcon } from "app/modules/home-module/assets/info-icon.svg";
 
-import { Tooltip } from "@material-ui/core";
+import { Tooltip, useMediaQuery } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useStoreActions } from "app/state/store/hooks";
@@ -35,6 +35,7 @@ export default function GridItem(props: Readonly<Props>) {
     React.useState(false);
   const setIsAiSwitchActive = useRecoilState(isChartAIAgentActive)[1];
   const { user, isAuthenticated } = useAuth0();
+  const isMobile = useMediaQuery("(max-width: 767px)");
 
   const showMenuOptions = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -256,7 +257,7 @@ export default function GridItem(props: Readonly<Props>) {
 
               display: flex;
               height: 38px;
-              width: 143px;
+              padding: 0 23px;
               position: absolute;
               background: #adb5bd;
               border-radius: 100px;
@@ -298,23 +299,25 @@ export default function GridItem(props: Readonly<Props>) {
                 </IconButton>
               </Tooltip>
             </div>
-            <div
-              css={
-                !canDatasetEditDelete
-                  ? "opacity: 0.5;pointer-events: none;"
-                  : ""
-              }
-            >
-              <Link to={props.path}>
-                <Tooltip title="Edit" data-cy="dataset-grid-item-edit-btn">
-                  <EditIcon
-                    css={`
-                      margin-top: 4px;
-                    `}
-                  />
-                </Tooltip>
-              </Link>
-            </div>
+            {!isMobile && (
+              <div
+                css={
+                  !canDatasetEditDelete
+                    ? "opacity: 0.5;pointer-events: none;"
+                    : ""
+                }
+              >
+                <Link to={props.path}>
+                  <Tooltip title="Edit" data-cy="dataset-grid-item-edit-btn">
+                    <EditIcon
+                      css={`
+                        margin-top: 4px;
+                      `}
+                    />
+                  </Tooltip>
+                </Link>
+              </div>
+            )}
             <div
               css={
                 !canDatasetEditDelete

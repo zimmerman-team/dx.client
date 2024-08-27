@@ -23,6 +23,7 @@ interface MockProps {
   setHasSubHeaderTitleFocused?: React.Dispatch<React.SetStateAction<boolean>>;
   setReportName?: React.Dispatch<React.SetStateAction<string>>;
   reportName?: string;
+  handleRightPanelOpen: () => void;
   setPlugins: React.Dispatch<React.SetStateAction<ToolbarPluginsType>>;
   headerDetails: {
     title: string;
@@ -79,6 +80,7 @@ const defaultProps = (props: Partial<MockProps>): MockProps => {
       descriptionColor: "#000",
       dateColor: "#000",
     },
+    handleRightPanelOpen: jest.fn(),
     setHeaderDetails: jest.fn(
       (newHeaderDetails) =>
         (headerDetailsResult.headerDetails = newHeaderDetails)

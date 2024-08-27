@@ -18,7 +18,6 @@ export default function SourceCategoryList(props: Readonly<Props>) {
     <div
       css={`
         gap: ${customCss ? customCss.gap : "19px"};
-        /* width: 100%; */
         display: flex;
         flex-wrap: wrap;
         max-width: 100%;

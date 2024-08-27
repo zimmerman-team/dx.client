@@ -1,11 +1,12 @@
 import React from "react";
 
-import { Box, Container, Grid } from "@material-ui/core";
+import { Box, Container } from "@material-ui/core";
 import { ReactComponent as MissionImg } from "app/modules/home-module/assets/about-mission.svg";
 import { ReactComponent as DXImg } from "app/modules/home-module/assets/about-dx.svg";
 import { ReactComponent as StoryImg } from "app/modules/home-module/assets/about-story.svg";
-import Ellipses from "app/modules/home-module/assets/about-page-ellipses.svg";
-
+import EllipsesMobile from "app/modules/home-module/assets/about-page-ellipses-mobile.svg";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+import { Carousel } from "react-responsive-carousel";
 import HomeFooter from "../../components/Footer";
 import { subParagraphcss } from "./style";
 import { useTitle } from "react-use";
@@ -30,22 +31,21 @@ import EmptyAvi from "app/modules/home-module/assets/team/empty.png";
 export default function AboutModule() {
   useTitle("DX Dataxplorer - About");
   const { isAuthenticated } = useAuth0();
-
   const features = [
     {
       title: "+100.000",
       subtitle: "Datasets available",
-      text: "Access over 100.000 datasets to\n create reports and charts. Create\n impact with data from 3rd parties\n built in Dataxplorer or connect\n your in-house datasources.",
+      text: "Access over 100.000 datasets to create reports and charts. Create impact with data from 3rd parties built in Dataxplorer or connect your in-house datasources.",
     },
     {
       title: "+15 Visuals",
       subtitle: "Chart type provided",
-      text: "Dataxplorer offers over 15\n different chart types for you to\n work with. Based on the open\n sources Apache E-charts library\n you are able to create rich graphs.",
+      text: "Dataxplorer offers over 15 different chart types for you to work with. Based on the open sources Apache E-charts library you are able to create rich graphs.",
     },
     {
       title: "+3",
       subtitle: "Languages are supported",
-      text: "Dataxplorer caters to a global\n clientele, ensuring seamless data\n integration and communication.\n We will offer Dataxplorer in 3\n different languages.",
+      text: "Dataxplorer caters to a global clientele, ensuring seamless data integration and communication. We will offer Dataxplorer in 3 different languages.",
     },
   ];
 
@@ -94,7 +94,7 @@ export default function AboutModule() {
     },
     {
       img: SamuelAvi,
-      name: "Okechukwu Samuel Owhondah",
+      name: "Okechukwu Samuel \n Owhondah",
       role: "Frontend Developer",
       linkedIn: "https://ng.linkedin.com/in/okorie-emmanuella-350916173",
     },
@@ -112,10 +112,98 @@ export default function AboutModule() {
     },
   ];
 
+  const teamCarousel = team.map((member) => (
+    <div key={member.name}>
+      <img
+        src={member.img}
+        alt={member.name}
+        css={`
+          width: 270.25px;
+          height: 307.25px;
+          border-radius: 20px;
+        `}
+      />
+      <p
+        css={`
+          margin: 0;
+          margin-top: 32px;
+          font-size: 24px;
+          font-family: "GothamNarrow-Bold";
+          font-style: normal;
+          font-weight: 400;
+          line-height: normal;
+          color: #504e4e;
+          white-space: pre-line;
+          @media (max-width: 500px) {
+            font-size: 20px;
+            margin-top: 16px;
+          }
+        `}
+      >
+        {member.name}
+      </p>
+      <p
+        css={`
+          margin: 0;
+          font-size: 16px;
+          font-style: normal;
+          font-weight: 325;
+          line-height: normal;
+          font-family: "GothamNarrow-Book";
+          color: #231d2c;
+        `}
+      >
+        {member.role}
+      </p>
+    </div>
+  ));
+  const futureTeam = Array.from({ length: 1 }).map((_, index) => (
+    <div key={index}>
+      <img
+        src={EmptyAvi}
+        alt={"Empty"}
+        css={`
+          width: 270.25px;
+          height: 307.25px;
+          border-radius: 20px;
+        `}
+      />
+      <Link
+        to={"/contact"}
+        css={`
+          margin-top: 32px;
+          font-family: "Inter", sans-serif;
+          font-size: 20px;
+          font-style: normal;
+          font-weight: 700;
+          line-height: normal;
+          text-transform: uppercase;
+          border-radius: 30px;
+          background: #231d2c;
+          box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.25);
+          width: max-content;
+          margin: 32px auto 0 auto;
+          display: block;
+          color: #fff;
+          padding: 12px 27px;
+          border: none;
+          text-decoration: none;
+          @media (max-width: 500px) {
+            font-size: 16px;
+            padding: 12px 24px;
+          }
+        `}
+      >
+        Join Our Team
+      </Link>
+    </div>
+  ));
+  const allTeamCarousel = [...teamCarousel, ...futureTeam];
+
   return (
     <section
       css={`
-        background-image: url(${Ellipses});
+        background-image: url(${EllipsesMobile});
         background-repeat: no-repeat;
         background-position: 40% 0%;
         height: 100%;
@@ -128,20 +216,43 @@ export default function AboutModule() {
       `}
     >
       <Box height={48} />
-      <Box height={77} />
+      <div
+        css={`
+          height: 77px;
+          @media (max-width: 600px) {
+            height: 48px;
+          }
+        `}
+      />
 
       <Container maxWidth="lg">
         <div
           css={`
             display: flex;
-            justify-content: space-between
+            justify-content: space-between;
             align-items: center;
-   
+            @media (max-width: 805px) {
+              flex-direction: column;
+            }
           `}
         >
           <div
             css={`
               width: 518px;
+              @media (max-width: 1200px) {
+                width: 62%;
+              }
+              @media (max-width: 805px) {
+                width: 100%;
+              }
+              @media (max-width: 500px) {
+                p {
+                  font-size: 16px;
+                }
+                h1 {
+                  font-size: 40px;
+                }
+              }
             `}
           >
             <h1
@@ -150,7 +261,7 @@ export default function AboutModule() {
                 font-size: 64px;
                 font-style: normal;
                 font-weight: 400;
-                line-height: 130%; /* 83.2px */
+                line-height: 130%;
                 margin: 0;
               `}
             >
@@ -166,6 +277,9 @@ export default function AboutModule() {
                 font-weight: 350;
                 line-height: normal;
                 font-family: "GothamNarrow-Medium", "Helvetica Neue", sans-serif;
+                @media (max-width: 1024px) {
+                  font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
+                }
               `}
             >
               With 20+ years combined experience in data and global health
@@ -181,6 +295,9 @@ export default function AboutModule() {
             <div
               css={`
                 margin-top: 59px;
+                @media (max-width: 500px) {
+                  margin-top: 24px;
+                }
               `}
             >
               {isAuthenticated && (
@@ -188,6 +305,13 @@ export default function AboutModule() {
                   css={`
                     display: flex;
                     column-gap: 20px;
+                    @media (max-width: 425px) {
+                      flex-direction: column;
+                      gap: 10px;
+                      button {
+                        width: 51%;
+                      }
+                    }
                   `}
                 >
                   <Link
@@ -213,7 +337,12 @@ export default function AboutModule() {
                     width: 100%;
                     display: flex;
                     flex-direction: row;
-
+                    @media (max-width: 425px) {
+                      flex-direction: column;
+                      button {
+                        width: 100%;
+                      }
+                    }
                     > button {
                       gap: 10px;
                       color: #fff;
@@ -232,7 +361,7 @@ export default function AboutModule() {
                       font-size: 14px;
                       text-transform: uppercase;
                       text-decoration: none;
-
+                      white-space: nowrap;
                       :hover {
                         opacity: 0.8;
                         cursor: pointer;
@@ -240,6 +369,9 @@ export default function AboutModule() {
 
                       > svg {
                         transform: scale(0.8);
+                      }
+                      @media (max-width: 600px) {
+                        gap: 3px;
                       }
                     }
                   `}
@@ -258,6 +390,16 @@ export default function AboutModule() {
           <div
             css={`
               margin-right: -41px;
+              @media (max-width: 1200px) {
+                margin-right: unset;
+                svg {
+                  width: 100%;
+                  height: 100%;
+                }
+              }
+              @media (max-width: 500px) {
+                margin-top: 40px;
+              }
             `}
           >
             <StoryImg />
@@ -275,12 +417,38 @@ export default function AboutModule() {
           <div
             css={`
               display: flex;
-              column-gap: 180px;
+              column-gap: 150px;
               justify-content: center;
+              @media (max-width: 1110px) {
+                column-gap: 88px;
+              }
+              @media (max-width: 905px) {
+                column-gap: unset;
+                flex-direction: column;
+                gap: 40px;
+              }
             `}
           >
-            {features.map((feature) => (
-              <div key={feature.title}>
+            {features.map((feature, index) => (
+              <div
+                key={feature.title}
+                css={`
+                  width: ${index == 2 ? "100%" : "auto"};
+                  @media (max-width: 1218px) {
+                    h2 {
+                      margin-left: unset;
+                    }
+                    p {
+                      &:nth-of-type(1) {
+                        margin-left: unset;
+                      }
+                      &:nth-of-type(2) {
+                        width: 100%;
+                      }
+                    }
+                  }
+                `}
+              >
                 <h2
                   css={`
                     font-family: "GothamNarrow-Bold", "Helvetica Neue",
@@ -291,6 +459,7 @@ export default function AboutModule() {
                     line-height: 130%;
                     margin: 0;
                     color: #fff;
+                    margin-left: 16.3%;
                   `}
                 >
                   {feature.title}
@@ -302,9 +471,10 @@ export default function AboutModule() {
                       sans-serif;
                     font-style: normal;
                     font-weight: 400;
-                    line-height: 130%; /* 31.2px */
+                    line-height: 130%;
                     margin: 0;
                     color: #fff;
+                    margin-left: 16.3%;
                   `}
                 >
                   {feature.subtitle}
@@ -312,11 +482,11 @@ export default function AboutModule() {
                 <p
                   css={`
                     color: #fff;
-                    margin: 0;
-                    margin-top: 16px;
                     font-family: "GothamNarrow-Book", "Helvetica Neue",
                       sans-serif;
                     white-space: pre-line;
+                    width: 66%;
+                    margin: 16px auto 0 auto;
                   `}
                 >
                   {feature.text}
@@ -362,13 +532,70 @@ export default function AboutModule() {
           dashboards.
         </p>
         <Box height={77} />
+        <div
+          css={`
+            @media (min-width: 501px) {
+              display: none;
+            }
+            width: 55%;
+            height: 325px;
+            margin: auto;
+            img {
+              width: 100%;
+              height: 50%;
 
+              object-fit: cover;
+            }
+          `}
+        >
+          <Carousel
+            autoPlay
+            infiniteLoop
+            swipeable
+            stopOnHover
+            showStatus={false}
+            showThumbs={false}
+            showArrows={false}
+            showIndicators={false}
+          >
+            {allTeamCarousel}
+          </Carousel>
+        </div>
         <div
           css={`
             display: grid;
             grid-template-columns: repeat(4, minmax(0, 1fr));
             column-gap: 48px;
             row-gap: 64px;
+            @media (min-width: 880px) {
+              @media (max-width: 1314px) {
+                row-gap: 56px;
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                justify-items: center;
+              }
+            }
+            @media (max-width: 879px) {
+              grid-template-columns: repeat(3, minmax(0, 1fr));
+              justify-items: center;
+              img {
+                width: 100%;
+                height: 70%;
+                object-fit: cover;
+              }
+            }
+            @media (max-width: 830px) {
+              grid-template-columns: repeat(2, minmax(0, 1fr));
+              row-gap: 46px;
+              justify-items: center;
+              img {
+                width: 100%;
+                height: 70%;
+                object-fit: cover;
+              }
+            }
+            @media (max-width: 500px) {
+              display: none;
+            }
           `}
         >
           {team.map((member) => (
@@ -392,6 +619,7 @@ export default function AboutModule() {
                   font-weight: 400;
                   line-height: normal;
                   color: #504e4e;
+                  white-space: pre-line;
                 `}
               >
                 {member.name}
@@ -449,28 +677,42 @@ export default function AboutModule() {
             </div>
           ))}
         </div>
-        <Box height={77} />
+        <div
+          css={`
+            height: 77px;
+            @media (max-width: 500px) {
+              height: 56px;
+            }
+          `}
+        />
         <div css={subParagraphcss}>
-          <div
-            css={`
-              display: flex;
-              column-gap: 97px;
-              align-items: start;
-            `}
-          >
+          <div>
+            <h3 id="ab-mobile">
+              <b>Mission</b>
+            </h3>
             <div
               css={`
                 margin-left: -28px;
+                @media (max-width: 1024px) {
+                  margin-left: unset;
+                }
               `}
             >
               <MissionImg />
             </div>
             <div>
-              <h3>
+              <h3 id="ab-desktop">
                 <b>Mission</b>
               </h3>
-              <Box height={39.5} />
-              <p>
+              <div
+                css={`
+                  height: 39.5px;
+                  @media (max-width: 1024px) {
+                    display: none;
+                  }
+                `}
+              />
+              <p css={``}>
                 Our mission is to create lasting impact for organizations that
                 bring positive change to our world by helping them to unlock the
                 power of data. Our trusted and easy-to-use data solutions boost
@@ -479,17 +721,28 @@ export default function AboutModule() {
             </div>
           </div>
         </div>
-        <Box height={77} />
-        <div css={subParagraphcss}>
-          <div
-            css={`
-              display: flex;
-              align-items: start;
-              column-gap: 97px;
-            `}
-          >
+        <div
+          css={`
+            height: 77px;
+            @media (max-width: 500px) {
+              height: 56px;
+            }
+          `}
+        />
+        <div
+          css={`
+            ${subParagraphcss};
+            @media (max-width: 1024px) {
+              > div:nth-of-type(1) {
+                display: flex;
+                flex-direction: column-reverse;
+              }
+            }
+          `}
+        >
+          <div>
             <div>
-              <h3>
+              <h3 id="ab-desktop">
                 <b>Dataxplorer</b>
               </h3>
               <Box height={26.9} />
@@ -509,6 +762,9 @@ export default function AboutModule() {
             <div>
               <DXImg />
             </div>
+            <h3 id="ab-mobile">
+              <b>Dataxplorer</b>
+            </h3>
           </div>
         </div>
       </Container>

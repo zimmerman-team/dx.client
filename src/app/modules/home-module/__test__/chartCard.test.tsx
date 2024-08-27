@@ -73,14 +73,7 @@ test("card should display chart title, and date", async () => {
   expect(screen.getByText("August 2021")).toBeInTheDocument();
 });
 
-test("card should display chart title, and date", async () => {
-  const { app } = appSetup({});
-  render(app);
-  expect(screen.getByText("chart-title")).toBeInTheDocument();
-  expect(screen.getByText("August 2021")).toBeInTheDocument();
-});
-
-test("ai tag should not be visible if chart is isAIAssisted is false", async () => {
+test("ai tag should not be visible if chart isAIAssisted is false", async () => {
   const { app } = appSetup({});
   render(app);
   expect(screen.queryByTestId("chart-grid-item-ai-icon")).toBeNull();

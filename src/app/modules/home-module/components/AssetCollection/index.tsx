@@ -101,47 +101,73 @@ function AssetsCollection() {
     <Container maxWidth="lg">
       <div css={turnsDataCss}>
         {isAuthenticated ? (
-          <>
-            <h2>Welcome {user?.given_name ?? user?.name?.split(" ")[0]}</h2>
-            <div
+          <Grid container>
+            <Grid lg={5} md={5} sm={12} xs={11}>
+              <h2>Welcome {user?.given_name ?? user?.name?.split(" ")[0]}</h2>
+            </Grid>
+            <Grid
+              lg={7}
+              md={7}
+              sm={12}
+              xs={1}
               css={`
-                ${rowFlexCss} gap: 8px;
-                a {
-                  padding: 8px 24px;
+                @media (max-width: 965px) {
+                  margin-top: 16px;
+                  @media (max-width: 767px) {
+                    display: none;
+                  }
                 }
               `}
             >
-              <Link
-                to={`/dataset/new/upload${
-                  location.pathname === "/" ? "?fromHome=true" : ""
-                }`}
+              <div
                 css={`
-                  background: #e492bd;
+                  display: flex;
+                  width: 100%;
+                  justify-content: flex-end;
+                  align-items: center;
+                  gap: 8px;
+                  a {
+                    padding: 8px 24px;
+                    white-space: nowrap;
+                    @media (max-width: 700px) {
+                      font-size: 12px;
+                      padding: 8px 19px;
+                    }
+                  }
                 `}
-                data-cy="home-connect-dataset-button"
               >
-                CONNECT DATASET
-              </Link>
-              <Link
-                to="/chart/new/data"
-                css={`
-                  background: #64afaa;
-                `}
-                data-cy="home-create-chart-button"
-              >
-                CREATE CHART
-              </Link>
-              <Link
-                to="/report/new/initial"
-                css={`
-                  background: #6061e5;
-                `}
-                data-cy="home-create-report-button"
-              >
-                CREATE REPORT
-              </Link>
-            </div>
-          </>
+                <Link
+                  to={`/dataset/new/upload${
+                    location.pathname === "/" ? "?fromHome=true" : ""
+                  }`}
+                  css={`
+                    background: #e492bd;
+                  `}
+                  data-cy="home-connect-dataset-button"
+                >
+                  CONNECT DATASET
+                </Link>
+                <Link
+                  to="/chart/new/data"
+                  css={`
+                    background: #64afaa;
+                  `}
+                  data-cy="home-create-chart-button"
+                >
+                  CREATE CHART
+                </Link>
+                <Link
+                  to="/report/new/initial"
+                  css={`
+                    background: #6061e5;
+                  `}
+                  data-cy="home-create-report-button"
+                >
+                  CREATE REPORT
+                </Link>
+              </div>
+            </Grid>
+          </Grid>
         ) : (
           <div />
         )}
@@ -156,9 +182,12 @@ function AssetsCollection() {
           alignItems="center"
           css={`
             width: 100%;
+            @media (max-width: 599px) {
+              flex-flow: wrap-reverse;
+            }
           `}
         >
-          <Grid item lg={6} md={6} sm={6}>
+          <Grid item lg={6} md={6} sm={6} xs={12}>
             <Tab.Container>
               <Tab.Left
                 active={display === "all"}
@@ -193,7 +222,8 @@ function AssetsCollection() {
               </Tab.Right>
             </Tab.Container>
           </Grid>
-          <Grid item lg={6} md={6} sm={6}>
+
+          <Grid item lg={6} md={6} sm={6} xs={12}>
             <Filter
               searchValue={searchValue as string}
               setSearchValue={setSearchValue}
@@ -205,13 +235,22 @@ function AssetsCollection() {
               setOpenSearch={setOpenSearch}
               searchIconCypressId="home-search-button"
             />
+            <div
+              css={`
+                display: none;
+                @media (max-width: 599px) {
+                  height: 20px;
+                  display: block;
+                }
+              `}
+            />
           </Grid>
         </Grid>
         <div
           css={`
             padding-top: 24px;
             font-size: 14px;
-            font-family: GothamNarrow-Book, "Helvetica Neue", sans-serif;
+            font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
             color: #000000;
           `}
         >

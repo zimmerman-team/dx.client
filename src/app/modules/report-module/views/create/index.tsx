@@ -113,6 +113,7 @@ function ReportCreateView(props: Readonly<ReportCreateViewProps>) {
         reportName={props.reportName}
         hasSubHeaderTitleFocused={props.hasSubHeaderTitleFocused}
         setPlugins={props.setPlugins}
+        handleRightPanelOpen={props.handleRightPanelOpen}
       />
       <Container maxWidth="lg">
         <div
@@ -121,7 +122,7 @@ function ReportCreateView(props: Readonly<ReportCreateViewProps>) {
           css={`
             position: relative;
             transition: width 225ms cubic-bezier(0, 0, 0.2, 1) 0ms;
-            width: ${props.open
+            width: ${props.rightPanelOpen
               ? "calc(100vw - ((100vw - 1280px) / 2) - 400px - 50px)"
               : "100%"};
 
@@ -133,7 +134,7 @@ function ReportCreateView(props: Readonly<ReportCreateViewProps>) {
           <Box height={50} />
           <TourGuide
             reportType={props.reportType ?? "basic"}
-            toolBoxOpen={props.open}
+            toolBoxOpen={props.rightPanelOpen}
             handleClose={() => {}}
             open
           />
