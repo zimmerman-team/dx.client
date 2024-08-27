@@ -72,6 +72,7 @@ import { ReactComponent as ScatterChartPreviewImg } from "app/modules/chart-modu
 import { ReactComponent as GraphGlPreviewImg } from "app/modules/chart-module/assets/graphglPreview.svg";
 import { ReactComponent as AreatimeaxisPreviewImg } from "app/modules/chart-module/assets/areastackedPreview.svg";
 import { ChartRenderedItem } from "app/modules/chart-module/data";
+import { IChartType } from "app/state/api/action-reducers/sync/charts";
 
 export interface ChartBuilderChartTypeProps {
   loading: boolean;
@@ -85,7 +86,7 @@ export interface ChartBuilderChartTypeProps {
 }
 
 export interface ChartTypeModel {
-  id: string;
+  id: IChartType;
   label: string;
   icon: React.ReactNode;
   categories: string[];
@@ -113,8 +114,18 @@ export const chartTypesFromMiddleWare = {
   areatimeaxis: "echartsAreatimeaxis",
   scatterchart: "echartsScatterchart",
 };
+interface IEchartTypes {
+  id: IChartType;
+  label: string;
+  icon: React.ReactNode;
+  preview: React.ReactNode;
+  categories: string[];
+  class: string;
+  ssr: boolean;
+  description: string;
+}
 
-export const echartTypes = (big: boolean) => {
+export const echartTypes = (big: boolean): IEchartTypes[] => {
   return [
     {
       id: "echartsBarchart",
@@ -344,23 +355,6 @@ export const echartTypes = (big: boolean) => {
       ssr: false,
       description:
         "Network graphs illustrate relationships between nodes in a network. Nodes are represented as points, and connections between nodes are depicted as lines",
-    },
-
-    {
-      id: "placeholder9",
-      label: "",
-      icon: <></>,
-      categories: [],
-      ssr: false,
-      description: "",
-    },
-    {
-      id: "placeholder10",
-      label: "",
-      icon: <></>,
-      categories: [],
-      ssr: false,
-      description: "",
     },
   ];
 };

@@ -118,14 +118,35 @@ export const ChartsMappingState: ChartsMappingStateModel = {
   }),
 };
 
+export type IChartType =
+  | "echartsBarchart"
+  | "echartsGeomap"
+  | "echartsLinechart"
+  | "echartsAreatimeaxis"
+  | "echartsAreastack"
+  | "echartsSankey"
+  | "echartsTreemap"
+  | "bigNumber"
+  | "echartsSunburst"
+  | "echartsForcegraph"
+  | "echartsCirculargraph"
+  | "echartsPiechart"
+  | "echartsBubblechart"
+  | "echartsMultisetBarchart"
+  | "echartsStackedBarchart"
+  | "echartsScatterchart"
+  | "echartsHeatmap"
+  | "echartsGraphgl"
+  | "echartsRadarchart"
+  | "echartsCirclepacking";
 export interface ChartsChartTypeStateModel {
-  value: string | null;
-  setValue: Action<ChartsChartTypeStateModel, string | null>;
+  value: IChartType | null;
+  setValue: Action<ChartsChartTypeStateModel, IChartType | null>;
   reset: Action<ChartsChartTypeStateModel>;
 }
 export const ChartsChartTypeState: ChartsChartTypeStateModel = {
   value: null,
-  setValue: action((state, payload: string | null) => {
+  setValue: action((state, payload: IChartType | null) => {
     state.value = payload;
   }),
   reset: action((state) => {

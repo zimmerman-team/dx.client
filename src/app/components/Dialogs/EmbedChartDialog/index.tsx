@@ -70,10 +70,6 @@ export default function EmbedChartDialog(props: {
     return get(chartFromAPI, "mappedData", []);
   }, [chartFromAPI]);
 
-  const renderedChartSsr = React.useMemo(() => {
-    return get(chartFromAPI, "ssr", false);
-  }, [chartFromAPI]);
-
   const renderedChartType = React.useMemo(() => {
     return get(chartFromAPI, "vizType", "echartsBarchart");
   }, [chartFromAPI]);
@@ -190,7 +186,6 @@ export default function EmbedChartDialog(props: {
                 datasetDetails={datasetDetails}
                 renderedChart={renderedChart}
                 renderedChartMappedData={renderedChartMappedData}
-                renderedChartSsr={renderedChartSsr}
                 renderedChartType={renderedChartType}
                 setChartError={setNotFound}
                 setNotFound={setNotFound}
