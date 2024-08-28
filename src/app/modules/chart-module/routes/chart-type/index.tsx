@@ -24,6 +24,7 @@ import { charts } from "app/modules/chart-module/data";
 import AILoader from "app/modules/chart-module/routes/chart-type/loader";
 import { handleValidityCheckOfDimensionsToBeMapped } from "app/modules/chart-module/components/toolbox/steps/panels-content/Mapping";
 import { useCheckUserPlan } from "app/hooks/useCheckUserPlan";
+import { IChartType } from "app/state/api/action-reducers/sync/charts";
 
 function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
   useTitle("DX Dataxplorer - Chart Type");
@@ -189,7 +190,7 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
   }
 
   const onChartTypeChange =
-    (chartTypeId: string) => (e: React.MouseEvent<HTMLButtonElement>) => {
+    (chartTypeId: IChartType) => (e: React.MouseEvent<HTMLButtonElement>) => {
       sessionStorage.setItem("visualOptions", JSON.stringify({}));
       props.setVisualOptionsOnChange(
         chartType === chartTypeId ? null : chartTypeId
@@ -266,6 +267,7 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
               align-items: center;
               justify-content: end;
               gap: 5px;
+              flex-shrink: 0;
               span {
                 color: #000000;
                 font-size: 12px;
@@ -473,7 +475,8 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
                           filter: ${userPlan?.planData?.name === "Free"
                             ? "blur(5px)"
                             : "none"};
-                          ${ct.label === "" &&
+                          ${(ct.label === "" ||
+                            userPlan?.planData?.name === "Free") &&
                           `pointer-events: none;background: #f1f3f5;`}
 
                           &:hover {
@@ -615,7 +618,8 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
                             ? "blur(5px)"
                             : "none"};
 
-                          ${ct.label === "" &&
+                          ${(ct.label === "" ||
+                            userPlan?.planData?.name === "Free") &&
                           `pointer-events: none;background: #f1f3f5;`}
 
                           &:hover {

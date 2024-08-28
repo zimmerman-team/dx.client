@@ -5,7 +5,6 @@ export interface ChartBuilderMappingProps {
   dimensions: any[];
   visualOptions: any;
   renderedChart: string;
-  renderedChartSsr: boolean;
   renderedChartMappedData: any;
   setChartError: React.Dispatch<React.SetStateAction<boolean>>;
   setChartErrorMessage: React.Dispatch<React.SetStateAction<string>>;

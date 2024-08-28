@@ -5,6 +5,8 @@ import { socialAuth } from "app/utils/socialAuth";
 import { HomePrimaryButton } from "app/components/Styled/button";
 import { ReactComponent as GoogleIcon } from "app/modules/onboarding-module/asset/google-img.svg";
 import { ReactComponent as LinkedInIcon } from "app/modules/onboarding-module/asset/linkedIn-img.svg";
+import { ReactComponent as Ellipses } from "app/modules/home-module/assets/ellipses.svg";
+import { ReactComponent as EllipsesMobile } from "app/modules/home-module/assets/ellipses-mobile.svg";
 import {
   empowercss,
   ClimateButton,
@@ -100,7 +102,6 @@ export default function EmpowerBlock(props: {
       )}
       {!isAuthenticated && (
         <div
-          id="auth-buttons"
           css={`
             gap: 20px;
             width: 100%;
@@ -112,14 +113,30 @@ export default function EmpowerBlock(props: {
               gap: 10px;
               color: #fff;
               display: flex;
-              padding: 9px 18px !important;
+              padding: 9px 17px !important;
+              border-radius: 30px;
+              outline: none;
+              border: none;
               background: #a1a2ff;
               align-items: center;
               justify-content: center;
               text-transform: uppercase;
-
+              font-family: "Inter", sans-serif;
+              font-weight: 700;
+              white-space: nowrap;
+              font-size: 14px;
               > svg {
                 transform: scale(0.8);
+              }
+              :hover {
+                opacity: 0.8;
+                cursor: pointer;
+              }
+            }
+            @media (max-width: 420px) {
+              flex-direction: column;
+              button {
+                width: 90%;
               }
             }
           `}
@@ -132,6 +149,40 @@ export default function EmpowerBlock(props: {
           </button>
         </div>
       )}
+      <Ellipses
+        css={`
+          position: absolute;
+          top: -1px;
+          z-index: -1;
+          display: block;
+          width: 100%;
+          @media (min-width: 900px) {
+            @media (max-width: 1024px) {
+              top: 20px;
+            }
+          }
+          @media (min-width: 642px) {
+            @media (max-width: 899px) {
+              top: 53px;
+            }
+          }
+          @media (max-width: 641px) {
+            display: none;
+          }
+        `}
+      />
+      <EllipsesMobile
+        css={`
+          display: none;
+          @media (max-width: 641px) {
+            position: absolute;
+            bottom: -21px;
+            right: -63px;
+            z-index: -1;
+            display: block;
+          }
+        `}
+      />
     </Box>
   );
 }

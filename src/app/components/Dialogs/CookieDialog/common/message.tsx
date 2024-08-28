@@ -5,9 +5,9 @@ import Typography from "@material-ui/core/Typography";
 
 const MessageContainer = styled((props) => <Box {...props} />)`
   align-items: center;
-  @media (max-width: 960px) {
+  @media (max-width: 728px) {
     flex-direction: column;
-    align-items: normal;
+    align-items: center;
   }
 `;
 

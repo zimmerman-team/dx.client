@@ -66,10 +66,6 @@ export function ReportChartWrapper(props: Props) {
     return get(chartFromAPI, "mappedData", []);
   }, [chartFromAPI]);
 
-  const renderedChartSsr = React.useMemo(() => {
-    return get(chartFromAPI, "ssr", false);
-  }, [chartFromAPI]);
-
   const renderedChartType = React.useMemo(() => {
     return get(chartFromAPI, "vizType", "echartsBarchart");
   }, [chartFromAPI]);
@@ -214,6 +210,7 @@ export function ReportChartWrapper(props: Props) {
             font-size: 14px;
             color: #231d2c;
             letter-spacing: 0.5px;
+            word-break: break-all;
           `}
         >
           {chartName}
@@ -235,7 +232,6 @@ export function ReportChartWrapper(props: Props) {
         containerRef={containerRef}
         renderedChart={renderedChart}
         visualOptions={visualOptions}
-        renderedChartSsr={renderedChartSsr}
         setVisualOptions={setVisualOptions}
         renderedChartType={renderedChartType}
         renderedChartMappedData={renderedChartMappedData}

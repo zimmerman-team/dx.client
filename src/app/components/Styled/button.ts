@@ -38,6 +38,7 @@ export const HomePrimaryButton = styled.button`
   font-weight: 700;
   font-size: 14px;
   text-transform: uppercase;
+  white-space: nowrap;
   background: ${(props) => (props.color ? props.color : "inherit")};
   :hover {
     opacity: 0.8;

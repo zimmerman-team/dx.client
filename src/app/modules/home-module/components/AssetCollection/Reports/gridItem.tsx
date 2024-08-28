@@ -9,6 +9,7 @@ import { ReactComponent as EditIcon } from "app/modules/home-module/assets/edit.
 import { ReactComponent as DeleteIcon } from "app/modules/home-module/assets/delete.svg";
 import { ReactComponent as ClockIcon } from "app/modules/home-module/assets/clock-icon.svg";
 import { ReactComponent as DuplicateIcon } from "app/modules/home-module/assets/duplicate.svg";
+import { useMediaQuery } from "@material-ui/core";
 
 interface Props {
   date: Date;
@@ -26,7 +27,7 @@ interface Props {
 export default function gridItem(props: Props) {
   const { user, isAuthenticated } = useAuth0();
   const [menuOptionsDisplay, setMenuOptionsDisplay] = React.useState(false);
-
+  const isMobile = useMediaQuery("(max-width: 767px)");
   const showMenuOptions = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
@@ -203,7 +204,7 @@ export default function gridItem(props: Props) {
 
               display: flex;
               height: 38px;
-              width: 143px;
+              padding: 0 23px;
               background: #adb5bd;
               border-radius: 100px;
               align-items: center;
@@ -249,21 +250,25 @@ export default function gridItem(props: Props) {
                 </Tooltip>
               </IconButton>
             </div>
-            <div
-              css={
-                !canReportEditDelete ? "opacity: 0.5;pointer-events: none;" : ""
-              }
-            >
-              <Link to={`/report/${props.id}/edit`} aria-label="edit-icon">
-                <Tooltip title="Edit" data-cy="report-grid-item-edit-btn">
-                  <EditIcon
-                    css={`
-                      margin-top: 4px;
-                    `}
-                  />
-                </Tooltip>
-              </Link>
-            </div>
+            {!isMobile && (
+              <div
+                css={
+                  !canReportEditDelete
+                    ? "opacity: 0.5;pointer-events: none;"
+                    : ""
+                }
+              >
+                <Link to={`/report/${props.id}/edit`} aria-label="edit-icon">
+                  <Tooltip title="Edit" data-cy="report-grid-item-edit-btn">
+                    <EditIcon
+                      css={`
+                        margin-top: 4px;
+                      `}
+                    />
+                  </Tooltip>
+                </Link>
+              </div>
+            )}
             <div
               css={
                 !canReportEditDelete ? "opacity: 0.5;pointer-events: none;" : ""

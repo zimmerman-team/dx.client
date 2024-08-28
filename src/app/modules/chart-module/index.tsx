@@ -411,15 +411,6 @@ export default function ChartModule() {
     return get(chartFromAPI, "mappedData", []);
   }, [chartFromAPI]);
 
-  const renderedChartSsr = React.useMemo(() => {
-    return get(chartFromAPI, "ssr", false);
-  }, [chartFromAPI]);
-
-  const activeRenderedChartSsr = React.useMemo(
-    () => Boolean(renderedChartSsr),
-    [renderedChartSsr]
-  );
-
   function setVisualOptionsOnChange(chartType: string | null = null) {
     const options = {
       ...getOptionsConfig(
@@ -600,6 +591,11 @@ export default function ChartModule() {
                       : "100%"};
 
                     transition: width 225ms cubic-bezier(0, 0, 0.2, 1) 0ms;
+                    @media (min-width: 768px) {
+                      @media (max-width: 1024px) {
+                        width: 100%;
+                      }
+                    }
                   `}
                   ref={ref}
                 >
@@ -613,7 +609,6 @@ export default function ChartModule() {
                         renderedChart={content}
                         visualOptions={visualOptions}
                         setVisualOptions={setVisualOptions}
-                        renderedChartSsr={activeRenderedChartSsr}
                         renderedChartMappedData={renderedChartMappedData}
                         renderedChartType={chartType as ChartType}
                         setChartErrorMessage={setChartErrorMessage}
@@ -633,7 +628,6 @@ export default function ChartModule() {
                         visualOptions={visualOptions}
                         containerRef={containerRef}
                         setVisualOptions={setVisualOptions}
-                        renderedChartSsr={activeRenderedChartSsr}
                         renderedChartMappedData={renderedChartMappedData}
                         renderedChartType={chartType as ChartType}
                         setChartErrorMessage={setChartErrorMessage}
@@ -652,7 +646,6 @@ export default function ChartModule() {
                         dimensions={dimensions}
                         renderedChart={content}
                         containerRef={containerRef}
-                        renderedChartSsr={activeRenderedChartSsr}
                         renderedChartMappedData={renderedChartMappedData}
                         renderedChartType={chartType as ChartType}
                         setChartErrorMessage={setChartErrorMessage}
@@ -699,7 +692,6 @@ export default function ChartModule() {
                         visualOptions={visualOptions}
                         renderedChart={renderedChart}
                         setVisualOptions={setVisualOptions}
-                        renderedChartSsr={renderedChartSsr}
                         renderedChartMappedData={renderedChartMappedData}
                         editable={!isPreviewMode || (page === "new" && !view)}
                         setIsPreviewView={setIsPreviewView}
@@ -719,7 +711,6 @@ export default function ChartModule() {
                         visualOptions={visualOptions}
                         renderedChart={renderedChart}
                         setVisualOptions={setVisualOptions}
-                        renderedChartSsr={renderedChartSsr}
                         renderedChartMappedData={renderedChartMappedData}
                         editable={!isPreviewMode}
                         setIsPreviewView={setIsPreviewView}

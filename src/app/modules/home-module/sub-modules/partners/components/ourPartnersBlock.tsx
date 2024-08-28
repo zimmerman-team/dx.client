@@ -17,6 +17,15 @@ export default function OurPartnersBlock() {
           height: 78px;
           object-fit: contain;
         }
+        @media (max-width: 1024px) {
+          gap: 30px;
+        }
+        @media (max-width: 818px) {
+          flex-direction: column;
+          gap: 2px;
+          padding-top: 56px;
+          border-bottom: none;
+        }
       `}
     >
       <h4
@@ -25,6 +34,10 @@ export default function OurPartnersBlock() {
           line-height: 29px;
           margin: 0;
           padding: 0;
+          @media (max-width: 1024px) {
+            font-size: 16px;
+            line-height: 19px;
+          }
         `}
       >
         <b>Our partners</b>

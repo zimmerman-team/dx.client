@@ -1,5 +1,4 @@
 export async function copyToClipboard(elementId: string) {
-  // Get the element by its ID
   const element = document.getElementById(elementId);
 
   if (!element) {
@@ -7,10 +6,6 @@ export async function copyToClipboard(elementId: string) {
     return;
   }
 
-  // Create a temporary textarea element
-  const textarea = document.createElement("textarea");
-
-  // Set the textarea's value to the text content of the element
   const textToCopy =
     element.innerText || element.innerHTML || element.textContent;
 

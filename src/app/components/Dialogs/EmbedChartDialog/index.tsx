@@ -26,7 +26,6 @@ export default function EmbedChartDialog(props: {
   const token = useStoreState((state) => state.AuthToken.value);
   const classes = useStyles();
   const { user } = useAuth0();
-  console.log(props.datasetId, "datasetId");
   const { datasetDetails } = useLoadDatasetDetails(
     props.datasetId!,
     token ?? undefined
@@ -71,10 +70,6 @@ export default function EmbedChartDialog(props: {
     return get(chartFromAPI, "mappedData", []);
   }, [chartFromAPI]);
 
-  const renderedChartSsr = React.useMemo(() => {
-    return get(chartFromAPI, "ssr", false);
-  }, [chartFromAPI]);
-
   const renderedChartType = React.useMemo(() => {
     return get(chartFromAPI, "vizType", "echartsBarchart");
   }, [chartFromAPI]);
@@ -115,6 +110,9 @@ export default function EmbedChartDialog(props: {
             width: 691px;
             padding: 24px 24px 32px 24px;
             border-radius: 8px;
+            @media (max-width: 768px) {
+              width: 93%;
+            }
           `}
         >
           <div
@@ -188,7 +186,6 @@ export default function EmbedChartDialog(props: {
                 datasetDetails={datasetDetails}
                 renderedChart={renderedChart}
                 renderedChartMappedData={renderedChartMappedData}
-                renderedChartSsr={renderedChartSsr}
                 renderedChartType={renderedChartType}
                 setChartError={setNotFound}
                 setNotFound={setNotFound}

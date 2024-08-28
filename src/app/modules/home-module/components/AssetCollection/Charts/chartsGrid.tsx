@@ -244,7 +244,14 @@ export default function ChartsGrid(props: Props) {
                 owner={c.owner}
                 isAIAssisted={c.isAIAssisted}
               />
-              <Box height={16} />
+              <div
+                css={`
+                  height: 16px;
+                  @media (max-width: 600px) {
+                    height: 8px;
+                  }
+                `}
+              />
             </Grid>
           ))}
         </Grid>

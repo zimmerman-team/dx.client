@@ -15,7 +15,9 @@ export const stepcss = css`
   background: #f4f4f4;
   gap: 1rem;
   @media (min-width: 768px) {
-    height: 50px;
+    @media (max-width: 881px) {
+      top: 66px;
+    }
   }
 `;
 
@@ -74,6 +76,12 @@ export const metaDatacss = css`
     font-family: "Inter", sans-serif;
 
     margin-bottom: 4.5rem;
+    @media (min-width: 768px) {
+      @media (max-width: 1024px) {
+        margin-top: 10px;
+        margin-bottom: 3.5rem;
+      }
+    }
   }
   button {
     border-radius: 30px;
@@ -98,6 +106,33 @@ export const dataSetsCss = css`
   justify-content: center;
   a {
     text-decoration: none;
+  }
+`;
+export const mobileDescriptioncss = css`
+  display: none;
+  @media (max-width: 500px) {
+    display: flex;
+    padding: 24px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+    border-radius: 10px;
+    background: #fff;
+    box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    height: 100%;
+    div {
+      p {
+        margin: 0px;
+        &:nth-of-type(1) {
+          color: #231d2c;
+          font-family: "GothamNarrow-Bold", sans-serif;
+        }
+        &:nth-of-type(2) {
+          font-family: "GothamNarrow-Book", sans-serif;
+        }
+      }
+    }
   }
 `;
 

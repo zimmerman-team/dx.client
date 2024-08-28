@@ -2,7 +2,7 @@ import React from "react";
 import moment from "moment";
 import { Link } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
-import { IconButton, Tooltip } from "@material-ui/core";
+import { IconButton, Tooltip, useMediaQuery } from "@material-ui/core";
 import { ReactComponent as EditIcon } from "app/modules/home-module/assets/edit.svg";
 import { ReactComponent as MenuIcon } from "app/modules/home-module/assets/menu.svg";
 import { ReactComponent as DeleteIcon } from "app/modules/home-module/assets/delete.svg";
@@ -26,6 +26,8 @@ interface Props {
 export default function GridItem(props: Props) {
   const { user, isAuthenticated } = useAuth0();
   const [menuOptionsDisplay, setMenuOptionsDisplay] = React.useState(false);
+  const isMobile = useMediaQuery("(max-width: 767px)");
+
   const showMenuOptions = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
@@ -189,7 +191,7 @@ export default function GridItem(props: Props) {
 
               display: flex;
               height: 38px;
-              width: 143px;
+              padding: 0 23px;
               position: absolute;
               background: #adb5bd;
               border-radius: 100px;
@@ -236,28 +238,32 @@ export default function GridItem(props: Props) {
                 </Tooltip>
               </IconButton>
             </div>
-            <div
-              css={
-                !canChartEditDelete ? "opacity: 0.5;pointer-events: none;" : ""
-              }
-            >
-              <Link
-                to={
-                  props.isMappingValid
-                    ? `/chart/${props.id}/customize`
-                    : `/chart/${props.id}/mapping`
+            {!isMobile && (
+              <div
+                css={
+                  !canChartEditDelete
+                    ? "opacity: 0.5;pointer-events: none;"
+                    : ""
                 }
-                aria-label="edit-icon"
               >
-                <Tooltip title="Edit" data-cy="chart-grid-item-edit-btn">
-                  <EditIcon
-                    css={`
-                      margin-top: 4px;
-                    `}
-                  />
-                </Tooltip>
-              </Link>
-            </div>
+                <Link
+                  to={
+                    props.isMappingValid
+                      ? `/chart/${props.id}/customize`
+                      : `/chart/${props.id}/mapping`
+                  }
+                  aria-label="edit-icon"
+                >
+                  <Tooltip title="Edit" data-cy="chart-grid-item-edit-btn">
+                    <EditIcon
+                      css={`
+                        margin-top: 4px;
+                      `}
+                    />
+                  </Tooltip>
+                </Link>
+              </div>
+            )}
             <div
               css={
                 !canChartEditDelete ? "opacity: 0.5;pointer-events: none;" : ""

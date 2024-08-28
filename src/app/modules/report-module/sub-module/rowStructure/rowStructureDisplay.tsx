@@ -28,6 +28,7 @@ import { IFramesArray } from "../../views/create/data";
 import { ToolbarPluginsType } from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
 import { css } from "styled-components";
 import { Updater } from "use-immer";
+import { useMediaQuery } from "@material-ui/core";
 
 interface RowStructureDisplayProps {
   gap: string;
@@ -58,6 +59,7 @@ interface RowStructureDisplayProps {
   ) => void;
   setPlugins: React.Dispatch<React.SetStateAction<ToolbarPluginsType>>;
   onSave: (type: "create" | "edit") => Promise<void>;
+  forceSelectedType: string | undefined;
 }
 
 export default function RowstructureDisplay(props: RowStructureDisplayProps) {
@@ -66,7 +68,7 @@ export default function RowstructureDisplay(props: RowStructureDisplayProps) {
   const { page } = useParams<{ page: string }>();
   const [handleDisplay, setHandleDisplay] = React.useState(false);
   const [reportPreviewMode] = useRecoilState(unSavedReportPreviewModeAtom);
-
+  const smScreen = useMediaQuery("(max-width: 850px)");
   const viewOnlyMode =
     (page !== "new" &&
       get(location.pathname.split("/"), "[3]", "") !== "edit") ||
@@ -224,6 +226,13 @@ export default function RowstructureDisplay(props: RowStructureDisplayProps) {
             overflow: hidden;
             gap: ${props.gap};
             border: ${border};
+            @media (max-width: 767px) {
+              display: grid;
+              grid-template-columns: ${props.forceSelectedType ===
+                "oneByFive" || props.forceSelectedType === "oneByFour"
+                ? " auto auto"
+                : "auto"};
+            }
           `}
           data-cy={`row-frame-${props.rowIndex}`}
         >
@@ -272,7 +281,7 @@ const Box = (props: {
   const location = useLocation();
   const history = useHistory();
   const { page, view } = useParams<{ page: string; view: string }>();
-
+  const smScreen = useMediaQuery("(max-width: 767px)");
   const setDataset = useStoreActions(
     (actions) => actions.charts.dataset.setValue
   );
@@ -525,7 +534,10 @@ const Box = (props: {
           grid={[5, 5]}
           onResize={onResize}
           onResizeStop={onResizeStop}
-          size={{ width: width, height: `${props.height}px` }}
+          size={{
+            width: smScreen ? "100%" : width,
+            height: `${props.height}px`,
+          }}
           maxWidth={!viewOnlyMode ? containerWidth : undefined}
           minWidth={78}
           enable={{
@@ -604,7 +616,10 @@ const Box = (props: {
           key={chartId}
           onResize={onResize}
           onResizeStop={onResizeStop}
-          size={{ width: width, height: `${props.height}px` }}
+          size={{
+            width: smScreen ? "100%" : width,
+            height: `${props.height}px`,
+          }}
           maxWidth={!viewOnlyMode ? containerWidth : undefined}
           minWidth={78}
           enable={{
@@ -707,7 +722,10 @@ const Box = (props: {
           grid={[5, 5]}
           onResize={onResize}
           onResizeStop={onResizeStop}
-          size={{ width: width, height: `${props.height}px` }}
+          size={{
+            width: smScreen ? "100%" : width,
+            height: `${props.height}px`,
+          }}
           maxWidth={!viewOnlyMode ? containerWidth : undefined}
           minWidth={78}
           enable={{
@@ -789,7 +807,10 @@ const Box = (props: {
           grid={[5, 5]}
           onResize={onResize}
           onResizeStop={onResizeStop}
-          size={{ width: width, height: `${props.height}px` }}
+          size={{
+            width: smScreen ? "100%" : width,
+            height: `${props.height}px`,
+          }}
           maxWidth={!viewOnlyMode ? containerWidth : undefined}
           minWidth={78}
           enable={{

@@ -13,7 +13,6 @@ export default function ChartContainer(props: {
   visualOptions: any;
   withHeader?: boolean;
   renderedChart: string;
-  renderedChartSsr: boolean;
   renderedChartMappedData: any;
   setRawViz?: React.Dispatch<any>;
   setVisualOptions: (value: any) => void;
@@ -54,6 +53,9 @@ export default function ChartContainer(props: {
               font-size: 18px;
               margin-top: 16px;
               margin-bottom: 0;
+              @media (max-width: 599px) {
+                font-size: 16px;
+              }
             }
             p:nth-of-type(2) {
               color: #e75656;
@@ -96,7 +98,6 @@ export default function ChartContainer(props: {
             containerRef={props.containerRef}
             renderedChart={props.renderedChart}
             visualOptions={props.visualOptions}
-            renderedChartSsr={props.renderedChartSsr}
             setVisualOptions={props.setVisualOptions}
             renderedChartType={props.renderedChartType}
             renderedChartMappedData={props.renderedChartMappedData}
