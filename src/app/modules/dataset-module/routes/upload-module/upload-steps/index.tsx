@@ -24,7 +24,7 @@ import { DatasetListItemAPIModel } from "app/modules/dataset-module/data";
 import BreadCrumbs from "app/modules/home-module/components/Breadcrumbs";
 import SmallFooter from "app/modules/home-module/components/Footer/smallFooter";
 import { useRecoilState } from "recoil";
-import { dataUploadTabAtom } from "app/state/recoil/atoms";
+import { dataUploadTabAtom, planDialogAtom } from "app/state/recoil/atoms";
 import BasicSwitch from "app/components/Switch/BasicSwitch";
 import Search from "@material-ui/icons/Search";
 import DesktopWindowsIcon from "@material-ui/icons/DesktopWindows";
@@ -40,6 +40,7 @@ function DatasetUploadSteps(props: Props) {
   const { user } = useAuth0();
   const token = useStoreState((state) => state.AuthToken.value);
   const steps = ["Connect", "Processing Data", "Description", "Finished"];
+  const [_, setPlanDialog] = useRecoilState(planDialogAtom);
   const [formDetails, setFormDetails] = React.useState({
     name: "",
     description: "",
@@ -52,6 +53,7 @@ function DatasetUploadSteps(props: Props) {
   const [processingError, setProcessingError] = React.useState<string | null>(
     null
   );
+  const [processingMessage, setProcessingMessage] = React.useState("");
   const [processed, setProcessed] = React.useState(false);
   const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
   const [searchValue, setSearchValue] = React.useState<string | undefined>("");
@@ -154,6 +156,7 @@ function DatasetUploadSteps(props: Props) {
   React.useEffect(() => {
     if (activeStep === 0) {
       setProcessingError("");
+      setProcessingMessage("");
       setProcessed(false);
     }
   }, [activeStep]);
@@ -174,9 +177,25 @@ function DatasetUploadSteps(props: Props) {
       .then((response) => {
         //load dataset and datasets on upload success
         //we do this to load data to populate the table
-        loadSampleDataset(response.data.id);
+        loadSampleDataset(response.data.data.id);
         //we do this to update the dataset list with the new dataset
         loadDatasets({ token, storeInCrudData: true });
+        if (response?.data.error && response?.data.errorType === "planError") {
+          return setPlanDialog({
+            open: true,
+            message: response?.data.error,
+            tryAgain: "",
+            onTryAgain: () => {},
+          });
+        }
+        if (response.data.planWarning) {
+          setPlanDialog({
+            open: true,
+            message: response.data.planWarning,
+            tryAgain: "",
+            onTryAgain: () => {},
+          });
+        }
         //set active step to finished
         setActiveStep(3);
       })
@@ -203,17 +222,38 @@ function DatasetUploadSteps(props: Props) {
       .post(`${process.env.REACT_APP_API}/files`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
         },
         onUploadProgress,
       })
       .then((response) => {
         //go to next step - metadata
-        if (response.data.error) {
-          setProcessingError(response.data.error);
-          console.debug("Dataset upload error", response.data.error);
-        } else {
+        if (!response.data.error) {
           setActiveStep(2);
           setProcessed(true);
+          return;
+        }
+        if (response.data?.errorType !== "planError") {
+          setProcessingError(response.data.error);
+          console.debug("Dataset upload error", response.data.error);
+          return;
+        }
+        if (response.data?.processingMessage) {
+          setPlanDialog({
+            open: true,
+            message: response.data.error,
+            tryAgain: "Try another dataset",
+            onTryAgain: tryAgain,
+          });
+          setProcessingMessage(response.data?.processingMessage ?? "");
+        } else {
+          setPlanDialog({
+            open: true,
+            message: response.data.error,
+            tryAgain: "",
+            onTryAgain: () => {},
+          });
+          setProcessingMessage(response.data.error ?? "");
         }
       })
       .catch((error) => {
@@ -371,6 +411,7 @@ function DatasetUploadSteps(props: Props) {
             loaded={loadedProgress}
             percentageLoaded={percentageLoadedProgress}
             estimatedUploadTime={estUploadTime}
+            processingMessage={processingMessage}
             tryAgain={tryAgain}
           />
         );

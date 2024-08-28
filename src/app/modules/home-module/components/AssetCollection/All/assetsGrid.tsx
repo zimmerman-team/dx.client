@@ -20,6 +20,8 @@ import ColoredReportIcon from "app/assets/icons/ColoredReportIcon";
 import DeleteDatasetDialog from "app/components/Dialogs/deleteDatasetDialog";
 import DeleteReportDialog from "app/components/Dialogs/deleteReportDialog";
 import { HomepageTable } from "../../Table";
+import { planDialogAtom } from "app/state/recoil/atoms";
+import { useSetRecoilState } from "recoil";
 import { getColumns } from "./data";
 
 interface Props {
@@ -43,6 +45,8 @@ export default function AssetsGrid(props: Props) {
     React.useState<assetType | null>(null);
   const [enableButton, setEnableButton] = React.useState<boolean>(false);
   const initialRender = React.useRef(true);
+
+  const setPlanDialog = useSetRecoilState(planDialogAtom);
 
   const token = useStoreState((state) => state.AuthToken.value);
 
@@ -181,7 +185,23 @@ export default function AssetsGrid(props: Props) {
           Authorization: `Bearer ${token}`,
         },
       })
-      .then(() => {
+      .then((response) => {
+        if (response?.data.error && response?.data.errorType === "planError") {
+          return setPlanDialog({
+            open: true,
+            message: response?.data.error,
+            tryAgain: "",
+            onTryAgain: () => {},
+          });
+        }
+        if (response.data.planWarning) {
+          setPlanDialog({
+            open: true,
+            message: response.data.planWarning,
+            tryAgain: "",
+            onTryAgain: () => {},
+          });
+        }
         reloadData();
       })
       .catch((error) => console.log(error));

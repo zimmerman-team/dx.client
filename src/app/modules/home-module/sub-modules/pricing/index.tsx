@@ -12,6 +12,7 @@ import Features from "./components/features";
 import MFALogo from "./assets/mfa-logo";
 import TGFLogo from "./assets/tgf-logo";
 import IATILogo from "./assets/iati-logo";
+import { useHistory } from "react-router-dom";
 
 const views = [
   {
@@ -19,55 +20,8 @@ const views = [
     key: "monthly",
   },
   {
-    name: "Yearly Plan",
+    name: "Annual Plan",
     key: "yearly",
-  },
-];
-
-const plans = [
-  {
-    name: "Free Plan",
-    yearlyPrice: "Free forever",
-    monthlyPrice: "Free forever",
-    text: "For individuals or teams just getting started in Dataxplorer",
-    current: false,
-    recommended: true,
-    buttonText: "Activate free trial",
-    discount: "",
-    key: "free",
-  },
-  {
-    name: "Pro",
-    yearlyPrice: "€750",
-    monthlyPrice: "€75",
-    text: "For individual users.",
-    current: false,
-    recommended: false,
-    buttonText: "Activate a free trial",
-    discount: "(Save 15%)",
-    key: "pro",
-  },
-  {
-    name: "Team",
-    yearlyPrice: "€2,250",
-    monthlyPrice: "€250",
-    text: "Scale to 5 users and connect your team.",
-    current: false,
-    recommended: false,
-    buttonText: "Activate free trial",
-    discount: "(Save 15%)",
-    key: "team",
-  },
-  {
-    name: "Enterprise",
-    yearlyPrice: "Custom",
-    monthlyPrice: "Custom",
-    text: "For organisations looking scale into powerful data visualization, with full support and security",
-    current: false,
-    recommended: false,
-    buttonText: "Contact us",
-    discount: "",
-    key: "enterprise",
   },
 ];
 
@@ -79,6 +33,8 @@ export default function PricingModule() {
   const [subscriptionPlan, setSubscriptionPlan] = React.useState("monthly");
 
   const token = useStoreState((state) => state.AuthToken.value);
+
+  const history = useHistory();
 
   const createNewStripeCustomer = async () => {
     const customerCreationResponse = await axios.post(
@@ -98,6 +54,57 @@ export default function PricingModule() {
     const customerId = customerCreationResponse.data.data;
     return customerId;
   };
+
+  const plans = [
+    {
+      name: "Free Plan",
+      yearlyPrice: "Free forever",
+      monthlyPrice: "Free forever",
+      text: "For individuals or teams just getting started in Dataxplorer",
+      current: isAuthenticated ? true : false,
+      recommended: isAuthenticated ? false : true,
+      buttonText: "Activate",
+      discount: "",
+      key: "free",
+      available: true,
+    },
+    {
+      name: "Pro",
+      yearlyPrice: "€720",
+      monthlyPrice: "€75",
+      text: "For individual users.",
+      current: false,
+      recommended: false,
+      buttonText: "Activate a free trial",
+      discount: "(Save 20%)",
+      key: "pro",
+      available: false,
+    },
+    {
+      name: "Team",
+      yearlyPrice: "€576",
+      monthlyPrice: "€60",
+      text: "Scale up to 100 users and connect your team.",
+      current: false,
+      recommended: false,
+      buttonText: "Activate free trial",
+      discount: "(Save 20%)",
+      key: "team",
+      available: false,
+    },
+    {
+      name: "Enterprise",
+      yearlyPrice: "Custom",
+      monthlyPrice: "Custom",
+      text: "For organisations looking scale into powerful data visualization, with full support and security",
+      current: false,
+      recommended: false,
+      buttonText: "Contact us",
+      discount: "",
+      key: "enterprise",
+      available: false,
+    },
+  ];
 
   const createStripeCheckoutSession = async (
     customerId: string,
@@ -124,19 +131,17 @@ export default function PricingModule() {
   };
 
   const handlePlanButtonClick = async (key: string) => {
+    if (!isAuthenticated) {
+      return history.replace(
+        `/onboarding/login?to=${location.pathname}${location.search}`
+      );
+    }
     switch (key) {
       case plans[0].key:
-        if (isAuthenticated) {
-          const customerId = await createNewStripeCustomer();
-          if (customerId) {
-            const sessionUrl = await createStripeCheckoutSession(
-              customerId,
-              key
-            );
-            if (sessionUrl) window.location.href = sessionUrl;
-          }
-        } else {
-          // redirect to login page
+        const customerId = await createNewStripeCustomer();
+        if (customerId) {
+          const sessionUrl = await createStripeCheckoutSession(customerId, key);
+          if (sessionUrl) window.location.href = sessionUrl;
         }
         break;
       case plans[1].key:
@@ -188,7 +193,7 @@ export default function PricingModule() {
           `}
         >
           DATAXPLORER simplifies and empowers visual data reporting for all.
-          Free for all.
+          <b> Free for all.</b>
         </p>
         <Box height={65} />
         <div
@@ -199,24 +204,41 @@ export default function PricingModule() {
             column-gap: 20px;
           `}
         >
-          <p
-            css={`
-              margin: 0;
-              padding: 0;
-              font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
-              color: #231d2c;
-              font-size: 20px;
-              font-weight: 400;
-              line-height: normal;
-            `}
-          >
-            Choose Your Subscription
-          </p>
+          <div>
+            <p
+              css={`
+                margin: 0;
+                padding: 0;
+                font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
+                color: #231d2c;
+                font-size: 20px;
+                font-weight: 400;
+                line-height: normal;
+              `}
+            >
+              Choose Your Subscription
+            </p>
+            <p
+              css={`
+                margin: 0;
+                padding: 0;
+                font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
+                font-size: 14px;
+                font-style: normal;
+                font-weight: 325;
+                line-height: normal;
+                letter-spacing: 0.5px;
+                text-align: center;
+              `}
+            >
+              Save 20% for annual plans
+            </p>
+          </div>
           <div
             css={`
               border-radius: 51px;
               background: #f1f1f1;
-              padding: 7px 9px;
+              padding: 5px 8px;
               display: flex;
               align-items: center;
               button {
@@ -226,7 +248,7 @@ export default function PricingModule() {
                 line-height: normal;
                 font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
                 display: flex;
-                width: 105px;
+                width: 99px;
                 height: 32px;
                 justify-content: center;
                 align-items: center;

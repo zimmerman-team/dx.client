@@ -4,7 +4,7 @@ import axios from "axios";
 import get from "lodash/get";
 import Box from "@material-ui/core/Box";
 import Grid, { GridSize } from "@material-ui/core/Grid";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import useDebounce from "react-use/lib/useDebounce";
 /** project */
 import { useInfinityScroll } from "app/hooks/useInfinityScroll";
@@ -14,7 +14,7 @@ import DeleteDatasetDialog from "app/components/Dialogs/deleteDatasetDialog";
 import GridItem from "app/modules/home-module/components/AssetCollection/Datasets/gridItem";
 import DatasetAddnewCard from "app/modules/home-module/components/AssetCollection/Datasets/datasetAddNewCard";
 import CircleLoader from "app/modules/home-module/components/Loader";
-import { loadedDatasetsAtom } from "app/state/recoil/atoms";
+import { loadedDatasetsAtom, planDialogAtom } from "app/state/recoil/atoms";
 import { DatasetListItemAPIModel } from "app/modules/dataset-module/data";
 
 interface Props {
@@ -40,6 +40,7 @@ export default function DatasetsGrid(props: Readonly<Props>) {
   const [offset, setOffset] = React.useState(0);
   const { isObserved } = useInfinityScroll(observerTarget);
   const token = useStoreState((state) => state.AuthToken.value);
+  const setPlanDialog = useSetRecoilState(planDialogAtom);
   const [loadedDatasets, setLoadedDatasets] =
     useRecoilState(loadedDatasetsAtom);
 
@@ -146,7 +147,23 @@ export default function DatasetsGrid(props: Readonly<Props>) {
           Authorization: `Bearer ${token}`,
         },
       })
-      .then(() => {
+      .then((response) => {
+        if (response?.data.error && response?.data.errorType === "planError") {
+          return setPlanDialog({
+            open: true,
+            message: response?.data.error,
+            tryAgain: "",
+            onTryAgain: () => {},
+          });
+        }
+        if (response.data.planWarning) {
+          setPlanDialog({
+            open: true,
+            message: response.data.planWarning,
+            tryAgain: "",
+            onTryAgain: () => {},
+          });
+        }
         reloadData();
       })
       .catch((error) => console.log(error));

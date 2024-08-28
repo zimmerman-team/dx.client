@@ -23,6 +23,7 @@ import {
 import { charts } from "app/modules/chart-module/data";
 import AILoader from "app/modules/chart-module/routes/chart-type/loader";
 import { handleValidityCheckOfDimensionsToBeMapped } from "app/modules/chart-module/components/toolbox/steps/panels-content/Mapping";
+import { useCheckUserPlan } from "app/hooks/useCheckUserPlan";
 import { IChartType } from "app/state/api/action-reducers/sync/charts";
 
 function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
@@ -35,6 +36,8 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
   const [isAiActive, setIsAiActive] = useRecoilState(isChartAIAgentActive);
   const datasetId = useStoreState((state) => state.charts.dataset.value);
   const chartType = useStoreState((state) => state.charts.chartType.value);
+
+  const { userPlan } = useCheckUserPlan();
   const loadChartTypesSuggestions = useStoreActions(
     (actions) => actions.charts.ChartTypesSuggest.fetch
   );
@@ -88,6 +91,12 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
       });
     }
   }, [datasetId]);
+
+  React.useEffect(() => {
+    if (userPlan?.planData.name === "Free") {
+      setIsAiActive(false);
+    }
+  }, [userPlan]);
 
   React.useEffect(() => {
     if (fromReportParamValue === "true") {
@@ -273,6 +282,7 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
               checked={isAiActive}
               setIsAiActive={setIsAiActive}
               dataset={datasetId as string}
+              disabled={userPlan?.planData?.name === "Free"}
             />
           </div>
         </div>
@@ -449,6 +459,7 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
                           ct.label === "" ? () => {} : onChartTypeChange(ct.id)
                         }
                         data-cy="chart-type-item"
+                        disabled={userPlan?.planData?.name === "Free"}
                         css={`
                           position: relative;
                           width: 100%;
@@ -461,8 +472,11 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
                           align-items: center;
                           background: ${getColor(ct.id).background};
                           border: 1px solid ${getColor(ct.id).border};
-
-                          ${ct.label === "" &&
+                          filter: ${userPlan?.planData?.name === "Free"
+                            ? "blur(5px)"
+                            : "none"};
+                          ${(ct.label === "" ||
+                            userPlan?.planData?.name === "Free") &&
                           `pointer-events: none;background: #f1f3f5;`}
 
                           &:hover {
@@ -587,6 +601,7 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
                           ct.label === "" ? () => {} : onChartTypeChange(ct.id)
                         }
                         data-cy="chart-type-item"
+                        disabled={userPlan?.planData?.name === "Free"}
                         css={`
                           position: relative;
                           width: 100%;
@@ -599,8 +614,12 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
                           align-items: center;
                           background: ${getColor(ct.id).background};
                           border: 1px solid ${getColor(ct.id).border};
+                          filter: ${userPlan?.planData?.name === "Free"
+                            ? "blur(5px)"
+                            : "none"};
 
-                          ${ct.label === "" &&
+                          ${(ct.label === "" ||
+                            userPlan?.planData?.name === "Free") &&
                           `pointer-events: none;background: #f1f3f5;`}
 
                           &:hover {

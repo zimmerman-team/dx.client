@@ -12,6 +12,8 @@ import DeleteReportDialog from "app/components/Dialogs/deleteReportDialog";
 import ReformedGridItem from "app/modules/home-module/components/AssetCollection/Reports/gridItem";
 import ReportAddnewCard from "./reportAddNewCard";
 import { useInfinityScroll } from "app/hooks/useInfinityScroll";
+import { useSetRecoilState } from "recoil";
+import { planDialogAtom } from "app/state/recoil/atoms";
 import CircleLoader from "app/modules/home-module/components/Loader";
 
 interface Props {
@@ -33,6 +35,8 @@ export default function ReportsGrid(props: Props) {
   const [offset, setOffset] = React.useState(0);
   const { isObserved } = useInfinityScroll(observerTarget);
   const token = useStoreState((state) => state.AuthToken.value);
+
+  const setPlanDialog = useSetRecoilState(planDialogAtom);
 
   const reports = useStoreState(
     (state) => (state.reports.ReportGetList.crudData ?? []) as ReportModel[]
@@ -143,7 +147,23 @@ export default function ReportsGrid(props: Props) {
           Authorization: `Bearer ${token}`,
         },
       })
-      .then(() => {
+      .then((response) => {
+        if (response?.data.error && response?.data.errorType === "planError") {
+          return setPlanDialog({
+            open: true,
+            message: response?.data.error,
+            tryAgain: "",
+            onTryAgain: () => {},
+          });
+        }
+        if (response.data.planWarning) {
+          setPlanDialog({
+            open: true,
+            message: response.data.planWarning,
+            tryAgain: "",
+            onTryAgain: () => {},
+          });
+        }
         reloadData();
       })
       .catch((error) => console.log(error));

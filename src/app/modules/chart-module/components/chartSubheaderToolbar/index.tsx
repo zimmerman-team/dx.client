@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 import isEmpty from "lodash/isEmpty";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { useAuth0 } from "@auth0/auth0-react";
 import Button from "@material-ui/core/Button";
 import SaveIcon from "@material-ui/icons/Save";
@@ -29,7 +29,7 @@ import { ChartAPIModel, emptyChartAPI } from "app/modules/chart-module/data";
 import { SubheaderToolbarProps } from "app/modules/chart-module/components/chartSubheaderToolbar/data";
 import { ExportChartButton } from "app/modules/chart-module/components/chartSubheaderToolbar/exportButton";
 import { ISnackbarState } from "app/modules/dataset-module/routes/upload-module/upload-steps/previewFragment";
-import { chartFromReportAtom } from "app/state/recoil/atoms";
+import { chartFromReportAtom, planDialogAtom } from "app/state/recoil/atoms";
 import { getRequiredFieldsAndErrors } from "../../routes/mapping/utils";
 import AutoSaveSwitch from "app/modules/report-module/components/reportSubHeaderToolbar/autoSaveSwitch";
 import useAutosave from "app/hooks/useAutoSave";
@@ -99,6 +99,8 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
   const canChartEditDelete = React.useMemo(() => {
     return isAuthenticated && loadedChart && loadedChart.owner === user?.sub;
   }, [user, isAuthenticated, loadedChart]);
+
+  const setPlanDialog = useSetRecoilState(planDialogAtom);
 
   const isMappingValid = React.useMemo(() => {
     return loadedChart?.isMappingValid || editChartCrudData?.isMappingValid;
@@ -235,6 +237,14 @@ export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
         },
       })
       .then(async (response) => {
+        if (response?.data.error && response?.data.errorType === "planError") {
+          return setPlanDialog({
+            open: true,
+            message: response?.data.error,
+            tryAgain: "",
+            onTryAgain: () => {},
+          });
+        }
         loadCharts({
           token,
           storeInCrudData: true,

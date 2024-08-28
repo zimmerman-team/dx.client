@@ -25,6 +25,8 @@ import DeleteDatasetDialog from "app/components/Dialogs/deleteDatasetDialog";
 import { ISnackbarState } from "app/modules/dataset-module/routes/upload-module/upload-steps/previewFragment";
 import { InfoSnackbar } from "app/modules/report-module/components/reportSubHeaderToolbar/infosnackbar";
 import { DatasetListItemAPIModel } from "app/modules/dataset-module/data";
+import { useSetRecoilState } from "recoil";
+import { planDialogAtom } from "app/state/recoil/atoms";
 import ShareModal from "./shareModal";
 import DuplicateMessage from "app/modules/common/mobile-duplicate-message";
 
@@ -52,6 +54,7 @@ export default function DatasetSubHeaderToolbar(
     vertical: "bottom",
     horizontal: "center",
   });
+  const setPlanDialog = useSetRecoilState(planDialogAtom);
 
   const open = Boolean(anchorEl);
   const popoverId = open ? "simple-popover" : undefined;
@@ -99,6 +102,14 @@ export default function DatasetSubHeaderToolbar(
         },
       })
       .then((response) => {
+        if (response?.data.error && response?.data.errorType === "planError") {
+          return setPlanDialog({
+            open: true,
+            message: response?.data.error,
+            tryAgain: "",
+            onTryAgain: () => {},
+          });
+        }
         setDuplicatedDatasetId(response.data.id);
         setSnackbarState({
           ...snackbarState,

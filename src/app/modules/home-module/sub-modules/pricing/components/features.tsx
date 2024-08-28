@@ -5,6 +5,9 @@ import GoodIcon from "../assets/good-icon";
 import ReportIcon from "../assets/report";
 import UserShieldIcon from "../assets/user-shied";
 import SupportIcon from "../assets/support";
+import { InfoOutlined } from "@material-ui/icons";
+import InfoIcon from "../assets/info-icon";
+import { Tooltip } from "react-tooltip";
 
 const Features = () => {
   const features = [
@@ -17,6 +20,7 @@ const Features = () => {
       options: [
         {
           name: "Number of  datasets or data size",
+          info: "The amount of datasets you can manage",
           values: [
             "5 datasets / 1GB",
             "100 datasets / 10GB",
@@ -26,23 +30,34 @@ const Features = () => {
         },
         {
           name: "Federated search",
-          values: ["Max 10 results", ">", "Unlimited", "<"],
+          info: "Access to datasources like Worldbank, Kaggle, WHO, HDX and more.",
+          values: ["Max 12 results", "Unlimited", "Unlimited", "Unlimited"],
         },
-        {
-          name: "Data export (CSV)",
-          values: ["Max 100 lines", ">", "Unlimited", "<"],
-        },
+
         {
           name: "Availability",
-          values: ["180 days", ">", "Unlimited", "<"],
+          info: "How long Dataxplorer will keep your assets",
+          values: ["180 days", "Unlimited", "Unlimited", "Unlimited"],
         },
         {
-          name: "Local Data Upload",
+          name: "Connect Data",
+          info: "Bring your own data via CSV, SQL, noSQL or connect your REST services",
           values: [true, true, true, true],
         },
         {
-          name: "Connect to 3rd Party services ",
-          values: [false, true, true, true],
+          name: "Data export (CSV)",
+          info: "Export your view in a nice CSV file",
+          values: ["", true, true, true],
+        },
+        {
+          name: "Connect your own data source",
+          info: "Connect data from your database",
+          values: ["", true, true, true],
+        },
+        {
+          name: "Google Drive data connect",
+          info: "Connect data from your Google Drive",
+          values: ["", true, true, true],
         },
       ],
     },
@@ -55,14 +70,17 @@ const Features = () => {
       options: [
         {
           name: "Number of charts",
+          info: "The amount of charts you can manage.",
           values: [10, 100, "5.000", "50.000"],
         },
         {
           name: "Access to the Chartbuilder",
+          info: "Create charts from your datasets",
           values: [true, true, true, true],
         },
         {
-          name: "Share Chart Powered by Dataxplorer",
+          name: "Share Chart Powered by\n Dataxplorer",
+          info: "Sharing charts standalone as link AND embed code",
           values: [true, true, true, true],
         },
         {
@@ -71,16 +89,19 @@ const Features = () => {
         },
         {
           name: "Advanced Charting",
-          values: [false, true, true, true],
-        },
-        {
-          name: "Custom Charting",
-          button: true,
-          values: [false, true, true, true],
+          info: "Advanced charting all CB charting features",
+          values: ["", true, true, true],
         },
         {
           name: "AI Agent",
-          values: [false, true, true, true],
+          info: "Use AI Agent to help you chart",
+          values: ["", true, true, true],
+        },
+        {
+          name: "Custom Charting",
+          info: "",
+          button: true,
+          values: ["", true, true, true],
         },
       ],
     },
@@ -93,29 +114,35 @@ const Features = () => {
       options: [
         {
           name: "Number of reports",
+          info: "The amount of reports you can manage.",
           values: [5, 100, "1.000", "10.000"],
         },
         {
           name: "Basic Templates",
+          info: "Access to Basic templates",
           values: [true, true, true, true],
         },
         {
           name: "Advanced Templates",
+          info: "Access to Advanced templates",
           values: [true, true, true, true],
         },
         {
           name: "Media / Video support",
-          values: [false, true, true, true],
+          info: "Add images and video",
+          values: ["", true, true, true],
         },
         {
           name: "Report AI Chat",
+          info: "Talk to your data",
           button: true,
-          values: [false, true, true, true],
+          values: ["", true, true, true],
         },
         {
           name: "Report AI Builder",
+          info: "Use AI Agent to draft your Report",
           button: true,
-          values: [false, true, true, true],
+          values: ["", true, true, true],
         },
       ],
     },
@@ -128,7 +155,7 @@ const Features = () => {
       options: [
         {
           name: "User Management",
-          values: [1, 1, 5, 10],
+          values: [1, 1, 5, 100],
         },
         {
           name: "Pricing Management",
@@ -136,7 +163,7 @@ const Features = () => {
         },
         {
           name: "Team Management",
-          values: [false, true, true, true],
+          values: ["", true, true, true],
         },
       ],
     },
@@ -149,23 +176,28 @@ const Features = () => {
       options: [
         {
           name: "Ticketing support",
-          values: [false, true, true, true],
+          info: "Access to a ticketing system",
+          values: ["", true, true, true],
         },
         {
           name: "Webinars",
-          values: [false, true, true, true],
+          info: "Access to monthly webinars",
+          values: ["", true, true, true],
         },
         {
           name: "Live chat",
-          values: [false, true, true, true],
+          info: "Chat with support",
+          values: ["", true, true, true],
         },
         {
           name: "Dedicated support",
-          values: [false, false, false, "5/8 CET"],
+          info: "Dedicated support only",
+          values: ["", "", "", "5/8 CET"],
         },
         {
           name: "Service Level Agreement",
-          values: [false, false, false, "5/8 CET"],
+          info: "Custom Service Level",
+          values: ["", "", "", "5/8 CET"],
         },
       ],
     },
@@ -252,7 +284,15 @@ const Features = () => {
               `}
             >
               {feature.options.map(
-                (option: { name: string; values: any[]; button?: boolean }) => (
+                (
+                  option: {
+                    name: string;
+                    values: any[];
+                    button?: boolean;
+                    info?: string;
+                  },
+                  optionIndex
+                ) => (
                   <div
                     key={option.name}
                     css={`
@@ -271,12 +311,13 @@ const Features = () => {
                         align-items: center;
                         gap: 8px;
                         margin: 0;
-                        padding: 9px 12px;
+                        padding: 0px 12px;
                         line-height: normal;
                         font-family: "Inter", sans-serif;
-                        font-size: 14px;
+                        font-size: 13px;
                         font-style: normal;
                         font-weight: 500;
+                        white-space: pre-line;
                         button {
                           border: none;
                           background: none;
@@ -297,7 +338,39 @@ const Features = () => {
                       `}
                     >
                       {option.name}{" "}
-                      {option.button && <button>Coming soon</button>}
+                      <div
+                        css={`
+                          flex-shrink: 0;
+                          cursor: pointer;
+                        `}
+                        className={`feature-${idx}-option-${optionIndex}`}
+                      >
+                        {option.button ? (
+                          <button>Coming soon!</button>
+                        ) : (
+                          <InfoIcon />
+                        )}
+                      </div>
+                      <Tooltip
+                        anchorSelect={`.feature-${idx}-option-${optionIndex}`}
+                        place="right"
+                        css={`
+                          opacity: 1 !important;
+                        `}
+                        style={{
+                          backgroundColor: "#231D2C",
+                          borderRadius: "8px",
+                          color: "#fff",
+                          fontSize: "12px",
+                          fontFamily: "GothamNarrow-Medium",
+                          maxWidth: "320px",
+                          lineHeight: "16px",
+                          zIndex: "1",
+                          padding: "12px",
+                        }}
+                      >
+                        {option.info}
+                      </Tooltip>
                     </p>
 
                     <div

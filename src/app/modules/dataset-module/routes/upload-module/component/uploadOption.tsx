@@ -1,5 +1,6 @@
 import React from "react";
 import SettingsIcon from "../assets/upload-options-icons/settings";
+import { useHistory } from "react-router-dom";
 
 const UploadOption = (props: {
   name: string;
@@ -12,8 +13,12 @@ const UploadOption = (props: {
   connected?: boolean;
   onLogout?: () => void;
   canConnect?: boolean;
+  upgradeRequired: boolean;
 }) => {
   const [openSettings, setOpenSettings] = React.useState(false);
+
+  const history = useHistory();
+
   return (
     <button
       css={`
@@ -27,9 +32,13 @@ const UploadOption = (props: {
         :disabled {
           cursor: not-allowed;
         }
+        position: relative;
       `}
       disabled={props.disabled}
       onClick={(e) => {
+        if (props.upgradeRequired) {
+          return history.push("/pricing");
+        }
         props.setActiveOption(props.name);
         props.onClick(e);
       }}
@@ -80,6 +89,29 @@ const UploadOption = (props: {
           </p>
         </div>
       </div>
+      {props.upgradeRequired ? (
+        <div
+          css={`
+            background: #f6c445;
+            border-radius: 48px;
+            color: #856207;
+            font-family: "GothamNarrow-Bold", Helvetica, sans-serif;
+            font-size: 11px;
+            font-style: normal;
+            font-weight: 450;
+            line-height: normal;
+            text-transform: uppercase;
+            padding: 8px 16px;
+            width: max-content;
+            position: absolute;
+            right: 8px;
+            bottom: 46px;
+          `}
+        >
+          UPGRADE
+        </div>
+      ) : null}
+
       <div
         css={`
           padding: 7px 16px;
@@ -117,7 +149,7 @@ const UploadOption = (props: {
                   border-radius: 50%;
                   background-color: ${props.connected ? "#51dbca" : "#D9D9D9"};
                 `}
-              ></div>
+              />
               {props.connected ? "Connected" : "Not Connected"}
             </span>
 
@@ -136,7 +168,6 @@ const UploadOption = (props: {
                     position: absolute;
                     right: calc(100% + 10px);
                     top: -4px;
-                    box-shadow: 0px 4px 30px 0px rgba(0, 0, 0, 0.1);
                   `}
                   hidden={!openSettings}
                   onClick={(e) => {
@@ -159,6 +190,7 @@ const UploadOption = (props: {
                         sans-serif;
                       border-radius: 12px;
                       background: #6061e5;
+                      box-shadow: 0px 4px 30px 0px rgba(0, 0, 0, 0.1);
                       border: none;
                       /* padding: 5px 0; */
                       width: 113px;

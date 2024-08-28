@@ -3,7 +3,7 @@ import { v4 } from "uuid";
 import get from "lodash/get";
 import isEmpty from "lodash/isEmpty";
 import { DndProvider } from "react-dnd";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { useImmer } from "use-immer";
 import { useAuth0 } from "@auth0/auth0-react";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -27,6 +27,7 @@ import {
 } from "react-router-dom";
 import {
   persistedReportStateAtom,
+  planDialogAtom,
   reportRightPanelViewAtom,
   unSavedReportPreviewModeAtom,
 } from "app/state/recoil/atoms";
@@ -45,6 +46,8 @@ export default function ReportModule() {
   const [autoSave, setAutoSave] = React.useState<{
     isAutoSaveEnabled: boolean;
   }>({ isAutoSaveEnabled: false });
+
+  const setPlanDialog = useSetRecoilState(planDialogAtom);
 
   /** static toolbar states */
   const [plugins, setPlugins] = React.useState<ToolbarPluginsType>([]);
@@ -127,6 +130,39 @@ export default function ReportModule() {
         401 ||
       get(state.reports.ReportGet.crudData, "error", "") === "Unauthorized"
   );
+
+  const reportCreateData = useStoreState(
+    (state) => state.reports.ReportCreate.crudData as any
+  );
+
+  React.useEffect(() => {
+    if (
+      reportCreateData?.error &&
+      reportCreateData?.errorType === "planError"
+    ) {
+      setPlanDialog({
+        open: true,
+        message: reportCreateData?.error,
+        tryAgain: "",
+        onTryAgain: () => {},
+      });
+    }
+  }, [reportCreateData]);
+
+  const reportPlanWarning = useStoreState(
+    (state) => state.reports.ReportCreate.planWarning
+  );
+
+  React.useEffect(() => {
+    if (reportPlanWarning) {
+      setPlanDialog({
+        open: true,
+        message: reportPlanWarning,
+        tryAgain: "",
+        onTryAgain: () => {},
+      });
+    }
+  }, [reportPlanWarning]);
 
   const [headerDetails, setHeaderDetails] = React.useState({
     title: "",
