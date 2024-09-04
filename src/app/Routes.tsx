@@ -230,7 +230,9 @@ export function MainRoutes() {
     >
       <AuthLoader />
       <OneTapLoginComponent />
-      {process.env.ENV_TYPE === "prod" ? <IntercomBootupComponent /> : null}
+      {process.env.REACT_APP_ENV_TYPE === "prod" ? (
+        <IntercomBootupComponent />
+      ) : null}
       <Suspense fallback={<PageLoader />}>
         <Switch>
           <Route exact path="/callback">
