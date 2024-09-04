@@ -5,6 +5,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { socialloginbuttoncss, termsOfServiceCss } from "./style";
 import { ReactComponent as GoogleIcon } from "../../asset/google-img.svg";
 import { ReactComponent as LinkedInIcon } from "../../asset/linkedIn-img.svg";
+import { ReactComponent as MicrosoftIcon } from "../../asset/microsoft-img.svg";
 import { useLocation } from "react-router-dom";
 
 export default function AuthCard(props: { isLogin?: boolean }) {
@@ -66,6 +67,22 @@ export default function AuthCard(props: { isLogin?: boolean }) {
         <LinkedInIcon />
         {props.isLogin ? "Log in" : "Sign up"} with LinkedIn
       </button>
+      <button
+        type="button"
+        css={socialloginbuttoncss}
+        disabled={!checked}
+        onClick={() => {
+          if (props.isLogin) {
+            socialAuth("windowslive", undefined, location.search);
+          } else {
+            storeSignUpState();
+            socialAuth("windowslive", undefined, location.search);
+          }
+        }}
+      >
+        <MicrosoftIcon />
+        {props.isLogin ? "Log in" : "Sign up"} with Microsoft
+      </button>
       {props.isLogin ? null : (
         <FormControlLabel
           control={
@@ -81,7 +98,7 @@ export default function AuthCard(props: { isLogin?: boolean }) {
               css={`
                 color: #231d2c;
                 font-size: 12px;
-                font-family: "GothamNarrow-Book";
+                font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
               `}
             >
               I agree with DX's{" "}

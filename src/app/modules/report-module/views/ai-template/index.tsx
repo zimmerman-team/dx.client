@@ -29,7 +29,7 @@ import NewsletterForm from "app/modules/common/newsletterForm";
 import { useTitle } from "react-use";
 
 export default function AITemplate() {
-  useTitle("DX DataXplorer - AI Template");
+  useTitle("DX Dataxplorer - AI Template");
 
   const [isSubscribed, setIsSubscribed] = React.useState(false);
   const [isSubscriptionFailed, setIsSubscriptionFailed] = React.useState(false);
@@ -134,7 +134,8 @@ export default function AITemplate() {
                   padding-left: 10px;
                   color: #e75656;
                   p {
-                    font-family: "GothamNarrow-Book", sans-serif;
+                    font-family: "GothamNarrow-Book", "Helvetica Neue",
+                      sans-serif;
                     text-align: left;
                     display: flex;
                     align-items: center;

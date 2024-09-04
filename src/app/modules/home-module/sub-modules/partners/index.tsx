@@ -1,5 +1,4 @@
 import React from "react";
-import Box from "@material-ui/core/Box";
 import Tab from "@material-ui/core/Tab";
 import Grid from "@material-ui/core/Grid";
 import Tabs from "@material-ui/core/Tabs";
@@ -21,7 +20,7 @@ import {
 } from "app/modules/home-module/sub-modules/partners/components/tabCard";
 import { useTitle } from "react-use";
 
-export const StyledTab = withStyles(() => ({
+const StyledTab = withStyles(() => ({
   root: {
     "&.MuiButtonBase-root": {
       "&.MuiTab-root": {
@@ -36,7 +35,7 @@ export const StyledTab = withStyles(() => ({
         fontSize: "24px",
         fontWeight: 700,
         fontFamily: "Inter, sans-serif",
-        "@media (max-width: 768px)": {
+        "@media (max-width: 1024px)": {
           fontSize: "16px",
         },
       },
@@ -45,7 +44,7 @@ export const StyledTab = withStyles(() => ({
           fontSize: "24px",
           fontWeight: 700,
           fontFamily: "Inter, sans-serif",
-          "@media (max-width: 768px)": {
+          "@media (max-width: 1024px)": {
             fontSize: "16px",
           },
         },
@@ -54,13 +53,16 @@ export const StyledTab = withStyles(() => ({
   },
 }))(Tab);
 
-export const StyledTabs = withStyles({
+const StyledTabs = withStyles({
   root: {
     "& .MuiTabs-scroller": {
       "& .MuiTabs-flexContainer": {
         gap: "113px",
         "@media (max-width: 768px)": {
-          gap: "40px",
+          gap: "36px",
+        },
+        "@media (max-width: 390px)": {
+          gap: "18px",
         },
       },
     },
@@ -80,11 +82,15 @@ const Pagination = (props: {
       justify-content: center;
       align-items: center;
       position: absolute;
-      top: 95%;
       left: 0%;
+      bottom: 26px;
       width: 100%;
-      padding-bottom: 40px;
+      height: 12px;
       gap: 8px;
+      @media (max-width: 1129px) {
+        top: unset;
+        bottom: 3%;
+      }
     `}
   >
     {new Array(props.dots).fill(0).map((_, i) => (
@@ -103,7 +109,7 @@ const Pagination = (props: {
   </div>
 );
 export default function PartnersModule() {
-  useTitle("DX DataXplorer - Partners");
+  useTitle("DX Dataxplorer - Partners");
 
   const [displayTab, setDisplayTab] = React.useState<number>(0);
   const handleChange = (
@@ -112,7 +118,7 @@ export default function PartnersModule() {
   ) => {
     setDisplayTab(newValue);
   };
-  const [autoPlay, setAutoPlay] = React.useState<boolean>(true);
+  const [autoPlay, setAutoPlay] = React.useState<boolean>(false);
 
   const cards = [
     <AboutTabCard />,
@@ -144,6 +150,14 @@ export default function PartnersModule() {
               margin-top: 78px;
               position: relative;
               height: 639px;
+              @media (max-width: 1129px) {
+                width: 83%;
+                height: 100%;
+              }
+              @media (max-width: 600px) {
+                width: 100%;
+                height: 100%;
+              }
             `}
           >
             <div
@@ -176,11 +190,28 @@ export default function PartnersModule() {
                 <StyledTab disableTouchRipple label="Performance" value={3} />
               </StyledTabs>
             </div>
-            <div>
+            <div
+              css={`
+                height: 55px;
+                @media (max-width: 1024px) {
+                  height: 32px;
+                }
+              `}
+            />
+            <div
+              css={`
+                position: relative;
+                background: linear-gradient(
+                  180deg,
+                  #a4a0ff -61.62%,
+                  #f8fcfc 114.5%
+                );
+                border-radius: 29px;
+              `}
+            >
               <AutoPlaySwipeableViews
                 index={displayTab}
                 onChangeIndex={(index) => autoPlay && handleChange(null, index)}
-                style={{ margin: "55px 0 110px 0" }}
                 animateTransitions={true}
                 interval={3000}
               >
@@ -188,12 +219,19 @@ export default function PartnersModule() {
                   <div key={index}>{card}</div>
                 ))}
               </AutoPlaySwipeableViews>
+              <Pagination
+                dots={4}
+                index={displayTab}
+                onChangeIndex={(index) => handleChange(null, index)}
+              />
             </div>
-
-            <Pagination
-              dots={4}
-              index={displayTab}
-              onChangeIndex={(index) => handleChange(null, index)}
+            <div
+              css={`
+                height: 110px;
+                @media (max-width: 1129px) {
+                  display: none;
+                }
+              `}
             />
           </div>
           <div
@@ -203,7 +241,14 @@ export default function PartnersModule() {
           />
           <QuoteBlock />
         </Grid>
-        <Box height={150} />
+        <div
+          css={`
+            height: 150px;
+            @media (max-width: 1129px) {
+              height: 130px;
+            }
+          `}
+        />
         <BestDecisionBlock />
       </Container>
       <div css="width: 100%;height: 148px;" />

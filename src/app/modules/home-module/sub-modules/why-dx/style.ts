@@ -9,12 +9,12 @@ export const benefitscss = css`
     line-height: 43px;
     text-align: center;
     color: #000000;
-    font-family: "GothamNarrow-Bold", sans-serif;
+    font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
     margin-bottom: 66px;
     margin-top: 0px;
   }
   h3 {
-    font-family: "GothamNarrow-Bold", sans-serif;
+    font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
     font-weight: 400;
     font-size: 40px;
     line-height: 48px;
@@ -24,11 +24,103 @@ export const benefitscss = css`
   p {
     font-size: 20px;
     line-height: 24px;
-    /* width: 90%; */
-    font-family: "GothamNarrow-Medium", sans-serif;
+    font-family: "GothamNarrow-Medium", "Helvetica Neue", sans-serif;
     margin-top: 14px;
   }
 `;
+
+export const keyfeaturescss = {
+  container: css`
+    position: relative;
+    z-index: 1;
+    padding-top: 114px;
+
+    svg {
+      @media (max-width: 1200px) {
+        flex-direction: column;
+        width: 100%;
+        height: 100%;
+        margin: unset;
+      }
+    }
+    h3 {
+      font-size: 48px;
+      line-height: 43px;
+      text-align: center;
+      color: #000000;
+      margin-top: 0;
+      margin-bottom: 83px;
+      font-family: "GothamNarrow-Bold", sans-serif;
+      @media (max-width: 1200px) {
+        font-size: 36px;
+        line-height: normal;
+      }
+      @media (max-width: 600px) {
+        font-size: 24px;
+        line-height: normal;
+        margin-bottom: 48px;
+      }
+    }
+    p:nth-of-type(1) {
+      font-size: 36px;
+      line-height: 20px;
+      font-weight: 350;
+      font-family: "GothamNarrow-Medium", sans-serif;
+      margin-bottom: 25px;
+      margin-top: 0;
+      color: #231d2c;
+      @media (max-width: 600px) {
+        font-size: 24px;
+        line-height: normal;
+        text-align: center;
+      }
+    }
+    p:nth-of-type(2) {
+      font-family: "GothamNarrow-Medium", sans-serif;
+      font-weight: 350;
+      line-height: 30px;
+      letter-spacing: 0.5px;
+      font-size: 20px;
+      color: #231d2c;
+      @media (max-width: 600px) {
+        font-size: 14px;
+        line-height: normal;
+        text-align: center;
+      }
+    }
+    @media (min-width: 750px) {
+      @media (max-width: 1024px) {
+        padding-top: 40px;
+      }
+    }
+    @media (max-width: 600px) {
+      padding-top: 56px;
+    }
+  `,
+  flexContainer: css``,
+  text: css`
+    @media (min-width: 1111px) {
+      @media (max-width: 1279px) {
+        width: 91%;
+      }
+    }
+    @media (max-width: 1110px) {
+      width: 75%;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      margin: auto;
+    }
+    @media (max-width: 600px) {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+  `,
+};
 
 export const firstColcss = css`
   display: grid;
@@ -139,71 +231,6 @@ export const thirdColcss = css`
     }
     p {
       color: #fff;
-    }
-  }
-`;
-
-export const simpleStepsCss = css`
-  z-index: 2;
-  padding: 59px 190px 79px 190px;
-  height: 587px;
-  background: #dadaf8;
-  box-shadow: 0px 4px 30px 4px rgba(206, 168, 188, 0.08);
-  /**sets the content to the viewport width and centers it; because this div has to be wider than it's parent**/
-  width: 100vw;
-  position: relative;
-  left: 50%;
-  right: 50%;
-  margin-left: -50vw;
-  margin-right: -50vw;
-  /**end**/
-  h2 {
-    color: #231d2c;
-    font-size: 40px;
-    font-family: "GothamNarrow-Bold", sans-serif;
-    text-align: center;
-    margin: 0;
-    margin-bottom: 73px;
-  }
-  div {
-    text-transform: uppercase;
-    text-align: center;
-    div {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
-    p:nth-of-type(1) {
-      color: #000;
-      text-align: center;
-      font-family: "GothamNarrow-Book", sans-serif;
-      font-size: 14px;
-      font-style: normal;
-      line-height: 20px;
-      letter-spacing: 0.5px;
-      margin: 0px;
-    }
-    p:nth-child(2) {
-      color: #000;
-      text-align: center;
-      font-family: "GothamNarrow-Bold", sans-serif;
-      font-size: 24px;
-      font-style: normal;
-      line-height: 20px;
-      letter-spacing: 0.5px;
-      margin: 10px 0;
-      /* margin-top: 10px; */
-    }
-    p:nth-of-type(3) {
-      color: #000;
-      text-align: center;
-      font-family: "GothamNarrow-Bold", sans-serif;
-      font-size: 16px;
-      font-style: normal;
-      line-height: 20px; /* 125% */
-      letter-spacing: 0.5px;
-      margin: 0px;
     }
   }
 `;

@@ -1,25 +1,28 @@
 import { EditorState } from "draft-js";
 import { IFramesArray } from "app/modules/report-module/views/create/data";
 import { ToolbarPluginsType } from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
+import { Updater } from "use-immer";
 
 export interface ReportEditViewProps {
-  open: boolean;
+  rightPanelOpen: boolean;
+  handleRightPanelOpen: () => void;
   reportType: "basic" | "advanced" | "ai" | null;
   isSaveEnabled: boolean;
   view: "initial" | "edit" | "create" | "preview" | "ai-template";
   hasSubHeaderTitleFocused: boolean;
   setHasSubHeaderTitleFocused: React.Dispatch<React.SetStateAction<boolean>>;
-  setFramesArray: React.Dispatch<React.SetStateAction<IFramesArray[]>>;
+  updateFramesArray: Updater<IFramesArray[]>;
   framesArray: IFramesArray[];
   localPickedCharts: string[];
   setReportName: React.Dispatch<React.SetStateAction<string>>;
+  autoSave: boolean;
   setAutoSave: React.Dispatch<
     React.SetStateAction<{
       isAutoSaveEnabled: boolean;
     }>
   >;
-  handlePersistReportState: () => void;
   reportName: string;
+  setHasChangesBeenMade: React.Dispatch<React.SetStateAction<boolean>>;
   headerDetails: {
     title: string;
     showHeader: boolean;
@@ -40,15 +43,8 @@ export interface ReportEditViewProps {
       dateColor: string;
     }>
   >;
-
-  handleRowFrameItemResize: (
-    rowId: string,
-    itemIndex: number,
-    width: number,
-    height: number
-  ) => void;
   stopInitializeFramesWidth: boolean;
   setStopInitializeFramesWidth: React.Dispatch<React.SetStateAction<boolean>>;
-
+  onSave: (type: "create" | "edit") => Promise<void>;
   setPlugins: React.Dispatch<React.SetStateAction<ToolbarPluginsType>>;
 }

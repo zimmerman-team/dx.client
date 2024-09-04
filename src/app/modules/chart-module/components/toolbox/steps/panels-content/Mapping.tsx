@@ -65,7 +65,7 @@ const typeIcon = {
   date: <DateIcon />,
 };
 
-export const AGGREGATIONS_LABELS = {
+const AGGREGATIONS_LABELS = {
   count: "Count",
   mean: "Average",
   median: "Median",
@@ -380,7 +380,11 @@ export function ChartToolBoxMapping(props: Readonly<ChartToolBoxMappingProps>) {
         height: 100%;
       `}
     >
-      <ToolboxSubheader name="Mapping" level={3} />
+      <ToolboxSubheader
+        name="Map datapoints to the chart"
+        level={3}
+        tooltip="Assign dimensions from your data to suitable axes or parameters in the chart to represent your data."
+      />
       <div
         css={`
           width: 90%;
@@ -405,12 +409,7 @@ export function ChartToolBoxMapping(props: Readonly<ChartToolBoxMappingProps>) {
           }
         `}
       >
-        <div
-          css={`
-            z-index: 1030;
-            position: relative;
-          `}
-        >
+        <div>
           {isEmpty(props.dimensions) ? (
             <div
               css={`
@@ -533,7 +532,7 @@ const NonStaticDimensionContainer = (props: {
           <div
             css={`
               font-size: 14px;
-              font-family: "GothamNarrow-Bold", sans-serif;
+              font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
 
               color: #262c34;
             `}
@@ -1059,7 +1058,7 @@ const StaticDimensionContainer = (props: { dimension: any }) => {
             css={`
               font-size: 14px;
               color: #262c34;
-              font-family: "GothamNarrow-Bold", sans-serif; ;
+              font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
             `}
           >
             {props.dimension.name}

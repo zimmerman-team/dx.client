@@ -10,7 +10,7 @@ import TableContainer from "@material-ui/core/TableContainer";
 /** project */
 import { previewTablecss } from "app/components/Table/Preview-table/style";
 import StatisticDisplay from "app/components/Table/Preview-table/statisticDisplay";
-import { ReactComponent as SortIcon } from "app/modules/dataset-upload-module/assets/sort.svg";
+import { ReactComponent as SortIcon } from "app/modules/dataset-module/routes/upload-module/assets/sort.svg";
 import StatisticalTableToolBox, {
   ColumnDetailsProps,
 } from "app/components/Table/Preview-table/StatisticalTableToolBox";
@@ -171,6 +171,7 @@ export default function PreviewTable(props: PreviewTableProps) {
                 {props.columns.map((val, cellIndex) => (
                   <TableCell key={val}>
                     <p
+                      title={data?.[val] as string}
                       css={`
                         margin: 0;
                         overflow: clip;

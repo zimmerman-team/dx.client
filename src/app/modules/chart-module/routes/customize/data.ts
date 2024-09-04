@@ -6,7 +6,6 @@ export interface ChartBuilderCustomizeProps {
   mappedData: any[];
   visualOptions: any;
   renderedChart: string;
-  renderedChartSsr: boolean;
   renderedChartMappedData: any;
   setVisualOptions: (value: any) => void;
   setChartErrorMessage: React.Dispatch<React.SetStateAction<string>>;

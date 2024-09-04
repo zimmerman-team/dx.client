@@ -39,36 +39,8 @@ export const headercss = css`
 
 export const logocss = css`
   display: flex;
-  padding-top: 5px;
   margin-right: 64px;
   justify-content: center;
-`;
-
-export const loginBtn = css`
-  height: 34px;
-  padding: 9.792px 35.496px;
-  background: #dadaf8;
-  border-radius: 24.48px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #231d2c;
-  margin-left: 16px;
-  text-transform: uppercase;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  &:hover {
-    opacity: 0.8;
-  }
-  a {
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 11.424px;
-    &:hover {
-      color: #231d2c;
-    }
-  }
 `;
 
 export const navLinkcss = (display: string, location: string) => css`

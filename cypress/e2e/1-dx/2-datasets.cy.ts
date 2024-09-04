@@ -27,18 +27,22 @@ describe("Testing connecting data on DX", () => {
     cy.visit("/");
 
     cy.get('[data-cy="cookie-btn"]').click();
-
+    cy.intercept(`${apiUrl}/external-sources/search?q=*`).as("getDefaultData");
     cy.get('[data-cy="home-connect-dataset-button"]').click();
   });
 
   it("Can filter results by source in the federated search", () => {
-    cy.intercept(`${apiUrl}/external-sources/search?q=*`).as("getDefaultData");
     cy.wait("@getDefaultData").then((interception) => {
+      cy.wait(2000);
+      cy.contains('[data-cy="source-category-button"]', "Kaggle").click();
+      cy.wait("@getDefaultData");
       cy.get('[data-cy="external-search-card-Kaggle"]').should(
         "have.length.greaterThan",
         1
       );
     });
+    cy.wait(2000);
+    cy.contains('[data-cy="source-category-button"]', "Kaggle").click();
 
     cy.contains('[data-cy="source-category-button"]', "WHO").click();
     cy.wait("@getDefaultData");
@@ -48,9 +52,10 @@ describe("Testing connecting data on DX", () => {
   });
 
   it("Can import data from External Search", () => {
-    cy.intercept(`${apiUrl}/external-sources/search?q=*`).as("getDefaultData");
-
     cy.wait("@getDefaultData").then((interception) => {
+      cy.wait(2000);
+      cy.contains('[data-cy="source-category-button"]', "Kaggle").click();
+      cy.wait("@getDefaultData");
       cy.get('[data-cy="external-search-card-Kaggle"]').should(
         "have.length.greaterThan",
         1
@@ -58,10 +63,11 @@ describe("Testing connecting data on DX", () => {
     });
 
     cy.get('[data-cy="open-search-button"]').click();
-    cy.intercept(`${apiUrl}/external-sources/search?q=world%20population*`).as(
-      "getDefaultData2"
-    );
-    cy.get('[data-cy="filter-search-input"]').type("world population");
+    cy.intercept(
+      `${apiUrl}/external-sources/search?q=Exclusive%20breastfeeding*`
+    ).as("getDefaultData2");
+    cy.wait(2000);
+    cy.get('[data-cy="filter-search-input"]').type("Exclusive breastfeeding");
 
     cy.wait("@getDefaultData2").then((interception) => {
       cy.get('[data-cy="external-search-card-Kaggle"]').should(
@@ -89,7 +95,7 @@ describe("Testing connecting data on DX", () => {
       "{selectall}{backspace}Rawgraphs"
     );
     cy.get('[data-cy="dataset-metadata-link"]').type(
-      "{selectall}{backspace}Not available"
+      "{selectall}{backspace}https://notavailableexternal.com"
     );
     cy.get('[data-cy="dataset-metadata-category"]').click();
     cy.get('[data-value="Social"]').click();
@@ -158,7 +164,9 @@ describe("Testing connecting data on DX", () => {
       "Football Players Data"
     );
     cy.get('[data-cy="dataset-metadata-source"]').type("Rawgraphs");
-    cy.get('[data-cy="dataset-metadata-link"]').type("Not available");
+    cy.get('[data-cy="dataset-metadata-link"]').type(
+      "https://notavailabledata.com"
+    );
     cy.get('[data-cy="dataset-metadata-category"]').click();
     cy.get('[data-value="Social"]').click();
     cy.get('[data-cy="dataset-metadata-submit"]').scrollIntoView();
@@ -185,7 +193,9 @@ describe("Testing connecting data on DX", () => {
       "Grossing Movies Data"
     );
     cy.get('[data-cy="dataset-metadata-source"]').type("Rawgraphs");
-    cy.get('[data-cy="dataset-metadata-link"]').type("Not available");
+    cy.get('[data-cy="dataset-metadata-link"]').type(
+      "https://notavailabledataset.com"
+    );
     cy.get('[data-cy="dataset-metadata-category"]').click();
     cy.get('[data-value="Social"]').click();
     cy.get('[data-cy="dataset-metadata-submit"]').scrollIntoView();
@@ -234,7 +244,7 @@ describe("Edit, Delete and Duplicate Dataset", () => {
       "{selectall}{backspace} Rawgraphs"
     );
     cy.get('[data-cy="dataset-metadata-link"]').type(
-      "{selectall}{backspace} Not available"
+      "{selectall}{backspace}https://notavailableedit.com"
     );
     cy.get('[data-cy="dataset-metadata-category"]').click();
     cy.get('[data-value="Social"]').click();
@@ -292,7 +302,8 @@ describe("Edit, Delete and Duplicate Dataset", () => {
 
   it("Can delete dataset", () => {
     cy.get("[data-cy=home-search-button]").click();
-    cy.get("[data-cy=home-search-input]").type("Soccer Players");
+    cy.wait(2000);
+    cy.get("[data-cy=filter-search-input]").type("Soccer Players");
 
     cy.wait("@fetchDatasets");
 
@@ -319,7 +330,7 @@ describe("Edit, Delete and Duplicate Dataset", () => {
     //   .should("not.exist");
 
     // cy.get("[data-cy=home-search-button]").click();
-    // cy.get("[data-cy=home-search-input]").type(
+    // cy.get("[data-cy=filter-search-input]").type(
     //   "{selectall}{backspace}Wine Tasting"
     // );
 
@@ -348,7 +359,8 @@ describe("Edit, Delete and Duplicate Dataset", () => {
     //   .should("not.exist");
 
     cy.get("[data-cy=home-search-button]").click();
-    cy.get("[data-cy=home-search-input]").type(
+    cy.wait(2000);
+    cy.get("[data-cy=filter-search-input]").type(
       `{selectall}{backspace}${testname1}`
     );
 
@@ -373,7 +385,8 @@ describe("Edit, Delete and Duplicate Dataset", () => {
     cy.wait("@fetchDatasets");
 
     cy.get("[data-cy=home-search-button]").click();
-    cy.get("[data-cy=home-search-input]").type(
+    cy.wait(2000);
+    cy.get("[data-cy=filter-search-input]").type(
       `{selectall}{backspace}${testname1}`
     );
     cy.wait("@fetchDatasets");

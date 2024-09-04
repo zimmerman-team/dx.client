@@ -11,11 +11,14 @@ interface PlanCardProps {
     current: boolean;
     recommended: boolean;
     buttonText: string;
+    discount: string;
     key: string;
+    available: boolean;
   };
+  onButtonClick: (key: string) => void;
 }
 
-function PlanCard({ activeView, plan }: PlanCardProps) {
+function PlanCard({ activeView, plan, onButtonClick }: PlanCardProps) {
   return (
     <div
       css={`
@@ -23,13 +26,15 @@ function PlanCard({ activeView, plan }: PlanCardProps) {
         background: rgba(202, 202, 202, 0.1);
         border-top-right-radius: 20px;
         border-top-left-radius: 20px;
+        height: 343px;
       `}
     >
       <div
         key={plan.name}
         css={`
           width: 100%;
-          padding: 0 13px 26px 22px;
+          height: 100%;
+          padding: 42.3px 13px 26px 22px;
           border-radius: 20px;
           background: ${plan.recommended ? "#6061E5" : "#FFFFFF"};
           box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.15);
@@ -41,7 +46,6 @@ function PlanCard({ activeView, plan }: PlanCardProps) {
           css={`
             margin: 0;
             padding: 0;
-            padding-top: 42.37px;
             font-size: 24px;
             font-weight: 400;
             line-height: normal;
@@ -54,7 +58,7 @@ function PlanCard({ activeView, plan }: PlanCardProps) {
           css={`
             margin: 0;
             padding: 0;
-            margin-top: 8.3px;
+            margin-top: 4.3px;
             font-size: 40px;
             font-weight: 400;
             line-height: normal;
@@ -64,7 +68,11 @@ function PlanCard({ activeView, plan }: PlanCardProps) {
           {activeView === "monthly" ? plan.monthlyPrice : plan.yearlyPrice}
         </p>
         {plan.key === "free" || plan.key === "enterprise" ? (
-          <Box height={48 + 15.08} />
+          <div
+            css={`
+              height: ${plan.key === "free" ? "5px" : "20px"};
+            `}
+          />
         ) : (
           <>
             <p
@@ -72,11 +80,13 @@ function PlanCard({ activeView, plan }: PlanCardProps) {
                 margin: 0;
                 padding: 0;
                 font-size: 16px;
+                line-height: 19.2px;
                 font-weight: 325;
                 font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
               `}
             >
               per {activeView === "monthly" ? "month" : "year"}
+              {plan.key === "team" ? " / per user" : ""}
             </p>
             <p
               css={`
@@ -92,9 +102,7 @@ function PlanCard({ activeView, plan }: PlanCardProps) {
             >
               Or{" "}
               {activeView === "monthly"
-                ? `${plan.yearlyPrice}/year ${
-                    plan.name === "Team" ? "(Save 15%)" : ""
-                  }`
+                ? `${plan.yearlyPrice}/year ${plan.discount}`
                 : `${plan.monthlyPrice}/month`}
             </p>
           </>
@@ -117,6 +125,9 @@ function PlanCard({ activeView, plan }: PlanCardProps) {
 
         <button
           css={`
+            position: absolute;
+            bottom: 23px;
+            left: 23px;
             border-radius: 50px;
             border: 1px solid ${plan.recommended ? "transparent" : "#262C34"};
             line-height: normal;
@@ -127,12 +138,17 @@ function PlanCard({ activeView, plan }: PlanCardProps) {
             line-height: normal;
             color: ${plan.recommended ? "#FFFFFF" : "#262C34"};
             background: ${plan.recommended ? "#2C2C79" : "#FFFFFF"};
-            padding: 11px 0px;
+            height: 41px;
             width: 175px;
-            margin: 0 auto;
-            margin-top: 34px;
-            display: block;
-            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            &:hover {
+              background: ${plan.recommended ? "#fff" : "#6061E5"};
+              color: ${plan.recommended ? "#262C34" : "#fff"};
+              cursor: pointer;
+              border: none;
+            }
             :disabled {
               border: 1px solid transparent;
               color: #868d96;
@@ -140,9 +156,14 @@ function PlanCard({ activeView, plan }: PlanCardProps) {
               cursor: not-allowed;
             }
           `}
-          disabled={plan.current}
+          disabled={plan.current || !plan.available}
+          onClick={() => onButtonClick(plan.key)}
         >
-          {plan.current ? "Current Plan" : plan.buttonText}
+          {plan.current
+            ? "Current Plan"
+            : !plan.available
+            ? "Coming soon"
+            : plan.buttonText}
         </button>
         {plan.recommended ? (
           <div

@@ -74,7 +74,7 @@ export default function FontSizeController(props: Props) {
           span {
             font-size: 14px;
             color: #70777e;
-            font-family: "GothamNarrow-Bold", sans-serif;
+            font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
             cursor: pointer;
           }
 
@@ -85,7 +85,7 @@ export default function FontSizeController(props: Props) {
             background: transparent;
             border: none;
             font-size: 14px;
-            font-family: "GothamNarrow-Bold", sans-serif;
+            font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
             color: #70777e;
             outline: none;
           }

@@ -37,13 +37,17 @@ const AboutModule = lazy(
 const WhyDXModule = lazy(
   () => import("app/modules/home-module/sub-modules/why-dx")
 );
-const ExploreAssetsModule = lazy(
-  () => import("app/modules/home-module/sub-modules/explore-assets")
-);
 
 const PricingModule = lazy(
   () => import("app/modules/home-module/sub-modules/pricing")
 );
+const EmbedChartModule = lazy(
+  () => import("app/modules/embed-module/embedChart")
+);
+import {
+  PaymentSuccessCallbackModule,
+  PaymentCanceledCallbackModule,
+} from "app/modules/callback-module/payment";
 
 const ChartModule = lazy(() => import("app/modules/chart-module"));
 const ReportModule = lazy(() => import("app/modules/report-module"));
@@ -155,12 +159,10 @@ const OneTapLoginComponent = () => {
 const IntercomBootupComponent = () => {
   const { isAuthenticated, user, getAccessTokenSilently } = useAuth0();
 
-  const APP_ID = window.location.hostname.includes("dataxplorer.org")
-    ? "tfvurn19"
-    : "hv1bfyau";
+  const APP_ID = "tfvurn19";
 
   React.useEffect(() => {
-    if (window.Intercom) {
+    if (window?.Intercom) {
       window.Intercom("update");
     }
   }, [location.pathname]);
@@ -180,7 +182,7 @@ const IntercomBootupComponent = () => {
   };
 
   React.useEffect(() => {
-    if (window.Intercom)
+    if (window?.Intercom)
       if (isAuthenticated) {
         getIntercomHash()
           .then((res) => {
@@ -228,7 +230,7 @@ export function MainRoutes() {
     >
       <AuthLoader />
       <OneTapLoginComponent />
-      <IntercomBootupComponent />
+      {process.env.ENV_TYPE === "prod" ? <IntercomBootupComponent /> : null}
       <Suspense fallback={<PageLoader />}>
         <Switch>
           <Route exact path="/callback">
@@ -243,12 +245,9 @@ export function MainRoutes() {
           <RouteWithAppBar exact path="/contact">
             <ContactModule />
           </RouteWithAppBar>
-          <RouteWithAppBar exact path="/why-dataXplorer">
+          <RouteWithAppBar exact path="/why-dataxplorer">
             <WhyDXModule />
           </RouteWithAppBar>
-          {/* <RouteWithAppBar exact path="/explore">
-            <ExploreAssetsModule />
-          </RouteWithAppBar> */}
           <RouteWithAppBar exact path="/dashboard">
             <AuthProtectedRoute>
               <DashboardModule />
@@ -278,6 +277,10 @@ export function MainRoutes() {
               <ChartModule />
             </AuthProtectedRoute>
           </RouteWithAppBar>
+
+          <Route exact path="/chart-embed/:chartId/:datasetId">
+            <EmbedChartModule />
+          </Route>
           {/* <RouteWithAppBar exact path="/dataset/:id/edit">
             <></>
           </RouteWithAppBar> */}
@@ -288,6 +291,12 @@ export function MainRoutes() {
             <AuthProtectedRoute>
               <UserProfileModule />
             </AuthProtectedRoute>
+          </RouteWithAppBar>
+          <RouteWithAppBar exact path="/payment/success">
+            <PaymentSuccessCallbackModule />
+          </RouteWithAppBar>
+          <RouteWithAppBar exact path="/payment/canceled">
+            <PaymentCanceledCallbackModule />
           </RouteWithAppBar>
           <RouteWithAppBar path="*">
             <NoMatchPage />

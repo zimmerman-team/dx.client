@@ -9,7 +9,7 @@ export default function Icon() {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <g clip-path="url(#clip0_1777_32761)">
+      <g clipPath="url(#clip0_1777_32761)">
         <path d="M0 61.166H68" stroke="#CBCBCB" strokeWidth="0.25" />
         <path d="M0 51.2559H68" stroke="#CBCBCB" strokeWidth="0.25" />
         <path d="M0 41.0049H68" stroke="#CBCBCB" strokeWidth="0.25" />

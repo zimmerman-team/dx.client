@@ -14,6 +14,8 @@ import {
   echartsCirculargraph,
   echartsCirclepacking,
   echartsBubblechart,
+  echartsMultisetBarchart,
+  echartsStackedBarchart,
   echartsScatterchart,
   echartsHeatmap,
   echartsGraphgl,
@@ -22,6 +24,7 @@ import {
   // @ts-ignore
 } from "@rawgraphs/rawgraphs-charts";
 import { FilterGroupModel } from "app/components/ToolBoxPanel/components/filters/data";
+import { IChartType } from "app/state/api/action-reducers/sync/charts";
 
 export const charts = {
   echartsBarchart,
@@ -37,6 +40,8 @@ export const charts = {
   echartsCirculargraph,
   echartsCirclepacking,
   echartsBubblechart,
+  echartsMultisetBarchart,
+  echartsStackedBarchart,
   echartsScatterchart,
   echartsHeatmap,
   echartsGraphgl,
@@ -44,7 +49,7 @@ export const charts = {
   echartsPiechart,
 };
 
-export const CHART_DEFAULT_WIDTH = 1000;
+const CHART_DEFAULT_WIDTH = 1000;
 export const CHART_DEFAULT_HEIGHT = 738;
 
 export const defaultChartOptions = {
@@ -268,6 +273,30 @@ export const defaultChartOptions = {
     },
     ...echartsBubblechart.visualOptions,
   },
+  echartsMultisetBarchart: {
+    ...baseOptions,
+    width: {
+      ...baseOptions.width,
+      default: CHART_DEFAULT_WIDTH,
+    },
+    height: {
+      ...baseOptions.height,
+      default: CHART_DEFAULT_HEIGHT,
+    },
+    ...echartsMultisetBarchart.visualOptions,
+  },
+  echartsStackedBarchart: {
+    ...baseOptions,
+    width: {
+      ...baseOptions.width,
+      default: CHART_DEFAULT_WIDTH,
+    },
+    height: {
+      ...baseOptions.height,
+      default: CHART_DEFAULT_HEIGHT,
+    },
+    ...echartsStackedBarchart.visualOptions,
+  },
   echartsScatterchart: {
     ...baseOptions,
     width: {
@@ -322,7 +351,7 @@ export const defaultChartOptions = {
 export interface ChartAPIModel {
   id: string;
   name: string;
-  vizType: string | null;
+  vizType: IChartType | null;
   datasetId: string | null;
   mapping: any;
   vizOptions: any;
@@ -345,24 +374,6 @@ export interface ChartRenderedItem {
   ssr: boolean;
   mapping?: any;
 }
-
-export interface DatasetAPIModel {
-  id: string;
-  name: string;
-  description: string;
-  public: boolean;
-  category: string;
-  createdDate: Date;
-}
-
-export const emptyDatasetAPI: DatasetAPIModel = {
-  id: "",
-  name: "",
-  description: "",
-  public: false,
-  category: "",
-  createdDate: new Date(),
-};
 
 interface ChartRoutesConfigModel {
   [key: string]: {

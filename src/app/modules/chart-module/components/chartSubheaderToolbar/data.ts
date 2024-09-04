@@ -7,11 +7,11 @@ export interface SubheaderToolbarProps {
   isAiSwitchActive: boolean;
   visualOptions?: any;
   dimensions: any;
+  isMappingValid: boolean;
   setName: (name: string) => void;
   setHasSubHeaderTitleFocused?: (value: boolean) => void;
   setHasSubHeaderTitleBlurred?: (value: boolean) => void;
   setStopInitializeFramesWidth?: (value: boolean) => void;
-  handlePersistReportState?: () => void;
   isPreviewView: boolean;
   setAutoSaveState: React.Dispatch<
     React.SetStateAction<{

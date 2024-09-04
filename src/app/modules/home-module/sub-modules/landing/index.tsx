@@ -10,7 +10,7 @@ import { useTitle } from "react-use";
 import { Link } from "react-router-dom";
 
 export default function LandingModule() {
-  useTitle("DX DataXplorer - Landing");
+  useTitle("DX Dataxplorer - Landing");
 
   return (
     <div
@@ -41,7 +41,7 @@ export default function LandingModule() {
               margin: 0;
               padding: 0;
               font-size: 36px;
-              font-family: "GothamNarrow-Medium", sans-serif;
+              font-family: "GothamNarrow-Medium", "Helvetica Neue", sans-serif;
               color: #231d2c;
               font-weight: 350;
             }
@@ -53,7 +53,7 @@ export default function LandingModule() {
               font-weight: 350;
               line-height: 30px; /* 150% */
               letter-spacing: 0.5px;
-              font-family: "GothamNarrow-Medium", sans-serif;
+              font-family: "GothamNarrow-Medium", "Helvetica Neue", sans-serif;
             }
           `}
         >
@@ -73,7 +73,7 @@ export default function LandingModule() {
 
               <p>
                 Transform your data-driven insights into engaging narratives
-                that captivate and inform your stakeholders. DataXplorer allows
+                that captivate and inform your stakeholders. Dataxplorer allows
                 you to effortlessly create interactive reports that captivate
                 and inform your stakeholders.
                 <br /> <br />
@@ -117,7 +117,7 @@ export default function LandingModule() {
               <h2>Visualize Your Impact</h2>
 
               <p>
-                Your data is a valuable resource, and DataXplorer empowers you
+                Your data is a valuable resource, and Dataxplorer empowers you
                 to make the most of it. Our AI-driven agents are at your
                 disposal, ready to generate the most pertinent charts for your
                 specific dataset.
@@ -143,11 +143,11 @@ export default function LandingModule() {
               font-style: normal;
               font-weight: 400;
               line-height: normal;
-              font-family: "GothamNarrow-Bold", sans-serif;
+              font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
               text-align: center;
             `}
           >
-            Unlock the Power of Data with DataXplorer
+            Unlock the Power of Data with Dataxplorer
           </h2>
           <img
             src={ThePowerImage}

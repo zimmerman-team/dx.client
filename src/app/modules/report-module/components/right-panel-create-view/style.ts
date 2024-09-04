@@ -4,7 +4,8 @@ export const elementItemcss = (
   disabled: boolean,
   isDragging: boolean,
   draggable?: boolean,
-  dropDown?: boolean
+  dropDown?: boolean,
+  upgradeRequired?: boolean
 ) => css`
   cursor: ${disabled ? "not-allowed" : !draggable ? "pointer" : "grab"};
   ${isDragging && "cursor: grabbing;"}
@@ -16,7 +17,7 @@ export const elementItemcss = (
   background: #dfe3e5;
   border-radius: 8px;
   /* transform: translate(0, 0); */
-  opacity: ${disabled ? 0.5 : 1};
+  opacity: ${upgradeRequired ? 0.2 : disabled ? 0.5 : 1};
   position: relative;
   padding: 0 8px 0 16px;
 

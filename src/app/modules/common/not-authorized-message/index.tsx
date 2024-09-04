@@ -20,8 +20,8 @@ export function NotAuthorizedMessageModule(props: {
         css={`
           background-color: #f4f4f4;
           height: 50px;
-          display: flex;
           align-items: center;
+          display: ${props.name ? "flex" : "none"};
         `}
       >
         <Container maxWidth="lg">
@@ -64,7 +64,7 @@ export function NotAuthorizedMessageModule(props: {
         />{" "}
         <p
           css={`
-            font-family: "GothamNarrow-Bold", sans-serif;
+            font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
             font-size: 18px;
             font-style: normal;
             font-weight: 400;

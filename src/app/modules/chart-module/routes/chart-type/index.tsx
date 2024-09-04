@@ -13,7 +13,6 @@ import {
   ChartBuilderChartTypeProps,
   chartTypesFromMiddleWare,
 } from "app/modules/chart-module/routes/chart-type/data";
-import { useAuth0 } from "@auth0/auth0-react";
 import AISwitch from "app/modules/chart-module/components/switch/AISwitch";
 import { useRecoilState, useResetRecoilState } from "recoil";
 import {
@@ -21,26 +20,24 @@ import {
   isChartAIAgentActive,
   isChartAutoMappedAtom,
 } from "app/state/recoil/atoms";
-import {
-  ChartAPIModel,
-  charts,
-  emptyChartAPI,
-} from "app/modules/chart-module/data";
-import { NotAuthorizedMessageModule } from "app/modules/common/not-authorized-message";
+import { charts } from "app/modules/chart-module/data";
 import AILoader from "app/modules/chart-module/routes/chart-type/loader";
 import { handleValidityCheckOfDimensionsToBeMapped } from "app/modules/chart-module/components/toolbox/steps/panels-content/Mapping";
+import { useCheckUserPlan } from "app/hooks/useCheckUserPlan";
+import { IChartType } from "app/state/api/action-reducers/sync/charts";
 
 function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
-  useTitle("DX DataXplorer - Chart Type");
+  useTitle("DX Dataxplorer - Chart Type");
 
   const history = useHistory();
-  const { isAuthenticated, user } = useAuth0();
   const { page } = useParams<{ page: string }>();
   const token = useStoreState((state) => state.AuthToken.value);
   const location = useLocation();
   const [isAiActive, setIsAiActive] = useRecoilState(isChartAIAgentActive);
   const datasetId = useStoreState((state) => state.charts.dataset.value);
   const chartType = useStoreState((state) => state.charts.chartType.value);
+
+  const { userPlan } = useCheckUserPlan();
   const loadChartTypesSuggestions = useStoreActions(
     (actions) => actions.charts.ChartTypesSuggest.fetch
   );
@@ -67,10 +64,6 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
   const fromReportParamValue = queryParams.get("fromreport");
   const reportPage = queryParams.get("page") as string;
 
-  const loadedChart = useStoreState(
-    (state) =>
-      (state.charts.ChartGet.crudData ?? emptyChartAPI) as ChartAPIModel
-  );
   const [chartFromReport, setChartFromReport] =
     useRecoilState(chartFromReportAtom);
 
@@ -100,6 +93,12 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
   }, [datasetId]);
 
   React.useEffect(() => {
+    if (userPlan?.planData.name === "Free") {
+      setIsAiActive(false);
+    }
+  }, [userPlan]);
+
+  React.useEffect(() => {
     if (fromReportParamValue === "true") {
       setChartFromReport((prev) => ({
         ...chartFromReport,
@@ -110,10 +109,6 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
       }));
     }
   }, []);
-
-  const canChartEditDelete = React.useMemo(() => {
-    return isAuthenticated && loadedChart && loadedChart.owner === user?.sub;
-  }, [user, isAuthenticated, loadedChart]);
 
   const validAiSuggestions = () => {
     try {
@@ -195,24 +190,17 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
   }
 
   const onChartTypeChange =
-    (chartTypeId: string) => (e: React.MouseEvent<HTMLButtonElement>) => {
+    (chartTypeId: IChartType) => (e: React.MouseEvent<HTMLButtonElement>) => {
       sessionStorage.setItem("visualOptions", JSON.stringify({}));
-      props.setVisualOptions({});
+      props.setVisualOptionsOnChange(
+        chartType === chartTypeId ? null : chartTypeId
+      );
       clearMapping();
       resetIsChartAutoMapped();
       props.setChartFromAPI(null);
       setChartType(chartType === chartTypeId ? null : chartTypeId);
       setSelectedAIChart(Boolean(aIChartSuggestions(chartTypeId)));
     };
-
-  if (!canChartEditDelete && page !== "new") {
-    return (
-      <>
-        <div css="width: 100%; height: 100px;" />
-        <NotAuthorizedMessageModule asset="chart" action="edit" />
-      </>
-    );
-  }
 
   return (
     <div css={commonStyles.container}>
@@ -228,32 +216,62 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
             justify-content: space-between;
           `}
         >
-          <p
-            css={`
-              font-family: "GothamNarrow-Bold", sans-serif;
-              font-size: 18px;
-              color: #231d2c;
-              margin-bottom: 0px;
-              span {
-                color: #359c96;
-                font-family: "GothamNarrow-Bold", sans-serif;
-              }
-            `}
-          >
-            Our <span>AI agent</span> is providing you with one or more
-            suggested charts to communicate your dataset. <br /> Feel free to
-            pick another chart type.
-          </p>
+          {chartTypesSuggestionsLoading ? (
+            <div
+              css={`
+                height: 44px;
+              `}
+            />
+          ) : (
+            <>
+              {isAiActive ? (
+                <p
+                  css={`
+                    font-family: "GothamNarrow-Bold", "Helvetica Neue",
+                      sans-serif;
+                    font-size: 18px;
+                    color: #231d2c;
+                    margin-bottom: 0px;
+                    span {
+                      color: #359c96;
+                      font-family: "GothamNarrow-Bold", "Helvetica Neue",
+                        sans-serif;
+                    }
+                  `}
+                >
+                  {validAiSuggestions() === undefined ||
+                  validAiSuggestions()?.length === 0 ? (
+                    <>
+                      Our <span>AI agent</span> is unable to recommend a
+                      specific chart for your dataset. Feel free to choose any
+                      chart <br /> that best suits your needs. Your selection is
+                      entirely up to you! Simply make your choice and click
+                      "Next."{" "}
+                    </>
+                  ) : (
+                    <>
+                      Our <span>AI agent</span> is providing you with one or
+                      more suggested charts to communicate your dataset. <br />{" "}
+                      Feel free to pick another chart type.
+                    </>
+                  )}
+                </p>
+              ) : (
+                <div></div>
+              )}
+            </>
+          )}
           <div
             css={`
               display: flex;
               align-items: center;
               justify-content: end;
               gap: 5px;
+              flex-shrink: 0;
               span {
                 color: #000000;
                 font-size: 12px;
-                font-family: "GothamNarrow-Book", sans-serif;
+                font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
               }
             `}
           >
@@ -264,6 +282,7 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
               checked={isAiActive}
               setIsAiActive={setIsAiActive}
               dataset={datasetId as string}
+              disabled={userPlan?.planData?.name === "Free"}
             />
           </div>
         </div>
@@ -276,7 +295,7 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
           <p
             css={`
               color: #000000;
-              font-family: "GothamNarrow-Bold", sans-serif;
+              font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
               font-size: 24px;
               margin: 0;
               margin-bottom: 15px;
@@ -390,7 +409,8 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
                             height: 16px;
                             color: #373d43;
                             font-size: 10px;
-                            font-family: "GothamNarrow-Book", sans-serif;
+                            font-family: "GothamNarrow-Book", "Helvetica Neue",
+                              sans-serif;
                           `}
                           data-cy="ai-suggestion-icon"
                         >
@@ -412,7 +432,7 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
           <p
             css={`
               color: #000000;
-              font-family: "GothamNarrow-Bold", sans-serif;
+              font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
 
               font-size: 24px;
               margin: 0;
@@ -439,6 +459,7 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
                           ct.label === "" ? () => {} : onChartTypeChange(ct.id)
                         }
                         data-cy="chart-type-item"
+                        disabled={userPlan?.planData?.name === "Free"}
                         css={`
                           position: relative;
                           width: 100%;
@@ -451,8 +472,11 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
                           align-items: center;
                           background: ${getColor(ct.id).background};
                           border: 1px solid ${getColor(ct.id).border};
-
-                          ${ct.label === "" &&
+                          filter: ${userPlan?.planData?.name === "Free"
+                            ? "blur(5px)"
+                            : "none"};
+                          ${(ct.label === "" ||
+                            userPlan?.planData?.name === "Free") &&
                           `pointer-events: none;background: #f1f3f5;`}
 
                           &:hover {
@@ -527,7 +551,8 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
                             height: 16px;
                             color: #373d43;
                             font-size: 10px;
-                            font-family: "GothamNarrow-Book", sans-serif;
+                            font-family: "GothamNarrow-Book", "Helvetica Neue",
+                              sans-serif;
                           `}
                           data-cy="ai-suggestion-icon"
                         >
@@ -550,7 +575,7 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
           <p
             css={`
               color: #000000;
-              font-family: "GothamNarrow-Bold", sans-serif;
+              font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
               font-size: 24px;
               margin: 0;
               margin-bottom: 15px;
@@ -576,6 +601,7 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
                           ct.label === "" ? () => {} : onChartTypeChange(ct.id)
                         }
                         data-cy="chart-type-item"
+                        disabled={userPlan?.planData?.name === "Free"}
                         css={`
                           position: relative;
                           width: 100%;
@@ -588,8 +614,12 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
                           align-items: center;
                           background: ${getColor(ct.id).background};
                           border: 1px solid ${getColor(ct.id).border};
+                          filter: ${userPlan?.planData?.name === "Free"
+                            ? "blur(5px)"
+                            : "none"};
 
-                          ${ct.label === "" &&
+                          ${(ct.label === "" ||
+                            userPlan?.planData?.name === "Free") &&
                           `pointer-events: none;background: #f1f3f5;`}
 
                           &:hover {
@@ -664,7 +694,8 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
                             height: 16px;
                             color: #373d43;
                             font-size: 10px;
-                            font-family: "GothamNarrow-Book", sans-serif;
+                            font-family: "GothamNarrow-Book", "Helvetica Neue",
+                              sans-serif;
                           `}
                           data-cy="ai-suggestion-icon"
                         >

@@ -19,11 +19,10 @@ import {
   rowFlexCss,
   turnsDataCss,
 } from "app/modules/home-module/style";
-
 import AssetsCollection from "./components/AssetCollection";
 
 export default function HomeModule() {
-  useTitle("DX DataXplorer");
+  useTitle("DX Dataxplorer");
 
   const { isAuthenticated, user } = useAuth0();
 
@@ -42,124 +41,141 @@ export default function HomeModule() {
         margin-top: 48px;
       `}
     >
-      <div
-        css={`
-          position: relative;
-          background: url(${HeroEllipses}),
-            linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #f2f7fd 100%);
-          background-repeat: no-repeat;
-          background-size: 100% 100%, auto;
-          background-position: 0% 20px;
-          padding-top: 48px;
-        `}
-      >
-        <Container maxWidth="lg">
-          <Grid
-            container
-            css={turnsDataCss}
-            alignItems="center"
-            alignContent="flex-start"
-          >
-            <Grid item lg={5} md={12} sm={12} xs={12}>
-              <div
+      {!isAuthenticated ? (
+        <div
+          css={`
+            position: relative;
+            background: url(${HeroEllipses}),
+              linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #f2f7fd 100%);
+            background-repeat: no-repeat;
+            background-size: 100% 100%, auto;
+            background-position: 0% 20px;
+            padding-top: 48px;
+          `}
+        >
+          <Container maxWidth="lg">
+            <Grid container css={turnsDataCss}>
+              <Grid
+                item
+                lg={5}
+                md={12}
+                sm={12}
+                xs={12}
                 css={`
-                  max-width: 450px;
+                  display: flex;
+                  flex-direction: column;
+                  align-items: center;
+                  justify-content: center;
                 `}
               >
-                <h1>Turn data into impact with DataXplorer</h1>
-                <Box height={26} />
-                <p>
-                  <b>
-                    DataXplorer simplifies and empowers visual data reporting
-                    for all.
-                  </b>
-                </p>
-                <Box height={61} />
-                {isAuthenticated && (
-                  <div
-                    css={`
-                      ${rowFlexCss} gap: 32px;
-                      width: 100%;
-                    `}
-                  >
-                    <Link
-                      to="report/new/initial"
+                <div
+                  css={`
+                    max-width: 450px;
+                  `}
+                >
+                  <h1>Turn data into impact with Dataxplorer</h1>
+                  <Box height={26} />
+                  <p>
+                    <b>
+                      Dataxplorer simplifies and empowers visual data reporting
+                      for all.
+                    </b>
+                  </p>
+                  <Box height={61} />
+                  {isAuthenticated && (
+                    <div
                       css={`
-                        background: #6061e5;
+                        ${rowFlexCss} gap: 32px;
+                        width: 100%;
                       `}
                     >
-                      CREATE REPORT
-                    </Link>
-                    <button
-                      onClick={exploreReportClick}
+                      <Link
+                        to="report/new/initial"
+                        css={`
+                          background: #6061e5;
+                        `}
+                      >
+                        CREATE REPORT
+                      </Link>
+                      <button
+                        onClick={exploreReportClick}
+                        css={`
+                          background: #e492bd;
+                        `}
+                      >
+                        EXPLORE REPORTS
+                      </button>
+                    </div>
+                  )}
+                  {!isAuthenticated && (
+                    <div
                       css={`
-                        background: #e492bd;
-                      `}
-                    >
-                      EXPLORE REPORTS
-                    </button>
-                  </div>
-                )}
-                {!isAuthenticated && (
-                  <div
-                    css={`
-                      gap: 20px;
-                      width: 100%;
-                      display: flex;
-                      flex-direction: row;
-                      justify-content: center;
-
-                      > button {
-                        gap: 10px;
-                        color: #fff;
+                        gap: 20px;
+                        width: 100%;
                         display: flex;
-                        padding: 9px 18px;
-                        background: #a1a2ff;
-                        align-items: center;
+                        flex-direction: row;
                         justify-content: center;
-                        text-transform: uppercase;
 
-                        > svg {
-                          transform: scale(0.8);
+                        > button {
+                          gap: 10px;
+                          color: #fff;
+                          display: flex;
+                          padding: 9px 18px;
+                          background: #a1a2ff;
+                          align-items: center;
+                          justify-content: center;
+                          text-transform: uppercase;
+
+                          > svg {
+                            transform: scale(0.8);
+                          }
+                          @media (max-width: 400px) {
+                            font-size: 12px;
+                            padding: 8px 16px;
+                          }
                         }
-                      }
-                    `}
-                  >
-                    <button onClick={() => socialAuth("google-oauth2")}>
-                      <GoogleIcon /> sign in for free
-                    </button>
-                    <button onClick={() => socialAuth("linkedin")}>
-                      <LinkedInIcon /> sign in for free
-                    </button>
-                  </div>
-                )}
-              </div>
+                      `}
+                    >
+                      <button onClick={() => socialAuth("google-oauth2")}>
+                        <GoogleIcon /> sign in for free
+                      </button>
+                      <button onClick={() => socialAuth("linkedin")}>
+                        <LinkedInIcon /> sign in for free
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </Grid>
+              <Grid
+                item
+                lg={7}
+                md={12}
+                sm={12}
+                xs={12}
+                css={`
+                  display: flex;
+                  @media (min-width: 1292px) {
+                    justify-content: flex-end;
+                    margin-right: -44px;
+                  }
+                  @media screen and (max-width: 1290px) {
+                    justify-content: center;
+                  }
+                `}
+              >
+                <img
+                  src={DatasetDetailImage}
+                  alt="dataset-detail-img"
+                  css={datsetDetailImgcss}
+                />
+              </Grid>
             </Grid>
-            <Grid
-              item
-              lg={7}
-              md={12}
-              sm={12}
-              xs={12}
-              css={`
-                margin-right: -44px;
-                display: flex;
-                justify-content: flex-end;
-                @media screen and (max-width: 1257px) {
-                  justify-content: center;
-                }
-              `}
-            >
-              <img
-                src={DatasetDetailImage}
-                alt="dataset-detail-img"
-                css={datsetDetailImgcss}
-              />
-            </Grid>
-          </Grid>
-        </Container>
-        <Box height={20} />
-      </div>
+          </Container>
+          <Box height={20} />
+        </div>
+      ) : (
+        <></>
+      )}
       <Box height={40} />
       <AssetsCollection />
 

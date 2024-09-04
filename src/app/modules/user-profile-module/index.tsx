@@ -29,7 +29,7 @@ const tabList = [
 ];
 
 export default function UserProfileModule() {
-  useTitle("DX DataXplorer - User Management");
+  useTitle("DX Dataxplorer - User Management");
 
   const history = useHistory();
   const { isAuthenticated, isLoading } = useAuth0();
