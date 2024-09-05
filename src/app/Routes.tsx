@@ -5,6 +5,7 @@
 import React, { Suspense, lazy } from "react";
 import { socialAuth } from "app/utils/socialAuth";
 import { useScrollToTop } from "app/hooks/useScrollToTop";
+import { useRouteListener } from "app/hooks/useRouteListener";
 import { PageLoader } from "app/modules/common/page-loader";
 import { RouteWithAppBar } from "app/utils/RouteWithAppBar";
 import { Route, Switch, useHistory } from "react-router-dom";
@@ -216,6 +217,7 @@ const IntercomBootupComponent = () => {
 
 export function MainRoutes() {
   useScrollToTop();
+  useRouteListener();
 
   return (
     <Auth0ProviderWithRedirectCallback
