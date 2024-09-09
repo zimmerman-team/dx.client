@@ -175,3 +175,8 @@ export const planDialogAtom = atom<{
     onTryAgain: () => {},
   },
 });
+
+export const fetchPlanLoadingAtom = atom<boolean>({
+  key: "fetchPlanLoadingAtom",
+  default: false,
+});
