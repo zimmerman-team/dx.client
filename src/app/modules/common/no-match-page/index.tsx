@@ -1,100 +1,128 @@
 import React from "react";
 import get from "lodash/get";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import { ReactComponent as NotFoundIcon } from "app/modules/common/no-match-page/asset/404.svg";
+import SmallFooter from "app/modules/home-module/components/Footer/smallFooter";
 
 // cc:refactor this component, inline css need to be moved to proper styled components
 
 export const NoMatchPage = () => {
+  const history = useHistory();
   return (
     <div
       css={`
         width: 100%;
-        height: 100%;
+        height: calc(100vh - 113px);
         display: flex;
-        position: relative;
         align-items: center;
         flex-direction: column;
         justify-content: center;
-        padding: 100px 50px 50px 50px;
       `}
     >
-      <div
-        css={`
-          font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
-          font-size: 14px;
-          font-weight: 500;
-          font-style: normal;
-          font-stretch: normal;
-          line-height: 1.71;
-          letter-spacing: 0.1px;
-          color: #231d2c;
-        `}
-      >
-        <div>Oops! Page not found</div>
+      <div>
+        <NotFoundIcon />
       </div>
       <div
         css={`
-          font-size: 120px;
-          font-weight: bold;
-          font-style: normal;
-          font-stretch: normal;
-          line-height: normal;
-          letter-spacing: 2.15px;
-          color: #525252;
-          font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
+          height: 65px;
         `}
-      >
-        <div>404</div>
-      </div>
+      />
       <div
         css={`
-          font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
-          font-size: 14px;
-          font-weight: 600;
-          font-style: normal;
-          font-stretch: normal;
-          line-height: 1.71;
-          letter-spacing: 1.25px;
-          text-align: center;
-          color: #231d2c;
+          p {
+            text-align: center;
+          }
+          p:nth-of-type(1) {
+            font-size: 34px;
+            font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
+            color: #6061e5;
+            margin: 0;
+            line-height: 41px;
+          }
+          p:nth-of-type(2) {
+            font-size: 18px;
+            font-family: "GothamNarrow-Medium", "Helvetica Neue", sans-serif;
+            color: #231d2c;
+          }
           margin-bottom: 50px;
         `}
       >
-        <div>We are sorry, but the page you requested was not found</div>
+        <p>Oops! This page could not be found</p>
+        <p>
+          Sorry but the page you are looking for does not exist, have been
+          removed, have changed or is temporarily unavailable.
+        </p>
       </div>
-      <Link
-        to="/"
+      <div
         css={`
-          text-decoration: none;
+          display: flex;
+          gap: 30px;
+          justify-content: center;
         `}
       >
-        <div
+        <Link
+          to="/"
           css={`
+            text-decoration: none;
             display: flex;
             justify-content: center;
             align-items: center;
-            width: 204px;
-            height: 46px;
+            width: 198px;
+            height: 41px;
             background: #262c34;
             border-radius: 20px;
           `}
         >
           <span
             css={`
-              font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
+              font-family: "GothamNarrow-Medium", "Helvetica Neue", sans-serif;
               font-size: 14px;
-              font-weight: 500;
               font-style: normal;
               font-stretch: normal;
               line-height: 1.5;
               letter-spacing: 0.15px;
               color: white;
+              text-transform: uppercase;
             `}
           >
-            <div>Back to Home Page</div>
+            Back to Home Page
           </span>
-        </div>
-      </Link>
+        </Link>
+        <button
+          onClick={() => {
+            history.go(-1);
+          }}
+          css={`
+            text-decoration: none;
+            border: none;
+            outline: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 164px;
+            height: 41px;
+            background: #6061e5;
+            border-radius: 30px;
+            cursor: pointer;
+          `}
+        >
+          <span
+            css={`
+              font-family: "GothamNarrow-Medium", "Helvetica Neue", sans-serif;
+              font-size: 14px;
+              font-style: normal;
+              font-stretch: normal;
+              line-height: 1.5;
+              letter-spacing: 0.15px;
+              color: white;
+              text-transform: uppercase;
+            `}
+          >
+            Previous page
+          </span>
+        </button>
+      </div>
+      <SmallFooter />
     </div>
   );
 };

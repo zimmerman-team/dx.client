@@ -431,8 +431,7 @@ export default function ReportModule() {
     <DndProvider backend={HTML5Backend}>
       {!reportError401 &&
         showReportHeader &&
-        view !== "ai-template" &&
-        view !== "initial" && (
+        (view === "edit" || view === undefined) && (
           <ReportSubheaderToolbar
             autoSave={autoSave.isAutoSaveEnabled}
             setAutoSave={setAutoSave}
@@ -449,25 +448,20 @@ export default function ReportModule() {
             plugins={plugins}
           />
         )}
-      {view &&
-        !reportError401 &&
-        view !== "preview" &&
-        canEditDeleteReport &&
-        view !== "initial" &&
-        view !== "ai-template" && (
-          <ReportRightPanel
-            open={rightPanelOpen}
-            currentView={view}
-            headerDetails={headerDetails}
-            setHeaderDetails={setHeaderDetails}
-            onOpen={() => setRightPanelOpen(true)}
-            onClose={() => setRightPanelOpen(false)}
-            showHeaderItem={!headerDetails.showHeader}
-            framesArray={framesArray}
-            reportName={reportName}
-            onSave={onSave}
-          />
-        )}
+      {view && !reportError401 && view === "edit" && canEditDeleteReport && (
+        <ReportRightPanel
+          open={rightPanelOpen}
+          currentView={view}
+          headerDetails={headerDetails}
+          setHeaderDetails={setHeaderDetails}
+          onOpen={() => setRightPanelOpen(true)}
+          onClose={() => setRightPanelOpen(false)}
+          showHeaderItem={!headerDetails.showHeader}
+          framesArray={framesArray}
+          reportName={reportName}
+          onSave={onSave}
+        />
+      )}
       <div
         css={`
           width: 100%;
@@ -479,34 +473,16 @@ export default function ReportModule() {
         `}
       />
       <Switch>
-        <Route path="/report/:page/initial">
+        <Route exact path="/report/:page/initial">
           <ReportInitialView
             resetReport={resetReport}
             handleSetButtonActive={handleSetButtonActive}
           />
         </Route>
-        <Route path="/report/:page/ai-template">
+        <Route exact path="/report/:page/ai-template">
           <AITemplate />
         </Route>
-        <Route path="/report/:page/create">
-          <ReportCreateView
-            rightPanelOpen={rightPanelOpen}
-            handleRightPanelOpen={() => setRightPanelOpen(true)}
-            view={view}
-            setReportName={setReportName}
-            reportName={reportName}
-            deleteFrame={deleteFrame}
-            hasSubHeaderTitleFocused={hasSubHeaderTitleFocused}
-            reportType={reportType}
-            framesArray={framesArray}
-            headerDetails={headerDetails}
-            updateFramesArray={updateFramesArray}
-            setHeaderDetails={setHeaderDetails}
-            setPlugins={setPlugins}
-            onSave={onSave}
-          />
-        </Route>
-        <Route path="/report/:page/edit">
+        <Route exact path="/report/:page/edit">
           <ReportEditView
             rightPanelOpen={rightPanelOpen}
             handleRightPanelOpen={() => setRightPanelOpen(true)}
@@ -531,19 +507,13 @@ export default function ReportModule() {
             onSave={onSave}
           />
         </Route>
-        <Route path="/report/:page/preview">
+        <Route exact path="/report/:page">
           <ReportPreviewView
             setIsPreviewView={setIsPreviewView}
             setAutoSave={setAutoSave}
           />
         </Route>
-        <Route path="/report/:page">
-          <ReportPreviewView
-            setIsPreviewView={setIsPreviewView}
-            setAutoSave={setAutoSave}
-          />
-        </Route>
-        <Route path="/report/new">
+        <Route exact path="/report/new">
           <Redirect to="/report/new/initial" />
         </Route>
         <Route path="*">
