@@ -12,6 +12,7 @@ import { useSetRecoilState } from "recoil";
 import { planDialogAtom } from "app/state/recoil/atoms";
 import SaveAltIcon from "@material-ui/icons/SaveAlt";
 import ExternalSearchTable from "../component/table/externalSearchTable";
+import { useCheckUserPlan } from "app/hooks/useCheckUserPlan";
 
 export interface IExternalDataset {
   name: string;
@@ -73,7 +74,9 @@ export default function ExternalSearch(props: {
     setOffset(0);
   };
 
-  const free = true;
+  const { userPlan } = useCheckUserPlan();
+
+  const free = userPlan?.planData.name === "Free";
   // Pagination on scroll
   React.useEffect(() => {
     if (isObserved && datasets.length > 0 && !free) {
