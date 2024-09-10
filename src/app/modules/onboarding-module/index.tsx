@@ -1,7 +1,5 @@
 import React from "react";
-import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
-import SplitBar from "./component/splibar";
 import { useAuth0 } from "@auth0/auth0-react";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { Route, Switch, useHistory, useLocation } from "react-router-dom";
@@ -53,7 +51,7 @@ export default function Onboarding() {
               font-size: 24px;
               font-weight: 700;
               font-style: normal;
-              font-family: "GothamNarrow-Bold";
+              font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
               padding: 0;
               margin: 0;
             `}

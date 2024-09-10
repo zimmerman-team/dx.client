@@ -5,6 +5,7 @@
 import React, { Suspense, lazy } from "react";
 import { socialAuth } from "app/utils/socialAuth";
 import { useScrollToTop } from "app/hooks/useScrollToTop";
+import { useRouteListener } from "app/hooks/useRouteListener";
 import { PageLoader } from "app/modules/common/page-loader";
 import { RouteWithAppBar } from "app/utils/RouteWithAppBar";
 import { Route, Switch, useHistory } from "react-router-dom";
@@ -37,13 +38,19 @@ const AboutModule = lazy(
 const WhyDXModule = lazy(
   () => import("app/modules/home-module/sub-modules/why-dx")
 );
-const ExploreAssetsModule = lazy(
-  () => import("app/modules/home-module/sub-modules/explore-assets")
-);
 
 const PricingModule = lazy(
   () => import("app/modules/home-module/sub-modules/pricing")
 );
+const EmbedChartModule = lazy(
+  () => import("app/modules/embed-module/embedChart")
+);
+import {
+  PaymentSuccessCallbackModule,
+  PaymentCanceledCallbackModule,
+} from "app/modules/callback-module/payment";
+import { useRecoilValue } from "recoil";
+import { fetchPlanLoadingAtom } from "./state/recoil/atoms";
 
 const ChartModule = lazy(() => import("app/modules/chart-module"));
 const ReportModule = lazy(() => import("app/modules/report-module"));
@@ -97,6 +104,15 @@ const Auth0ProviderWithRedirectCallback = (props: {
       {props.children}
     </Auth0Provider>
   );
+};
+
+const PlanLoader = () => {
+  const planLoading = useRecoilValue(fetchPlanLoadingAtom);
+
+  if (planLoading) {
+    return <PageLoader />;
+  }
+  return null;
 };
 
 const AuthLoader = () => {
@@ -155,12 +171,8 @@ const OneTapLoginComponent = () => {
 const IntercomBootupComponent = () => {
   const { isAuthenticated, user, getAccessTokenSilently } = useAuth0();
 
-  const APP_ID = window.location.hostname.includes("dataxplorer.org")
-    ? "tfvurn19"
-    : "hv1bfyau";
-
   React.useEffect(() => {
-    if (window.Intercom) {
+    if (window?.Intercom) {
       window.Intercom("update");
     }
   }, [location.pathname]);
@@ -180,7 +192,7 @@ const IntercomBootupComponent = () => {
   };
 
   React.useEffect(() => {
-    if (window.Intercom)
+    if (window?.Intercom)
       if (isAuthenticated) {
         getIntercomHash()
           .then((res) => {
@@ -190,7 +202,7 @@ const IntercomBootupComponent = () => {
               // @ts-ignore
               window.Intercom("boot", {
                 api_base: "https://api-iam.intercom.io",
-                app_id: APP_ID,
+                app_id: process.env.REACT_APP_INTERCOM_APP_ID,
                 name: user?.name, // Full name
                 email: user?.email, // the email for your user
                 user_id: user?.sub, // user_id as a string
@@ -206,7 +218,7 @@ const IntercomBootupComponent = () => {
         // @ts-ignore
         window.Intercom("boot", {
           api_base: "https://api-iam.intercom.io",
-          app_id: APP_ID,
+          app_id: process.env.REACT_APP_INTERCOM_APP_ID,
         });
       }
   }, [isAuthenticated]);
@@ -216,6 +228,7 @@ const IntercomBootupComponent = () => {
 
 export function MainRoutes() {
   useScrollToTop();
+  useRouteListener();
 
   return (
     <Auth0ProviderWithRedirectCallback
@@ -227,8 +240,11 @@ export function MainRoutes() {
       }}
     >
       <AuthLoader />
+      <PlanLoader />
       <OneTapLoginComponent />
-      <IntercomBootupComponent />
+      {process.env.REACT_APP_ENV_TYPE === "prod" ? (
+        <IntercomBootupComponent />
+      ) : null}
       <Suspense fallback={<PageLoader />}>
         <Switch>
           <Route exact path="/callback">
@@ -246,9 +262,6 @@ export function MainRoutes() {
           <RouteWithAppBar exact path="/why-dataxplorer">
             <WhyDXModule />
           </RouteWithAppBar>
-          {/* <RouteWithAppBar exact path="/explore">
-            <ExploreAssetsModule />
-          </RouteWithAppBar> */}
           <RouteWithAppBar exact path="/dashboard">
             <AuthProtectedRoute>
               <DashboardModule />
@@ -278,6 +291,10 @@ export function MainRoutes() {
               <ChartModule />
             </AuthProtectedRoute>
           </RouteWithAppBar>
+
+          <Route exact path="/chart-embed/:chartId/:datasetId">
+            <EmbedChartModule />
+          </Route>
           {/* <RouteWithAppBar exact path="/dataset/:id/edit">
             <></>
           </RouteWithAppBar> */}
@@ -288,6 +305,12 @@ export function MainRoutes() {
             <AuthProtectedRoute>
               <UserProfileModule />
             </AuthProtectedRoute>
+          </RouteWithAppBar>
+          <RouteWithAppBar exact path="/payment/success">
+            <PaymentSuccessCallbackModule />
+          </RouteWithAppBar>
+          <RouteWithAppBar exact path="/payment/canceled">
+            <PaymentCanceledCallbackModule />
           </RouteWithAppBar>
           <RouteWithAppBar path="*">
             <NoMatchPage />

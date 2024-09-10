@@ -43,7 +43,7 @@ function ReportUsePanel() {
                 font-style: normal;
                 font-weight: 400;
                 line-height: normal;
-                font-family: "GothamNarrow-Bold", sans-serif;
+                font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
                 color: #fff;
               `}
             >
@@ -58,7 +58,7 @@ function ReportUsePanel() {
                 font-style: normal;
                 font-weight: 325;
                 line-height: normal;
-                font-family: "GothamNarrow-Book", sans-serif;
+                font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
                 margin-top: 12.03px;
                 color: #fff;
               `}

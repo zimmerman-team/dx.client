@@ -99,7 +99,7 @@ function ChartToolBoxSelectDataset(props: { deselectDataset: () => void }) {
           margin-top: -8px;
           color: #231d2c;
           font-size: 14px;
-          font-family: "GothamNarrow-Bold", sans-serif;
+          font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
         }
 
         > label {
@@ -172,7 +172,7 @@ function ChartToolBoxSelectDataset(props: { deselectDataset: () => void }) {
   );
 }
 
-export const ConnectData = () => {
+const ConnectData = () => {
   const history = useHistory();
   const chartFromReport = useRecoilValue(chartFromReportAtom);
   return (
@@ -203,7 +203,7 @@ export const ConnectData = () => {
           cursor: pointer;
         }
         p {
-          font-family: "GothamNarrow-Bold", sans-serif;
+          font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
           margin-bottom: 4px;
           margin-top: -8px;
           font-size: 14px;

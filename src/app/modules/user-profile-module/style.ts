@@ -65,7 +65,7 @@ export const avicss = css`
   align-items: center;
   border-radius: 50%;
   justify-self: flex-start;
-  font-family: "GothamNarrow-Bold", sans-serif;
+  font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
   font-size: 22.0606px;
   line-height: 32px;
   b {

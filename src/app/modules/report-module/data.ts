@@ -35,15 +35,6 @@ export interface ReportModel {
   dateColor: string;
 }
 
-export interface ReportContentWidthsType {
-  id: string;
-  widths: number[];
-}
-export interface ReportContentHeightsType {
-  id: string;
-  heights: number[];
-}
-
 export const emptyReport: ReportModel = {
   id: "",
   name: "Untitled report",

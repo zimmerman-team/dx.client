@@ -53,6 +53,10 @@ export function ReportPreviewView(props: {
   const reportData = useStoreState(
     (state) => (state.reports.ReportGet.crudData ?? emptyReport) as ReportModel
   );
+
+  const [isReportLoading, setIsReportLoading] = React.useState<boolean | null>(
+    null
+  );
   const loadingReportData = useStoreState(
     (state) => state.reports.ReportGet.loading
   );
@@ -143,7 +147,14 @@ export function ReportPreviewView(props: {
     }
   }, [persistedReportState]);
 
-  if (loadingReportData) {
+  React.useEffect(() => {
+    if (!loadingReportData && isReportLoading === null) {
+      return;
+    }
+    setIsReportLoading(loadingReportData);
+  }, [loadingReportData]);
+
+  if (loadingReportData || isReportLoading === null) {
     return <PageLoader />;
   }
 
@@ -187,6 +198,7 @@ export function ReportPreviewView(props: {
         }}
         setPlugins={() => {}}
         setHeaderDetails={() => {}}
+        handleRightPanelOpen={() => {}}
       />
       <Container id="content-container" maxWidth="lg" ref={ref}>
         <Box height={45} />
@@ -233,11 +245,10 @@ export function ReportPreviewView(props: {
                 rowIndex={index}
                 framesArray={[]}
                 setPlugins={() => {}}
-                setFramesArray={() => {}}
+                updateFramesArray={() => {}}
                 key={"rowframe" + `${index}`}
-                handlePersistReportState={() => {}}
-                handleRowFrameItemResize={() => {}}
                 endReportTour={() => {}}
+                onSave={async () => {}}
                 forceSelectedType={rowFrame.structure ?? undefined}
                 previewItems={rowFrame.items.map((item, index) => {
                   return contentTypes[index] === "text"

@@ -51,6 +51,7 @@ interface MockProps {
   framesArray: never[];
   reportName: string;
   handlePersistReportState: jest.Mock<any, any, any>;
+  onSave: jest.Mock<any, any, any>;
 }
 interface Params {
   mockActions: boolean;
@@ -70,6 +71,7 @@ const defaultProps = (newProps: Partial<MockProps> = {}): MockProps => {
     framesArray: [],
     reportName: "",
     handlePersistReportState: jest.fn(),
+    onSave: jest.fn(),
     ...newProps,
   };
 };

@@ -31,7 +31,7 @@ export default function Subscribe() {
         <p
           css={`
             color: #fff;
-            font-family: "GothamNarrow-Bold", sans-serif;
+            font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
             font-size: 40px;
             font-style: normal;
             font-weight: 400;
@@ -44,7 +44,7 @@ export default function Subscribe() {
         <p
           css={`
             color: #fff;
-            font-family: "GothamNarrow-Book", sans-serif;
+            font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
             font-size: 20px;
             font-style: normal;
             font-weight: 325;
@@ -64,7 +64,7 @@ export default function Subscribe() {
         <p
           css={`
             color: #fff;
-            font-family: "GothamNarrow-Medium", sans-serif;
+            font-family: "GothamNarrow-Medium", "Helvetica Neue", sans-serif;
             font-size: 22px;
             font-style: normal;
             font-weight: 350;

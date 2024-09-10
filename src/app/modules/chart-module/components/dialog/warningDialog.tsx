@@ -18,7 +18,7 @@ export default function WarningDialog(props: { isMappingValid: boolean }) {
           font-size: 14px;
           line-height: 20px;
           font-weight: bold;
-          font-family: "GothamNarrow-Bold", sans-serif;
+          font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
           text-align: center;
           button {
             outline: none;

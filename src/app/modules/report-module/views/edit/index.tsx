@@ -66,6 +66,10 @@ function ReportEditView(props: ReportEditViewProps) {
     (actions) => actions.reports.ReportGet.fetch
   );
 
+  const [isReportLoading, setIsReportLoading] = React.useState<boolean | null>(
+    null
+  );
+
   const loadingReportData = useStoreState(
     (state) => state.reports.ReportGet.loading
   );
@@ -89,12 +93,10 @@ function ReportEditView(props: ReportEditViewProps) {
   );
 
   function deleteFrame(id: string) {
-    props.setFramesArray((prev) => {
-      let tempPrev = prev.map((item) => ({ ...item }));
-      const frameId = prev.findIndex((frame) => frame.id === id);
+    props.updateFramesArray((draft) => {
+      const frameId = draft.findIndex((frame) => frame.id === id);
 
-      tempPrev.splice(frameId, 1);
-      return [...tempPrev];
+      draft.splice(frameId, 1);
     });
   }
 
@@ -176,8 +178,6 @@ function ReportEditView(props: ReportEditViewProps) {
           frame: {
             rowIndex: index,
             rowId: id,
-            handlePersistReportState: props.handlePersistReportState,
-            handleRowFrameItemResize: props.handleRowFrameItemResize,
             type: isDivider ? "divider" : "rowFrame",
             forceSelectedType: rowFrame.structure ?? undefined,
             previewItems: content,
@@ -251,25 +251,30 @@ function ReportEditView(props: ReportEditViewProps) {
     if (reportData.id !== page) {
       return;
     }
-    if (JSON.parse(persistedReportState.framesArray || "[]").length < 1) {
-      props.setHasReportNameFocused(reportData.name !== "Untitled report");
-      props.setReportName(reportData.name);
-      props.setHeaderDetails(headerDetailsFromReportData());
-      props.setFramesArray(framesArrayFromReportData());
-    }
+    props.setHasReportNameFocused(reportData.name !== "Untitled report");
+    props.setReportName(reportData.name);
+    props.setHeaderDetails(headerDetailsFromReportData());
+    props.updateFramesArray(framesArrayFromReportData());
   };
 
-  useUpdateEffect(() => {
+  React.useEffect(() => {
     updateReportStatesWithReportData().finally(() => {
       props.setAutoSave({ isAutoSaveEnabled: true });
     });
   }, [reportData]);
 
+  React.useEffect(() => {
+    if (!loadingReportData && isReportLoading === null) {
+      return;
+    }
+    setIsReportLoading(loadingReportData);
+  }, [loadingReportData]);
+
   const canEditDeleteReport = React.useMemo(() => {
     return isAuthenticated && reportData?.owner === user?.sub;
   }, [user, isAuthenticated, reportData]);
 
-  if (loadingReportData) {
+  if (loadingReportData || isReportLoading === null) {
     return <PageLoader />;
   }
 
@@ -319,6 +324,7 @@ function ReportEditView(props: ReportEditViewProps) {
         sethasReportNameFocused={props.setHasReportNameFocused}
         setHeaderDetails={props.setHeaderDetails}
         setPlugins={props.setPlugins}
+        handleRightPanelOpen={props.handleRightPanelOpen}
       />
       <Container maxWidth="lg">
         <div
@@ -326,19 +332,16 @@ function ReportEditView(props: ReportEditViewProps) {
           id="content-container"
           css={`
             transition: width 225ms cubic-bezier(0, 0, 0.2, 1) 0ms;
-            width: ${props.open
+            width: ${props.rightPanelOpen
               ? "calc(100vw - ((100vw - 1280px) / 2) - 400px - 50px)"
               : "100%"};
             position: relative;
-            @media (max-width: 1280px) {
-              width: calc(100vw - 400px);
-            }
           `}
         >
           <Box height={50} />
           <TourGuide
             reportType={props.reportType ?? "basic"}
-            toolBoxOpen={props.open}
+            toolBoxOpen={props.rightPanelOpen}
             handleClose={handleEndReportTour}
             open={openTour}
           />
@@ -352,9 +355,7 @@ function ReportEditView(props: ReportEditViewProps) {
                     rowId={frame.id}
                     deleteFrame={deleteFrame}
                     framesArray={props.framesArray}
-                    setFramesArray={props.setFramesArray}
-                    handlePersistReportState={props.handlePersistReportState}
-                    handleRowFrameItemResize={props.handleRowFrameItemResize}
+                    updateFramesArray={props.updateFramesArray}
                   />
                 )}
                 <Box height={8} />
@@ -371,11 +372,12 @@ function ReportEditView(props: ReportEditViewProps) {
                     <RowFrame
                       {...frame.frame}
                       framesArray={props.framesArray}
-                      setFramesArray={props.setFramesArray}
+                      updateFramesArray={props.updateFramesArray}
                       view={props.view}
                       rowContentHeights={frame.contentHeights}
                       rowContentWidths={frame.contentWidths}
                       setPlugins={props.setPlugins}
+                      onSave={props.onSave}
                       endReportTour={handleEndReportTour}
                     />
                   </div>
@@ -386,9 +388,7 @@ function ReportEditView(props: ReportEditViewProps) {
                   rowId={frame.id}
                   deleteFrame={deleteFrame}
                   framesArray={props.framesArray}
-                  setFramesArray={props.setFramesArray}
-                  handlePersistReportState={props.handlePersistReportState}
-                  handleRowFrameItemResize={props.handleRowFrameItemResize}
+                  updateFramesArray={props.updateFramesArray}
                 />
               </div>
             );
@@ -398,10 +398,8 @@ function ReportEditView(props: ReportEditViewProps) {
           <AddRowFrameButton
             framesArray={props.framesArray}
             rowStructureType={rowStructureType}
-            setFramesArray={props.setFramesArray}
+            updateFramesArray={props.updateFramesArray}
             setRowStructureType={setRowStructuretype}
-            handlePersistReportState={props.handlePersistReportState}
-            handleRowFrameItemResize={props.handleRowFrameItemResize}
             endTour={handleEndReportTour}
           />
           <Box height={45} />

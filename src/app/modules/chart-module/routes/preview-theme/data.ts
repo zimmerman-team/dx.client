@@ -5,12 +5,12 @@ export interface ChartBuilderPreviewThemeProps {
   loading: boolean;
   visualOptions: any;
   renderedChart: string;
-  renderedChartSsr: boolean;
   renderedChartMappedData: any;
   setVisualOptions: (value: any) => void;
   setIsPreviewView: React.Dispatch<React.SetStateAction<boolean>>;
   containerRef: React.RefObject<HTMLDivElement>;
   loadedChart: ChartAPIModel;
+  isMappingValid: boolean;
   view: string | undefined;
   isAIAssistedChart: boolean;
   chartError: boolean;

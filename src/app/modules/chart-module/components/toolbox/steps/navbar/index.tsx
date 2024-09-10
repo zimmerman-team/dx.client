@@ -61,6 +61,12 @@ export default function ToolboxNav(
       css={`
         background: #f5f5f7;
         display: flex;
+        height: 67px;
+        @media (min-width: 768px) {
+          @media (max-width: 881px) {
+            height: 50px;
+          }
+        }
       `}
     >
       {navContent.map((item, index) => (

@@ -3,7 +3,7 @@ import React from "react";
 
 import { useStoreState } from "app/state/store/hooks";
 
-import { useLocation } from "react-router-dom";
+import { useHistory, useLocation, useParams } from "react-router-dom";
 import useUpdateEffect from "react-use/lib/useUpdateEffect";
 
 /* project */
@@ -18,6 +18,8 @@ import { isEmpty } from "lodash";
 import { ToolboxNavType } from "app/modules/chart-module/components/toolbox/data";
 
 import { ChartRenderedItem } from "app/modules/chart-module/data";
+import { chartFromReportAtom } from "app/state/recoil/atoms";
+import { useRecoilState } from "recoil";
 
 interface ChartToolBoxStepsProps {
   data: { [key: string]: string | number | null }[];
@@ -47,12 +49,15 @@ interface ChartToolBoxStepsProps {
 
 export function ChartToolBoxSteps(props: ChartToolBoxStepsProps) {
   const location = useLocation();
-
+  const { page } = useParams<{ page: string }>();
+  const history = useHistory();
   const { filterOptionGroups } = props;
   const [_expanded, setExpanded] = React.useState<number>(props.openPanel ?? 0);
   const appliedFilters = useStoreState(
     (state) => state.charts.appliedFilters.value
   );
+  const [chartFromReport, setChartFromReport] =
+    useRecoilState(chartFromReportAtom);
   let appliedFiltersCount = 0;
 
   Object.keys(appliedFilters || {}).forEach((key) => {
@@ -60,8 +65,13 @@ export function ChartToolBoxSteps(props: ChartToolBoxStepsProps) {
   });
 
   const handleSave = () => {
+    const { page: reportPage, view: reportView } = chartFromReport;
     if (!isEmpty(props.mappedData)) {
       props.save();
+      if (chartFromReport.state) {
+        setChartFromReport((prev) => ({ ...prev, chartId: page }));
+        history.push(`/report/${reportPage}/edit`);
+      }
     }
   };
 
@@ -176,7 +186,7 @@ export function ChartToolBoxSteps(props: ChartToolBoxStepsProps) {
             align-items: center;
             justify-content: center;
             font-size: 14px;
-            font-family: "GothamNarrow-Bold", sans-serif;
+            font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
             cursor: ${props.isClickable ? "pointer" : "not-allowed"};
             /* pointer-events: ${props.isClickable ? "auto" : "none"}; */
             :nth-child(1) {

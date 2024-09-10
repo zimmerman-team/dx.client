@@ -38,7 +38,10 @@ export function ReportChartWrapper(props: Props) {
     (actions) => actions.charts.ChartGetInReport.clear
   );
   const [datasetId, setDatasetId] = React.useState<string | null>(null);
-  const { datasetDetails } = useLoadDatasetDetails(datasetId!);
+  const { datasetDetails } = useLoadDatasetDetails(
+    datasetId!,
+    token ?? undefined
+  );
 
   const [_rawViz, setRawViz] = React.useState<any>(null);
   const {
@@ -51,7 +54,7 @@ export function ReportChartWrapper(props: Props) {
     setChartErrorMessage,
     setVisualOptions,
     setNotFound,
-  } = useRenderChartFromAPI(props.id);
+  } = useRenderChartFromAPI(token, props.id);
 
   const renderedChart = React.useMemo(() => {
     return chartFromAPI
@@ -61,10 +64,6 @@ export function ReportChartWrapper(props: Props) {
 
   const renderedChartMappedData = React.useMemo(() => {
     return get(chartFromAPI, "mappedData", []);
-  }, [chartFromAPI]);
-
-  const renderedChartSsr = React.useMemo(() => {
-    return get(chartFromAPI, "ssr", false);
   }, [chartFromAPI]);
 
   const renderedChartType = React.useMemo(() => {
@@ -140,7 +139,7 @@ export function ReportChartWrapper(props: Props) {
           font-size: ${parseInt(props.width) > 250 ? "14px" : "10px"};
           line-height: 15px;
           font-weight: bold;
-          font-family: "GothamNarrow-Bold", sans-serif;
+          font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
           text-align: center;
         `}
       >
@@ -207,10 +206,11 @@ export function ReportChartWrapper(props: Props) {
           css={`
             margin: 0;
             margin-bottom: 12px;
-            font-family: "GothamNarrow-bold", sans-serif;
+            font-family: "GothamNarrow-bold", "Helvetica Neue", sans-serif;
             font-size: 14px;
             color: #231d2c;
             letter-spacing: 0.5px;
+            word-break: break-all;
           `}
         >
           {chartName}
@@ -232,7 +232,6 @@ export function ReportChartWrapper(props: Props) {
         containerRef={containerRef}
         renderedChart={renderedChart}
         visualOptions={visualOptions}
-        renderedChartSsr={renderedChartSsr}
         setVisualOptions={setVisualOptions}
         renderedChartType={renderedChartType}
         renderedChartMappedData={renderedChartMappedData}
@@ -241,8 +240,7 @@ export function ReportChartWrapper(props: Props) {
         inChartWrapper={true}
         chartPreviewInReport={props.chartPreviewInReport}
         mapping={chartFromAPI?.mapping}
-        source={datasetDetails?.source}
-        sourceUrl={datasetDetails?.sourceUrl}
+        datasetDetails={datasetDetails}
       />
     </div>
   );

@@ -1,11 +1,11 @@
 import { Container } from "@material-ui/core";
-import MetaData from "app/modules/dataset-upload-module/upload-steps/metaData";
+import MetaData from "app/modules/dataset-module/routes/upload-module/upload-steps/metaData";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import axios from "axios";
 import React from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { useTitle } from "react-use";
-export interface IDatasetDetail {
+interface IDatasetDetail {
   name: string;
   description: string;
   public: boolean;
@@ -18,6 +18,7 @@ export interface IDatasetDetail {
   authId: string;
   id: string;
 }
+
 export default function EditMetaData() {
   useTitle("DX Dataxplorer - Edit Meta Data");
 

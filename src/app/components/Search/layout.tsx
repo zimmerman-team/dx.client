@@ -5,7 +5,6 @@ import get from "lodash/get";
 import findIndex from "lodash/findIndex";
 import Button from "@material-ui/core/Button";
 import MenuItem from "@material-ui/core/MenuItem";
-import { useCMSData } from "app/hooks/useCMSData";
 import { SearchIcon } from "app/assets/icons/Search";
 import { withStyles } from "@material-ui/core/styles";
 import Menu, { MenuProps } from "@material-ui/core/Menu";
@@ -98,7 +97,6 @@ const StyledMenuItem = withStyles(() => ({
 
 export function SearchLayout(props: SearchLayoutProps) {
   const isMobile = useMediaQuery("(max-width: 767px)");
-  const cmsData = useCMSData({ returnData: true });
 
   const [data, setData] = React.useState<SearchResultModel[]>([]);
   const [open, setOpen] = React.useState(
@@ -277,11 +275,7 @@ export function SearchLayout(props: SearchLayoutProps) {
           css={input}
           tabIndex={0}
           value={props.value}
-          placeholder={get(
-            cmsData,
-            "componentsSearch.placeholder",
-            "eg. Kenya"
-          )}
+          placeholder="eg. Kenya"
           autoFocus={props.forceFocus}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             props.setValue(e.target.value)

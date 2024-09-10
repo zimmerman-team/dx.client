@@ -31,7 +31,7 @@ export default function ErrorComponent(props: {
             font-size: 14px;
             line-height: 20px;
             font-weight: bold;
-            font-family: "GothamNarrow-Bold", sans-serif;
+            font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
             text-align: center;
             button {
               outline: none;
@@ -44,7 +44,7 @@ export default function ErrorComponent(props: {
               margin-top: 34px;
               white-space: pre-line;
               line-height: 11px;
-              font-family: "GothamNarrow-Bold", sans-serif;
+              font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
             }
           `}
         >

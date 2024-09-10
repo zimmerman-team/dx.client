@@ -1,5 +1,4 @@
 import {
-  createBlockAlignmentButton,
   createBlockStyleButton,
   createInlineStyleButton,
 } from "@draft-js-plugins/buttons";
@@ -35,107 +34,6 @@ export const HeaderTwoButton = createBlockStyleButton({
     >
       <path
         d="M0.98 10.5V0.699999H3.01V4.634H6.23V0.699999H8.26V10.5H6.23V6.51H3.01V10.5H0.98ZM9.85819 10.5V8.862L12.7422 5.894C13.7782 4.83 14.1562 4.298 14.1562 3.584C14.1562 2.842 13.6522 2.422 12.9802 2.422C12.2942 2.422 11.8182 2.814 11.1882 3.584L9.87219 2.338C10.7262 1.176 11.7202 0.559999 13.1342 0.559999C14.9402 0.559999 16.2142 1.638 16.2142 3.416V3.444C16.2142 4.816 15.5842 5.6 14.1282 7.014L12.4902 8.68H16.2282V10.5H9.85819Z"
-        fill="#70777E"
-      />
-    </svg>
-  ),
-});
-
-export const AlignBlockRightButton = createBlockAlignmentButton({
-  alignment: "right",
-  children: (
-    <svg
-      height="24"
-      viewBox="0 0 24 24"
-      width="24"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path d="M9,15 L3,15 L3,17 L9,17 L9,15 Z M9,7 L3,7 L3,9 L9,9 L9,7 Z M3,13 L9,13 L9,11 L3,11 L3,13 Z M3,21 L21,21 L21,19 L3,19 L3,21 Z M3,3 L3,5 L21,5 L21,3 L3,3 Z M11,7 L11,17 L21,17 L21,7 L11,7 Z" />
-      <path d="M0 0h24v24H0z" fill="none" />
-    </svg>
-  ),
-});
-
-export const BoldButton = createInlineStyleButton({
-  style: "BOLD",
-  children: (
-    <svg
-      width="28"
-      height="28"
-      viewBox="0 0 20 20"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <g clipPath="url(#clip0_13595_39555)">
-        <path
-          d="M15.6 10.79C16.57 10.12 17.25 9.02 17.25 8C17.25 5.74 15.5 4 13.25 4H7V18H14.04C16.13 18 17.75 16.3 17.75 14.21C17.75 12.69 16.89 11.39 15.6 10.79ZM10 6.5H13C13.83 6.5 14.5 7.17 14.5 8C14.5 8.83 13.83 9.5 13 9.5H10V6.5ZM13.5 15.5H10V12.5H13.5C14.33 12.5 15 13.17 15 14C15 14.83 14.33 15.5 13.5 15.5Z"
-          fill="#70777E"
-        />
-      </g>
-      <defs>
-        <clipPath id="clip0_13595_39555">
-          <rect width="24" height="24" fill="white" />
-        </clipPath>
-      </defs>
-    </svg>
-  ),
-});
-
-export const ItalicButton = createInlineStyleButton({
-  style: "ITALIC",
-  children: (
-    <svg
-      width="24"
-      height="24"
-      viewBox="0 0 20 20"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <g clipPath="url(#clip0_12744_75734)">
-        <path
-          d="M10 4V7H12.21L8.79 15H6V18H14V15H11.79L15.21 7H18V4H10Z"
-          fill="#70777E"
-        />
-      </g>
-      <defs>
-        <clipPath id="clip0_12744_75734">
-          <rect width="24" height="24" fill="white" />
-        </clipPath>
-      </defs>
-    </svg>
-  ),
-});
-
-export const UnderlineButton = createInlineStyleButton({
-  style: "UNDERLINE",
-  children: (
-    <svg
-      width="24"
-      height="24"
-      viewBox="4 2 20 20"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M19 20V22H5V20H19ZM16 13.215C15.9671 13.875 15.7711 14.5165 15.4297 15.0823C15.0883 15.6481 14.6121 16.1205 14.0435 16.4572C13.475 16.794 12.8318 16.9847 12.1716 17.0122C11.5114 17.0397 10.8546 16.9033 10.26 16.615C9.57464 16.3185 8.99341 15.8241 8.59077 15.1952C8.18813 14.5663 7.98242 13.8315 8 13.085V5.005H6V13.215C6.03383 14.1564 6.28885 15.0766 6.74442 15.9012C7.19998 16.7257 7.84329 17.4314 8.62227 17.9611C9.40125 18.4908 10.294 18.8296 11.2283 18.9502C12.1625 19.0707 13.1121 18.9696 14 18.655C15.1811 18.2613 16.2059 17.5012 16.9252 16.485C17.6446 15.4689 18.0211 14.2498 18 13.005V5.005H16V13.215ZM16 5H18H16ZM8 5H6H8Z"
-        fill="black"
-      />
-    </svg>
-  ),
-});
-
-export const BlockquoteButton = createBlockStyleButton({
-  blockType: "blockquote",
-  children: (
-    <svg
-      width="18"
-      height="14"
-      viewBox="0 0 18 14"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M9.92141 13.44V8.28C9.92141 3.32 12.4014 1.04 16.9214 0.799998L17.4014 3.16C14.5614 3.56 13.4414 5.16 13.6414 7.28H16.1214V13.44H9.92141ZM0.521406 13.44V8.28C0.521406 3.32 3.00141 1.04 7.48141 0.799998L8.00141 3.16C5.16141 3.56 4.04141 5.16 4.24141 7.28H6.72141V13.44H0.521406Z"
         fill="#70777E"
       />
     </svg>

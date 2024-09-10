@@ -1,15 +1,17 @@
 import { IFramesArray } from "app/modules/report-module/views/create/data";
 import { ToolbarPluginsType } from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
-import { IHeaderDetails } from "../../components/right-panel/data";
+import { IHeaderDetails } from "app/modules/report-module/components/right-panel/data";
+import { Updater } from "use-immer";
 
 export interface ReportEditViewProps {
-  open: boolean;
+  rightPanelOpen: boolean;
+  handleRightPanelOpen: () => void;
   reportType: "basic" | "advanced" | "ai" | null;
   isSaveEnabled: boolean;
   view: "initial" | "edit" | "create" | "preview" | "ai-template";
   hasReportNameFocused: boolean;
   setHasReportNameFocused: React.Dispatch<React.SetStateAction<boolean>>;
-  setFramesArray: React.Dispatch<React.SetStateAction<IFramesArray[]>>;
+  updateFramesArray: Updater<IFramesArray[]>;
   framesArray: IFramesArray[];
   localPickedCharts: string[];
   setReportName: React.Dispatch<React.SetStateAction<string>>;
@@ -19,19 +21,12 @@ export interface ReportEditViewProps {
       isAutoSaveEnabled: boolean;
     }>
   >;
-  handlePersistReportState: () => void;
   reportName: string;
   headerDetails: IHeaderDetails;
   setHeaderDetails: React.Dispatch<React.SetStateAction<IHeaderDetails>>;
   setHasChangesBeenMade: React.Dispatch<React.SetStateAction<boolean>>;
-  handleRowFrameItemResize: (
-    rowId: string,
-    itemIndex: number,
-    width: number,
-    height: number
-  ) => void;
   stopInitializeFramesWidth: boolean;
   setStopInitializeFramesWidth: React.Dispatch<React.SetStateAction<boolean>>;
-
+  onSave: (type: "create" | "edit") => Promise<void>;
   setPlugins: React.Dispatch<React.SetStateAction<ToolbarPluginsType>>;
 }

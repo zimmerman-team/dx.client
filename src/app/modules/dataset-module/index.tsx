@@ -1,6 +1,6 @@
 import React from "react";
 import { useTitle } from "react-use";
-import DatasetUploadSteps from "app/modules/dataset-upload-module/upload-steps";
+import DatasetUploadSteps from "app/modules/dataset-module/routes/upload-module/upload-steps";
 import { Route, Switch } from "react-router-dom";
 import DatasetDetail from "app/modules/dataset-module/routes/datasetDetail";
 import EditMetaData from "app/modules/dataset-module/routes/edit";

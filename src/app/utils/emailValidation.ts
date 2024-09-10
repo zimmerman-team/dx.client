@@ -1,6 +1,6 @@
 import * as yup from "yup";
 
-export function emailValidation(email: string): boolean {
+function emailValidation(email: string): boolean {
   const emailRegexp = new RegExp(
     /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
   );
@@ -19,7 +19,9 @@ export const emailSchema = yup
   .required();
 
 const urlPattern =
-  /^(https?:\/\/)?((([a-zA-Z0-9$_.+!*'(),;?&=-]|%[0-9a-fA-F]{2})+\.)*([a-zA-Z0-9$_.+!*'(),;?&=-]|%[0-9a-fA-F]{2})+\.[a-zA-Z]{2,})(:\d+)?(\/([a-zA-Z0-9$_.+!*'(),;?&=-]|%[0-9a-fA-F]{2})*)*(\?([a-zA-Z0-9$_.+!*'(),;?&=-]|%[0-9a-fA-F]{2})*)?(#([a-zA-Z0-9$_.+!*'(),;?&=-]|%[0-9a-fA-F]{2})*)?$/;
+  /^(https?:\/\/(?:www\.)?[a-zA-Z0-9\-._~:\/?#[\]@!$&'()*+,;=%]+)?$/;
+// const urlPattern =
+//   /^(https?:\/\/)?((([a-zA-Z0-9$_.+!*'(),;?&=-]|%[0-9a-fA-F]{2})+\.)*([a-zA-Z0-9$_.+!*'(),;?&=-]|%[0-9a-fA-F]{2})+\.[a-zA-Z]{2,})(:\d+)?(\/([a-zA-Z0-9$_.+!*'(),;?&=-]|%[0-9a-fA-F]{2})*)*(\?([a-zA-Z0-9$_.+!*'(),;?&=-]|%[0-9a-fA-F]{2})*)?(#([a-zA-Z0-9$_.+!*'(),;?&=-]|%[0-9a-fA-F]{2})*)?$/;
 
 export function isValidUrl(url: string) {
   return urlPattern.test(url);

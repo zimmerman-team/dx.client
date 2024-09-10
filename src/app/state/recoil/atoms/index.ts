@@ -18,38 +18,6 @@ export interface IRowFrameStructure {
 
 const { persistAtom } = recoilPersist();
 
-export const cmsDataAtom = atom({
-  key: "cmsDataAtom",
-  default: {
-    componentsAppBar: {},
-    componentsChartsBudgets: {},
-    componentsChartsCommon: {},
-    componentsChartsEligibility: {},
-    componentsChartsGeomap: {},
-    componentsChartsGrants: {},
-    componentsChartsInvestments: {},
-    componentsChartsNetwork: {},
-    componentsChartsPerformanceRating: {},
-    componentsChartsPledges: {},
-    componentsCookieDialog: {},
-    componentsDatasetCarousel: {},
-    componentsInformationPanel: {},
-    componentsMobile: {},
-    componentsPageHeader: {},
-    componentsPerformanceFrameworkComponents: {},
-    componentsSearch: {},
-    componentsSlideInPanel: {},
-    modulesLanding: {},
-    modulesAbout: {},
-    modulesCommon: {},
-    modulesCountryDetail: {},
-    modulesDatasets: {},
-    modulesGrantDetail: {},
-    modulesGrants: {},
-  },
-  effects_UNSTABLE: [persistAtom],
-});
-
 export const emptyRowsAtom = atom({
   key: "emptyRowsAtom",
   default: false,
@@ -59,9 +27,22 @@ export const untitledReportAtom = atom({
   default: false,
 });
 
+export const allAssetsViewAtom = atom<"grid" | "table">({
+  key: "allAssetsViewAtom",
+  default: "grid",
+  effects_UNSTABLE: [persistAtom],
+});
+
+export const allAssetsSortBy = atom<"name" | "updatedDate" | "createdDate">({
+  key: "allAssetsSortBy",
+  default: "updatedDate",
+  effects_UNSTABLE: [persistAtom],
+});
+
 export const homeDisplayAtom = atom<"all" | "data" | "charts" | "reports">({
   key: "homeDisplayAtom",
   default: "all",
+  effects_UNSTABLE: [persistAtom],
 });
 
 export const reportRightPanelViewAtom = atom<
@@ -93,10 +74,6 @@ export const isChartAIAgentActive = atom<boolean>({
 
 export const isChartAutoMappedAtom = atom<boolean>({
   key: "isChartAutoMappedAtom",
-  default: false,
-});
-export const unSavedReportPreviewMode = atom<boolean>({
-  key: "unSavedReportPreviewMode",
   default: false,
 });
 
@@ -186,4 +163,24 @@ export const dataUploadTabAtom = atom<"search" | "file">({
   key: "dataUploadTabAtom",
   default: "search",
   effects_UNSTABLE: [persistAtom],
+});
+
+export const planDialogAtom = atom<{
+  open: boolean;
+  message: string;
+  tryAgain: string;
+  onTryAgain: () => void;
+}>({
+  key: "planDialogAtom",
+  default: {
+    open: false,
+    message: "",
+    tryAgain: "",
+    onTryAgain: () => {},
+  },
+});
+
+export const fetchPlanLoadingAtom = atom<boolean>({
+  key: "fetchPlanLoadingAtom",
+  default: false,
 });

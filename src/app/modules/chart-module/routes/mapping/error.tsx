@@ -49,6 +49,40 @@ export default function MappingErrorComponent(props: {
       ),
     },
     {
+      id: "echartsMultisetBarchart",
+      placeholder: (
+        <div
+          css={`
+            padding-right: 38px;
+            height: 100%;
+            svg {
+              width: 100%;
+              height: 100%;
+            }
+          `}
+        >
+          <BarChartPlaceholderImage />
+        </div>
+      ),
+    },
+    {
+      id: "echartsStackedBarchart",
+      placeholder: (
+        <div
+          css={`
+            padding-right: 38px;
+            height: 100%;
+            svg {
+              width: 100%;
+              height: 100%;
+            }
+          `}
+        >
+          <BarChartPlaceholderImage />
+        </div>
+      ),
+    },
+    {
       id: "echartsGeomap",
       placeholder: <GeomapPlaceholder />,
     },
@@ -374,7 +408,7 @@ export default function MappingErrorComponent(props: {
               font-size: 14px;
               line-height: 20px;
               font-weight: bold;
-              font-family: "GothamNarrow-Bold", sans-serif;
+              font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
               text-align: center;
               svg {
                 width: 48px;
@@ -391,12 +425,12 @@ export default function MappingErrorComponent(props: {
                 margin-top: 34px;
                 white-space: pre-line;
                 line-height: 22px;
-                font-family: "GothamNarrow-Bold", sans-serif;
+                font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
                 font-size: 18px;
               }
               p:nth-of-type(2) {
                 margin: 0;
-                font-family: "GothamNarrow-Book", sans-serif;
+                font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
               }
             `}
           >

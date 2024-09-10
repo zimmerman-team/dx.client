@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 import isEmpty from "lodash/isEmpty";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { useAuth0 } from "@auth0/auth0-react";
 import Button from "@material-ui/core/Button";
 import SaveIcon from "@material-ui/icons/Save";
@@ -15,10 +15,11 @@ import Container from "@material-ui/core/Container";
 import IconButton from "@material-ui/core/IconButton";
 import AutorenewIcon from "@material-ui/icons/Autorenew";
 import CloudDoneIcon from "@material-ui/icons/CloudDone";
+import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import CopyToClipboard from "react-copy-to-clipboard";
 import FileCopyIcon from "@material-ui/icons/FileCopy";
 import { PageLoader } from "app/modules/common/page-loader";
-import { Link, useHistory, useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import Snackbar from "@material-ui/core/Snackbar";
 import SnackbarContent from "@material-ui/core/SnackbarContent";
 import { styles } from "app/modules/chart-module/components/chartSubheaderToolbar/styles";
@@ -27,21 +28,26 @@ import DeleteChartDialog from "app/components/Dialogs/deleteChartDialog";
 import { ChartAPIModel, emptyChartAPI } from "app/modules/chart-module/data";
 import { ChartSubheaderToolbarProps } from "app/modules/chart-module/components/chartSubheaderToolbar/data";
 import { ExportChartButton } from "app/modules/chart-module/components/chartSubheaderToolbar/exportButton";
-import { ISnackbarState } from "app/modules/dataset-upload-module/upload-steps/previewFragment";
-import { chartFromReportAtom, homeDisplayAtom } from "app/state/recoil/atoms";
-import { InfoSnackbar } from "app/modules/chart-module/components/chartSubheaderToolbar/infoSnackbar";
+import { ISnackbarState } from "app/modules/dataset-module/routes/upload-module/upload-steps/previewFragment";
+import { chartFromReportAtom, planDialogAtom } from "app/state/recoil/atoms";
 import { getRequiredFieldsAndErrors } from "../../routes/mapping/utils";
 import AutoSaveSwitch from "app/modules/report-module/components/reportSubHeaderToolbar/autoSaveSwitch";
 import useAutosave from "app/hooks/useAutoSave";
 import { useStyles } from "app/modules/report-module/components/reportSubHeaderToolbar";
 import AutoResizeInput from "app/modules/report-module/components/reportSubHeaderToolbar/autoResizeInput";
 import { isEqual } from "lodash";
+import EmbedChartDialog from "app/components/Dialogs/EmbedChartDialog";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+import DuplicateMessage from "app/modules/common/mobile-duplicate-message";
+import { InfoSnackbar } from "app/modules/report-module/components/reportSubHeaderToolbar/infosnackbar";
 
 export function ChartSubheaderToolbar(
   props: Readonly<ChartSubheaderToolbarProps>
 ) {
   const classes = useStyles();
   const history = useHistory();
+  const isMobile = useMediaQuery("(max-width: 599px)");
+  const isSmallScreen = useMediaQuery("(max-width:788px)"); //at this breakpoint, we limit user creation abilities
   const { user, isAuthenticated } = useAuth0();
   const token = useStoreState((state) => state.AuthToken.value);
   const titleRef = React.useRef<HTMLDivElement>(null);
@@ -50,7 +56,7 @@ export function ChartSubheaderToolbar(
   const { page, view } = useParams<{ page: string; view?: string }>();
   const [showDeleteDialog, setShowDeleteDialog] = React.useState(false);
   const [enableButton, setEnableButton] = React.useState<boolean>(false);
-  const setHomeTab = useRecoilState(homeDisplayAtom)[1];
+  const [displayEmbedModal, setDisplayEmbedModal] = React.useState(false);
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
   const [hasChangesBeenMade, setHasChangesBeenMade] = React.useState(false);
 
@@ -66,12 +72,6 @@ export function ChartSubheaderToolbar(
     useRecoilState(chartFromReportAtom);
 
   const mapping = useStoreState((state) => state.charts.mapping.value);
-  const { updRequiredFields, updMinValuesFields } = getRequiredFieldsAndErrors(
-    mapping,
-    props.dimensions
-  );
-  const isMappingValid =
-    updRequiredFields.length === 0 && updMinValuesFields.length === 0;
 
   const dataset = useStoreState((state) => state.charts.dataset.value);
   const appliedFilters = useStoreState(
@@ -88,6 +88,9 @@ export function ChartSubheaderToolbar(
     (state) =>
       (state.charts.ChartGet.crudData ?? emptyChartAPI) as ChartAPIModel
   );
+  const editChartCrudData = useStoreState(
+    (state) => state.charts.ChartUpdate.crudData
+  ) as ChartAPIModel;
 
   const createChartLoading = useStoreState(
     (state) => state.charts.ChartCreate.loading
@@ -95,69 +98,21 @@ export function ChartSubheaderToolbar(
   const editChartLoading = useStoreState(
     (state) => state.charts.ChartUpdate.loading
   );
-
   const canChartEditDelete = React.useMemo(() => {
     return isAuthenticated && loadedChart && loadedChart.owner === user?.sub;
   }, [user, isAuthenticated, loadedChart]);
+
+  const setPlanDialog = useSetRecoilState(planDialogAtom);
+
+  const isMappingValid = React.useMemo(() => {
+    return loadedChart?.isMappingValid || editChartCrudData?.isMappingValid;
+  }, [loadedChart, editChartCrudData]);
 
   const [snackbarState, setSnackbarState] = React.useState<ISnackbarState>({
     open: false,
     vertical: "bottom",
     horizontal: "center",
   });
-
-  const handleDeleteModalInputChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    if (e.target.value === "DELETE") {
-      setEnableButton(true);
-    } else {
-      setEnableButton(false);
-    }
-  };
-
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleCopy = (text: string, result: boolean) => {
-    setOpenSnackbar(result);
-  };
-
-  const handleCloseSnackbar = () => {
-    setOpenSnackbar(false);
-  };
-
-  const handleEdit = () => {
-    props.setAutoSaveState({
-      isAutoSaveEnabled: true,
-      enableAutoSaveSwitch: true,
-    });
-
-    if (!loadedChart?.isMappingValid) {
-      history.push(`/chart/${page}/mapping`);
-    } else {
-      history.push(`/chart/${page}/customize`);
-    }
-  };
-  const compareStateChanges = () => {
-    if (loadedChart.id !== page) return false;
-    if (
-      !isEqual(props.name, loadedChart.name) ||
-      !isEqual(selectedChartType, loadedChart.vizType) ||
-      !isEqual(mapping, loadedChart.mapping) ||
-      !isEqual(dataset as string, loadedChart.datasetId as string) ||
-      !isEqual(props.visualOptions, loadedChart.vizOptions) ||
-      !isEqual(appliedFilters, loadedChart.appliedFilters)
-    ) {
-      return true;
-    }
-    return false;
-  };
 
   React.useEffect(() => {
     setHasChangesBeenMade(compareStateChanges);
@@ -192,12 +147,60 @@ export function ChartSubheaderToolbar(
     const newValue =
       isEmpty(selectedChartType) || !isMappingValid || view === "preview";
     return newValue;
-  }, [selectedChartType, mapping, view]);
+  }, [selectedChartType, mapping, view, editChartCrudData]);
 
-  const isSavedDisabled: boolean = React.useMemo(() => {
-    const newValue = isEmpty(selectedChartType) || !isMappingValid;
-    return newValue;
-  }, [mapping, selectedChartType]);
+  const handleDeleteModalInputChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    if (e.target.value === "DELETE") {
+      setEnableButton(true);
+    } else {
+      setEnableButton(false);
+    }
+  };
+
+  const handleShare = () => {
+    setDisplayEmbedModal(true);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleCopy = (text: string, result: boolean) => {
+    setOpenSnackbar(result);
+  };
+
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
+  };
+
+  const handleEdit = () => {
+    props.setAutoSaveState({
+      isAutoSaveEnabled: true,
+      enableAutoSaveSwitch: true,
+    });
+
+    if (!props.isMappingValid) {
+      history.push(`/chart/${page}/mapping`);
+    } else {
+      history.push(`/chart/${page}/customize`);
+    }
+  };
+  const compareStateChanges = () => {
+    if (loadedChart.id !== page) return false;
+    if (
+      !isEqual(props.name, loadedChart.name) ||
+      !isEqual(selectedChartType, loadedChart.vizType) ||
+      !isEqual(mapping, loadedChart.mapping) ||
+      !isEqual(dataset as string, loadedChart.datasetId as string) ||
+      !isEqual(props.visualOptions, loadedChart.vizOptions) ||
+      !isEqual(appliedFilters, loadedChart.appliedFilters)
+    ) {
+      return true;
+    }
+    return false;
+  };
 
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
@@ -224,7 +227,6 @@ export function ChartSubheaderToolbar(
         });
       })
       .catch((error) => console.log(error));
-    setHomeTab("charts");
 
     history.replace("/");
   };
@@ -237,6 +239,14 @@ export function ChartSubheaderToolbar(
         },
       })
       .then(async (response) => {
+        if (response?.data.error && response?.data.errorType === "planError") {
+          return setPlanDialog({
+            open: true,
+            message: response?.data.error,
+            tryAgain: "",
+            onTryAgain: () => {},
+          });
+        }
         loadCharts({
           token,
           storeInCrudData: true,
@@ -252,59 +262,29 @@ export function ChartSubheaderToolbar(
   };
 
   const handlePreviewMode = () => {
-    history.push(`/chart/${page}/preview`);
+    props.onSave();
+    history.push(`/chart/${page}`);
   };
+  const handleViewDuplicatedChart = () => {
+    setSnackbarState({ ...snackbarState, open: false });
 
+    history.push(`/chart/${duplicatedChartId}`);
+    setDuplicatedChartId(null);
+  };
   const handleBackToEdit = () => {
     history.go(-1);
   };
   const handleBackToReport = () => {
     const { page: reportPage, view: reportView } = chartFromReport;
     setChartFromReport((prev) => ({ ...prev, chartId: page }));
-    console.log(chartFromReport, "chartFromReport");
+    props.onSave();
     history.push(`/report/${reportPage}/edit`);
   };
 
   return (
     <div id="subheader-toolbar" css={styles.container}>
       {createChartLoading && <PageLoader />}
-      <InfoSnackbar
-        gap={location.pathname.includes("report")}
-        data-testid="create-chart-snackbar"
-        onClose={() => setShowSnackbar(null)}
-        open={showSnackbar !== null && showSnackbar !== ""}
-      >
-        <SnackbarContent
-          message={showSnackbar}
-          aria-describedby="create-chart-snackbar-content"
-          action={
-            <>
-              {!location.pathname.includes("report") && (
-                <button
-                  onClick={() => {
-                    setShowSnackbar(null);
-                    setHomeTab("reports");
-                    history.push("/report/new/initial");
-                  }}
-                >
-                  CREATE NEW REPORT
-                </button>
-              )}
-            </>
-          }
-        />
-      </InfoSnackbar>
-      <Snackbar
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "left",
-        }}
-        open={openSnackbar}
-        autoHideDuration={5000}
-        onClose={handleCloseSnackbar}
-        message="Link copied to clipboard"
-        data-testid="copied-link-snackbar"
-      />
+
       <Container maxWidth="lg">
         <div css={styles.innercontainer} ref={innerContainerRef}>
           <div
@@ -315,8 +295,24 @@ export function ChartSubheaderToolbar(
               gap: 12px;
               width: 72%;
               position: relative;
+              @media (min-width: 768px) {
+                @media (max-width: 828px) {
+                  width: ${canChartEditDelete ? "50%" : "90%"};
+                }
+              }
+              @media (min-width: 829px) {
+                @media (max-width: 1040px) {
+                  width: 55%;
+                }
+              }
+              @media (min-width: 1041px) {
+                @media (max-width: 1373px) {
+                  width: 64%;
+                }
+              }
             `}
           >
+            {isMobile && <ArrowBackIosIcon onClick={() => history.go(-1)} />}
             <AutoResizeInput
               name={props.name}
               setName={props.setName}
@@ -352,14 +348,7 @@ export function ChartSubheaderToolbar(
             />
           </div>
 
-          <div
-            css={`
-              ${styles.endContainer}
-              margin-right: ${`calc(((100vw - ${
-                (innerContainerWidth as number) + 48
-              }px) / 2) * -1)`};
-            `}
-          >
+          <div css={styles.endContainer}>
             {editChartLoading && canChartEditDelete && (
               <div
                 css={`
@@ -380,7 +369,8 @@ export function ChartSubheaderToolbar(
                 <p
                   css={`
                     color: #70777e;
-                    font-family: "GothamNarrow-Book", sans-serif;
+                    font-family: "GothamNarrow-Book", "Helvetica Neue",
+                      sans-serif;
                     font-size: 12px;
                     font-weight: 325;
                     margin: 0px;
@@ -408,7 +398,8 @@ export function ChartSubheaderToolbar(
                 <p
                   css={`
                     color: #70777e;
-                    font-family: "GothamNarrow-Book", sans-serif;
+                    font-family: "GothamNarrow-Book", "Helvetica Neue",
+                      sans-serif;
                     font-size: 12px;
                     font-weight: 325;
                     margin: 0px;
@@ -457,7 +448,8 @@ export function ChartSubheaderToolbar(
                       css={`
                         color: #000;
 
-                        font-family: "GothamNarrow-Book", sans-serif;
+                        font-family: "GothamNarrow-Book", "Helvetica Neue",
+                          sans-serif;
                         font-size: 12px;
                         font-style: normal;
                         font-weight: 325;
@@ -485,7 +477,7 @@ export function ChartSubheaderToolbar(
                       <IconButton
                         onClick={handlePreviewMode}
                         aria-label="preview-button"
-                        disabled={isPreviewDisabled}
+                        // disabled={isPreviewDisabled}
                         data-testid="preview-button"
                         css={`
                           :disabled {
@@ -508,12 +500,6 @@ export function ChartSubheaderToolbar(
                       <IconButton
                         onClick={props.onSave}
                         aria-label="save-button"
-                        disabled={isSavedDisabled}
-                        css={`
-                          :disabled {
-                            opacity: 0.5;
-                          }
-                        `}
                       >
                         <SaveIcon htmlColor="#262c34" />
                       </IconButton>
@@ -523,7 +509,9 @@ export function ChartSubheaderToolbar(
               )}
               {page !== "new" && !view && (
                 <React.Fragment>
-                  <ExportChartButton filename={props.name} />
+                  {!isSmallScreen && (
+                    <ExportChartButton filename={props.name} />
+                  )}
                   {isAuthenticated && (
                     <Tooltip title="Duplicate">
                       <IconButton
@@ -535,7 +523,7 @@ export function ChartSubheaderToolbar(
                     </Tooltip>
                   )}
                   <Tooltip title="Share">
-                    <IconButton onClick={handleClick} aria-label="share-button">
+                    <IconButton onClick={handleShare} aria-label="share-button">
                       <ShareIcon htmlColor="#262c34" />
                     </IconButton>
                   </Tooltip>
@@ -569,14 +557,14 @@ export function ChartSubheaderToolbar(
                       </CopyToClipboard>
                     </div>
                   </Popover>
-                  {canChartEditDelete && (
+                  {canChartEditDelete && !isSmallScreen && (
                     <Tooltip title="Edit">
                       <IconButton onClick={handleEdit} aria-label="edit-button">
                         <EditIcon htmlColor="#262c34" />
                       </IconButton>
                     </Tooltip>
                   )}
-                  {canChartEditDelete && (
+                  {canChartEditDelete && !isSmallScreen && (
                     <Tooltip title="Delete">
                       <IconButton
                         onClick={handleModalDisplay}
@@ -593,30 +581,89 @@ export function ChartSubheaderToolbar(
         </div>
       </Container>
 
-      <InfoSnackbar
-        anchorOrigin={{
-          vertical: snackbarState.vertical,
-          horizontal: snackbarState.horizontal,
-        }}
-        data-testid="duplicated-chart-snackbar"
-        open={snackbarState.open}
-        onClose={() => setSnackbarState({ ...snackbarState, open: false })}
-        message={`Chart has been duplicated successfully!`}
-        key={snackbarState.vertical + snackbarState.horizontal}
-        action={
-          <button
-            onClick={() => {
-              setSnackbarState({ ...snackbarState, open: false });
-
-              history.push(`/chart/${duplicatedChartId}`);
-              setDuplicatedChartId(null);
+      <>
+        {isMobile ? (
+          <InfoSnackbar
+            anchorOrigin={{
+              vertical: snackbarState.vertical,
+              horizontal: snackbarState.horizontal,
             }}
+            open={snackbarState.open}
+            autoHideDuration={6000}
+            onClose={() => setSnackbarState({ ...snackbarState, open: false })}
+            key={snackbarState.vertical + snackbarState.horizontal}
           >
-            GO TO CHART
-          </button>
-        }
-      />
+            <DuplicateMessage
+              action={handleViewDuplicatedChart}
+              closeSnackbar={() =>
+                setSnackbarState({ ...snackbarState, open: false })
+              }
+              name={loadedChart.name}
+              type="chart"
+            />
+          </InfoSnackbar>
+        ) : (
+          <InfoSnackbar
+            anchorOrigin={{
+              vertical: snackbarState.vertical,
+              horizontal: snackbarState.horizontal,
+            }}
+            data-testid="duplicated-chart-snackbar"
+            open={snackbarState.open}
+            onClose={() => setSnackbarState({ ...snackbarState, open: false })}
+            message={`Chart has been duplicated successfully!`}
+            key={snackbarState.vertical + snackbarState.horizontal}
+            action={
+              <button
+                onClick={() => {
+                  setSnackbarState({ ...snackbarState, open: false });
 
+                  history.push(`/chart/${duplicatedChartId}`);
+                  setDuplicatedChartId(null);
+                }}
+              >
+                GO TO CHART
+              </button>
+            }
+          />
+        )}
+      </>
+      <InfoSnackbar
+        gap={location.pathname.includes("report")}
+        data-testid="create-chart-snackbar"
+        onClose={() => setShowSnackbar(null)}
+        open={showSnackbar !== null && showSnackbar !== ""}
+      >
+        <SnackbarContent
+          message={showSnackbar}
+          aria-describedby="create-chart-snackbar-content"
+          action={
+            <>
+              {!location.pathname.includes("report") && (
+                <button
+                  onClick={() => {
+                    setShowSnackbar(null);
+                    history.push("/report/new/initial");
+                  }}
+                >
+                  CREATE NEW REPORT
+                </button>
+              )}
+            </>
+          }
+        />
+      </InfoSnackbar>
+      <Snackbar
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
+        }}
+        open={openSnackbar}
+        autoHideDuration={5000}
+        onClose={handleCloseSnackbar}
+        message="Link copied to clipboard"
+        data-testid="copied-link-snackbar"
+      />
       <DeleteChartDialog
         modalDisplay={showDeleteDialog}
         enableButton={enableButton}
@@ -624,6 +671,15 @@ export function ChartSubheaderToolbar(
         setModalDisplay={setShowDeleteDialog}
         handleInputChange={handleDeleteModalInputChange}
       />
+      {displayEmbedModal && (
+        <EmbedChartDialog
+          modalDisplay={displayEmbedModal}
+          setModalDisplay={setDisplayEmbedModal}
+          chartId={page}
+          chartName={props.name}
+          datasetId={loadedChart.datasetId!}
+        />
+      )}
     </div>
   );
 }

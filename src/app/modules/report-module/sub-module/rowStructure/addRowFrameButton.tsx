@@ -4,20 +4,13 @@ import IconButton from "@material-ui/core/IconButton";
 import { IFramesArray } from "app/modules/report-module/views/create/data";
 import { ReactComponent as PlusIcon } from "app/modules/report-module/asset/addButton.svg";
 import { IRowFrameStructure } from "app/state/recoil/atoms";
-
+import { Updater } from "use-immer";
 interface Props {
-  setFramesArray: React.Dispatch<React.SetStateAction<IFramesArray[]>>;
+  updateFramesArray: Updater<IFramesArray[]>;
   framesArray: IFramesArray[];
   rowStructureType: IRowFrameStructure;
   setRowStructureType: React.Dispatch<React.SetStateAction<IRowFrameStructure>>;
-  handlePersistReportState: () => void;
   endTour: () => void;
-  handleRowFrameItemResize: (
-    rowId: string,
-    itemIndex: number,
-    width: number,
-    height: number
-  ) => void;
 }
 
 export default function AddRowFrameButton(props: Props) {
@@ -25,27 +18,21 @@ export default function AddRowFrameButton(props: Props) {
   const handleAddrowStructureBlock = () => {
     props.endTour();
     const id = v4();
-    props.setFramesArray((prev) => {
-      const tempPrev = prev.map((item) => ({ ...item }));
-      return [
-        ...tempPrev,
-        {
-          id,
-          frame: {
-            rowId: id,
-            rowIndex: tempPrev.length,
-
-            handlePersistReportState: props.handlePersistReportState,
-            handleRowFrameItemResize: props.handleRowFrameItemResize,
-            type: "rowFrame",
-          },
-          content: [],
-          contentWidths: [],
-          contentHeights: [],
-          contentTypes: [],
-          structure: null,
+    props.updateFramesArray((draft) => {
+      const newRowFrame = {
+        id,
+        frame: {
+          rowId: id,
+          rowIndex: draft.length,
+          type: "rowFrame" as "rowFrame",
         },
-      ];
+        content: [],
+        contentWidths: [],
+        contentHeights: [],
+        contentTypes: [],
+        structure: null,
+      };
+      draft.push(newRowFrame);
     });
     props.setRowStructureType({
       ...props.rowStructureType,
@@ -90,7 +77,7 @@ export default function AddRowFrameButton(props: Props) {
             background-color: #626262;
             border-radius: 4px;
             font-size: 12px;
-            font-family: "GothamNarrow-Book";
+            font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;

@@ -3,11 +3,7 @@ import { CloseOutlined } from "@material-ui/icons";
 import { IconButton, Modal, createStyles, makeStyles } from "@material-ui/core";
 import { SetterOrUpdater } from "recoil";
 
-function rand() {
-  return Math.round(Math.random() * 20) - 10;
-}
-
-export const useStyles = makeStyles(() =>
+const useStyles = makeStyles(() =>
   createStyles({
     modal: {
       display: "flex",
