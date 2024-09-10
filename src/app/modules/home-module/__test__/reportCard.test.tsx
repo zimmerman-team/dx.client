@@ -8,6 +8,7 @@ import { mockUseAuth0 } from "app/utils/mockAuth0";
 import { Router } from "react-router-dom";
 import { createMemoryHistory } from "history";
 import GridItem from "app/modules/home-module/components/AssetCollection/Reports/gridItem";
+import { EditorState } from "draft-js";
 
 interface MockProps {
   date: Date;
@@ -20,6 +21,7 @@ interface MockProps {
   handleDuplicate?: jest.Mock<any, any, any>;
   showMenuButton: boolean;
   owner: string;
+  heading: EditorState;
 }
 
 let mockLoginStatus = true;
