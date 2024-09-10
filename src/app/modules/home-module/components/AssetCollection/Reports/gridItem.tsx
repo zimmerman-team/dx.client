@@ -16,7 +16,7 @@ interface Props {
   date: Date;
   id?: string;
   heading: EditorState;
-  descr: string;
+  name: string;
   color: string;
   viz: JSX.Element;
   handleDelete?: (id: string) => void;
@@ -87,9 +87,7 @@ export default function GridItem(props: Readonly<Props>) {
             `}
           >
             <p
-              title={
-                props.heading.getCurrentContent().getPlainText() || props.descr
-              }
+              title={props.heading.getCurrentContent().getPlainText()}
               css={`
                 font-size: 14px;
                 line-height: 22px;
@@ -102,13 +100,10 @@ export default function GridItem(props: Readonly<Props>) {
                 margin-bottom: 0;
               `}
             >
-              <b>
-                {props.heading.getCurrentContent().getPlainText() ||
-                  props.descr}
-              </b>
+              <b>{props.heading.getCurrentContent().getPlainText()}</b>
             </p>
             <p
-              title={props.descr}
+              title={props.name}
               css={`
                 font-size: 10px;
                 line-height: 14px;
@@ -122,7 +117,7 @@ export default function GridItem(props: Readonly<Props>) {
                 color: #495057;
               `}
             >
-              {props.descr}
+              {props.name}
             </p>
           </div>
           <IconButton

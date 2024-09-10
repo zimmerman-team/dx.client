@@ -43,7 +43,8 @@ export const RichEditor = (props: {
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   const focus = (): void => {
-    editor.current?.focus();
+    // editor.current?.focus();
+    EditorState.moveFocusToEnd(props.textContent);
   };
 
   const moveSelectionToEnd = (editorState: EditorState) => {

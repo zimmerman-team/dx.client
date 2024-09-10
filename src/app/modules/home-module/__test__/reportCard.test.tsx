@@ -1,9 +1,8 @@
 import { Auth0Provider } from "@auth0/auth0-react";
-import { render } from "@testing-library/react";
 import userEvent, {
   PointerEventsCheckLevel,
 } from "@testing-library/user-event";
-import { screen } from "@testing-library/react";
+import { screen, render } from "@testing-library/react";
 import { mockUseAuth0 } from "app/utils/mockAuth0";
 import { Router } from "react-router-dom";
 import { createMemoryHistory } from "history";
@@ -14,7 +13,7 @@ interface MockProps {
   date: Date;
   id?: string;
   title: string;
-  descr: string;
+  name: string;
   color: string;
   viz: JSX.Element;
   handleDelete?: jest.Mock<any, any, any>;
@@ -44,7 +43,7 @@ const defaultProps = (newProps: Partial<MockProps> = {}): MockProps => {
     date: "2021-08-13",
     id: "report-id",
     title: "report-title",
-    descr: "report-description",
+    name: "report-description",
     color: "#ffffff",
     viz: <div data-testid="report-grid-item-viz-icon">report</div>,
     handleDelete: jest.fn(),

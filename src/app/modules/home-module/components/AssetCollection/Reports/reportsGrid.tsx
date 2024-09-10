@@ -25,7 +25,7 @@ interface Props {
   addCard?: boolean;
 }
 
-export default function ReportsGrid(props: Props) {
+export default function ReportsGrid(props: Readonly<Props>) {
   const observerTarget = React.useRef(null);
   const [cardId, setCardId] = React.useState<string>("");
   const [modalDisplay, setModalDisplay] = React.useState<boolean>(false);
@@ -221,7 +221,7 @@ export default function ReportsGrid(props: Props) {
               <ReformedGridItem
                 id={data.id}
                 key={data.id}
-                descr={data.name}
+                name={data.title}
                 date={data.createdDate}
                 viz={<ColoredReportIcon />}
                 color={data.backgroundColor}

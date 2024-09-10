@@ -345,7 +345,7 @@ export default function AssetsGrid(props: Props) {
                     <ReportGridItem
                       id={d.id}
                       key={d.id}
-                      descr={d.name}
+                      name={d.name}
                       date={d.createdDate}
                       viz={<ColoredReportIcon />}
                       color={d.backgroundColor}
