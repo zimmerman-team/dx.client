@@ -53,7 +53,7 @@ export default function ChartAddnewCard() {
           <p>
             <p
               css={`
-                fonrt-family: "GothamNarrow-Bold", sans-serif;
+                font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
                 margin: auto;
                 color: #ffffff;
                 font-size: 18px;

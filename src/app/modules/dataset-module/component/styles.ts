@@ -12,6 +12,9 @@ export const styles = {
     background: #f4f4f4;
     flex-direction: column;
     justify-content: center;
+    @media (max-width: 881px) {
+      top: 66px;
+    }
   `,
   innercontainer: css`
     height: 100%;
@@ -20,7 +23,7 @@ export const styles = {
     flex-direction: row;
     justify-content: space-between;
     p {
-      font-family: "GothamNarrow-Bold";
+      font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
       font-style: normal;
       font-weight: 700;
       font-size: 24px;
@@ -29,10 +32,16 @@ export const styles = {
     @media (max-width: 1280px) {
       margin-left: 0;
       width: calc(100vw - 400px);
+      @media (max-width: 700px) {
+        width: calc(100vw - 337px);
+      }
     }
 
     @media (max-width: 600px) {
-      padding: 13px 16px 0 16px;
+      width: calc(100vw - 153px);
+      p {
+        font-size: 20px;
+      }
     }
   `,
   backToEdit: css`
@@ -116,9 +125,12 @@ export const styles = {
   `,
   endContainer: css`
     display: flex;
-    right: 29px;
+    right: 17px;
     position: absolute;
     gap: 13px;
+    @media (max-width: 881px) {
+      right: 11px;
+    }
   `,
   iconbtns: css`
     display: flex;

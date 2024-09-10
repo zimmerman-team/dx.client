@@ -17,6 +17,8 @@ import { coloredEchartTypes } from "app/modules/chart-module/routes/chart-type/d
 import ChartAddnewCard from "app/modules/home-module/components/AssetCollection/Charts/chartAddNewCard";
 import GridItem from "app/modules/home-module/components/AssetCollection/Charts/gridItem";
 import { useAuth0 } from "@auth0/auth0-react";
+import { useSetRecoilState } from "recoil";
+import { planDialogAtom } from "app/state/recoil/atoms";
 
 interface Props {
   sortBy: string;
@@ -37,6 +39,8 @@ export default function ChartsGrid(props: Props) {
   const [offset, setOffset] = React.useState(0);
 
   const { isObserved } = useInfinityScroll(observerTarget);
+
+  const setPlanDialog = useSetRecoilState(planDialogAtom);
 
   const charts = useStoreState(
     (state) => (state.charts.ChartGetList.crudData ?? []) as any[]
@@ -150,7 +154,23 @@ export default function ChartsGrid(props: Props) {
           Authorization: `Bearer ${token}`,
         },
       })
-      .then(() => {
+      .then((response) => {
+        if (response?.data.error && response?.data.errorType === "planError") {
+          return setPlanDialog({
+            open: true,
+            message: response?.data.error,
+            tryAgain: "",
+            onTryAgain: () => {},
+          });
+        }
+        if (response.data.planWarning) {
+          setPlanDialog({
+            open: true,
+            message: response.data.planWarning,
+            tryAgain: "",
+            onTryAgain: () => {},
+          });
+        }
         reloadData();
       })
       .catch((error) => console.log(error));
@@ -200,8 +220,6 @@ export default function ChartsGrid(props: Props) {
         return;
       }
       reloadData();
-      // if (props.searchStr !== undefined) {
-      // }
     },
     500,
     [props.searchStr]
@@ -226,20 +244,31 @@ export default function ChartsGrid(props: Props) {
                 owner={c.owner}
                 isAIAssisted={c.isAIAssisted}
               />
-              <Box height={16} />
+              <div
+                css={`
+                  height: 16px;
+                  @media (max-width: 600px) {
+                    height: 8px;
+                  }
+                `}
+              />
             </Grid>
           ))}
         </Grid>
       )}
       {props.view === "table" && (
         <HomepageTable
-          data={loadedCharts.map((data) => ({
-            id: data.id,
-            name: data.name,
-            description: data.title,
-            createdDate: data.createdDate,
-            type: "chart",
-          }))}
+          tableData={{
+            columns: [
+              { key: "name", label: "Name" },
+              { key: "title", label: "Description" },
+              { key: "createdDate", label: "Date" },
+            ],
+            data: loadedCharts.map((data) => ({
+              ...data,
+              type: "chart",
+            })),
+          }}
         />
       )}
       <Box height={80} />

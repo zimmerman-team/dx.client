@@ -32,7 +32,7 @@ export default function SplitBar(props: Props) {
           <div className="title">
             <div
               css={`
-                font-family: "GothamNarrow-Bold";
+                font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
               `}
             >
               {props.leftLabel}
@@ -48,7 +48,7 @@ export default function SplitBar(props: Props) {
           <div className="title">
             <div
               css={`
-                font-family: "GothamNarrow-Bold";
+                font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
               `}
             >
               {props.rightLabel}

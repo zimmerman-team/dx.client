@@ -10,7 +10,7 @@ import { uploadAreacss } from "app/modules/dataset-module/routes/upload-module/s
 import { ReactComponent as UploadIcon } from "app/modules/dataset-module/routes/upload-module/assets/upload.svg";
 import { formatBytes } from "app/utils/formatBytes";
 
-export interface DropzoneProps {
+interface DropzoneProps {
   uploadError: boolean;
   disabled: boolean;
   onDrop: (acceptedFiles: File[], fileRejections: FileRejection[]) => void;
@@ -92,7 +92,7 @@ export const DropZone = (props: DropzoneProps) => {
                   font-size: 20px;
                   line-height: normal;
                   font-style: normal;
-                  font-family: "GothamNarrow-Book", sans-serif;
+                  font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
                   font-weight: 325;
                   margin: 0;
                   padding: 0;

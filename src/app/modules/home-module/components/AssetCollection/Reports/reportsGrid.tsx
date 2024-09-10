@@ -12,8 +12,9 @@ import DeleteReportDialog from "app/components/Dialogs/deleteReportDialog";
 import ReformedGridItem from "app/modules/home-module/components/AssetCollection/Reports/gridItem";
 import ReportAddnewCard from "./reportAddNewCard";
 import { useInfinityScroll } from "app/hooks/useInfinityScroll";
-import CircleLoader from "../../Loader";
-import { useAuth0 } from "@auth0/auth0-react";
+import { useSetRecoilState } from "recoil";
+import { planDialogAtom } from "app/state/recoil/atoms";
+import CircleLoader from "app/modules/home-module/components/Loader";
 
 interface Props {
   sortBy: string;
@@ -34,6 +35,8 @@ export default function ReportsGrid(props: Props) {
   const [offset, setOffset] = React.useState(0);
   const { isObserved } = useInfinityScroll(observerTarget);
   const token = useStoreState((state) => state.AuthToken.value);
+
+  const setPlanDialog = useSetRecoilState(planDialogAtom);
 
   const reports = useStoreState(
     (state) => (state.reports.ReportGetList.crudData ?? []) as ReportModel[]
@@ -144,7 +147,23 @@ export default function ReportsGrid(props: Props) {
           Authorization: `Bearer ${token}`,
         },
       })
-      .then(() => {
+      .then((response) => {
+        if (response?.data.error && response?.data.errorType === "planError") {
+          return setPlanDialog({
+            open: true,
+            message: response?.data.error,
+            tryAgain: "",
+            onTryAgain: () => {},
+          });
+        }
+        if (response.data.planWarning) {
+          setPlanDialog({
+            open: true,
+            message: response.data.planWarning,
+            tryAgain: "",
+            onTryAgain: () => {},
+          });
+        }
         reloadData();
       })
       .catch((error) => console.log(error));
@@ -218,13 +237,17 @@ export default function ReportsGrid(props: Props) {
       )}
       {props.view === "table" && (
         <HomepageTable
-          data={loadedReports.map((data) => ({
-            id: data.id,
-            name: data.name,
-            description: data.title,
-            createdDate: data.createdDate,
-            type: "report",
-          }))}
+          tableData={{
+            columns: [
+              { key: "name", label: "Name" },
+              { key: "title", label: "Description" },
+              { key: "createdDate", label: "Date" },
+            ],
+            data: loadedReports.map((data) => ({
+              ...data,
+              type: "report",
+            })),
+          }}
         />
       )}
       <Box height={80} />

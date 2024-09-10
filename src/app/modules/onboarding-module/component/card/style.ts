@@ -9,7 +9,7 @@ export const socialloginbuttoncss = css`
   padding: 6px 0;
   font-size: 14px;
   cursor: pointer;
-  font-family: "GothamNarrow-Book";
+  font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
   line-height: 20px;
   border: 1px solid #231d2c;
   border-radius: 10px;
@@ -18,30 +18,6 @@ export const socialloginbuttoncss = css`
   align-items: center;
   justify-content: center;
   background: transparent;
-
-  &:hover {
-    background: #a1aebd;
-  }
-`;
-
-export const actionbuttoncss = css`
-  width: 100%;
-  color: #fff;
-  padding: 6px 0;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 700;
-  line-height: 20px;
-  border-style: none;
-  border-radius: 50px;
-  background: #6061e5;
-  height: 48px;
-  margin-bottom: 24px;
-
-  :disabled {
-    opacity: 0.5;
-    pointer-events: none;
-  }
 
   &:hover {
     background: #a1aebd;

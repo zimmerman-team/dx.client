@@ -3,7 +3,8 @@ import { v4 } from "uuid";
 import get from "lodash/get";
 import isEmpty from "lodash/isEmpty";
 import { DndProvider } from "react-dnd";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { useImmer } from "use-immer";
 import { useAuth0 } from "@auth0/auth0-react";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { NoMatchPage } from "app/modules/common/no-match-page";
@@ -26,6 +27,7 @@ import {
 } from "react-router-dom";
 import {
   persistedReportStateAtom,
+  planDialogAtom,
   reportRightPanelViewAtom,
   unSavedReportPreviewModeAtom,
 } from "app/state/recoil/atoms";
@@ -44,6 +46,8 @@ export default function ReportModule() {
   const [autoSave, setAutoSave] = React.useState<{
     isAutoSaveEnabled: boolean;
   }>({ isAutoSaveEnabled: false });
+
+  const setPlanDialog = useSetRecoilState(planDialogAtom);
 
   /** static toolbar states */
   const [plugins, setPlugins] = React.useState<ToolbarPluginsType>([]);
@@ -127,6 +131,39 @@ export default function ReportModule() {
       get(state.reports.ReportGet.crudData, "error", "") === "Unauthorized"
   );
 
+  const reportCreateData = useStoreState(
+    (state) => state.reports.ReportCreate.crudData as any
+  );
+
+  React.useEffect(() => {
+    if (
+      reportCreateData?.error &&
+      reportCreateData?.errorType === "planError"
+    ) {
+      setPlanDialog({
+        open: true,
+        message: reportCreateData?.error,
+        tryAgain: "",
+        onTryAgain: () => {},
+      });
+    }
+  }, [reportCreateData]);
+
+  const reportPlanWarning = useStoreState(
+    (state) => state.reports.ReportCreate.planWarning
+  );
+
+  React.useEffect(() => {
+    if (reportPlanWarning) {
+      setPlanDialog({
+        open: true,
+        message: reportPlanWarning,
+        tryAgain: "",
+        onTryAgain: () => {},
+      });
+    }
+  }, [reportPlanWarning]);
+
   const [headerDetails, setHeaderDetails] = React.useState({
     title: "",
     description: EditorState.createEmpty(),
@@ -151,12 +188,10 @@ export default function ReportModule() {
   }, [hasSubHeaderTitleBlurred]);
 
   const deleteFrame = (id: string) => {
-    setFramesArray((prev) => {
-      const tempPrev = prev.map((item) => ({ ...item }));
-      const frameId = tempPrev.findIndex((frame) => frame.id === id);
+    updateFramesArray((draft) => {
+      const frameId = draft.findIndex((frame) => frame.id === id);
 
-      tempPrev.splice(frameId, 1);
-      return [...tempPrev];
+      draft.splice(frameId, 1);
     });
   };
 
@@ -243,8 +278,8 @@ export default function ReportModule() {
     return [];
   }, [reportType]);
 
-  const [framesArray, setFramesArray] =
-    React.useState<IFramesArray[]>(initialFramesArray);
+  const [framesArray, updateFramesArray] =
+    useImmer<IFramesArray[]>(initialFramesArray);
 
   React.useEffect(() => {
     if (view === "edit" && !rightPanelOpen) {
@@ -261,12 +296,12 @@ export default function ReportModule() {
       resetMapping();
       clearChart();
       setRightPanelView("charts");
-      setFramesArray([]);
+      updateFramesArray([]);
     };
   }, []);
 
   const resetReport = () => {
-    setFramesArray(initialFramesArray);
+    updateFramesArray(initialFramesArray);
     setPersistedReportState({
       reportName: "Untitled report",
       headerDetails: {
@@ -343,9 +378,9 @@ export default function ReportModule() {
     if (type === "ai") {
       history.push(`/report/${page}/ai-template`);
     } else if (type === "basic") {
-      setFramesArray(basicReportInitialState());
+      updateFramesArray(basicReportInitialState());
     } else if (type === "advanced") {
-      setFramesArray(advancedReportInitialState());
+      updateFramesArray(advancedReportInitialState());
     }
 
     setReportType(type);
@@ -455,7 +490,8 @@ export default function ReportModule() {
         </Route>
         <Route path="/report/:page/create">
           <ReportCreateView
-            open={rightPanelOpen}
+            rightPanelOpen={rightPanelOpen}
+            handleRightPanelOpen={() => setRightPanelOpen(true)}
             view={view}
             setReportName={setReportName}
             reportName={reportName}
@@ -464,7 +500,7 @@ export default function ReportModule() {
             reportType={reportType}
             framesArray={framesArray}
             headerDetails={headerDetails}
-            setFramesArray={setFramesArray}
+            updateFramesArray={updateFramesArray}
             setHeaderDetails={setHeaderDetails}
             setPlugins={setPlugins}
             onSave={onSave}
@@ -472,7 +508,8 @@ export default function ReportModule() {
         </Route>
         <Route path="/report/:page/edit">
           <ReportEditView
-            open={rightPanelOpen}
+            rightPanelOpen={rightPanelOpen}
+            handleRightPanelOpen={() => setRightPanelOpen(true)}
             autoSave={autoSave.isAutoSaveEnabled}
             reportType={reportType}
             setHasChangesBeenMade={setHasChangesBeenMade}
@@ -481,7 +518,7 @@ export default function ReportModule() {
             localPickedCharts={localPickedCharts}
             framesArray={framesArray}
             headerDetails={headerDetails}
-            setFramesArray={setFramesArray}
+            updateFramesArray={updateFramesArray}
             setHeaderDetails={setHeaderDetails}
             stopInitializeFramesWidth={stopInitializeFramesWidth}
             setStopInitializeFramesWidth={setStopInitializeFramesWidth}

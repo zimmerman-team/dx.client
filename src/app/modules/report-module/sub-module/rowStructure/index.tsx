@@ -22,6 +22,7 @@ import { ToolbarPluginsType } from "app/modules/report-module/components/reportS
 import { useDrag } from "react-dnd";
 import { ReportElementsType } from "app/modules/report-module/components/right-panel-create-view";
 import { usehandleRowFrameItemResize } from "app/hooks/useHandleRowFrameItemResize";
+import { Updater } from "use-immer";
 
 const _rowStructureDetailItems = [
   [{ rowType: "oneByOne", rowId: "oneByOne-1", width: "100%", factor: 1 }],
@@ -119,11 +120,11 @@ const _rowStructureDetailItems = [
   ],
 ];
 
-export interface RowFrameProps {
+interface RowFrameProps {
   rowIndex: number;
   rowId: string;
   forceSelectedType?: string;
-  setFramesArray: (value: React.SetStateAction<IFramesArray[]>) => void;
+  updateFramesArray: Updater<IFramesArray[]>;
   framesArray: IFramesArray[];
   type: "rowFrame" | "divider";
   view: "initial" | "edit" | "create" | "preview" | "ai-template";
@@ -135,7 +136,7 @@ export interface RowFrameProps {
   onSave: (type: "create" | "edit") => Promise<void>;
 }
 
-export interface IRowStructureType {
+interface IRowStructureType {
   selectedType: string;
   setSelectedType: React.Dispatch<React.SetStateAction<string>>;
   tourStep: number;
@@ -145,9 +146,8 @@ export interface IRowStructureType {
 
 export default function RowFrame(props: RowFrameProps) {
   const history = useHistory();
-
   const { handleRowFrameItemResize } = usehandleRowFrameItemResize(
-    props.setFramesArray
+    props.updateFramesArray
   );
   const [selectedType, setSelectedType] = React.useState<string>(
     props.forceSelectedType ?? ""
@@ -206,12 +206,9 @@ export default function RowFrame(props: RowFrameProps) {
   };
 
   const deleteFrame = (id: string) => {
-    props.setFramesArray((prev) => {
-      const tempPrev = prev.map((item) => ({ ...item }));
-      const frameId = tempPrev.findIndex((frame) => frame.id === id);
-
-      tempPrev.splice(frameId, 1);
-      return [...tempPrev];
+    props.updateFramesArray((draft) => {
+      const frameId = draft.findIndex((frame) => frame.id === id);
+      draft.splice(frameId, 1);
     });
   };
   const rowIndex = React.useMemo(() => {
@@ -266,58 +263,57 @@ export default function RowFrame(props: RowFrameProps) {
       default:
         break;
     }
-    props.setFramesArray((prev) => {
-      const tempPrev = prev.map((item) => ({ ...item }));
+    props.updateFramesArray((draft) => {
       //the first time you select a row structure, framesArray is set to default values
       if (selectedTypeHistory.length === 1) {
-        tempPrev[rowIndex] = {
-          ...tempPrev[rowIndex],
+        draft[rowIndex] = {
+          ...draft[rowIndex],
           content,
           contentTypes,
           contentWidths,
           contentHeights,
           structure,
           frame: {
-            ...tempPrev[rowIndex].frame,
+            ...draft[rowIndex].frame,
             previewItems: [],
           },
         };
       } else {
         //if you change the row structure, the content array is updated to match the
         //new structure while retaining the previous content
-        let prevContent = tempPrev[rowIndex].content;
-        let prevContentTypes = tempPrev[rowIndex].contentTypes;
-        if (content.length < prevContent.length) {
-          prevContent = prevContent.slice(
-            -(prevContent.length - content.length)
+        let draftContent = draft[rowIndex].content;
+        let draftContentTypes = draft[rowIndex].contentTypes;
+        if (content.length < draftContent.length) {
+          draftContent = draftContent.slice(
+            -(draftContent.length - content.length)
           );
-          prevContentTypes = prevContentTypes.slice(
-            -(contentTypes.length - prevContentTypes.length)
+          draftContentTypes = draftContentTypes.slice(
+            -(contentTypes.length - draftContentTypes.length)
           );
-        } else if (content.length > prevContent.length) {
-          prevContent = [
-            ...prevContent,
-            ...Array(content.length - prevContent.length).fill(null),
+        } else if (content.length > draftContent.length) {
+          draftContent = [
+            ...draftContent,
+            ...Array(content.length - draftContent.length).fill(null),
           ];
-          prevContentTypes = [
-            ...prevContentTypes,
-            ...Array(contentTypes.length - prevContentTypes.length).fill(null),
+          draftContentTypes = [
+            ...draftContentTypes,
+            ...Array(contentTypes.length - draftContentTypes.length).fill(null),
           ];
         }
-        tempPrev[rowIndex] = {
-          ...tempPrev[rowIndex],
-          contentTypes: prevContentTypes,
-          content: prevContent,
+        draft[rowIndex] = {
+          ...draft[rowIndex],
+          contentTypes: draftContentTypes,
+          content: draftContent,
           contentWidths,
           contentHeights,
           structure,
           frame: {
-            ...tempPrev[rowIndex].frame,
-            previewItems: prevContent as (string | object)[],
+            ...draft[rowIndex].frame,
+            previewItems: draftContent as (string | object)[],
           },
         };
       }
-      return tempPrev;
+      // return tempPrev;
     });
   };
 
@@ -384,7 +380,7 @@ export default function RowFrame(props: RowFrameProps) {
         rowId={props.rowId}
         rowIndex={props.rowIndex}
         selectedType={selectedType}
-        setFramesArray={props.setFramesArray}
+        updateFramesArray={props.updateFramesArray}
         framesArray={props.framesArray}
         rowContentHeights={props.rowContentHeights}
         rowContentWidths={props.rowContentWidths}
@@ -397,6 +393,7 @@ export default function RowFrame(props: RowFrameProps) {
         onRowBoxItemResize={onRowBoxItemResize}
         setPlugins={props.setPlugins}
         onSave={props.onSave}
+        forceSelectedType={props.forceSelectedType}
       />
     ),
     oneByTwo: (
@@ -406,7 +403,7 @@ export default function RowFrame(props: RowFrameProps) {
         rowIndex={props.rowIndex}
         rowId={props.rowId}
         selectedType={selectedType}
-        setFramesArray={props.setFramesArray}
+        updateFramesArray={props.updateFramesArray}
         framesArray={props.framesArray}
         rowContentHeights={props.rowContentHeights}
         rowContentWidths={props.rowContentWidths}
@@ -419,6 +416,7 @@ export default function RowFrame(props: RowFrameProps) {
         onRowBoxItemResize={onRowBoxItemResize}
         setPlugins={props.setPlugins}
         onSave={props.onSave}
+        forceSelectedType={props.forceSelectedType}
       />
     ),
     oneByThree: (
@@ -428,7 +426,7 @@ export default function RowFrame(props: RowFrameProps) {
         rowId={props.rowId}
         rowIndex={props.rowIndex}
         selectedType={selectedType}
-        setFramesArray={props.setFramesArray}
+        updateFramesArray={props.updateFramesArray}
         framesArray={props.framesArray}
         rowContentHeights={props.rowContentHeights}
         rowContentWidths={props.rowContentWidths}
@@ -441,6 +439,7 @@ export default function RowFrame(props: RowFrameProps) {
         onRowBoxItemResize={onRowBoxItemResize}
         setPlugins={props.setPlugins}
         onSave={props.onSave}
+        forceSelectedType={props.forceSelectedType}
       />
     ),
     oneByFour: (
@@ -455,7 +454,7 @@ export default function RowFrame(props: RowFrameProps) {
         onRowBoxItemResize={onRowBoxItemResize}
         rowId={props.rowId}
         rowIndex={props.rowIndex}
-        setFramesArray={props.setFramesArray}
+        updateFramesArray={props.updateFramesArray}
         framesArray={props.framesArray}
         rowContentHeights={props.rowContentHeights}
         rowContentWidths={props.rowContentWidths}
@@ -463,6 +462,7 @@ export default function RowFrame(props: RowFrameProps) {
         setPlugins={props.setPlugins}
         onSave={props.onSave}
         previewItems={props.previewItems}
+        forceSelectedType={props.forceSelectedType}
       />
     ),
     oneByFive: (
@@ -473,7 +473,7 @@ export default function RowFrame(props: RowFrameProps) {
         rowIndex={props.rowIndex}
         selectedType={selectedType}
         setSelectedType={setSelectedType}
-        setFramesArray={props.setFramesArray}
+        updateFramesArray={props.updateFramesArray}
         framesArray={props.framesArray}
         rowContentHeights={props.rowContentHeights}
         rowContentWidths={props.rowContentWidths}
@@ -485,6 +485,7 @@ export default function RowFrame(props: RowFrameProps) {
         onRowBoxItemResize={onRowBoxItemResize}
         setPlugins={props.setPlugins}
         onSave={props.onSave}
+        forceSelectedType={props.forceSelectedType}
       />
     ),
   };
@@ -511,7 +512,7 @@ export default function RowFrame(props: RowFrameProps) {
                 css={`
                   margin-bottom: 0;
                   color: #000;
-                  font-family: "GothamNarrow-bold", sans-serif;
+                  font-family: "GothamNarrow-bold", "Helvetica Neue", sans-serif;
                 `}
               >
                 Select your row structure
@@ -750,7 +751,7 @@ const OneByFive = (props: IRowStructureType) => {
   );
 };
 
-export function Divider(props: {
+function Divider(props: {
   dividerId: string;
   delete: (id: string) => void;
   rowIndex?: number;
@@ -810,7 +811,6 @@ export function Divider(props: {
         display: flex;
         align-items: center;
         position: relative;
-        background: pink;
       `}
     >
       {handleDisplay && (

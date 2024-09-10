@@ -1,74 +1,9 @@
 import { Action, Thunk } from "easy-peasy";
-import { AppliedFiltersStateModel } from "app/state/api/action-reducers/sync/filters";
-import { DataThemesAppliedFiltersStateModel } from "app/state/api/action-reducers/sync/data-themes/filters";
-import {
-  DataThemesMappingStateModel,
-  DataThemesStepChartTypeStateModel,
-  DataThemesStepSelectionsStateModel,
-  DataThemesIndexStateModel,
-  DataThemesIdsStateModel,
-  DataThemesActivePanelsStateModel,
-  DataThemesTitlesStateModel,
-  DataThemesTextContentStateModel,
-  DataThemesPublicStateModel,
-  DataThemesVizOrderStateModel,
-  DataThemesVizDeletedStateModel,
-  DataThemesVizDuplicatedStateModel,
-  DataThemesTabDeletedStateModel,
-  DataThemesEnabledFilterOptionGroupsStateModel,
-} from "app/state/api/action-reducers/sync/data-themes";
 import {
   AuthTokenModel,
   DataSourceSnackbarVisibilityStateModel,
   DataSourceStateModel,
-  PageHeaderVizDrilldownsStateModel,
-  ReportOrderStateModel,
-  ToolBoxPanelAllocationsPeriodStateModel,
-  ToolBoxPanelBudgetFlowDrilldownSelectorsModel,
-  ToolBoxPanelBudgetTimeCycleDrilldownYearSelectorModel,
-  ToolBoxPanelDisbursementsSliderValuesModel,
-  ToolBoxPanelDonorMapTypeStateModel,
-  ToolBoxPanelDonorMapViewStateModel,
-  ToolBoxPanelEligibilityAdvancedCheckboxStateModel,
-  ToolBoxPanelEligibilityYearStateModel,
-  ToolBoxPanelInvestmentsMapViewStateModel,
-  ToolBoxPanelPFPeriodStateModel,
-  ToolBoxPanelResultsYearStateModel,
 } from "app/state/api/action-reducers/sync";
-import {
-  CMSApiComponentsAppBar,
-  CMSApiComponentsChartsBudgets,
-  CMSApiComponentsChartsCommon,
-  CMSApiComponentsChartsEligibility,
-  CMSApiComponentsChartsGeomap,
-  CMSApiComponentsChartsGrants,
-  CMSApiComponentsChartsInvestments,
-  CMSApiComponentsChartsNetwork,
-  CMSApiComponentsChartsPerformanceRating,
-  CMSApiComponentsChartsPledges,
-  CMSApiComponentsCookieDialog,
-  CMSApiComponentsDatasetCarousel,
-  CMSApiComponentsInformationPanel,
-  CMSApiComponentsMobile,
-  CMSApiComponentsPageHeader,
-  CMSApiComponentsPerformanceFrameworkComponents,
-  CMSApiComponentsSearch,
-  CMSApiComponentsSlideInPanel,
-  CMSApiModulesLanding,
-  CMSApiModulesAbout,
-  CMSApiModulesCommon,
-  CMSApiModulesCountryDetail,
-  CMSApiModulesDatasets,
-  CMSApiModulesGrantDetail,
-  CMSApiModulesGrants,
-  CMSApiCountrySummary,
-  CMSApiNotesAndDisclaimers,
-} from "app/state/api/interfaces/cms";
-import {
-  DataPathActiveStepStateModel,
-  DataPathPanelVisibilityStateModel,
-  DataPathStepsStateModel,
-} from "../action-reducers/sync/dataPath";
 import {
   ChartsActivePanelsStateModel,
   ChartsChartTypeStateModel,
@@ -110,6 +45,7 @@ export interface Errors {
 export interface ApiModel<QueryModel, ResponseModel> {
   loading: boolean;
   success: boolean;
+  planWarning: string | null;
   data: ResponseData<ResponseModel> | null | ResponseData<ResponseModel>[];
   crudData: object | object[] | null;
   setData: Action<ApiModel<QueryModel, ResponseModel>, any>;
@@ -117,6 +53,8 @@ export interface ApiModel<QueryModel, ResponseModel> {
   errorData: Errors | null;
   onError: Action<ApiModel<QueryModel, ResponseModel>, Errors>;
   setSuccess: Action<ApiModel<QueryModel, ResponseModel>>;
+  setPlanWarning: Action<ApiModel<QueryModel, ResponseModel>, string>;
+  clearPlanWarning: Action<ApiModel<QueryModel, ResponseModel>>;
   onSuccess: Action<
     ApiModel<QueryModel, ResponseModel>,
     ResponseData<ResponseModel> | ResponseData<ResponseModel>[]
@@ -137,12 +75,9 @@ export interface ApiModel<QueryModel, ResponseModel> {
   delete: Thunk<ApiModel<QueryModel, ResponseModel>, RequestValues<QueryModel>>;
 }
 
-// todo: add all available filters
-interface ApiCallParamsFilters {}
+interface ApiCallParams {}
 
-export interface ApiCallParams {}
-
-export interface ApiResponseModel {
+interface ApiResponseModel {
   data: any[];
   count: number;
 }
@@ -152,139 +87,20 @@ export type ApiCallModel = ApiModel<
   ApiResponseModel
 >;
 
-// CMS API Call model for
-export type CMSApiCallModel = ApiModel<
-  CMSApiCallParams,
-  | CMSApiComponentsAppBar
-  | CMSApiComponentsChartsBudgets
-  | CMSApiComponentsChartsCommon
-  | CMSApiComponentsChartsEligibility
-  | CMSApiComponentsChartsGeomap
-  | CMSApiComponentsChartsGrants
-  | CMSApiComponentsChartsInvestments
-  | CMSApiComponentsChartsNetwork
-  | CMSApiComponentsChartsPerformanceRating
-  | CMSApiComponentsChartsPledges
-  | CMSApiComponentsCookieDialog
-  | CMSApiComponentsDatasetCarousel
-  | CMSApiComponentsInformationPanel
-  | CMSApiComponentsMobile
-  | CMSApiComponentsPageHeader
-  | CMSApiComponentsPerformanceFrameworkComponents
-  | CMSApiComponentsSearch
-  | CMSApiComponentsSlideInPanel
-  | CMSApiModulesLanding
-  | CMSApiModulesAbout
-  | CMSApiModulesCommon
-  | CMSApiModulesCountryDetail
-  | CMSApiModulesDatasets
-  | CMSApiModulesGrantDetail
-  | CMSApiModulesGrants
-  | CMSApiCountrySummary
-  | CMSApiNotesAndDisclaimers
->;
-
-export interface CMSApiCallParams {}
-
 export interface StoreModel {
   // global search
   GlobalSearch: ApiCallModel;
-
-  // filter options api
-  LocationFilterOptions: ApiCallModel;
-  ComponentFilterOptions: ApiCallModel;
-  PartnerTypeFilterOptions: ApiCallModel;
-  StatusFilterOptions: ApiCallModel;
-  ReplenishmentPeriodFilterOptions: ApiCallModel;
-  DonorFilterOptions: ApiCallModel;
-  // sync state variables
-  AppliedFiltersState: AppliedFiltersStateModel;
-  ToolBoxPanelPFPeriodState: ToolBoxPanelPFPeriodStateModel;
-  PageHeaderVizDrilldownsState: PageHeaderVizDrilldownsStateModel;
-
-  ToolBoxPanelResultsYearState: ToolBoxPanelResultsYearStateModel;
-  ToolBoxPanelDonorMapTypeState: ToolBoxPanelDonorMapTypeStateModel;
-  ToolBoxPanelDonorMapViewState: ToolBoxPanelDonorMapViewStateModel;
-  ToolBoxPanelEligibilityYearState: ToolBoxPanelEligibilityYearStateModel;
-  ToolBoxPanelAllocationsPeriodState: ToolBoxPanelAllocationsPeriodStateModel;
-  ToolBoxPanelInvestmentsMapViewState: ToolBoxPanelInvestmentsMapViewStateModel;
-  ToolBoxPanelDisbursementsSliderValues: ToolBoxPanelDisbursementsSliderValuesModel;
-  ToolBoxPanelBudgetFlowDrilldownSelectors: ToolBoxPanelBudgetFlowDrilldownSelectorsModel;
-  ToolBoxPanelEligibilityAdvancedCheckboxState: ToolBoxPanelEligibilityAdvancedCheckboxStateModel;
-  ToolBoxPanelBudgetTimeCycleDrilldownYearSelector: ToolBoxPanelBudgetTimeCycleDrilldownYearSelectorModel;
   // datasource selector
   DataSourceState: DataSourceStateModel;
   // AvailableDatasources: ApiCallModel;
   // MappedDatasets: ApiCallModel;
   DataSourceSnackbarVisibility: DataSourceSnackbarVisibilityStateModel;
   // sync data path vars
-  DataPathPanelVisibilityState: DataPathPanelVisibilityStateModel;
-  DataPathSteps: DataPathStepsStateModel;
-  DataPathActiveStep: DataPathActiveStepStateModel;
   AuthToken: AuthTokenModel;
-  // CMS
-  cms: {
-    componentsAppBar: CMSApiCallModel;
-    componentsChartsBudgets: CMSApiCallModel;
-    componentsChartsCommon: CMSApiCallModel;
-    componentsChartsEligibility: CMSApiCallModel;
-    componentsChartsGeomap: CMSApiCallModel;
-    componentsChartsGrants: CMSApiCallModel;
-    componentsChartsInvestments: CMSApiCallModel;
-    componentsChartsNetwork: CMSApiCallModel;
-    componentsChartsPerformanceRating: CMSApiCallModel;
-    componentsChartsPledges: CMSApiCallModel;
-    componentsCookieDialog: CMSApiCallModel;
-    componentsDatasetCarousel: CMSApiCallModel;
-    componentsInformationPanel: CMSApiCallModel;
-    componentsMobile: CMSApiCallModel;
-    componentsPageHeader: CMSApiCallModel;
-    componentsPerformanceFrameworkComponents: CMSApiCallModel;
-    componentsSearch: CMSApiCallModel;
-    componentsSlideInPanel: CMSApiCallModel;
-    modulesLanding: CMSApiCallModel;
-    modulesAbout: CMSApiCallModel;
-    modulesCommon: CMSApiCallModel;
-    modulesCountryDetail: CMSApiCallModel;
-    modulesDatasets: CMSApiCallModel;
-    modulesGrantDetail: CMSApiCallModel;
-    modulesGrants: CMSApiCallModel;
-    countrySummary: CMSApiCallModel;
-    notesAndDisclaimers: CMSApiCallModel;
-  };
   dataThemes: {
-    activeTabIndex: DataThemesIndexStateModel;
-    activeVizIndex: DataThemesIndexStateModel;
-    ids: DataThemesIdsStateModel;
-    activePanels: DataThemesActivePanelsStateModel;
-    titles: DataThemesTitlesStateModel;
-    textContent: DataThemesTextContentStateModel;
-    sync: {
-      stepSelections: DataThemesStepSelectionsStateModel;
-      chartType: DataThemesStepChartTypeStateModel;
-      mapping: DataThemesMappingStateModel;
-      public: DataThemesPublicStateModel;
-      vizOrderData: DataThemesVizOrderStateModel;
-      vizDeleted: DataThemesVizDeletedStateModel;
-      vizDuplicated: DataThemesVizDuplicatedStateModel;
-      tabDeleted: DataThemesTabDeletedStateModel;
-      enabledFilterOptionGroups: DataThemesEnabledFilterOptionGroupsStateModel;
-    };
-    appliedFilters: DataThemesAppliedFiltersStateModel;
-    DataThemeGet: ApiCallModel;
-    DataThemeCreate: ApiCallModel;
-    DataThemeUpdate: ApiCallModel;
-    DataThemeDelete: ApiCallModel;
-    DataThemeDuplicate: ApiCallModel;
-    DataThemeGetList: ApiCallModel;
     DatasetGetList: ApiCallModel;
     DatasetCount: ApiCallModel;
-    DatasetCreate: ApiCallModel;
     DatasetGet: ApiCallModel;
-    ExternalDatasetGet: ApiCallModel;
-    ExternalDatasetGetLimited: ApiCallModel;
-
-    ExternalDatasetDownload: ApiCallModel;
   };
   assets: {
     AssetGetList: ApiCallModel;

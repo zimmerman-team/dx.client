@@ -16,12 +16,13 @@ import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import { useMount, useTitle, useUpdateEffect } from "react-use";
 import { isEmpty } from "lodash";
 import Filter from "app/modules/home-module/components/Filter";
+import { useMediaQuery } from "@material-ui/core";
 
 function ReportInitialView(props: Readonly<ReportInitialViewProps>) {
   useTitle("DX Dataxplorer - New Report");
 
   const history = useHistory();
-
+  const isMobile = useMediaQuery("(max-width: 599px)");
   const [reportsView, setReportsView] = React.useState<"grid" | "table">(
     "grid"
   );
@@ -90,9 +91,9 @@ function ReportInitialView(props: Readonly<ReportInitialViewProps>) {
           height: 48px;
         `}
       />
-      <Grid container spacing={10}>
+      <Grid container spacing={isMobile ? 4 : 7} justifyContent="space-between">
         {templates.map((option) => (
-          <Grid key={option.value} item xs={12} sm={6} md={4}>
+          <Grid key={option.value} item lg={"auto"} md={4} sm={6} xs={12}>
             <TemplateItem
               name={option.name}
               value={option.value}
@@ -128,19 +129,19 @@ function ReportInitialView(props: Readonly<ReportInitialViewProps>) {
           margin-bottom: 44px;
         `}
       >
-        <Grid item lg={6} md={6} sm={6}>
+        <Grid item lg={6} md={6} sm={6} xs={6}>
           <h4
             css={`
               font-size: 18px;
               line-height: 22px;
               color: #000000;
-              font-family: "GothamNarrow-Bold", sans-serif;
+              font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
             `}
           >
             Explore or duplicate reports
           </h4>
         </Grid>
-        <Grid item lg={6} md={6} sm={6}>
+        <Grid item lg={6} md={6} sm={6} xs={6}>
           <Filter
             searchValue={searchValue as string}
             setSearchValue={setSearchValue}

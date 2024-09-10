@@ -104,7 +104,7 @@ export default function GridItem(props: Props) {
                   align-items: center;
                   border: 1px solid #000;
                   justify-content: center;
-                  font-family: "GothamNarrow", sans-serif;
+                  font-family: "GothamNarrow", "Helvetica Neue", sans-serif;
                 `}
               >
                 Added

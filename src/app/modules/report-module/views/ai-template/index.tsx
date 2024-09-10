@@ -134,7 +134,8 @@ export default function AITemplate() {
                   padding-left: 10px;
                   color: #e75656;
                   p {
-                    font-family: "GothamNarrow-Book", sans-serif;
+                    font-family: "GothamNarrow-Book", "Helvetica Neue",
+                      sans-serif;
                     text-align: left;
                     display: flex;
                     align-items: center;

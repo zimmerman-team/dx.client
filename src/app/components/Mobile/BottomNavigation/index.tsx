@@ -4,7 +4,6 @@ import findIndex from "lodash/findIndex";
 import { useHistory } from "react-router-dom";
 import HomeIcon from "@material-ui/icons/Home";
 import InfoIcon from "@material-ui/icons/Info";
-import { useCMSData } from "app/hooks/useCMSData";
 import ExploreIcon from "@material-ui/icons/Explore";
 import { makeStyles } from "@material-ui/core/styles";
 import BottomNavigation from "@material-ui/core/BottomNavigation";
@@ -21,22 +20,20 @@ const useStyles = makeStyles({
   },
 });
 
-export function createActionButtons() {
-  const cmsData = useCMSData({ returnData: true });
-
+function createActionButtons() {
   return [
     {
-      label: get(cmsData, "componentsMobile.appbarLabelHome", ""),
+      label: "Home",
       icon: <HomeIcon />,
       path: "/",
     },
     {
-      label: get(cmsData, "componentsMobile.appbarLabelExplore", ""),
+      label: "Explore",
       icon: <ExploreIcon />,
       path: "/datasets",
     },
     {
-      label: get(cmsData, "componentsMobile.appbarLabelAbout", ""),
+      label: "About",
       icon: <InfoIcon />,
       path: "/about",
     },

@@ -45,11 +45,17 @@ import useResizeObserver from "use-resize-observer";
 import { ChartType } from "app/modules/chart-module/components/common-chart";
 import { getRequiredFieldsAndErrors } from "app/modules/chart-module/routes/mapping/utils";
 import axios from "axios";
-import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
+import {
+  useRecoilState,
+  useRecoilValue,
+  useResetRecoilState,
+  useSetRecoilState,
+} from "recoil";
 import {
   chartFromReportAtom,
   isChartAIAgentActive,
   isChartAutoMappedAtom,
+  planDialogAtom,
 } from "app/state/recoil/atoms";
 import { IDatasetDetails } from "./components/toolbox/steps/panels-content/SelectDataset";
 
@@ -64,6 +70,8 @@ export default function ChartModule() {
     "visualOptions",
     {}
   );
+
+  const setPlanDialog = useSetRecoilState(planDialogAtom);
 
   const [rawViz, setRawViz] = React.useState<any>(null);
   const [toolboxOpen, setToolboxOpen] = React.useState(Boolean(view));
@@ -125,6 +133,8 @@ export default function ChartModule() {
   const isSaveLoading = useStoreState(
     (state) => state.charts.ChartCreate.loading
   );
+
+  const [chartLoading, setChartLoading] = React.useState<boolean | null>(null);
   const isChartLoading = useStoreState(
     (state) => state.charts.ChartGet.loading
   );
@@ -248,6 +258,14 @@ export default function ChartModule() {
     setChartError(false);
     clearDatasetDetails();
   };
+
+  React.useEffect(() => {
+    if (!isChartLoading && chartLoading === null) {
+      return;
+    }
+    setChartLoading(isChartLoading);
+  }, [isChartLoading]);
+
   const onSave = async () => {
     const chart = {
       name: chartName,
@@ -295,7 +313,23 @@ export default function ChartModule() {
       });
       if (page === "new") {
         const response = await onSave();
-        const data = response?.data;
+        const data = response?.data?.data;
+        if (response?.data.error && response?.data.errorType === "planError") {
+          return setPlanDialog({
+            open: true,
+            message: response?.data.error,
+            tryAgain: "",
+            onTryAgain: () => {},
+          });
+        }
+        if (response?.data.planWarning) {
+          setPlanDialog({
+            open: true,
+            message: response.data.planWarning,
+            tryAgain: "",
+            onTryAgain: () => {},
+          });
+        }
         history.push(
           `/chart/${data.id}/mapping${
             chartFromReport.state
@@ -376,15 +410,6 @@ export default function ChartModule() {
   const renderedChartMappedData = React.useMemo(() => {
     return get(chartFromAPI, "mappedData", []);
   }, [chartFromAPI]);
-
-  const renderedChartSsr = React.useMemo(() => {
-    return get(chartFromAPI, "ssr", false);
-  }, [chartFromAPI]);
-
-  const activeRenderedChartSsr = React.useMemo(
-    () => Boolean(renderedChartSsr),
-    [renderedChartSsr]
-  );
 
   function setVisualOptionsOnChange(chartType: string | null = null) {
     const options = {
@@ -507,12 +532,14 @@ export default function ChartModule() {
         enableAutoSaveSwitch={autoSaveState.enableAutoSaveSwitch}
         onSave={onSave}
         savedChanges={savedChanges}
+        isMappingValid={isMappingValid}
       />
       {isChartLoading || isSaveLoading ? (
         <PageLoader />
       ) : (
         <>
-          {canChartEditDelete ||
+          {chartLoading === null ||
+          canChartEditDelete ||
           !!matchPath(location.pathname, {
             path: "/chart/:page",
             exact: true,
@@ -564,6 +591,11 @@ export default function ChartModule() {
                       : "100%"};
 
                     transition: width 225ms cubic-bezier(0, 0, 0.2, 1) 0ms;
+                    @media (min-width: 768px) {
+                      @media (max-width: 1024px) {
+                        width: 100%;
+                      }
+                    }
                   `}
                   ref={ref}
                 >
@@ -577,7 +609,6 @@ export default function ChartModule() {
                         renderedChart={content}
                         visualOptions={visualOptions}
                         setVisualOptions={setVisualOptions}
-                        renderedChartSsr={activeRenderedChartSsr}
                         renderedChartMappedData={renderedChartMappedData}
                         renderedChartType={chartType as ChartType}
                         setChartErrorMessage={setChartErrorMessage}
@@ -597,7 +628,6 @@ export default function ChartModule() {
                         visualOptions={visualOptions}
                         containerRef={containerRef}
                         setVisualOptions={setVisualOptions}
-                        renderedChartSsr={activeRenderedChartSsr}
                         renderedChartMappedData={renderedChartMappedData}
                         renderedChartType={chartType as ChartType}
                         setChartErrorMessage={setChartErrorMessage}
@@ -616,7 +646,6 @@ export default function ChartModule() {
                         dimensions={dimensions}
                         renderedChart={content}
                         containerRef={containerRef}
-                        renderedChartSsr={activeRenderedChartSsr}
                         renderedChartMappedData={renderedChartMappedData}
                         renderedChartType={chartType as ChartType}
                         setChartErrorMessage={setChartErrorMessage}
@@ -663,12 +692,12 @@ export default function ChartModule() {
                         visualOptions={visualOptions}
                         renderedChart={renderedChart}
                         setVisualOptions={setVisualOptions}
-                        renderedChartSsr={renderedChartSsr}
                         renderedChartMappedData={renderedChartMappedData}
                         editable={!isPreviewMode || (page === "new" && !view)}
                         setIsPreviewView={setIsPreviewView}
                         containerRef={containerRef}
                         loadedChart={loadedChart}
+                        isMappingValid={isMappingValid}
                         view={view}
                         isAIAssistedChart={editChartCrudData?.isAIAssisted}
                         dataError={dataError}
@@ -682,12 +711,12 @@ export default function ChartModule() {
                         visualOptions={visualOptions}
                         renderedChart={renderedChart}
                         setVisualOptions={setVisualOptions}
-                        renderedChartSsr={renderedChartSsr}
                         renderedChartMappedData={renderedChartMappedData}
                         editable={!isPreviewMode}
                         setIsPreviewView={setIsPreviewView}
                         containerRef={containerRef}
                         loadedChart={loadedChart}
+                        isMappingValid={isMappingValid}
                         view={view}
                         isAIAssistedChart={
                           editChartCrudData?.isAIAssisted ??

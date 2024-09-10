@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-import { useRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 import { useAuth0 } from "@auth0/auth0-react";
 import Button from "@material-ui/core/Button";
 import SaveIcon from "@material-ui/icons/Save";
@@ -12,14 +12,15 @@ import { LinkIcon } from "app/assets/icons/Link";
 import Snackbar from "@material-ui/core/Snackbar";
 import DeleteIcon from "@material-ui/icons/Delete";
 import Container from "@material-ui/core/Container";
+import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import IconButton from "@material-ui/core/IconButton";
 import CopyToClipboard from "react-copy-to-clipboard";
 import FileCopyIcon from "@material-ui/icons/FileCopy";
 import AutorenewIcon from "@material-ui/icons/Autorenew";
 import CloudDoneIcon from "@material-ui/icons/CloudDone";
-import { homeDisplayAtom } from "app/state/recoil/atoms";
+import { planDialogAtom } from "app/state/recoil/atoms";
 import { PageLoader } from "app/modules/common/page-loader";
-import { createStyles, makeStyles } from "@material-ui/core";
+import { createStyles, makeStyles, useMediaQuery } from "@material-ui/core";
 import { Link, useHistory, useParams } from "react-router-dom";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import { ReportModel, emptyReport } from "app/modules/report-module/data";
@@ -34,6 +35,8 @@ import StaticToolbar from "app/modules/report-module/components/reportSubHeaderT
 import AutoSaveSwitch from "app/modules/report-module/components/reportSubHeaderToolbar/autoSaveSwitch";
 import AutoResizeInput from "app/modules/report-module/components/reportSubHeaderToolbar/autoResizeInput";
 import { InfoSnackbar } from "app/modules/report-module/components/reportSubHeaderToolbar/infosnackbar";
+import ShareModal from "app/modules/dataset-module/component/shareModal";
+import DuplicateMessage from "app/modules/common/mobile-duplicate-message";
 
 export const useStyles = makeStyles(() =>
   createStyles({
@@ -57,6 +60,8 @@ export function ReportSubheaderToolbar(
   const history = useHistory();
   const classes = useStyles();
   const { user, isAuthenticated } = useAuth0();
+  const isMobile = useMediaQuery("(max-width: 599px)");
+  const isTabletView = useMediaQuery("(min-width: 768px)"); //at this breakpoint, we limit user creation abilities
   const titleRef = React.useRef<HTMLDivElement>(null);
   const { page, view } = useParams<{ page: string; view?: string }>();
   const token = useStoreState((state) => state.AuthToken.value);
@@ -68,6 +73,8 @@ export function ReportSubheaderToolbar(
     string | null
   >(null);
 
+  const setPlanDialog = useSetRecoilState(planDialogAtom);
+
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
   );
@@ -76,7 +83,8 @@ export function ReportSubheaderToolbar(
     vertical: "bottom",
     horizontal: "center",
   });
-
+  const [isShareModalOpen, setIsShareModalOpen] =
+    React.useState<boolean>(false);
   const [savedChanges, setSavedChanges] = React.useState<boolean>(false);
 
   const loadReports = useStoreActions(
@@ -85,6 +93,7 @@ export function ReportSubheaderToolbar(
   const loadedReport = useStoreState(
     (state) => (state.reports.ReportGet.crudData ?? emptyReport) as ReportModel
   );
+  const shareURL = `${window.location.origin}/report/${loadedReport.id}`;
 
   const loadedChart = useStoreState(
     (state) =>
@@ -134,8 +143,12 @@ export function ReportSubheaderToolbar(
     }
   };
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
+  const handleSharePopup = (event: React.MouseEvent<HTMLButtonElement>) => {
+    if (isMobile) {
+      setIsShareModalOpen(true);
+    } else {
+      setAnchorEl(event.currentTarget);
+    }
   };
 
   const handleClose = () => {
@@ -204,6 +217,14 @@ export function ReportSubheaderToolbar(
         },
       })
       .then((response) => {
+        if (response?.data.error && response?.data.errorType === "planError") {
+          return setPlanDialog({
+            open: true,
+            message: response?.data.error,
+            tryAgain: "",
+            onTryAgain: () => {},
+          });
+        }
         loadReports({
           token,
           storeInCrudData: true,
@@ -218,6 +239,12 @@ export function ReportSubheaderToolbar(
       .catch((error) => console.log(error));
   };
 
+  const handleViewDuplocatedReport = () => {
+    setSnackbarState({ ...snackbarState, open: false });
+    history.push(`/report/${duplicatedReportId}`);
+    setDuplicatedReportId(null);
+  };
+
   const canReportEditDelete = React.useMemo(() => {
     return isAuthenticated && loadedReport && loadedReport.owner === user?.sub;
   }, [user, isAuthenticated, loadedChart, loadedReport]);
@@ -230,16 +257,7 @@ export function ReportSubheaderToolbar(
   return (
     <div id="subheader-toolbar" css={styles.container(view !== undefined)}>
       {createOrEditChartLoading && <PageLoader />}
-      <Snackbar
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "left",
-        }}
-        open={openSnackbar}
-        autoHideDuration={5000}
-        onClose={handleCloseSnackbar}
-        message="Link copied to clipboard"
-      />
+
       <Container maxWidth="lg">
         <div css={styles.innercontainer}>
           <div
@@ -250,15 +268,26 @@ export function ReportSubheaderToolbar(
               gap: 28px;
               position: relative;
               width: 70%;
+              @media (min-width: 768px) {
+                @media (max-width: 800px) {
+                  width: 48%;
+                }
+              }
+              @media (min-width: 801px) {
+                @media (max-width: 1199px) {
+                  width: 49%;
+                }
+              }
             `}
           >
+            {isMobile && <ArrowBackIosIcon onClick={() => history.go(-1)} />}
             <AutoResizeInput
               name={props.name}
               setName={props.setName}
               placeholder="Title"
               autoResize={true}
               maxWidth={(titleRef.current?.offsetWidth ?? 1000) - 100}
-              spanBuffer={150}
+              spanBuffer={isMobile ? 0 : 150}
               minWidth={200}
               spanVisibility={inputSpanVisibiltiy}
               setSpanVisibility={setInputSpanVisibility}
@@ -290,6 +319,11 @@ export function ReportSubheaderToolbar(
                 display: flex;
                 flex-shrink: 0;
                 gap: 12px;
+                @media (min-width: 768px) {
+                  @media (max-width: 1200px) {
+                    display: none;
+                  }
+                }
               `}
             >
               {view === "edit" && (
@@ -330,7 +364,8 @@ export function ReportSubheaderToolbar(
                       <p
                         css={`
                           color: #70777e;
-                          font-family: "GothamNarrow-Book", sans-serif;
+                          font-family: "GothamNarrow-Book", "Helvetica Neue",
+                            sans-serif;
                           font-size: 12px;
                           font-weight: 325;
                           margin: 0px;
@@ -357,7 +392,8 @@ export function ReportSubheaderToolbar(
                       <p
                         css={`
                           color: #70777e;
-                          font-family: "GothamNarrow-Book", sans-serif;
+                          font-family: "GothamNarrow-Book", "Helvetica Neue",
+                            sans-serif;
                           font-size: 12px;
                           font-weight: 325;
                           margin: 0px;
@@ -379,7 +415,8 @@ export function ReportSubheaderToolbar(
                       css={`
                         color: #000;
 
-                        font-family: "GothamNarrow-Book", sans-serif;
+                        font-family: "GothamNarrow-Book", "Helvetica Neue",
+                          sans-serif;
                         font-size: 12px;
                         font-style: normal;
                         font-weight: 325;
@@ -393,6 +430,35 @@ export function ReportSubheaderToolbar(
                       setAutoSave={props.setAutoSave}
                     />
                   </div>
+                  {view === "edit" && (
+                    <Tooltip title="view report">
+                      <IconButton
+                        onClick={handleViewReport}
+                        css={`
+                          padding: 0px;
+                          :disabled {
+                            opacity: 0.5;
+                          }
+                          display: none;
+                          @media (min-width: 768px) {
+                            @media (max-width: 1200px) {
+                              display: block;
+                            }
+                          }
+                        `}
+                        data-cy="view-report-button-tablet"
+                        aria-label="view-report-button-tablet"
+                      >
+                        <svg width="20" height="19" viewBox="0 0 20 19">
+                          <rect width="20" height="19" rx="3" fill="#262C34" />
+                          <path
+                            fill="#EFEFEF"
+                            d="M14 9L6.5 13.3301L6.5 4.66987L14 9Z"
+                          />
+                        </svg>
+                      </IconButton>
+                    </Tooltip>
+                  )}
                   <Tooltip title="Save">
                     <span>
                       <IconButton
@@ -400,7 +466,7 @@ export function ReportSubheaderToolbar(
                         disabled={!props.isSaveEnabled}
                         aria-label="save button"
                         css={`
-                          padding: 4px;
+                          padding: 0px;
                           :disabled {
                             opacity: 0.5;
                           }
@@ -415,7 +481,7 @@ export function ReportSubheaderToolbar(
               )}
               {page !== "new" && !view && (
                 <div css={styles.previewEndContainer}>
-                  <ExportChartButton filename={props.name} />
+                  {isTabletView && <ExportChartButton filename={props.name} />}
 
                   <Tooltip title="Duplicate">
                     <IconButton
@@ -428,7 +494,7 @@ export function ReportSubheaderToolbar(
 
                   <Tooltip title="Share">
                     <IconButton
-                      onClick={handleClick}
+                      onClick={handleSharePopup}
                       data-testid="share-button"
                     >
                       <ShareIcon htmlColor="#262c34" />
@@ -463,7 +529,7 @@ export function ReportSubheaderToolbar(
                       </CopyToClipboard>
                     </div>
                   </Popover>
-                  {canReportEditDelete && (
+                  {canReportEditDelete && isTabletView && (
                     <Tooltip title="Edit">
                       <IconButton
                         component={Link}
@@ -474,7 +540,7 @@ export function ReportSubheaderToolbar(
                       </IconButton>
                     </Tooltip>
                   )}
-                  {canReportEditDelete && (
+                  {canReportEditDelete && isTabletView && (
                     <Tooltip title="Delete">
                       <IconButton
                         onClick={handleModalDisplay}
@@ -495,26 +561,67 @@ export function ReportSubheaderToolbar(
           <StaticToolbar plugins={props.plugins} />
         </Container>
       )}
-      <InfoSnackbar
-        anchorOrigin={{
-          vertical: snackbarState.vertical,
-          horizontal: snackbarState.horizontal,
-        }}
-        open={snackbarState.open}
-        onClose={() => setSnackbarState({ ...snackbarState, open: false })}
-        message={`Report has been duplicated successfully!`}
-        key={snackbarState.vertical + snackbarState.horizontal}
-        action={
-          <button
-            onClick={() => {
-              setSnackbarState({ ...snackbarState, open: false });
-              history.push(`/report/${duplicatedReportId}`);
-              setDuplicatedReportId(null);
+      <>
+        {isMobile ? (
+          <InfoSnackbar
+            anchorOrigin={{
+              vertical: snackbarState.vertical,
+              horizontal: snackbarState.horizontal,
             }}
+            open={snackbarState.open}
+            autoHideDuration={6000}
+            onClose={() => setSnackbarState({ ...snackbarState, open: false })}
+            key={snackbarState.vertical + snackbarState.horizontal}
           >
-            GO TO REPORT
-          </button>
-        }
+            <DuplicateMessage
+              action={handleViewDuplocatedReport}
+              closeSnackbar={() =>
+                setSnackbarState({ ...snackbarState, open: false })
+              }
+              name={loadedReport.name}
+              type="report"
+            />
+          </InfoSnackbar>
+        ) : (
+          <InfoSnackbar
+            anchorOrigin={{
+              vertical: snackbarState.vertical,
+              horizontal: snackbarState.horizontal,
+            }}
+            open={snackbarState.open}
+            onClose={() => setSnackbarState({ ...snackbarState, open: false })}
+            message={`Report has been duplicated successfully!`}
+            key={snackbarState.vertical + snackbarState.horizontal}
+            action={
+              <button
+                onClick={() => {
+                  setSnackbarState({ ...snackbarState, open: false });
+                  history.push(`/report/${duplicatedReportId}`);
+                  setDuplicatedReportId(null);
+                }}
+              >
+                GO TO REPORT
+              </button>
+            }
+          />
+        )}
+      </>
+      <Snackbar
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
+        }}
+        open={openSnackbar}
+        autoHideDuration={5000}
+        onClose={handleCloseSnackbar}
+        message="Link copied to clipboard"
+      />
+      <ShareModal
+        datasetDetails={loadedReport}
+        isShareModalOpen={isShareModalOpen}
+        setIsShareModalOpen={setIsShareModalOpen}
+        handleCopy={handleCopy}
+        url={shareURL}
       />
       <DeleteReportDialog
         modalDisplay={showDeleteDialog}

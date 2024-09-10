@@ -880,6 +880,7 @@ export function useDataThemesEchart() {
             type: "dashed",
           },
         },
+        type: mapping.x.mappedType === "date" ? "category" : "value",
       },
       yAxis: {
         splitLine: {
@@ -887,6 +888,7 @@ export function useDataThemesEchart() {
             type: "dashed",
           },
         },
+        type: mapping.y.mappedType === "date" ? "category" : "value",
         scale: true,
         name: mapping?.y?.value?.[0] ?? "",
         nameTextStyle: {
@@ -981,12 +983,11 @@ export function useDataThemesEchart() {
         zlevel: -1,
         z: -1,
       },
-      xAxis: [
-        {
-          data: uniqBy(sortBy(data.map((d: any) => d.x)), (d: any) => d),
-        },
-      ],
+      xAxis: {
+        type: mapping.x.mappedType === "date" ? "category" : "value",
+      },
       yAxis: {
+        type: mapping.y.mappedType === "date" ? "category" : "value",
         name: mapping?.y?.value?.[0] ?? "",
         nameTextStyle: {
           align: "left",
@@ -1016,7 +1017,7 @@ export function useDataThemesEchart() {
       series: [
         {
           symbolSize: symbolSize ?? 4,
-          data: data.map((d: any) => d.y),
+          data: data.map((d: any) => [d.x, d.y]),
           type: "scatter",
         },
       ],

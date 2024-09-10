@@ -36,7 +36,7 @@ interface Props {
   >;
 }
 
-export interface IFormDetails {
+interface IFormDetails {
   name: string;
   source: string;
   category: string;
@@ -55,7 +55,7 @@ export const datasetCategories = [
   "Social",
 ];
 
-export const SelectCategoryField = (props: {
+const SelectCategoryField = (props: {
   setFormDetails: React.Dispatch<React.SetStateAction<IFormDetails>>;
   formDetails: IFormDetails;
   error: boolean;
@@ -290,6 +290,12 @@ export default function MetaData(props: Readonly<Props>) {
             justify-content: flex-end;
             margin-top: 12rem;
             gap: 1rem;
+            @media (min-width: 768px) {
+              @media (max-width: 13004px) {
+                margin-top: 4rem;
+                padding-bottom: 10px;
+              }
+            }
           `}
         >
           <button

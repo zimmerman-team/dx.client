@@ -95,7 +95,6 @@ function ChartBuilderMapping(props: Readonly<ChartBuilderMappingProps>) {
                 renderedChart={props.renderedChart}
                 visualOptions={props.visualOptions}
                 setVisualOptions={props.setVisualOptions}
-                renderedChartSsr={props.renderedChartSsr}
                 renderedChartMappedData={props.renderedChartMappedData}
                 setChartErrorMessage={props.setChartErrorMessage}
                 setChartError={props.setChartError}

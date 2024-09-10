@@ -66,6 +66,10 @@ function ReportEditView(props: ReportEditViewProps) {
     (actions) => actions.reports.ReportGet.fetch
   );
 
+  const [isReportLoading, setIsReportLoading] = React.useState<boolean | null>(
+    null
+  );
+
   const loadingReportData = useStoreState(
     (state) => state.reports.ReportGet.loading
   );
@@ -89,12 +93,10 @@ function ReportEditView(props: ReportEditViewProps) {
   );
 
   function deleteFrame(id: string) {
-    props.setFramesArray((prev) => {
-      let tempPrev = prev.map((item) => ({ ...item }));
-      const frameId = prev.findIndex((frame) => frame.id === id);
+    props.updateFramesArray((draft) => {
+      const frameId = draft.findIndex((frame) => frame.id === id);
 
-      tempPrev.splice(frameId, 1);
-      return [...tempPrev];
+      draft.splice(frameId, 1);
     });
   }
 
@@ -247,7 +249,7 @@ function ReportEditView(props: ReportEditViewProps) {
     props.setHasSubHeaderTitleFocused(reportData.name !== "Untitled report");
     props.setReportName(reportData.name);
     props.setHeaderDetails(headerDetailsFromReportData());
-    props.setFramesArray(framesArrayFromReportData());
+    props.updateFramesArray(framesArrayFromReportData());
   };
 
   React.useEffect(() => {
@@ -256,11 +258,18 @@ function ReportEditView(props: ReportEditViewProps) {
     });
   }, [reportData]);
 
+  React.useEffect(() => {
+    if (!loadingReportData && isReportLoading === null) {
+      return;
+    }
+    setIsReportLoading(loadingReportData);
+  }, [loadingReportData]);
+
   const canEditDeleteReport = React.useMemo(() => {
     return isAuthenticated && reportData?.owner === user?.sub;
   }, [user, isAuthenticated, reportData]);
 
-  if (loadingReportData) {
+  if (loadingReportData || isReportLoading === null) {
     return <PageLoader />;
   }
 
@@ -310,7 +319,8 @@ function ReportEditView(props: ReportEditViewProps) {
         setHasSubHeaderTitleFocused={props.setHasSubHeaderTitleFocused}
         setHeaderDetails={props.setHeaderDetails}
         setPlugins={props.setPlugins}
-        isToolboxOpen={props.open}
+        isToolboxOpen={props.rightPanelOpen}
+        handleRightPanelOpen={props.handleRightPanelOpen}
       />
       <Container maxWidth="lg">
         <div
@@ -318,19 +328,16 @@ function ReportEditView(props: ReportEditViewProps) {
           id="content-container"
           css={`
             transition: width 225ms cubic-bezier(0, 0, 0.2, 1) 0ms;
-            width: ${props.open
+            width: ${props.rightPanelOpen
               ? "calc(100vw - ((100vw - 1280px) / 2) - 400px - 50px)"
               : "100%"};
             position: relative;
-            @media (max-width: 1280px) {
-              width: calc(100vw - 400px);
-            }
           `}
         >
           <Box height={50} />
           <TourGuide
             reportType={props.reportType ?? "basic"}
-            toolBoxOpen={props.open}
+            toolBoxOpen={props.rightPanelOpen}
             handleClose={handleEndReportTour}
             open={openTour}
           />
@@ -344,7 +351,7 @@ function ReportEditView(props: ReportEditViewProps) {
                     rowId={frame.id}
                     deleteFrame={deleteFrame}
                     framesArray={props.framesArray}
-                    setFramesArray={props.setFramesArray}
+                    updateFramesArray={props.updateFramesArray}
                   />
                 )}
                 <Box height={8} />
@@ -361,7 +368,7 @@ function ReportEditView(props: ReportEditViewProps) {
                     <RowFrame
                       {...frame.frame}
                       framesArray={props.framesArray}
-                      setFramesArray={props.setFramesArray}
+                      updateFramesArray={props.updateFramesArray}
                       view={props.view}
                       rowContentHeights={frame.contentHeights}
                       rowContentWidths={frame.contentWidths}
@@ -377,7 +384,7 @@ function ReportEditView(props: ReportEditViewProps) {
                   rowId={frame.id}
                   deleteFrame={deleteFrame}
                   framesArray={props.framesArray}
-                  setFramesArray={props.setFramesArray}
+                  updateFramesArray={props.updateFramesArray}
                 />
               </div>
             );
@@ -387,7 +394,7 @@ function ReportEditView(props: ReportEditViewProps) {
           <AddRowFrameButton
             framesArray={props.framesArray}
             rowStructureType={rowStructureType}
-            setFramesArray={props.setFramesArray}
+            updateFramesArray={props.updateFramesArray}
             setRowStructureType={setRowStructuretype}
             endTour={handleEndReportTour}
           />
