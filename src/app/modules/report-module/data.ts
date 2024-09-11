@@ -33,6 +33,7 @@ export interface ReportModel {
   descriptionColor: string;
   owner: string;
   dateColor: string;
+  isUpdated: boolean;
 }
 
 export const emptyReport: ReportModel = {
@@ -50,6 +51,7 @@ export const emptyReport: ReportModel = {
   descriptionColor: "#ffffff",
   owner: "",
   dateColor: "#ffffff",
+  isUpdated: false,
 };
 
 export const itemSpacing = "30px";

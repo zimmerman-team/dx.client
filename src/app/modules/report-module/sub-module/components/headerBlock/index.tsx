@@ -1,7 +1,7 @@
 import React from "react";
 import get from "lodash/get";
 import { useDrop } from "react-dnd";
-import { EditorState } from "draft-js";
+import { ContentState, EditorState } from "draft-js";
 import { useRecoilState } from "recoil";
 import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
@@ -19,8 +19,10 @@ import { ToolbarPluginsType } from "app/modules/report-module/components/reportS
 import { IHeaderDetails } from "app/modules/report-module/components/right-panel/data";
 
 interface Props {
+  isToolboxOpen: boolean;
   previewMode: boolean;
   hasReportNameFocused?: boolean;
+  isReportHeadingModified?: boolean;
   sethasReportNameFocused?: React.Dispatch<React.SetStateAction<boolean>>;
   setReportName?: React.Dispatch<React.SetStateAction<string>>;
   reportName?: string;
@@ -33,7 +35,6 @@ interface Props {
 export default function HeaderBlock(props: Props) {
   const location = useLocation();
   const { page } = useParams<{ page: string }>();
-  const inputRef = React.useRef<HTMLInputElement>(null);
   const [currentView, setCurrentView] = useRecoilState(
     reportRightPanelViewAtom
   );
@@ -42,11 +43,13 @@ export default function HeaderBlock(props: Props) {
   const headingPlaceholder = "Add a header title";
   const [headingPlaceholderState, setHeadingPlaceholderState] =
     React.useState<string>(headingPlaceholder);
+  const [charCount, setCharCount] = React.useState<null | number>(null);
+  const [maxCharCount, setMaxCharCount] = React.useState(50);
+  const [isHeadingFocused, setIsHeadingFocused] = React.useState(true);
+  const [isDescriptionFocused, setIsDescriptionFocused] = React.useState(false);
+  const [updateCharCount, setUpdateCharCount] = React.useState(false);
   const [descriptionPlaceholderState, setDescriptionPlaceholderState] =
     React.useState<string>(descriptionPlaceholder);
-
-  const [isReportHeadingModified, setIsReportHeadingModified] =
-    React.useState(false);
 
   const viewOnlyMode =
     page !== "new" && get(location.pathname.split("/"), "[3]", "") !== "edit";
@@ -58,14 +61,19 @@ export default function HeaderBlock(props: Props) {
       };
 
   React.useEffect(() => {
-    inputRef.current?.focus();
-  }, []);
+    const plainText = getPlainTextFromEditorState(props.headerDetails.heading);
+    if (charCount === null && props.headerDetails.isUpdated) {
+      setCharCount(plainText.length);
+      setUpdateCharCount(true);
+      setMaxCharCount(50);
+    }
+  }, [props.headerDetails.isUpdated]);
 
   //handles report name state
   const [,] = useDebounce(
     () => {
       // checks when headerDetails.heading is empty and report heading has not been focused
-      if (!props.hasReportNameFocused && isReportHeadingModified) {
+      if (!props.hasReportNameFocused && props.isReportHeadingModified) {
         props.setReportName?.(
           props.headerDetails.heading.getCurrentContent().getPlainText()
         );
@@ -89,34 +97,47 @@ export default function HeaderBlock(props: Props) {
       });
     },
   }));
-
-  const setDescriptionContent = (text: EditorState) => {
-    props.setHeaderDetails({
-      ...props.headerDetails,
-      description: text,
-    });
+  const getPlainTextFromEditorState = (text: EditorState) => {
+    return text.getCurrentContent().getPlainText();
   };
 
-  const setHeadingContent = (text: EditorState) => {
-    props.setHeaderDetails({
-      ...props.headerDetails,
-      heading: text,
-    });
-    if (text.getCurrentContent().getPlainText().length > 0) {
-      setIsReportHeadingModified(true);
-    }
-  };
-
-  const handleChange = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  const setTextContent = (
+    text: EditorState,
+    propsState: EditorState,
+    type: "heading" | "description"
   ) => {
-    const { name, value } = event.target;
-    props.setHeaderDetails({
-      ...props.headerDetails,
-      [name]: value,
-    });
-    if (name == "title") {
-      setIsReportHeadingModified(true);
+    let max = type === "heading" ? 50 : 250;
+    setMaxCharCount(max);
+    const plainText = getPlainTextFromEditorState(text);
+    const plainDescr = getPlainTextFromEditorState(propsState);
+    if (plainText.length <= max) {
+      if (updateCharCount) {
+        setCharCount(plainText.length);
+      }
+      if (type === "heading") {
+        props.setHeaderDetails({
+          ...props.headerDetails,
+          heading: text,
+        });
+      } else {
+        props.setHeaderDetails({
+          ...props.headerDetails,
+          description: text,
+        });
+      }
+    } else {
+      if (type === "heading") {
+        props.setHeaderDetails({
+          ...props.headerDetails,
+          heading: EditorState.moveFocusToEnd(propsState),
+        });
+      } else {
+        props.setHeaderDetails({
+          ...props.headerDetails,
+          description: EditorState.moveFocusToEnd(propsState),
+        });
+      }
+      setCharCount(plainDescr.length);
     }
   };
 
@@ -150,11 +171,28 @@ export default function HeaderBlock(props: Props) {
 
   return (
     <div
-      css={headerBlockcss.container(props.headerDetails.backgroundColor)}
+      css={headerBlockcss.container(
+        props.headerDetails.backgroundColor,
+        props.isToolboxOpen
+      )}
       {...handlers}
       data-cy="report-header-block"
       data-testid="header-block"
     >
+      <div
+        css={`
+          position: absolute;
+          right: ${props.isToolboxOpen ? "404px" : "4px"};
+          top: 4px;
+          color: #ffffff;
+          display: ${props.previewMode ||
+          (!isDescriptionFocused && !isHeadingFocused)
+            ? "none"
+            : "block"};
+        `}
+      >
+        {charCount} / {maxCharCount}
+      </div>
       {(handleDisplay || currentView === "editHeader") && (
         <div
           css={`
@@ -272,13 +310,24 @@ export default function HeaderBlock(props: Props) {
             <RichEditor
               invertColors
               editMode={!props.previewMode}
-              setTextContent={setHeadingContent}
+              setTextContent={(text) =>
+                setTextContent(text, props.headerDetails.heading, "heading")
+              }
               placeholder={headingPlaceholder}
               placeholderState={headingPlaceholderState}
               setPlaceholderState={setHeadingPlaceholderState}
               textContent={props.headerDetails.heading}
               setPlugins={props.setPlugins}
               focusOnMount
+              onBlur={() => {
+                setIsHeadingFocused(false);
+                if (!props.isReportHeadingModified && props.reportName === "") {
+                  props.setReportName?.("Untitled Report");
+                }
+              }}
+              onFocus={() => {
+                setIsHeadingFocused(true);
+              }}
             />
           </div>
 
@@ -336,12 +385,24 @@ export default function HeaderBlock(props: Props) {
             <RichEditor
               invertColors
               editMode={true}
-              setTextContent={setDescriptionContent}
+              setTextContent={(text) =>
+                setTextContent(
+                  text,
+                  props.headerDetails.description,
+                  "description"
+                )
+              }
               placeholder={descriptionPlaceholder}
               placeholderState={descriptionPlaceholderState}
               setPlaceholderState={setDescriptionPlaceholderState}
               textContent={props.headerDetails.description}
               setPlugins={props.setPlugins}
+              onBlur={() => {
+                setIsDescriptionFocused(false);
+              }}
+              onFocus={() => {
+                setIsDescriptionFocused(true);
+              }}
             />
           </div>
         </div>

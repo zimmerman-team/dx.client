@@ -179,6 +179,7 @@ export function ReportPreviewView(props: {
       `}
     >
       <HeaderBlock
+        isToolboxOpen={false}
         previewMode={true}
         headerDetails={{
           title: reportPreviewData.title,

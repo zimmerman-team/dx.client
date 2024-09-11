@@ -38,33 +38,13 @@ export const RichEditor = (props: {
   focusOnMount?: boolean;
   setPlaceholderState: React.Dispatch<React.SetStateAction<string>>;
   placeholder: string;
+  onBlur?: () => void;
+  onFocus?: () => void;
 }): ReactElement => {
   const editor = useRef<Editor | null>(null);
-  const containerRef = useRef<HTMLDivElement | null>(null);
 
   const focus = (): void => {
-    // editor.current?.focus();
-    EditorState.moveFocusToEnd(props.textContent);
-  };
-
-  const moveSelectionToEnd = (editorState: EditorState) => {
-    const content = editorState.getCurrentContent();
-    const blockMap = content.getBlockMap();
-
-    const key = blockMap.last().getKey();
-    const length = blockMap.last().getLength();
-
-    // On Chrome and Safari, calling focus on contenteditable focuses the
-    // cursor at the first character. This is something you don't expect when
-    // you're clicking on an input element but not directly on a character.
-    // Put the cursor back where it was before the blur.
-    const selection = new SelectionState({
-      anchorKey: key,
-      anchorOffset: length,
-      focusKey: key,
-      focusOffset: length,
-    });
-    return EditorState.forceSelection(editorState, selection);
+    editor.current?.focus();
   };
 
   React.useEffect(() => {
@@ -176,10 +156,12 @@ export const RichEditor = (props: {
         editorState={props.textContent}
         onChange={props.setTextContent}
         onBlur={() => {
+          props.onBlur?.();
           if (props.textContent.getCurrentContent().getPlainText().length === 0)
             props.setPlaceholderState(props.placeholder);
         }}
         onFocus={() => {
+          props.onFocus?.();
           props.setPlugins?.(plugins);
           props.setPlaceholderState("");
         }}

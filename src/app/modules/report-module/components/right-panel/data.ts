@@ -10,6 +10,7 @@ export interface IHeaderDetails {
   titleColor: string;
   descriptionColor: string;
   dateColor: string;
+  isUpdated?: boolean;
 }
 export interface ReportRightPanelProps {
   open: boolean;

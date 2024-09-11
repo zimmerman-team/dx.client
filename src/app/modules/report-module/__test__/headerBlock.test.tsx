@@ -18,6 +18,7 @@ import { DndProvider, useDrag } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
 interface MockProps {
+  isToolboxOpen: boolean;
   previewMode: boolean;
   hasSubHeaderTitleFocused?: boolean;
   setHasSubHeaderTitleFocused?: React.Dispatch<React.SetStateAction<boolean>>;
@@ -66,6 +67,7 @@ jest.mock("react-router-dom", () => ({
 
 const defaultProps = (props: Partial<MockProps>): MockProps => {
   return {
+    isToolboxOpen: false,
     previewMode: false,
     hasSubHeaderTitleFocused: false,
     setHasSubHeaderTitleFocused: jest.fn(),

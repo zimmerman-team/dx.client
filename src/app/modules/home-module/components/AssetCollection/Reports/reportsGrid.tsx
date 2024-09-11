@@ -221,7 +221,7 @@ export default function ReportsGrid(props: Readonly<Props>) {
               <ReformedGridItem
                 id={data.id}
                 key={data.id}
-                name={data.title}
+                name={data.name}
                 date={data.createdDate}
                 viz={<ColoredReportIcon />}
                 color={data.backgroundColor}
