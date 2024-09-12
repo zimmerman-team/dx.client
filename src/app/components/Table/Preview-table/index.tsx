@@ -31,9 +31,24 @@ interface PreviewTableProps {
   observerTarget: React.MutableRefObject<null>;
   loading: boolean;
 }
-
+type IdatasStats = {
+  name: string;
+  type: "bar" | "percentage" | "unique";
+  data: { name: string; value: number }[];
+};
 export default function PreviewTable(props: PreviewTableProps) {
   const [toolboxDisplay, setToolboxDisplay] = React.useState(false);
+  let columns: string[] = [];
+  let dataStats: IdatasStats[] = [];
+  if (props.columns.length > 0 && props.dataStats.length > 0) {
+    if (props.columns.length < 5) {
+      columns = [...props.columns, ...Array(5).fill("")];
+      dataStats = [...props.dataStats, ...Array(5).fill("")];
+    } else {
+      columns = [...props.columns, ...Array(2).fill("")];
+      dataStats = [...props.dataStats, ...Array(2).fill("")];
+    }
+  }
 
   return (
     <>
@@ -88,7 +103,7 @@ export default function PreviewTable(props: PreviewTableProps) {
                 padding: 0rem 0.4rem;
               `}
             >
-              {props.columns.map((val, index) => {
+              {columns.map((val, index) => {
                 return (
                   <TableCell key={val}>
                     <div
@@ -98,6 +113,7 @@ export default function PreviewTable(props: PreviewTableProps) {
                         justify-content: space-between;
                         align-items: center;
                         gap: 1rem;
+                        width: ${val ? "auto" : "192px"};
                       `}
                     >
                       <div
@@ -107,9 +123,9 @@ export default function PreviewTable(props: PreviewTableProps) {
                           border-radius: 50%;
                           padding: 3px;
                           justify-content: center;
-                          display: flex;
                           align-items: center;
                           background: #ffffff;
+                          display: ${val ? "flex" : "none"};
                         `}
                       >
                         {props.dataTypes?.[val] === "string" ? "Aa" : "#"}
@@ -127,25 +143,25 @@ export default function PreviewTable(props: PreviewTableProps) {
                       >
                         <b>{val}</b>
                       </p>
-                      <IconButton>
-                        <SortIcon />
-                      </IconButton>
+                      {val && (
+                        <IconButton>
+                          <SortIcon />
+                        </IconButton>
+                      )}
                     </div>
                   </TableCell>
                 );
               })}
             </TableRow>
             <TableRow>
-              {props.dataStats?.map((val) => (
+              {dataStats?.map((val) => (
                 <TableCell
                   key={val.name}
                   css={`
                     color: #000;
                     font-size: 12px;
-                    // cursor: pointer;
                     background: #f4f4f4;
                   `}
-                  // onClick={handleToolBoxDisplay}
                 >
                   {val.name !== "ID" && (
                     <div
@@ -168,7 +184,7 @@ export default function PreviewTable(props: PreviewTableProps) {
                   background: #fff;
                 `}
               >
-                {props.columns.map((val, cellIndex) => (
+                {columns.map((val, cellIndex) => (
                   <TableCell key={val}>
                     <p
                       title={data?.[val] as string}

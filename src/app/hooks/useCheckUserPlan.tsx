@@ -1,5 +1,5 @@
 import { useAuth0 } from "@auth0/auth0-react";
-import { planDialogAtom } from "app/state/recoil/atoms";
+import { fetchPlanLoadingAtom, planDialogAtom } from "app/state/recoil/atoms";
 import { useStoreState } from "app/state/store/hooks";
 import axios from "axios";
 import React from "react";
@@ -9,6 +9,8 @@ export function useCheckUserPlan() {
   const { isAuthenticated } = useAuth0();
   const token = useStoreState((state) => state.AuthToken.value);
   const setPlanDialog = useSetRecoilState(planDialogAtom);
+
+  const setLoading = useSetRecoilState(fetchPlanLoadingAtom);
 
   const [userPlan, setUserPlan] = React.useState<{
     planData: {
@@ -49,6 +51,7 @@ export function useCheckUserPlan() {
 
   React.useEffect(() => {
     if (!token) return;
+    setLoading(true);
     axios
       .get(`${process.env.REACT_APP_API}/users/plan-data`, {
         headers: {
@@ -58,6 +61,12 @@ export function useCheckUserPlan() {
       })
       .then((response) => {
         setUserPlan(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, [token]);
 
