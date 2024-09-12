@@ -27,7 +27,7 @@ export const NoMatchPage = () => {
           css={`
             position: absolute;
             top: 80px;
-
+            z-index: -1;
             left: 0;
             width: 100%;
           `}
