@@ -7,7 +7,7 @@ import { mockUseAuth0 } from "app/utils/mockAuth0";
 import { Router } from "react-router-dom";
 import { createMemoryHistory } from "history";
 import GridItem from "app/modules/home-module/components/AssetCollection/Reports/gridItem";
-import { EditorState } from "draft-js";
+import { ContentState, EditorState } from "draft-js";
 
 interface MockProps {
   date: Date;
@@ -42,7 +42,9 @@ const defaultProps = (newProps: Partial<MockProps> = {}): MockProps => {
   return {
     date: "2021-08-13",
     id: "report-id",
-    title: "report-title",
+    heading: EditorState.createWithContent(
+      ContentState.createFromText("report-title")
+    ),
     name: "report-description",
     color: "#ffffff",
     viz: <div data-testid="report-grid-item-viz-icon">report</div>,
@@ -50,6 +52,7 @@ const defaultProps = (newProps: Partial<MockProps> = {}): MockProps => {
     handleDuplicate: jest.fn(),
     showMenuButton: true,
     owner: "auth0|123",
+
     ...newProps,
   } as MockProps;
 };

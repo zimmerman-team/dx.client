@@ -328,6 +328,7 @@ export default function HeaderBlock(props: Props) {
               onFocus={() => {
                 setIsHeadingFocused(true);
               }}
+              testId="heading"
             />
           </div>
 

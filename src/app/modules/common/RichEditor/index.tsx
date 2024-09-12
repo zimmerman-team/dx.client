@@ -40,6 +40,7 @@ export const RichEditor = (props: {
   placeholder: string;
   onBlur?: () => void;
   onFocus?: () => void;
+  testId?: string;
 }): ReactElement => {
   const editor = useRef<Editor | null>(null);
 
@@ -138,6 +139,7 @@ export const RichEditor = (props: {
         }
       `}
       data-cy="rich-text-editor-container"
+      data-testid={`rich-text-editor-container-${props.testId}`}
     >
       <Editor
         plugins={plugins}
