@@ -1,7 +1,7 @@
 import React from "react";
 import get from "lodash/get";
 import { useDrop } from "react-dnd";
-import { ContentState, EditorState } from "draft-js";
+import { ContentState, EditorState, convertToRaw } from "draft-js";
 import { useRecoilState } from "recoil";
 import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
@@ -110,10 +110,10 @@ export default function HeaderBlock(props: Props) {
     setMaxCharCount(max);
     const plainText = getPlainTextFromEditorState(text);
     const plainDescr = getPlainTextFromEditorState(propsState);
+    if (updateCharCount) {
+      setCharCount(plainText.length);
+    }
     if (plainText.length <= max) {
-      if (updateCharCount) {
-        setCharCount(plainText.length);
-      }
       if (type === "heading") {
         props.setHeaderDetails({
           ...props.headerDetails,
