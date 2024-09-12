@@ -462,27 +462,30 @@ export default function ReportModule() {
           onSave={onSave}
         />
       )}
-      <div
-        css={`
-          width: 100%;
-          height: ${view === "ai-template" ||
-          reportError401 ||
-          !showReportHeader
-            ? "0px"
-            : "98px"};
-        `}
-      />
+
       <Switch>
-        <Route exact path="/report/:page/initial">
+        <Route exact path="/report/new/initial">
+          <div
+            css={`
+              height: 98px;
+            `}
+          />
           <ReportInitialView
             resetReport={resetReport}
             handleSetButtonActive={handleSetButtonActive}
           />
         </Route>
-        <Route exact path="/report/:page/ai-template">
+        <Route exact path="/report/new/ai-template">
           <AITemplate />
         </Route>
         <Route exact path="/report/:page/edit">
+          <div
+            css={`
+              height: ${canEditDeleteReport && !reportError401
+                ? "98px"
+                : "0px"};
+            `}
+          />
           <ReportEditView
             rightPanelOpen={rightPanelOpen}
             handleRightPanelOpen={() => setRightPanelOpen(true)}
@@ -508,6 +511,11 @@ export default function ReportModule() {
           />
         </Route>
         <Route exact path="/report/:page">
+          <div
+            css={`
+              height: ${reportError401 ? "0px" : "98px"};
+            `}
+          />
           <ReportPreviewView
             setIsPreviewView={setIsPreviewView}
             setAutoSave={setAutoSave}
