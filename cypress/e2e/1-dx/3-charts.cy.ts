@@ -21,7 +21,11 @@ describe("Testing create chart on DX", () => {
 
   beforeEach(() => {
     cy.restoreLocalStorageCache();
+    cy.intercept("GET", `${apiUrl}/users/plan-data`).as("planData");
+
     cy.visit("/");
+
+    cy.wait("@planData");
 
     cy.get('[data-cy="cookie-btn"]').click();
 
@@ -186,7 +190,11 @@ describe("Testing Ai chart creation", () => {
 
   beforeEach(() => {
     cy.restoreLocalStorageCache();
+    cy.intercept("GET", `${apiUrl}/users/plan-data`).as("planData");
+
     cy.visit("/");
+
+    cy.wait("@planData");
 
     cy.get('[data-cy="cookie-btn"]').click();
     cy.intercept("GET", `${apiUrl}/datasets?**`).as("getDatasets");
@@ -271,7 +279,11 @@ describe("Edit, duplicate and delete chart", () => {
   const apiUrl = Cypress.env("api_url");
   beforeEach(() => {
     cy.restoreLocalStorageCache();
+    cy.intercept("GET", `${apiUrl}/users/plan-data`).as("planData");
+
     cy.visit("/");
+
+    cy.wait("@planData");
 
     cy.get('[data-cy="cookie-btn"]').click();
 
