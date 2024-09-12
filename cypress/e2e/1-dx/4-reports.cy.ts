@@ -47,11 +47,9 @@ describe("Testing reports on DX", () => {
     cy.get('[data-cy="report-sub-header-title-input"]').type(reportTestName);
 
     cy.get('[data-cy="report-header-block"]').within(() => {
-      cy.get('[data-cy="report-header-block-title-input"]').type(
-        reportTestName
-      );
-      cy.get('[data-cy="rich-text-editor-container"]').click();
-      cy.get('[data-testid="rich-text-editor"]').type(
+      cy.get('[data-testid="heading-rich-text-editor"]').type(reportTestName);
+      cy.get('[data-cy="description-rich-text-editor-container"]').click();
+      cy.get('[data-testid="description-rich-text-editor"]').type(
         "This is a report on football players"
       );
     });
@@ -79,7 +77,7 @@ describe("Testing reports on DX", () => {
     cy.get('[data-cy="row-frame-item-drop-zone-0-0"]').drop();
 
     cy.get("[data-cy=row-frame-0]").within(() => {
-      cy.get('[data-testid="rich-text-editor"]')
+      cy.get('[data-testid="report-rich-text-editor"]')
         .first()
         .type(
           "This is a report on football players who played in a match last year"
@@ -221,9 +219,9 @@ describe("Edit, duplicate and delete report", () => {
     cy.get('[data-cy="report-sub-header-title-input"]').type(" - Edited");
 
     cy.get('[data-cy="report-header-block"]').within(() => {
-      cy.get('[data-cy="report-header-block-title-input"]').type(" - Edited");
-      cy.get('[data-cy="rich-text-editor-container"]').click();
-      cy.get('[data-testid="rich-text-editor"]').type(" - Edited");
+      cy.get('[data-testid="heading-rich-text-editor"]').type(" - Edited");
+      cy.get('[data-cy="description-rich-text-editor-container"]').click();
+      cy.get('[data-testid="description-rich-text-editor"]').type(" - Edited");
     });
 
     cy.get('[data-cy="save-report-button"]').click();

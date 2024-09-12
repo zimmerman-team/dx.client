@@ -328,7 +328,7 @@ export default function HeaderBlock(props: Props) {
               onFocus={() => {
                 setIsHeadingFocused(true);
               }}
-              testId="heading"
+              testId="heading-rich-text-editor"
             />
           </div>
 
@@ -404,6 +404,7 @@ export default function HeaderBlock(props: Props) {
               onFocus={() => {
                 setIsDescriptionFocused(true);
               }}
+              testId="description-rich-text-editor"
             />
           </div>
         </div>
