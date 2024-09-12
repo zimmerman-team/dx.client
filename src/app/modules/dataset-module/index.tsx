@@ -4,6 +4,7 @@ import DatasetUploadSteps from "app/modules/dataset-module/routes/upload-module/
 import { Route, Switch } from "react-router-dom";
 import DatasetDetail from "app/modules/dataset-module/routes/datasetDetail";
 import EditMetaData from "app/modules/dataset-module/routes/edit";
+import { NoMatchPage } from "app/modules/common/no-match-page";
 
 export default function DatasetDetailModule() {
   useTitle("Dataxplorer - Datasets");
@@ -11,14 +12,17 @@ export default function DatasetDetailModule() {
 
   return (
     <Switch>
-      <Route path="/dataset/:page/detail">
+      <Route exact path="/dataset/:page/detail">
         <DatasetDetail />
       </Route>
-      <Route path="/dataset/new/upload">
+      <Route exact path="/dataset/new/upload">
         <DatasetUploadSteps datasetId={datasetId} setDatasetId={setDatasetId} />
       </Route>
-      <Route path="/dataset/:page/edit">
+      <Route exact path="/dataset/:page/edit">
         <EditMetaData />
+      </Route>
+      <Route path="*">
+        <NoMatchPage />
       </Route>
     </Switch>
   );
