@@ -102,6 +102,9 @@ export interface StoreModel {
     DatasetCount: ApiCallModel;
     DatasetGet: ApiCallModel;
   };
+  user: {
+    UserProfile: ApiCallModel;
+  };
   assets: {
     AssetGetList: ApiCallModel;
     AssetsCount: ApiCallModel;

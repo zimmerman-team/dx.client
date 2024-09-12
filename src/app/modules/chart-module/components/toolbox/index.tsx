@@ -1,6 +1,5 @@
 /* third-party */
 import React from "react";
-import { useRecoilState } from "recoil";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useHistory, useParams } from "react-router-dom";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
@@ -15,12 +14,17 @@ import {
 } from "app/modules/chart-module/components/toolbox/data";
 import { ChartToolBoxSteps } from "app/modules/chart-module/components/toolbox/steps";
 import { TriangleXSIcon } from "app/assets/icons/TriangleXS";
-import { emptyChartAPI, ChartAPIModel } from "app/modules/chart-module/data";
+import {
+  emptyChartAPI,
+  ChartAPIModel,
+  chartViews,
+} from "app/modules/chart-module/data";
 import ToolboxNav from "app/modules/chart-module/components/toolbox/steps/navbar";
 import { InfoSnackbar } from "../chartSubheaderToolbar/infoSnackbar";
 
 export function ChartModuleToolBox(props: Readonly<ChartToolBoxProps>) {
   const { page, view } = useParams<{ page: string; view?: string }>();
+  const isValidView = Object.values(chartViews).find((v) => v === view);
   const history = useHistory();
   const { isAuthenticated, user } = useAuth0();
   const isMobile = useMediaQuery("(max-width: 767px)");
@@ -114,7 +118,11 @@ export function ChartModuleToolBox(props: Readonly<ChartToolBoxProps>) {
   };
 
   React.useEffect(() => {
-    if (location.pathname === `/chart/${page}` || view == "preview") {
+    if (
+      location.pathname === `/chart/${page}` ||
+      view == "preview" ||
+      !isValidView
+    ) {
       setDisplayToolbar("none");
       props.setToolboxOpen(false);
     } else {

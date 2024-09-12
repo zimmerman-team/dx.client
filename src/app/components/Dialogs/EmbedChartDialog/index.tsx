@@ -7,10 +7,9 @@ import IconButton from "@material-ui/core/IconButton";
 import Snackbar from "@material-ui/core/Snackbar";
 import get from "lodash/get";
 import { useLoadDatasetDetails } from "app/modules/report-module/components/chart-wrapper/useLoadDatasetDetailsAPI";
-import { useAuth0 } from "@auth0/auth0-react";
 import ChartContainer from "./chartContainer";
 import { copyToClipboard } from "app/utils/copyToClipboard";
-import { useStoreState } from "app/state/store/hooks";
+import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import LinkOptions from "./linkOptions";
 import BasicSwitch from "app/components/Switch/BasicSwitch";
 import EmbedOptions from "./embedOptions";
@@ -24,8 +23,13 @@ export default function EmbedChartDialog(props: {
 }) {
   const containerRef = React.useRef<HTMLDivElement>(null);
   const token = useStoreState((state) => state.AuthToken.value);
+  const fetchUserProfile = useStoreActions(
+    (state) => state.user.UserProfile.fetch
+  );
+  const userProfile = useStoreState(
+    (state) => state.user.UserProfile.crudData
+  ) as { username: string };
   const classes = useStyles();
-  const { user } = useAuth0();
   const { datasetDetails } = useLoadDatasetDetails(
     props.datasetId!,
     token ?? undefined
@@ -38,7 +42,6 @@ export default function EmbedChartDialog(props: {
     React.useState<string>("embed-code");
 
   const {
-    loading,
     notFound,
     chartErrorMessage,
     dataError,
@@ -49,6 +52,11 @@ export default function EmbedChartDialog(props: {
     setNotFound,
   } = useRenderChartFromAPI(token, props.chartId);
 
+  React.useEffect(() => {
+    if (datasetDetails.owner) {
+      fetchUserProfile({ getId: datasetDetails.owner });
+    }
+  }, [datasetDetails]);
   let newVisualOptions = visualOptions;
 
   const displayModes = [
@@ -226,7 +234,7 @@ export default function EmbedChartDialog(props: {
             >
               <p>
                 <span>Author:</span>
-                <span>{user?.given_name || "NOT SPECIFIED"}</span>
+                <span>{userProfile?.username}</span>
               </p>
               <div
                 css={`

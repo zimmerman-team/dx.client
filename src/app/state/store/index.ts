@@ -46,6 +46,7 @@ import {
   ReportsCount,
 } from "app/state/api/action-reducers/reports";
 import { AssetGetList, AssetsCount } from "../api/action-reducers/assets";
+import { UserProfile } from "../api/action-reducers/user";
 
 const storeContent: StoreModel = {
   // global search
@@ -55,7 +56,9 @@ const storeContent: StoreModel = {
   DataSourceState: persist(DataSourceState),
   DataSourceSnackbarVisibility: persist(DataSourceSnackbarVisibilityState),
   AuthToken: persist(AuthTokenState),
-
+  user: {
+    UserProfile: UserProfile,
+  },
   dataThemes: {
     DatasetGetList: DatasetGetList,
     DatasetGet: persist(DatasetGet),
