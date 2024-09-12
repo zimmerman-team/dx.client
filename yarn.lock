@@ -1729,6 +1729,11 @@
   resolved "https://registry.yarnpkg.com/@juggle/resize-observer/-/resize-observer-3.4.0.tgz#08d6c5e20cf7e4cc02fd181c4b0c225cd31dbb60"
   integrity sha512-dfLbk+PwWvFzSxwk3n5ySL0hfBog779o8h68wK/7/APo/7cgyWp5jcXockbxdk5kFRkbeXWm4Fbi9FrdN381sA==
 
+"@livesession/sdk@^1.1.4":
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/@livesession/sdk/-/sdk-1.1.4.tgz#e8c020faffe4b51308a6b0bf404a1871f246a595"
+  integrity sha512-xyiDd3M9wx5k586BIQRcVxSJP5/2XWF9Ca1seLGRSaFoV8o270p5Mn5kpceZFN4STzlYubiMcrPZFFSNWEceVw==
+
 "@material-ui/core@^4.11.3":
   version "4.12.3"
   resolved "https://registry.npmjs.org/@material-ui/core/-/core-4.12.3.tgz"
