@@ -21,7 +21,11 @@ describe("Testing reports on DX", () => {
     cy.restoreLocalStorageCache();
 
     // Navigating to dx home page
+    cy.intercept("GET", `${apiUrl}/users/plan-data`).as("planData");
+
     cy.visit("/");
+
+    cy.wait("@planData");
 
     cy.get('[data-cy="cookie-btn"]').click();
   });
@@ -176,7 +180,11 @@ describe("Edit, duplicate and delete report", () => {
 
   beforeEach(() => {
     cy.restoreLocalStorageCache();
+    cy.intercept("GET", `${apiUrl}/users/plan-data`).as("planData");
+
     cy.visit("/");
+
+    cy.wait("@planData");
 
     cy.get('[data-cy="cookie-btn"]').click();
 

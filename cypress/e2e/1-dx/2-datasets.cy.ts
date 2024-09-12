@@ -24,11 +24,16 @@ describe("Testing connecting data on DX", () => {
     cy.restoreLocalStorageCache();
     // cy.setGoogleAccessToken();
 
+    cy.intercept("GET", `${apiUrl}/users/plan-data`).as("planData");
+
     cy.visit("/");
+
+    cy.wait("@planData");
 
     cy.get('[data-cy="cookie-btn"]').click();
     cy.intercept(`${apiUrl}/external-sources/search?q=*`).as("getDefaultData");
     cy.get('[data-cy="home-connect-dataset-button"]').click();
+    cy.wait("@planData");
   });
 
   it("Can filter results by source in the federated search", () => {
@@ -212,7 +217,11 @@ describe("Edit, Delete and Duplicate Dataset", () => {
 
   beforeEach(() => {
     cy.restoreLocalStorageCache();
+    cy.intercept("GET", `${apiUrl}/users/plan-data`).as("planData");
+
     cy.visit("/");
+
+    cy.wait("@planData");
     cy.get('[data-cy="cookie-btn"]').click();
 
     cy.intercept("GET", `${apiUrl}/datasets?filter=*`).as("fetchDatasets");

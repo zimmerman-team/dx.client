@@ -23,7 +23,7 @@ import {
 import { PageLoader } from "app/modules/common/page-loader";
 import { useChartsRawData } from "app/hooks/useChartsRawData";
 import { NoMatchPage } from "app/modules/common/no-match-page";
-import ChartModuleDataView from "app/modules/chart-module/routes/data";
+import ChartModuleDataView from "app/modules/chart-module/routes/select-data";
 import { ChartSubheaderToolbar } from "./components/chartSubheaderToolbar";
 import ChartBuilderMapping from "app/modules/chart-module/routes/mapping";
 import ChartBuilderFilters from "app/modules/chart-module/routes/filters";
@@ -38,6 +38,8 @@ import {
   routeToConfig,
   ChartRenderedItem,
   defaultChartOptions,
+  chartViews,
+  chartPaths,
 } from "app/modules/chart-module/data";
 import { NotAuthorizedMessageModule } from "app/modules/common/not-authorized-message";
 import { isEmpty } from "lodash";
@@ -64,6 +66,7 @@ export default function ChartModule() {
   const token = useStoreState((state) => state.AuthToken.value);
   const history = useHistory();
   const { page, view } = useParams<{ page: string; view?: string }>();
+  const isValidView = Object.values(chartViews).find((v) => v === view);
   const [chartFromAPI, setChartFromAPI] =
     React.useState<ChartRenderedItem | null>(null);
   const [visualOptions, setVisualOptions] = useSessionStorage<any>(
@@ -74,7 +77,7 @@ export default function ChartModule() {
   const setPlanDialog = useSetRecoilState(planDialogAtom);
 
   const [rawViz, setRawViz] = React.useState<any>(null);
-  const [toolboxOpen, setToolboxOpen] = React.useState(Boolean(view));
+  const [toolboxOpen, setToolboxOpen] = React.useState(Boolean(isValidView));
   const [savedChanges, setSavedChanges] = React.useState<boolean>(false);
 
   const [chartName, setChartName] = React.useState("Untitled Chart");
@@ -600,7 +603,7 @@ export default function ChartModule() {
                   ref={ref}
                 >
                   <Switch>
-                    <Route path="/chart/:page/customize">
+                    <Route exact path={chartPaths.customize}>
                       <ChartBuilderCustomize
                         loading={loading}
                         dimensions={dimensions}
@@ -620,7 +623,7 @@ export default function ChartModule() {
                       />
                     </Route>
 
-                    <Route path="/chart/:page/filters">
+                    <Route exact path={chartPaths.filters}>
                       <ChartBuilderFilters
                         loading={loading}
                         renderedChart={content}
@@ -638,7 +641,7 @@ export default function ChartModule() {
                         chartErrorMessage={chartErrorMessage}
                       />
                     </Route>
-                    <Route path="/chart/:page/mapping">
+                    <Route exact path={chartPaths.mapping}>
                       <ChartBuilderMapping
                         loading={loading}
                         visualOptions={visualOptions}
@@ -656,7 +659,7 @@ export default function ChartModule() {
                         chartErrorMessage={chartErrorMessage}
                       />
                     </Route>
-                    <Route path="/chart/:page/chart-type">
+                    <Route exact path={chartPaths.chartType}>
                       <ChartBuilderChartType
                         loading={loading}
                         loadDataset={loadDataset}
@@ -666,7 +669,7 @@ export default function ChartModule() {
                         setVisualOptionsOnChange={setVisualOptionsOnChange}
                       />
                     </Route>
-                    <Route path="/chart/:page/preview-data">
+                    <Route exact path={chartPaths.previewData}>
                       <ChartBuilderPreview
                         loading={loading}
                         data={sampleData}
@@ -679,14 +682,14 @@ export default function ChartModule() {
                         chartErrorMessage={chartErrorMessage}
                       />
                     </Route>
-                    <Route path="/chart/:page/data">
+                    <Route exact path={chartPaths.data}>
                       <ChartModuleDataView
                         loadDataset={loadDataset}
                         toolboxOpen={toolboxOpen}
                         setChartFromAPI={setChartFromAPI}
                       />
                     </Route>
-                    <Route path="/chart/:page/preview">
+                    <Route exact path={chartPaths.preview}>
                       <ChartBuilderPreviewTheme
                         loading={loading || isChartLoading}
                         visualOptions={visualOptions}
@@ -705,7 +708,7 @@ export default function ChartModule() {
                         chartErrorMessage={chartErrorMessage}
                       />
                     </Route>
-                    <Route path="/chart/:page">
+                    <Route exact path={chartPaths.detail}>
                       <ChartBuilderPreviewTheme
                         loading={loading || isChartLoading}
                         visualOptions={visualOptions}
