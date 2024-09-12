@@ -6,7 +6,8 @@ export interface ReportModel {
   title: string;
   public: boolean;
   showHeader: boolean;
-  subTitle: RawDraftContentState;
+  description: RawDraftContentState;
+  heading: RawDraftContentState;
   rows: {
     structure:
       | null
@@ -32,6 +33,7 @@ export interface ReportModel {
   descriptionColor: string;
   owner: string;
   dateColor: string;
+  isUpdated: boolean;
 }
 
 export const emptyReport: ReportModel = {
@@ -39,7 +41,8 @@ export const emptyReport: ReportModel = {
   name: "Untitled report",
   title: "",
   public: false,
-  subTitle: convertToRaw(EditorState.createEmpty().getCurrentContent()),
+  description: convertToRaw(EditorState.createEmpty().getCurrentContent()),
+  heading: convertToRaw(EditorState.createEmpty().getCurrentContent()),
   showHeader: true,
   rows: [],
   createdDate: new Date(),
@@ -48,6 +51,7 @@ export const emptyReport: ReportModel = {
   descriptionColor: "#ffffff",
   owner: "",
   dateColor: "#ffffff",
+  isUpdated: false,
 };
 
 export const itemSpacing = "30px";

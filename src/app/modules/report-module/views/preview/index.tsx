@@ -141,7 +141,8 @@ export function ReportPreviewView(props: {
         descriptionColor: persistedReportState.headerDetails.descriptionColor,
         dateColor: persistedReportState.headerDetails.dateColor,
         rows: JSON.parse(persistedReportState.framesArray || "[]"),
-        subTitle: JSON.parse(persistedReportState.headerDetails.description),
+        description: JSON.parse(persistedReportState.headerDetails.description),
+        heading: JSON.parse(persistedReportState.headerDetails.heading),
       });
     }
   }, [persistedReportState]);
@@ -178,12 +179,18 @@ export function ReportPreviewView(props: {
       `}
     >
       <HeaderBlock
+        isToolboxOpen={false}
         previewMode={true}
         headerDetails={{
           title: reportPreviewData.title,
           showHeader: reportPreviewData.showHeader,
+          heading: EditorState.createWithContent(
+            convertFromRaw(reportPreviewData.heading ?? emptyReport.heading)
+          ),
           description: EditorState.createWithContent(
-            convertFromRaw(reportPreviewData.subTitle ?? emptyReport.subTitle)
+            convertFromRaw(
+              reportPreviewData.description ?? emptyReport.description
+            )
           ),
           backgroundColor: reportPreviewData.backgroundColor,
           titleColor: reportPreviewData.titleColor,

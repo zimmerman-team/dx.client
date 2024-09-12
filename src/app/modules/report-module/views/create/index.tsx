@@ -106,12 +106,13 @@ function ReportCreateView(props: Readonly<ReportCreateViewProps>) {
         `}
       />
       <HeaderBlock
+        isToolboxOpen={props.rightPanelOpen}
         previewMode={false}
         headerDetails={{ ...props.headerDetails }}
         setHeaderDetails={props.setHeaderDetails}
         setReportName={props.setReportName}
         reportName={props.reportName}
-        hasSubHeaderTitleFocused={props.hasSubHeaderTitleFocused}
+        hasReportNameFocused={props.hasReportNameFocused}
         setPlugins={props.setPlugins}
         handleRightPanelOpen={props.handleRightPanelOpen}
       />

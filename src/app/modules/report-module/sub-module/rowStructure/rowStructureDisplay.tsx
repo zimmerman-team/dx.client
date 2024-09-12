@@ -604,6 +604,7 @@ const Box = (props: {
               placeholder={placeholder}
               setPlaceholderState={setTextPlaceholderState}
               placeholderState={textPlaceholderState}
+              testId="report-rich-text-editor"
             />
           </div>
         </Resizable>

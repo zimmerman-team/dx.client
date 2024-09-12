@@ -3,12 +3,14 @@ import { IFramesArray } from "../../views/create/data";
 
 export interface IHeaderDetails {
   title: string;
+  heading: EditorState;
   showHeader: boolean;
   description: EditorState;
   backgroundColor: string;
   titleColor: string;
   descriptionColor: string;
   dateColor: string;
+  isUpdated?: boolean;
 }
 export interface ReportRightPanelProps {
   open: boolean;

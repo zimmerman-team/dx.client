@@ -126,6 +126,7 @@ export const persistedReportStateAtom = atom<{
   headerDetails: {
     title: string;
     description: string;
+    heading: string;
     showHeader: boolean;
     backgroundColor: string;
     titleColor: string;
@@ -141,6 +142,9 @@ export const persistedReportStateAtom = atom<{
     headerDetails: {
       title: "",
       description: JSON.stringify(
+        convertToRaw(EditorState.createEmpty().getCurrentContent())
+      ),
+      heading: JSON.stringify(
         convertToRaw(EditorState.createEmpty().getCurrentContent())
       ),
       showHeader: true,

@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom";
 import useResizeObserver from "use-resize-observer";
 import Container from "@material-ui/core/Container";
 import { EditorState, RawDraftContentState, convertFromRaw } from "draft-js";
-import { useTitle, useUpdateEffect } from "react-use";
+import { useTitle } from "react-use";
 import { useAuth0 } from "@auth0/auth0-react";
 import { PlaceHolder } from "app/modules/report-module/views/create";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
@@ -28,7 +28,8 @@ import { IFramesArray } from "app/modules/report-module/views/create/data";
 import RowFrame from "app/modules/report-module/sub-module/rowStructure";
 import TourGuide from "app/components/Dialogs/TourGuide";
 import useCookie from "@devhammed/use-cookie";
-import { get } from "lodash";
+import isEqual from "lodash/isEqual";
+import get from "lodash/get";
 import { PageLoader } from "app/modules/common/page-loader";
 import { handleDragOverScroll } from "app/utils/handleAutoScroll";
 import {
@@ -42,18 +43,16 @@ function ReportEditView(props: ReportEditViewProps) {
   const { page } = useParams<{ page: string }>();
   const token = useStoreState((state) => state.AuthToken.value);
   const { isAuthenticated, user } = useAuth0();
-
   const { ref, width } = useResizeObserver<HTMLDivElement>();
-
   const [tourCookie, setTourCookie] = useCookie("tourGuide", "true");
   const [openTour, setOpenTour] = React.useState(
     tourCookie && !props.isSaveEnabled
   );
-
   const [containerWidth, setContainerWidth] = useRecoilState(
     reportContentContainerWidth
   );
-
+  const [isReportHeadingModified, setIsReportHeadingModified] =
+    React.useState(false);
   const [persistedReportState] = useRecoilState(persistedReportStateAtom);
   const [rowStructureType, setRowStructuretype] =
     React.useState<IRowFrameStructure>({
@@ -196,15 +195,23 @@ function ReportEditView(props: ReportEditViewProps) {
     return {
       title: reportData.title,
       showHeader: reportData.showHeader,
-      description: reportData?.subTitle
+      heading: reportData?.heading
+        ? EditorState.moveFocusToEnd(
+            EditorState.createWithContent(
+              convertFromRaw(reportData?.heading as RawDraftContentState)
+            )
+          )
+        : EditorState.moveFocusToEnd(EditorState.createEmpty()),
+      description: reportData?.description
         ? EditorState.createWithContent(
-            convertFromRaw(reportData?.subTitle as RawDraftContentState)
+            convertFromRaw(reportData?.description as RawDraftContentState)
           )
         : EditorState.createEmpty(),
       backgroundColor: reportData.backgroundColor,
       titleColor: reportData.titleColor,
       descriptionColor: reportData.descriptionColor,
       dateColor: reportData.dateColor,
+      isUpdated: true,
     };
   };
 
@@ -228,12 +235,21 @@ function ReportEditView(props: ReportEditViewProps) {
     ) {
       props.setHasChangesBeenMade(true);
     }
+    if (
+      !isEqual(
+        props.headerDetails.heading.getCurrentContent().getPlainText(),
+        headerDetailsFromReportData().heading.getCurrentContent().getPlainText()
+      )
+    ) {
+      setIsReportHeadingModified(true);
+    }
   };
 
   React.useEffect(() => {
     hasChangesBeenMadeCheck();
     return () => {
       props.setHasChangesBeenMade(false);
+      setIsReportHeadingModified(false);
     };
   }, [
     props.framesArray,
@@ -246,7 +262,7 @@ function ReportEditView(props: ReportEditViewProps) {
     if (reportData.id !== page) {
       return;
     }
-    props.setHasSubHeaderTitleFocused(reportData.name !== "Untitled report");
+    props.setHasReportNameFocused(reportData.name !== "Untitled report");
     props.setReportName(reportData.name);
     props.setHeaderDetails(headerDetailsFromReportData());
     props.updateFramesArray(framesArrayFromReportData());
@@ -315,11 +331,13 @@ function ReportEditView(props: ReportEditViewProps) {
         }}
         reportName={reportData.name}
         setReportName={props.setReportName}
-        hasSubHeaderTitleFocused={props.hasSubHeaderTitleFocused}
-        setHasSubHeaderTitleFocused={props.setHasSubHeaderTitleFocused}
+        hasReportNameFocused={props.hasReportNameFocused}
+        sethasReportNameFocused={props.setHasReportNameFocused}
         setHeaderDetails={props.setHeaderDetails}
         setPlugins={props.setPlugins}
+        isToolboxOpen={props.rightPanelOpen}
         handleRightPanelOpen={props.handleRightPanelOpen}
+        isReportHeadingModified={isReportHeadingModified}
       />
       <Container maxWidth="lg">
         <div

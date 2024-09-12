@@ -26,7 +26,7 @@ import { styles } from "app/modules/chart-module/components/chartSubheaderToolba
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import DeleteChartDialog from "app/components/Dialogs/deleteChartDialog";
 import { ChartAPIModel, emptyChartAPI } from "app/modules/chart-module/data";
-import { SubheaderToolbarProps } from "app/modules/chart-module/components/chartSubheaderToolbar/data";
+import { ChartSubheaderToolbarProps } from "app/modules/chart-module/components/chartSubheaderToolbar/data";
 import { ExportChartButton } from "app/modules/chart-module/components/chartSubheaderToolbar/exportButton";
 import { ISnackbarState } from "app/modules/dataset-module/routes/upload-module/upload-steps/previewFragment";
 import { chartFromReportAtom, planDialogAtom } from "app/state/recoil/atoms";
@@ -41,7 +41,9 @@ import useMediaQuery from "@material-ui/core/useMediaQuery";
 import DuplicateMessage from "app/modules/common/mobile-duplicate-message";
 import { InfoSnackbar } from "app/modules/report-module/components/reportSubHeaderToolbar/infosnackbar";
 
-export function ChartSubheaderToolbar(props: Readonly<SubheaderToolbarProps>) {
+export function ChartSubheaderToolbar(
+  props: Readonly<ChartSubheaderToolbarProps>
+) {
   const classes = useStyles();
   const history = useHistory();
   const isMobile = useMediaQuery("(max-width: 599px)");

@@ -298,11 +298,11 @@ export function ReportSubheaderToolbar(
               }}
               onBlur={() => {
                 setInputSpanVisibility(true);
-                props.setHasSubHeaderTitleBlurred?.(true);
+                props.setHasReportNameBlurred?.(true);
               }}
               onFocus={() => {
-                props.setHasSubHeaderTitleFocused?.(true);
-                props.setHasSubHeaderTitleBlurred?.(false);
+                props.setHasReportNameFocused?.(true);
+                props.setHasReportNameBlurred?.(false);
                 setInputSpanVisibility(false);
               }}
               disabled={props.isPreviewView}

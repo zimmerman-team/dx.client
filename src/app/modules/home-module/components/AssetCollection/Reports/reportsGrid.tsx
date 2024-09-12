@@ -12,6 +12,7 @@ import DeleteReportDialog from "app/components/Dialogs/deleteReportDialog";
 import ReformedGridItem from "app/modules/home-module/components/AssetCollection/Reports/gridItem";
 import ReportAddnewCard from "./reportAddNewCard";
 import { useInfinityScroll } from "app/hooks/useInfinityScroll";
+import { EditorState, convertFromRaw } from "draft-js";
 import { useSetRecoilState } from "recoil";
 import { planDialogAtom } from "app/state/recoil/atoms";
 import CircleLoader from "app/modules/home-module/components/Loader";
@@ -24,7 +25,7 @@ interface Props {
   addCard?: boolean;
 }
 
-export default function ReportsGrid(props: Props) {
+export default function ReportsGrid(props: Readonly<Props>) {
   const observerTarget = React.useRef(null);
   const [cardId, setCardId] = React.useState<string>("");
   const [modalDisplay, setModalDisplay] = React.useState<boolean>(false);
@@ -220,14 +221,20 @@ export default function ReportsGrid(props: Props) {
               <ReformedGridItem
                 id={data.id}
                 key={data.id}
-                descr={data.name}
+                name={data.name}
                 date={data.createdDate}
                 viz={<ColoredReportIcon />}
                 color={data.backgroundColor}
                 showMenuButton={props.showMenuButton}
                 handleDelete={() => handleModal(data.id)}
                 handleDuplicate={() => handleDuplicate(data.id)}
-                title={data.title || data.name}
+                heading={
+                  data.heading
+                    ? EditorState.createWithContent(
+                        convertFromRaw(data.heading)
+                      )
+                    : EditorState.createEmpty()
+                }
                 owner={data.owner}
               />
               <Box height={16} />
@@ -245,6 +252,11 @@ export default function ReportsGrid(props: Props) {
             ],
             data: loadedReports.map((data) => ({
               ...data,
+              description: data.heading
+                ? EditorState.createWithContent(convertFromRaw(data.heading))
+                    .getCurrentContent()
+                    .getPlainText()
+                : "",
               type: "report",
             })),
           }}

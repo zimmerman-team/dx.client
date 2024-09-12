@@ -19,10 +19,12 @@ import ReportGridItem from "app/modules/home-module/components/AssetCollection/R
 import ColoredReportIcon from "app/assets/icons/ColoredReportIcon";
 import DeleteDatasetDialog from "app/components/Dialogs/deleteDatasetDialog";
 import DeleteReportDialog from "app/components/Dialogs/deleteReportDialog";
-import { HomepageTable } from "../../Table";
+import { EditorState, convertFromRaw } from "draft-js";
+import { DatasetListItemAPIModel } from "app/modules/dataset-module/data";
+import { HomepageTable } from "app/modules/home-module/components/Table/";
 import { planDialogAtom } from "app/state/recoil/atoms";
 import { useSetRecoilState } from "recoil";
-import { getColumns } from "./data";
+import { getColumns } from "app/modules/home-module/components/AssetCollection/All/data";
 
 interface Props {
   sortBy: string;
@@ -283,11 +285,12 @@ export default function AssetsGrid(props: Props) {
                   type: data.assetType,
                 };
               }
-
               return {
                 id: data.id,
                 name: data.name,
-                description: data.title,
+                heading: data.heading
+                  ? EditorState.createWithContent(convertFromRaw(data.heading))
+                  : EditorState.createEmpty(),
                 createdDate: data.createdDate,
                 type: data.assetType,
               };
@@ -342,7 +345,7 @@ export default function AssetsGrid(props: Props) {
                     <ReportGridItem
                       id={d.id}
                       key={d.id}
-                      descr={d.name}
+                      name={d.name}
                       date={d.createdDate}
                       viz={<ColoredReportIcon />}
                       color={d.backgroundColor}
@@ -353,7 +356,13 @@ export default function AssetsGrid(props: Props) {
                       handleDuplicate={() =>
                         handleDuplicate(d.id, d.assetType as assetType)
                       }
-                      title={d.title || d.name}
+                      heading={
+                        d.heading
+                          ? EditorState.createWithContent(
+                              convertFromRaw(d.heading)
+                            )
+                          : EditorState.createEmpty()
+                      }
                       owner={d.owner}
                     />
                   ),
