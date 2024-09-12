@@ -49,6 +49,8 @@ import {
   PaymentSuccessCallbackModule,
   PaymentCanceledCallbackModule,
 } from "app/modules/callback-module/payment";
+import { useRecoilValue } from "recoil";
+import { fetchPlanLoadingAtom } from "./state/recoil/atoms";
 
 const ChartModule = lazy(() => import("app/modules/chart-module"));
 const ReportModule = lazy(() => import("app/modules/report-module"));
@@ -102,6 +104,15 @@ const Auth0ProviderWithRedirectCallback = (props: {
       {props.children}
     </Auth0Provider>
   );
+};
+
+const PlanLoader = () => {
+  const planLoading = useRecoilValue(fetchPlanLoadingAtom);
+
+  if (planLoading) {
+    return <PageLoader />;
+  }
+  return null;
 };
 
 const AuthLoader = () => {
@@ -191,7 +202,7 @@ const IntercomBootupComponent = () => {
               // @ts-ignore
               window.Intercom("boot", {
                 api_base: "https://api-iam.intercom.io",
-                app_id: "tfvurn19",
+                app_id: process.env.REACT_APP_INTERCOM_APP_ID,
                 name: user?.name, // Full name
                 email: user?.email, // the email for your user
                 user_id: user?.sub, // user_id as a string
@@ -207,7 +218,7 @@ const IntercomBootupComponent = () => {
         // @ts-ignore
         window.Intercom("boot", {
           api_base: "https://api-iam.intercom.io",
-          app_id: "tfvurn19",
+          app_id: process.env.REACT_APP_INTERCOM_APP_ID,
         });
       }
   }, [isAuthenticated]);
@@ -229,6 +240,7 @@ export function MainRoutes() {
       }}
     >
       <AuthLoader />
+      <PlanLoader />
       <OneTapLoginComponent />
       {process.env.REACT_APP_ENV_TYPE === "prod" ? (
         <IntercomBootupComponent />
