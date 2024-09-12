@@ -57,7 +57,7 @@ const storeContent: StoreModel = {
   DataSourceSnackbarVisibility: persist(DataSourceSnackbarVisibilityState),
   AuthToken: persist(AuthTokenState),
   user: {
-    UserProfile: persist(UserProfile),
+    UserProfile: UserProfile,
   },
   dataThemes: {
     DatasetGetList: DatasetGetList,

@@ -234,7 +234,7 @@ export default function EmbedChartDialog(props: {
             >
               <p>
                 <span>Author:</span>
-                <span>{userProfile.username}</span>
+                <span>{userProfile?.username}</span>
               </p>
               <div
                 css={`
