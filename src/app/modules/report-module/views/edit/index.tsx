@@ -400,7 +400,6 @@ function ReportEditView(props: Readonly<ReportEditViewProps>) {
                     height: 20px;
                   `}
                 />
-                {/* <Box height={8} /> */}
 
                 <PlaceHolder
                   rowId={frame.id}
