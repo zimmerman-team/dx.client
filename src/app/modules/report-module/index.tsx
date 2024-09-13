@@ -13,7 +13,6 @@ import AITemplate from "app/modules/report-module/views/ai-template";
 import { EditorState, convertToRaw } from "draft-js";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import { ReportModel, emptyReport } from "app/modules/report-module/data";
-import ReportCreateView from "app/modules/report-module/views/create";
 import { ReportPreviewView } from "app/modules/report-module/views/preview";
 import ReportInitialView from "app/modules/report-module/views/initial";
 import { IFramesArray } from "app/modules/report-module/views/create/data";
@@ -26,10 +25,8 @@ import {
   Redirect,
 } from "react-router-dom";
 import {
-  persistedReportStateAtom,
   planDialogAtom,
   reportRightPanelViewAtom,
-  unSavedReportPreviewModeAtom,
 } from "app/state/recoil/atoms";
 import { ReportSubheaderToolbar } from "app/modules/report-module/components/reportSubHeaderToolbar";
 import { ToolbarPluginsType } from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
@@ -48,37 +45,12 @@ export default function ReportModule() {
   }>({ isAutoSaveEnabled: false });
 
   const setPlanDialog = useSetRecoilState(planDialogAtom);
-
-  /** static toolbar states */
   const [plugins, setPlugins] = React.useState<ToolbarPluginsType>([]);
-  /** end of static toolbar states */
-
   const token = useStoreState((state) => state.AuthToken.value);
-
   const [_rightPanelView, setRightPanelView] = useRecoilState(
     reportRightPanelViewAtom
   );
-
-  const [_reportPreviewMode, setReportPreviewMode] = useRecoilState(
-    unSavedReportPreviewModeAtom
-  );
-
-  const [persistedReportState, setPersistedReportState] = useRecoilState(
-    persistedReportStateAtom
-  );
   const [isPreviewView, setIsPreviewView] = React.useState(false);
-
-  const localReportState = JSON.parse(persistedReportState.framesArray);
-
-  let localPickedCharts: string[] = [];
-  localReportState.map((data: any) => {
-    return data.contentTypes.map((item: any, index: number) => {
-      if (item === "chart") {
-        localPickedCharts.push(data.content[index]);
-      }
-    });
-  });
-
   const [rightPanelOpen, setRightPanelOpen] = React.useState(true);
   const [reportName, setReportName] = React.useState("Untitled report");
   const [hasReportNameFocused, setHasReportNameFocused] = React.useState(false);
@@ -300,26 +272,6 @@ export default function ReportModule() {
 
   const resetReport = () => {
     updateFramesArray(initialFramesArray);
-    setPersistedReportState({
-      reportName: "Untitled report",
-      headerDetails: {
-        title: "",
-        heading: JSON.stringify(
-          convertToRaw(EditorState.createEmpty().getCurrentContent())
-        ),
-        description: JSON.stringify(
-          convertToRaw(EditorState.createEmpty().getCurrentContent())
-        ),
-        showHeader: true,
-        backgroundColor: "#252c34",
-        titleColor: "#ffffff",
-        descriptionColor: "#ffffff",
-        dateColor: "#ffffff",
-      },
-
-      framesArray: JSON.stringify([]),
-    });
-
     setHeaderDetails({
       title: "",
       heading: EditorState.createEmpty(),
@@ -333,7 +285,6 @@ export default function ReportModule() {
     setReportName("Untitled report");
     setRightPanelView("charts");
     setRightPanelOpen(true);
-    setReportPreviewMode(false);
     setAutoSave({ isAutoSaveEnabled: false });
   };
 
@@ -500,7 +451,6 @@ export default function ReportModule() {
             setHasChangesBeenMade={setHasChangesBeenMade}
             setReportName={setReportName}
             reportName={reportName}
-            localPickedCharts={localPickedCharts}
             framesArray={framesArray}
             headerDetails={headerDetails}
             updateFramesArray={updateFramesArray}

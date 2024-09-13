@@ -13,7 +13,6 @@ export interface ReportEditViewProps {
   setHasReportNameFocused: React.Dispatch<React.SetStateAction<boolean>>;
   updateFramesArray: Updater<IFramesArray[]>;
   framesArray: IFramesArray[];
-  localPickedCharts: string[];
   setReportName: React.Dispatch<React.SetStateAction<string>>;
   autoSave: boolean;
   setAutoSave: React.Dispatch<
