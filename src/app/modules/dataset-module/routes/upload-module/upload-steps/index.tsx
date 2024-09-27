@@ -17,6 +17,7 @@ import { useOnUploadProgress } from "app/hooks/useOnUploadProgress";
 import ExternalSearch, {
   IExternalDataset,
 } from "app/modules/dataset-module/routes/upload-module/upload-steps/externalSearch";
+import IATISearch from "app/modules/dataset-module/routes/upload-module/upload-steps/iatiSearch";
 import Stepper from "app/modules/dataset-module/routes/upload-module/component/stepper";
 import { Box } from "@material-ui/core";
 import { useTitle } from "react-use";
@@ -150,7 +151,7 @@ function DatasetUploadSteps(props: Props) {
       setActiveStep(newActiveStep);
     }
   };
-  const handleTabSwitch = (tab: "search" | "file") => {
+  const handleTabSwitch = (tab: "search" | "file" | "iati") => {
     setActiveTab(tab);
   };
   React.useEffect(() => {
@@ -308,6 +309,50 @@ function DatasetUploadSteps(props: Props) {
       });
   };
 
+  // Define the new handler for IATI search
+  const handleIATISearch = async (query: string, fl: string) => {
+    try {
+      setActiveStep(1);
+      await axios
+        .post("http://localhost:4004/external-sources/iati", { query, fl })
+        .then((response) => {
+          const result = response.data.result;
+          const icQuery = result.substring(
+            result.indexOf("query: ") + 7,
+            result.indexOf(" - datasetId: ")
+          );
+          const dsId = result
+            .substring(result.indexOf("datasetId: ") + 11)
+            .trim();
+          props.setDatasetId(dsId);
+          setFormDetails({
+            category: "IATI",
+            description: `We have converted your search query to the following solr query to IATI.cloud: ${icQuery}`,
+            name: query,
+            public: false,
+            source: "IATI.cloud",
+            sourceUrl: "https://datastore.iati.cloud/home",
+          });
+          //go to next step - metadata
+          setActiveStep(2);
+          setProcessed(true);
+        })
+        .catch((error) => {
+          setProcessingError(
+            "Unable to search for IATI data at this time, please try again later. If the problem persists, please contact your administrator."
+          );
+          setActiveStep(0);
+          console.error("IATI Search error", error);
+        });
+    } catch (error) {
+      setProcessingError(
+        "Unable to search for IATI data at this time, please try again later. If the problem persists, please contact your administrator."
+      );
+      setActiveStep(0);
+      console.error("CatchAll IATI Search error", error);
+    }
+  };
+
   const tryAgain = () => {
     setActiveStep(0);
   };
@@ -352,7 +397,7 @@ function DatasetUploadSteps(props: Props) {
             <Box height={24} />
             <div
               css={`
-                width: 434px;
+                width: 666px;
                 height: 56px;
               `}
             >
@@ -373,6 +418,12 @@ function DatasetUploadSteps(props: Props) {
                     testId: "file-upload-tab",
                     icon: <DesktopWindowsIcon />,
                   },
+                  {
+                    label: "IATI search",
+                    value: "iati",
+                    testId: "iati-tab",
+                    icon: <DesktopWindowsIcon />,
+                  },
                 ]}
               />
             </div>
@@ -390,6 +441,8 @@ function DatasetUploadSteps(props: Props) {
                 sources={sources}
                 setSources={setSources}
               />
+            ) : activeTab === "iati" ? (
+              <IATISearch handleIATISearch={handleIATISearch} />
             ) : (
               <AddDatasetFragment
                 onFileSubmit={onFileSubmit}

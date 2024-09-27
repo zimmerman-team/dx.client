@@ -3,8 +3,8 @@ import ComputerIcon from "../assets/computer-icon";
 import { Search } from "@material-ui/icons";
 
 interface Props {
-  activeTab: "search" | "file";
-  setActiveTab: (c: "search" | "file") => void;
+  activeTab: "search" | "file" | "iati";
+  setActiveTab: (c: "search" | "file" | "iati") => void;
 }
 
 function UploadTabs({ activeTab, setActiveTab }: Props) {
@@ -28,7 +28,7 @@ function UploadTabs({ activeTab, setActiveTab }: Props) {
           border-radius: 30px;
           font-family: Inter;
           font-size: 14px;
-          min-width: 203px;
+          min-width: 305px;
           border: none;
           justify-content: center;
           cursor: pointer;
@@ -61,6 +61,19 @@ function UploadTabs({ activeTab, setActiveTab }: Props) {
       >
         <ComputerIcon color={activeTab === "file" ? "white" : "#231D2C"} /> FILE
         upload
+      </button>
+
+      <button
+        css={`
+          background: ${activeTab === "iati" ? "#6061E5" : "transparent"};
+          font-weight: ${activeTab === "iati" ? "bold" : "medium"};
+          color: ${activeTab === "iati" ? "white" : "#231D2C"};
+        `}
+        onClick={() => setActiveTab("iati")}
+        data-cy="iati-tab"
+      >
+        <ComputerIcon color={activeTab === "iati" ? "white" : "#231D2C"} /> IATI
+        Search
       </button>
     </div>
   );

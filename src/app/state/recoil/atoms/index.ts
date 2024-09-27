@@ -159,7 +159,7 @@ export const persistedReportStateAtom = atom<{
   effects_UNSTABLE: [persistAtom],
 });
 
-export const dataUploadTabAtom = atom<"search" | "file">({
+export const dataUploadTabAtom = atom<"search" | "file" | "iati">({
   key: "dataUploadTabAtom",
   default: "search",
   effects_UNSTABLE: [persistAtom],

@@ -1,0 +1,2658 @@
+[
+  {
+    "id": "001",
+    "name": "IATI Identifier",
+    "iati-tag": "iati-identifier",
+    "description": "A globally unique identifier for the activity. This MUST be prefixed with EITHER the current IATI organisation identifier for the reporting organisation (reporting-org/@ref) OR a previous identifier reported in other-identifier, and suffixed with the organisation’s own activity identifier. The prefix and the suffix should be separated by a hyphen “-“. Once an activity has been reported to IATI its identifier MUST NOT be changed in subsequent updates.",
+    "default": true,
+    "category": "Core"
+  },
+  {
+    "id": "002",
+    "name": "Last Updated Datetime",
+    "iati-tag": "last-updated-datetime",
+    "description": "The date and time the activity was last updated. This helps users to know when the data was refreshed and ensures they have the most current information.",
+    "default": false,
+    "category": "Core"
+  },
+  {
+    "id": "003",
+    "name": "Language",
+    "iati-tag": "lang",
+    "description": "The language used in the activity's narrative and descriptions. It helps in understanding and processing the information based on the specified language.",
+    "default": false,
+    "category": "Core"
+  },
+  {
+    "id": "004",
+    "name": "Default Currency",
+    "iati-tag": "default-currency",
+    "description": "The currency that is used by default for reporting financial data associated with the activity. It's critical for financial accountability and transparency.",
+    "default": false,
+    "category": "Core"
+  },
+  {
+    "id": "005",
+    "name": "Humanitarian",
+    "iati-tag": "humanitarian",
+    "description": "A boolean value indicating whether the activity is of a humanitarian nature. This captures the essence and focus of the activity.",
+    "default": false,
+    "category": "Core"
+  },
+  {
+    "id": "006",
+    "name": "Hierarchy",
+    "iati-tag": "hierarchy",
+    "description": "A numerical indicator of the hierarchical level of the activity within the organization’s structure, detailing the extent and reach of the activity.",
+    "default": false,
+    "category": "Core"
+  },
+  {
+    "id": "007",
+    "name": "Linked Data URI",
+    "iati-tag": "linked-data-uri",
+    "description": "A URI that links to additional data or information related to the activity, supporting interoperability and data sharing.",
+    "default": false,
+    "category": "Core"
+  },
+  {
+    "id": "008",
+    "name": "Budget Not Provided",
+    "iati-tag": "budget-not-provided",
+    "description": "A field that indicates if the budget information for the activity is not provided. This helps organizations understand data completeness.",
+    "default": false,
+    "category": "Core"
+  },
+  {
+    "id": "009",
+    "name": "Reporting Organisation Reference",
+    "iati-tag": "reporting-org.ref",
+    "description": "The unique identifier for the reporting organisation. This references the organisation that is reporting the activity and is essential for accountability and traceability.",
+    "default": true,
+    "category": "Reporting Organisation"
+  },
+  {
+    "id": "010",
+    "name": "Reporting Organisation Type",
+    "iati-tag": "reporting-org.type",
+    "description": "The type of organisation that is reporting the activity, which provides context on the organisation's role and identity in the reporting process.",
+    "default": true,
+    "category": "Reporting Organisation"
+  },
+  {
+    "id": "011",
+    "name": "Secondary Reporter",
+    "iati-tag": "reporting-org.secondary-reporter",
+    "description": "A boolean value indicating whether the reporting organisation is considered a secondary reporter. This helps identify organisations involved in multiple roles in the reporting process.",
+    "default": false,
+    "category": "Reporting Organisation"
+  },
+  {
+    "id": "012",
+    "name": "Reporting Organisation Narrative",
+    "iati-tag": "reporting-org.narrative",
+    "description": "A narrative description of the reporting organisation, providing additional context, background, and information that helps understand the organisation’s role.",
+    "default": true,
+    "category": "Reporting Organisation"
+  },
+  {
+    "id": "013",
+    "name": "Reporting Organisation Narrative Language",
+    "iati-tag": "reporting-org.narrative.lang",
+    "description": "The language used for the narrative description of the reporting organisation. This ensures clarity and comprehension according to language preferences.",
+    "default": false,
+    "category": "Reporting Organisation"
+  },
+  {
+    "id": "014",
+    "name": "Title Narrative",
+    "iati-tag": "title.narrative",
+    "description": "The title of the activity, providing a concise summary that captures the essence and main objectives of the activity.",
+    "default": true,
+    "category": "Title"
+  },
+  {
+    "id": "015",
+    "name": "Title Narrative Language",
+    "iati-tag": "title.narrative.lang",
+    "description": "The language used for the title narrative of the activity. This helps ensure that the title is understood and accessible to diverse audiences.",
+    "default": false,
+    "category": "Title"
+  },
+  {
+    "id": "016",
+    "name": "Description Type",
+    "iati-tag": "description.type",
+    "description": "The type of description provided for the activity, which helps categorize the nature of the information given.",
+    "default": false,
+    "category": "Description"
+  },
+  {
+    "id": "017",
+    "name": "Description Narrative",
+    "iati-tag": "description.narrative",
+    "description": "A detailed narrative that describes the activity, including its objectives, implementation, context, and outcomes.",
+    "default": true,
+    "category": "Description"
+  },
+  {
+    "id": "018",
+    "name": "Description Narrative Language",
+    "iati-tag": "description.narrative.lang",
+    "description": "The language used for the description narrative of the activity. This is important for ensuring the description is comprehensible to the intended audience.",
+    "default": false,
+    "category": "Description"
+  },
+  {
+    "id": "019",
+    "name": "Participating Organisation Reference",
+    "iati-tag": "participating-org.ref",
+    "description": "A unique identifier for each organisation participating in the activity. This allows for tracking and accountability regarding each organisation's role in the activity.",
+    "default": true,
+    "category": "Participating Organisation"
+  },
+  {
+    "id": "020",
+    "name": "Participating Organisation Type",
+    "iati-tag": "participating-org.type",
+    "description": "The type of each participating organisation, which provides context about the contributions and roles of different entities within the activity.",
+    "default": true,
+    "category": "Participating Organisation"
+  },
+  {
+    "id": "021",
+    "name": "Participating Organisation Role",
+    "iati-tag": "participating-org.role",
+    "description": "The specific role that the participating organisation plays in relation to the activity. This clarifies the functions and contributions of each partner.",
+    "default": true,
+    "category": "Participating Organisation"
+  },
+  {
+    "id": "022",
+    "name": "Participating Organisation Activity ID",
+    "iati-tag": "participating-org.activity-id",
+    "description": "The identifier that is used by the participating organisation to signify their specific activity, facilitating cross-referencing between organisations.",
+    "default": false,
+    "category": "Participating Organisation"
+  },
+  {
+    "id": "023",
+    "name": "Participating Organisation CRS Channel Code",
+    "iati-tag": "participating-org.crs-channel-code",
+    "description": "A code that signifies the channel through which the participating organisation reports on the activity, important for classification and data analysis.",
+    "default": false,
+    "category": "Participating Organisation"
+  },
+  {
+    "id": "024",
+    "name": "Participating Organisation Narrative",
+    "iati-tag": "participating-org.narrative",
+    "description": "A narrative description of the participating organisation, providing additional context on their role and contributions to the activity.",
+    "default": true,
+    "category": "Participating Organisation"
+  },
+  {
+    "id": "025",
+    "name": "Participating Organisation Narrative Language",
+    "iati-tag": "participating-org.narrative.lang",
+    "description": "The language used for the narrative description of the participating organisation, ensuring clarity and understanding for diverse audiences.",
+    "default": false,
+    "category": "Participating Organisation"
+  },
+  {
+    "id": "026",
+    "name": "Other Identifier Reference",
+    "iati-tag": "other-identifier.ref",
+    "description": "A unique identifier used to reference the activity from another context or system, providing additional means of identification and verification.",
+    "default": true,
+    "category": "Other Identifier"
+  },
+  {
+    "id": "027",
+    "name": "Other Identifier Type",
+    "iati-tag": "other-identifier.type",
+    "description": "The type of the other identifier, which categorizes the nature of this reference and provides context for its usage.",
+    "default": false,
+    "category": "Other Identifier"
+  },
+  {
+    "id": "028",
+    "name": "Other Identifier Owner Organisation Reference",
+    "iati-tag": "other-identifier.owner-org.ref",
+    "description": "The unique identifier for the organisation that owns the other identifier, aiding in accountability and linking to the appropriate entity.",
+    "default": false,
+    "category": "Other Identifier"
+  },
+  {
+    "id": "029",
+    "name": "Other Identifier Owner Organisation Narrative",
+    "iati-tag": "other-identifier.owner-org.narrative",
+    "description": "A narrative description of the organisation that owns the other identifier, providing context and information about its role and relevance.",
+    "default": false,
+    "category": "Other Identifier"
+  },
+  {
+    "id": "030",
+    "name": "Other Identifier Owner Organisation Narrative Language",
+    "iati-tag": "other-identifier.owner-org.narrative.lang",
+    "description": "The language used for the narrative description of the organisation that owns the other identifier, ensuring comprehension across language barriers.",
+    "default": false,
+    "category": "Other Identifier"
+  },
+  {
+    "id": "031",
+    "name": "Activity Status Code",
+    "iati-tag": "activity-status.code",
+    "description": "The code representing the current status of the activity, helping users understand whether the activity is ongoing, completed, or planned.",
+    "default": true,
+    "category": "Activity Status"
+  },
+  {
+    "id": "032",
+    "name": "Activity Date Type",
+    "iati-tag": "activity-date.type",
+    "description": "The type of date associated with the activity, which may signify when the activity is planned to start, end, or other relevant dates.",
+    "default": false,
+    "category": "Activity Date"
+  },
+  {
+    "id": "033",
+    "name": "Activity Date ISO Date",
+    "iati-tag": "activity-date.iso-date",
+    "description": "The date in ISO format related to the activity. This ensures standardization and clarity regarding the timing of activities.",
+    "default": false,
+    "category": "Activity Date"
+  },
+  {
+    "id": "034",
+    "name": "Activity Date Narrative",
+    "iati-tag": "activity-date.narrative",
+    "description": "A narrative providing context or additional information about the date associated with the activity, enriching understanding beyond the raw date.",
+    "default": false,
+    "category": "Activity Date"
+  },
+  {
+    "id": "035",
+    "name": "Activity Date Narrative Language",
+    "iati-tag": "activity-date.narrative.lang",
+    "description": "The language used for the narrative describing the activity date, ensuring the information is accessible to different language speakers.",
+    "default": false,
+    "category": "Activity Date"
+  },
+  {
+    "id": "036",
+    "name": "Contact Information Type",
+    "iati-tag": "contact-info.type",
+    "description": "The type of contact information provided, which may indicate the nature of the contact (e.g., general inquiry, technical details, etc.).",
+    "default": false,
+    "category": "Contact Information"
+  },
+  {
+    "id": "037",
+    "name": "Contact Organisation Narrative",
+    "iati-tag": "contact-info.organisation.narrative",
+    "description": "A narrative description of the organisation responsible for the contact information, clarifying its role in relation to the activity.",
+    "default": false,
+    "category": "Contact Information"
+  },
+  {
+    "id": "038",
+    "name": "Contact Organisation Narrative Language",
+    "iati-tag": "contact-info.organisation.narrative.lang",
+    "description": "The language used for the narrative describing the contact organisation, which helps ensure clarity and understanding.",
+    "default": false,
+    "category": "Contact Information"
+  },
+  {
+    "id": "039",
+    "name": "Contact Department Narrative",
+    "iati-tag": "contact-info.department.narrative",
+    "description": "A narrative providing details about the specific department within the organisation that can be contacted regarding the activity.",
+    "default": false,
+    "category": "Contact Information"
+  },
+  {
+    "id": "040",
+    "name": "Contact Department Narrative Language",
+    "iati-tag": "contact-info.department.narrative.lang",
+    "description": "The language used for the narrative describing the contact department, enhancing understanding for diverse users.",
+    "default": false,
+    "category": "Contact Information"
+  },
+  {
+    "id": "041",
+    "name": "Contact Person Name Narrative",
+    "iati-tag": "contact-info.person-name.narrative",
+    "description": "The name of the person responsible for contact within the organisation, facilitating direct communication.",
+    "default": false,
+    "category": "Contact Information"
+  },
+  {
+    "id": "042",
+    "name": "Contact Person Name Narrative Language",
+    "iati-tag": "contact-info.person-name.narrative.lang",
+    "description": "The language used for the narrative describing the contact person's name, ensuring clarity for users from different linguistic backgrounds.",
+    "default": false,
+    "category": "Contact Information"
+  },
+  {
+    "id": "043",
+    "name": "Contact Job Title Narrative",
+    "iati-tag": "contact-info.job-title.narrative",
+    "description": "The job title of the contact person within the organisation, providing context regarding their role and responsibility.",
+    "default": false,
+    "category": "Contact Information"
+  },
+  {
+    "id": "044",
+    "name": "Contact Job Title Narrative Language",
+    "iati-tag": "contact-info.job-title.narrative.lang",
+    "description": "The language used for the narrative describing the contact person's job title, ensuring comprehensibility across different languages.",
+    "default": false,
+    "category": "Contact Information"
+  },
+  {
+    "id": "045",
+    "name": "Contact Telephone",
+    "iati-tag": "contact-info.telephone",
+    "description": "The telephone number to contact the organisation or person related to the activity, facilitating real-time communication.",
+    "default": false,
+    "category": "Contact Information"
+  },
+  {
+    "id": "046",
+    "name": "Contact Email",
+    "iati-tag": "contact-info.email",
+    "description": "The email address for contacting the organisation or person regarding the activity, allowing for written communication.",
+    "default": true,
+    "category": "Contact Information"
+  },
+  {
+    "id": "047",
+    "name": "Contact Website",
+    "iati-tag": "contact-info.website",
+    "description": "The website URL for the organisation, providing additional resources and information regarding the activity.",
+    "default": false,
+    "category": "Contact Information"
+  },
+  {
+    "id": "048",
+    "name": "Contact Mailing Address Narrative",
+    "iati-tag": "contact-info.mailing-address.narrative",
+    "description": "The narrative that describes the mailing address for the organisation or person, enabling physical correspondence.",
+    "default": false,
+    "category": "Contact Information"
+  },
+  {
+    "id": "049",
+    "name": "Contact Mailing Address Narrative Language",
+    "iati-tag": "contact-info.mailing-address.narrative.lang",
+    "description": "The language used for the narrative describing the contact mailing address, ensuring the information is understandable.",
+    "default": false,
+    "category": "Contact Information"
+  },
+  {
+    "id": "050",
+    "name": "Activity Scope Code",
+    "iati-tag": "activity-scope.code",
+    "description": "The code representing the scope of the activity, indicating the extent of intervention or focus areas.",
+    "default": true,
+    "category": "Activity Scope"
+  },
+  {
+    "id": "051",
+    "name": "Recipient Country Code",
+    "iati-tag": "recipient-country.code",
+    "description": "The unique code representing the recipient country where the activity takes place, ensuring accurate identification of geographical focus.",
+    "default": true,
+    "category": "Recipient Country"
+  },
+  {
+    "id": "052",
+    "name": "Recipient Country Percentage",
+    "iati-tag": "recipient-country.percentage",
+    "description": "The percentage of the activity focused on the recipient country, providing insight into the level of commitment and investment in that area.",
+    "default": false,
+    "category": "Recipient Country"
+  },
+  {
+    "id": "053",
+    "name": "Recipient Country Narrative",
+    "iati-tag": "recipient-country.narrative",
+    "description": "A narrative description of the recipient country, offering additional context and detail about the country involved.",
+    "default": true,
+    "category": "Recipient Country"
+  },
+  {
+    "id": "054",
+    "name": "Recipient Country Narrative Language",
+    "iati-tag": "recipient-country.narrative.lang",
+    "description": "The language used for the narrative description of the recipient country, helping ensure understanding among varied audiences.",
+    "default": false,
+    "category": "Recipient Country"
+  },
+  {
+    "id": "055",
+    "name": "Recipient Region Code",
+    "iati-tag": "recipient-region.code",
+    "description": "The unique code representing the recipient region where the activity takes place, critical for regional analysis and reporting.",
+    "default": true,
+    "category": "Recipient Region"
+  },
+  {
+    "id": "056",
+    "name": "Recipient Region Vocabulary",
+    "iati-tag": "recipient-region.vocabulary",
+    "description": "The vocabulary used to classify the recipient region, which provides context for the type of regions involved in the activity.",
+    "default": true,
+    "category": "Recipient Region"
+  },
+  {
+    "id": "057",
+    "name": "Recipient Region Vocabulary URI",
+    "iati-tag": "recipient-region.vocabulary-uri",
+    "description": "The URI that points to the vocabulary used for classifying recipient regions, enabling resource linking and enhanced interoperability.",
+    "default": false,
+    "category": "Recipient Region"
+  },
+  {
+    "id": "058",
+    "name": "Recipient Region Percentage",
+    "iati-tag": "recipient-region.percentage",
+    "description": "The percentage of the activity focused on the recipient region, illustrating the extent of engagement within that region.",
+    "default": false,
+    "category": "Recipient Region"
+  },
+  {
+    "id": "059",
+    "name": "Recipient Region Narrative",
+    "iati-tag": "recipient-region.narrative",
+    "description": "A narrative description of the recipient region, providing details and context beyond the code.",
+    "default": true,
+    "category": "Recipient Region"
+  },
+  {
+    "id": "060",
+    "name": "Recipient Region Narrative Language",
+    "iati-tag": "recipient-region.narrative.lang",
+    "description": "The language used for the narrative description of the recipient region, facilitating understanding across diverse language speakers.",
+    "default": false,
+    "category": "Recipient Region"
+  },
+  {
+    "id": "061",
+    "name": "Location Reference",
+    "iati-tag": "location.ref",
+    "description": "A unique identifier for the location associated with the activity, enabling accurate geographic tagging and reporting.",
+    "default": true,
+    "category": "Location"
+  },
+  {
+    "id": "062",
+    "name": "Location Location Reach Code",
+    "iati-tag": "location.location-reach.code",
+    "description": "The code indicating the reach of the location in relation to the activity, providing insight into the scale of implementation.",
+    "default": false,
+    "category": "Location"
+  },
+  {
+    "id": "063",
+    "name": "Location Location ID Code",
+    "iati-tag": "location.location-id.code",
+    "description": "The unique code used to identify the specific location associated with the activity, important for precise geo-spatial recognition.",
+    "default": false,
+    "category": "Location"
+  },
+  {
+    "id": "064",
+    "name": "Location Location ID Vocabulary",
+    "iati-tag": "location.location-id.vocabulary",
+    "description": "The vocabulary used to define the location ID, fostering clarity in categorization and enabling interoperability.",
+    "default": false,
+    "category": "Location"
+  },
+  {
+    "id": "065",
+    "name": "Location Name Narrative",
+    "iati-tag": "location.name.narrative",
+    "description": "A narrative description of the location associated with the activity, providing context and detail beyond the mere identifiers.",
+    "default": true,
+    "category": "Location"
+  },
+  {
+    "id": "066",
+    "name": "Location Name Narrative Language",
+    "iati-tag": "location.name.narrative.lang",
+    "description": "The language used for the narrative describing the location, enhancing accessibility and comprehension for diverse users.",
+    "default": true,
+    "category": "Location"
+  },
+  {
+    "id": "067",
+    "name": "Location Description Narrative",
+    "iati-tag": "location.description.narrative",
+    "description": "A narrative providing a detailed description of the location, adding further context and information related to the activity.",
+    "default": true,
+    "category": "Location"
+  },
+  {
+    "id": "068",
+    "name": "Location Description Narrative Language",
+    "iati-tag": "location.description.narrative.lang",
+    "description": "The language used for the narrative description of the location, ensuring clear communication of information.",
+    "default": false,
+    "category": "Location"
+  },
+  {
+    "id": "069",
+    "name": "Location Activity Description Narrative",
+    "iati-tag": "location.activity-description.narrative",
+    "description": "A narrative that describes how the activity is related to the specific location, emphasizing contextual relevance.",
+    "default": false,
+    "category": "Location"
+  },
+  {
+    "id": "070",
+    "name": "Location Activity Description Narrative Language",
+    "iati-tag": "location.activity-description.narrative.lang",
+    "description": "The language used for the narrative describing the relationship between the activity and the location, enhancing clarity in communication.",
+    "default": false,
+    "category": "Location"
+  },
+  {
+    "id": "071",
+    "name": "Location Administrative Code",
+    "iati-tag": "location.administrative.code",
+    "description": "The administrative code associated with the location, facilitating governance and jurisdictional understanding.",
+    "default": true,
+    "category": "Location"
+  },
+  {
+    "id": "072",
+    "name": "Location Administrative Vocabulary",
+    "iati-tag": "location.administrative.vocabulary",
+    "description": "The vocabulary used to classify the administrative identifiers of the location, aiding in consistent categorization.",
+    "default": false,
+    "category": "Location"
+  },
+  {
+    "id": "073",
+    "name": "Location Administrative Level",
+    "iati-tag": "location.administrative.level",
+    "description": "A numerical indicator of the administrative level of the location, which helps to understand the governance structure related to the activity.",
+    "default": false,
+    "category": "Location"
+  },
+  {
+    "id": "074",
+    "name": "Location Point SRS Name",
+    "iati-tag": "location.point.srsName",
+    "description": "The spatial reference system name for the location point, essential for mapping and geo-spatial analysis.",
+    "default": false,
+    "category": "Location"
+  },
+  {
+    "id": "075",
+    "name": "Location Point Position",
+    "iati-tag": "location.point.pos",
+    "description": "The geographic coordinates (longitude and latitude) of the activity location, providing precise location information.",
+    "default": false,
+    "category": "Location"
+  },
+  {
+    "id": "076",
+    "name": "Location Exactness Code",
+    "iati-tag": "location.exactness.code",
+    "description": "The code indicating the precision of the geographical information regarding the location, which influences interpretation and analysis.",
+    "default": false,
+    "category": "Location"
+  },
+  {
+    "id": "077",
+    "name": "Location Location Class Code",
+    "iati-tag": "location.location-class.code",
+    "description": "The classification code that categorizes the type of location relevant to the activity, which aids in data organization.",
+    "default": false,
+    "category": "Location"
+  },
+  {
+    "id": "078",
+    "name": "Location Feature Designation Code",
+    "iati-tag": "location.feature-designation.code",
+    "description": "The code used to specify the feature designation of the location, providing additional context for interpretation.",
+    "default": false,
+    "category": "Location"
+  },
+  {
+    "id": "079",
+    "name": "Sector Vocabulary",
+    "iati-tag": "sector.vocabulary",
+    "description": "The vocabulary used to classify sectors associated with the activity, helping in categorizing and analyzing activities.",
+    "default": false,
+    "category": "Sector"
+  },
+  {
+    "id": "080",
+    "name": "Sector Vocabulary URI",
+    "iati-tag": "sector.vocabulary-uri",
+    "description": "The URI that links to the sector vocabulary used in classifying sectors, enhancing data interoperability.",
+    "default": false,
+    "category": "Sector"
+  },
+  {
+    "id": "081",
+    "name": "Sector Code",
+    "iati-tag": "sector.code",
+    "description": "The unique code representing the sector associated with the activity, essential for categorizing the nature of the activity.",
+    "default": true,
+    "category": "Sector"
+  },
+  {
+    "id": "082",
+    "name": "Sector Percentage",
+    "iati-tag": "sector.percentage",
+    "description": "The percentage of the activity focused on each sector, providing insight into the distribution of resources and attention.",
+    "default": false,
+    "category": "Sector"
+  },
+  {
+    "id": "083",
+    "name": "Sector Narrative",
+    "iati-tag": "sector.narrative",
+    "description": "A narrative description of the sector(s) associated with the activity, adding context and insights beyond the codes.",
+    "default": true,
+    "category": "Sector"
+  },
+  {
+    "id": "084",
+    "name": "Sector Narrative Language",
+    "iati-tag": "sector.narrative.lang",
+    "description": "The language used for the narrative description of the sector, ensuring clarity and comprehension for diverse audiences.",
+    "default": false,
+    "category": "Sector"
+  },
+  {
+    "id": "085",
+    "name": "Tag Code",
+    "iati-tag": "tag.code",
+    "description": "The unique code representing the tags that are assigned to the activity, which assists in classifying and analyzing it.",
+    "default": true,
+    "category": "Tag"
+  },
+  {
+    "id": "086",
+    "name": "Tag Vocabulary",
+    "iati-tag": "tag.vocabulary",
+    "description": "The vocabulary used to classify the tags related to the activity, enhancing data interpretation and use.",
+    "default": true,
+    "category": "Tag"
+  },
+  {
+    "id": "087",
+    "name": "Tag Vocabulary URI",
+    "iati-tag": "tag.vocabulary-uri",
+    "description": "The URI that links to the tag vocabulary used, which facilitates cross-referencing and interoperability.",
+    "default": false,
+    "category": "Tag"
+  },
+  {
+    "id": "088",
+    "name": "Tag Narrative",
+    "iati-tag": "tag.narrative",
+    "description": "A narrative description of the tags assigned to the activity, providing a richer context and understanding of their relevance.",
+    "default": true,
+    "category": "Tag"
+  },
+  {
+    "id": "089",
+    "name": "Tag Narrative Language",
+    "iati-tag": "tag.narrative.lang",
+    "description": "The language used for the narrative description of the tags, ensuring accessible understanding of the information.",
+    "default": false,
+    "category": "Tag"
+  },
+  {
+    "id": "090",
+    "name": "Country Budget Items Vocabulary",
+    "iati-tag": "country-budget-items.vocabulary",
+    "description": "The vocabulary used to classify the country budget items associated with the activity, enabling consistency in categorization.",
+    "default": false,
+    "category": "Country Budget Items"
+  },
+  {
+    "id": "091",
+    "name": "Country Budget Item Code",
+    "iati-tag": "country-budget-items.budget-item.code",
+    "description": "The unique code representing each budget item related to a specific country, aiding in financial tracking and analysis.",
+    "default": false,
+    "category": "Country Budget Items"
+  },
+  {
+    "id": "092",
+    "name": "Country Budget Item Percentage",
+    "iati-tag": "country-budget-items.budget-item.percentage",
+    "description": "The percentage allocated to each budget item associated with the activity, providing clear insight into resource distribution.",
+    "default": false,
+    "category": "Country Budget Items"
+  },
+  {
+    "id": "093",
+    "name": "Country Budget Item Description Narrative",
+    "iati-tag": "country-budget-items.budget-item.description.narrative",
+    "description": "A narrative that describes each budget item associated with the activity, adding contextual information to financial figures.",
+    "default": false,
+    "category": "Country Budget Items"
+  },
+  {
+    "id": "094",
+    "name": "Country Budget Item Description Narrative Language",
+    "iati-tag": "country-budget-items.budget-item.description.narrative.lang",
+    "description": "The language used for the narrative description of the budget item, ensuring clarity and comprehension among diverse audiences.",
+    "default": false,
+    "category": "Country Budget Items"
+  },
+  {
+    "id": "095",
+    "name": "Humanitarian Scope Type",
+    "iati-tag": "humanitarian-scope.type",
+    "description": "The type of humanitarian scope relevant to the activity, providing context around the humanitarian objectives and focus.",
+    "default": false,
+    "category": "Humanitarian Scope"
+  },
+  {
+    "id": "096",
+    "name": "Humanitarian Scope Vocabulary",
+    "iati-tag": "humanitarian-scope.vocabulary",
+    "description": "The vocabulary used to classify the types of humanitarian scope, enhancing consistency in humanitarian reporting.",
+    "default": false,
+    "category": "Humanitarian Scope"
+  },
+  {
+    "id": "097",
+    "name": "Humanitarian Scope Vocabulary URI",
+    "iati-tag": "humanitarian-scope.vocabulary-uri",
+    "description": "The URI that links to the vocabulary used for the humanitarian scope classification, enabling access to detailed definitions.",
+    "default": false,
+    "category": "Humanitarian Scope"
+  },
+  {
+    "id": "098",
+    "name": "Humanitarian Scope Code",
+    "iati-tag": "humanitarian-scope.code",
+    "description": "The code representing the specific humanitarian scope associated with the activity, which helps in categorizing humanitarian interventions.",
+    "default": false,
+    "category": "Humanitarian Scope"
+  },
+  {
+    "id": "099",
+    "name": "Humanitarian Scope Narrative",
+    "iati-tag": "humanitarian-scope.narrative",
+    "description": "A narrative description of the humanitarian scope associated with the activity, providing richer context and rationale.",
+    "default": false,
+    "category": "Humanitarian Scope"
+  },
+  {
+    "id": "100",
+    "name": "Humanitarian Scope Narrative Language",
+    "iati-tag": "humanitarian-scope.narrative.lang",
+    "description": "The language used for the narrative description of the humanitarian scope, ensuring accessibility for various audiences.",
+    "default": false,
+    "category": "Humanitarian Scope"
+  },
+  {
+    "id": "101",
+    "name": "Policy Marker Vocabulary",
+    "iati-tag": "policy-marker.vocabulary",
+    "description": "The vocabulary used to categorize policy markers associated with the activity, facilitating consistent tagging of policy relevance.",
+    "default": false,
+    "category": "Policy Marker"
+  },
+  {
+    "id": "102",
+    "name": "Policy Marker Vocabulary URI",
+    "iati-tag": "policy-marker.vocabulary-uri",
+    "description": "The URI linking to the vocabulary for policy markers, enabling users to access detailed definitions and classifications.",
+    "default": false,
+    "category": "Policy Marker"
+  },
+  {
+    "id": "103",
+    "name": "Policy Marker Code",
+    "iati-tag": "policy-marker.code",
+    "description": "The unique code representing each policy marker associated with the activity, which aids in categorizing the policy objectives addressed.",
+    "default": true,
+    "category": "Policy Marker"
+  },
+  {
+    "id": "104",
+    "name": "Policy Marker Significance",
+    "iati-tag": "policy-marker.significance",
+    "description": "A value indicating the significance of the policy marker, which helps users understand the activity's alignment with specific policies.",
+    "default": true,
+    "category": "Policy Marker"
+  },
+  {
+    "id": "105",
+    "name": "Policy Marker Narrative",
+    "iati-tag": "policy-marker.narrative",
+    "description": "A narrative description of the policy marker, providing context and rationale for its relevance to the activity.",
+    "default": true,
+    "category": "Policy Marker"
+  },
+  {
+    "id": "106",
+    "name": "Policy Marker Narrative Language",
+    "iati-tag": "policy-marker.narrative.lang",
+    "description": "The language used for the narrative description of the policy marker, facilitating understanding across different linguistic backgrounds.",
+    "default": false,
+    "category": "Policy Marker"
+  },
+  {
+    "id": "107",
+    "name": "Collaboration Type Code",
+    "iati-tag": "collaboration-type.code",
+    "description": "A code that represents the type of collaboration involved in the activity, specifying the partnership dynamics.",
+    "default": true,
+    "category": "Collaboration Type"
+  },
+  {
+    "id": "108",
+    "name": "Default Flow Type Code",
+    "iati-tag": "default-flow-type.code",
+    "description": "The code indicating the default flow type of funding for the activity, which helps in classifying the direction of financial flow.",
+    "default": true,
+    "category": "Default Flow Type"
+  },
+  {
+    "id": "109",
+    "name": "Default Finance Type Code",
+    "iati-tag": "default-finance-type.code",
+    "description": "The code representing the default finance type associated with the activity, which aids in classifying the nature of financial resources used.",
+    "default": true,
+    "category": "Default Finance Type"
+  },
+  {
+    "id": "110",
+    "name": "Default Aid Type Code",
+    "iati-tag": "default-aid-type.code",
+    "description": "The code indicating the default aid type for the activity, providing context for the nature of assistance provided.",
+    "default": true,
+    "category": "Default Aid Type"
+  },
+  {
+    "id": "111",
+    "name": "Default Aid Type Vocabulary",
+    "iati-tag": "default-aid-type.vocabulary",
+    "description": "The vocabulary used to classify the default aid types associated with the activity, ensuring consistency in classification.",
+    "default": true,
+    "category": "Default Aid Type"
+  },
+  {
+    "id": "112",
+    "name": "Default Tied Status Code",
+    "iati-tag": "default-tied-status.code",
+    "description": "The code representing the tied status of the aid provided in the activity, indicating whether the aid is tied to specific uses or conditions.",
+    "default": false,
+    "category": "Default Tied Status"
+  },
+  {
+    "id": "113",
+    "name": "Budget Type",
+    "iati-tag": "budget.type",
+    "description": "The type of budget related to the activity, which helps define the nature of financial planning and allocations.",
+    "default": false,
+    "category": "Budget"
+  },
+  {
+    "id": "114",
+    "name": "Budget Status",
+    "iati-tag": "budget.status",
+    "description": "The status of the budget, providing information on whether the budget is approved, revised, or finalized.",
+    "default": false,
+    "category": "Budget"
+  },
+  {
+    "id": "115",
+    "name": "Budget Period Start ISO Date",
+    "iati-tag": "budget.period-start.iso-date",
+    "description": "The start date of the budget period in ISO format, essential for understanding the time frame of budget allocations.",
+    "default": false,
+    "category": "Budget"
+  },
+  {
+    "id": "116",
+    "name": "Budget Period End ISO Date",
+    "iati-tag": "budget.period-end.iso-date",
+    "description": "The end date of the budget period in ISO format, helping to define the time boundaries for budget implementation.",
+    "default": false,
+    "category": "Budget"
+  },
+  {
+    "id": "117",
+    "name": "Budget Value",
+    "iati-tag": "budget.value",
+    "description": "The total monetary value of the budget allocated for the activity, indicating the financial resources dedicated to it.",
+    "default": false,
+    "category": "Budget"
+  },
+  {
+    "id": "118",
+    "name": "Budget Value Currency",
+    "iati-tag": "budget.value.currency",
+    "description": "The currency in which the budget value is reported, ensuring clarity regarding the financial figures provided.",
+    "default": false,
+    "category": "Budget"
+  },
+  {
+    "id": "119",
+    "name": "Budget Value Date",
+    "iati-tag": "budget.value.value-date",
+    "description": "The date associated with the budget value, providing context on when the budget figures were reported or applicable.",
+    "default": false,
+    "category": "Budget"
+  },
+  {
+    "id": "120",
+    "name": "Planned Disbursement Type",
+    "iati-tag": "planned-disbursement.type",
+    "description": "The type of planned disbursement related to the activity, clarifying the nature of expected financial flows.",
+    "default": false,
+    "category": "Planned Disbursement"
+  },
+  {
+    "id": "121",
+    "name": "Planned Disbursement Period Start ISO Date",
+    "iati-tag": "planned-disbursement.period-start.iso-date",
+    "description": "The start date of the planned disbursement period in ISO format, indicating when funds are expected to be allocated.",
+    "default": false,
+    "category": "Planned Disbursement"
+  },
+  {
+    "id": "122",
+    "name": "Planned Disbursement Period End ISO Date",
+    "iati-tag": "planned-disbursement.period-end.iso-date",
+    "description": "The end date of the planned disbursement period in ISO format, defining the time frame for expected disbursements.",
+    "default": false,
+    "category": "Planned Disbursement"
+  },
+  {
+    "id": "123",
+    "name": "Planned Disbursement Value",
+    "iati-tag": "planned-disbursement.value",
+    "description": "The monetary value of the planned disbursement allocated for the activity, signifying the expected financial commitment.",
+    "default": false,
+    "category": "Planned Disbursement"
+  },
+  {
+    "id": "124",
+    "name": "Planned Disbursement Value Currency",
+    "iati-tag": "planned-disbursement.value.currency",
+    "description": "The currency in which the planned disbursement value is reported, ensuring clarity regarding financial figures.",
+    "default": false,
+    "category": "Planned Disbursement"
+  },
+  {
+    "id": "125",
+    "name": "Planned Disbursement Value Date",
+    "iati-tag": "planned-disbursement.value.value-date",
+    "description": "The date associated with the planned disbursement value, providing context on when the figures were reported.",
+    "default": false,
+    "category": "Planned Disbursement"
+  },
+  {
+    "id": "126",
+    "name": "Planned Disbursement Provider Organisation Reference",
+    "iati-tag": "planned-disbursement.provider-org.ref",
+    "description": "The unique identifier for the provider organisation supplying the planned disbursement, enabling tracking and accountability.",
+    "default": true,
+    "category": "Planned Disbursement"
+  },
+  {
+    "id": "127",
+    "name": "Planned Disbursement Provider Organisation Provider Activity ID",
+    "iati-tag": "planned-disbursement.provider-org.provider-activity-id",
+    "description": "The specific activity ID used by the provider organisation to refer to their activity related to the planned disbursement.",
+    "default": false,
+    "category": "Planned Disbursement"
+  },
+  {
+    "id": "128",
+    "name": "Planned Disbursement Provider Organisation Type",
+    "iati-tag": "planned-disbursement.provider-org.type",
+    "description": "The type of organisation providing the planned disbursement, which offers context to their role within the activity.",
+    "default": false,
+    "category": "Planned Disbursement"
+  },
+  {
+    "id": "129",
+    "name": "Planned Disbursement Provider Organisation Narrative",
+    "iati-tag": "planned-disbursement.provider-org.narrative",
+    "description": "A narrative description of the provider organisation associated with the planned disbursement, adding context and detail.",
+    "default": true,
+    "category": "Planned Disbursement"
+  },
+  {
+    "id": "130",
+    "name": "Planned Disbursement Provider Organisation Narrative Language",
+    "iati-tag": "planned-disbursement.provider-org.narrative.lang",
+    "description": "The language used for the narrative describing the provider organisation, ensuring comprehension among diverse audiences.",
+    "default": false,
+    "category": "Planned Disbursement"
+  },
+  {
+    "id": "131",
+    "name": "Planned Disbursement Receiver Organisation Reference",
+    "iati-tag": "planned-disbursement.receiver-org.ref",
+    "description": "The unique identifier for the receiver organisation that will receive the planned disbursement, facilitating tracking of financial flows.",
+    "default": true,
+    "category": "Planned Disbursement"
+  },
+  {
+    "id": "132",
+    "name": "Planned Disbursement Receiver Organisation Receiver Activity ID",
+    "iati-tag": "planned-disbursement.receiver-org.receiver-activity-id",
+    "description": "The specific activity ID used by the receiver organisation to refer to their activity related to the planned disbursement.",
+    "default": false,
+    "category": "Planned Disbursement"
+  },
+  {
+    "id": "133",
+    "name": "Planned Disbursement Receiver Organisation Type",
+    "iati-tag": "planned-disbursement.receiver-org.type",
+    "description": "The type of organisation receiving the planned disbursement, providing context for their role within the activity.",
+    "default": false,
+    "category": "Planned Disbursement"
+  },
+  {
+    "id": "134",
+    "name": "Planned Disbursement Receiver Organisation Narrative",
+    "iati-tag": "planned-disbursement.receiver-org.narrative",
+    "description": "A narrative description of the receiver organisation associated with the planned disbursement, enriching understanding of their role.",
+    "default": true,
+    "category": "Planned Disbursement"
+  },
+  {
+    "id": "135",
+    "name": "Planned Disbursement Receiver Organisation Narrative Language",
+    "iati-tag": "planned-disbursement.receiver-org.narrative.lang",
+    "description": "The language used for the narrative describing the receiver organisation, ensuring clarity across different languages.",
+    "default": false,
+    "category": "Planned Disbursement"
+  },
+  {
+    "id": "136",
+    "name": "Capital Spend Percentage",
+    "iati-tag": "capital-spend.percentage",
+    "description": "The percentage of the total budget allocated specifically for capital expenditures, indicating investment in long-term assets.",
+    "default": true,
+    "category": "Capital Spend"
+  },
+  {
+    "id": "137",
+    "name": "Transaction Reference",
+    "iati-tag": "transaction.ref",
+    "description": "A unique identifier for each transaction related to the activity, allowing detailed tracking and accountability of financial flows.",
+    "default": false,
+    "category": "Transaction"
+  },
+  {
+    "id": "138",
+    "name": "Transaction Humanitarian",
+    "iati-tag": "transaction.humanitarian",
+    "description": "A boolean value indicating if the transaction is of a humanitarian nature, highlighting its relevance to humanitarian efforts.",
+    "default": false,
+    "category": "Transaction"
+  },
+  {
+    "id": "139",
+    "name": "Transaction Type Code",
+    "iati-tag": "transaction.transaction-type.code",
+    "description": "The code representing the type of transaction, helping to classify the nature of the financial flow (e.g., grant, loan, etc.).",
+    "default": false,
+    "category": "Transaction"
+  },
+  {
+    "id": "140",
+    "name": "Transaction Date ISO Date",
+    "iati-tag": "transaction.transaction-date.iso-date",
+    "description": "The date of the transaction in ISO format, providing clarity on when financial flows occurred.",
+    "default": false,
+    "category": "Transaction"
+  },
+  {
+    "id": "141",
+    "name": "Transaction Value",
+    "iati-tag": "transaction.value",
+    "description": "The monetary value of the transaction, indicating the amount of funding involved in the financial flow.",
+    "default": false,
+    "category": "Transaction"
+  },
+  {
+    "id": "142",
+    "name": "Transaction Value Currency",
+    "iati-tag": "transaction.value.currency",
+    "description": "The currency in which the transaction value is reported, ensuring clarity regarding the financial figures provided.",
+    "default": false,
+    "category": "Transaction"
+  },
+  {
+    "id": "143",
+    "name": "Transaction Value Date",
+    "iati-tag": "transaction.value.value-date",
+    "description": "The date associated with the transaction value, providing context on when the figures were reported.",
+    "default": false,
+    "category": "Transaction"
+  },
+  {
+    "id": "144",
+    "name": "Transaction Description Narrative",
+    "iati-tag": "transaction.description.narrative",
+    "description": "A narrative description of the transaction, providing additional insights into the nature and purpose of the financial flow.",
+    "default": false,
+    "category": "Transaction"
+  },
+  {
+    "id": "145",
+    "name": "Transaction Description Narrative Language",
+    "iati-tag": "transaction.description.narrative.lang",
+    "description": "The language used for the narrative description of the transaction, ensuring comprehensibility for diverse audiences.",
+    "default": false,
+    "category": "Transaction"
+  },
+  {
+    "id": "146",
+    "name": "Transaction Provider Organisation Reference",
+    "iati-tag": "transaction.provider-org.ref",
+    "description": "The unique identifier for the provider organisation associated with the transaction, facilitating tracking of financial flows.",
+    "default": false,
+    "category": "Transaction"
+  },
+  {
+    "id": "147",
+    "name": "Transaction Provider Organisation Provider Activity ID",
+    "iati-tag": "transaction.provider-org.provider-activity-id",
+    "description": "The specific activity ID used by the provider organisation to refer to their activity related to the transaction.",
+    "default": false,
+    "category": "Transaction"
+  },
+  {
+    "id": "148",
+    "name": "Transaction Provider Organisation Type",
+    "iati-tag": "transaction.provider-org.type",
+    "description": "The type of organisation providing the transaction, which offers context to their role within the activity.",
+    "default": false,
+    "category": "Transaction"
+  },
+  {
+    "id": "149",
+    "name": "Transaction Provider Organisation Narrative",
+    "iati-tag": "transaction.provider-org.narrative",
+    "description": "A narrative description of the provider organisation responsible for the transaction, adding context and detail.",
+    "default": false,
+    "category": "Transaction"
+  },
+  {
+    "id": "150",
+    "name": "Transaction Provider Organisation Narrative Language",
+    "iati-tag": "transaction.provider-org.narrative.lang",
+    "description": "The language used for the narrative describing the provider organisation, ensuring clarity across different languages.",
+    "default": false,
+    "category": "Transaction"
+  },
+  {
+    "id": "151",
+    "name": "Transaction Receiver Organisation Reference",
+    "iati-tag": "transaction.receiver-org.ref",
+    "description": "The unique identifier for the receiver organisation associated with the transaction, enabling tracking of financial flows.",
+    "default": false,
+    "category": "Transaction"
+  },
+  {
+    "id": "152",
+    "name": "Transaction Receiver Organisation Receiver Activity ID",
+    "iati-tag": "transaction.receiver-org.receiver-activity-id",
+    "description": "The specific activity ID used by the receiver organisation to refer to their activity related to the transaction.",
+    "default": false,
+    "category": "Transaction"
+  },
+  {
+    "id": "153",
+    "name": "Transaction Receiver Organisation Type",
+    "iati-tag": "transaction.receiver-org.type",
+    "description": "The type of organisation receiving the transaction, providing context for their role within the activity.",
+    "default": false,
+    "category": "Transaction"
+  },
+  {
+    "id": "154",
+    "name": "Transaction Receiver Organisation Narrative",
+    "iati-tag": "transaction.receiver-org.narrative",
+    "description": "A narrative description of the receiver organisation associated with the transaction, enriching understanding of their role.",
+    "default": false,
+    "category": "Transaction"
+  },
+  {
+    "id": "155",
+    "name": "Transaction Receiver Organisation Narrative Language",
+    "iati-tag": "transaction.receiver-org.narrative.lang",
+    "description": "The language used for the narrative describing the receiver organisation, ensuring comprehensibility across various languages.",
+    "default": false,
+    "category": "Transaction"
+  },
+  {
+    "id": "156",
+    "name": "Transaction Disbursement Channel Code",
+    "iati-tag": "transaction.disbursement-channel.code",
+    "description": "The code indicating the channel through which the disbursement was made, which can specify the type of funding flow.",
+    "default": false,
+    "category": "Transaction"
+  },
+  {
+    "id": "157",
+    "name": "Transaction Sector Vocabulary",
+    "iati-tag": "transaction.sector.vocabulary",
+    "description": "The vocabulary used to classify sectors associated with the transaction, enhancing understanding of the contextual focus.",
+    "default": false,
+    "category": "Transaction"
+  },
+  {
+    "id": "158",
+    "name": "Transaction Sector Vocabulary URI",
+    "iati-tag": "transaction.sector.vocabulary-uri",
+    "description": "The URI that links to the sector vocabulary used in the classification of the transaction, promoting data interoperability.",
+    "default": false,
+    "category": "Transaction"
+  },
+  {
+    "id": "159",
+    "name": "Transaction Sector Code",
+    "iati-tag": "transaction.sector.code",
+    "description": "The unique code representing the sector associated with the transaction, essential for categorizing financial flows.",
+    "default": false,
+    "category": "Transaction"
+  },
+  {
+    "id": "160",
+    "name": "Transaction Sector Narrative",
+    "iati-tag": "transaction.sector.narrative",
+    "description": "A narrative description of the sector associated with the transaction, providing additional context and insights.",
+    "default": false,
+    "category": "Transaction"
+  },
+  {
+    "id": "161",
+    "name": "Transaction Sector Narrative Language",
+    "iati-tag": "transaction.sector.narrative.lang",
+    "description": "The language used for the narrative description of the sector involved in the transaction, enhancing understanding.",
+    "default": false,
+    "category": "Transaction"
+  },
+  {
+    "id": "162",
+    "name": "Transaction Recipient Country Code",
+    "iati-tag": "transaction.recipient-country.code",
+    "description": "The unique code representing the recipient country associated with the transaction, crucial for geographic classification.",
+    "default": false,
+    "category": "Transaction"
+  },
+  {
+    "id": "163",
+    "name": "Transaction Recipient Country Narrative",
+    "iati-tag": "transaction.recipient-country.narrative",
+    "description": "A narrative description of the recipient country involved in the transaction, providing additional context beyond the code.",
+    "default": false,
+    "category": "Transaction"
+  },
+  {
+    "id": "164",
+    "name": "Transaction Recipient Country Narrative Language",
+    "iati-tag": "transaction.recipient-country.narrative.lang",
+    "description": "The language used for the narrative describing the recipient country, ensuring clarity for diverse audiences.",
+    "default": false,
+    "category": "Transaction"
+  },
+  {
+    "id": "165",
+    "name": "Transaction Recipient Region Code",
+    "iati-tag": "transaction.recipient-region.code",
+    "description": "The unique code representing the recipient region associated with the transaction, necessary for regional classification.",
+    "default": false,
+    "category": "Transaction"
+  },
+  {
+    "id": "166",
+    "name": "Transaction Recipient Region Vocabulary",
+    "iati-tag": "transaction.recipient-region.vocabulary",
+    "description": "The vocabulary used to classify recipient regions relevant to the transaction, enhancing consistency in reporting.",
+    "default": false,
+    "category": "Transaction"
+  },
+  {
+    "id": "167",
+    "name": "Transaction Recipient Region Vocabulary URI",
+    "iati-tag": "transaction.recipient-region.vocabulary-uri",
+    "description": "The URI that links to the vocabulary used for classifying recipient regions, enabling better data interoperability.",
+    "default": false,
+    "category": "Transaction"
+  },
+  {
+    "id": "168",
+    "name": "Transaction Recipient Region Narrative",
+    "iati-tag": "transaction.recipient-region.narrative",
+    "description": "A narrative description of the recipient region involved in the transaction, adding contextual understanding.",
+    "default": false,
+    "category": "Transaction"
+  },
+  {
+    "id": "169",
+    "name": "Transaction Recipient Region Narrative Language",
+    "iati-tag": "transaction.recipient-region.narrative.lang",
+    "description": "The language used for the narrative describing the recipient region, facilitating comprehension.",
+    "default": false,
+    "category": "Transaction"
+  },
+  {
+    "id": "170",
+    "name": "Transaction Flow Type Code",
+    "iati-tag": "transaction.flow-type.code",
+    "description": "The code representing the flow type associated with the transaction, clarifying the direction of financial flow.",
+    "default": false,
+    "category": "Transaction"
+  },
+  {
+    "id": "171",
+    "name": "Transaction Finance Type Code",
+    "iati-tag": "transaction.finance-type.code",
+    "description": "The code indicating the finance type associated with the transaction, useful for understanding the nature of funding.",
+    "default": false,
+    "category": "Transaction"
+  },
+  {
+    "id": "172",
+    "name": "Transaction Aid Type Code",
+    "iati-tag": "transaction.aid-type.code",
+    "description": "The code specifying the aid type related to the transaction, assisting in classifying the nature of support provided.",
+    "default": false,
+    "category": "Transaction"
+  },
+  {
+    "id": "173",
+    "name": "Transaction Aid Type Vocabulary",
+    "iati-tag": "transaction.aid-type.vocabulary",
+    "description": "The vocabulary used to classify aid types associated with the transaction, enhancing clarity in reporting.",
+    "default": false,
+    "category": "Transaction"
+  },
+  {
+    "id": "174",
+    "name": "Transaction Tied Status Code",
+    "iati-tag": "transaction.tied-status.code",
+    "description": "The code indicating the tied status of the aid represented by the transaction, clarifying conditions for use.",
+    "default": false,
+    "category": "Transaction"
+  },
+  {
+    "id": "175",
+    "name": "Document Link URL",
+    "iati-tag": "document-link.url",
+    "description": "The URL of the linked document.",
+    "default": false,
+    "category": "Document Link"
+  },
+  {
+    "id": "176",
+    "name": "Document Link Format",
+    "iati-tag": "document-link.format",
+    "description": "The format of the linked document.",
+    "default": false,
+    "category": "Document Link"
+  },
+  {
+    "id": "177",
+    "name": "Document Link Title Narrative",
+    "iati-tag": "document-link.title.narrative",
+    "description": "The title of the linked document in narrative form.",
+    "default": false,
+    "category": "Document Link"
+  },
+  {
+    "id": "178",
+    "name": "Document Link Title Narrative Language",
+    "iati-tag": "document-link.title.narrative.lang",
+    "description": "The language of the document title narrative.",
+    "default": false,
+    "category": "Document Link"
+  },
+  {
+    "id": "179",
+    "name": "Document Link Description Narrative",
+    "iati-tag": "document-link.description.narrative",
+    "description": "A description of the linked document in narrative form.",
+    "default": false,
+    "category": "Document Link"
+  },
+  {
+    "id": "180",
+    "name": "Document Link Description Narrative Language",
+    "iati-tag": "document-link.description.narrative.lang",
+    "description": "The language of the document description narrative.",
+    "default": false,
+    "category": "Document Link"
+  },
+  {
+    "id": "181",
+    "name": "Document Link Category Code",
+    "iati-tag": "document-link.category.code",
+    "description": "The category code associated with the document link.",
+    "default": false,
+    "category": "Document Link"
+  },
+  {
+    "id": "182",
+    "name": "Document Link Language Code",
+    "iati-tag": "document-link.language.code",
+    "description": "The language code for the document link.",
+    "default": false,
+    "category": "Document Link"
+  },
+  {
+    "id": "183",
+    "name": "Document Link Document Date",
+    "iati-tag": "document-link.document-date.iso-date",
+    "description": "The date of the document linked.",
+    "default": false,
+    "category": "Document Link"
+  },
+  {
+    "id": "184",
+    "name": "Related Activity Reference",
+    "iati-tag": "related-activity.ref",
+    "description": "A reference to a related activity.",
+    "default": false,
+    "category": "Related Activity"
+  },
+  {
+    "id": "185",
+    "name": "Related Activity Type",
+    "iati-tag": "related-activity.type",
+    "description": "The type of the related activity.",
+    "default": false,
+    "category": "Related Activity"
+  },
+  {
+    "id": "186",
+    "name": "Legacy Data Name",
+    "iati-tag": "legacy-data.name",
+    "description": "The name of the legacy data.",
+    "default": false,
+    "category": "Legacy Data"
+  },
+  {
+    "id": "187",
+    "name": "Legacy Data Value",
+    "iati-tag": "legacy-data.value",
+    "description": "The value associated with the legacy data.",
+    "default": false,
+    "category": "Legacy Data"
+  },
+  {
+    "id": "188",
+    "name": "Legacy Data IATI Equivalent",
+    "iati-tag": "legacy-data.iati-equivalent",
+    "description": "The IATI equivalent of the legacy data.",
+    "default": false,
+    "category": "Legacy Data"
+  },
+  {
+    "id": "189",
+    "name": "Conditions Attached",
+    "iati-tag": "conditions.attached",
+    "description": "Indicates whether conditions are attached.",
+    "default": false,
+    "category": "Conditions"
+  },
+  {
+    "id": "190",
+    "name": "Conditions Condition Type",
+    "iati-tag": "conditions.condition.type",
+    "description": "The type of condition attached to the activity.",
+    "default": false,
+    "category": "Conditions"
+  },
+  {
+    "id": "191",
+    "name": "Conditions Condition Narrative",
+    "iati-tag": "conditions.condition.narrative",
+    "description": "A narrative description of the condition.",
+    "default": false,
+    "category": "Conditions"
+  },
+  {
+    "id": "192",
+    "name": "Conditions Condition Narrative Language",
+    "iati-tag": "conditions.condition.narrative.lang",
+    "description": "The language of the condition narrative.",
+    "default": false,
+    "category": "Conditions"
+  },
+  {
+    "id": "193",
+    "name": "Result Type",
+    "iati-tag": "result.type",
+    "description": "The type of result reported.",
+    "default": false,
+    "category": "Result"
+  },
+  {
+    "id": "194",
+    "name": "Result Aggregation Status",
+    "iati-tag": "result.aggregation-status",
+    "description": "Indicates the aggregation status of the result.",
+    "default": false,
+    "category": "Result"
+  },
+  {
+    "id": "195",
+    "name": "Result Title Narrative",
+    "iati-tag": "result.title.narrative",
+    "description": "The title of the result in narrative form.",
+    "default": false,
+    "category": "Result"
+  },
+  {
+    "id": "196",
+    "name": "Result Title Narrative Language",
+    "iati-tag": "result.title.narrative.lang",
+    "description": "The language of the result title narrative.",
+    "default": false,
+    "category": "Result"
+  },
+  {
+    "id": "197",
+    "name": "Result Description Narrative",
+    "iati-tag": "result.description.narrative",
+    "description": "A narrative description of the result.",
+    "default": false,
+    "category": "Result"
+  },
+  {
+    "id": "198",
+    "name": "Result Description Narrative Language",
+    "iati-tag": "result.description.narrative.lang",
+    "description": "The language of the result description narrative.",
+    "default": false,
+    "category": "Result"
+  },
+  {
+    "id": "199",
+    "name": "Result Document Link URL",
+    "iati-tag": "result.document-link.url",
+    "description": "The URL of the document link related to the result.",
+    "default": false,
+    "category": "Result Document Link"
+  },
+  {
+    "id": "200",
+    "name": "Result Document Link Format",
+    "iati-tag": "result.document-link.format",
+    "description": "The format of the document linked to the result.",
+    "default": false,
+    "category": "Result Document Link"
+  },
+  {
+    "id": "201",
+    "name": "Result Document Link Title Narrative",
+    "iati-tag": "result.document-link.title.narrative",
+    "description": "The title of the document link in narrative form related to the result.",
+    "default": false,
+    "category": "Result Document Link"
+  },
+  {
+    "id": "202",
+    "name": "Result Document Link Title Narrative Language",
+    "iati-tag": "result.document-link.title.narrative.lang",
+    "description": "The language of the document link title narrative.",
+    "default": false,
+    "category": "Result Document Link"
+  },
+  {
+    "id": "203",
+    "name": "Result Document Link Description Narrative",
+    "iati-tag": "result.document-link.description.narrative",
+    "description": "A description of the document link in narrative form related to the result.",
+    "default": false,
+    "category": "Result Document Link"
+  },
+  {
+    "id": "204",
+    "name": "Result Document Link Description Narrative Language",
+    "iati-tag": "result.document-link.description.narrative.lang",
+    "description": "The language of the document link description narrative.",
+    "default": false,
+    "category": "Result Document Link"
+  },
+  {
+    "id": "205",
+    "name": "Result Document Link Category Code",
+    "iati-tag": "result.document-link.category.code",
+    "description": "The category code associated with the document link related to the result.",
+    "default": false,
+    "category": "Result Document Link"
+  },
+  {
+    "id": "206",
+    "name": "Result Document Link Language Code",
+    "iati-tag": "result.document-link.language.code",
+    "description": "The language code for the document link related to the result.",
+    "default": false,
+    "category": "Result Document Link"
+  },
+  {
+    "id": "207",
+    "name": "Result Document Link Document Date",
+    "iati-tag": "result.document-link.document-date.iso-date",
+    "description": "The date of the document linked to the result.",
+    "default": false,
+    "category": "Result Document Link"
+  },
+  {
+    "id": "208",
+    "name": "Result Reference Code",
+    "iati-tag": "result.reference.code",
+    "description": "The reference code associated with the result.",
+    "default": false,
+    "category": "Result"
+  },
+  {
+    "id": "209",
+    "name": "Result Reference Vocabulary",
+    "iati-tag": "result.reference.vocabulary",
+    "description": "The vocabulary used for references to the results.",
+    "default": false,
+    "category": "Result"
+  },
+  {
+    "id": "210",
+    "name": "Result Reference Vocabulary URI",
+    "iati-tag": "result.reference.vocabulary-uri",
+    "description": "The URI of the vocabulary used for references to the results.",
+    "default": false,
+    "category": "Result"
+  },
+  {
+    "id": "211",
+    "name": "Result Indicator Measure",
+    "iati-tag": "result.indicator.measure",
+    "description": "The measure used to quantify the indicator for the result.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "212",
+    "name": "Result Indicator Ascending",
+    "iati-tag": "result.indicator.ascending",
+    "description": "Indicates whether a higher value represents better performance.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "213",
+    "name": "Result Indicator Aggregation Status",
+    "iati-tag": "result.indicator.aggregation-status",
+    "description": "Indicates the aggregation status of the indicator.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "214",
+    "name": "Result Indicator Title Narrative",
+    "iati-tag": "result.indicator.title.narrative",
+    "description": "The title of the indicator that describes the result in narrative form.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "215",
+    "name": "Result Indicator Title Narrative Language",
+    "iati-tag": "result.indicator.title.narrative.lang",
+    "description": "The language of the indicator title narrative.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "216",
+    "name": "Result Indicator Description Narrative",
+    "iati-tag": "result.indicator.description.narrative",
+    "description": "A narrative description of the result indicator, providing context on its purpose and significance.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "217",
+    "name": "Result Indicator Description Narrative Language",
+    "iati-tag": "result.indicator.description.narrative.lang",
+    "description": "The language used for the narrative describing the result indicator, ensuring clarity and comprehension.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "218",
+    "name": "Result Indicator Document Link URL",
+    "iati-tag": "result.indicator.document-link.url",
+    "description": "The URL linking to additional documents related to the result indicator, providing easy access to supporting information.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "219",
+    "name": "Result Indicator Document Link Format",
+    "iati-tag": "result.indicator.document-link.format",
+    "description": "The format of the document linked regarding the result indicator (e.g., PDF, DOCX), helping users understand how to access the content.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "220",
+    "name": "Result Indicator Document Link Title Narrative",
+    "iati-tag": "result.indicator.document-link.title.narrative",
+    "description": "The title of the linked document associated with the result indicator, summarizing the content of the document.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "221",
+    "name": "Result Indicator Document Link Title Narrative Language",
+    "iati-tag": "result.indicator.document-link.title.narrative.lang",
+    "description": "The language of the title narrative for the result indicator document link, ensuring clarity in communication.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "222",
+    "name": "Result Indicator Document Link Description Narrative",
+    "iati-tag": "result.indicator.document-link.description.narrative",
+    "description": "A descriptive narrative providing context for the linked document related to the result indicator.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "223",
+    "name": "Result Indicator Document Link Description Narrative Language",
+    "iati-tag": "result.indicator.document-link.description.narrative.lang",
+    "description": "The language used for the description narrative of the document link, enhancing understanding among users.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "224",
+    "name": "Result Indicator Document Link Category Code",
+    "iati-tag": "result.indicator.document-link.category.code",
+    "description": "The category code representing the type of document linked regarding the result indicator, aiding in classification.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "225",
+    "name": "Result Indicator Document Link Language Code",
+    "iati-tag": "result.indicator.document-link.language.code",
+    "description": "The language code used for the document link related to the result indicator, ensuring accessibility for users.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "226",
+    "name": "Result Indicator Document Link Document Date ISO Date",
+    "iati-tag": "result.indicator.document-link.document-date.iso-date",
+    "description": "The date when the linked document regarding the result indicator was created or published, providing context on its currency.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "227",
+    "name": "Result Indicator Reference Vocabulary",
+    "iati-tag": "result.indicator.reference.vocabulary",
+    "description": "The vocabulary used to classify the references for the result indicator, improving the consistency of data reporting.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "228",
+    "name": "Result Indicator Reference Code",
+    "iati-tag": "result.indicator.reference.code",
+    "description": "The unique code representing the reference for the result indicator, facilitating tracking and linking of specific indicators.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "229",
+    "name": "Result Indicator Reference Indicator URI",
+    "iati-tag": "result.indicator.reference.indicator-uri",
+    "description": "The URI that links to the specific indicator referenced, allowing for easy access to detailed information about the indicator.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "230",
+    "name": "Result Indicator Baseline ISO Date",
+    "iati-tag": "result.indicator.baseline.iso-date",
+    "description": "The ISO date for the baseline measurement of the indicator, providing context for the starting point of measurement.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "231",
+    "name": "Result Indicator Baseline Year",
+    "iati-tag": "result.indicator.baseline.year",
+    "description": "The year associated with the baseline measurement of the indicator, helping to frame the temporal context of the data.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "232",
+    "name": "Result Indicator Baseline Value",
+    "iati-tag": "result.indicator.baseline.value",
+    "description": "The value of the baseline measurement for the indicator, representing the starting measure for comparison.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "233",
+    "name": "Result Indicator Baseline Location Reference",
+    "iati-tag": "result.indicator.baseline.location.ref",
+    "description": "The reference of the location related to the baseline measurement of the indicator, aiding in geographic context.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "234",
+    "name": "Result Indicator Baseline Dimension Name",
+    "iati-tag": "result.indicator.baseline.dimension.name",
+    "description": "The name of the dimension associated with the baseline measurement of the indicator, contributing to dimensional analysis.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "235",
+    "name": "Result Indicator Baseline Dimension Value",
+    "iati-tag": "result.indicator.baseline.dimension.value",
+    "description": "The value of the dimension associated with the baseline measurement, providing deeper insights into the indicator's context.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "236",
+    "name": "Result Indicator Baseline Document Link URL",
+    "iati-tag": "result.indicator.baseline.document-link.url",
+    "description": "The URL linking to additional documents related to the baseline measurement of the indicator, offering supporting information.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "237",
+    "name": "Result Indicator Baseline Document Link Format",
+    "iati-tag": "result.indicator.baseline.document-link.format",
+    "description": "The format of the document linked regarding the baseline measurement (e.g., PDF, DOCX), clarifying how to access the content.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "238",
+    "name": "Result Indicator Baseline Document Link Title Narrative",
+    "iati-tag": "result.indicator.baseline.document-link.title.narrative",
+    "description": "The title of the linked document associated with the baseline measurement of the indicator, summarizing its content.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "239",
+    "name": "Result Indicator Baseline Document Link Title Narrative Language",
+    "iati-tag": "result.indicator.baseline.document-link.title.narrative.lang",
+    "description": "The language of the title narrative for the baseline document link, enhancing clarity in communication.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "240",
+    "name": "Result Indicator Baseline Document Link Description Narrative",
+    "iati-tag": "result.indicator.baseline.document-link.description.narrative",
+    "description": "A descriptive narrative providing context for the linked document related to the baseline measurement.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "241",
+    "name": "Result Indicator Baseline Document Link Description Narrative Language",
+    "iati-tag": "result.indicator.baseline.document-link.description.narrative.lang",
+    "description": "The language used for the description narrative of the baseline document link, ensuring clear communication.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "242",
+    "name": "Result Indicator Baseline Document Link Category Code",
+    "iati-tag": "result.indicator.baseline.document-link.category.code",
+    "description": "The category code representing the type of document linked regarding the baseline measurement, aiding in classification.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "243",
+    "name": "Result Indicator Baseline Document Link Language Code",
+    "iati-tag": "result.indicator.baseline.document-link.language.code",
+    "description": "The language code used for the baseline document link, ensuring accessibility for users from different backgrounds.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "244",
+    "name": "Result Indicator Baseline Document Link Document Date ISO Date",
+    "iati-tag": "result.indicator.baseline.document-link.document-date.iso-date",
+    "description": "The date when the linked document regarding the baseline measurement was created or published, providing context on its currency.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "245",
+    "name": "Result Indicator Baseline Comment Narrative",
+    "iati-tag": "result.indicator.baseline.comment.narrative",
+    "description": "A narrative providing comments or additional information related to the baseline measurement of the indicator.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "246",
+    "name": "Result Indicator Baseline Comment Narrative Language",
+    "iati-tag": "result.indicator.baseline.comment.narrative.lang",
+    "description": "The language used for the comments related to the baseline measurement of the indicator, ensuring clear understanding.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "247",
+    "name": "Result Indicator Period Period Start ISO Date",
+    "iati-tag": "result.indicator.period.period-start.iso-date",
+    "description": "The start date of the period for which the indicator is measured, in ISO format, defining the temporal scope.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "248",
+    "name": "Result Indicator Period Period End ISO Date",
+    "iati-tag": "result.indicator.period.period-end.iso-date",
+    "description": "The end date of the period for which the indicator is measured, in ISO format, establishing the temporal boundary.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "249",
+    "name": "Result Indicator Period Target Value",
+    "iati-tag": "result.indicator.period.target.value",
+    "description": "The target value for the indicator within the defined period, representing the expected achievement.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "250",
+    "name": "Result Indicator Period Target Location Reference",
+    "iati-tag": "result.indicator.period.target.location.ref",
+    "description": "The reference of the location related to the target value for the indicator, providing geographic context.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "251",
+    "name": "Result Indicator Period Target Dimension Name",
+    "iati-tag": "result.indicator.period.target.dimension.name",
+    "description": "The name of the dimension associated with the target value for the indicator, adding depth to the measurement context.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "252",
+    "name": "Result Indicator Period Target Dimension Value",
+    "iati-tag": "result.indicator.period.target.dimension.value",
+    "description": "The value of the dimension associated with the target value for the indicator, facilitating multidimensional analysis.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "253",
+    "name": "Result Indicator Period Target Comment Narrative",
+    "iati-tag": "result.indicator.period.target.comment.narrative",
+    "description": "A narrative providing comments or additional information related to the target value for the indicator.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "254",
+    "name": "Result Indicator Period Target Comment Narrative Language",
+    "iati-tag": "result.indicator.period.target.comment.narrative.lang",
+    "description": "The language used for the comments related to the target value of the indicator, ensuring clear understanding.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "255",
+    "name": "Result Indicator Period Target Document Link URL",
+    "iati-tag": "result.indicator.period.target.document-link.url",
+    "description": "The URL linking to additional documents related to the target value for the indicator, providing access to further information.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "256",
+    "name": "Result Indicator Period Target Document Link Format",
+    "iati-tag": "result.indicator.period.target.document-link.format",
+    "description": "The format of the document linked regarding the target value for the indicator (e.g., PDF, DOCX), clarifying access methods.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "257",
+    "name": "Result Indicator Period Target Document Link Title Narrative",
+    "iati-tag": "result.indicator.period.target.document-link.title.narrative",
+    "description": "The title of the linked document associated with the target value of the indicator, summarizing its content.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "258",
+    "name": "Result Indicator Period Target Document Link Title Narrative Language",
+    "iati-tag": "result.indicator.period.target.document-link.title.narrative.lang",
+    "description": "The language of the title narrative for the target document link, ensuring effective communication.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "259",
+    "name": "Result Indicator Period Target Document Link Description Narrative",
+    "iati-tag": "result.indicator.period.target.document-link.description.narrative",
+    "description": "A description providing context for the linked document related to the target value of the indicator.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "260",
+    "name": "Result Indicator Period Target Document Link Description Narrative Language",
+    "iati-tag": "result.indicator.period.target.document-link.description.narrative.lang",
+    "description": "The language used for the description narrative of the target document link, enhancing understanding.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "261",
+    "name": "Result Indicator Period Target Document Link Category Code",
+    "iati-tag": "result.indicator.period.target.document-link.category.code",
+    "description": "The category code representing the type of document linked regarding the target value, aiding in classification.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "262",
+    "name": "Result Indicator Period Target Document Link Language Code",
+    "iati-tag": "result.indicator.period.target.document-link.language.code",
+    "description": "The language code used for the target document link, ensuring accessibility for a diverse audience.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "263",
+    "name": "Result Indicator Period Target Document Link Document Date ISO Date",
+    "iati-tag": "result.indicator.period.target.document-link.document-date.iso-date",
+    "description": "The date when the linked document regarding the target measurement of the indicator was created or published.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "264",
+    "name": "Result Indicator Period Actual Value",
+    "iati-tag": "result.indicator.period.actual.value",
+    "description": "The actual value achieved for the indicator within the defined period, representing the real outcome of the activity.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "265",
+    "name": "Result Indicator Period Actual Location Reference",
+    "iati-tag": "result.indicator.period.actual.location.ref",
+    "description": "The reference of the location related to the actual value for the indicator, providing geographic context.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "266",
+    "name": "Result Indicator Period Actual Dimension Name",
+    "iati-tag": "result.indicator.period.actual.dimension.name",
+    "description": "The name of the dimension associated with the actual value for the indicator, contributing to dimensional analysis.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "267",
+    "name": "Result Indicator Period Actual Dimension Value",
+    "iati-tag": "result.indicator.period.actual.dimension.value",
+    "description": "The value of the dimension associated with the actual value for the indicator, facilitating multidimensional analysis.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "268",
+    "name": "Result Indicator Period Actual Comment Narrative",
+    "iati-tag": "result.indicator.period.actual.comment.narrative",
+    "description": "A narrative providing comments or additional information related to the actual value for the indicator.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "269",
+    "name": "Result Indicator Period Actual Comment Narrative Language",
+    "iati-tag": "result.indicator.period.actual.comment.narrative.lang",
+    "description": "The language used for the comments related to the actual value of the indicator, ensuring clear understanding.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "270",
+    "name": "Result Indicator Period Actual Document Link URL",
+    "iati-tag": "result.indicator.period.actual.document-link.url",
+    "description": "The URL linking to additional documents related to the actual measurement of the indicator, providing access to further information.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "271",
+    "name": "Result Indicator Period Actual Document Link Format",
+    "iati-tag": "result.indicator.period.actual.document-link.format",
+    "description": "The format of the document linked regarding the actual measurement of the indicator (e.g., PDF, DOCX), clarifying access methods.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "272",
+    "name": "Result Indicator Period Actual Document Link Title Narrative",
+    "iati-tag": "result.indicator.period.actual.document-link.title.narrative",
+    "description": "The title of the linked document associated with the actual measurement of the indicator, summarizing its content.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "273",
+    "name": "Result Indicator Period Actual Document Link Title Narrative Language",
+    "iati-tag": "result.indicator.period.actual.document-link.title.narrative.lang",
+    "description": "The language of the title narrative for the actual document link, ensuring clarity in communication.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "274",
+    "name": "Result Indicator Period Actual Document Link Description Narrative",
+    "iati-tag": "result.indicator.period.actual.document-link.description.narrative",
+    "description": "A descriptive narrative providing context for the linked document related to the actual measurement of the indicator.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "275",
+    "name": "Result Indicator Period Actual Document Link Description Narrative Language",
+    "iati-tag": "result.indicator.period.actual.document-link.description.narrative.lang",
+    "description": "The language used for the description narrative of the actual document link, enhancing understanding.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "276",
+    "name": "Result Indicator Period Actual Document Link Category Code",
+    "iati-tag": "result.indicator.period.actual.document-link.category.code",
+    "description": "The category code representing the type of document linked regarding the actual measurement, aiding in classification.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "277",
+    "name": "Result Indicator Period Actual Document Link Language Code",
+    "iati-tag": "result.indicator.period.actual.document-link.language.code",
+    "description": "The language code used for the actual document link, ensuring accessibility for users from different backgrounds.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "278",
+    "name": "Result Indicator Period Actual Document Link Document Date ISO Date",
+    "iati-tag": "result.indicator.period.actual.document-link.document-date.iso-date",
+    "description": "The date when the linked document regarding the actual measurement of the indicator was created or published, providing context on its currency.",
+    "default": false,
+    "category": "Result Indicator"
+  },
+  {
+    "id": "279",
+    "name": "CRS Add Other Flags Code",
+    "iati-tag": "crs-add.other-flags.code",
+    "description": "Codes representing additional flags associated with the CRS Add data, which may indicate specific considerations or attributes.",
+    "default": false,
+    "category": "CRS Add"
+  },
+  {
+    "id": "280",
+    "name": "CRS Add Other Flags Significance",
+    "iati-tag": "crs-add.other-flags.significance",
+    "description": "A boolean value indicating the significance of the other flags associated with the CRS Add data, providing context for their relevance.",
+    "default": false,
+    "category": "CRS Add"
+  },
+  {
+    "id": "281",
+    "name": "CRS Add Loan Terms Rate 1",
+    "iati-tag": "crs-add.loan-terms.rate-1",
+    "description": "The first rate associated with the loan terms of the activity, indicating the interest rate applicable to the loan provided.",
+    "default": false,
+    "category": "CRS Add"
+  },
+  {
+    "id": "282",
+    "name": "CRS Add Loan Terms Rate 2",
+    "iati-tag": "crs-add.loan-terms.rate-2",
+    "description": "The second rate associated with the loan terms of the activity, indicating any additional interest rate that may apply.",
+    "default": false,
+    "category": "CRS Add"
+  },
+  {
+    "id": "283",
+    "name": "CRS Add Loan Terms Repayment Type Code",
+    "iati-tag": "crs-add.loan-terms.repayment-type.code",
+    "description": "The code representing the repayment type for the loan terms associated with the activity, clarifying the repayment structure.",
+    "default": false,
+    "category": "CRS Add"
+  },
+  {
+    "id": "284",
+    "name": "CRS Add Loan Terms Repayment Plan Code",
+    "iati-tag": "crs-add.loan-terms.repayment-plan.code",
+    "description": "The code representing the repayment plan for the loan terms, outlining how and when repayments will occur.",
+    "default": false,
+    "category": "CRS Add"
+  },
+  {
+    "id": "285",
+    "name": "CRS Add Loan Terms Commitment Date ISO Date",
+    "iati-tag": "crs-add.loan-terms.commitment-date.iso-date",
+    "description": "The date the loan terms were committed, recorded in ISO format to provide a clear timeline for the agreement.",
+    "default": false,
+    "category": "CRS Add"
+  },
+  {
+    "id": "286",
+    "name": "CRS Add Loan Terms Repayment First Date ISO Date",
+    "iati-tag": "crs-add.loan-terms.repayment-first-date.iso-date",
+    "description": "The date when the first repayment on the loan is due, recorded in ISO format for clarity and compliance.",
+    "default": false,
+    "category": "CRS Add"
+  },
+  {
+    "id": "287",
+    "name": "CRS Add Loan Terms Repayment Final Date ISO Date",
+    "iati-tag": "crs-add.loan-terms.repayment-final-date.iso-date",
+    "description": "The date when the final repayment on the loan is due, recorded in ISO format, marking the completion of the repayment.",
+    "default": false,
+    "category": "CRS Add"
+  },
+  {
+    "id": "288",
+    "name": "CRS Add Loan Status Year",
+    "iati-tag": "crs-add.loan-status.year",
+    "description": "The year associated with the loan status, helping to identify when the loan status was reported or updated.",
+    "default": false,
+    "category": "CRS Add"
+  },
+  {
+    "id": "289",
+    "name": "CRS Add Loan Status Currency",
+    "iati-tag": "crs-add.loan-status.currency",
+    "description": "The currency in which the loan status values are reported, ensuring clarity on financial figures.",
+    "default": false,
+    "category": "CRS Add"
+  },
+  {
+    "id": "290",
+    "name": "CRS Add Loan Status Value Date",
+    "iati-tag": "crs-add.loan-status.value-date",
+    "description": "The date associated with the loan status value, providing context regarding when the reported value was applicable.",
+    "default": false,
+    "category": "CRS Add"
+  },
+  {
+    "id": "291",
+    "name": "CRS Add Loan Status Interest Received",
+    "iati-tag": "crs-add.loan-status.interest-received",
+    "description": "The amount of interest received on the loan as per the loan status, indicating financial performance.",
+    "default": false,
+    "category": "CRS Add"
+  },
+  {
+    "id": "292",
+    "name": "CRS Add Loan Status Principal Outstanding",
+    "iati-tag": "crs-add.loan-status.principal-outstanding",
+    "description": "The outstanding principal amount of the loan as per the loan status, crucial for understanding repayment obligations.",
+    "default": false,
+    "category": "CRS Add"
+  },
+  {
+    "id": "293",
+    "name": "CRS Add Loan Status Principal Arrears",
+    "iati-tag": "crs-add.loan-status.principal-arrears",
+    "description": "The amount of the principal that is in arrears, helping identify overdue loan obligations.",
+    "default": false,
+    "category": "CRS Add"
+  },
+  {
+    "id": "294",
+    "name": "CRS Add Loan Status Interest Arrears",
+    "iati-tag": "crs-add.loan-status.interest-arrears",
+    "description": "The amount of interest that is in arrears on the loan, indicating overdue payments.",
+    "default": false,
+    "category": "CRS Add"
+  },
+  {
+    "id": "295",
+    "name": "CRS Add Channel Code",
+    "iati-tag": "crs-add.channel-code",
+    "description": "The code indicating the channel through which the loan or funding is provided, assisting in categorizing the distribution mechanisms.",
+    "default": false,
+    "category": "CRS Add"
+  },
+  {
+    "id": "296",
+    "name": "FSS Extraction Date",
+    "iati-tag": "fss.extraction-date",
+    "description": "The date when the FSS data was extracted, providing context on the recency of the information.",
+    "default": false,
+    "category": "FSS"
+  },
+  {
+    "id": "297",
+    "name": "FSS Priority",
+    "iati-tag": "fss.priority",
+    "description": "A boolean value indicating whether the FSS entry is a priority, highlighting its importance within the dataset.",
+    "default": false,
+    "category": "FSS"
+  },
+  {
+    "id": "298",
+    "name": "FSS Phaseout Year",
+    "iati-tag": "fss.phaseout-year",
+    "description": "The year when the phaseout of the FSS funding or activity is expected to occur, indicating the timeline for transition.",
+    "default": false,
+    "category": "FSS"
+  },
+  {
+    "id": "299",
+    "name": "FSS Forecast",
+    "iati-tag": "fss.forecast",
+    "description": "The forecasted values associated with the funding or activity under FSS, providing projections for future commitments.",
+    "default": false,
+    "category": "FSS"
+  },
+  {
+    "id": "300",
+    "name": "FSS Forecast Year",
+    "iati-tag": "fss.forecast.year",
+    "description": "The years for which the FSS forecasts are made, enabling tracking of financial projections over time.",
+    "default": false,
+    "category": "FSS"
+  },
+  {
+    "id": "301",
+    "name": "FSS Forecast Currency",
+    "iati-tag": "fss.forecast.currency",
+    "description": "The currency in which the FSS forecast values are reported, ensuring clarity regarding the financial figures.",
+    "default": false,
+    "category": "FSS"
+  },
+  {
+    "id": "302",
+    "name": "FSS Forecast Value Date",
+    "iati-tag": "fss.forecast.value-date",
+    "description": "The date associated with the forecast value under FSS, providing context for when the projection is applicable.",
+    "default": false,
+    "category": "FSS"
+  },
+  {
+    "id": "303",
+    "name": "Dataset ID",
+    "iati-tag": "dataset.id",
+    "description": "A unique identifier for the dataset, which allows for easy tracking and referencing of the specific dataset.",
+    "default": true,
+    "category": "Dataset"
+  },
+  {
+    "id": "304",
+    "name": "Dataset Metadata Created",
+    "iati-tag": "dataset.metadata_created",
+    "description": "The date when the metadata for the dataset was created, in ISO format for standardization.",
+    "default": false,
+    "category": "Dataset"
+  },
+  {
+    "id": "305",
+    "name": "Dataset Metadata Modified",
+    "iati-tag": "dataset.metadata_modified",
+    "description": "The date when the metadata for the dataset was last modified, in ISO format, ensuring users know the currency of the data.",
+    "default": false,
+    "category": "Dataset"
+  },
+  {
+    "id": "306",
+    "name": "Dataset Name",
+    "iati-tag": "dataset.name",
+    "description": "The name of the dataset, providing a clear and concise title that describes the contents of the dataset.",
+    "default": true,
+    "category": "Dataset"
+  },
+  {
+    "id": "307",
+    "name": "Dataset IATI Version",
+    "iati-tag": "dataset.extras.iati_version",
+    "description": "The version of the IATI standard used for the dataset, indicating compliance with IATI guidelines.",
+    "default": false,
+    "category": "Dataset"
+  },
+  {
+    "id": "308",
+    "name": "Dataset Publisher IATI ID",
+    "iati-tag": "dataset.extras.publisher_iati_id",
+    "description": "The IATI identifier of the publisher of the dataset, linking the dataset to the specific publisher organisation.",
+    "default": false,
+    "category": "Dataset"
+  },
+  {
+    "id": "309",
+    "name": "Dataset Publisher",
+    "iati-tag": "dataset.extras.publisher",
+    "description": "The name of the organisation that published the dataset, providing context about the source of the information.",
+    "default": false,
+    "category": "Dataset"
+  },
+  {
+    "id": "310",
+    "name": "Dataset Data Updated",
+    "iati-tag": "dataset.extras.data_updated",
+    "description": "The date when the actual data within the dataset was last updated, in ISO format, ensuring users have access to the latest information.",
+    "default": false,
+    "category": "Dataset"
+  },
+  {
+    "id": "311",
+    "name": "Dataset Resource Hash",
+    "iati-tag": "dataset.resources.hash",
+    "description": "A hash value representing the dataset resource, used for verifying data integrity and tracking changes.",
+    "default": false,
+    "category": "Dataset"
+  },
+  {
+    "id": "312",
+    "name": "Dataset Resource Last Modified",
+    "iati-tag": "dataset.resources.last_modified",
+    "description": "The date when the resource associated with the dataset was last modified, in ISO format, assisting users in verifying data currency.",
+    "default": false,
+    "category": "Dataset"
+  },
+  {
+    "id": "313",
+    "name": "Dataset Resource URL",
+    "iati-tag": "dataset.resources.url",
+    "description": "The URL where the dataset resource can be accessed, providing users with direct links to the data.",
+    "default": false,
+    "category": "Dataset"
+  },
+  {
+    "id": "314",
+    "name": "Planned Start Date",
+    "iati-tag": "activity-date.start-planned",
+    "description": "The planned start date of the activity.",
+    "default": true,
+    "category": "Additional Data"
+  },
+  {
+    "id": "315",
+    "name": "Actual Start Date",
+    "iati-tag": "activity-date.start-actual",
+    "description": "The actual start date of the activity.",
+    "default": true,
+    "category": "Additional Data"
+  },
+  {
+    "id": "316",
+    "name": "Planned End Date",
+    "iati-tag": "activity-date.end-planned",
+    "description": "The planned end date of the activity.",
+    "default": true,
+    "category": "Additional Data"
+  },
+  {
+    "id": "317",
+    "name": "Actual End Date",
+    "iati-tag": "activity-date.end-actual",
+    "description": "The actual end date of the activity.",
+    "default": true,
+    "category": "Additional Data"
+  },
+  {
+    "id": "318",
+    "name": "Transaction Aggregated Incoming Funds (USD)",
+    "iati-tag": "activity-aggregation.incoming-funds.value-usd",
+    "description": "The total amount of incoming funds aggregated for the activity in USD.",
+    "default": true,
+    "category": "Additional Data"
+  },
+  {
+    "id": "319",
+    "name": "Transaction Aggregated Outgoing Commitment (USD)",
+    "iati-tag": "activity-aggregation.outgoing-commitment.value-usd",
+    "description": "The total amount of outgoing commitment aggregated for the activity in USD.",
+    "default": true,
+    "category": "Additional Data"
+  },
+  {
+    "id": "320",
+    "name": "Transaction Aggregated Disbursement (USD)",
+    "iati-tag": "activity-aggregation.disbursement.value-usd",
+    "description": "The total amount of disbursement aggregated for the activity in USD.",
+    "default": true,
+    "category": "Additional Data"
+  },
+  {
+    "id": "321",
+    "name": "Transaction Aggregated Expenditure (USD)",
+    "iati-tag": "activity-aggregation.expenditure.value-usd",
+    "description": "The total amount of expenditure aggregated for the activity in USD.",
+    "default": true,
+    "category": "Additional Data"
+  },
+  {
+    "id": "322",
+    "name": "Transaction Aggregated Interest Payment (USD)",
+    "iati-tag": "activity-aggregation.interest-payment.value-usd",
+    "description": "The total amount of interest payment aggregated for the activity in USD.",
+    "default": true,
+    "category": "Additional Data"
+  },
+  {
+    "id": "323",
+    "name": "Transaction Aggregated Loan Repayment (USD)",
+    "iati-tag": "activity-aggregation.loan-repayment.value-usd",
+    "description": "The total amount of loan repayment aggregated for the activity in USD.",
+    "default": true,
+    "category": "Additional Data"
+  },
+  {
+    "id": "324",
+    "name": "Transaction Aggregated Reimbursement (USD)",
+    "iati-tag": "activity-aggregation.reimbursement.value-usd",
+    "description": "The total amount of reimbursement aggregated for the activity in USD.",
+    "default": true,
+    "category": "Additional Data"
+  },
+  {
+    "id": "325",
+    "name": "Transaction Aggregated Purchase of Equity (USD)",
+    "iati-tag": "activity-aggregation.purchase-of-equity.value-usd",
+    "description": "The total amount of equity purchased aggregated for the activity in USD.",
+    "default": true,
+    "category": "Additional Data"
+  },
+  {
+    "id": "326",
+    "name": "Transaction Aggregated Sale of Equity (USD)",
+    "iati-tag": "activity-aggregation.sale-of-equity.value-usd",
+    "description": "The total amount of equity sold aggregated for the activity in USD.",
+    "default": true,
+    "category": "Additional Data"
+  },
+  {
+    "id": "327",
+    "name": "Transaction Aggregated Credit Guarantee (USD)",
+    "iati-tag": "activity-aggregation.credit-guarantee.value-usd",
+    "description": "The total amount of credit guarantee aggregated for the activity in USD.",
+    "default": true,
+    "category": "Additional Data"
+  },
+  {
+    "id": "328",
+    "name": "Transaction Aggregated Incoming Commitment (USD)",
+    "iati-tag": "activity-aggregation.incoming-commitment.value-usd",
+    "description": "The total amount of incoming commitment aggregated for the activity in USD.",
+    "default": true,
+    "category": "Additional Data"
+  },
+  {
+    "id": "329",
+    "name": "Transaction Aggregated Outgoing Pledge (USD)",
+    "iati-tag": "activity-aggregation.outgoing-pledge.value-usd",
+    "description": "The total amount of outgoing pledge aggregated for the activity in USD.",
+    "default": true,
+    "category": "Additional Data"
+  },
+  {
+    "id": "330",
+    "name": "Transaction Aggregated Incoming Pledge (USD)",
+    "iati-tag": "activity-aggregation.incoming-pledge.value-usd",
+    "description": "The total amount of incoming pledge aggregated for the activity in USD.",
+    "default": true,
+    "category": "Additional Data"
+  },
+  {
+    "id": "331",
+    "name": "Aggregated Budget Values (USD)",
+    "iati-tag": "activity-aggregation.budget.value-usd",
+    "description": "The total amount of aggregated budget values for the activity in USD.",
+    "default": true,
+    "category": "Additional Data"
+  },
+  {
+    "id": "332",
+    "name": "Aggregated Planned Disbursement Values (USD)",
+    "iati-tag": "activity-aggregation.planned-disbursement.value-usd",
+    "description": "The total amount of aggregated planned disbursement values for the activity in USD.",
+    "default": true,
+    "category": "Additional Data"
+  }
+]
