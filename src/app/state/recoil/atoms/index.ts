@@ -121,6 +121,18 @@ export const chartFromReportAtom = atom<{
   effects_UNSTABLE: [persistAtom],
 });
 
+export const newChartAtom = atom<{
+  state: boolean;
+  chartId: string | null;
+}>({
+  key: "newChartAtom",
+  default: {
+    state: false,
+    chartId: null,
+  },
+  effects_UNSTABLE: [persistAtom],
+});
+
 export const persistedReportStateAtom = atom<{
   reportName: string;
   headerDetails: {
