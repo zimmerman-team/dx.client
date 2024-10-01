@@ -1,12 +1,6 @@
-import {
-  act,
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-} from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import HeaderBlock from "app/modules/report-module/sub-module/components/headerBlock/";
+import HeaderBlock from "app/modules/report-module/components/headerBlock";
 import { ContentState, EditorState } from "draft-js";
 import { ToolbarPluginsType } from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
 import Router from "react-router-dom";

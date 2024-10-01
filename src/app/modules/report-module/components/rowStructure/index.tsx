@@ -5,7 +5,7 @@ import { useUpdateEffect } from "react-use";
 import IconButton from "@material-ui/core/IconButton";
 import { useHistory, useLocation, useParams } from "react-router-dom";
 import { itemSpacing, containerGap } from "app/modules/report-module/data";
-import RowstructureDisplay from "app/modules/report-module/sub-module/rowStructure/rowStructureDisplay";
+import RowstructureDisplay from "app/modules/report-module/components/rowStructure/rowStructureDisplay";
 import { ReactComponent as CloseIcon } from "app/modules/report-module/asset/closeIcon.svg";
 import { ReactComponent as DeleteIcon } from "app/modules/report-module/asset/deleteIcon.svg";
 import {
@@ -15,7 +15,7 @@ import {
 import {
   blockcss,
   containercss,
-} from "app/modules/report-module/sub-module/rowStructure/style";
+} from "app/modules/report-module/components/rowStructure/style";
 import { IFramesArray } from "app/modules/report-module/views/create/data";
 import { useOnClickOutside } from "usehooks-ts";
 import { ToolbarPluginsType } from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";

@@ -8,15 +8,14 @@ import Container from "@material-ui/core/Container";
 import { EditorState, convertFromRaw } from "draft-js";
 import { useTitle } from "react-use";
 import { useAuth0 } from "@auth0/auth0-react";
-import { PlaceHolder } from "app/modules/report-module/views/create";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import { ReportModel, emptyReport } from "app/modules/report-module/data";
 import { ReportEditViewProps } from "app/modules/report-module/views/edit/data";
-import HeaderBlock from "app/modules/report-module/sub-module/components/headerBlock";
+import HeaderBlock from "app/modules/report-module/components/headerBlock";
 import { NotAuthorizedMessageModule } from "app/modules/common/not-authorized-message";
 import { ItemComponent } from "app/modules/report-module/components/order-container";
 import { ReportElementsType } from "app/modules/report-module/components/right-panel-create-view";
-import AddRowFrameButton from "app/modules/report-module/sub-module/rowStructure/addRowFrameButton";
+import AddRowFrameButton from "app/modules/report-module/components/rowStructure/addRowFrameButton";
 import { GridColumns } from "app/modules/report-module/components/grid-columns";
 
 import {
@@ -24,7 +23,7 @@ import {
   reportContentContainerWidth,
 } from "app/state/recoil/atoms";
 import { IFramesArray } from "app/modules/report-module/views/create/data";
-import RowFrame from "app/modules/report-module/sub-module/rowStructure";
+import RowFrame from "app/modules/report-module/components/rowStructure";
 import TourGuide from "app/components/Dialogs/TourGuide";
 import useCookie from "@devhammed/use-cookie";
 import isEqual from "lodash/isEqual";
@@ -35,6 +34,7 @@ import {
   compareFramesArrayState,
   compareHeaderDetailsState,
 } from "app/modules/report-module/views/edit/compareStates";
+import PlaceHolder from "app/modules/report-module/components/placeholder";
 
 function ReportEditView(props: Readonly<ReportEditViewProps>) {
   useTitle("DX Dataxplorer - Edit Report");
@@ -387,7 +387,11 @@ function ReportEditView(props: Readonly<ReportEditViewProps>) {
                     />
                   </div>
                 </ItemComponent>
-                <Box height={8} />
+                <div
+                  css={`
+                    height: 20px;
+                  `}
+                />
 
                 <PlaceHolder
                   rowId={frame.id}
