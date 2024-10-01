@@ -1,13 +1,7 @@
-import {
-  act,
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-} from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import HeaderBlock from "app/modules/report-module/sub-module/components/headerBlock/";
-import { EditorState } from "draft-js";
+import HeaderBlock from "app/modules/report-module/components/headerBlock";
+import { ContentState, EditorState } from "draft-js";
 import { ToolbarPluginsType } from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
 import Router from "react-router-dom";
 import { MutableSnapshot, RecoilRoot } from "recoil";
@@ -18,6 +12,7 @@ import { DndProvider, useDrag } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
 interface MockProps {
+  isToolboxOpen: boolean;
   previewMode: boolean;
   hasSubHeaderTitleFocused?: boolean;
   setHasSubHeaderTitleFocused?: React.Dispatch<React.SetStateAction<boolean>>;
@@ -29,6 +24,7 @@ interface MockProps {
     title: string;
     showHeader: boolean;
     description: EditorState;
+    heading: EditorState;
     createdDate: Date;
     backgroundColor: string;
     titleColor: string;
@@ -40,6 +36,7 @@ interface MockProps {
 const headerDetailsResult = {
   headerDetails: {
     title: "",
+    heading: EditorState.createEmpty(),
     description: EditorState.createEmpty(),
     backgroundColor: "",
     titleColor: "",
@@ -64,6 +61,7 @@ jest.mock("react-router-dom", () => ({
 
 const defaultProps = (props: Partial<MockProps>): MockProps => {
   return {
+    isToolboxOpen: false,
     previewMode: false,
     hasSubHeaderTitleFocused: false,
     setHasSubHeaderTitleFocused: jest.fn(),
@@ -73,6 +71,9 @@ const defaultProps = (props: Partial<MockProps>): MockProps => {
     headerDetails: {
       title: "Test Title",
       showHeader: true,
+      heading: EditorState.createWithContent(
+        ContentState.createFromText("heading")
+      ),
       description: EditorState.createEmpty(),
       createdDate: new Date(),
       backgroundColor: "#fff",
@@ -144,6 +145,7 @@ const appSetup = (newProps: Partial<MockProps> = {}) => {
 };
 
 test("title input should be visible and editable", async () => {
+  const user = userEvent.setup();
   jest
     .spyOn(Router, "useParams")
     .mockReturnValue({ page: "12345", view: "edit" });
@@ -155,14 +157,11 @@ test("title input should be visible and editable", async () => {
   jest.spyOn(window, "scrollTo").mockImplementation(() => {});
   const { app, props } = appSetup();
   render(app);
-  expect(screen.getByPlaceholderText("Add a header title")).toBeEnabled();
-  fireEvent.change(screen.getByPlaceholderText("Add a header title"), {
-    target: { value: "Test Tite" },
-  });
-  expect(props.setHeaderDetails).toHaveBeenCalledWith(
-    expect.objectContaining({ title: "Test Tite" })
-  );
-  expect(headerDetailsResult.headerDetails.title).toBe("Test Tite");
+  expect(screen.getByText("heading")).toBeEnabled();
+  await user.type(screen.getByText("heading"), "Test Tite");
+  expect(
+    headerDetailsResult.headerDetails.heading.getCurrentContent().getPlainText()
+  ).toBe("headingTest Tite");
 });
 
 test("focusing on description input should clear placeholder", async () => {

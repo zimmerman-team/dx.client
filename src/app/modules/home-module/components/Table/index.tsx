@@ -12,19 +12,21 @@ import { isValidDate } from "app/utils/isValidDate";
 interface IData {
   id: string;
   name: string;
-  description: string;
+  description?: string;
   createdDate: Date;
   type: string;
 }
-export function HomepageTable(props: {
-  inChartBuilder?: boolean;
-  onItemClick?: (v: string) => void;
-  all?: boolean;
-  tableData: {
-    columns: { key: string; label: string; icon?: React.ReactNode }[];
-    data: any[];
-  };
-}) {
+export function HomepageTable(
+  props: Readonly<{
+    inChartBuilder?: boolean;
+    onItemClick?: (v: string) => void;
+    all?: boolean;
+    tableData: {
+      columns: { key: string; label: string; icon?: React.ReactNode }[];
+      data: any[];
+    };
+  }>
+) {
   const history = useHistory();
 
   const getDestinationPath = (data: IData) => {

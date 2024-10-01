@@ -24,7 +24,7 @@ export const compareHeaderDetailsState = (
 
   // Check if all values are the same
   for (const key of propsKeys) {
-    if (key === "description") {
+    if (key === "description" || key === "heading") {
       if (
         headerDetailsProps[key].getCurrentContent().getPlainText() !==
         headerDetailsState[key].getCurrentContent().getPlainText()

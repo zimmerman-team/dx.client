@@ -490,3 +490,23 @@ export const emptyChartAPI: ChartAPIModel = {
   isMappingValid: false,
   isAIAssisted: false,
 };
+export const chartViews = {
+  customize: "customize",
+  preview: "preview",
+  previewData: "preview-data",
+  filters: "filters",
+  data: "data",
+  mapping: "mapping",
+  chartType: "chart-type",
+};
+
+export const chartPaths = {
+  detail: "/chart/:page",
+  customize: `/chart/:page/${chartViews.customize}`,
+  preview: `/chart/:page/${chartViews.preview}`,
+  previewData: `/chart/:page/${chartViews.previewData}`,
+  filters: `/chart/:page/${chartViews.filters}`,
+  data: `/chart/:page/${chartViews.data}`,
+  mapping: `/chart/:page/${chartViews.mapping}`,
+  chartType: `/chart/:page/${chartViews.chartType}`,
+};

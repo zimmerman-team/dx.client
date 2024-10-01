@@ -1,5 +1,5 @@
-import { EditorState } from "draft-js";
 import { ToolbarPluginsType } from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
+import { IHeaderDetails } from "../../components/right-panel/data";
 import { Updater } from "use-immer";
 
 interface IRowFrame {
@@ -35,28 +35,10 @@ export interface ReportCreateViewProps {
   updateFramesArray: Updater<IFramesArray[]>;
   deleteFrame: (id: string) => void;
   framesArray: IFramesArray[];
+  hasReportNameFocused: boolean;
+  headerDetails: IHeaderDetails;
+  setHeaderDetails: React.Dispatch<React.SetStateAction<IHeaderDetails>>;
   onSave: (type: "create" | "edit") => Promise<void>;
-  hasSubHeaderTitleFocused: boolean;
-  headerDetails: {
-    title: string;
-    showHeader: boolean;
-    description: EditorState;
-    backgroundColor: string;
-    titleColor: string;
-    descriptionColor: string;
-    dateColor: string;
-  };
-  setHeaderDetails: React.Dispatch<
-    React.SetStateAction<{
-      title: string;
-      showHeader: boolean;
-      description: EditorState;
-      backgroundColor: string;
-      titleColor: string;
-      descriptionColor: string;
-      dateColor: string;
-    }>
-  >;
   setPlugins: React.Dispatch<React.SetStateAction<ToolbarPluginsType>>;
 }
 

@@ -42,7 +42,7 @@ interface MockProps {
   isSaveEnabled?: boolean;
   rawViz?: any;
   setHasSubHeaderTitleFocused?: (value: boolean) => void;
-  setHasSubHeaderTitleBlurred?: (value: boolean) => void;
+  setHasReportNameFocused?: (value: boolean) => void;
   plugins: ToolbarPluginsType;
   isEditorFocused: boolean;
   headerDetails: IHeaderDetails;
@@ -94,7 +94,7 @@ const defaultProps = (props: Partial<MockProps> = {}): MockProps => {
     isSaveEnabled: false,
     rawViz: {},
     setHasSubHeaderTitleFocused: jest.fn(),
-    setHasSubHeaderTitleBlurred: jest.fn(),
+    setHasReportNameFocused: jest.fn(),
     plugins: {} as ToolbarPluginsType,
     isEditorFocused: false,
     headerDetails: {} as IHeaderDetails,
@@ -170,17 +170,17 @@ describe("Tests for tablet and desktop view", () => {
   beforeEach(() => {
     setMediaQueryForTest(768);
   });
-  test("focusing on input should call setHasSubHeaderTitleFocused", async () => {
+  test("focusing on input should call setHasReportNameFocused", async () => {
     jest
       .spyOn(Router, "useParams")
       .mockReturnValue({ page: "65dcb26aaf4c8500693f1ab7", view: "edit" });
     const { app, props } = appSetup({ mockActions: false });
     render(app);
     screen.getByRole("textbox").focus();
-    expect(props.setHasSubHeaderTitleFocused).toHaveBeenCalledWith(true);
+    expect(props.setHasReportNameFocused).toHaveBeenCalledWith(true);
   });
 
-  test("blurring on input should call setHasSubHeaderTitleBlurred", async () => {
+  test("blurring on input should call setHasReportNameFocused", async () => {
     jest
       .spyOn(Router, "useParams")
       .mockReturnValue({ page: "65dcb26aaf4c8500693f1ab7", view: "edit" });
@@ -188,7 +188,7 @@ describe("Tests for tablet and desktop view", () => {
     render(app);
     screen.getByRole("textbox").focus();
     screen.getByRole("textbox").blur();
-    expect(props.setHasSubHeaderTitleBlurred).toHaveBeenCalledWith(true);
+    expect(props.setHasReportNameFocused).toHaveBeenCalledWith(true);
   });
 
   test("clicking on input when value is Untitled report should clear the input", async () => {

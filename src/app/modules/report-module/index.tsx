@@ -81,10 +81,8 @@ export default function ReportModule() {
 
   const [rightPanelOpen, setRightPanelOpen] = React.useState(true);
   const [reportName, setReportName] = React.useState("Untitled report");
-  const [hasSubHeaderTitleFocused, setHasSubHeaderTitleFocused] =
-    React.useState(false);
-  const [hasSubHeaderTitleBlurred, setHasSubHeaderTitleBlurred] =
-    React.useState(false);
+  const [hasReportNameFocused, setHasReportNameFocused] = React.useState(false);
+  const [hasReportNameBlurred, setHasReportNameBlurred] = React.useState(false);
 
   const [reportType, setReportType] = React.useState<
     "basic" | "advanced" | "ai" | null
@@ -167,6 +165,7 @@ export default function ReportModule() {
   const [headerDetails, setHeaderDetails] = React.useState({
     title: "",
     description: EditorState.createEmpty(),
+    heading: EditorState.createEmpty(),
     showHeader: true,
     backgroundColor: "#252c34",
     titleColor: "#ffffff",
@@ -179,18 +178,17 @@ export default function ReportModule() {
 
   React.useEffect(() => {
     //set report name back to untitled report if it is empty and user is not focused on subheader title
-    if (reportName === "" && hasSubHeaderTitleBlurred) {
+    if (reportName === "" && hasReportNameBlurred) {
       setReportName("Untitled report");
     }
     return () => {
-      setHasSubHeaderTitleBlurred(false);
+      setHasReportNameBlurred(false);
     };
-  }, [hasSubHeaderTitleBlurred]);
+  }, [hasReportNameBlurred]);
 
   const deleteFrame = (id: string) => {
     updateFramesArray((draft) => {
       const frameId = draft.findIndex((frame) => frame.id === id);
-
       draft.splice(frameId, 1);
     });
   };
@@ -306,6 +304,9 @@ export default function ReportModule() {
       reportName: "Untitled report",
       headerDetails: {
         title: "",
+        heading: JSON.stringify(
+          convertToRaw(EditorState.createEmpty().getCurrentContent())
+        ),
         description: JSON.stringify(
           convertToRaw(EditorState.createEmpty().getCurrentContent())
         ),
@@ -321,6 +322,7 @@ export default function ReportModule() {
 
     setHeaderDetails({
       title: "",
+      heading: EditorState.createEmpty(),
       description: EditorState.createEmpty(),
       showHeader: true,
       backgroundColor: "#252c34",
@@ -345,7 +347,12 @@ export default function ReportModule() {
         authId: user?.sub,
         showHeader: headerDetails.showHeader,
         title: headerDetails.showHeader ? headerDetails.title : undefined,
-        subTitle: convertToRaw(
+        heading: convertToRaw(
+          headerDetails.showHeader
+            ? headerDetails.heading.getCurrentContent()
+            : EditorState.createEmpty().getCurrentContent()
+        ),
+        description: convertToRaw(
           headerDetails.showHeader
             ? headerDetails.description.getCurrentContent()
             : EditorState.createEmpty().getCurrentContent()
@@ -426,20 +433,18 @@ export default function ReportModule() {
   }, [user, isAuthenticated, reportGetData]);
 
   const showReportHeader = view === "edit" ? canEditDeleteReport : true;
-
   return (
     <DndProvider backend={HTML5Backend}>
       {!reportError401 &&
         showReportHeader &&
-        view !== "ai-template" &&
-        view !== "initial" && (
+        (view === "edit" || view === undefined) && (
           <ReportSubheaderToolbar
             autoSave={autoSave.isAutoSaveEnabled}
             setAutoSave={setAutoSave}
             onReportSave={onSave}
             setName={setReportName}
-            setHasSubHeaderTitleFocused={setHasSubHeaderTitleFocused}
-            setHasSubHeaderTitleBlurred={setHasSubHeaderTitleBlurred}
+            setHasReportNameFocused={setHasReportNameFocused}
+            setHasReportNameBlurred={setHasReportNameBlurred}
             isSaveEnabled={isSaveEnabled}
             name={page !== "new" && !view ? reportGetData.name : reportName}
             framesArray={framesArray}
@@ -449,64 +454,44 @@ export default function ReportModule() {
             plugins={plugins}
           />
         )}
-      {view &&
-        !reportError401 &&
-        view !== "preview" &&
-        canEditDeleteReport &&
-        view !== "initial" &&
-        view !== "ai-template" && (
-          <ReportRightPanel
-            open={rightPanelOpen}
-            currentView={view}
-            headerDetails={headerDetails}
-            setHeaderDetails={setHeaderDetails}
-            onOpen={() => setRightPanelOpen(true)}
-            onClose={() => setRightPanelOpen(false)}
-            showHeaderItem={!headerDetails.showHeader}
-            framesArray={framesArray}
-            reportName={reportName}
-            onSave={onSave}
-          />
-        )}
-      <div
-        css={`
-          width: 100%;
-          height: ${view === "ai-template" ||
-          reportError401 ||
-          !showReportHeader
-            ? "0px"
-            : "98px"};
-        `}
-      />
+      {view && !reportError401 && view === "edit" && canEditDeleteReport && (
+        <ReportRightPanel
+          open={rightPanelOpen}
+          currentView={view}
+          headerDetails={headerDetails}
+          setHeaderDetails={setHeaderDetails}
+          onOpen={() => setRightPanelOpen(true)}
+          onClose={() => setRightPanelOpen(false)}
+          showHeaderItem={!headerDetails.showHeader}
+          framesArray={framesArray}
+          reportName={reportName}
+          onSave={onSave}
+        />
+      )}
+
       <Switch>
-        <Route path="/report/:page/initial">
+        <Route exact path="/report/new/initial">
+          <div
+            css={`
+              height: 98px;
+            `}
+          />
           <ReportInitialView
             resetReport={resetReport}
             handleSetButtonActive={handleSetButtonActive}
           />
         </Route>
-        <Route path="/report/:page/ai-template">
+        <Route exact path="/report/new/ai-template">
           <AITemplate />
         </Route>
-        <Route path="/report/:page/create">
-          <ReportCreateView
-            rightPanelOpen={rightPanelOpen}
-            handleRightPanelOpen={() => setRightPanelOpen(true)}
-            view={view}
-            setReportName={setReportName}
-            reportName={reportName}
-            deleteFrame={deleteFrame}
-            hasSubHeaderTitleFocused={hasSubHeaderTitleFocused}
-            reportType={reportType}
-            framesArray={framesArray}
-            headerDetails={headerDetails}
-            updateFramesArray={updateFramesArray}
-            setHeaderDetails={setHeaderDetails}
-            setPlugins={setPlugins}
-            onSave={onSave}
+        <Route exact path="/report/:page/edit">
+          <div
+            css={`
+              height: ${canEditDeleteReport && !reportError401
+                ? "98px"
+                : "0px"};
+            `}
           />
-        </Route>
-        <Route path="/report/:page/edit">
           <ReportEditView
             rightPanelOpen={rightPanelOpen}
             handleRightPanelOpen={() => setRightPanelOpen(true)}
@@ -523,27 +508,26 @@ export default function ReportModule() {
             stopInitializeFramesWidth={stopInitializeFramesWidth}
             setStopInitializeFramesWidth={setStopInitializeFramesWidth}
             view={view}
-            hasSubHeaderTitleFocused={hasSubHeaderTitleFocused}
-            setHasSubHeaderTitleFocused={setHasSubHeaderTitleFocused}
+            hasReportNameFocused={hasReportNameFocused}
+            setHasReportNameFocused={setHasReportNameFocused}
             setPlugins={setPlugins}
             setAutoSave={setAutoSave}
             isSaveEnabled={isSaveEnabled}
             onSave={onSave}
           />
         </Route>
-        <Route path="/report/:page/preview">
+        <Route exact path="/report/:page">
+          <div
+            css={`
+              height: ${reportError401 ? "0px" : "98px"};
+            `}
+          />
           <ReportPreviewView
             setIsPreviewView={setIsPreviewView}
             setAutoSave={setAutoSave}
           />
         </Route>
-        <Route path="/report/:page">
-          <ReportPreviewView
-            setIsPreviewView={setIsPreviewView}
-            setAutoSave={setAutoSave}
-          />
-        </Route>
-        <Route path="/report/new">
+        <Route exact path="/report/new">
           <Redirect to="/report/new/initial" />
         </Route>
         <Route path="*">

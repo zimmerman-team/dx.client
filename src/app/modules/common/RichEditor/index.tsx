@@ -4,7 +4,7 @@ import bgPicker from "app/modules/common/RichEditor/BGColorModal/Picker";
 import { ToolbarPluginsType } from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
 
 /*plugins */
-import { EditorState } from "draft-js";
+import { EditorState, SelectionState } from "draft-js";
 import Editor from "@draft-js-plugins/editor";
 import createLinkPlugin from "@draft-js-plugins/anchor";
 import createEmojiPlugin from "@draft-js-plugins/emoji";
@@ -38,6 +38,9 @@ export const RichEditor = (props: {
   focusOnMount?: boolean;
   setPlaceholderState: React.Dispatch<React.SetStateAction<string>>;
   placeholder: string;
+  onBlur?: () => void;
+  onFocus?: () => void;
+  testId?: string;
 }): ReactElement => {
   const editor = useRef<Editor | null>(null);
 
@@ -46,7 +49,7 @@ export const RichEditor = (props: {
   };
 
   React.useEffect(() => {
-    if (props.focusOnMount) {
+    if (props.focusOnMount && props.editMode) {
       focus();
     }
   }, []);
@@ -135,7 +138,8 @@ export const RichEditor = (props: {
           font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
         }
       `}
-      data-cy="rich-text-editor-container"
+      data-cy={`${props.testId}-container`}
+      data-testid={`${props.testId}-container`}
     >
       <Editor
         plugins={plugins}
@@ -154,10 +158,12 @@ export const RichEditor = (props: {
         editorState={props.textContent}
         onChange={props.setTextContent}
         onBlur={() => {
+          props.onBlur?.();
           if (props.textContent.getCurrentContent().getPlainText().length === 0)
             props.setPlaceholderState(props.placeholder);
         }}
         onFocus={() => {
+          props.onFocus?.();
           props.setPlugins?.(plugins);
           props.setPlaceholderState("");
         }}
@@ -165,8 +171,7 @@ export const RichEditor = (props: {
         ref={(element) => {
           editor.current = element;
         }}
-        webDriverTestID="rich-text-editor"
-        data-cy="rich-text-editor"
+        webDriverTestID={props.testId}
       />
     </div>
   );

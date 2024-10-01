@@ -9,13 +9,14 @@ import { ReactComponent as EditIcon } from "app/modules/home-module/assets/edit.
 import { ReactComponent as DeleteIcon } from "app/modules/home-module/assets/delete.svg";
 import { ReactComponent as ClockIcon } from "app/modules/home-module/assets/clock-icon.svg";
 import { ReactComponent as DuplicateIcon } from "app/modules/home-module/assets/duplicate.svg";
+import { EditorState } from "draft-js";
 import { useMediaQuery } from "@material-ui/core";
 
 interface Props {
   date: Date;
   id?: string;
-  title: string;
-  descr: string;
+  heading: EditorState;
+  name: string;
   color: string;
   viz: JSX.Element;
   handleDelete?: (id: string) => void;
@@ -24,7 +25,7 @@ interface Props {
   owner: string;
 }
 
-export default function gridItem(props: Props) {
+export default function GridItem(props: Readonly<Props>) {
   const { user, isAuthenticated } = useAuth0();
   const [menuOptionsDisplay, setMenuOptionsDisplay] = React.useState(false);
   const isMobile = useMediaQuery("(max-width: 767px)");
@@ -86,7 +87,7 @@ export default function gridItem(props: Props) {
             `}
           >
             <p
-              title={props.title}
+              title={props.heading.getCurrentContent().getPlainText()}
               css={`
                 font-size: 14px;
                 line-height: 22px;
@@ -99,10 +100,10 @@ export default function gridItem(props: Props) {
                 margin-bottom: 0;
               `}
             >
-              <b>{props.title}</b>
+              <b>{props.heading.getCurrentContent().getPlainText()}</b>
             </p>
             <p
-              title={props.descr}
+              title={props.name}
               css={`
                 font-size: 10px;
                 line-height: 14px;
@@ -116,7 +117,7 @@ export default function gridItem(props: Props) {
                 color: #495057;
               `}
             >
-              {props.descr}
+              {props.name}
             </p>
           </div>
           <IconButton
