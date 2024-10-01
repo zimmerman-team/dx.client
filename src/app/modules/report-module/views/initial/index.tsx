@@ -9,8 +9,6 @@ import {
 } from "app/modules/report-module/views/initial/data";
 import { ReportModel, emptyReport } from "app/modules/report-module/data";
 import ReportsGrid from "app/modules/home-module/components/AssetCollection/Reports/reportsGrid";
-import { persistedReportStateAtom } from "app/state/recoil/atoms";
-import { useResetRecoilState } from "recoil";
 import { useHistory } from "react-router-dom";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import { useMount, useTitle, useUpdateEffect } from "react-use";
@@ -50,12 +48,7 @@ function ReportInitialView(props: Readonly<ReportInitialViewProps>) {
     props.handleSetButtonActive(option.value);
   };
 
-  const clearPersistedReportState = useResetRecoilState(
-    persistedReportStateAtom
-  );
-
   React.useEffect(() => {
-    clearPersistedReportState();
     props.resetReport();
   }, []);
 
@@ -66,8 +59,7 @@ function ReportInitialView(props: Readonly<ReportInitialViewProps>) {
 
   useUpdateEffect(() => {
     if (reportCreateSuccess && !isEmpty(reportCreateData?.id)) {
-      const id = reportCreateData.id;
-      history.push(`/report/${id}/edit`);
+      history.push(`/report/${reportCreateData.id}/edit`);
     }
   }, [reportCreateSuccess, reportCreateData]);
 
