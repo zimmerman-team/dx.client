@@ -581,7 +581,7 @@ test("clicking duplicate button should duplicate chart", async () => {
   const mockedAxios = axios.get as jest.Mock;
   mockedAxios
     .mockResolvedValueOnce({
-      data: { id: "chart-id" },
+      data: { data: { id: "chart-id" } },
     } as AxiosResponse<any>)
     .mockResolvedValueOnce({ data: mockChartList });
   jest

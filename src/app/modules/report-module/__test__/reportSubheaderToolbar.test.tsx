@@ -414,8 +414,10 @@ describe("Tests for tablet and desktop view", () => {
     const axiosMock = axios.get as jest.Mock;
 
     axiosMock
-      .mockResolvedValueOnce({ data: { id: "12345" } } as AxiosResponse<any>)
-      .mockResolvedValueOnce({ data: [] });
+      .mockResolvedValueOnce({
+        data: { data: { id: "12345" } },
+      } as AxiosResponse<any>)
+      .mockResolvedValueOnce({ data: { data: [] } });
     jest
       .spyOn(Router, "useParams")
       .mockReturnValue({ page: "12345", view: undefined });
