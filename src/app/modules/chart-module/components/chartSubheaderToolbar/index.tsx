@@ -252,7 +252,7 @@ export function ChartSubheaderToolbar(
           storeInCrudData: true,
           filterString: "filter[order]=updatedDate desc",
         });
-        setDuplicatedChartId(response.data.id);
+        setDuplicatedChartId(response.data?.data?.id);
         setSnackbarState({
           ...snackbarState,
           open: true,
