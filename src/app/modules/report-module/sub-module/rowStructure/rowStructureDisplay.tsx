@@ -21,7 +21,6 @@ import {
   chartFromReportAtom,
   reportContentIsResizingAtom,
   reportContentContainerWidth,
-  unSavedReportPreviewModeAtom,
   isChartDraggingAtom,
 } from "app/state/recoil/atoms";
 import { IFramesArray } from "../../views/create/data";
@@ -62,17 +61,14 @@ interface RowStructureDisplayProps {
   forceSelectedType: string | undefined;
 }
 
-export default function RowstructureDisplay(props: RowStructureDisplayProps) {
+export default function RowstructureDisplay(
+  props: Readonly<RowStructureDisplayProps>
+) {
   const ref = useRef(null);
   const location = useLocation();
   const { page } = useParams<{ page: string }>();
   const [handleDisplay, setHandleDisplay] = React.useState(false);
-  const [reportPreviewMode] = useRecoilState(unSavedReportPreviewModeAtom);
-  const smScreen = useMediaQuery("(max-width: 850px)");
-  const viewOnlyMode =
-    (page !== "new" &&
-      get(location.pathname.split("/"), "[3]", "") !== "edit") ||
-    reportPreviewMode;
+  const viewOnlyMode = location.pathname === `/report/${page}`;
 
   const handlers = viewOnlyMode
     ? {}
@@ -381,15 +377,10 @@ const Box = (props: {
   };
 
   const containerWidth = useRecoilValue(reportContentContainerWidth);
-  const [reportPreviewMode] = useRecoilState(unSavedReportPreviewModeAtom);
   const [_isResizing, setIsResizing] = useRecoilState(
     reportContentIsResizingAtom
   );
-
-  const viewOnlyMode =
-    (page !== "new" &&
-      get(location.pathname.split("/"), "[3]", "") !== "edit") ||
-    reportPreviewMode;
+  const viewOnlyMode = location.pathname === `/report/${page}`;
 
   const elementTypes = [
     ReportElementsType.TEXT,

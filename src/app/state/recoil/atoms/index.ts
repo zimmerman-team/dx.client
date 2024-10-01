@@ -1,6 +1,5 @@
 import { atom } from "recoil";
 import { recoilPersist } from "recoil-persist";
-import { convertToRaw, EditorState } from "draft-js";
 import { DatasetListItemAPIModel } from "app/modules/dataset-module/data";
 
 export interface IRowFrameStructure {
@@ -91,11 +90,6 @@ export const reportCreationTourStepAtom = atom<number>({
   key: "reportCreationTourStepAtom",
   default: 0,
 });
-export const unSavedReportPreviewModeAtom = atom<boolean>({
-  key: "unSavedReportPreviewModeAtom",
-  default: false,
-  effects_UNSTABLE: [persistAtom],
-});
 
 export const loadedDatasetsAtom = atom<DatasetListItemAPIModel[]>({
   key: "loadedDatasetsAtom",
@@ -117,44 +111,6 @@ export const chartFromReportAtom = atom<{
     page: "",
     action: null,
     chartId: null,
-  },
-  effects_UNSTABLE: [persistAtom],
-});
-
-export const persistedReportStateAtom = atom<{
-  reportName: string;
-  headerDetails: {
-    title: string;
-    description: string;
-    heading: string;
-    showHeader: boolean;
-    backgroundColor: string;
-    titleColor: string;
-    descriptionColor: string;
-    dateColor: string;
-  };
-
-  framesArray: string;
-}>({
-  key: "reportCreateStateAtom",
-  default: {
-    reportName: "Untitled report",
-    headerDetails: {
-      title: "",
-      description: JSON.stringify(
-        convertToRaw(EditorState.createEmpty().getCurrentContent())
-      ),
-      heading: JSON.stringify(
-        convertToRaw(EditorState.createEmpty().getCurrentContent())
-      ),
-      showHeader: true,
-      backgroundColor: "#252c34",
-      titleColor: "#ffffff",
-      descriptionColor: "#ffffff",
-      dateColor: "#ffffff",
-    },
-
-    framesArray: JSON.stringify([]),
   },
   effects_UNSTABLE: [persistAtom],
 });
