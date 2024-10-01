@@ -5,7 +5,7 @@ import { useRecoilState } from "recoil";
 import { useParams } from "react-router-dom";
 import useResizeObserver from "use-resize-observer";
 import Container from "@material-ui/core/Container";
-import { EditorState, RawDraftContentState, convertFromRaw } from "draft-js";
+import { EditorState, convertFromRaw } from "draft-js";
 import { useTitle } from "react-use";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
@@ -20,7 +20,6 @@ import { GridColumns } from "app/modules/report-module/components/grid-columns";
 
 import {
   IRowFrameStructure,
-  persistedReportStateAtom,
   reportContentContainerWidth,
 } from "app/state/recoil/atoms";
 import { IFramesArray } from "app/modules/report-module/views/create/data";
@@ -53,7 +52,6 @@ function ReportEditView(props: Readonly<ReportEditViewProps>) {
   );
   const [isReportHeadingModified, setIsReportHeadingModified] =
     React.useState(false);
-  const [persistedReportState] = useRecoilState(persistedReportStateAtom);
   const [rowStructureType, setRowStructuretype] =
     React.useState<IRowFrameStructure>({
       index: 0,
@@ -112,15 +110,13 @@ function ReportEditView(props: Readonly<ReportEditViewProps>) {
     if (reportData.id !== page) {
       return;
     }
-    if (props.localPickedCharts.length === 0) {
-      const items = reportData.rows.map((rowFrame, index) =>
-        rowFrame.items.filter((item) => typeof item === "string")
-      ) as string[][];
-      let pickedItems: string[] = [];
+    const items = reportData.rows.map((rowFrame, index) =>
+      rowFrame.items.filter((item) => typeof item === "string")
+    ) as string[][];
+    let pickedItems: string[] = [];
 
-      for (const element of items) {
-        pickedItems = [...pickedItems, ...element];
-      }
+    for (const element of items) {
+      pickedItems = [...pickedItems, ...element];
     }
   }, [reportData]);
 
@@ -197,15 +193,11 @@ function ReportEditView(props: Readonly<ReportEditViewProps>) {
       showHeader: reportData.showHeader,
       heading: reportData?.heading
         ? EditorState.moveFocusToEnd(
-            EditorState.createWithContent(
-              convertFromRaw(reportData?.heading as RawDraftContentState)
-            )
+            EditorState.createWithContent(convertFromRaw(reportData?.heading))
           )
         : EditorState.moveFocusToEnd(EditorState.createEmpty()),
       description: reportData?.description
-        ? EditorState.createWithContent(
-            convertFromRaw(reportData?.description as RawDraftContentState)
-          )
+        ? EditorState.createWithContent(convertFromRaw(reportData?.description))
         : EditorState.createEmpty(),
       backgroundColor: reportData.backgroundColor,
       titleColor: reportData.titleColor,

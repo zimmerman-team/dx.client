@@ -55,6 +55,11 @@ const Features = () => {
           values: ["", true, true, true],
         },
         {
+          name: "Microsoft Drive data connect",
+          info: "Connect data from your Microsoft Drive",
+          values: ["", true, true, true],
+        },
+        {
           name: "Google Drive data connect",
           info: "Connect data from your Google Drive",
           values: ["", true, true, true],

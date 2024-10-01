@@ -11,6 +11,7 @@ import HomeFooter from "app/modules/home-module/components/Footer";
 import DatasetDetailImage from "app/modules/home-module/assets/dataset-detail.png";
 import { ReactComponent as GoogleIcon } from "app/modules/onboarding-module/asset/google-img.svg";
 import { ReactComponent as LinkedInIcon } from "app/modules/onboarding-module/asset/linkedIn-img.svg";
+import { ReactComponent as MicrosoftIcon } from "app/modules/onboarding-module/asset/microsoft-img.svg";
 import HeroEllipses from "app/modules/home-module/assets/hero-ellipses.svg";
 
 import { homeDisplayAtom } from "app/state/recoil/atoms";
@@ -141,6 +142,9 @@ export default function HomeModule() {
                       </button>
                       <button onClick={() => socialAuth("linkedin")}>
                         <LinkedInIcon /> sign in for free
+                      </button>
+                      <button onClick={() => socialAuth("windowslive")}>
+                        <MicrosoftIcon /> sign in for free
                       </button>
                     </div>
                   )}

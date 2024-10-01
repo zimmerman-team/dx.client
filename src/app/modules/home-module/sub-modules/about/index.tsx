@@ -16,6 +16,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { socialAuth } from "app/utils/socialAuth";
 import { ReactComponent as GoogleIcon } from "app/modules/onboarding-module/asset/google-img.svg";
 import { ReactComponent as LinkedInIcon } from "app/modules/onboarding-module/asset/linkedIn-img.svg";
+import { ReactComponent as MicrosoftIcon } from "app/modules/onboarding-module/asset/microsoft-img.svg";
 import SiemAvi from "app/modules/home-module/assets/team/siem.png";
 import JohnAvi from "app/modules/home-module/assets/team/john.png";
 import KennyAvi from "app/modules/home-module/assets/team/kenny.png";
@@ -381,6 +382,9 @@ export default function AboutModule() {
                   </button>
                   <button onClick={() => socialAuth("linkedin")}>
                     <LinkedInIcon /> sign in for free
+                  </button>
+                  <button onClick={() => socialAuth("windowslive")}>
+                    <MicrosoftIcon /> sign in for free
                   </button>
                 </div>
               )}

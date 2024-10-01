@@ -110,7 +110,7 @@ export default function DatasetSubHeaderToolbar(
             onTryAgain: () => {},
           });
         }
-        setDuplicatedDatasetId(response.data.id);
+        setDuplicatedDatasetId(response.data?.data?.id);
         setSnackbarState({
           ...snackbarState,
           open: true,

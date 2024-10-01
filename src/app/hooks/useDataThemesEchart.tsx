@@ -79,6 +79,7 @@ export function useDataThemesEchart() {
       barWidth,
       xAxisLineColor,
       xAxisLabelFontSize,
+      autoBarWidth,
       focus,
       xAxisLabelColor,
       xAxisLabelInterval,
@@ -136,11 +137,11 @@ export function useDataThemesEchart() {
             {
               type: "inside",
               start: 0,
-              end: 20,
+              end: 100,
             },
             {
               start: 0,
-              end: 20,
+              end: 100,
             },
           ]
         : null,
@@ -162,7 +163,7 @@ export function useDataThemesEchart() {
           emphasis: {
             focus,
           },
-          barWidth,
+          barWidth: autoBarWidth ? undefined : barWidth,
         },
       ],
       tooltip: {
