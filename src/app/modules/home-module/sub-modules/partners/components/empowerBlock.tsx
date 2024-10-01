@@ -5,6 +5,7 @@ import { socialAuth } from "app/utils/socialAuth";
 import { HomePrimaryButton } from "app/components/Styled/button";
 import { ReactComponent as GoogleIcon } from "app/modules/onboarding-module/asset/google-img.svg";
 import { ReactComponent as LinkedInIcon } from "app/modules/onboarding-module/asset/linkedIn-img.svg";
+import { ReactComponent as MicrosoftIcon } from "app/modules/onboarding-module/asset/microsoft-img.svg";
 import { ReactComponent as Ellipses } from "app/modules/home-module/assets/ellipses.svg";
 import { ReactComponent as EllipsesMobile } from "app/modules/home-module/assets/ellipses-mobile.svg";
 import {
@@ -146,6 +147,9 @@ export default function EmpowerBlock(props: {
           </button>
           <button onClick={() => socialAuth("linkedin")}>
             <LinkedInIcon /> sign in for free
+          </button>
+          <button onClick={() => socialAuth("windowslive")}>
+            <MicrosoftIcon /> sign in for free
           </button>
         </div>
       )}

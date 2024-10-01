@@ -217,6 +217,7 @@ export function ChartModuleToolBox(props: Readonly<ChartToolBoxProps>) {
               onMouseOverNavBtn={onMouseOverNavBtn}
               setChartFromAPI={props.setChartFromAPI}
               deselectDataset={props.deselectDataset}
+              setShowSnackbar={setShowSnackbar}
             />
           )}
 
@@ -233,24 +234,83 @@ export function ChartModuleToolBox(props: Readonly<ChartToolBoxProps>) {
         onClose={() => setShowSnackbar(null)}
         open={showSnackbar !== null && showSnackbar !== ""}
       >
-        <SnackbarContent
-          message={showSnackbar}
-          aria-describedby="create-chart-snackbar-content"
-          action={
-            <>
-              {!location.pathname.includes("report") && (
-                <button
-                  onClick={() => {
-                    setShowSnackbar(null);
-                    history.push("/report/new/initial");
-                  }}
-                >
-                  CREATE NEW REPORT
-                </button>
-              )}
-            </>
-          }
-        />
+        <div
+          css={`
+            border-radius: 20px;
+            width: 1232px;
+            padding: 8px 0;
+            display: flex;
+            align-items: center;
+            background: #fff;
+            box-shadow: 0px 0px 10px 0px rgba(152, 161, 170, 0.6);
+            justify-content: center;
+            column-gap: 48px;
+            p {
+              font-size: 18px;
+              font-style: normal;
+              margin: 0;
+              line-height: 20px; /* 111.111% */
+              letter-spacing: 0.5px;
+            }
+            button {
+              font-size: 14px;
+              font-style: normal;
+              font-weight: 500;
+              font-family: Inter;
+              line-height: normal;
+              text-align: center;
+              color: #fff;
+              background: #231d2c;
+              border-radius: 20px;
+              border: none;
+              padding: 12px 27px;
+              cursor: pointer;
+            }
+          `}
+        >
+          <p
+            css={`
+              font-family: GothamNarrow-Bold;
+              font-weight: 400;
+            `}
+          >
+            Your chart has been successfully created! You can now find it in
+            your library.
+          </p>
+          <div
+            css={`
+              display: flex;
+              align-items: center;
+              column-gap: 24px;
+            `}
+          >
+            <button
+              onClick={() => {
+                setShowSnackbar(null);
+                history.push("/report/new/initial");
+              }}
+            >
+              CREATE REPORT
+            </button>
+            <p
+              css={`
+                font-family: GothamNarrow-Book;
+                font-weight: 325;
+              `}
+            >
+              or
+            </p>
+
+            <button
+              onClick={() => {
+                setShowSnackbar(null);
+                history.push("/");
+              }}
+            >
+              BACK TO EXPLORE
+            </button>
+          </div>
+        </div>
       </InfoSnackbar>
     </>
   );
