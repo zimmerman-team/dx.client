@@ -230,7 +230,7 @@ export function ReportSubheaderToolbar(
           storeInCrudData: true,
           filterString: "filter[order]=updatedDate desc",
         });
-        setDuplicatedReportId(response.data.id);
+        setDuplicatedReportId(response.data?.data?.id);
         setSnackbarState({
           ...snackbarState,
           open: true,
