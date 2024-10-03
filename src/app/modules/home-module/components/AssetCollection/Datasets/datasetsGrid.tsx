@@ -73,7 +73,9 @@ export default function DatasetsGrid(props: Readonly<Props>) {
 
     return `${props.userOnly ? "userOnly=true&" : ""}filter={${value}"order":"${
       props.sortBy
-    } desc","limit":${limit},"offset":${fromZeroOffset ? 0 : offset}}`;
+    } ${props.sortBy === "name" ? "asc" : "desc"}","limit":${limit},"offset":${
+      fromZeroOffset ? 0 : offset
+    }}`;
   };
 
   const getWhereString = () => {

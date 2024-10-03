@@ -77,9 +77,9 @@ export default function ChartsGrid(props: Props) {
       props.searchStr?.length > 0
         ? `"where":{"name":{"like":"${props.searchStr}.*","options":"i"}},`
         : "";
-    return `filter={${value}"order":"${
-      props.sortBy
-    } desc","limit":${limit},"offset":${fromZeroOffset ? 0 : offset}}`;
+    return `filter={${value}"order":"${props.sortBy} ${
+      props.sortBy === "name" ? "asc" : "desc"
+    }","limit":${limit},"offset":${fromZeroOffset ? 0 : offset}}`;
   };
 
   const getWhereString = () => {
