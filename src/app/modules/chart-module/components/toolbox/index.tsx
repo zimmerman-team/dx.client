@@ -1,6 +1,5 @@
 /* third-party */
 import React from "react";
-import { useRecoilState } from "recoil";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useHistory, useLocation, useParams } from "react-router-dom";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
@@ -15,12 +14,17 @@ import {
 } from "app/modules/chart-module/components/toolbox/data";
 import { ChartToolBoxSteps } from "app/modules/chart-module/components/toolbox/steps";
 import { TriangleXSIcon } from "app/assets/icons/TriangleXS";
-import { emptyChartAPI, ChartAPIModel } from "app/modules/chart-module/data";
+import {
+  emptyChartAPI,
+  ChartAPIModel,
+  chartViews,
+} from "app/modules/chart-module/data";
 import ToolboxNav from "app/modules/chart-module/components/toolbox/steps/navbar";
 import { InfoSnackbar } from "app/modules/chart-module/components/chartSubheaderToolbar/infoSnackbar";
 
 export function ChartModuleToolBox(props: Readonly<ChartToolBoxProps>) {
   const { page, view } = useParams<{ page: string; view?: string }>();
+  const isValidView = Object.values(chartViews).find((v) => v === view);
   const history = useHistory();
   const { isAuthenticated, user } = useAuth0();
   const isMobile = useMediaQuery("(max-width: 767px)");
@@ -116,7 +120,11 @@ export function ChartModuleToolBox(props: Readonly<ChartToolBoxProps>) {
   };
 
   React.useEffect(() => {
-    if (location.pathname === `/chart/${page}` || view === "preview") {
+    if (
+      location.pathname === `/chart/${page}` ||
+      view === "preview" ||
+      !isValidView
+    ) {
       setDisplayToolbar("none");
       props.setToolboxOpen(false);
     } else {
@@ -211,6 +219,7 @@ export function ChartModuleToolBox(props: Readonly<ChartToolBoxProps>) {
               onMouseOverNavBtn={onMouseOverNavBtn}
               setChartFromAPI={props.setChartFromAPI}
               deselectDataset={props.deselectDataset}
+              setShowSnackbar={setShowSnackbar}
             />
           )}
 
@@ -227,24 +236,83 @@ export function ChartModuleToolBox(props: Readonly<ChartToolBoxProps>) {
         onClose={() => setShowSnackbar(null)}
         open={showSnackbar !== null && showSnackbar !== ""}
       >
-        <SnackbarContent
-          message={showSnackbar}
-          aria-describedby="create-chart-snackbar-content"
-          action={
-            <>
-              {!location.pathname.includes("report") && (
-                <button
-                  onClick={() => {
-                    setShowSnackbar(null);
-                    history.push("/report/new/initial");
-                  }}
-                >
-                  CREATE NEW REPORT
-                </button>
-              )}
-            </>
-          }
-        />
+        <div
+          css={`
+            border-radius: 20px;
+            width: 1232px;
+            padding: 8px 0;
+            display: flex;
+            align-items: center;
+            background: #fff;
+            box-shadow: 0px 0px 10px 0px rgba(152, 161, 170, 0.6);
+            justify-content: center;
+            column-gap: 48px;
+            p {
+              font-size: 18px;
+              font-style: normal;
+              margin: 0;
+              line-height: 20px; /* 111.111% */
+              letter-spacing: 0.5px;
+            }
+            button {
+              font-size: 14px;
+              font-style: normal;
+              font-weight: 500;
+              font-family: Inter;
+              line-height: normal;
+              text-align: center;
+              color: #fff;
+              background: #231d2c;
+              border-radius: 20px;
+              border: none;
+              padding: 12px 27px;
+              cursor: pointer;
+            }
+          `}
+        >
+          <p
+            css={`
+              font-family: GothamNarrow-Bold;
+              font-weight: 400;
+            `}
+          >
+            Your chart has been successfully created! You can now find it in
+            your library.
+          </p>
+          <div
+            css={`
+              display: flex;
+              align-items: center;
+              column-gap: 24px;
+            `}
+          >
+            <button
+              onClick={() => {
+                setShowSnackbar(null);
+                history.push("/report/new/initial");
+              }}
+            >
+              CREATE REPORT
+            </button>
+            <p
+              css={`
+                font-family: GothamNarrow-Book;
+                font-weight: 325;
+              `}
+            >
+              or
+            </p>
+
+            <button
+              onClick={() => {
+                setShowSnackbar(null);
+                history.push("/");
+              }}
+            >
+              BACK TO EXPLORE
+            </button>
+          </div>
+        </div>
       </InfoSnackbar>
     </>
   );

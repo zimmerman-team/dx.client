@@ -39,7 +39,6 @@ export const headercss = css`
 
 export const logocss = css`
   display: flex;
-  padding-top: 5px;
   margin-right: 64px;
   justify-content: center;
 `;

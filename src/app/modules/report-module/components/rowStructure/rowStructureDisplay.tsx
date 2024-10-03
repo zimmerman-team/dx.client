@@ -21,13 +21,13 @@ import {
   chartFromReportAtom,
   reportContentIsResizingAtom,
   reportContentContainerWidth,
-  unSavedReportPreviewModeAtom,
   isChartDraggingAtom,
 } from "app/state/recoil/atoms";
 import { IFramesArray } from "app/modules/report-module/views/create/data";
 import { ToolbarPluginsType } from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
 import { css } from "styled-components";
 import { Updater } from "use-immer";
+import { useMediaQuery } from "@material-ui/core";
 
 interface RowStructureDisplayProps {
   gap: string;
@@ -58,19 +58,17 @@ interface RowStructureDisplayProps {
   ) => void;
   setPlugins: React.Dispatch<React.SetStateAction<ToolbarPluginsType>>;
   onSave: (type: "create" | "edit") => Promise<void>;
+  forceSelectedType: string | undefined;
 }
 
-export default function RowstructureDisplay(props: RowStructureDisplayProps) {
+export default function RowstructureDisplay(
+  props: Readonly<RowStructureDisplayProps>
+) {
   const ref = useRef(null);
   const location = useLocation();
   const { page } = useParams<{ page: string }>();
   const [handleDisplay, setHandleDisplay] = React.useState(false);
-  const [reportPreviewMode] = useRecoilState(unSavedReportPreviewModeAtom);
-
-  const viewOnlyMode =
-    (page !== "new" &&
-      get(location.pathname.split("/"), "[3]", "") !== "edit") ||
-    reportPreviewMode;
+  const viewOnlyMode = location.pathname === `/report/${page}`;
 
   const handlers = viewOnlyMode
     ? {}
@@ -224,6 +222,13 @@ export default function RowstructureDisplay(props: RowStructureDisplayProps) {
             overflow: hidden;
             gap: ${props.gap};
             border: ${border};
+            @media (max-width: 767px) {
+              display: grid;
+              grid-template-columns: ${props.forceSelectedType ===
+                "oneByFive" || props.forceSelectedType === "oneByFour"
+                ? " auto auto"
+                : "auto"};
+            }
           `}
           data-cy={`row-frame-${props.rowIndex}`}
         >
@@ -273,7 +278,7 @@ const Box = (props: {
   const location = useLocation();
   const history = useHistory();
   const { page, view } = useParams<{ page: string; view: string }>();
-
+  const smScreen = useMediaQuery("(max-width: 767px)");
   const setDataset = useStoreActions(
     (actions) => actions.charts.dataset.setValue
   );
@@ -372,15 +377,10 @@ const Box = (props: {
   };
 
   const containerWidth = useRecoilValue(reportContentContainerWidth);
-  const [reportPreviewMode] = useRecoilState(unSavedReportPreviewModeAtom);
   const [_isResizing, setIsResizing] = useRecoilState(
     reportContentIsResizingAtom
   );
-
-  const viewOnlyMode =
-    (page !== "new" &&
-      get(location.pathname.split("/"), "[3]", "") !== "edit") ||
-    reportPreviewMode;
+  const viewOnlyMode = location.pathname === `/report/${page}`;
 
   const elementTypes = [
     ReportElementsType.TEXT,
@@ -534,7 +534,10 @@ const Box = (props: {
           grid={[5, 5]}
           onResize={onResize}
           onResizeStop={onResizeStop}
-          size={{ width: width, height: `${props.height}px` }}
+          size={{
+            width: smScreen ? "100%" : width,
+            height: `${props.height}px`,
+          }}
           maxWidth={!viewOnlyMode ? containerWidth : undefined}
           minWidth={78}
           enable={{
@@ -596,6 +599,7 @@ const Box = (props: {
               placeholder={placeholder}
               setPlaceholderState={setTextPlaceholderState}
               placeholderState={textPlaceholderState}
+              testId="report-rich-text-editor"
             />
           </div>
         </Resizable>
@@ -608,7 +612,10 @@ const Box = (props: {
           key={chartId}
           onResize={onResize}
           onResizeStop={onResizeStop}
-          size={{ width: width, height: `${props.height}px` }}
+          size={{
+            width: smScreen ? "100%" : width,
+            height: `${props.height}px`,
+          }}
           maxWidth={!viewOnlyMode ? containerWidth : undefined}
           minWidth={78}
           enable={{
@@ -706,7 +713,10 @@ const Box = (props: {
           grid={[5, 5]}
           onResize={onResize}
           onResizeStop={onResizeStop}
-          size={{ width: width, height: `${props.height}px` }}
+          size={{
+            width: smScreen ? "100%" : width,
+            height: `${props.height}px`,
+          }}
           maxWidth={!viewOnlyMode ? containerWidth : undefined}
           minWidth={78}
           enable={{
@@ -784,7 +794,10 @@ const Box = (props: {
           grid={[5, 5]}
           onResize={onResize}
           onResizeStop={onResizeStop}
-          size={{ width: width, height: `${props.height}px` }}
+          size={{
+            width: smScreen ? "100%" : width,
+            height: `${props.height}px`,
+          }}
           maxWidth={!viewOnlyMode ? containerWidth : undefined}
           minWidth={78}
           enable={{

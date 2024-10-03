@@ -1,4 +1,3 @@
-import { Box } from "@material-ui/core";
 import React from "react";
 
 interface PlanCardProps {
@@ -13,6 +12,7 @@ interface PlanCardProps {
     buttonText: string;
     discount: string;
     key: string;
+    available: boolean;
   };
   onButtonClick: (key: string) => void;
 }
@@ -35,6 +35,7 @@ export default function PlanCard({
         `}
       >
         per {activeView === "monthly" ? "month" : "year"}
+        {plan.key === "team" ? " / per user" : ""}
       </p>
       <p
         css={`
@@ -162,10 +163,14 @@ export default function PlanCard({
               cursor: not-allowed;
             }
           `}
-          disabled={plan.current}
+          disabled={plan.current || !plan.available}
           onClick={() => onButtonClick(plan.key)}
         >
-          {plan.current ? "Current Plan" : plan.buttonText}
+          {plan.current
+            ? "Current Plan"
+            : !plan.available
+            ? "Coming soon"
+            : plan.buttonText}
         </button>
         {plan.recommended ? (
           <div

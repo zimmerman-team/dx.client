@@ -56,10 +56,6 @@ export default function EmbedChartRoute() {
     return get(chartFromAPI, "mappedData", []);
   }, [chartFromAPI]);
 
-  const renderedChartSsr = React.useMemo(() => {
-    return get(chartFromAPI, "ssr", false);
-  }, [chartFromAPI]);
-
   const renderedChartType = React.useMemo(() => {
     return get(chartFromAPI, "vizType", "echartsBarchart");
   }, [chartFromAPI]);
@@ -91,7 +87,7 @@ export default function EmbedChartRoute() {
           padding: 24px;
           > p {
             color: #231d2c;
-            font-family: "GothamNarrow-Bold", sans-serif;
+            font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
             font-size: 18px;
             width: 100%;
             overflow: hidden;
@@ -112,7 +108,6 @@ export default function EmbedChartRoute() {
           datasetDetails={datasetDetails}
           renderedChart={renderedChart}
           renderedChartMappedData={renderedChartMappedData}
-          renderedChartSsr={renderedChartSsr}
           renderedChartType={renderedChartType}
           setChartError={setNotFound}
           setNotFound={setNotFound}
@@ -137,11 +132,11 @@ export default function EmbedChartRoute() {
             id={`datasource-${loadedChart.id || "1"}`}
             css={`
               color: #70777e;
-              font-family: "GothamNarrow-Bold", sans-serif;
+              font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
               font-size: 12px;
               margin: 0;
               a {
-                font-family: "GothamNarrow-Bold", sans-serif;
+                font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
                 color: #70777e;
                 text-decoration: none;
                 border-bottom: 1px solid #70777e;

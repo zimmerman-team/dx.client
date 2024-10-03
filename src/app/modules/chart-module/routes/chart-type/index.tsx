@@ -23,6 +23,8 @@ import {
 import { charts } from "app/modules/chart-module/data";
 import AILoader from "app/modules/chart-module/routes/chart-type/loader";
 import { handleValidityCheckOfDimensionsToBeMapped } from "app/modules/chart-module/components/toolbox/steps/panels-content/Mapping";
+import { useCheckUserPlan } from "app/hooks/useCheckUserPlan";
+import { IChartType } from "app/state/api/action-reducers/sync/charts";
 
 function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
   useTitle("DX Dataxplorer - Chart Type");
@@ -34,6 +36,8 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
   const [isAiActive, setIsAiActive] = useRecoilState(isChartAIAgentActive);
   const datasetId = useStoreState((state) => state.charts.dataset.value);
   const chartType = useStoreState((state) => state.charts.chartType.value);
+
+  const { userPlan } = useCheckUserPlan();
   const loadChartTypesSuggestions = useStoreActions(
     (actions) => actions.charts.ChartTypesSuggest.fetch
   );
@@ -87,6 +91,12 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
       });
     }
   }, [datasetId]);
+
+  React.useEffect(() => {
+    if (userPlan?.planData.name === "Free") {
+      setIsAiActive(false);
+    }
+  }, [userPlan]);
 
   React.useEffect(() => {
     if (fromReportParamValue === "true") {
@@ -180,7 +190,7 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
   }
 
   const onChartTypeChange =
-    (chartTypeId: string) => (e: React.MouseEvent<HTMLButtonElement>) => {
+    (chartTypeId: IChartType) => (e: React.MouseEvent<HTMLButtonElement>) => {
       sessionStorage.setItem("visualOptions", JSON.stringify({}));
       props.setVisualOptionsOnChange(
         chartType === chartTypeId ? null : chartTypeId
@@ -192,12 +202,13 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
       setSelectedAIChart(Boolean(aIChartSuggestions(chartTypeId)));
     };
 
-  const renderChartOptions = (ct: ChartTypeModel) => {
+  const renderChartOptions = (ct: ChartTypeModel, paid: boolean) => {
     return (
       <Grid item xs={12} sm={6} md={4} key={ct.id}>
         <button
           onClick={ct.label === "" ? () => {} : onChartTypeChange(ct.id)}
           data-cy="chart-type-item"
+          disabled={paid && userPlan?.planData?.name === "Free"}
           css={`
             position: relative;
             width: 100%;
@@ -210,8 +221,12 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
             align-items: center;
             background: ${getColor(ct.id).background};
             border: 1px solid ${getColor(ct.id).border};
-
-            ${ct.label === "" && `pointer-events: none;background: #f1f3f5;`}
+            filter: ${paid && userPlan?.planData?.name === "Free"
+              ? "blur(5px)"
+              : "none"};
+            ${(ct.label === "" ||
+              (paid && userPlan?.planData?.name === "Free")) &&
+            `pointer-events: none;background: #f1f3f5;`}
 
             &:hover {
               cursor: ${ct.label !== "" ? "pointer" : "auto"};
@@ -274,7 +289,7 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
               height: 16px;
               color: #373d43;
               font-size: 10px;
-              font-family: "GothamNarrow-Book", sans-serif;
+              font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
             `}
             data-cy="ai-suggestion-icon"
           >
@@ -310,13 +325,15 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
               {isAiActive ? (
                 <p
                   css={`
-                    font-family: "GothamNarrow-Bold", sans-serif;
+                    font-family: "GothamNarrow-Bold", "Helvetica Neue",
+                      sans-serif;
                     font-size: 18px;
                     color: #231d2c;
                     margin-bottom: 0px;
                     span {
                       color: #359c96;
-                      font-family: "GothamNarrow-Bold", sans-serif;
+                      font-family: "GothamNarrow-Bold", "Helvetica Neue",
+                        sans-serif;
                     }
                   `}
                 >
@@ -348,10 +365,11 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
               align-items: center;
               justify-content: end;
               gap: 5px;
+              flex-shrink: 0;
               span {
                 color: #000000;
                 font-size: 12px;
-                font-family: "GothamNarrow-Book", sans-serif;
+                font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
               }
             `}
           >
@@ -362,6 +380,7 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
               checked={isAiActive}
               setIsAiActive={setIsAiActive}
               dataset={datasetId as string}
+              disabled={userPlan?.planData?.name === "Free"}
             />
           </div>
         </div>
@@ -374,7 +393,7 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
           <p
             css={`
               color: #000000;
-              font-family: "GothamNarrow-Bold", sans-serif;
+              font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
               font-size: 24px;
               margin: 0;
               margin-bottom: 15px;
@@ -392,7 +411,7 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
             <Grid container item spacing={2}>
               {echartTypes(false)
                 .filter((c) => c.class === "basic")
-                .map(renderChartOptions)}
+                .map((v) => renderChartOptions(v, false))}
             </Grid>
           </Grid>
         </div>
@@ -405,7 +424,7 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
           <p
             css={`
               color: #000000;
-              font-family: "GothamNarrow-Bold", sans-serif;
+              font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
 
               font-size: 24px;
               margin: 0;
@@ -424,7 +443,7 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
             <Grid container item spacing={2}>
               {echartTypes(false)
                 .filter((c) => c.class === "advanced")
-                .map(renderChartOptions)}
+                .map((v) => renderChartOptions(v, true))}
             </Grid>
           </Grid>
         </div>
@@ -438,7 +457,7 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
           <p
             css={`
               color: #000000;
-              font-family: "GothamNarrow-Bold", sans-serif;
+              font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
               font-size: 24px;
               margin: 0;
               margin-bottom: 15px;
@@ -456,7 +475,7 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
             <Grid container item spacing={2}>
               {echartTypes(false)
                 .filter((c) => c.class === "compound")
-                .map(renderChartOptions)}
+                .map((v) => renderChartOptions(v, true))}
             </Grid>
           </Grid>
         </div>

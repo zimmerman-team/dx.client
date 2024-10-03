@@ -8,8 +8,11 @@ import axios from "axios";
 import CircleLoader from "app/modules/home-module/components/Loader";
 import { useInfinityScroll } from "app/hooks/useInfinityScroll";
 import SourceCategoryList from "app/modules/dataset-module/routes/upload-module/component/externalSourcesList";
+import { useSetRecoilState } from "recoil";
+import { planDialogAtom } from "app/state/recoil/atoms";
 import SaveAltIcon from "@material-ui/icons/SaveAlt";
 import ExternalSearchTable from "app/modules/dataset-module/routes/upload-module/component/table/externalSearchTable";
+import { useCheckUserPlan } from "app/hooks/useCheckUserPlan";
 
 export interface IExternalDataset {
   name: string;
@@ -49,6 +52,8 @@ export default function ExternalSearch(props: {
   const [offset, setOffset] = React.useState(0);
   const limit = 20;
   const [datasets, setDatasets] = React.useState<IExternalDataset[]>([]);
+  const [planWarning, setPlanWarning] = React.useState<string | null>(null);
+  const setPlanDialog = useSetRecoilState(planDialogAtom);
 
   const baseSources = [
     { name: "Kaggle", value: "Kaggle" },
@@ -69,9 +74,12 @@ export default function ExternalSearch(props: {
     setOffset(0);
   };
 
+  const { userPlan } = useCheckUserPlan();
+
+  const free = userPlan?.planData.name === "Free";
   // Pagination on scroll
   React.useEffect(() => {
-    if (isObserved && datasets.length > 0) {
+    if (isObserved && datasets.length > 0 && !free) {
       loadSearch(true);
     }
   }, [isObserved]);
@@ -99,11 +107,14 @@ export default function ExternalSearch(props: {
         console.log(response.data.error);
         return;
       }
+      if (response.data.planWarning) {
+        setPlanWarning(response.data.planWarning);
+      }
       if (nextPage) {
-        setDatasets([...datasets, ...response.data]);
+        setDatasets([...datasets, ...response.data.result]);
         setOffset(offset + limit);
       } else {
-        setDatasets(response.data);
+        setDatasets(response.data.result);
         setOffset(limit);
       }
     } catch (e) {
@@ -111,6 +122,17 @@ export default function ExternalSearch(props: {
       console.log(e);
     }
   };
+
+  React.useEffect(() => {
+    if (planWarning) {
+      setPlanDialog({
+        open: true,
+        message: planWarning,
+        tryAgain: "",
+        onTryAgain: () => {},
+      });
+    }
+  }, [planWarning]);
 
   React.useEffect(() => {
     const controller = abortControllerRef.current;
@@ -127,6 +149,10 @@ export default function ExternalSearch(props: {
       loadSearch();
     }
   }, [token]);
+  const t =
+    "http://localhost:4200/reports?filter={%22order%22:%22updatedDate%20desc%22,%22limit%22:15,%22offset%22:0}";
+  const v =
+    "http://localhost:4200/reports?filter={%22order%22:%22updatedDate%20desc%22,%22limit%22:15,%22offset%22:0}";
 
   const [,] = useDebounce(
     () => {
@@ -156,7 +182,7 @@ export default function ExternalSearch(props: {
           }
           p {
             color: #231d2c;
-            font-family: "GothamNarrow-Book";
+            font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
             font-size: 14px;
             font-weight: 325;
             line-height: 20px;
@@ -262,7 +288,7 @@ export default function ExternalSearch(props: {
             font-weight: 325;
             line-height: normal;
             letter-spacing: 0.5px;
-            font-family: "GothamNarrow-Book", sans-serif;
+            font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
           `}
         >
           No datasets were found using federated search. Please consider trying

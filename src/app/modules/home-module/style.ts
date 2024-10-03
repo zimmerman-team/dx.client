@@ -1,18 +1,22 @@
 import { css } from "styled-components/macro";
 
 export const turnsDataCss = css`
-  /* margin-top: 60px;
-  padding: 0;
-  @media screen and (max-width: 768px) {
+  @media (max-width: 1276px) {
     justify-content: center;
     align-items: center;
-  } */
+    gap: 45px;
+  }
+  @media (max-width: 700px) {
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+  }
   display: flex;
   justify-content: space-between;
   align-items: center;
 
   h1 {
-    font-family: "GothamNarrow-Bold", sans-serif;
+    font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
     font-weight: 700;
     font-size: 40px;
     line-height: 48px;
@@ -22,18 +26,21 @@ export const turnsDataCss = css`
     padding: 0;
   }
   h2 {
-    font-family: "GothamNarrow-Bold", sans-serif;
+    font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
     font-weight: 400;
     font-size: 34px;
     line-height: 42px;
     color: #2b3674;
     margin: 0;
     padding: 0;
+    @media (max-width: 700px) {
+      font-size: 29px;
+    }
   }
 
   p {
     color: #495057;
-    font-family: "GothamNarrow-Bold", sans-serif;
+    font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
     font-size: 18px;
     line-height: 22px;
     text-align: center;
@@ -50,7 +57,7 @@ export const turnsDataCss = css`
     outline: none;
     border: none;
     color: #ffffff;
-    font-family: "GothamNarrow-Bold", sans-serif;
+    font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
     font-weight: 400;
     font-size: 14px;
     text-transform: uppercase;
@@ -59,6 +66,7 @@ export const turnsDataCss = css`
     font-style: normal;
     line-height: 24px; /* 171.429% */
     letter-spacing: -0.28px;
+    white-space: nowrap;
 
     :hover {
       opacity: 0.8;
@@ -70,7 +78,7 @@ export const turnsDataCss = css`
 export const featuredAssetsCss = css`
   h3 {
     font-size: 24px;
-    font-family: "GothamNarrow-Bold", sans-serif;
+    font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
     line-height: 29px;
     color: #000000;
     margin: 0;
@@ -81,11 +89,20 @@ export const datsetDetailImgcss = css`
   width: 710px;
   height: 428px;
   border-radius: 14px;
+  @media (max-width: 1240px) {
+    width: 70%;
+    object-fit: contain;
+    height: 100%;
+  }
+  @media (max-width: 700px) {
+    width: 95%;
+    object-fit: contain;
+    height: 100%;
+  }
 `;
 
 export const rowFlexCss = css`
   display: flex;
-
   justify-content: center;
   align-items: center;
 `;
@@ -97,11 +114,12 @@ export const searchInputCss = (
   background: #dadaf8;
   display: flex;
   align-items: center;
-  width: ${width ?? "385px"};
+  width: ${openSearch ? width ?? "385px" : "0px"};
   height: 32px;
   border-radius: 20px;
   opacity: ${openSearch ? 1 : 0};
-  transition: all 0.5s ease-in-out 0s;
+  transition: opacity 0.5s ease-in-out 0s;
+  overflow: hidden;
   input {
     outline: none;
     height: 100%;
@@ -113,6 +131,14 @@ export const searchInputCss = (
     border-radius: 20px;
 
     padding: 6px 16px !important;
+  }
+  @media (min-width: 768px) {
+    @media (max-width: 900px) {
+      width: ${openSearch ? "250px" : "0px"};
+    }
+  }
+  @media (max-width: 599px) {
+    width: ${openSearch ? "100%" : "0px"};
   }
 `;
 
@@ -148,7 +174,7 @@ export const sortByItemCss = (active: boolean) => css`
   color: #231d2c;
   font-size: 12px;
   padding: 8px 22px;
-  font-family: "GothamNarrow-Book", sans-serif;
+  font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
   background: ${active ? "#f1f3f5" : "transparent"};
 
   &:hover {

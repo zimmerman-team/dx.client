@@ -26,7 +26,7 @@ export const Tab = {
     font-weight: ${(props) => (props.active ? "bold" : "normal")};
     font-family: ${(props) =>
         props.active ? gothamNarrowBold : gothamNarrowBook},
-      sans-serif;
+      "Helvetica Neue", sans-serif;
 
     ::after {
       content: "";
@@ -48,7 +48,7 @@ export const Tab = {
     font-weight: ${(props) => (props.active ? "bold" : "normal")};
     font-family: ${(props) =>
         props.active ? gothamNarrowBold : gothamNarrowBook},
-      sans-serif;
+      "Helvetica Neue", sans-serif;
 
     ::after {
       content: "";
@@ -73,7 +73,7 @@ export const Tab = {
     font-weight: ${(props) => (props.active ? "700" : "normal")};
     font-family: ${(props) =>
         props.active ? gothamNarrowBold : gothamNarrowBook},
-      sans-serif;
+      "Helvetica Neue", sans-serif;
 
     ::after {
       content: "";

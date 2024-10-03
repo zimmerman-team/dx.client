@@ -19,9 +19,14 @@ export default function ShareContent(props: {
         border-radius: 8px;
         line-height: 16px;
         background: #f5f5f7;
-        font-family: "GothamNarrow-Medium", sans-serif;
+        font-family: "GothamNarrow-Medium", "Helvetica Neue", sans-serif;
         color: #000;
         font-size: 14px;
+        @media (max-width: 768px) {
+          height: 100%;
+          word-break: break-all;
+          padding: 16px 4px;
+        }
       `}
       id="embed-code"
     >

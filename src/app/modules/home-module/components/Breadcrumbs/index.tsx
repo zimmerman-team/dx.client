@@ -28,7 +28,7 @@ function BreadCrumbs(props: BreadCrumbsProps) {
                 &,
                 * {
                   font-size: 24px;
-                  font-family: "GothamNarrow-Bold", sans-serif;
+                  font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
                   font-weight: 400;
                   line-height: 29px;
                   color: #2b3674;
@@ -47,7 +47,7 @@ function BreadCrumbs(props: BreadCrumbsProps) {
                 &,
                 * {
                   font-size: 24px;
-                  font-family: "GothamNarrow-Book", sans-serif;
+                  font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
                   font-weight: 325;
                   line-height: 29px;
                   color: #2b3674;

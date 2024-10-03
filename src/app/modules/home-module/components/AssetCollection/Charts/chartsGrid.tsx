@@ -17,12 +17,24 @@ import { coloredEchartTypes } from "app/modules/chart-module/routes/chart-type/d
 import ChartAddnewCard from "app/modules/home-module/components/AssetCollection/Charts/chartAddNewCard";
 import GridItem from "app/modules/home-module/components/AssetCollection/Charts/gridItem";
 import { useAuth0 } from "@auth0/auth0-react";
+import { useSetRecoilState } from "recoil";
+import { planDialogAtom } from "app/state/recoil/atoms";
 
 interface Props {
   sortBy: string;
   searchStr: string;
   view: "grid" | "table";
   addCard?: boolean;
+}
+
+export interface IChartAsset {
+  id: string;
+  name: string;
+  createdDate: Date;
+  vizType: string;
+  isMappingValid: boolean;
+  owner: string;
+  isAIAssisted: boolean;
 }
 
 export default function ChartsGrid(props: Props) {
@@ -38,8 +50,10 @@ export default function ChartsGrid(props: Props) {
 
   const { isObserved } = useInfinityScroll(observerTarget);
 
+  const setPlanDialog = useSetRecoilState(planDialogAtom);
+
   const charts = useStoreState(
-    (state) => (state.charts.ChartGetList.crudData ?? []) as any[]
+    (state) => (state.charts.ChartGetList.crudData ?? []) as IChartAsset[]
   );
   const loadChartsCount = useStoreActions(
     (actions) => actions.charts.ChartsCount.fetch
@@ -63,9 +77,9 @@ export default function ChartsGrid(props: Props) {
       props.searchStr?.length > 0
         ? `"where":{"name":{"like":"${props.searchStr}.*","options":"i"}},`
         : "";
-    return `filter={${value}"order":"${
-      props.sortBy
-    } desc","limit":${limit},"offset":${fromZeroOffset ? 0 : offset}}`;
+    return `filter={${value}"order":"${props.sortBy} ${
+      props.sortBy === "name" ? "asc" : "desc"
+    }","limit":${limit},"offset":${fromZeroOffset ? 0 : offset}}`;
   };
 
   const getWhereString = () => {
@@ -151,7 +165,23 @@ export default function ChartsGrid(props: Props) {
           Authorization: `Bearer ${token}`,
         },
       })
-      .then(() => {
+      .then((response) => {
+        if (response?.data.error && response?.data.errorType === "planError") {
+          return setPlanDialog({
+            open: true,
+            message: response?.data.error,
+            tryAgain: "",
+            onTryAgain: () => {},
+          });
+        }
+        if (response.data.planWarning) {
+          setPlanDialog({
+            open: true,
+            message: response.data.planWarning,
+            tryAgain: "",
+            onTryAgain: () => {},
+          });
+        }
         reloadData();
       })
       .catch((error) => console.log(error));
@@ -225,7 +255,14 @@ export default function ChartsGrid(props: Props) {
                 owner={c.owner}
                 isAIAssisted={c.isAIAssisted}
               />
-              <Box height={16} />
+              <div
+                css={`
+                  height: 16px;
+                  @media (max-width: 600px) {
+                    height: 8px;
+                  }
+                `}
+              />
             </Grid>
           ))}
         </Grid>

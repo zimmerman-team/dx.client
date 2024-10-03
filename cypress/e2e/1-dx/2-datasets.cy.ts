@@ -24,21 +24,30 @@ describe("Testing connecting data on DX", () => {
     cy.restoreLocalStorageCache();
     // cy.setGoogleAccessToken();
 
+    cy.intercept("GET", `${apiUrl}/users/plan-data`).as("planData");
+
     cy.visit("/");
+
+    cy.wait("@planData");
 
     cy.get('[data-cy="cookie-btn"]').click();
     cy.intercept(`${apiUrl}/external-sources/search?q=*`).as("getDefaultData");
     cy.get('[data-cy="home-connect-dataset-button"]').click();
+    cy.wait("@planData");
   });
 
   it("Can filter results by source in the federated search", () => {
     cy.wait("@getDefaultData").then((interception) => {
+      cy.wait(2000);
+      cy.contains('[data-cy="source-category-button"]', "Kaggle").click();
+      cy.wait("@getDefaultData");
       cy.get('[data-cy="external-search-card-Kaggle"]').should(
         "have.length.greaterThan",
         1
       );
     });
     cy.wait(2000);
+    cy.contains('[data-cy="source-category-button"]', "Kaggle").click();
 
     cy.contains('[data-cy="source-category-button"]', "WHO").click();
     cy.wait("@getDefaultData");
@@ -49,6 +58,9 @@ describe("Testing connecting data on DX", () => {
 
   it("Can import data from External Search", () => {
     cy.wait("@getDefaultData").then((interception) => {
+      cy.wait(2000);
+      cy.contains('[data-cy="source-category-button"]', "Kaggle").click();
+      cy.wait("@getDefaultData");
       cy.get('[data-cy="external-search-card-Kaggle"]').should(
         "have.length.greaterThan",
         1
@@ -56,11 +68,11 @@ describe("Testing connecting data on DX", () => {
     });
 
     cy.get('[data-cy="open-search-button"]').click();
-    cy.intercept(`${apiUrl}/external-sources/search?q=world%20population*`).as(
-      "getDefaultData2"
-    );
+    cy.intercept(
+      `${apiUrl}/external-sources/search?q=Exclusive%20breastfeeding*`
+    ).as("getDefaultData2");
     cy.wait(2000);
-    cy.get('[data-cy="filter-search-input"]').type("world population");
+    cy.get('[data-cy="filter-search-input"]').type("Exclusive breastfeeding");
 
     cy.wait("@getDefaultData2").then((interception) => {
       cy.get('[data-cy="external-search-card-Kaggle"]').should(
@@ -205,7 +217,11 @@ describe("Edit, Delete and Duplicate Dataset", () => {
 
   beforeEach(() => {
     cy.restoreLocalStorageCache();
+    cy.intercept("GET", `${apiUrl}/users/plan-data`).as("planData");
+
     cy.visit("/");
+
+    cy.wait("@planData");
     cy.get('[data-cy="cookie-btn"]').click();
 
     cy.intercept("GET", `${apiUrl}/datasets?filter=*`).as("fetchDatasets");

@@ -1,25 +1,26 @@
 import { Auth0Provider } from "@auth0/auth0-react";
-import { render } from "@testing-library/react";
 import userEvent, {
   PointerEventsCheckLevel,
 } from "@testing-library/user-event";
-import { screen } from "@testing-library/react";
+import { screen, render } from "@testing-library/react";
 import { mockUseAuth0 } from "app/utils/mockAuth0";
 import { Router } from "react-router-dom";
 import { createMemoryHistory } from "history";
 import GridItem from "app/modules/home-module/components/AssetCollection/Reports/gridItem";
+import { ContentState, EditorState } from "draft-js";
 
 interface MockProps {
   date: Date;
   id?: string;
   title: string;
-  descr: string;
+  name: string;
   color: string;
   viz: JSX.Element;
   handleDelete?: jest.Mock<any, any, any>;
   handleDuplicate?: jest.Mock<any, any, any>;
   showMenuButton: boolean;
   owner: string;
+  heading: EditorState;
 }
 
 let mockLoginStatus = true;
@@ -41,14 +42,17 @@ const defaultProps = (newProps: Partial<MockProps> = {}): MockProps => {
   return {
     date: "2021-08-13",
     id: "report-id",
-    title: "report-title",
-    descr: "report-description",
+    heading: EditorState.createWithContent(
+      ContentState.createFromText("report-title")
+    ),
+    name: "report-description",
     color: "#ffffff",
     viz: <div data-testid="report-grid-item-viz-icon">report</div>,
     handleDelete: jest.fn(),
     handleDuplicate: jest.fn(),
     showMenuButton: true,
     owner: "auth0|123",
+
     ...newProps,
   } as MockProps;
 };

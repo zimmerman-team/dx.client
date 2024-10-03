@@ -41,7 +41,7 @@ export default function LandingModule() {
               margin: 0;
               padding: 0;
               font-size: 36px;
-              font-family: "GothamNarrow-Medium", sans-serif;
+              font-family: "GothamNarrow-Medium", "Helvetica Neue", sans-serif;
               color: #231d2c;
               font-weight: 350;
             }
@@ -53,7 +53,7 @@ export default function LandingModule() {
               font-weight: 350;
               line-height: 30px; /* 150% */
               letter-spacing: 0.5px;
-              font-family: "GothamNarrow-Medium", sans-serif;
+              font-family: "GothamNarrow-Medium", "Helvetica Neue", sans-serif;
             }
           `}
         >
@@ -143,7 +143,7 @@ export default function LandingModule() {
               font-style: normal;
               font-weight: 400;
               line-height: normal;
-              font-family: "GothamNarrow-Bold", sans-serif;
+              font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
               text-align: center;
             `}
           >

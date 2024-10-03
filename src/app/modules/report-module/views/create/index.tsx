@@ -1,27 +1,22 @@
 import React from "react";
 import { v4 } from "uuid";
-import { useDrop } from "react-dnd";
 import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
 import useResizeObserver from "use-resize-observer";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import { GridColumns } from "app/modules/report-module/components/grid-columns";
-import HeaderBlock from "app/modules/report-module/sub-module/components/headerBlock";
+import HeaderBlock from "app/modules/report-module/components/headerBlock";
 import { ItemComponent } from "app/modules/report-module/components/order-container";
-import { ReportElementsType } from "app/modules/report-module/components/right-panel-create-view";
-import AddRowFrameButton from "app/modules/report-module/sub-module/rowStructure/addRowFrameButton";
-import RowFrame from "app/modules/report-module/sub-module/rowStructure";
-import {
-  ReportCreateViewProps,
-  PlaceholderProps,
-} from "app/modules/report-module/views/create/data";
+import AddRowFrameButton from "app/modules/report-module/components/rowStructure/addRowFrameButton";
+import RowFrame from "app/modules/report-module/components/rowStructure";
+import { ReportCreateViewProps } from "app/modules/report-module/views/create/data";
 import {
   IRowFrameStructure,
   reportContentContainerWidth,
-  isDividerOrRowFrameDraggingAtom,
 } from "app/state/recoil/atoms";
 import TourGuide from "app/components/Dialogs/TourGuide";
 import { useTitle } from "react-use";
+import PlaceHolder from "app/modules/report-module/components/placeholder";
 
 function ReportCreateView(props: Readonly<ReportCreateViewProps>) {
   useTitle("DX Dataxplorer - Create Report");
@@ -106,13 +101,15 @@ function ReportCreateView(props: Readonly<ReportCreateViewProps>) {
         `}
       />
       <HeaderBlock
+        isToolboxOpen={props.rightPanelOpen}
         previewMode={false}
         headerDetails={{ ...props.headerDetails }}
         setHeaderDetails={props.setHeaderDetails}
         setReportName={props.setReportName}
         reportName={props.reportName}
-        hasSubHeaderTitleFocused={props.hasSubHeaderTitleFocused}
+        hasReportNameFocused={props.hasReportNameFocused}
         setPlugins={props.setPlugins}
+        handleRightPanelOpen={props.handleRightPanelOpen}
       />
       <Container maxWidth="lg">
         <div
@@ -121,7 +118,7 @@ function ReportCreateView(props: Readonly<ReportCreateViewProps>) {
           css={`
             position: relative;
             transition: width 225ms cubic-bezier(0, 0, 0.2, 1) 0ms;
-            width: ${props.open
+            width: ${props.rightPanelOpen
               ? "calc(100vw - ((100vw - 1280px) / 2) - 400px - 50px)"
               : "100%"};
 
@@ -133,7 +130,7 @@ function ReportCreateView(props: Readonly<ReportCreateViewProps>) {
           <Box height={50} />
           <TourGuide
             reportType={props.reportType ?? "basic"}
-            toolBoxOpen={props.open}
+            toolBoxOpen={props.rightPanelOpen}
             handleClose={() => {}}
             open
           />
@@ -195,121 +192,3 @@ function ReportCreateView(props: Readonly<ReportCreateViewProps>) {
 }
 
 export default ReportCreateView;
-
-export const PlaceHolder = (props: PlaceholderProps) => {
-  const moveCard = React.useCallback((itemId: string) => {
-    props.updateFramesArray((draft) => {
-      const dragIndex = draft.findIndex((frame) => frame.id === itemId);
-
-      const dropIndex =
-        props.index ?? draft.findIndex((frame) => frame.id === props.rowId) + 1;
-
-      const fakeId = v4();
-      const tempItem = draft[dragIndex];
-      draft[dragIndex].id = fakeId;
-
-      draft.splice(dropIndex, 0, tempItem);
-      const fakeIndex = draft.findIndex((frame) => frame.id === fakeId);
-      draft.splice(fakeIndex, 1);
-    });
-  }, []);
-  const [{ isOver, handlerId, item: dragItem }, drop] = useDrop(() => ({
-    // The type (or types) to accept - strings or symbols
-    accept: [
-      ReportElementsType.DIVIDER,
-      ReportElementsType.ROWFRAME,
-      ReportElementsType.ROW,
-    ],
-    // Props to collect
-    collect: (monitor) => ({
-      isOver: monitor.isOver(),
-      canDrop: monitor.canDrop(),
-      item: monitor.getItem(),
-      handlerId: monitor.getHandlerId(),
-    }),
-    drop: (item: any, monitor) => {
-      if (item.type === ReportElementsType.ROW) {
-        moveCard(item.id);
-      } else {
-        props.updateFramesArray((draft) => {
-          const tempIndex =
-            props.index ??
-            draft.findIndex((frame) => frame.id === props.rowId) + 1;
-
-          const id = v4();
-          draft.splice(tempIndex, 0, {
-            id,
-            frame: {
-              rowId: id,
-              rowIndex: tempIndex,
-
-              type: item.type,
-            },
-            content:
-              item.type === ReportElementsType.ROWFRAME ? [] : ["divider"],
-            contentWidths: [],
-            contentHeights: [],
-            contentTypes:
-              item.type === ReportElementsType.ROWFRAME ? [] : ["divider"],
-            structure: null,
-          });
-        });
-      }
-    },
-  }));
-
-  const isItemDragging = useRecoilValue(isDividerOrRowFrameDraggingAtom);
-
-  const itemDragIndex = props.framesArray.findIndex(
-    (frame) => frame.id === isItemDragging.rowId
-  );
-
-  const placeholderIndex =
-    props.index ??
-    props.framesArray.findIndex((frame) => frame.id === props.rowId) + 1;
-
-  const dragIndex = props.framesArray.findIndex(
-    (frame) => frame.id === (dragItem as any)?.id
-  );
-
-  const placeholderActive = () => {
-    if (isOver) {
-      if (dragIndex === -1) {
-        return true;
-      }
-      if (placeholderIndex === dragIndex) {
-        return false;
-      }
-      return placeholderIndex - 1 !== dragIndex;
-    }
-    return false;
-  };
-
-  const isDroppable = () => {
-    if (isItemDragging.state) {
-      if (itemDragIndex === -1) {
-        return true;
-      }
-      if (placeholderIndex === itemDragIndex) {
-        return false;
-      }
-      return placeholderIndex - 1 !== itemDragIndex;
-    }
-    return false;
-  };
-
-  return (
-    <div
-      data-cy="report-row-placeholder"
-      data-handler-id={handlerId}
-      ref={drop}
-      css={`
-        width: 100%;
-        height: 4px;
-        display: ${isItemDragging.state ? "block" : "none"};
-        background-color: ${placeholderActive() ? "#6061E5" : "#262c34"};
-        opacity: ${isDroppable() ? 1 : 0.5};
-      `}
-    />
-  );
-};

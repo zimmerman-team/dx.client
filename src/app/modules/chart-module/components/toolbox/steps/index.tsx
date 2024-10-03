@@ -18,7 +18,7 @@ import { isEmpty } from "lodash";
 import { ToolboxNavType } from "app/modules/chart-module/components/toolbox/data";
 
 import { ChartRenderedItem } from "app/modules/chart-module/data";
-import { chartFromReportAtom } from "app/state/recoil/atoms";
+import { chartFromReportAtom, newChartAtom } from "app/state/recoil/atoms";
 import { useRecoilState } from "recoil";
 
 interface ChartToolBoxStepsProps {
@@ -45,6 +45,7 @@ interface ChartToolBoxStepsProps {
     value: React.SetStateAction<ChartRenderedItem | null>
   ) => void;
   deselectDataset: () => void;
+  setShowSnackbar: (value: string | null) => void;
 }
 
 export function ChartToolBoxSteps(props: ChartToolBoxStepsProps) {
@@ -56,6 +57,7 @@ export function ChartToolBoxSteps(props: ChartToolBoxStepsProps) {
   const appliedFilters = useStoreState(
     (state) => state.charts.appliedFilters.value
   );
+  const [newChart, setNewChart] = useRecoilState(newChartAtom);
   const [chartFromReport, setChartFromReport] =
     useRecoilState(chartFromReportAtom);
   let appliedFiltersCount = 0;
@@ -71,6 +73,15 @@ export function ChartToolBoxSteps(props: ChartToolBoxStepsProps) {
       if (chartFromReport.state) {
         setChartFromReport((prev) => ({ ...prev, chartId: page }));
         history.push(`/report/${reportPage}/edit`);
+      } else {
+        if (newChart.state && newChart.chartId === page) {
+          props.setShowSnackbar("Chart saved successfully");
+          setNewChart({
+            state: false,
+            chartId: null,
+          });
+        }
+        history.push(`/chart/${page}`);
       }
     }
   };
@@ -186,7 +197,7 @@ export function ChartToolBoxSteps(props: ChartToolBoxStepsProps) {
             align-items: center;
             justify-content: center;
             font-size: 14px;
-            font-family: "GothamNarrow-Bold", sans-serif;
+            font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
             cursor: ${props.isClickable ? "pointer" : "not-allowed"};
             /* pointer-events: ${props.isClickable ? "auto" : "none"}; */
             :nth-child(1) {
@@ -226,7 +237,7 @@ export function ChartToolBoxSteps(props: ChartToolBoxStepsProps) {
           }}
           data-cy="toolbox-chart-next"
         >
-          {currentPathIndex < 5 ? "Next" : "Save"}
+          {currentPathIndex < 5 ? "Next" : "Save and Preview"}
         </button>
       </div>
     </div>

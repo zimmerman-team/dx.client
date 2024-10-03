@@ -24,6 +24,7 @@ import {
   // @ts-ignore
 } from "@rawgraphs/rawgraphs-charts";
 import { FilterGroupModel } from "app/components/ToolBoxPanel/components/filters/data";
+import { IChartType } from "app/state/api/action-reducers/sync/charts";
 
 export const charts = {
   echartsBarchart,
@@ -350,7 +351,7 @@ export const defaultChartOptions = {
 export interface ChartAPIModel {
   id: string;
   name: string;
-  vizType: string | null;
+  vizType: IChartType | null;
   datasetId: string | null;
   mapping: any;
   vizOptions: any;
@@ -488,4 +489,24 @@ export const emptyChartAPI: ChartAPIModel = {
   dataTypes: [],
   isMappingValid: false,
   isAIAssisted: false,
+};
+export const chartViews = {
+  customize: "customize",
+  preview: "preview",
+  previewData: "preview-data",
+  filters: "filters",
+  data: "data",
+  mapping: "mapping",
+  chartType: "chart-type",
+};
+
+export const chartPaths = {
+  detail: "/chart/:page",
+  customize: `/chart/:page/${chartViews.customize}`,
+  preview: `/chart/:page/${chartViews.preview}`,
+  previewData: `/chart/:page/${chartViews.previewData}`,
+  filters: `/chart/:page/${chartViews.filters}`,
+  data: `/chart/:page/${chartViews.data}`,
+  mapping: `/chart/:page/${chartViews.mapping}`,
+  chartType: `/chart/:page/${chartViews.chartType}`,
 };

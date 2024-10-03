@@ -98,7 +98,7 @@ export default function AuthCard(props: { isLogin?: boolean }) {
               css={`
                 color: #231d2c;
                 font-size: 12px;
-                font-family: "GothamNarrow-Book";
+                font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
               `}
             >
               I agree with DX's{" "}

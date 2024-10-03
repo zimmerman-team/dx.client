@@ -18,6 +18,7 @@ import UploadOption from "app/modules/dataset-module/routes/upload-module/compon
 import { useCookie } from "react-use";
 import useGoogleDrivePicker from "app/hooks/useGoogleDrivePicker";
 import { useOneDrivePicker } from "app/hooks/useOneDrivePicker";
+import { useCheckUserPlan } from "app/hooks/useCheckUserPlan";
 
 interface Props {
   disabled: boolean;
@@ -31,6 +32,8 @@ interface Props {
 export default function AddDatasetFragment(props: Props) {
   const [googleDriveToken, setGoogleDriveToken, deleteGoogleDriveToken] =
     useCookie("googleDriveToken");
+
+  const { userPlan } = useCheckUserPlan();
 
   const { getAccessTokenAndOpenPicker } = useGoogleDrivePicker({
     onCancel: () => {
@@ -71,6 +74,7 @@ export default function AddDatasetFragment(props: Props) {
       formats: ["CSV", "XSLX", "JSON", "ODS", "SQLite"],
       icon: <LocalIcon />,
       onClick: () => {},
+      upgradeRequired: false,
     },
     {
       name: "Google Drive",
@@ -86,6 +90,7 @@ export default function AddDatasetFragment(props: Props) {
       onLogout: () => {
         deleteGoogleDriveToken();
       },
+      upgradeRequired: userPlan?.planData.name === "Free",
     },
     {
       name: "Microsoft Cloud",
@@ -101,6 +106,7 @@ export default function AddDatasetFragment(props: Props) {
       onLogout: async () => {
         await clearToken();
       },
+      upgradeRequired: userPlan?.planData.name === "Free",
     },
     {
       name: "API Connection",
@@ -108,6 +114,7 @@ export default function AddDatasetFragment(props: Props) {
       formats: ["CSV", "XSLX", "JSON", "ODS", "SQLite"],
       icon: <ApiIcon />,
       onClick: () => {},
+      upgradeRequired: false,
     },
     {
       name: "MSSQL",
@@ -115,6 +122,7 @@ export default function AddDatasetFragment(props: Props) {
       formats: [comingSoon],
       icon: <img width={30} height={33.462} src={MSSQLIcon} alt="mssql-logo" />,
       onClick: () => {},
+      upgradeRequired: false,
     },
     {
       name: "MYSQL",
@@ -122,6 +130,7 @@ export default function AddDatasetFragment(props: Props) {
       formats: [comingSoon],
       icon: <img width={30} height={30} src={MYSQLIcon} alt="mysql-logo" />,
       onClick: () => {},
+      upgradeRequired: false,
     },
     {
       name: "PostgreSQL",
@@ -129,6 +138,7 @@ export default function AddDatasetFragment(props: Props) {
       formats: [comingSoon],
       icon: <PostgresIcon />,
       onClick: () => {},
+      upgradeRequired: false,
     },
     {
       name: "MongoDB",
@@ -136,6 +146,7 @@ export default function AddDatasetFragment(props: Props) {
       formats: [comingSoon],
       icon: <MongoDbIcon />,
       onClick: () => {},
+      upgradeRequired: false,
     },
     {
       name: "Hubspot",
@@ -143,6 +154,7 @@ export default function AddDatasetFragment(props: Props) {
       formats: [comingSoon],
       icon: <HubspotIcon />,
       onClick: () => {},
+      upgradeRequired: false,
     },
   ];
 
@@ -159,7 +171,7 @@ export default function AddDatasetFragment(props: Props) {
           }
           p {
             color: #231d2c;
-            font-family: "GothamNarrow-Book";
+            font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
             font-size: 14px;
             font-weight: 325;
             line-height: 20px;
@@ -198,10 +210,12 @@ export default function AddDatasetFragment(props: Props) {
               font-style: normal;
               font-weight: 400;
               line-height: normal;
-              font-family: "GothamNarrow-Bold", sans-serif;
-              background: #dadaf84d;
+              font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
               border-radius: 16px 16px 0px 0px;
               width: 100%;
+              @media (max-width: 1024px) {
+                margin-bottom: 40px;
+              }
             `}
           >
             Connect your data
@@ -230,6 +244,7 @@ export default function AddDatasetFragment(props: Props) {
                   canConnect={option.canConnect}
                   connected={option.connected}
                   onLogout={option.onLogout}
+                  upgradeRequired={option.upgradeRequired}
                 />
               ))}
             </div>
@@ -259,6 +274,7 @@ export default function AddDatasetFragment(props: Props) {
                   onClick={option.onClick}
                   disabled
                   setActiveOption={props.setActiveOption}
+                  upgradeRequired={option.upgradeRequired}
                 />
               ))}
             </div>

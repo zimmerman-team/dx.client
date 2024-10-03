@@ -9,42 +9,34 @@ import Container from "@material-ui/core/Container";
 import { EditorState, convertFromRaw } from "draft-js";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import { ReportModel, emptyReport } from "app/modules/report-module/data";
-import RowFrame from "app/modules/report-module/sub-module/rowStructure";
-import HeaderBlock from "app/modules/report-module/sub-module/components/headerBlock";
+import RowFrame from "app/modules/report-module/components/rowStructure";
+import HeaderBlock from "app/modules/report-module/components/headerBlock";
 import { NotAuthorizedMessageModule } from "app/modules/common/not-authorized-message";
 import { ReportElementsType } from "app/modules/report-module/components/right-panel-create-view";
-import {
-  persistedReportStateAtom,
-  reportContentContainerWidth,
-  unSavedReportPreviewModeAtom,
-} from "app/state/recoil/atoms";
+import { reportContentContainerWidth } from "app/state/recoil/atoms";
 import { linkDecorator } from "app/modules/common/RichEditor/decorators";
 import { useTitle } from "react-use";
 import ReportUsePanel from "app/modules/report-module/components/use-report-panel";
 import HomeFooter from "app/modules/home-module/components/Footer";
 import { PageLoader } from "app/modules/common/page-loader";
 
-export function ReportPreviewView(props: {
-  setIsPreviewView: React.Dispatch<React.SetStateAction<boolean>>;
-  setAutoSave: React.Dispatch<
-    React.SetStateAction<{
-      isAutoSaveEnabled: boolean;
-    }>
-  >;
-}) {
-  const location = useLocation();
-
-  const previewMode = location.pathname.endsWith("preview");
-  useTitle(`DX DataXplorer - Report ${previewMode ? "Preview" : "View"}`);
+export function ReportPreviewView(
+  props: Readonly<{
+    setIsPreviewView: React.Dispatch<React.SetStateAction<boolean>>;
+    setAutoSave: React.Dispatch<
+      React.SetStateAction<{
+        isAutoSaveEnabled: boolean;
+      }>
+    >;
+  }>
+) {
+  useTitle(`DX DataXplorer - Report View`);
 
   const { page } = useParams<{ page: string }>();
 
   const { isLoading, isAuthenticated } = useAuth0();
 
   const { ref, width } = useResizeObserver<HTMLDivElement>();
-
-  const persistedReportState = useRecoilState(persistedReportStateAtom)[0];
-  const reportPreviewMode = useRecoilState(unSavedReportPreviewModeAtom)[0];
 
   const [containerWidth, setContainerWidth] = useRecoilState(
     reportContentContainerWidth
@@ -93,8 +85,6 @@ export function ReportPreviewView(props: {
     (actions) => actions.reports.ReportGet.clear
   );
 
-  const [reportPreviewData, setReportPreviewData] = React.useState(reportData);
-
   React.useEffect(() => {
     props.setAutoSave({ isAutoSaveEnabled: false });
 
@@ -119,12 +109,6 @@ export function ReportPreviewView(props: {
   }, [width]);
 
   React.useEffect(() => {
-    if (!reportPreviewMode) {
-      setReportPreviewData(reportData);
-    }
-  }, [reportData]);
-
-  React.useEffect(() => {
     props.setIsPreviewView(true);
     return () => {
       reportGetClear();
@@ -133,23 +117,6 @@ export function ReportPreviewView(props: {
       props.setIsPreviewView(false);
     };
   }, []);
-
-  React.useEffect(() => {
-    if (reportPreviewMode) {
-      setReportPreviewData({
-        ...reportPreviewData,
-
-        title: JSON.parse(persistedReportState.headerDetails.title),
-        showHeader: persistedReportState.headerDetails.showHeader,
-        backgroundColor: persistedReportState.headerDetails.backgroundColor,
-        titleColor: persistedReportState.headerDetails.titleColor,
-        descriptionColor: persistedReportState.headerDetails.descriptionColor,
-        dateColor: persistedReportState.headerDetails.dateColor,
-        rows: JSON.parse(persistedReportState.framesArray || "[]"),
-        subTitle: JSON.parse(persistedReportState.headerDetails.description),
-      });
-    }
-  }, [persistedReportState]);
 
   React.useEffect(() => {
     if (!loadingReportData && isReportLoading === null) {
@@ -183,26 +150,31 @@ export function ReportPreviewView(props: {
       `}
     >
       <HeaderBlock
+        isToolboxOpen={false}
         previewMode={true}
         headerDetails={{
-          title: reportPreviewData.title,
-          showHeader: reportPreviewData.showHeader,
-          description: EditorState.createWithContent(
-            convertFromRaw(reportPreviewData.subTitle ?? emptyReport.subTitle)
+          title: reportData.title,
+          showHeader: reportData.showHeader,
+          heading: EditorState.createWithContent(
+            convertFromRaw(reportData.heading ?? emptyReport.heading)
           ),
-          backgroundColor: reportPreviewData.backgroundColor,
-          titleColor: reportPreviewData.titleColor,
-          descriptionColor: reportPreviewData.descriptionColor,
-          dateColor: reportPreviewData.dateColor,
+          description: EditorState.createWithContent(
+            convertFromRaw(reportData.description ?? emptyReport.description)
+          ),
+          backgroundColor: reportData.backgroundColor,
+          titleColor: reportData.titleColor,
+          descriptionColor: reportData.descriptionColor,
+          dateColor: reportData.dateColor,
         }}
         setPlugins={() => {}}
         setHeaderDetails={() => {}}
+        handleRightPanelOpen={() => {}}
       />
       <Container id="content-container" maxWidth="lg" ref={ref}>
         <Box height={45} />
 
         {!reportError401 &&
-          get(reportPreviewData, "rows", []).map((rowFrame, index) => {
+          get(reportData, "rows", []).map((rowFrame, index) => {
             const contentTypes = rowFrame.items.map((item) => {
               if (item === null) {
                 return null;
@@ -267,16 +239,11 @@ export function ReportPreviewView(props: {
           })}
         <Box height={16} />
       </Container>
-
-      {location.search.includes("?fromLanding=true") && !isAuthenticated ? (
+      {window.location.search.includes("?fromLanding=true") &&
+      !isAuthenticated ? (
         <ReportUsePanel />
       ) : null}
-
-      {!previewMode ? (
-        <>
-          <Box height={71} /> <HomeFooter />
-        </>
-      ) : null}
+      <Box height={71} /> <HomeFooter />
     </div>
   );
 }

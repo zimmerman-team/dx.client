@@ -21,7 +21,7 @@ export const useOneDrivePicker = ({
   const msalParams = {
     auth: {
       authority: "https://login.microsoftonline.com/consumers",
-      clientId: "a5f756dd-d422-443e-93d2-3361f8a4a6f8",
+      clientId: "a5f756dd-d422-443e-93d2-3361f8a4a6f8", // Doesn't work if used as an env variable
       redirectUri: window.location.origin,
     },
   };

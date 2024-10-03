@@ -11,6 +11,7 @@ import HomeFooter from "app/modules/home-module/components/Footer";
 import DatasetDetailImage from "app/modules/home-module/assets/dataset-detail.png";
 import { ReactComponent as GoogleIcon } from "app/modules/onboarding-module/asset/google-img.svg";
 import { ReactComponent as LinkedInIcon } from "app/modules/onboarding-module/asset/linkedIn-img.svg";
+import { ReactComponent as MicrosoftIcon } from "app/modules/onboarding-module/asset/microsoft-img.svg";
 import HeroEllipses from "app/modules/home-module/assets/hero-ellipses.svg";
 
 import { homeDisplayAtom } from "app/state/recoil/atoms";
@@ -54,13 +55,20 @@ export default function HomeModule() {
           `}
         >
           <Container maxWidth="lg">
-            <Grid
-              container
-              css={turnsDataCss}
-              alignItems="center"
-              alignContent="flex-start"
-            >
-              <Grid item lg={5} md={12} sm={12} xs={12}>
+            <Grid container css={turnsDataCss}>
+              <Grid
+                item
+                lg={5}
+                md={12}
+                sm={12}
+                xs={12}
+                css={`
+                  display: flex;
+                  flex-direction: column;
+                  align-items: center;
+                  justify-content: center;
+                `}
+              >
                 <div
                   css={`
                     max-width: 450px;
@@ -122,6 +130,10 @@ export default function HomeModule() {
                           > svg {
                             transform: scale(0.8);
                           }
+                          @media (max-width: 400px) {
+                            font-size: 12px;
+                            padding: 8px 16px;
+                          }
                         }
                       `}
                     >
@@ -130,6 +142,9 @@ export default function HomeModule() {
                       </button>
                       <button onClick={() => socialAuth("linkedin")}>
                         <LinkedInIcon /> sign in for free
+                      </button>
+                      <button onClick={() => socialAuth("windowslive")}>
+                        <MicrosoftIcon /> sign in for free
                       </button>
                     </div>
                   )}
@@ -142,10 +157,12 @@ export default function HomeModule() {
                 sm={12}
                 xs={12}
                 css={`
-                  margin-right: -44px;
                   display: flex;
-                  justify-content: flex-end;
-                  @media screen and (max-width: 1257px) {
+                  @media (min-width: 1292px) {
+                    justify-content: flex-end;
+                    margin-right: -44px;
+                  }
+                  @media screen and (max-width: 1290px) {
                     justify-content: center;
                   }
                 `}

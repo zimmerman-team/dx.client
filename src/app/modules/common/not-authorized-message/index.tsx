@@ -66,7 +66,7 @@ export function NotAuthorizedMessageModule(props: {
         />{" "}
         <p
           css={`
-            font-family: "GothamNarrow-Bold", sans-serif;
+            font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
             font-size: 18px;
             font-style: normal;
             font-weight: 400;

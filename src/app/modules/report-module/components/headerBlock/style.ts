@@ -1,8 +1,9 @@
 import { css } from "styled-components/macro";
 
 export const headerBlockcss = {
-  container: (backgroundColor: string) => css`
+  container: (backgroundColor: string, istoolboxOpen: boolean) => css`
     width: 100%;
+    transition: width 225ms cubic-bezier(0, 0, 0.2, 1) 0ms;
     height: 215px;
     padding: 35px 0;
     position: relative;
@@ -16,7 +17,7 @@ export const headerBlockcss = {
     outline: none;
     font-size: 28.9px;
     font-weight: 400;
-    font-family: "GothamNarrow-Bold", sans-serif;
+    font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
     line-height: 48px;
     background: inherit;
     padding-left: 0px;

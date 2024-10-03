@@ -22,6 +22,7 @@ export const APIModel = <QueryModel, ResponseModel>(
   },
   crudData: null,
   errorData: null,
+  planWarning: null,
   onError: action((state, payload: Errors) => {
     state.loading = false;
     state.errorData = payload;
@@ -105,6 +106,12 @@ export const APIModel = <QueryModel, ResponseModel>(
   setCrudData: action((state, payload: any) => {
     state.crudData = payload;
   }),
+  setPlanWarning: action((state, payload: any) => {
+    state.planWarning = payload;
+  }),
+  clearPlanWarning: action((state) => {
+    state.planWarning = null;
+  }),
   clear: action((state) => {
     state.loading = false;
     state.success = false;
@@ -114,6 +121,7 @@ export const APIModel = <QueryModel, ResponseModel>(
     };
     state.crudData = null;
     state.errorData = null;
+    state.planWarning = null;
   }),
   fetchWithEndpoint: thunk(
     async (actions, query: RequestValues<QueryModel>) => {
@@ -150,7 +158,12 @@ export const APIModel = <QueryModel, ResponseModel>(
       })
       .then(
         (resp: AxiosResponse) => {
-          if (resp.data) {
+          if (resp.data.data) {
+            actions.onSuccess({ ...resp.data.data, isUpdateCrudData: true });
+            if (resp.data.planWarning) {
+              actions.setPlanWarning(resp.data.planWarning);
+            }
+          } else if (resp.data) {
             actions.onSuccess({ ...resp.data, isUpdateCrudData: true });
           }
         },

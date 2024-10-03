@@ -59,16 +59,9 @@ import { useSearchMediaSources } from "app/hooks/useSearchMediaSources";
 import { useDebounce } from "react-use";
 import Skeleton from "@material-ui/lab/Skeleton";
 import { useInfinityScroll } from "app/hooks/useInfinityScroll";
+import { IHeaderDetails } from "app/modules/report-module/components/right-panel/data";
+import { useCheckUserPlan } from "app/hooks/useCheckUserPlan";
 
-interface IHeaderDetails {
-  title: string;
-  showHeader: boolean;
-  description: EditorState;
-  backgroundColor: string;
-  titleColor: string;
-  descriptionColor: string;
-  dateColor: string;
-}
 interface Props {
   showHeaderItem: boolean;
   headerDetails: IHeaderDetails;
@@ -86,7 +79,7 @@ const Button = withStyles(() => ({
     fontSize: "14px",
     borderRadius: "0px",
     backgroundColor: "#C7CDD1",
-    fontFamily: "GothamNarrow-Bold, sans-serif",
+    fontFamily: "GothamNarrow-Bold, 'Helvetica Neue', sans-serif",
     "&:first-child": {
       borderRight: "1px solid #f1f3f5",
     },
@@ -98,7 +91,7 @@ const Button = withStyles(() => ({
     color: "#fff",
     fontSize: "14px",
     textTransform: "none",
-    fontFamily: "GothamNarrow-Book, sans-serif",
+    fontFamily: "GothamNarrow-Book, 'Helvetica Neue', sans-serif",
   },
 }))(MuiButton);
 
@@ -181,6 +174,107 @@ const imageSources = [
   // { value: "shutterstock", label: "Shutterstock" },
 ];
 
+const UpgradeCard = (props: { onClose: () => void }) => {
+  const history = useHistory();
+
+  return (
+    <div
+      css={`
+        width: 93%;
+        position: absolute;
+        right: 13px;
+        bottom: 21px;
+        padding: 26px;
+        border-radius: 10px;
+        background: #fff;
+        box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.25);
+        z-index: 1;
+      `}
+    >
+      <h2
+        css={`
+          margin: 0;
+          color: #231d2c;
+          font-family: "GothamNarrow-Bold", sans-serif;
+          font-size: 20px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: normal;
+        `}
+      >
+        Enhance Your Reports with Multimedia!
+      </h2>
+      <p
+        css={`
+          margin: 0;
+          font-family: "GothamNarrow-Book", sans-serif;
+          font-size: 15px;
+          font-style: normal;
+          font-weight: 325;
+          line-height: normal;
+        `}
+      >
+        Currently, adding videos and images to reports is a feature exclusive to
+        our premium plans. Upgrade now to bring your data to life with engaging
+        visuals and make your reports more impactful.
+      </p>
+
+      <div
+        css={`
+          display: flex;
+          align-items: center;
+          gap: 16px;
+          padding-top: 43px;
+          justify-content: flex-end;
+        `}
+      >
+        <p
+          css={`
+            text-transform: uppercase;
+            flex-shrink: 0;
+            font-family: Inter;
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: normal;
+            color: #231d2c;
+            cursor: pointer;
+          `}
+          onClick={props.onClose}
+        >
+          Not Now
+        </p>
+
+        <button
+          css={`
+            padding: 16px 24px;
+            border-radius: 48px;
+            background: #6061e5;
+            color: #fff;
+            outline: none;
+            border: none;
+            font-family: "Inter", sans-serif;
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: normal;
+            text-transform: uppercase;
+            cursor: pointer;
+            flex-shrink: 0;
+          `}
+          type="button"
+          onClick={() => {
+            history.push("/pricing");
+            props.onClose();
+          }}
+        >
+          Upgrade Now
+        </button>
+      </div>
+    </div>
+  );
+};
+
 export function ReportRightPanelCreateView(props: Readonly<Props>) {
   const [currentView, setCurrentView] = useRecoilState(
     reportRightPanelViewAtom
@@ -194,6 +288,10 @@ export function ReportRightPanelCreateView(props: Readonly<Props>) {
     whiteBackgroundOnly + " border-radius: 0px 0px 0px 8px;";
   const whiteBackgroundNotRounded =
     whiteBackgroundOnly + " border-radius: 0px 0px 0px 0px";
+
+  const { userPlan } = useCheckUserPlan();
+
+  const [open, setOpen] = useState(true);
 
   const [elementItemDetails, setElementItemDetails] = React.useState([
     {
@@ -293,6 +391,7 @@ export function ReportRightPanelCreateView(props: Readonly<Props>) {
         height: 100%;
         flex-direction: column;
         box-shadow: 0px 0px 10px 0px rgba(152, 161, 170, 0.6);
+        position: relative;
       `}
     >
       <div
@@ -399,6 +498,11 @@ export function ReportRightPanelCreateView(props: Readonly<Props>) {
           `}
         ></div>
       </div>
+      {open &&
+      currentView === "media" &&
+      userPlan?.planData?.name === "Free" ? (
+        <UpgradeCard onClose={() => setOpen(false)} />
+      ) : null}
 
       <PanelLabel currentView={currentView} />
       {currentView === "elements" && (
@@ -448,6 +552,11 @@ export function ReportRightPanelCreateView(props: Readonly<Props>) {
               key={item.elementType}
               {...item}
               disabled={false}
+              upgradeRequired={
+                (item.elementType === ReportElementsType.IMAGE ||
+                  item.elementType === ReportElementsType.VIDEO) &&
+                userPlan?.planData?.name === "Free"
+              }
               ItemDetails={mediaItemDetails}
               setItemDetails={setMediaItemDetails}
               index={index}
@@ -831,6 +940,7 @@ function ElementItem(props: {
   index?: number;
   description: string;
   draggable?: boolean;
+  upgradeRequired?: boolean;
 }) {
   const nullRef = React.useRef(null);
 
@@ -950,9 +1060,13 @@ function ElementItem(props: {
             props.disabled as boolean,
             isDragging,
             props.draggable,
-            dropDown
+            dropDown,
+            props.upgradeRequired
           )}
-          onClick={() => setDropDown((prev) => !prev)}
+          onClick={() => {
+            if (props.disabled || props.upgradeRequired) return;
+            setDropDown((prev) => !prev);
+          }}
         >
           {props.leftIcon}
           <div>
@@ -1223,7 +1337,7 @@ function CreateChartCard(props: {
         <div
           css={`
             h1 {
-              font-family: "GothamNarrow-Bold", sans-serif;
+              font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
               color: #262c34;
               font-size: 18px;
               line-height: 20px;
@@ -1231,7 +1345,7 @@ function CreateChartCard(props: {
               font-weight: bold;
             }
             p {
-              font-family: "GothamNarrow", sans-serif;
+              font-family: "GothamNarrow", "Helvetica Neue", sans-serif;
               color: #495057;
               font-size: 10px;
               line-height: 15px;

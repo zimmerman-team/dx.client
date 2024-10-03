@@ -5,7 +5,7 @@ import { useUpdateEffect } from "react-use";
 import IconButton from "@material-ui/core/IconButton";
 import { useHistory, useLocation, useParams } from "react-router-dom";
 import { itemSpacing, containerGap } from "app/modules/report-module/data";
-import RowstructureDisplay from "app/modules/report-module/sub-module/rowStructure/rowStructureDisplay";
+import RowstructureDisplay from "app/modules/report-module/components/rowStructure/rowStructureDisplay";
 import { ReactComponent as CloseIcon } from "app/modules/report-module/asset/closeIcon.svg";
 import { ReactComponent as DeleteIcon } from "app/modules/report-module/asset/deleteIcon.svg";
 import {
@@ -15,7 +15,7 @@ import {
 import {
   blockcss,
   containercss,
-} from "app/modules/report-module/sub-module/rowStructure/style";
+} from "app/modules/report-module/components/rowStructure/style";
 import { IFramesArray } from "app/modules/report-module/views/create/data";
 import { useOnClickOutside } from "usehooks-ts";
 import { ToolbarPluginsType } from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
@@ -146,7 +146,6 @@ interface IRowStructureType {
 
 export default function RowFrame(props: RowFrameProps) {
   const history = useHistory();
-
   const { handleRowFrameItemResize } = usehandleRowFrameItemResize(
     props.updateFramesArray
   );
@@ -395,6 +394,7 @@ export default function RowFrame(props: RowFrameProps) {
         onRowBoxItemResize={onRowBoxItemResize}
         setPlugins={props.setPlugins}
         onSave={props.onSave}
+        forceSelectedType={props.forceSelectedType}
       />
     ),
     oneByTwo: (
@@ -417,6 +417,7 @@ export default function RowFrame(props: RowFrameProps) {
         onRowBoxItemResize={onRowBoxItemResize}
         setPlugins={props.setPlugins}
         onSave={props.onSave}
+        forceSelectedType={props.forceSelectedType}
       />
     ),
     oneByThree: (
@@ -439,6 +440,7 @@ export default function RowFrame(props: RowFrameProps) {
         onRowBoxItemResize={onRowBoxItemResize}
         setPlugins={props.setPlugins}
         onSave={props.onSave}
+        forceSelectedType={props.forceSelectedType}
       />
     ),
     oneByFour: (
@@ -461,6 +463,7 @@ export default function RowFrame(props: RowFrameProps) {
         setPlugins={props.setPlugins}
         onSave={props.onSave}
         previewItems={props.previewItems}
+        forceSelectedType={props.forceSelectedType}
       />
     ),
     oneByFive: (
@@ -483,6 +486,7 @@ export default function RowFrame(props: RowFrameProps) {
         onRowBoxItemResize={onRowBoxItemResize}
         setPlugins={props.setPlugins}
         onSave={props.onSave}
+        forceSelectedType={props.forceSelectedType}
       />
     ),
   };
@@ -509,7 +513,7 @@ export default function RowFrame(props: RowFrameProps) {
                 css={`
                   margin-bottom: 0;
                   color: #000;
-                  font-family: "GothamNarrow-bold", sans-serif;
+                  font-family: "GothamNarrow-bold", "Helvetica Neue", sans-serif;
                 `}
               >
                 Select your row structure
@@ -808,7 +812,6 @@ function Divider(props: {
         display: flex;
         align-items: center;
         position: relative;
-        background: pink;
       `}
     >
       {handleDisplay && (

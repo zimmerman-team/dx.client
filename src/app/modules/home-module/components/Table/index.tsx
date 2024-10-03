@@ -12,19 +12,21 @@ import { isValidDate } from "app/utils/isValidDate";
 interface IData {
   id: string;
   name: string;
-  description: string;
+  description?: string;
   createdDate: Date;
   type: string;
 }
-export function HomepageTable(props: {
-  inChartBuilder?: boolean;
-  onItemClick?: (v: string) => void;
-  all?: boolean;
-  tableData: {
-    columns: { key: string; label: string; icon?: React.ReactNode }[];
-    data: any[];
-  };
-}) {
+export function HomepageTable(
+  props: Readonly<{
+    inChartBuilder?: boolean;
+    onItemClick?: (v: string) => void;
+    all?: boolean;
+    tableData: {
+      columns: { key: string; label: string; icon?: React.ReactNode }[];
+      data: any[];
+    };
+  }>
+) {
   const history = useHistory();
 
   const location = useLocation();
@@ -77,7 +79,7 @@ export function HomepageTable(props: {
 
             > tr > th {
               font-size: 14px;
-              font-family: "GothamNarrow-Bold", sans-serif;
+              font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
             }
           `}
         >

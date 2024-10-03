@@ -12,6 +12,9 @@ export const styles = {
     background: #f4f4f4;
     flex-direction: column;
     justify-content: center;
+    @media (max-width: 881px) {
+      top: 66px;
+    }
   `,
   innercontainer: css`
     height: 100%;
@@ -20,10 +23,6 @@ export const styles = {
     flex-direction: row;
     justify-content: space-between;
     gap: 10px;
-
-    @media (max-width: 600px) {
-      padding: 13px 16px 0 16px;
-    }
   `,
   backToEdit: css`
     height: 36px;
@@ -52,7 +51,7 @@ export const styles = {
     align-items: center;
     height: 32px;
     padding: 10px 20px;
-    font-family: "GothamNarrow-Bold", sans-serif;
+    font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
     gap: 10px;
     outline: none;
     border: none;
@@ -120,13 +119,21 @@ export const styles = {
     &:focus {
       background: #f1f3f5;
     }
+    @media (max-width: 600px) {
+      font-size: 20px;
+    }
   `,
   endContainer: css`
     display: flex;
+    right: 23px;
+    position: absolute;
     gap: 13px;
-    flex-shrink: 0;
-    justify-content: flex-end;
-    align-items: center;
+    @media (max-width: 1216px) {
+      right: 20px;
+    }
+    @media (max-width: 881px) {
+      right: 11px;
+    }
   `,
   iconbtns: css`
     display: flex;

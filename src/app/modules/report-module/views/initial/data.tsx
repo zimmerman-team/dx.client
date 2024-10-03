@@ -54,7 +54,7 @@ export const TemplateItem = ({
     <div
       css={`
         height: 125px;
-        width: 85%;
+        width: 296px;
         position: relative;
         padding: 12px 16px;
         background: #f2f7fd;
@@ -65,6 +65,14 @@ export const TemplateItem = ({
             cursor: pointer;
             background: #6061e5;
           }
+        }
+        @media (min-width: 1266px) {
+          @media (max-width: 1325px) {
+            width: 275px;
+          }
+        }
+        @media (max-width: 1265px) {
+          width: 100%;
         }
       `}
       onClick={handleClick}

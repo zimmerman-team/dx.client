@@ -5,6 +5,7 @@
 import React, { Suspense, lazy } from "react";
 import { socialAuth } from "app/utils/socialAuth";
 import { useScrollToTop } from "app/hooks/useScrollToTop";
+import { useRouteListener } from "app/hooks/useRouteListener";
 import { PageLoader } from "app/modules/common/page-loader";
 import { RouteWithAppBar } from "app/utils/RouteWithAppBar";
 import { Route, Switch, useHistory, useLocation } from "react-router-dom";
@@ -24,6 +25,8 @@ import {
   PaymentSuccessCallbackModule,
   PaymentCanceledCallbackModule,
 } from "app/modules/callback-module/payment";
+import { useRecoilValue } from "recoil";
+import { fetchPlanLoadingAtom } from "./state/recoil/atoms";
 
 const LandingModule = lazy(
   () => import("app/modules/home-module/sub-modules/landing")
@@ -103,6 +106,15 @@ const Auth0ProviderWithRedirectCallback = (props: {
   );
 };
 
+const PlanLoader = () => {
+  const planLoading = useRecoilValue(fetchPlanLoadingAtom);
+
+  if (planLoading) {
+    return <PageLoader />;
+  }
+  return null;
+};
+
 const AuthLoader = () => {
   const { isLoading } = useAuth0();
 
@@ -160,8 +172,6 @@ const IntercomBootupComponent = () => {
   const { isAuthenticated, user, getAccessTokenSilently } = useAuth0();
   const location = useLocation();
 
-  const APP_ID = "tfvurn19";
-
   React.useEffect(() => {
     if (window?.Intercom) {
       window.Intercom("update");
@@ -193,7 +203,7 @@ const IntercomBootupComponent = () => {
               // @ts-ignore
               window.Intercom("boot", {
                 api_base: "https://api-iam.intercom.io",
-                app_id: APP_ID,
+                app_id: process.env.REACT_APP_INTERCOM_APP_ID,
                 name: user?.name, // Full name
                 email: user?.email, // the email for your user
                 user_id: user?.sub, // user_id as a string
@@ -209,7 +219,7 @@ const IntercomBootupComponent = () => {
         // @ts-ignore
         window.Intercom("boot", {
           api_base: "https://api-iam.intercom.io",
-          app_id: APP_ID,
+          app_id: process.env.REACT_APP_INTERCOM_APP_ID,
         });
       }
   }, [isAuthenticated]);
@@ -219,6 +229,7 @@ const IntercomBootupComponent = () => {
 
 export function MainRoutes() {
   useScrollToTop();
+  useRouteListener();
 
   return (
     <Auth0ProviderWithRedirectCallback
@@ -230,8 +241,11 @@ export function MainRoutes() {
       }}
     >
       <AuthLoader />
+      <PlanLoader />
       <OneTapLoginComponent />
-      {process.env.ENV_TYPE === "prod" ? <IntercomBootupComponent /> : null}
+      {process.env.REACT_APP_ENV_TYPE === "prod" ? (
+        <IntercomBootupComponent />
+      ) : null}
       <Suspense fallback={<PageLoader />}>
         <Switch>
           <Route exact path="/callback">

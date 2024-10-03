@@ -28,6 +28,11 @@ export const styles = {
         font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
       }
     }
+    @media (min-width: 768px) {
+      @media (max-width: 881px) {
+        top: 113px;
+      }
+    }
   `,
   contentlist: css`
     width: 100%;

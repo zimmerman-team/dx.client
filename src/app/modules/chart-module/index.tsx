@@ -23,7 +23,7 @@ import {
 import { PageLoader } from "app/modules/common/page-loader";
 import { useChartsRawData } from "app/hooks/useChartsRawData";
 import { NoMatchPage } from "app/modules/common/no-match-page";
-import ChartModuleDataView from "app/modules/chart-module/routes/data";
+import ChartModuleDataView from "app/modules/chart-module/routes/select-data";
 import { ChartSubheaderToolbar } from "./components/chartSubheaderToolbar";
 import ChartBuilderMapping from "app/modules/chart-module/routes/mapping";
 import ChartBuilderFilters from "app/modules/chart-module/routes/filters";
@@ -38,6 +38,8 @@ import {
   routeToConfig,
   ChartRenderedItem,
   defaultChartOptions,
+  chartViews,
+  chartPaths,
 } from "app/modules/chart-module/data";
 import { NotAuthorizedMessageModule } from "app/modules/common/not-authorized-message";
 import { isEmpty } from "lodash";
@@ -45,11 +47,18 @@ import useResizeObserver from "use-resize-observer";
 import { ChartType } from "app/modules/chart-module/components/common-chart";
 import { getRequiredFieldsAndErrors } from "app/modules/chart-module/routes/mapping/utils";
 import axios from "axios";
-import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
+import {
+  useRecoilState,
+  useRecoilValue,
+  useResetRecoilState,
+  useSetRecoilState,
+} from "recoil";
 import {
   chartFromReportAtom,
   isChartAIAgentActive,
   isChartAutoMappedAtom,
+  newChartAtom,
+  planDialogAtom,
 } from "app/state/recoil/atoms";
 import { IDatasetDetails } from "./components/toolbox/steps/panels-content/SelectDataset";
 
@@ -58,6 +67,7 @@ export default function ChartModule() {
   const token = useStoreState((state) => state.AuthToken.value);
   const history = useHistory();
   const { page, view } = useParams<{ page: string; view?: string }>();
+  const isValidView = Object.values(chartViews).find((v) => v === view);
   const [chartFromAPI, setChartFromAPI] =
     React.useState<ChartRenderedItem | null>(null);
   const [visualOptions, setVisualOptions] = useSessionStorage<any>(
@@ -65,8 +75,12 @@ export default function ChartModule() {
     {}
   );
 
+  const setPlanDialog = useSetRecoilState(planDialogAtom);
+
+  const setNewChart = useSetRecoilState(newChartAtom);
+
   const [rawViz, setRawViz] = React.useState<any>(null);
-  const [toolboxOpen, setToolboxOpen] = React.useState(Boolean(view));
+  const [toolboxOpen, setToolboxOpen] = React.useState(Boolean(isValidView));
   const [savedChanges, setSavedChanges] = React.useState<boolean>(false);
   const defaultChartTitle = "Untitled Chart";
   const [chartName, setChartName] = React.useState(defaultChartTitle);
@@ -300,7 +314,27 @@ export default function ChartModule() {
       });
       if (page === "new") {
         const response = await onSave();
-        const data = response?.data;
+        const data = response?.data?.data;
+        if (response?.data.error && response?.data.errorType === "planError") {
+          return setPlanDialog({
+            open: true,
+            message: response?.data.error,
+            tryAgain: "",
+            onTryAgain: () => {},
+          });
+        }
+        if (response?.data.planWarning) {
+          setPlanDialog({
+            open: true,
+            message: response.data.planWarning,
+            tryAgain: "",
+            onTryAgain: () => {},
+          });
+        }
+        setNewChart({
+          state: true,
+          chartId: data.id,
+        });
         history.push(
           `/chart/${data.id}/mapping${
             chartFromReport.state
@@ -381,15 +415,6 @@ export default function ChartModule() {
   const renderedChartMappedData = React.useMemo(() => {
     return get(chartFromAPI, "mappedData", []);
   }, [chartFromAPI]);
-
-  const renderedChartSsr = React.useMemo(() => {
-    return get(chartFromAPI, "ssr", false);
-  }, [chartFromAPI]);
-
-  const activeRenderedChartSsr = React.useMemo(
-    () => Boolean(renderedChartSsr),
-    [renderedChartSsr]
-  );
 
   function setVisualOptionsOnChange(chartType: string | null = null) {
     const options = {
@@ -571,11 +596,16 @@ export default function ChartModule() {
                       : "100%"};
 
                     transition: width 225ms cubic-bezier(0, 0, 0.2, 1) 0ms;
+                    @media (min-width: 768px) {
+                      @media (max-width: 1024px) {
+                        width: 100%;
+                      }
+                    }
                   `}
                   ref={ref}
                 >
                   <Switch>
-                    <Route path="/chart/:page/customize">
+                    <Route exact path={chartPaths.customize}>
                       <ChartBuilderCustomize
                         loading={loading}
                         dimensions={dimensions}
@@ -584,7 +614,6 @@ export default function ChartModule() {
                         renderedChart={content}
                         visualOptions={visualOptions}
                         setVisualOptions={setVisualOptions}
-                        renderedChartSsr={activeRenderedChartSsr}
                         renderedChartMappedData={renderedChartMappedData}
                         renderedChartType={chartType as ChartType}
                         setChartErrorMessage={setChartErrorMessage}
@@ -596,7 +625,7 @@ export default function ChartModule() {
                       />
                     </Route>
 
-                    <Route path="/chart/:page/filters">
+                    <Route exact path={chartPaths.filters}>
                       <ChartBuilderFilters
                         loading={loading}
                         renderedChart={content}
@@ -604,7 +633,6 @@ export default function ChartModule() {
                         visualOptions={visualOptions}
                         containerRef={containerRef}
                         setVisualOptions={setVisualOptions}
-                        renderedChartSsr={activeRenderedChartSsr}
                         renderedChartMappedData={renderedChartMappedData}
                         renderedChartType={chartType as ChartType}
                         setChartErrorMessage={setChartErrorMessage}
@@ -615,7 +643,7 @@ export default function ChartModule() {
                         chartErrorMessage={chartErrorMessage}
                       />
                     </Route>
-                    <Route path="/chart/:page/mapping">
+                    <Route exact path={chartPaths.mapping}>
                       <ChartBuilderMapping
                         loading={loading}
                         visualOptions={visualOptions}
@@ -623,7 +651,6 @@ export default function ChartModule() {
                         dimensions={dimensions}
                         renderedChart={content}
                         containerRef={containerRef}
-                        renderedChartSsr={activeRenderedChartSsr}
                         renderedChartMappedData={renderedChartMappedData}
                         renderedChartType={chartType as ChartType}
                         setChartErrorMessage={setChartErrorMessage}
@@ -634,7 +661,7 @@ export default function ChartModule() {
                         chartErrorMessage={chartErrorMessage}
                       />
                     </Route>
-                    <Route path="/chart/:page/chart-type">
+                    <Route exact path={chartPaths.chartType}>
                       <ChartBuilderChartType
                         loading={loading}
                         loadDataset={loadDataset}
@@ -644,7 +671,7 @@ export default function ChartModule() {
                         setVisualOptionsOnChange={setVisualOptionsOnChange}
                       />
                     </Route>
-                    <Route path="/chart/:page/preview-data">
+                    <Route exact path={chartPaths.previewData}>
                       <ChartBuilderPreview
                         loading={loading}
                         data={sampleData}
@@ -657,20 +684,19 @@ export default function ChartModule() {
                         chartErrorMessage={chartErrorMessage}
                       />
                     </Route>
-                    <Route path="/chart/:page/data">
+                    <Route exact path={chartPaths.data}>
                       <ChartModuleDataView
                         loadDataset={loadDataset}
                         toolboxOpen={toolboxOpen}
                         setChartFromAPI={setChartFromAPI}
                       />
                     </Route>
-                    <Route path="/chart/:page/preview">
+                    <Route exact path={chartPaths.preview}>
                       <ChartBuilderPreviewTheme
                         loading={loading || isChartLoading}
                         visualOptions={visualOptions}
                         renderedChart={renderedChart}
                         setVisualOptions={setVisualOptions}
-                        renderedChartSsr={renderedChartSsr}
                         renderedChartMappedData={renderedChartMappedData}
                         editable={!isPreviewMode || (page === "new" && !view)}
                         setIsPreviewView={setIsPreviewView}
@@ -684,13 +710,12 @@ export default function ChartModule() {
                         chartErrorMessage={chartErrorMessage}
                       />
                     </Route>
-                    <Route path="/chart/:page">
+                    <Route exact path={chartPaths.detail}>
                       <ChartBuilderPreviewTheme
                         loading={loading || isChartLoading}
                         visualOptions={visualOptions}
                         renderedChart={renderedChart}
                         setVisualOptions={setVisualOptions}
-                        renderedChartSsr={renderedChartSsr}
                         renderedChartMappedData={renderedChartMappedData}
                         editable={!isPreviewMode}
                         setIsPreviewView={setIsPreviewView}

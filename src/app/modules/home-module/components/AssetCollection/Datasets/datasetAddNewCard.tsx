@@ -53,7 +53,7 @@ export default function DatasetAddnewCard() {
           <p>
             <p
               css={`
-                fonrt-family: "GothamNarrow-Bold", sans-serif;
+                fonrt-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
                 margin: auto;
                 color: #ffffff;
                 font-size: 18px;

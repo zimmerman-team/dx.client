@@ -19,6 +19,7 @@ test("data should be processing", async () => {
       processingError={null}
       setProcessingError={mockSetProcessingError}
       tryAgain={mockTryAgain}
+      processingMessage=""
     />
   );
 
@@ -43,6 +44,7 @@ test("when estimated times <=0, it should display 'finishing up...'", async () =
       processingError={null}
       setProcessingError={mockSetProcessingError}
       tryAgain={mockTryAgain}
+      processingMessage=""
     />
   );
   const estimatedTime = screen.getByTestId(estimatedTimeId);
@@ -62,6 +64,7 @@ test('when estimated times > 60, it should display "minutes and seconds (estimat
       processingError={null}
       setProcessingError={mockSetProcessingError}
       tryAgain={mockTryAgain}
+      processingMessage=""
     />
   );
   const estimatedTime = screen.getByTestId(estimatedTimeId);
@@ -81,6 +84,7 @@ test("renders processing message when processingError is true", async () => {
       processingError={defaultProcessingError}
       setProcessingError={mockSetProcessingError}
       tryAgain={mockTryAgain}
+      processingMessage=""
     />
   );
   const ErrorText = screen.getByTestId("error-message");
