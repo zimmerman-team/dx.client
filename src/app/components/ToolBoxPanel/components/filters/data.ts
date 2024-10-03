@@ -3,6 +3,7 @@ import { filter } from "lodash";
 export interface FilterGroupOptionModel {
   label: string;
   value: string;
+  count?: string;
   subOptions?: FilterGroupOptionModel[];
 }
 

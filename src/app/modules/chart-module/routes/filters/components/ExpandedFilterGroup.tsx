@@ -485,7 +485,7 @@ function FilterOption(props: FilterOptionProps) {
               }
             />
           }
-          label={props.label}
+          label={props.label + ` (${props?.count ?? ""})`}
         />
         {props.subOptions && (
           <React.Fragment>
