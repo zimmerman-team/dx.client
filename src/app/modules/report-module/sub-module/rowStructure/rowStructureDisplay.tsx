@@ -39,7 +39,6 @@ interface RowStructureDisplayProps {
   selectedTypeHistory: string[];
   rowContentWidths: number[];
   rowContentHeights: number[];
-  setSelectedType: React.Dispatch<React.SetStateAction<string>>;
   updateFramesArray: Updater<IFramesArray[]>;
   deleteFrame: (id: string) => void;
   setSelectedTypeHistory: React.Dispatch<React.SetStateAction<string[]>>;
@@ -59,6 +58,7 @@ interface RowStructureDisplayProps {
   setPlugins: React.Dispatch<React.SetStateAction<ToolbarPluginsType>>;
   onSave: (type: "create" | "edit") => Promise<void>;
   forceSelectedType: string | undefined;
+  setTempRowState: React.Dispatch<React.SetStateAction<IFramesArray>>;
 }
 
 export default function RowstructureDisplay(
@@ -198,6 +198,7 @@ export default function RowstructureDisplay(
                       props.selectedType,
                       "",
                     ]);
+                    props.setTempRowState(props.framesArray[props.rowIndex]);
                   }}
                   data-cy="edit-row-structure-button"
                 >

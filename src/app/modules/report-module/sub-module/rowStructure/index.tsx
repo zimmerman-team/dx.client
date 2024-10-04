@@ -1,7 +1,6 @@
 import React, { useRef } from "react";
 import get from "lodash/get";
 import { SetterOrUpdater, useRecoilState, useResetRecoilState } from "recoil";
-import { useUpdateEffect } from "react-use";
 import IconButton from "@material-ui/core/IconButton";
 import { useHistory, useLocation, useParams } from "react-router-dom";
 import { itemSpacing, containerGap } from "app/modules/report-module/data";
@@ -137,8 +136,14 @@ interface RowFrameProps {
 }
 
 interface IRowStructureType {
-  selectedType: string;
-  setSelectedType: React.Dispatch<React.SetStateAction<string>>;
+  handleRowFrameStructureTypeSelection: (
+    structure:
+      | "oneByOne"
+      | "oneByTwo"
+      | "oneByThree"
+      | "oneByFour"
+      | "oneByFive"
+  ) => void;
   tourStep: number;
   setTourStep: SetterOrUpdater<number>;
   endReportTour: () => void;
@@ -158,6 +163,10 @@ export default function RowFrame(props: RowFrameProps) {
 
   const clearReportCreationTourStep = useResetRecoilState(
     reportCreationTourStepAtom
+  );
+
+  const [tempRowState, setTempRowState] = React.useState<IFramesArray>(
+    {} as IFramesArray
   );
 
   const [selectedTypeHistory, setSelectedTypeHistory] = React.useState<
@@ -217,7 +226,6 @@ export default function RowFrame(props: RowFrameProps) {
 
   const handleRowFrameStructureTypeSelection = (
     structure:
-      | null
       | "oneByOne"
       | "oneByTwo"
       | "oneByThree"
@@ -228,6 +236,7 @@ export default function RowFrame(props: RowFrameProps) {
     let contentTypes: ("text" | "divider" | "chart" | null)[] = [];
     let contentWidths: number[] = [];
     let contentHeights: number[] = [];
+    setSelectedType(structure);
     switch (structure) {
       case "oneByOne":
         content = [null];
@@ -283,22 +292,25 @@ export default function RowFrame(props: RowFrameProps) {
         //new structure while retaining the previous content
         let draftContent = draft[rowIndex].content;
         let draftContentTypes = draft[rowIndex].contentTypes;
-        if (content.length < draftContent.length) {
-          draftContent = draftContent.slice(
-            -(draftContent.length - content.length)
-          );
-          draftContentTypes = draftContentTypes.slice(
-            -(contentTypes.length - draftContentTypes.length)
-          );
-        } else if (content.length > draftContent.length) {
-          draftContent = [
-            ...draftContent,
-            ...Array(content.length - draftContent.length).fill(null),
-          ];
-          draftContentTypes = [
-            ...draftContentTypes,
-            ...Array(contentTypes.length - draftContentTypes.length).fill(null),
-          ];
+        if (tempRowState.id === draft[rowIndex].id) {
+          if (content.length < tempRowState.content.length) {
+            draftContent = tempRowState.content.slice(0, content.length);
+            draftContentTypes = tempRowState.contentTypes.slice(
+              0,
+              contentTypes.length
+            );
+          } else if (content.length > tempRowState.content.length) {
+            draftContent = [
+              ...tempRowState.content,
+              ...Array(content.length - tempRowState.content.length).fill(null),
+            ];
+            draftContentTypes = [
+              ...tempRowState.contentTypes,
+              ...Array(
+                contentTypes.length - tempRowState.contentTypes.length
+              ).fill(null),
+            ];
+          }
         }
         draft[rowIndex] = {
           ...draft[rowIndex],
@@ -313,7 +325,6 @@ export default function RowFrame(props: RowFrameProps) {
           },
         };
       }
-      // return tempPrev;
     });
   };
 
@@ -357,17 +368,6 @@ export default function RowFrame(props: RowFrameProps) {
     }
   }, [props.forceSelectedType]);
 
-  useUpdateEffect(() => {
-    handleRowFrameStructureTypeSelection(
-      selectedType as
-        | "oneByOne"
-        | "oneByTwo"
-        | "oneByThree"
-        | "oneByFour"
-        | "oneByFive"
-    );
-  }, [selectedType]);
-
   const contentContainer = document.getElementById("content-container");
   if (!contentContainer || rowStructureDetailItems.length === 0)
     return <div>loading</div>;
@@ -385,7 +385,6 @@ export default function RowFrame(props: RowFrameProps) {
         rowContentHeights={props.rowContentHeights}
         rowContentWidths={props.rowContentWidths}
         deleteFrame={deleteFrame}
-        setSelectedType={setSelectedType}
         selectedTypeHistory={selectedTypeHistory}
         setSelectedTypeHistory={setSelectedTypeHistory}
         rowStructureDetailItems={rowStructureDetailItems[0]}
@@ -394,6 +393,7 @@ export default function RowFrame(props: RowFrameProps) {
         setPlugins={props.setPlugins}
         onSave={props.onSave}
         forceSelectedType={props.forceSelectedType}
+        setTempRowState={setTempRowState}
       />
     ),
     oneByTwo: (
@@ -408,7 +408,6 @@ export default function RowFrame(props: RowFrameProps) {
         rowContentHeights={props.rowContentHeights}
         rowContentWidths={props.rowContentWidths}
         deleteFrame={deleteFrame}
-        setSelectedType={setSelectedType}
         selectedTypeHistory={selectedTypeHistory}
         setSelectedTypeHistory={setSelectedTypeHistory}
         rowStructureDetailItems={rowStructureDetailItems[1]}
@@ -417,6 +416,7 @@ export default function RowFrame(props: RowFrameProps) {
         setPlugins={props.setPlugins}
         onSave={props.onSave}
         forceSelectedType={props.forceSelectedType}
+        setTempRowState={setTempRowState}
       />
     ),
     oneByThree: (
@@ -431,7 +431,6 @@ export default function RowFrame(props: RowFrameProps) {
         rowContentHeights={props.rowContentHeights}
         rowContentWidths={props.rowContentWidths}
         deleteFrame={deleteFrame}
-        setSelectedType={setSelectedType}
         selectedTypeHistory={selectedTypeHistory}
         setSelectedTypeHistory={setSelectedTypeHistory}
         rowStructureDetailItems={rowStructureDetailItems[2]}
@@ -440,6 +439,7 @@ export default function RowFrame(props: RowFrameProps) {
         setPlugins={props.setPlugins}
         onSave={props.onSave}
         forceSelectedType={props.forceSelectedType}
+        setTempRowState={setTempRowState}
       />
     ),
     oneByFour: (
@@ -447,7 +447,6 @@ export default function RowFrame(props: RowFrameProps) {
         gap={containerGap}
         height={142}
         selectedType={selectedType}
-        setSelectedType={setSelectedType}
         selectedTypeHistory={selectedTypeHistory}
         setSelectedTypeHistory={setSelectedTypeHistory}
         rowStructureDetailItems={rowStructureDetailItems[3]}
@@ -463,6 +462,7 @@ export default function RowFrame(props: RowFrameProps) {
         onSave={props.onSave}
         previewItems={props.previewItems}
         forceSelectedType={props.forceSelectedType}
+        setTempRowState={setTempRowState}
       />
     ),
     oneByFive: (
@@ -472,7 +472,6 @@ export default function RowFrame(props: RowFrameProps) {
         rowId={props.rowId}
         rowIndex={props.rowIndex}
         selectedType={selectedType}
-        setSelectedType={setSelectedType}
         updateFramesArray={props.updateFramesArray}
         framesArray={props.framesArray}
         rowContentHeights={props.rowContentHeights}
@@ -486,6 +485,7 @@ export default function RowFrame(props: RowFrameProps) {
         setPlugins={props.setPlugins}
         onSave={props.onSave}
         forceSelectedType={props.forceSelectedType}
+        setTempRowState={setTempRowState}
       />
     ),
   };
@@ -547,36 +547,41 @@ export default function RowFrame(props: RowFrameProps) {
                 `}
               >
                 <OneByOne
-                  selectedType={selectedType}
-                  setSelectedType={setSelectedType}
+                  handleRowFrameStructureTypeSelection={
+                    handleRowFrameStructureTypeSelection
+                  }
                   tourStep={reportCreationTourStep}
                   setTourStep={setReportCreationTourStep}
                   endReportTour={props.endReportTour}
                 />
                 <OneByTwo
-                  selectedType={selectedType}
-                  setSelectedType={setSelectedType}
+                  handleRowFrameStructureTypeSelection={
+                    handleRowFrameStructureTypeSelection
+                  }
                   tourStep={reportCreationTourStep}
                   setTourStep={setReportCreationTourStep}
                   endReportTour={props.endReportTour}
                 />
                 <OneByThree
-                  selectedType={selectedType}
-                  setSelectedType={setSelectedType}
+                  handleRowFrameStructureTypeSelection={
+                    handleRowFrameStructureTypeSelection
+                  }
                   tourStep={reportCreationTourStep}
                   setTourStep={setReportCreationTourStep}
                   endReportTour={props.endReportTour}
                 />
                 <OneByFour
-                  selectedType={selectedType}
-                  setSelectedType={setSelectedType}
+                  handleRowFrameStructureTypeSelection={
+                    handleRowFrameStructureTypeSelection
+                  }
                   tourStep={reportCreationTourStep}
                   setTourStep={setReportCreationTourStep}
                   endReportTour={props.endReportTour}
                 />
                 <OneByFive
-                  selectedType={selectedType}
-                  setSelectedType={setSelectedType}
+                  handleRowFrameStructureTypeSelection={
+                    handleRowFrameStructureTypeSelection
+                  }
                   tourStep={reportCreationTourStep}
                   setTourStep={setReportCreationTourStep}
                   endReportTour={props.endReportTour}
@@ -602,7 +607,7 @@ const OneByOne = (props: IRowStructureType) => {
       props.setTourStep(3);
     } else {
       props.endReportTour();
-      props.setSelectedType("oneByOne");
+      props.handleRowFrameStructureTypeSelection("oneByOne");
     }
   };
   return (
@@ -628,7 +633,7 @@ const OneByTwo = (props: IRowStructureType) => {
     } else {
       props.endReportTour();
     }
-    props.setSelectedType("oneByTwo");
+    props.handleRowFrameStructureTypeSelection("oneByTwo");
   };
   return (
     <div css={blockcss} onClick={handleClick} data-cy="one-by-two-type">
@@ -658,7 +663,7 @@ const OneByThree = (props: IRowStructureType) => {
       props.setTourStep(3);
     } else {
       props.endReportTour();
-      props.setSelectedType("oneByThree");
+      props.handleRowFrameStructureTypeSelection("oneByThree");
     }
   };
   return (
@@ -690,7 +695,7 @@ const OneByFour = (props: IRowStructureType) => {
       props.setTourStep(3);
     } else {
       props.endReportTour();
-      props.setSelectedType("oneByFour");
+      props.handleRowFrameStructureTypeSelection("oneByFour");
     }
   };
   return (
@@ -723,7 +728,7 @@ const OneByFive = (props: IRowStructureType) => {
       props.setTourStep(3);
     } else {
       props.endReportTour();
-      props.setSelectedType("oneByFive");
+      props.handleRowFrameStructureTypeSelection("oneByFive");
     }
   };
   return (
