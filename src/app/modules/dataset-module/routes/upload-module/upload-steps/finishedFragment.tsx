@@ -7,8 +7,8 @@ import {
 import { useStoreActions } from "app/state/store/hooks";
 import { DatasetDataTable } from "app/modules/dataset-module/routes/upload-module/component/table/data-table";
 import { CssSnackbar, ISnackbarState } from "./previewFragment";
-import { ReactComponent as FullScreenIcon } from "../assets/full-screen.svg";
-import { ReactComponent as CloseFullScreenIcon } from "../assets/close-full-screen.svg";
+import { ReactComponent as FullScreenIcon } from "app/modules/dataset-module/routes/upload-module/assets/full-screen.svg";
+import { ReactComponent as CloseFullScreenIcon } from "app/modules/dataset-module/routes/upload-module/assets/close-full-screen.svg";
 import { ArrowBack } from "@material-ui/icons";
 import { useMediaQuery } from "usehooks-ts";
 import { DatasetListItemAPIModel } from "app/modules/dataset-module/data";

@@ -29,7 +29,7 @@ import {
   ReportUpdate,
 } from "app/state/api/action-reducers/reports";
 import axios, { AxiosResponse } from "axios";
-import { ReportSubheaderToolbar } from "../components/reportSubHeaderToolbar";
+import { ReportSubheaderToolbar } from "app/modules/report-module/components/reportSubHeaderToolbar";
 import { setMediaQueryForTest } from "app/utils/setMediaQueryForTest";
 
 interface MockProps {
@@ -165,6 +165,14 @@ const appSetup = (params: Params, newProps: Partial<MockProps> = {}) => {
   };
 };
 
+const setDefaultCrudData = (mockStore: any) => {
+  mockStore.getActions().reports.ReportGet.setCrudData({
+    id: "12345",
+    name: "test",
+    owner: "auth0|123",
+  });
+};
+
 //test cases
 describe("Tests for tablet and desktop view", () => {
   beforeEach(() => {
@@ -228,6 +236,11 @@ describe("Tests for tablet and desktop view", () => {
     expect(mockSetValues.name).toBe("new title");
   });
 
+  const waitForReportSave = (props: MockProps) => {
+    expect(props.onReportSave).toHaveBeenCalledWith("edit");
+    expect(history.location.pathname).toBe("/report/65dcb26aaf4c8500693f1ab7");
+  };
+
   test("clicking view report button should save report and go to report detail page", async () => {
     const user = userEvent.setup();
     jest
@@ -240,12 +253,7 @@ describe("Tests for tablet and desktop view", () => {
       name: /view report button/i,
     });
     await user.click(viewReportButton);
-    await waitFor(() => {
-      expect(props.onReportSave).toHaveBeenCalledWith("edit");
-      expect(history.location.pathname).toBe(
-        "/report/65dcb26aaf4c8500693f1ab7"
-      );
-    });
+    await waitFor(() => waitForReportSave(props));
   });
 
   test("clicking view report button in tablet view should save report and go to report detail page", async () => {
@@ -260,13 +268,10 @@ describe("Tests for tablet and desktop view", () => {
       name: /view-report-button-tablet/i,
     });
     await user.click(viewReportButton);
-    await waitFor(() => {
-      expect(props.onReportSave).toHaveBeenCalledWith("edit");
-      expect(history.location.pathname).toBe(
-        "/report/65dcb26aaf4c8500693f1ab7"
-      );
-    });
+    await waitFor(() => waitForReportSave(props));
   });
+
+  const autoSaveSwitchId = "auto-save-switch";
 
   test("autosave switch should toggle autosave state from false to true", async () => {
     const user = userEvent.setup();
@@ -277,9 +282,9 @@ describe("Tests for tablet and desktop view", () => {
       .mockReturnValue({ page: "65dcb26aaf4c8500693f1ab7", view: "edit" });
     render(app);
 
-    expect(screen.getByTestId("auto-save-switch")).not.toBeChecked();
+    expect(screen.getByTestId(autoSaveSwitchId)).not.toBeChecked();
 
-    await user.click(screen.getByTestId("auto-save-switch"));
+    await user.click(screen.getByTestId(autoSaveSwitchId));
     expect(props.setAutoSave).toHaveBeenCalledWith({
       isAutoSaveEnabled: true,
       enableAutoSaveSwitch: true,
@@ -295,9 +300,9 @@ describe("Tests for tablet and desktop view", () => {
       .spyOn(Router, "useParams")
       .mockReturnValue({ page: "65dcb26aaf4c8500693f1ab7", view: "edit" });
     render(app);
-    expect(screen.getByTestId("auto-save-switch")).toBeChecked();
+    expect(screen.getByTestId(autoSaveSwitchId)).toBeChecked();
 
-    await user.click(screen.getByTestId("auto-save-switch"));
+    await user.click(screen.getByTestId(autoSaveSwitchId));
     expect(props.setAutoSave).toHaveBeenCalledWith({
       isAutoSaveEnabled: false,
       enableAutoSaveSwitch: true,
@@ -371,13 +376,7 @@ describe("Tests for tablet and desktop view", () => {
     jest
       .spyOn(Router, "useParams")
       .mockReturnValue({ page: "65dcb26aaf4c8500693f1ab7", view: undefined });
-    act(() => {
-      mockStore.getActions().reports.ReportGet.setCrudData({
-        id: "12345",
-        name: "test",
-        owner: "auth0|123",
-      });
-    });
+    act(() => setDefaultCrudData(mockStore));
     render(app);
     expect(screen.getByRole("textbox")).toBeDisabled();
   });
@@ -391,19 +390,15 @@ describe("Tests for tablet and desktop view", () => {
     jest
       .spyOn(Router, "useParams")
       .mockReturnValue({ page: "65dcb26aaf4c8500693f1ab7", view: undefined });
-    act(() => {
-      mockStore.getActions().reports.ReportGet.setCrudData({
-        id: "12345",
-        name: "test",
-        owner: "auth0|123",
-      });
-    });
+    act(() => setDefaultCrudData(mockStore));
     render(app);
     await user.click(screen.getByRole("button", { name: "export-button" }));
     expect(screen.getByRole("menu")).toBeVisible();
     expect(screen.getByText(".png")).toBeVisible();
     expect(screen.getByText(".svg")).toBeVisible();
   });
+
+  const goToReport = "GO TO REPORT";
 
   test("clicking on duplicate button should open duplicate dialog", async () => {
     const user = userEvent.setup();
@@ -421,13 +416,7 @@ describe("Tests for tablet and desktop view", () => {
     jest
       .spyOn(Router, "useParams")
       .mockReturnValue({ page: "12345", view: undefined });
-    act(() => {
-      mockStore.getActions().reports.ReportGet.setCrudData({
-        id: "12345",
-        name: "test",
-        owner: "auth0|123",
-      });
-    });
+    act(() => setDefaultCrudData(mockStore));
     render(app);
     await user.click(screen.getByTestId("duplicate-button"));
     expect(axiosMock).toHaveBeenCalled();
@@ -436,11 +425,9 @@ describe("Tests for tablet and desktop view", () => {
       screen.getByText("Report has been duplicated successfully!")
     ).toBeVisible();
 
-    expect(screen.getByRole("button", { name: "GO TO REPORT" })).toBeVisible();
-    await user.click(screen.getByRole("button", { name: "GO TO REPORT" }));
-    expect(
-      screen.getByRole("button", { name: "GO TO REPORT" })
-    ).not.toBeVisible();
+    expect(screen.getByRole("button", { name: goToReport })).toBeVisible();
+    await user.click(screen.getByRole("button", { name: goToReport }));
+    expect(screen.getByRole("button", { name: goToReport })).not.toBeVisible();
 
     expect(history.location.pathname).toBe("/report/12345");
   });
@@ -461,13 +448,7 @@ describe("Tests for tablet and desktop view", () => {
     jest
       .spyOn(Router, "useParams")
       .mockReturnValue({ page: "12345", view: undefined });
-    act(() => {
-      mockStore.getActions().reports.ReportGet.setCrudData({
-        id: "12345",
-        name: "test",
-        owner: "auth0|123",
-      });
-    });
+    act(() => setDefaultCrudData(mockStore));
     render(app);
     await user.click(screen.getByTestId("share-button"));
     expect(screen.getByRole("button", { name: "Copy link" })).toBeVisible();
@@ -484,13 +465,7 @@ describe("Tests for tablet and desktop view", () => {
     jest
       .spyOn(Router, "useParams")
       .mockReturnValue({ page: "12345", view: undefined });
-    act(() => {
-      mockStore.getActions().reports.ReportGet.setCrudData({
-        id: "12345",
-        name: "test",
-        owner: "auth0|123",
-      });
-    });
+    act(() => setDefaultCrudData(mockStore));
     render(app);
     await user.click(screen.getByTestId("edit-button"));
     expect(history.location.pathname).toBe("/report/12345/edit");
@@ -515,13 +490,7 @@ describe("Tests for tablet and desktop view", () => {
     jest
       .spyOn(Router, "useParams")
       .mockReturnValue({ page: "12345", view: undefined });
-    act(() => {
-      mockStore.getActions().reports.ReportGet.setCrudData({
-        id: "12345",
-        name: "test",
-        owner: "auth0|123",
-      });
-    });
+    act(() => setDefaultCrudData(mockStore));
     render(app);
     await user.click(screen.getByTestId("delete-button"));
     expect(screen.getByRole("button", { name: "Delete" })).toBeVisible();
@@ -551,13 +520,7 @@ describe("Tests for mobile view", () => {
     jest
       .spyOn(Router, "useParams")
       .mockReturnValue({ page: "65dcb26aaf4c8500693f1ab7", view: undefined });
-    act(() => {
-      mockStore.getActions().reports.ReportGet.setCrudData({
-        id: "12345",
-        name: "test",
-        owner: "auth0|123",
-      });
-    });
+    act(() => setDefaultCrudData(mockStore));
     render(app);
     expect(screen.queryByRole("button", { name: "export-button" })).toBeNull();
 

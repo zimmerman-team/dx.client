@@ -45,7 +45,7 @@ export default function PanelLabel(props: {
       `}
     >
       <p>{label}</p>
-      <a className="report-panel-info">
+      <a href="." className="report-panel-info">
         <InfoIcon />
       </a>
       <Tooltip

@@ -65,6 +65,7 @@ export function ChartBuilderPreviewTheme(props: ChartBuilderPreviewThemeProps) {
     }
   }, [dataset]);
 
+  // eslint-disable-next-line sonarjs/cognitive-complexity
   React.useEffect(() => {
     if (
       domRef &&

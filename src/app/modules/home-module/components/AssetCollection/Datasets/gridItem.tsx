@@ -8,9 +8,8 @@ import { ReactComponent as DeleteIcon } from "app/modules/home-module/assets/del
 import { ReactComponent as MenuIcon } from "app/modules/home-module/assets/menu.svg";
 import { ReactComponent as DataCardImg } from "app/modules/home-module/assets/data-card-img.svg";
 import { ReactComponent as InfoIcon } from "app/modules/home-module/assets/info-icon.svg";
-
+import { Link, useLocation } from "react-router-dom";
 import { Tooltip, useMediaQuery } from "@material-ui/core";
-import { Link } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useStoreActions } from "app/state/store/hooks";
 import { isChartAIAgentActive } from "app/state/recoil/atoms";
@@ -30,6 +29,7 @@ interface Props {
 }
 
 export default function GridItem(props: Readonly<Props>) {
+  const location = useLocation();
   const [menuOptionsDisplay, setMenuOptionsDisplay] = React.useState(false);
   const [displayCreateChartButton, setDisplayCreateChartButton] =
     React.useState(false);
@@ -57,6 +57,8 @@ export default function GridItem(props: Readonly<Props>) {
   if (location.pathname === "/") {
     destinationPath += "?fromHome=true";
   }
+
+  const disabledStyle = "opacity: 0.5;pointer-events: none;";
 
   return (
     <div
@@ -285,9 +287,7 @@ export default function GridItem(props: Readonly<Props>) {
               }
             `}
           >
-            <div
-              css={!isAuthenticated ? "opacity: 0.5;pointer-events: none;" : ""}
-            >
+            <div css={!isAuthenticated ? disabledStyle : ""}>
               <Tooltip
                 title="Duplicate"
                 data-cy="dataset-grid-item-duplicate-btn"
@@ -300,13 +300,7 @@ export default function GridItem(props: Readonly<Props>) {
               </Tooltip>
             </div>
             {!isMobile && (
-              <div
-                css={
-                  !canDatasetEditDelete
-                    ? "opacity: 0.5;pointer-events: none;"
-                    : ""
-                }
-              >
+              <div css={!canDatasetEditDelete ? disabledStyle : ""}>
                 <Link to={props.path}>
                   <Tooltip title="Edit" data-cy="dataset-grid-item-edit-btn">
                     <EditIcon
@@ -318,13 +312,7 @@ export default function GridItem(props: Readonly<Props>) {
                 </Link>
               </div>
             )}
-            <div
-              css={
-                !canDatasetEditDelete
-                  ? "opacity: 0.5;pointer-events: none;"
-                  : ""
-              }
-            >
+            <div css={!canDatasetEditDelete ? disabledStyle : ""}>
               <Tooltip title="Delete" data-cy="dataset-grid-item-delete-btn">
                 <IconButton
                   onClick={() => props.handleDelete?.(props.id as string)}

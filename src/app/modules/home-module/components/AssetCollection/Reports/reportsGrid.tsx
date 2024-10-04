@@ -16,6 +16,7 @@ import { EditorState, convertFromRaw } from "draft-js";
 import { useSetRecoilState } from "recoil";
 import { planDialogAtom } from "app/state/recoil/atoms";
 import CircleLoader from "app/modules/home-module/components/Loader";
+import { useAuth0 } from "@auth0/auth0-react";
 
 interface Props {
   sortBy: string;
@@ -62,9 +63,9 @@ export default function ReportsGrid(props: Readonly<Props>) {
       props.searchStr?.length > 0
         ? `"where":{"name":{"like":"${props.searchStr}.*","options":"i"}},`
         : "";
-    return `filter={${value}"order":"${
-      props.sortBy
-    } desc","limit":${limit},"offset":${fromZeroOffset ? 0 : offset}}`;
+    return `filter={${value}"order":"${props.sortBy} ${
+      props.sortBy === "name" ? "asc" : "desc"
+    }","limit":${limit},"offset":${fromZeroOffset ? 0 : offset}}`;
   };
 
   const getWhereString = () => {
@@ -103,13 +104,14 @@ export default function ReportsGrid(props: Readonly<Props>) {
 
   React.useEffect(() => {
     //load data if intersection observer is triggered
-    if (reportsCount > limit) {
-      if (isObserved && reportsLoadSuccess) {
-        if (loadedReports.length !== reportsCount) {
-          //update the offset value for the next load
-          setOffset(offset + limit);
-        }
-      }
+    if (
+      reportsCount > limit &&
+      isObserved &&
+      reportsLoadSuccess &&
+      loadedReports.length !== reportsCount
+    ) {
+      //update the offset value for the next load
+      setOffset(offset + limit);
     }
   }, [isObserved]);
 

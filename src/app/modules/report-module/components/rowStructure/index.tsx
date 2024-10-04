@@ -4,7 +4,7 @@ import { SetterOrUpdater, useRecoilState, useResetRecoilState } from "recoil";
 import IconButton from "@material-ui/core/IconButton";
 import { useHistory, useLocation, useParams } from "react-router-dom";
 import { itemSpacing, containerGap } from "app/modules/report-module/data";
-import RowstructureDisplay from "app/modules/report-module/sub-module/rowStructure/rowStructureDisplay";
+import RowstructureDisplay from "app/modules/report-module/components/rowStructure/rowStructureDisplay";
 import { ReactComponent as CloseIcon } from "app/modules/report-module/asset/closeIcon.svg";
 import { ReactComponent as DeleteIcon } from "app/modules/report-module/asset/deleteIcon.svg";
 import {
@@ -14,7 +14,7 @@ import {
 import {
   blockcss,
   containercss,
-} from "app/modules/report-module/sub-module/rowStructure/style";
+} from "app/modules/report-module/components/rowStructure/style";
 import { IFramesArray } from "app/modules/report-module/views/create/data";
 import { useOnClickOutside } from "usehooks-ts";
 import { ToolbarPluginsType } from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
@@ -182,16 +182,17 @@ export default function RowFrame(props: RowFrameProps) {
     }[][]
   >([]);
 
+  const contentContainerId = "content-container";
+
   const onContentContainerResize = () => {
-    const contentContainer = document.getElementById("content-container");
+    const contentContainer = document.getElementById(contentContainerId);
     if (contentContainer) {
       const contentContainerWidth = contentContainer.offsetWidth;
       const newItems = _rowStructureDetailItems.map((item) => {
-        const items = item.map((subitem) => ({
+        return item.map((subitem) => ({
           ...subitem,
           width: contentContainerWidth * subitem.factor,
         }));
-        return items;
       });
       setRowStructureDetailItems(newItems);
     }
@@ -333,7 +334,7 @@ export default function RowFrame(props: RowFrameProps) {
   }, [selectedTypeHistory]);
 
   React.useEffect(() => {
-    const contentContainer = document.getElementById("content-container");
+    const contentContainer = document.getElementById(contentContainerId);
     if (contentContainer) {
       onContentContainerResize();
       contentContainer.addEventListener("resize", onContentContainerResize);
@@ -368,7 +369,7 @@ export default function RowFrame(props: RowFrameProps) {
     }
   }, [props.forceSelectedType]);
 
-  const contentContainer = document.getElementById("content-container");
+  const contentContainer = document.getElementById(contentContainerId);
   if (!contentContainer || rowStructureDetailItems.length === 0)
     return <div>loading</div>;
 

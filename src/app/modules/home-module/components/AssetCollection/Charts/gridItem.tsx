@@ -38,6 +38,8 @@ export default function GridItem(props: Props) {
     return isAuthenticated && props.owner === user?.sub;
   }, [user, isAuthenticated]);
 
+  const disabledStyle = "opacity: 0.5;pointer-events: none;";
+
   return (
     <div
       css={`
@@ -219,9 +221,7 @@ export default function GridItem(props: Props) {
               }
             `}
           >
-            <div
-              css={!isAuthenticated ? "opacity: 0.5;pointer-events: none;" : ""}
-            >
+            <div css={!isAuthenticated ? disabledStyle : ""}>
               <IconButton
                 onClick={() => {
                   props.handleDuplicate?.(props.id);
@@ -239,13 +239,7 @@ export default function GridItem(props: Props) {
               </IconButton>
             </div>
             {!isMobile && (
-              <div
-                css={
-                  !canChartEditDelete
-                    ? "opacity: 0.5;pointer-events: none;"
-                    : ""
-                }
-              >
+              <div css={!canChartEditDelete ? disabledStyle : ""}>
                 <Link
                   to={
                     props.isMappingValid
@@ -264,11 +258,7 @@ export default function GridItem(props: Props) {
                 </Link>
               </div>
             )}
-            <div
-              css={
-                !canChartEditDelete ? "opacity: 0.5;pointer-events: none;" : ""
-              }
-            >
+            <div css={!canChartEditDelete ? disabledStyle : ""}>
               <IconButton
                 onClick={() => props.handleDelete?.(props.id)}
                 aria-label="delete-button"

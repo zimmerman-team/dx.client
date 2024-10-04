@@ -1,12 +1,6 @@
-import {
-  act,
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-} from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import HeaderBlock from "app/modules/report-module/sub-module/components/headerBlock/";
+import HeaderBlock from "app/modules/report-module/components/headerBlock";
 import { ContentState, EditorState } from "draft-js";
 import { ToolbarPluginsType } from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
 import Router from "react-router-dom";
@@ -149,7 +143,7 @@ const appSetup = (newProps: Partial<MockProps> = {}) => {
     props,
   };
 };
-
+const reportPath = "/report/12345/edit";
 test("title input should be visible and editable", async () => {
   const user = userEvent.setup();
   jest
@@ -157,7 +151,7 @@ test("title input should be visible and editable", async () => {
     .mockReturnValue({ page: "12345", view: "edit" });
 
   jest.spyOn(Router, "useLocation").mockReturnValue({
-    pathname: "/report/12345/edit",
+    pathname: reportPath,
   } as any);
   //spy on window alert
   jest.spyOn(window, "scrollTo").mockImplementation(() => {});
@@ -170,6 +164,8 @@ test("title input should be visible and editable", async () => {
   ).toBe("headingTest Tite");
 });
 
+const addAHeaderDesc = "Add a header description";
+
 test("focusing on description input should clear placeholder", async () => {
   const user = userEvent.setup();
   jest
@@ -177,14 +173,14 @@ test("focusing on description input should clear placeholder", async () => {
     .mockReturnValue({ page: "12345", view: "edit" });
 
   jest.spyOn(Router, "useLocation").mockReturnValue({
-    pathname: "/report/12345/edit",
+    pathname: reportPath,
   } as any);
   const { app } = appSetup();
   render(app);
-  expect(screen.getByText("Add a header description")).toBeEnabled();
-  await user.click(screen.getByText("Add a header description"));
+  expect(screen.getByText(addAHeaderDesc)).toBeEnabled();
+  await user.click(screen.getByText(addAHeaderDesc));
 
-  expect(screen.queryByText("Add a header description")).toBeNull();
+  expect(screen.queryByText(addAHeaderDesc)).toBeNull();
 });
 
 test("focusing on description input should call setIsEditorFocused", async () => {
@@ -194,20 +190,20 @@ test("focusing on description input should call setIsEditorFocused", async () =>
     .mockReturnValue({ page: "12345", view: "edit" });
 
   jest.spyOn(Router, "useLocation").mockReturnValue({
-    pathname: "/report/12345/edit",
+    pathname: reportPath,
   } as any);
   const { app, props } = appSetup();
   render(app);
-  await user.click(screen.getByText("Add a header description"));
+  await user.click(screen.getByText(addAHeaderDesc));
 });
 
 // test("description input should be visible and editable", async () => {
 //   const user = userEvent.setup();
 //   const { app } = appSetup();
 //   render(app);
-//   expect(screen.getByText("Add a header description")).toBeEnabled();
+//   expect(screen.getByText(addAHeaderDesc)).toBeEnabled();
 //   await user.type(
-//     screen.getByText("Add a header description"),
+//     screen.getByText(addAHeaderDesc),
 //     "Test Description"
 //   );
 //   expect(
@@ -217,6 +213,10 @@ test("focusing on description input should call setIsEditorFocused", async () =>
 //   ).toBe("Test Description");
 // });
 
+const headerBlockId = "header-block";
+const editHeaderButtonId = "edit-header-button";
+const deleteHeaderButtonId = "delete-header-button";
+
 test("hovering and unhovering should show and hide the edit and delete buttons", async () => {
   const user = userEvent.setup();
   jest
@@ -224,16 +224,16 @@ test("hovering and unhovering should show and hide the edit and delete buttons",
     .mockReturnValue({ page: "12345", view: "edit" });
 
   jest.spyOn(Router, "useLocation").mockReturnValue({
-    pathname: "/report/12345/edit",
+    pathname: reportPath,
   } as any);
   const { app } = appSetup();
   render(app);
-  await user.hover(screen.getByTestId("header-block"));
-  expect(screen.getByTestId("edit-header-button")).toBeEnabled();
-  expect(screen.getByTestId("delete-header-button")).toBeEnabled();
-  await user.unhover(screen.getByTestId("header-block"));
-  expect(screen.queryByTestId("edit-header-button")).toBeNull();
-  expect(screen.queryByTestId("delete-header-button")).toBeNull();
+  await user.hover(screen.getByTestId(headerBlockId));
+  expect(screen.getByTestId(editHeaderButtonId)).toBeEnabled();
+  expect(screen.getByTestId(deleteHeaderButtonId)).toBeEnabled();
+  await user.unhover(screen.getByTestId(headerBlockId));
+  expect(screen.queryByTestId(editHeaderButtonId)).toBeNull();
+  expect(screen.queryByTestId(deleteHeaderButtonId)).toBeNull();
 });
 test("hovering should show the edit and delete buttons", async () => {
   const user = userEvent.setup();
@@ -242,18 +242,18 @@ test("hovering should show the edit and delete buttons", async () => {
     .mockReturnValue({ page: "12345", view: "edit" });
 
   jest.spyOn(Router, "useLocation").mockReturnValue({
-    pathname: "/report/12345/edit",
+    pathname: reportPath,
   } as any);
   const { app, props } = appSetup();
   render(app);
-  await user.hover(screen.getByTestId("header-block"));
-  expect(screen.getByTestId("edit-header-button")).toBeEnabled();
-  expect(screen.getByTestId("delete-header-button")).toBeEnabled();
+  await user.hover(screen.getByTestId(headerBlockId));
+  expect(screen.getByTestId(editHeaderButtonId)).toBeEnabled();
+  expect(screen.getByTestId(deleteHeaderButtonId)).toBeEnabled();
 
-  fireEvent.click(screen.getByTestId("edit-header-button"));
+  fireEvent.click(screen.getByTestId(editHeaderButtonId));
   expect(reportRightPanelViewChange).toHaveBeenCalledWith("editHeader");
 
-  fireEvent.click(screen.getByTestId("delete-header-button"));
+  fireEvent.click(screen.getByTestId(deleteHeaderButtonId));
   expect(props.setHeaderDetails).toHaveBeenCalledWith({
     ...props.headerDetails,
     showHeader: false,
@@ -266,7 +266,7 @@ test("drop area should be visible when showHeader is false", async () => {
     .mockReturnValue({ page: "12345", view: "edit" });
 
   jest.spyOn(Router, "useLocation").mockReturnValue({
-    pathname: "/report/12345/edit",
+    pathname: reportPath,
   } as any);
   const { app } = appSetup({
     headerDetails: { ...headerDetailsResult.headerDetails, showHeader: false },
@@ -281,7 +281,7 @@ test("drop area should call setHeaderDetails when dropped", async () => {
     .mockReturnValue({ page: "12345", view: "edit" });
 
   jest.spyOn(Router, "useLocation").mockReturnValue({
-    pathname: "/report/12345/edit",
+    pathname: reportPath,
   } as any);
   const { app, props } = appSetup({
     headerDetails: { ...headerDetailsResult.headerDetails, showHeader: false },

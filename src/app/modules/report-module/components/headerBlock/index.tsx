@@ -11,7 +11,7 @@ import { reportRightPanelViewAtom } from "app/state/recoil/atoms";
 import { RichEditor } from "app/modules/common/RichEditor";
 import { ReactComponent as EditIcon } from "app/modules/report-module/asset/editIcon.svg";
 import { ReactComponent as DeleteIcon } from "app/modules/report-module/asset/deleteIcon.svg";
-import { headerBlockcss } from "app/modules/report-module/sub-module/components/headerBlock/style";
+import { headerBlockcss } from "app/modules/report-module/components/headerBlock/style";
 import { ReactComponent as HeaderHandlesvg } from "app/modules/report-module/asset/header-handle.svg";
 import { Tooltip } from "@material-ui/core";
 import useDebounce from "react-use/lib/useDebounce";

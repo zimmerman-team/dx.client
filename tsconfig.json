@@ -29,6 +29,7 @@
     "@nivo/bar",
     ".vscode",
     "cypress",
+    ".eslintrc.js",
     ".history",
     "e2e",
     "etc",

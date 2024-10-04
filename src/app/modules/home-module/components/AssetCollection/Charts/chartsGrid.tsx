@@ -77,9 +77,9 @@ export default function ChartsGrid(props: Props) {
       props.searchStr?.length > 0
         ? `"where":{"name":{"like":"${props.searchStr}.*","options":"i"}},`
         : "";
-    return `filter={${value}"order":"${
-      props.sortBy
-    } desc","limit":${limit},"offset":${fromZeroOffset ? 0 : offset}}`;
+    return `filter={${value}"order":"${props.sortBy} ${
+      props.sortBy === "name" ? "asc" : "desc"
+    }","limit":${limit},"offset":${fromZeroOffset ? 0 : offset}}`;
   };
 
   const getWhereString = () => {
@@ -118,13 +118,14 @@ export default function ChartsGrid(props: Props) {
 
   React.useEffect(() => {
     //load data if intersection observer is triggered
-    if (chartsCount > limit) {
-      if (isObserved && chartsLoadSuccess) {
-        if (loadedCharts.length !== chartsCount) {
-          //update the offset value for the next load
-          setOffset(offset + limit);
-        }
-      }
+    if (
+      chartsCount > limit &&
+      isObserved &&
+      chartsLoadSuccess &&
+      loadedCharts.length !== chartsCount
+    ) {
+      //update the offset value for the next load
+      setOffset(offset + limit);
     }
   }, [isObserved]);
 

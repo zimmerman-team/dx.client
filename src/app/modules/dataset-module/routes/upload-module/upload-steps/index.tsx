@@ -22,6 +22,7 @@ import { Box } from "@material-ui/core";
 import { useTitle } from "react-use";
 import { DatasetListItemAPIModel } from "app/modules/dataset-module/data";
 import BreadCrumbs from "app/modules/home-module/components/Breadcrumbs";
+import { useLocation } from "react-router-dom";
 import SmallFooter from "app/modules/home-module/components/Footer/smallFooter";
 import { useRecoilState } from "recoil";
 import { dataUploadTabAtom, planDialogAtom } from "app/state/recoil/atoms";
@@ -38,6 +39,7 @@ function DatasetUploadSteps(props: Props) {
   useTitle("DX Dataxplorer - Upload Dataset");
 
   const { user } = useAuth0();
+  const location = useLocation();
   const token = useStoreState((state) => state.AuthToken.value);
   const steps = ["Connect", "Processing Data", "Description", "Finished"];
   const [_, setPlanDialog] = useRecoilState(planDialogAtom);
@@ -205,6 +207,8 @@ function DatasetUploadSteps(props: Props) {
       });
   };
 
+  const dataUploadError = "Dataset upload error";
+
   const onFileSubmit = (file: File) => {
     setSelectedFile(file);
     const formData = new FormData();
@@ -235,7 +239,7 @@ function DatasetUploadSteps(props: Props) {
         }
         if (response.data?.errorType !== "planError") {
           setProcessingError(response.data.error);
-          console.debug("Dataset upload error", response.data.error);
+          console.debug(dataUploadError, response.data.error);
           return;
         }
         if (response.data?.processingMessage) {
@@ -257,7 +261,7 @@ function DatasetUploadSteps(props: Props) {
         }
       })
       .catch((error) => {
-        console.debug("Dataset upload error", error);
+        console.debug(dataUploadError, error);
         setProcessingError(defaultProcessingError);
         setSelectedFile(null);
       });
@@ -286,7 +290,7 @@ function DatasetUploadSteps(props: Props) {
 
         if (response.data.error) {
           setProcessingError(response.data.error);
-          console.debug("Dataset upload error", response.data.error);
+          console.debug(dataUploadError, response.data.error);
         } else {
           setFormDetails({
             category: "",
@@ -302,7 +306,7 @@ function DatasetUploadSteps(props: Props) {
         }
       })
       .catch((error) => {
-        console.debug("Dataset upload error", error);
+        console.debug(dataUploadError, error);
         setActiveStep(0);
         setProcessingError(defaultProcessingError);
       });
@@ -312,10 +316,14 @@ function DatasetUploadSteps(props: Props) {
     setActiveStep(0);
   };
 
-  useEffect(() => {
+  const disableActiveOption = () => {
     if (activeOption) {
       setActiveOption(null);
     }
+  };
+
+  useEffect(() => {
+    disableActiveOption();
   }, [activeTab]);
 
   const currentStep = () => {
@@ -336,9 +344,7 @@ function DatasetUploadSteps(props: Props) {
                   title: (
                     <span
                       onClick={() => {
-                        if (activeOption) {
-                          setActiveOption(null);
-                        }
+                        disableActiveOption();
                       }}
                     >
                       Connect Data

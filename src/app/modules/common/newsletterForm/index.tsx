@@ -17,14 +17,15 @@ export default function NewsletterForm(
     >;
   }>
 ) {
+  const emailAddress = "Email address";
   const inputRef = React.useRef<HTMLInputElement>(null);
-  const [placeholder, setPlaceholder] = React.useState("Email address");
+  const [placeholder, setPlaceholder] = React.useState(emailAddress);
   const inputRefFocus = () => {
     setPlaceholder("");
   };
   const inputRefBlur = () => {
     if (inputRef.current?.value === "") {
-      setPlaceholder("Email address");
+      setPlaceholder(emailAddress);
     }
   };
 
@@ -68,7 +69,7 @@ export default function NewsletterForm(
       .then((response: AxiosResponse) => {
         if (response.status === 200) {
           setValue("email", "");
-          setPlaceholder("Email address");
+          setPlaceholder(emailAddress);
           props.setIsSubscribed(true);
         } else {
           props.setIsSubscriptionFailed(true);

@@ -1,7 +1,7 @@
 import React from "react";
 import { useTitle } from "react-use";
-import AssetsCollection from "../../components/AssetCollection";
-import SmallFooter from "../../components/Footer/smallFooter";
+import AssetsCollection from "app/modules/home-module/components/AssetCollection";
+import SmallFooter from "app/modules/home-module/components/Footer/smallFooter";
 
 function DashboardModule() {
   useTitle("DX Dataxplorer - Dashboard");

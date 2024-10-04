@@ -95,7 +95,7 @@ export function ChartToolBoxSteps(props: ChartToolBoxStepsProps) {
     const nextPath = props.stepPaths[currentPathIndex + 1]?.path;
     props.onNavBtnClick(nextStep as ToolboxNavType, nextPath);
 
-    if (currentPathIndex == 5) {
+    if (currentPathIndex === 5) {
       handleSave();
     } else {
       return;
@@ -105,7 +105,7 @@ export function ChartToolBoxSteps(props: ChartToolBoxStepsProps) {
   const handleBack = () => {
     const prevStep = props.stepPaths[currentPathIndex - 1]?.name;
     const prevPath = props.stepPaths[currentPathIndex - 1]?.path;
-    if (currentPathIndex == 0) {
+    if (currentPathIndex === 0) {
       return;
     }
     props.onNavBtnClick(prevStep as ToolboxNavType, prevPath);

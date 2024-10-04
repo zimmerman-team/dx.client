@@ -8,7 +8,7 @@ import { useScrollToTop } from "app/hooks/useScrollToTop";
 import { useRouteListener } from "app/hooks/useRouteListener";
 import { PageLoader } from "app/modules/common/page-loader";
 import { RouteWithAppBar } from "app/utils/RouteWithAppBar";
-import { Route, Switch, useHistory } from "react-router-dom";
+import { Route, Switch, useHistory, useLocation } from "react-router-dom";
 import { NoMatchPage } from "app/modules/common/no-match-page";
 import { useGoogleOneTapLogin } from "react-google-one-tap-login";
 import {
@@ -21,6 +21,12 @@ import {
 } from "@auth0/auth0-react";
 import axios from "axios";
 import { AuthProtectedRoute } from "./utils/AuthProtectedRoute";
+import {
+  PaymentSuccessCallbackModule,
+  PaymentCanceledCallbackModule,
+} from "app/modules/callback-module/payment";
+import { useRecoilValue } from "recoil";
+import { fetchPlanLoadingAtom } from "./state/recoil/atoms";
 
 const LandingModule = lazy(
   () => import("app/modules/home-module/sub-modules/landing")
@@ -45,12 +51,6 @@ const PricingModule = lazy(
 const EmbedChartModule = lazy(
   () => import("app/modules/embed-module/embedChart")
 );
-import {
-  PaymentSuccessCallbackModule,
-  PaymentCanceledCallbackModule,
-} from "app/modules/callback-module/payment";
-import { useRecoilValue } from "recoil";
-import { fetchPlanLoadingAtom } from "./state/recoil/atoms";
 
 const ChartModule = lazy(() => import("app/modules/chart-module"));
 const ReportModule = lazy(() => import("app/modules/report-module"));
@@ -170,6 +170,7 @@ const OneTapLoginComponent = () => {
 
 const IntercomBootupComponent = () => {
   const { isAuthenticated, user, getAccessTokenSilently } = useAuth0();
+  const location = useLocation();
 
   React.useEffect(() => {
     if (window?.Intercom) {

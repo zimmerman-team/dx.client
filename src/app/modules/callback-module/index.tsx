@@ -87,7 +87,7 @@ function AuthCallbackModule() {
           setLoading(false);
         })();
       } else {
-        if (localStorage.getItem("signup-state") == "true") {
+        if (localStorage.getItem("signup-state") === "true") {
           history.replace("/report/new/initial");
           localStorage.removeItem("signup-state");
         } else {

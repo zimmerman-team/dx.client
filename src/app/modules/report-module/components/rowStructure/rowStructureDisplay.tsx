@@ -23,7 +23,7 @@ import {
   reportContentContainerWidth,
   isChartDraggingAtom,
 } from "app/state/recoil/atoms";
-import { IFramesArray } from "../../views/create/data";
+import { IFramesArray } from "app/modules/report-module/views/create/data";
 import { ToolbarPluginsType } from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
 import { css } from "styled-components";
 import { Updater } from "use-immer";
@@ -274,6 +274,7 @@ const Box = (props: {
     width: number,
     height: number
   ) => void;
+  // eslint-disable-next-line sonarjs/cognitive-complexity
 }) => {
   const location = useLocation();
   const history = useHistory();
@@ -357,11 +358,10 @@ const Box = (props: {
       draft[frameId].content[itemIndex] = itemContent;
       draft[frameId].contentTypes[itemIndex] = itemContentType;
       const heights = draft[frameId].contentHeights;
-      if (textHeight) {
-        //relative to the text content, we only want to increase the height of textbox
-        if (textHeight > heights[itemIndex]) {
-          heights[itemIndex] = textHeight;
-        }
+
+      //relative to the text content, we only want to increase the height of textbox
+      if (textHeight && textHeight > heights[itemIndex]) {
+        heights[itemIndex] = textHeight;
       }
     });
   };
@@ -519,6 +519,15 @@ const Box = (props: {
     setIsResizing(true);
   };
 
+  const resetContent = () => {
+    setDisplayMode(null);
+    setChartId(null);
+    setTextContent(EditorState.createEmpty());
+    handleRowFrameItemRemoval(props.rowId, props.itemIndex);
+  };
+
+  const cursorDefault = "cursor: default;";
+
   const content = React.useMemo(() => {
     if (displayMode === "text") {
       return (
@@ -543,7 +552,7 @@ const Box = (props: {
             position: relative;
 
             div {
-              ${viewOnlyMode && "cursor: default;"}
+              ${viewOnlyMode && cursorDefault}
             }
           `}
         >
@@ -555,12 +564,7 @@ const Box = (props: {
           >
             {!viewOnlyMode && displayBoxIcons && (
               <IconButton
-                onClick={() => {
-                  setDisplayMode(null);
-                  setChartId(null);
-                  setTextContent(EditorState.createEmpty());
-                  handleRowFrameItemRemoval(props.rowId, props.itemIndex);
-                }}
+                onClick={resetContent}
                 css={`
                   top: 12px;
                   z-index: 1;
@@ -637,12 +641,7 @@ const Box = (props: {
             {!viewOnlyMode && displayBoxIcons && (
               <div>
                 <IconButton
-                  onClick={() => {
-                    setDisplayMode(null);
-                    setChartId(null);
-                    setTextContent(EditorState.createEmpty());
-                    handleRowFrameItemRemoval(props.rowId, props.itemIndex);
-                  }}
+                  onClick={resetContent}
                   css={`
                     top: 12px;
                     z-index: 1;
@@ -732,7 +731,7 @@ const Box = (props: {
             position: relative;
 
             div {
-              ${viewOnlyMode && "cursor: default;"}
+              ${viewOnlyMode && cursorDefault}
             }
           `}
         >
@@ -743,12 +742,7 @@ const Box = (props: {
           >
             {!viewOnlyMode && displayBoxIcons && (
               <IconButton
-                onClick={() => {
-                  setDisplayMode(null);
-                  setChartId(null);
-                  setTextContent(EditorState.createEmpty());
-                  handleRowFrameItemRemoval(props.rowId, props.itemIndex);
-                }}
+                onClick={resetContent}
                 css={`
                   top: 12px;
                   z-index: 1;
@@ -775,6 +769,7 @@ const Box = (props: {
               </IconButton>
             )}
             <iframe
+              title="Video Content"
               src={videoContent?.embedUrl}
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowFullScreen
@@ -817,7 +812,7 @@ const Box = (props: {
             position: relative;
 
             div {
-              ${viewOnlyMode && "cursor: default;"}
+              ${viewOnlyMode && cursorDefault}
             }
           `}
         >
@@ -828,12 +823,7 @@ const Box = (props: {
           >
             {!viewOnlyMode && displayBoxIcons && (
               <IconButton
-                onClick={() => {
-                  setDisplayMode(null);
-                  setChartId(null);
-                  setTextContent(EditorState.createEmpty());
-                  handleRowFrameItemRemoval(props.rowId, props.itemIndex);
-                }}
+                onClick={resetContent}
                 css={`
                   top: 12px;
                   z-index: 1;

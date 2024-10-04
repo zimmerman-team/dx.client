@@ -9,9 +9,11 @@ colors.map((c, i) => {
   styleMap[`color-${c.replace("#", "")}` as keyof typeof styleMap] = {
     color: c,
   };
+  return null;
 });
-
-export default {
+const pickerObj = {
   Picker: Picker,
   colorStyleMap: styleMap,
 };
+
+export default pickerObj;

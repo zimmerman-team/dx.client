@@ -82,8 +82,8 @@ export default function ChartModule() {
   const [rawViz, setRawViz] = React.useState<any>(null);
   const [toolboxOpen, setToolboxOpen] = React.useState(Boolean(isValidView));
   const [savedChanges, setSavedChanges] = React.useState<boolean>(false);
-
-  const [chartName, setChartName] = React.useState("Untitled Chart");
+  const defaultChartTitle = "Untitled Chart";
+  const [chartName, setChartName] = React.useState(defaultChartTitle);
   const [isPreviewView, setIsPreviewView] = React.useState(false);
   const [hasSubHeaderTitleFocused, setHasSubHeaderTitleFocused] =
     React.useState(false);
@@ -294,17 +294,12 @@ export default function ChartModule() {
       });
     } else {
       try {
-        const response = await axios.post(
-          `${process.env.REACT_APP_API}/chart/`,
-          chart,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        return response;
+        return await axios.post(`${process.env.REACT_APP_API}/chart/`, chart, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
       } catch (e) {
         console.log(e);
       }
@@ -375,7 +370,7 @@ export default function ChartModule() {
       setChartName(datasetDetail?.name as string);
     }
     if (isEmpty(datasetId) && page === "new" && !hasSubHeaderTitleFocused) {
-      setChartName("Untitled Chart");
+      setChartName(defaultChartTitle);
     }
     //resets mapping and applied filters when dataset becomes null
     if (datasetId === null) {
@@ -452,7 +447,7 @@ export default function ChartModule() {
     editChartClear();
     clearDatasetDetails();
     clearChartTypesSuggestions();
-    setChartName("Untitled Chart");
+    setChartName(defaultChartTitle);
     setDataError(false);
     setChartError(false);
     setDataTypes([]);
@@ -550,7 +545,7 @@ export default function ChartModule() {
         <>
           {chartLoading === null ||
           canChartEditDelete ||
-          !!matchPath(location.pathname, {
+          !!matchPath(window.location.pathname, {
             path: "/chart/:page",
             exact: true,
             strict: true,

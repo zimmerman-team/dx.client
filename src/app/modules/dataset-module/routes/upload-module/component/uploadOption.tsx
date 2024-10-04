@@ -1,5 +1,5 @@
 import React from "react";
-import SettingsIcon from "../assets/upload-options-icons/settings";
+import SettingsIcon from "app/modules/dataset-module/routes/upload-module/assets/upload-options-icons/settings";
 import { useHistory } from "react-router-dom";
 
 const UploadOption = (props: {

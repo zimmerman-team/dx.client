@@ -5,7 +5,7 @@ import Settings from "./sub-module/settings";
 import { useAuth0 } from "@auth0/auth0-react";
 import { bigAvicss, layoutcss } from "./style";
 import { Box, Container, Grid } from "@material-ui/core";
-import { PageTopSpacer } from "../common/page-top-spacer";
+import { PageTopSpacer } from "app/modules/common/page-top-spacer";
 import { Route, Switch, useHistory, useParams } from "react-router-dom";
 import { LogOutIcon, RightIcon } from "./component/icons";
 import LogOutDialog from "app/components/Dialogs/logOutDialog";
