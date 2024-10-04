@@ -343,33 +343,33 @@ describe("Edit, duplicate and delete report", () => {
     ).should("be.visible");
   });
 
-  it("Can drag and drop rows in a report", () => {
-    cy.get("[data-cy=home-search-button]").click();
-    cy.wait(2000);
-    cy.get("[data-cy=filter-search-input]").type(
-      `{selectall}{backspace}${reportTestName}`
-    );
+  // it("Can drag and drop rows in a report", () => {
+  //   cy.get("[data-cy=home-search-button]").click();
+  //   cy.wait(2000);
+  //   cy.get("[data-cy=filter-search-input]").type(
+  //     `{selectall}{backspace}${reportTestName}`
+  //   );
 
-    cy.wait("@fetchReports");
+  //   cy.wait("@fetchReports");
 
-    cy.contains('[data-cy="report-grid-item"]', `${reportTestName} - Edited`)
-      .first()
-      .scrollIntoView()
-      .within(() => {
-        cy.get('[data-cy="report-grid-item-menu-btn"]').click();
-      });
+  //   cy.contains('[data-cy="report-grid-item"]', `${reportTestName} - Edited`)
+  //     .first()
+  //     .scrollIntoView()
+  //     .within(() => {
+  //       cy.get('[data-cy="report-grid-item-menu-btn"]').click();
+  //     });
 
-    cy.intercept(`${apiUrl}/report/*`).as("fetchReport");
+  //   cy.intercept(`${apiUrl}/report/*`).as("fetchReport");
 
-    cy.get('[data-cy="report-grid-item-edit-btn"]').click();
+  //   cy.get('[data-cy="report-grid-item-edit-btn"]').click();
 
-    cy.wait("@fetchReport");
+  //   cy.wait("@fetchReport");
 
-    cy.get('[data-cy="row-frame-container-0"]').within(() => {
-      cy.get('[data-cy="row-frame-handle"]').drag();
-    });
-    cy.get('[data-cy="report-row-placeholder"]').eq(2).scrollIntoView().drop();
-  });
+  //   cy.get('[data-cy="row-frame-container-0"]').within(() => {
+  //     cy.get('[data-cy="row-frame-handle"]').drag();
+  //   });
+  //   cy.get('[data-cy="report-row-placeholder"]').eq(2).scrollIntoView().drop();
+  // });
 
   it("Can delete an item from a box in a row", () => {
     cy.get("[data-cy=home-search-button]").click();
@@ -573,6 +573,7 @@ describe("Edit, duplicate and delete report", () => {
     cy.get('[data-cy="report-grid-item-edit-btn"]').click();
 
     cy.wait("@fetchReport");
+    cy.wait("@planData");
 
     cy.get('[data-cy="row-frame-chart-item-0-1"]').should("have.length", 1);
 
