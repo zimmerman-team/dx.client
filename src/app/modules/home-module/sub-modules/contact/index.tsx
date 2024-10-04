@@ -1,5 +1,5 @@
 import React from "react";
-import EmpowerBlock from "../partners/components/empowerBlock";
+import EmpowerBlock from "app/modules/home-module/sub-modules/partners/components/empowerBlock";
 import {
   Container,
   Snackbar,
@@ -7,7 +7,7 @@ import {
   useMediaQuery,
   withStyles,
 } from "@material-ui/core";
-import HomeFooter from "../../components/Footer";
+import HomeFooter from "app/modules/home-module/components/Footer";
 import { ReactComponent as FullEllipse } from "app/modules/home-module/assets/contact-lg-ellispe.svg";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { useTitle } from "react-use";
@@ -17,6 +17,7 @@ import { FieldErrors } from "react-hook-form";
 
 const CssTextField = withStyles({
   root: {
+    // eslint-disable-next-line no-useless-computed-key
     ["@media (max-width:938px)"]: {
       marginTop: "unset !important",
       "& label": {

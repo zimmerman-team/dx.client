@@ -12,7 +12,7 @@ interface Icon {
   black: string;
 }
 
-interface ProjectPalette extends Palette {
+interface IProjectPalette extends Palette {
   icon: Icon;
 }
 
@@ -258,15 +258,6 @@ export default createTheme({
         fontSize: 12,
       },
     },
-    MuiListItem: {
-      button: {
-        "&:hover": {
-          color: "#231d2c",
-          backgroundColor: "#fff",
-          transition: "background 0.2s ease-in-out",
-        },
-      },
-    },
     MuiTooltip: {
       tooltip: {
         fontSize: 12,
@@ -297,6 +288,13 @@ export default createTheme({
         "&:hover": {
           color: "#231d2c",
           background: "#f1f3f5",
+        },
+      },
+      button: {
+        "&:hover": {
+          color: "#231d2c",
+          backgroundColor: "#fff",
+          transition: "background 0.2s ease-in-out",
         },
       },
     },

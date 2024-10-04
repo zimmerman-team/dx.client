@@ -7,8 +7,8 @@ import { screen } from "@testing-library/react";
 import { mockUseAuth0 } from "app/utils/mockAuth0";
 import { Router } from "react-router-dom";
 import { createMemoryHistory } from "history";
-import GridItem from "../components/AssetCollection/Charts/gridItem";
-import ReportsGrid from "../components/AssetCollection/Reports/reportsGrid";
+import GridItem from "app/modules/home-module/components/AssetCollection/Charts/gridItem";
+import ReportsGrid from "app/modules/home-module/components/AssetCollection/Reports/reportsGrid";
 import { StoreProvider, createStore } from "easy-peasy";
 import {
   ReportGetList,

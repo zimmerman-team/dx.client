@@ -126,13 +126,14 @@ export default function AssetsGrid(props: Props) {
 
   React.useEffect(() => {
     //load data if intersection observer is triggered
-    if (assetsCount > limit) {
-      if (isObserved && assetsLoadSuccess) {
-        if (loadedAssets.length !== assetsCount) {
-          //update the offset value for the next load
-          setOffset(offset + limit);
-        }
-      }
+    if (
+      assetsCount > limit &&
+      isObserved &&
+      assetsLoadSuccess &&
+      loadedAssets.length !== assetsCount
+    ) {
+      //update the offset value for the next load
+      setOffset(offset + limit);
     }
   }, [isObserved]);
 

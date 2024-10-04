@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import Filter from "../components/Filter";
+import Filter from "app/modules/home-module/components/Filter";
 import userEvent from "@testing-library/user-event";
 
 interface MockProps {
@@ -93,15 +93,13 @@ test("clicking view button should change view from table to grid", async () => {
   await user.click(screen.getByRole("button", { name: "grid-view-button" }));
   expect(props.setAssetsView).toHaveBeenCalledWith("grid");
 });
-
+const sortButton = "sort-button";
 test("clicking sort button should display sort options", async () => {
   const user = userEvent.setup();
   const { app } = appSetup({});
   render(app);
-  expect(
-    screen.getByRole("button", { name: "sort-button" })
-  ).toBeInTheDocument();
-  await user.click(screen.getByRole("button", { name: "sort-button" }));
+  expect(screen.getByRole("button", { name: sortButton })).toBeInTheDocument();
+  await user.click(screen.getByRole("button", { name: sortButton }));
   expect(screen.getByText("Sort by")).toBeInTheDocument();
 });
 
@@ -109,10 +107,8 @@ test("clicking sort option name should change sort value", async () => {
   const user = userEvent.setup();
   const { app, props } = appSetup({});
   render(app);
-  expect(
-    screen.getByRole("button", { name: "sort-button" })
-  ).toBeInTheDocument();
-  await user.click(screen.getByRole("button", { name: "sort-button" }));
+  expect(screen.getByRole("button", { name: sortButton })).toBeInTheDocument();
+  await user.click(screen.getByRole("button", { name: sortButton }));
   expect(screen.getByText("Sort by")).toBeInTheDocument();
   await user.click(screen.getByText("Name"));
   expect(props.setSortValue).toHaveBeenCalledWith("name");
@@ -122,10 +118,8 @@ test("clicking sort option created date should change sort value", async () => {
   const user = userEvent.setup();
   const { app, props } = appSetup({});
   render(app);
-  expect(
-    screen.getByRole("button", { name: "sort-button" })
-  ).toBeInTheDocument();
-  await user.click(screen.getByRole("button", { name: "sort-button" }));
+  expect(screen.getByRole("button", { name: sortButton })).toBeInTheDocument();
+  await user.click(screen.getByRole("button", { name: sortButton }));
   expect(screen.getByText("Sort by")).toBeInTheDocument();
   await user.click(screen.getByText("Created date"));
   expect(props.setSortValue).toHaveBeenCalledWith("createdDate");
@@ -135,10 +129,8 @@ test("clicking sort option updated date should change sort value", async () => {
   const user = userEvent.setup();
   const { app, props } = appSetup({});
   render(app);
-  expect(
-    screen.getByRole("button", { name: "sort-button" })
-  ).toBeInTheDocument();
-  await user.click(screen.getByRole("button", { name: "sort-button" }));
+  expect(screen.getByRole("button", { name: sortButton })).toBeInTheDocument();
+  await user.click(screen.getByRole("button", { name: sortButton }));
   expect(screen.getByText("Sort by")).toBeInTheDocument();
   await user.click(screen.getByText("Last updated"));
   expect(props.setSortValue).toHaveBeenCalledWith("updatedDate");
@@ -148,10 +140,8 @@ test("clicking sort option should close sort options", async () => {
   const user = userEvent.setup();
   const { app } = appSetup({});
   render(app);
-  expect(
-    screen.getByRole("button", { name: "sort-button" })
-  ).toBeInTheDocument();
-  await user.click(screen.getByRole("button", { name: "sort-button" }));
+  expect(screen.getByRole("button", { name: sortButton })).toBeInTheDocument();
+  await user.click(screen.getByRole("button", { name: sortButton }));
   expect(screen.getByText("Sort by")).toBeInTheDocument();
   await user.click(screen.getByText("Last updated"));
   expect(screen.queryByText("Sort by")).not.toBeInTheDocument();

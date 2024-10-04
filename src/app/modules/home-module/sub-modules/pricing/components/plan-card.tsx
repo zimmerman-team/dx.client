@@ -1,4 +1,3 @@
-import { Box } from "@material-ui/core";
 import React from "react";
 
 interface PlanCardProps {
@@ -18,7 +17,46 @@ interface PlanCardProps {
   onButtonClick: (key: string) => void;
 }
 
-function PlanCard({ activeView, plan, onButtonClick }: PlanCardProps) {
+export default function PlanCard({
+  activeView,
+  plan,
+  onButtonClick,
+}: PlanCardProps) {
+  const centerContent = (
+    <>
+      <p
+        css={`
+          margin: 0;
+          padding: 0;
+          font-size: 16px;
+          line-height: 19.2px;
+          font-weight: 325;
+          font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
+        `}
+      >
+        per {activeView === "monthly" ? "month" : "year"}
+        {plan.key === "team" ? " / per user" : ""}
+      </p>
+      <p
+        css={`
+          margin: 0;
+          padding: 0;
+          margin-top: 15.08px;
+          font-size: 14px;
+          font-weight: 325;
+          font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
+          line-height: normal;
+          font-style: normal;
+        `}
+      >
+        Or{" "}
+        {activeView === "monthly"
+          ? `${plan.yearlyPrice}/year ${plan.discount}`
+          : `${plan.monthlyPrice}/month`}
+      </p>
+    </>
+  );
+
   return (
     <div
       css={`
@@ -67,45 +105,14 @@ function PlanCard({ activeView, plan, onButtonClick }: PlanCardProps) {
         >
           {activeView === "monthly" ? plan.monthlyPrice : plan.yearlyPrice}
         </p>
-        {plan.key === "free" || plan.key === "enterprise" ? (
+        {["free", "enterprise"].includes(plan.key) ? (
           <div
             css={`
               height: ${plan.key === "free" ? "5px" : "20px"};
             `}
           />
         ) : (
-          <>
-            <p
-              css={`
-                margin: 0;
-                padding: 0;
-                font-size: 16px;
-                line-height: 19.2px;
-                font-weight: 325;
-                font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
-              `}
-            >
-              per {activeView === "monthly" ? "month" : "year"}
-              {plan.key === "team" ? " / per user" : ""}
-            </p>
-            <p
-              css={`
-                margin: 0;
-                padding: 0;
-                margin-top: 15.08px;
-                font-size: 14px;
-                font-weight: 325;
-                font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
-                line-height: normal;
-                font-style: normal;
-              `}
-            >
-              Or{" "}
-              {activeView === "monthly"
-                ? `${plan.yearlyPrice}/year ${plan.discount}`
-                : `${plan.monthlyPrice}/month`}
-            </p>
-          </>
+          centerContent
         )}
 
         <p
@@ -189,5 +196,3 @@ function PlanCard({ activeView, plan, onButtonClick }: PlanCardProps) {
     </div>
   );
 }
-
-export default PlanCard;

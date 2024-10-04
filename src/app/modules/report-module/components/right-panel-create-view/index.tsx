@@ -484,9 +484,9 @@ export function ReportRightPanelCreateView(props: Readonly<Props>) {
           css={`
             ${(() => {
               if (currentView === "elements") {
-                return "background-color: #fff;";
+                return whiteBackgroundOnly;
               } else if (currentView === "charts") {
-                return "background-color: #fff;";
+                return whiteBackgroundOnly;
               } else if (currentView === "media") {
                 return whiteBackgroundRoundedBottomLeft;
               } else {
@@ -801,6 +801,7 @@ function VideoFrame(props: {
         <>
           {" "}
           <iframe
+            title="video player"
             src={props.embedUrl + "?autoplay=1"}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen
@@ -1041,14 +1042,12 @@ function ElementItem(props: {
           }
         }}
         onOpen={() => {
-          if (props.disabled) {
-            if (props.ItemDetails && props.index) {
-              props.setItemDetails?.((prev) => {
-                const tempPrev = prev.map((item) => ({ ...item }));
-                tempPrev[props.index as number].openTooltip = true;
-                return [...tempPrev];
-              });
-            }
+          if (props.disabled && props.ItemDetails && props.index) {
+            props.setItemDetails?.((prev) => {
+              const tempPrev = prev.map((item) => ({ ...item }));
+              tempPrev[props.index as number].openTooltip = true;
+              return [...tempPrev];
+            });
           }
         }}
       >

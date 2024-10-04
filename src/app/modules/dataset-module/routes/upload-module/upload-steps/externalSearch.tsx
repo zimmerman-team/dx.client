@@ -7,11 +7,11 @@ import useDebounce from "react-use/lib/useDebounce";
 import axios from "axios";
 import CircleLoader from "app/modules/home-module/components/Loader";
 import { useInfinityScroll } from "app/hooks/useInfinityScroll";
-import SourceCategoryList from "../component/externalSourcesList";
+import SourceCategoryList from "app/modules/dataset-module/routes/upload-module/component/externalSourcesList";
 import { useSetRecoilState } from "recoil";
 import { planDialogAtom } from "app/state/recoil/atoms";
 import SaveAltIcon from "@material-ui/icons/SaveAlt";
-import ExternalSearchTable from "../component/table/externalSearchTable";
+import ExternalSearchTable from "app/modules/dataset-module/routes/upload-module/component/table/externalSearchTable";
 import { useCheckUserPlan } from "app/hooks/useCheckUserPlan";
 
 export interface IExternalDataset {
@@ -46,7 +46,7 @@ export default function ExternalSearch(props: {
   const observerTarget = React.useRef(null);
   const [view, setView] = React.useState<"grid" | "table">("grid");
 
-  const [sortValue, setSortValue] = React.useState("createdDate");
+  const [sortValue, setSortValue] = React.useState("name");
   const token = useStoreState((state) => state.AuthToken.value);
   const [loading, setLoading] = React.useState(false);
   const [offset, setOffset] = React.useState(0);

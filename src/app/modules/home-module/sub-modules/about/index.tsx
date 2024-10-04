@@ -7,7 +7,7 @@ import { ReactComponent as StoryImg } from "app/modules/home-module/assets/about
 import EllipsesMobile from "app/modules/home-module/assets/about-page-ellipses-mobile.svg";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
-import HomeFooter from "../../components/Footer";
+import HomeFooter from "app/modules/home-module/components/Footer";
 import { subParagraphcss } from "./style";
 import { useTitle } from "react-use";
 import { HomePrimaryButton } from "app/components/Styled/button";
@@ -50,6 +50,8 @@ export default function AboutModule() {
     },
   ];
 
+  const uiUx = "UI/UX Design Intern";
+
   const team = [
     {
       img: SiemAvi,
@@ -84,7 +86,7 @@ export default function AboutModule() {
     {
       img: AylinAvi,
       name: "Aylin Paçaci",
-      role: "UI/UX Design Intern",
+      role: uiUx,
       linkedIn: "https://tr.linkedin.com/in/aylinpacaci",
     },
     {
@@ -102,13 +104,13 @@ export default function AboutModule() {
     {
       img: VeronikaAvi,
       name: "Veronika Ivanova",
-      role: "UI/UX Design Intern",
+      role: uiUx,
       linkedIn: "https://nl.linkedin.com/in/veronika-ivanova-448b6b1b6",
     },
     {
       img: AnsonAvi,
       name: "Shiyi Anson Chen",
-      role: "UI/UX Design Intern",
+      role: uiUx,
       linkedIn: "",
     },
   ];
@@ -437,7 +439,7 @@ export default function AboutModule() {
               <div
                 key={feature.title}
                 css={`
-                  width: ${index == 2 ? "100%" : "auto"};
+                  width: ${index === 2 ? "100%" : "auto"};
                   @media (max-width: 1218px) {
                     h2 {
                       margin-left: unset;

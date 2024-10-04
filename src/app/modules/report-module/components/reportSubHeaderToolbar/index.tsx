@@ -54,6 +54,7 @@ export const useStyles = makeStyles(() =>
   })
 );
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 export function ReportSubheaderToolbar(
   props: Readonly<ReportSubheaderToolbarProps>
 ) {
@@ -239,7 +240,7 @@ export function ReportSubheaderToolbar(
       .catch((error) => console.log(error));
   };
 
-  const handleViewDuplocatedReport = () => {
+  const handleViewDuplicatedReport = () => {
     setSnackbarState({ ...snackbarState, open: false });
     history.push(`/report/${duplicatedReportId}`);
     setDuplicatedReportId(null);
@@ -574,7 +575,7 @@ export function ReportSubheaderToolbar(
             key={snackbarState.vertical + snackbarState.horizontal}
           >
             <DuplicateMessage
-              action={handleViewDuplocatedReport}
+              action={handleViewDuplicatedReport}
               closeSnackbar={() =>
                 setSnackbarState({ ...snackbarState, open: false })
               }
@@ -593,15 +594,7 @@ export function ReportSubheaderToolbar(
             message={`Report has been duplicated successfully!`}
             key={snackbarState.vertical + snackbarState.horizontal}
             action={
-              <button
-                onClick={() => {
-                  setSnackbarState({ ...snackbarState, open: false });
-                  history.push(`/report/${duplicatedReportId}`);
-                  setDuplicatedReportId(null);
-                }}
-              >
-                GO TO REPORT
-              </button>
+              <button onClick={handleViewDuplicatedReport}>GO TO REPORT</button>
             }
           />
         )}

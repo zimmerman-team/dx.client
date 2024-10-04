@@ -7,7 +7,7 @@ import BgEllipses from "app/modules/home-module/assets/full-bg-ellipses.svg";
 import { Box, Container } from "@material-ui/core";
 import PlanCard from "./components/plan-card";
 
-import HomeFooter from "../../components/Footer";
+import HomeFooter from "app/modules/home-module/components/Footer";
 import Features from "./components/features";
 import MFALogo from "./assets/mfa-logo";
 import TGFLogo from "./assets/tgf-logo";
@@ -51,8 +51,7 @@ export default function PricingModule() {
         },
       }
     );
-    const customerId = customerCreationResponse.data.data;
-    return customerId;
+    return customerCreationResponse.data.data;
   };
 
   const plans = [
@@ -126,14 +125,13 @@ export default function PricingModule() {
         },
       }
     );
-    const sessionUrl = checkoutSessionResponse.data.data;
-    return sessionUrl;
+    return checkoutSessionResponse.data.data;
   };
 
   const handlePlanButtonClick = async (key: string) => {
     if (!isAuthenticated) {
       return history.replace(
-        `/onboarding/login?to=${location.pathname}${location.search}`
+        `/onboarding/login?to=${window.location.pathname}${window.location.search}`
       );
     }
     switch (key) {

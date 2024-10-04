@@ -125,6 +125,12 @@ interface IEchartTypes {
   description: string;
 }
 
+const barChartDescription =
+  "Bar charts present data by visually displaying and comparing categorical information or discrete values through the use of bars of varying lengths or heights.";
+const changesOverTime = "changes over time";
+const graphDescription =
+  "Network graphs illustrate relationships between nodes in a network. Nodes are represented as points, and connections between nodes are depicted as lines";
+
 export const echartTypes = (big: boolean): IEchartTypes[] => {
   return [
     {
@@ -135,8 +141,7 @@ export const echartTypes = (big: boolean): IEchartTypes[] => {
       categories: ["Correllations"],
       class: "basic",
       ssr: false,
-      description:
-        "Bar charts present data by visually displaying and comparing categorical information or discrete values through the use of bars of varying lengths or heights.",
+      description: barChartDescription,
     },
     {
       id: "echartsMultisetBarchart",
@@ -146,8 +151,7 @@ export const echartTypes = (big: boolean): IEchartTypes[] => {
       categories: ["Correllations", "Proportions"],
       class: "advanced",
       ssr: false,
-      description:
-        "Bar charts present data by visually displaying and comparing categorical information or discrete values through the use of bars of varying lengths or heights.",
+      description: barChartDescription,
     },
     {
       id: "echartsStackedBarchart",
@@ -157,15 +161,14 @@ export const echartTypes = (big: boolean): IEchartTypes[] => {
       categories: ["Correllations", "Proportions"],
       class: "advanced",
       ssr: false,
-      description:
-        "Bar charts present data by visually displaying and comparing categorical information or discrete values through the use of bars of varying lengths or heights.",
+      description: barChartDescription,
     },
     {
       id: "echartsLinechart",
       label: "Line chart",
       icon: <LineChartIcon big={big} />,
       preview: <LineChartPreviewImg />,
-      categories: ["Trends", "changes over time"],
+      categories: ["Trends", changesOverTime],
       class: "basic",
 
       ssr: false,
@@ -281,7 +284,7 @@ export const echartTypes = (big: boolean): IEchartTypes[] => {
       label: "Line Stacked Chart",
       icon: <AreastackedIcon big={big} />,
       preview: <AreastackedPreviewImg />,
-      categories: ["Trends", "changes over time"],
+      categories: ["Trends", changesOverTime],
       class: "compound",
       ssr: false,
       description:
@@ -292,7 +295,7 @@ export const echartTypes = (big: boolean): IEchartTypes[] => {
       label: "Area Time Axis Chart",
       icon: <AreaTimeAxisIcon big={big} />,
       preview: <AreatimeaxisPreviewImg />,
-      categories: ["Trends", "changes over time"],
+      categories: ["Trends", changesOverTime],
       class: "compound",
       ssr: false,
       description:
@@ -330,8 +333,7 @@ export const echartTypes = (big: boolean): IEchartTypes[] => {
       categories: ["Networks"],
       class: "compound",
       ssr: false,
-      description:
-        "Network graphs illustrate relationships between nodes in a network. Nodes are represented as points, and connections between nodes are depicted as lines",
+      description: graphDescription,
     },
     {
       id: "echartsForcegraph",
@@ -341,8 +343,7 @@ export const echartTypes = (big: boolean): IEchartTypes[] => {
       categories: ["Networks"],
       class: "compound",
       ssr: false,
-      description:
-        "Network graphs illustrate relationships between nodes in a network. Nodes are represented as points, and connections between nodes are depicted as lines",
+      description: graphDescription,
     },
 
     {
@@ -353,8 +354,7 @@ export const echartTypes = (big: boolean): IEchartTypes[] => {
       categories: ["Networks"],
       class: "compound",
       ssr: false,
-      description:
-        "Network graphs illustrate relationships between nodes in a network. Nodes are represented as points, and connections between nodes are depicted as lines",
+      description: graphDescription,
     },
   ];
 };
@@ -367,8 +367,7 @@ export const coloredEchartTypes = () => {
       icon: <ColoredBarChartIcon />,
       categories: ["Correllations"],
       ssr: false,
-      description:
-        "It displays a categorical dimension and related amounts. Each bar represents a category, width is proportional to the quantitative dimension.",
+      description: barChartDescription,
     },
     {
       id: "echartsMultisetBarchart",
@@ -376,8 +375,7 @@ export const coloredEchartTypes = () => {
       icon: <ColoredBarChartIcon />,
       categories: ["Correllations", "Proportions"],
       ssr: false,
-      description:
-        "It displays a categorical dimension and related amounts. Each bar represents a category, width is proportional to the quantitative dimension.",
+      description: barChartDescription,
     },
     {
       id: "echartsStackedBarchart",
@@ -385,8 +383,7 @@ export const coloredEchartTypes = () => {
       icon: <ColoredBarChartIcon />,
       categories: ["Correllations", "Proportions"],
       ssr: false,
-      description:
-        "It displays a categorical dimension and related amounts. Each bar represents a category, width is proportional to the quantitative dimension.",
+      description: barChartDescription,
     },
     {
       id: "echartsGeomap",
@@ -406,7 +403,7 @@ export const coloredEchartTypes = () => {
       id: "echartsLinechart",
       label: "Line chart",
       icon: <ColoredLineChartIcon />,
-      categories: ["Trends", "changes over time"],
+      categories: ["Trends", changesOverTime],
       ssr: false,
       description:
         "It displays a quantitative dimension over a continuous interval or time period. Colour can be optionally used to encode an additional quantitative or categorical dimension.",
@@ -471,8 +468,7 @@ export const coloredEchartTypes = () => {
       icon: <ColoredForceGraphIcon />,
       categories: ["Networks"],
       ssr: false,
-      description:
-        "Network graphs illustrate relationships between nodes in a network. Nodes are represented as points, and connections between nodes are depicted as lines",
+      description: graphDescription,
     },
     {
       id: "echartsCirculargraph",
@@ -480,14 +476,13 @@ export const coloredEchartTypes = () => {
       icon: <ColoredCircularGraphIcon />,
       categories: ["Networks"],
       ssr: false,
-      description:
-        "Network graphs illustrate relationships between nodes in a network. Nodes are represented as points, and connections between nodes are depicted as lines",
+      description: graphDescription,
     },
     {
       id: "echartsAreastack",
       label: "Line Stacked Chart",
       icon: <ColoredAreastackedIcon />,
-      categories: ["Trends", "changes over time"],
+      categories: ["Trends", changesOverTime],
       ssr: false,
       description:
         "Line stacked charts present data by illustrating trends and changes in continuous or sequential data points over time, making them ideal for visualizing patterns, fluctuations, or relationships in data.",
@@ -525,15 +520,14 @@ export const coloredEchartTypes = () => {
       icon: <ColoredGraphGLIcon />,
       categories: ["Networks"],
       ssr: false,
-      description:
-        "Network graphs illustrate relationships between nodes in a network. Nodes are represented as points, and connections between nodes are depicted as lines",
+      description: graphDescription,
     },
 
     {
       id: "echartsAreatimeaxis",
       label: "Area Time Axis Chart",
       icon: <ColoredAreaTimeAxisIcon />,
-      categories: ["Trends", "changes over time"],
+      categories: ["Trends", changesOverTime],
       ssr: false,
       description:
         "Area time Axis charts present data by illustrating trends and changes in continuous or sequential data points over time, making them ideal for visualizing patterns, fluctuations, or relationships in data.",

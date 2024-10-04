@@ -139,52 +139,51 @@ function ReportEditView(props: Readonly<ReportEditViewProps>) {
     setOpenTour(false);
   }
 
-  const framesArrayFromReportData = () => {
-    const frameArray: IFramesArray[] = reportData.rows?.map(
-      (rowFrame, index) => {
-        const contentTypes = rowFrame.items.map((item) => {
-          if (item === null) {
-            return null;
-          }
-          if (get(item, "embedUrl", null)) {
-            return "video";
-          } else if (get(item, "imageUrl", null)) {
-            return "image";
-          } else if (typeof item === "object") {
-            return "text";
-          } else {
-            return "chart";
-          }
-        });
-        const content = rowFrame.items.map((item, index) => {
-          return contentTypes[index] === "text"
-            ? EditorState.createWithContent(convertFromRaw(item as any))
-            : item;
-        });
-        const isDivider =
-          content &&
-          content.length === 1 &&
-          content[0] === ReportElementsType.DIVIDER;
-        const id = v4();
+  const getContentType = (item: string | object) => {
+    if (item === null) {
+      return null;
+    }
+    if (get(item, "embedUrl", null)) {
+      return "video";
+    } else if (get(item, "imageUrl", null)) {
+      return "image";
+    } else if (typeof item === "object") {
+      return "text";
+    } else {
+      return "chart";
+    }
+  };
 
-        return {
-          id,
-          structure: rowFrame.structure,
-          frame: {
-            rowIndex: index,
-            rowId: id,
-            type: isDivider ? "divider" : "rowFrame",
-            forceSelectedType: rowFrame.structure ?? undefined,
-            previewItems: content,
-          },
-          content,
-          contentWidths: [...rowFrame.contentWidths?.widths] ?? [],
-          contentHeights: [...rowFrame.contentHeights?.heights] ?? [],
-          contentTypes,
-        };
-      }
-    );
-    return frameArray;
+  const framesArrayFromReportData = (): IFramesArray[] => {
+    return reportData.rows?.map((rowFrame, index) => {
+      const contentTypes = rowFrame.items.map(getContentType);
+      const content = rowFrame.items.map((item, index) => {
+        return contentTypes[index] === "text"
+          ? EditorState.createWithContent(convertFromRaw(item as any))
+          : item;
+      });
+      const isDivider =
+        content &&
+        content.length === 1 &&
+        content[0] === ReportElementsType.DIVIDER;
+      const id = v4();
+
+      return {
+        id,
+        structure: rowFrame.structure,
+        frame: {
+          rowIndex: index,
+          rowId: id,
+          type: isDivider ? "divider" : "rowFrame",
+          forceSelectedType: rowFrame.structure ?? undefined,
+          previewItems: content,
+        },
+        content,
+        contentWidths: [...rowFrame.contentWidths?.widths] ?? [],
+        contentHeights: [...rowFrame.contentHeights?.heights] ?? [],
+        contentTypes,
+      };
+    });
   };
 
   const headerDetailsFromReportData = () => {

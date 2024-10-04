@@ -173,16 +173,17 @@ export default function RowFrame(props: RowFrameProps) {
     }[][]
   >([]);
 
+  const contentContainerId = "content-container";
+
   const onContentContainerResize = () => {
-    const contentContainer = document.getElementById("content-container");
+    const contentContainer = document.getElementById(contentContainerId);
     if (contentContainer) {
       const contentContainerWidth = contentContainer.offsetWidth;
       const newItems = _rowStructureDetailItems.map((item) => {
-        const items = item.map((subitem) => ({
+        return item.map((subitem) => ({
           ...subitem,
           width: contentContainerWidth * subitem.factor,
         }));
-        return items;
       });
       setRowStructureDetailItems(newItems);
     }
@@ -322,7 +323,7 @@ export default function RowFrame(props: RowFrameProps) {
   }, [selectedTypeHistory]);
 
   React.useEffect(() => {
-    const contentContainer = document.getElementById("content-container");
+    const contentContainer = document.getElementById(contentContainerId);
     if (contentContainer) {
       onContentContainerResize();
       contentContainer.addEventListener("resize", onContentContainerResize);
@@ -368,7 +369,7 @@ export default function RowFrame(props: RowFrameProps) {
     );
   }, [selectedType]);
 
-  const contentContainer = document.getElementById("content-container");
+  const contentContainer = document.getElementById(contentContainerId);
   if (!contentContainer || rowStructureDetailItems.length === 0)
     return <div>loading</div>;
 

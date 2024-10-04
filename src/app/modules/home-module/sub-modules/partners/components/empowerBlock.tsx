@@ -20,33 +20,24 @@ export default function EmpowerBlock(props: {
   const { isAuthenticated } = useAuth0();
 
   let mainText = "";
-  let subText = "";
+  let subText =
+    "Dataxplorer simplifies and empowers visual data reporting for all.";
 
   switch (props.view) {
     case "why-dx":
       mainText = `Turn Data into Impact in Minutes with\nDataxplorer`;
-      subText =
-        "Dataxplorer simplifies and empowers visual data reporting for all.";
       break;
     case "contact":
       mainText = "Dataxplorer Equips You with\nInsightful Data";
-      subText =
-        "Dataxplorer simplifies and empowers visual data reporting for all.";
       break;
     case "about":
       mainText = `Dataxplorer Equips You with\nInsightful Data`;
-      subText =
-        "Dataxplorer simplifies and empowers visual data reporting for all.";
       break;
     case "partners":
       mainText = `Global Health and International Development\nOrganizations are using Dataxplorer`;
-      subText =
-        "Dataxplorer simplifies and empowers visual data reporting for all.";
       break;
     case "explore":
       mainText = "Explore Empowered Data";
-      subText =
-        "Dataxplorer simplifies and empowers visual data reporting for all.";
       break;
     case "landing":
       mainText = "Start Making Impact Today\nwith Dataxplorer";

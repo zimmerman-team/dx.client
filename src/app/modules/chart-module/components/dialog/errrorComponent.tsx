@@ -1,6 +1,7 @@
 import React from "react";
 import { styles as commonStyles } from "app/modules/chart-module/routes/common/styles";
 import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
+import { useLocation } from "react-router-dom";
 
 export default function ErrorComponent(props: {
   page: string;
@@ -8,6 +9,7 @@ export default function ErrorComponent(props: {
   dataError: boolean;
   chartErrorMessage: string;
 }) {
+  const location = useLocation();
   return (
     <div css={commonStyles.container}>
       <div

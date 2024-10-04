@@ -116,13 +116,15 @@ export default function DatasetsGrid(props: Readonly<Props>) {
 
   React.useEffect(() => {
     //load data if intersection observer is triggered
-    if (datasetCount > limit) {
-      if (isObserved && datasetLoadSuccess) {
-        if (loadedDatasets.length !== datasetCount) {
-          //update the offset value for the next load
-          setOffset(offset + limit);
-        }
-      }
+
+    if (
+      datasetCount > limit &&
+      isObserved &&
+      datasetLoadSuccess &&
+      loadedDatasets.length !== datasetCount
+    ) {
+      //update the offset value for the next load
+      setOffset(offset + limit);
     }
   }, [isObserved]);
 

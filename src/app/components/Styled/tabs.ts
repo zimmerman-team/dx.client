@@ -4,6 +4,10 @@ interface ITab {
   active?: boolean;
   position?: string;
 }
+
+const gothamNarrowBold = "GothamNarrow-Bold";
+const gothamNarrowBook = "GothamNarrow-Book";
+const translateX0 = "translateX(0%)";
 export const Tab = {
   Container: styled.div`
     display: flex;
@@ -21,7 +25,7 @@ export const Tab = {
     color: ${(props) => (props.active ? "#6061E5" : "#000000")};
     font-weight: ${(props) => (props.active ? "bold" : "normal")};
     font-family: ${(props) =>
-        props.active ? "GothamNarrow-Bold" : "GothamNarrow-Book"},
+        props.active ? gothamNarrowBold : gothamNarrowBook},
       "Helvetica Neue", sans-serif;
 
     ::after {
@@ -33,7 +37,7 @@ export const Tab = {
       border-bottom: 2px solid
         ${(props) => (props.active ? "#6061E5" : "transparent")};
       transform: ${(props) =>
-        props.active ? "translateX(0%)" : `translateX(100%)`};
+        props.active ? translateX0 : `translateX(100%)`};
       transition: transform 0.3s linear;
     }
   `,
@@ -43,7 +47,7 @@ export const Tab = {
     color: ${(props) => (props.active ? "#6061E5" : "#000000")};
     font-weight: ${(props) => (props.active ? "bold" : "normal")};
     font-family: ${(props) =>
-        props.active ? "GothamNarrow-Bold" : "GothamNarrow-Book"},
+        props.active ? gothamNarrowBold : gothamNarrowBook},
       "Helvetica Neue", sans-serif;
 
     ::after {
@@ -56,8 +60,8 @@ export const Tab = {
         ${(props) => (props.active ? "#6061E5" : "transparent")};
       transform: ${(props) =>
         props.active
-          ? "translateX(0%)"
-          : `translateX(${props.position == "left" ? "-100%" : "100%"} )`};
+          ? translateX0
+          : `translateX(${props.position === "left" ? "-100%" : "100%"} )`};
       transition: transform 0.3s linear;
     }
   `,
@@ -68,7 +72,7 @@ export const Tab = {
     color: ${(props) => (props.active ? "#6061E5" : "#000000")};
     font-weight: ${(props) => (props.active ? "700" : "normal")};
     font-family: ${(props) =>
-        props.active ? "GothamNarrow-Bold" : "GothamNarrow-Book"},
+        props.active ? gothamNarrowBold : gothamNarrowBook},
       "Helvetica Neue", sans-serif;
 
     ::after {
@@ -80,7 +84,7 @@ export const Tab = {
       border-bottom: 2px solid
         ${(props) => (props.active ? "#6061E5" : "transparent")};
       transform: ${(props) =>
-        props.active ? "translateX(0%)" : "translateX(-100%)"};
+        props.active ? translateX0 : "translateX(-100%)"};
       transition: transform 0.3s linear;
     }
   `,

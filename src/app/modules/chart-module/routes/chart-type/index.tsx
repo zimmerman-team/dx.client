@@ -202,6 +202,104 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
       setSelectedAIChart(Boolean(aIChartSuggestions(chartTypeId)));
     };
 
+  const renderChartOptions = (ct: ChartTypeModel, paid: boolean) => {
+    return (
+      <Grid item xs={12} sm={6} md={4} key={ct.id}>
+        <button
+          onClick={ct.label === "" ? () => {} : onChartTypeChange(ct.id)}
+          data-cy="chart-type-item"
+          disabled={paid && userPlan?.planData?.name === "Free"}
+          css={`
+            position: relative;
+            width: 100%;
+            height: 64px;
+            display: flex;
+            padding: 0 15px;
+            user-select: none;
+            border-radius: 8px;
+            flex-direction: row;
+            align-items: center;
+            background: ${getColor(ct.id).background};
+            border: 1px solid ${getColor(ct.id).border};
+            filter: ${paid && userPlan?.planData?.name === "Free"
+              ? "blur(5px)"
+              : "none"};
+            ${(ct.label === "" ||
+              (paid && userPlan?.planData?.name === "Free")) &&
+            `pointer-events: none;background: #f1f3f5;`}
+
+            &:hover {
+              cursor: ${ct.label !== "" ? "pointer" : "auto"};
+              background: #cfd4da;
+              border-color: #262c34;
+            }
+            svg {
+              path {
+                fill: ${aIChartSuggestions(ct.id) ? "#fff" : "#262C34"};
+              }
+              circle {
+                fill: ${aIChartSuggestions(ct.id) ? "#fff" : "#262C34"};
+              }
+            }
+          `}
+          data-testid={ct.id}
+        >
+          {ct.icon}
+          <div
+            css={`
+              display: flex;
+              margin-left: 15px;
+              flex-direction: column;
+              align-items: flex-start;
+              gap: 3px;
+            `}
+          >
+            <div
+              css={`
+                font-size: 14px;
+                color: ${aIChartSuggestions(ct.id) ? "#fff" : "#262C34"};
+                b {
+                  margin: 0;
+                }
+              `}
+            >
+              <b>{ct.label}</b>
+            </div>
+            <div
+              css={`
+                font-size: 12px;
+                font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
+                color: ${aIChartSuggestions(ct.id) ? "#fff" : "#262C34"};
+              `}
+            >
+              {ct.categories.join(", ")}
+            </div>
+          </div>
+          <div
+            css={`
+              display: ${aIChartSuggestions(ct.id) ? "flex" : "none"};
+              position: absolute;
+              top: 6px;
+              right: 6px;
+              background: #daf5f3;
+              border-radius: 4px;
+              justify-content: center;
+              align-items: center;
+              width: 20px;
+              height: 16px;
+              color: #373d43;
+              font-size: 10px;
+              font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
+            `}
+            data-cy="ai-suggestion-icon"
+          >
+            AI
+          </div>
+        </button>
+      </Grid>
+    );
+  };
+
   return (
     <div css={commonStyles.container}>
       <div
@@ -313,113 +411,7 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
             <Grid container item spacing={2}>
               {echartTypes(false)
                 .filter((c) => c.class === "basic")
-                .map((ct: ChartTypeModel) => {
-                  return (
-                    <Grid item xs={12} sm={6} md={4} key={ct.id}>
-                      <button
-                        onClick={
-                          ct.label === "" ? () => {} : onChartTypeChange(ct.id)
-                        }
-                        data-cy="chart-type-item"
-                        css={`
-                          position: relative;
-                          width: 100%;
-                          height: 64px;
-                          display: flex;
-                          padding: 0 15px;
-                          user-select: none;
-                          border-radius: 8px;
-                          flex-direction: row;
-                          align-items: center;
-                          background: ${getColor(ct.id).background};
-                          border: 1px solid ${getColor(ct.id).border};
-
-                          ${ct.label === "" &&
-                          `pointer-events: none;background: #f1f3f5;`}
-
-                          &:hover {
-                            cursor: ${ct.label !== "" ? "pointer" : "auto"};
-                            background: #cfd4da;
-                            border-color: #262c34;
-                          }
-                          svg {
-                            path {
-                              fill: ${aIChartSuggestions(ct.id)
-                                ? "#fff"
-                                : "#262C34"};
-                            }
-                            circle {
-                              fill: ${aIChartSuggestions(ct.id)
-                                ? "#fff"
-                                : "#262C34"};
-                            }
-                          }
-                        `}
-                        data-testid={ct.id}
-                      >
-                        {ct.icon}
-                        <div
-                          css={`
-                            display: flex;
-                            margin-left: 15px;
-                            flex-direction: column;
-                            align-items: flex-start;
-                            gap: 3px;
-                          `}
-                        >
-                          <div
-                            css={`
-                              font-size: 14px;
-                              color: ${aIChartSuggestions(ct.id)
-                                ? "#fff"
-                                : "#262C34"};
-                              b {
-                                margin: 0;
-                              }
-                            `}
-                          >
-                            <b>{ct.label}</b>
-                          </div>
-                          <div
-                            css={`
-                              font-size: 12px;
-                              font-family: "GothamNarrow-Book", "Helvetica Neue",
-                                sans-serif;
-                              color: ${aIChartSuggestions(ct.id)
-                                ? "#fff"
-                                : "#262C34"};
-                            `}
-                          >
-                            {ct.categories.join(", ")}
-                          </div>
-                        </div>
-                        <div
-                          css={`
-                            display: ${aIChartSuggestions(ct.id)
-                              ? "flex"
-                              : "none"};
-                            position: absolute;
-                            top: 6px;
-                            right: 6px;
-                            background: #daf5f3;
-                            border-radius: 4px;
-                            justify-content: center;
-                            align-items: center;
-                            width: 20px;
-                            height: 16px;
-                            color: #373d43;
-                            font-size: 10px;
-                            font-family: "GothamNarrow-Book", "Helvetica Neue",
-                              sans-serif;
-                          `}
-                          data-cy="ai-suggestion-icon"
-                        >
-                          AI
-                        </div>
-                      </button>
-                    </Grid>
-                  );
-                })}
+                .map((v) => renderChartOptions(v, false))}
             </Grid>
           </Grid>
         </div>
@@ -451,117 +443,7 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
             <Grid container item spacing={2}>
               {echartTypes(false)
                 .filter((c) => c.class === "advanced")
-                .map((ct: ChartTypeModel) => {
-                  return (
-                    <Grid item xs={12} sm={6} md={4} key={ct.id}>
-                      <button
-                        onClick={
-                          ct.label === "" ? () => {} : onChartTypeChange(ct.id)
-                        }
-                        data-cy="chart-type-item"
-                        disabled={userPlan?.planData?.name === "Free"}
-                        css={`
-                          position: relative;
-                          width: 100%;
-                          height: 64px;
-                          display: flex;
-                          padding: 0 15px;
-                          user-select: none;
-                          border-radius: 8px;
-                          flex-direction: row;
-                          align-items: center;
-                          background: ${getColor(ct.id).background};
-                          border: 1px solid ${getColor(ct.id).border};
-                          filter: ${userPlan?.planData?.name === "Free"
-                            ? "blur(5px)"
-                            : "none"};
-                          ${(ct.label === "" ||
-                            userPlan?.planData?.name === "Free") &&
-                          `pointer-events: none;background: #f1f3f5;`}
-
-                          &:hover {
-                            cursor: ${ct.label !== "" ? "pointer" : "auto"};
-                            background: #cfd4da;
-                            border-color: #262c34;
-                          }
-                          svg {
-                            path {
-                              fill: ${aIChartSuggestions(ct.id)
-                                ? "#fff"
-                                : "#262C34"};
-                            }
-                            circle {
-                              fill: ${aIChartSuggestions(ct.id)
-                                ? "#fff"
-                                : "#262C34"};
-                            }
-                          }
-                        `}
-                        data-testid={ct.id}
-                      >
-                        {ct.icon}
-                        <div
-                          css={`
-                            display: flex;
-                            margin-left: 15px;
-                            flex-direction: column;
-                            align-items: flex-start;
-                            gap: 3px;
-                          `}
-                        >
-                          <div
-                            css={`
-                              font-size: 14px;
-                              color: ${aIChartSuggestions(ct.id)
-                                ? "#fff"
-                                : "#262C34"};
-                              b {
-                                margin: 0;
-                              }
-                            `}
-                          >
-                            <b>{ct.label}</b>
-                          </div>
-                          <div
-                            css={`
-                              font-size: 12px;
-                              font-family: "GothamNarrow-Book", "Helvetica Neue",
-                                sans-serif;
-                              color: ${aIChartSuggestions(ct.id)
-                                ? "#fff"
-                                : "#262C34"};
-                            `}
-                          >
-                            {ct.categories.join(", ")}
-                          </div>
-                        </div>
-                        <div
-                          css={`
-                            display: ${aIChartSuggestions(ct.id)
-                              ? "flex"
-                              : "none"};
-                            position: absolute;
-                            top: 6px;
-                            right: 6px;
-                            background: #daf5f3;
-                            border-radius: 4px;
-                            justify-content: center;
-                            align-items: center;
-                            width: 20px;
-                            height: 16px;
-                            color: #373d43;
-                            font-size: 10px;
-                            font-family: "GothamNarrow-Book", "Helvetica Neue",
-                              sans-serif;
-                          `}
-                          data-cy="ai-suggestion-icon"
-                        >
-                          AI
-                        </div>
-                      </button>
-                    </Grid>
-                  );
-                })}
+                .map((v) => renderChartOptions(v, true))}
             </Grid>
           </Grid>
         </div>
@@ -593,118 +475,7 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
             <Grid container item spacing={2}>
               {echartTypes(false)
                 .filter((c) => c.class === "compound")
-                .map((ct: ChartTypeModel) => {
-                  return (
-                    <Grid item xs={12} sm={6} md={4} key={ct.id}>
-                      <button
-                        onClick={
-                          ct.label === "" ? () => {} : onChartTypeChange(ct.id)
-                        }
-                        data-cy="chart-type-item"
-                        disabled={userPlan?.planData?.name === "Free"}
-                        css={`
-                          position: relative;
-                          width: 100%;
-                          height: 64px;
-                          display: flex;
-                          padding: 0 15px;
-                          user-select: none;
-                          border-radius: 8px;
-                          flex-direction: row;
-                          align-items: center;
-                          background: ${getColor(ct.id).background};
-                          border: 1px solid ${getColor(ct.id).border};
-                          filter: ${userPlan?.planData?.name === "Free"
-                            ? "blur(5px)"
-                            : "none"};
-
-                          ${(ct.label === "" ||
-                            userPlan?.planData?.name === "Free") &&
-                          `pointer-events: none;background: #f1f3f5;`}
-
-                          &:hover {
-                            cursor: ${ct.label !== "" ? "pointer" : "auto"};
-                            background: #cfd4da;
-                            border-color: #262c34;
-                          }
-                          svg {
-                            path {
-                              fill: ${aIChartSuggestions(ct.id)
-                                ? "#fff"
-                                : "#262C34"};
-                            }
-                            circle {
-                              fill: ${aIChartSuggestions(ct.id)
-                                ? "#fff"
-                                : "#262C34"};
-                            }
-                          }
-                        `}
-                        data-testid={ct.id}
-                      >
-                        {ct.icon}
-                        <div
-                          css={`
-                            display: flex;
-                            margin-left: 15px;
-                            flex-direction: column;
-                            gap: 3px;
-                            align-items: flex-start;
-                          `}
-                        >
-                          <div
-                            css={`
-                              font-size: 14px;
-                              color: ${aIChartSuggestions(ct.id)
-                                ? "#fff"
-                                : "#262C34"};
-                              b {
-                                margin: 0;
-                              }
-                            `}
-                          >
-                            <b>{ct.label}</b>
-                          </div>
-                          <div
-                            css={`
-                              font-size: 12px;
-                              font-family: "GothamNarrow-Book", "Helvetica Neue",
-                                sans-serif;
-                              color: ${aIChartSuggestions(ct.id)
-                                ? "#fff"
-                                : "#262C34"};
-                            `}
-                          >
-                            {ct.categories.join(", ")}
-                          </div>
-                        </div>
-                        <div
-                          css={`
-                            display: ${aIChartSuggestions(ct.id)
-                              ? "flex"
-                              : "none"};
-                            position: absolute;
-                            top: 6px;
-                            right: 6px;
-                            background: #daf5f3;
-                            border-radius: 4px;
-                            justify-content: center;
-                            align-items: center;
-                            width: 20px;
-                            height: 16px;
-                            color: #373d43;
-                            font-size: 10px;
-                            font-family: "GothamNarrow-Book", "Helvetica Neue",
-                              sans-serif;
-                          `}
-                          data-cy="ai-suggestion-icon"
-                        >
-                          AI
-                        </div>
-                      </button>
-                    </Grid>
-                  );
-                })}
+                .map((v) => renderChartOptions(v, true))}
             </Grid>
           </Grid>
         </div>

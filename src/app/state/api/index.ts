@@ -9,6 +9,8 @@ import {
   ResponseData,
 } from "app/state/api/interfaces";
 
+const applicationJson = "application/json";
+
 export const APIModel = <QueryModel, ResponseModel>(
   url: string
 ): ApiModel<QueryModel, ResponseModel> => ({
@@ -85,7 +87,7 @@ export const APIModel = <QueryModel, ResponseModel>(
         }${query.filterString ? "?" : ""}${query.filterString ?? ""}`,
         {
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": applicationJson,
             Authorization: Authorization as string,
           },
         }
@@ -131,7 +133,7 @@ export const APIModel = <QueryModel, ResponseModel>(
           }`,
           {
             headers: {
-              "Content-Type": "application/json",
+              "Content-Type": applicationJson,
             },
           }
         )
@@ -150,7 +152,7 @@ export const APIModel = <QueryModel, ResponseModel>(
     axios
       .post(url, query.values, {
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": applicationJson,
           Authorization: `Bearer ${get(query, "token", undefined)}`,
         },
       })
@@ -173,7 +175,7 @@ export const APIModel = <QueryModel, ResponseModel>(
     axios
       .patch(`${url}/${query.patchId}`, query.values, {
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": applicationJson,
           Authorization: `Bearer ${get(query, "token", undefined)}`,
         },
       })
@@ -188,7 +190,7 @@ export const APIModel = <QueryModel, ResponseModel>(
     axios
       .delete(`${url}/${query.deleteId}`, {
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": applicationJson,
           Authorization: `Bearer ${get(query, "token", undefined)}`,
         },
       })

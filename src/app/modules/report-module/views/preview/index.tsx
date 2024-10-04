@@ -2,7 +2,7 @@ import React from "react";
 import get from "lodash/get";
 import { useRecoilState } from "recoil";
 import Box from "@material-ui/core/Box";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import useResizeObserver from "use-resize-observer";
 import Container from "@material-ui/core/Container";
@@ -16,7 +16,7 @@ import { ReportElementsType } from "app/modules/report-module/components/right-p
 import { reportContentContainerWidth } from "app/state/recoil/atoms";
 import { linkDecorator } from "app/modules/common/RichEditor/decorators";
 import { useTitle } from "react-use";
-import ReportUsePanel from "../../components/use-report-panel";
+import ReportUsePanel from "app/modules/report-module/components/use-report-panel";
 import HomeFooter from "app/modules/home-module/components/Footer";
 import { PageLoader } from "app/modules/common/page-loader";
 
@@ -87,13 +87,16 @@ export function ReportPreviewView(
 
   React.useEffect(() => {
     props.setAutoSave({ isAutoSaveEnabled: false });
-    if (!isLoading) {
-      if (token) {
-        fetchReportData({ token, getId: page });
-      } else if (!isAuthenticated) {
-        fetchReportData({ nonAuthCall: true, getId: page });
-      }
+
+    if (isLoading) {
+      return;
     }
+    if (token) {
+      fetchReportData({ token, getId: page });
+    } else if (!isAuthenticated) {
+      fetchReportData({ nonAuthCall: true, getId: page });
+    }
+
     return () => {
       clearReportData();
     };
@@ -193,7 +196,7 @@ export function ReportPreviewView(
             ) {
               return (
                 <div
-                  key={"divider" + `${index}`}
+                  key={`divider${index}`}
                   css={`
                     margin: 0 0 16px 0;
                     height: 2px;
@@ -213,7 +216,7 @@ export function ReportPreviewView(
                 framesArray={[]}
                 setPlugins={() => {}}
                 updateFramesArray={() => {}}
-                key={"rowframe" + `${index}`}
+                key={`rowframe${index}`}
                 endReportTour={() => {}}
                 onSave={async () => {}}
                 forceSelectedType={rowFrame.structure ?? undefined}
@@ -236,7 +239,8 @@ export function ReportPreviewView(
           })}
         <Box height={16} />
       </Container>
-      {location.search.includes("?fromLanding=true") && !isAuthenticated ? (
+      {window.location.search.includes("?fromLanding=true") &&
+      !isAuthenticated ? (
         <ReportUsePanel />
       ) : null}
       <Box height={71} /> <HomeFooter />

@@ -125,76 +125,70 @@ export const useOneDrivePicker = ({
   async function messageListener(message: MessageEvent) {
     if (port === null) return;
     if (win === null) return;
-    switch (message.data.type) {
-      case "notification":
-        break;
+    if (message.data.type !== "command") {
+      return;
+    }
 
-      case "command":
-        port.postMessage({
-          type: "acknowledge",
-          id: message.data.id,
-        });
+    port.postMessage({
+      type: "acknowledge",
+      id: message.data.id,
+    });
 
-        const command = message.data.data;
+    const command = message.data.data;
 
-        switch (command.command) {
-          case "authenticate":
-            // getToken is from scripts/auth.js
-            const token = await getToken();
+    switch (command.command) {
+      case "authenticate":
+        // getToken is from scripts/auth.js
+        const token = await getToken();
 
-            if (typeof token !== "undefined" && token !== null) {
-              port.postMessage({
-                type: "result",
-                id: message.data.id,
-                data: {
-                  result: "token",
-                  token,
-                },
-              });
-            } else {
-              console.error(
-                `Could not get auth token for command: ${JSON.stringify(
-                  command
-                )}`
-              );
-            }
-
-            break;
-
-          case "close":
-            win.close();
-            onCancel();
-            break;
-
-          case "pick":
-            downloadFiles(command);
-
-            port.postMessage({
-              type: "result",
-              id: message.data.id,
-              data: {
-                result: "success",
-              },
-            });
-
-            win.close();
-
-            break;
-
-          default:
-            console.warn(`Unsupported command: ${JSON.stringify(command)}`, 2);
-
-            port.postMessage({
-              result: "error",
-              error: {
-                code: "unsupportedCommand",
-                message: command.command,
-              },
-              isExpected: true,
-            });
-            break;
+        if (typeof token !== "undefined" && token !== null) {
+          port.postMessage({
+            type: "result",
+            id: message.data.id,
+            data: {
+              result: "token",
+              token,
+            },
+          });
+        } else {
+          console.error(
+            `Could not get auth token for command: ${JSON.stringify(command)}`
+          );
         }
 
+        break;
+
+      case "close":
+        win.close();
+        onCancel();
+        break;
+
+      case "pick":
+        downloadFiles(command);
+
+        port.postMessage({
+          type: "result",
+          id: message.data.id,
+          data: {
+            result: "success",
+          },
+        });
+
+        win.close();
+
+        break;
+
+      default:
+        console.warn(`Unsupported command: ${JSON.stringify(command)}`, 2);
+
+        port.postMessage({
+          result: "error",
+          error: {
+            code: "unsupportedCommand",
+            message: command.command,
+          },
+          isExpected: true,
+        });
         break;
     }
   }

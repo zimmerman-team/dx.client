@@ -38,6 +38,8 @@ export default function GridItem(props: Readonly<Props>) {
     return isAuthenticated && props.owner === user?.sub;
   }, [user, isAuthenticated]);
 
+  const disabledStyle = "opacity: 0.5;pointer-events: none;";
+
   return (
     <div
       css={`
@@ -232,9 +234,7 @@ export default function GridItem(props: Readonly<Props>) {
               }
             `}
           >
-            <div
-              css={!isAuthenticated ? "opacity: 0.5;pointer-events: none;" : ""}
-            >
+            <div css={!isAuthenticated ? disabledStyle : ""}>
               <IconButton
                 onClick={() => {
                   props.handleDuplicate?.(props.id as string);
@@ -252,13 +252,7 @@ export default function GridItem(props: Readonly<Props>) {
               </IconButton>
             </div>
             {!isMobile && (
-              <div
-                css={
-                  !canReportEditDelete
-                    ? "opacity: 0.5;pointer-events: none;"
-                    : ""
-                }
-              >
+              <div css={!canReportEditDelete ? disabledStyle : ""}>
                 <Link to={`/report/${props.id}/edit`} aria-label="edit-icon">
                   <Tooltip title="Edit" data-cy="report-grid-item-edit-btn">
                     <EditIcon
@@ -270,11 +264,7 @@ export default function GridItem(props: Readonly<Props>) {
                 </Link>
               </div>
             )}
-            <div
-              css={
-                !canReportEditDelete ? "opacity: 0.5;pointer-events: none;" : ""
-              }
-            >
+            <div css={!canReportEditDelete ? disabledStyle : ""}>
               <IconButton
                 onClick={() => props.handleDelete?.(props.id as string)}
                 aria-label="report-delete-button"

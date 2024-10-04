@@ -56,7 +56,7 @@ jobs:
           cache: 'yarn'
 
       - name: Install packages
-        run: yarn install && yarn add "https://github.com/zimmerman-team/rawgraphs-charts.git#b86c928" 
+        run: yarn install --frozen-lockfile && yarn add "https://github.com/zimmerman-team/rawgraphs-charts.git#b86c928" 
 
       - name: Build rawgraphs package
         run: |
@@ -84,7 +84,7 @@ jobs:
           cache: 'yarn'
 
       - name: Install packages
-        run: yarn install && yarn add "https://github.com/zimmerman-team/rawgraphs-charts.git#b86c928" 
+        run: yarn install --frozen-lockfile && yarn add "https://github.com/zimmerman-team/rawgraphs-charts.git#b86c928" 
 
       - name: Build rawgraphs package
         run: |
@@ -104,7 +104,7 @@ jobs:
           # https://docs.cypress.io/guides/continuous-integration/introduction#Boot-your-server
           start: yarn start
           wait-on: "http://127.0.0.1:3000" # Waits for above
-          wait-on-timeout: 180
+          wait-on-timeout: 200
           # Records to Cypress Cloud
           # https://docs.cypress.io/guides/cloud/projects#Set-up-a-project-to-record
           record: true

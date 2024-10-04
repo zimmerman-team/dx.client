@@ -6,12 +6,14 @@ import { ReactComponent as LinkedInIcon } from "app/modules/onboarding-module/as
 import { Container } from "@material-ui/core";
 import { useAuth0 } from "@auth0/auth0-react";
 import { socialAuth } from "app/utils/socialAuth";
+import { useLocation } from "react-router-dom";
 
 export function NotAuthorizedMessageModule(props: {
   asset: "chart" | "report" | "dataset";
   action: "view" | "edit" | "delete";
   name?: string;
 }) {
+  const location = useLocation();
   const { isAuthenticated } = useAuth0();
   const destinationPath = `?to=${location.pathname}${location.search}`;
   return (
