@@ -202,12 +202,19 @@ export default function AddDatasetFragment(props: Props) {
           />
         </>
       ) : (
-        <div>
+        <div
+          css={`
+            background: #fff;
+            border-radius: 16px;
+            margin-bottom: 40px;
+          `}
+        >
           <div
             css={`
               padding: 19px 23px;
               font-size: 14px;
               font-style: normal;
+              background: rgba(218, 218, 248, 0.3);
               font-weight: 400;
               line-height: normal;
               font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
