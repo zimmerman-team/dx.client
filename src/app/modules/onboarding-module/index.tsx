@@ -13,7 +13,7 @@ export default function Onboarding() {
   const history = useHistory();
   const location = useLocation();
   const { isAuthenticated } = useAuth0();
-  const mobile = useMediaQuery("(max-width: 959px)");
+  const tablet = useMediaQuery("(max-width: 1140px)");
 
   if (isAuthenticated) {
     history.replace("/");
@@ -25,12 +25,15 @@ export default function Onboarding() {
         padding-left: 40px;
         position: relative;
         height: 100vh;
+        @media (max-width: 1140px) {
+          padding-left: unset;
+        }
       `}
     >
       <Grid
         xs={12}
         sm={12}
-        md={6}
+        md={12}
         lg={true}
         css={`
           @media (max-width: 1024px) {
@@ -43,6 +46,12 @@ export default function Onboarding() {
           css={`
             width: 60%;
             margin: auto;
+            @media (max-width: 1140px) {
+              width: 395px;
+            }
+            @media (max-width: 428px) {
+              width: 94%;
+            }
           `}
         >
           <h2
@@ -71,7 +80,7 @@ export default function Onboarding() {
           </Switch>
         </div>
       </Grid>
-      {!mobile && (
+      {!tablet && (
         <Grid
           xs={false}
           sm={false}
