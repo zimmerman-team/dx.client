@@ -39,6 +39,7 @@ import EmbedChartDialog from "app/components/Dialogs/EmbedChartDialog";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import DuplicateMessage from "app/modules/common/mobile-duplicate-message";
 import { InfoSnackbar } from "app/modules/report-module/components/reportSubHeaderToolbar/infosnackbar";
+import ShareModal from "app/modules/dataset-module/component/shareModal";
 
 // eslint-disable-next-line sonarjs/cognitive-complexity
 export function ChartSubheaderToolbar(
@@ -52,7 +53,8 @@ export function ChartSubheaderToolbar(
   const token = useStoreState((state) => state.AuthToken.value);
   const titleRef = React.useRef<HTMLDivElement>(null);
   const innerContainerRef = React.useRef<HTMLDivElement>(null);
-  const innerContainerWidth = innerContainerRef?.current?.offsetWidth;
+  const [isShareModalOpen, setIsShareModalOpen] =
+    React.useState<boolean>(false);
   const { page, view } = useParams<{ page: string; view?: string }>();
   const [showDeleteDialog, setShowDeleteDialog] = React.useState(false);
   const [enableButton, setEnableButton] = React.useState<boolean>(false);
@@ -88,6 +90,8 @@ export function ChartSubheaderToolbar(
     (state) =>
       (state.charts.ChartGet.crudData ?? emptyChartAPI) as ChartAPIModel
   );
+  const shareURL = `${window.location.origin}/chart/${loadedChart.id}`;
+
   const editChartCrudData = useStoreState(
     (state) => state.charts.ChartUpdate.crudData
   ) as ChartAPIModel;
@@ -158,7 +162,11 @@ export function ChartSubheaderToolbar(
   };
 
   const handleShare = () => {
-    setDisplayEmbedModal(true);
+    if (isMobile) {
+      setIsShareModalOpen(true);
+    } else {
+      setDisplayEmbedModal(true);
+    }
   };
 
   const handleClose = () => {
@@ -648,6 +656,13 @@ export function ChartSubheaderToolbar(
         onClose={handleCloseSnackbar}
         message="Link copied to clipboard"
         data-testid="copied-link-snackbar"
+      />
+      <ShareModal
+        datasetDetails={loadedChart}
+        isShareModalOpen={isShareModalOpen}
+        setIsShareModalOpen={setIsShareModalOpen}
+        handleCopy={handleCopy}
+        url={shareURL}
       />
       <DeleteChartDialog
         modalDisplay={showDeleteDialog}
