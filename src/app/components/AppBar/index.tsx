@@ -81,7 +81,7 @@ function MobileHeader(props: { navLocation: string }) {
           overflow: ${isNavExpanded ? "auto" : "hidden"};
           padding: 0px 16px 16px 16px;
           width: 100%;
-          background: ${isNavExpanded ? "#F2F7FD" : "#fff"};
+          background: #f2f7fd;
           transition: all cubic-bezier(0.4, 0, 0.2, 1) 0.3s;
           position: fixed;
           top: 0;
