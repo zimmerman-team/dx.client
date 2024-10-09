@@ -1319,8 +1319,12 @@ export function useDataThemesEchart() {
 
     const nodes = uniqBy(data.nodes, "name");
 
+    const maxValue = nodes?.reduce((prev: number, curr: any) => {
+      return Math.max(prev, curr.value);
+    }, 0);
+
     nodes?.forEach(function (node: any) {
-      node.symbolSize = nodeSize;
+      node.symbolSize = (node.value / maxValue) * 50; // making the symbol size relative to the max value but max at 50
     });
 
     data.links?.forEach((link: any) => setLinkOpacity(link, linksOpacity));
