@@ -121,7 +121,8 @@ export default function HomeModule() {
                           gap: 10px;
                           color: #fff;
                           display: flex;
-                          padding: 9px 18px;
+                          height: 41px;
+                          width: 100%;
                           background: #a1a2ff;
                           align-items: center;
                           justify-content: center;
@@ -133,6 +134,17 @@ export default function HomeModule() {
                           @media (max-width: 400px) {
                             font-size: 12px;
                             padding: 8px 16px;
+                          }
+                        }
+                        @media (max-width: 655px) {
+                          flex-direction: column;
+                          justify-content: center;
+                          align-items: center;
+                          button {
+                            width: 60%;
+                            @media (max-width: 428px) {
+                              width: 85%;
+                            }
                           }
                         }
                       `}
