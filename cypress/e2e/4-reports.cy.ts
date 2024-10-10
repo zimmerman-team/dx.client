@@ -591,8 +591,8 @@ describe("Edit, duplicate and delete report", () => {
       cy.get('[data-cy="row-frame-handle"]').drag();
     });
     cy.get('[data-cy="report-row-placeholder"]').eq(2).scrollIntoView().drop();
-    cy.get('[data-cy="row-frame-text-item-0-0"]').should("have.length", 0);
     cy.wait(5000);
+    cy.get('[data-cy="row-frame-text-item-0-0"]').should("have.length", 0);
   });
 
   it("Can delete a report", () => {
