@@ -61,6 +61,7 @@ export default function ExternalSearch(props: {
     { name: "WHO", value: "WHO" },
     { name: "HDX", value: "HDX" },
     { name: "The Global Fund", value: "TGF" },
+    { name: "OECD", value: "OECD" },
   ];
 
   const { isObserved } = useInfinityScroll(observerTarget);
@@ -93,7 +94,7 @@ export default function ExternalSearch(props: {
         }&source=${
           props.sources.length
             ? props.sources.join(",")
-            : "Kaggle,World Bank,WHO,HDX,TGF"
+            : "Kaggle,World Bank,WHO,HDX,TGF,OECD"
         }&offset=${offset}&limit=${limit}&sortBy=${sortValue}`,
         {
           signal: abortControllerRef.current.signal,
