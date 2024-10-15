@@ -4,7 +4,7 @@ import { useTitle } from "react-use";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useStoreState } from "app/state/store/hooks";
 import BgEllipses from "app/modules/home-module/assets/full-bg-ellipses.svg";
-import { Box, Container } from "@material-ui/core";
+import { Box, Container, useMediaQuery } from "@material-ui/core";
 import PlanCard from "./components/plan-card";
 
 import HomeFooter from "app/modules/home-module/components/Footer";
@@ -13,6 +13,7 @@ import MFALogo from "./assets/mfa-logo";
 import TGFLogo from "./assets/tgf-logo";
 import IATILogo from "./assets/iati-logo";
 import { useHistory } from "react-router-dom";
+import MobilePlanCard from "./components/mobile-plan-card";
 
 const views = [
   {
@@ -29,6 +30,7 @@ export default function PricingModule() {
   useTitle("DX Dataxplorer - Pricing");
 
   const { user, isAuthenticated } = useAuth0();
+  const isMobile = useMediaQuery("(max-width: 1030px)");
 
   const [subscriptionPlan, setSubscriptionPlan] = React.useState("monthly");
 
@@ -131,7 +133,7 @@ export default function PricingModule() {
   const handlePlanButtonClick = async (key: string) => {
     if (!isAuthenticated) {
       return history.replace(
-        `/onboarding/login?to=${window.location.pathname}${window.location.search}`
+        `/onboarding/signin?to=${window.location.pathname}${window.location.search}`
       );
     }
     switch (key) {
@@ -172,6 +174,9 @@ export default function PricingModule() {
             line-height: normal;
             color: #231d2c;
             text-align: center;
+            @media (max-width: 1300px) {
+              font-size: 40px;
+            }
           `}
         >
           Create reports that aren't a pain to build
@@ -188,6 +193,15 @@ export default function PricingModule() {
             color: #231d2c;
             text-align: center;
             margin-top: 10px;
+            @media (max-width: 1300px) {
+              font-size: 18px;
+            }
+            @media (max-width: 600px) {
+              font-size: 16px;
+              b {
+                font-weight: 350;
+              }
+            }
           `}
         >
           DATAXPLORER simplifies and empowers visual data reporting for all.
@@ -200,6 +214,10 @@ export default function PricingModule() {
             justify-content: center;
             align-items: center;
             column-gap: 20px;
+            @media (max-width: 600px) {
+              flex-direction: column;
+              row-gap: 8px;
+            }
           `}
         >
           <div>
@@ -275,52 +293,60 @@ export default function PricingModule() {
           </div>
         </div>
         <Box height={65} />
+        {isMobile ? (
+          <>
+            <MobilePlanCard />
+          </>
+        ) : (
+          <>
+            <div
+              css={`
+                display: flex;
+                justify-content: flex-end;
+                column-gap: 24px;
+              `}
+            >
+              {plans.map((plan) => (
+                <PlanCard
+                  key={plan.key}
+                  plan={plan}
+                  activeView={subscriptionPlan}
+                  onButtonClick={handlePlanButtonClick}
+                />
+              ))}
+            </div>
 
-        <div
-          css={`
-            display: flex;
-            justify-content: flex-end;
-            column-gap: 24px;
-          `}
-        >
-          {plans.map((plan) => (
-            <PlanCard
-              plan={plan}
-              activeView={subscriptionPlan}
-              onButtonClick={handlePlanButtonClick}
-            />
-          ))}
-        </div>
+            <Features />
+            <Box height={100} />
+            <div>
+              <h2
+                css={`
+                  font-size: 18px;
+                  font-style: normal;
+                  font-weight: 400;
+                  line-height: 160%;
+                  font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
+                  color: #262c34;
+                  text-align: center;
+                `}
+              >
+                Trusted by
+              </h2>
+              <div
+                css={`
+                  margin-top: 24px;
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  column-gap: 200px;
+                `}
+              >
+                <MFALogo /> <TGFLogo /> <IATILogo />
+              </div>
+            </div>
+          </>
+        )}
 
-        <Features />
-
-        <Box height={100} />
-        <div>
-          <h2
-            css={`
-              font-size: 18px;
-              font-style: normal;
-              font-weight: 400;
-              line-height: 160%;
-              font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
-              color: #262c34;
-              text-align: center;
-            `}
-          >
-            Trusted by
-          </h2>
-          <div
-            css={`
-              margin-top: 24px;
-              display: flex;
-              justify-content: center;
-              align-items: center;
-              column-gap: 200px;
-            `}
-          >
-            <MFALogo /> <TGFLogo /> <IATILogo />
-          </div>
-        </div>
         <Box height={100} />
       </Container>
       <HomeFooter />

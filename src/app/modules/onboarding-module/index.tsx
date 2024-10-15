@@ -65,7 +65,7 @@ export default function Onboarding() {
               margin: 0;
             `}
           >
-            {location.pathname.includes("login")
+            {location.pathname.includes("signin")
               ? "Welcome back!"
               : "Create your free account."}
           </h2>
@@ -74,8 +74,8 @@ export default function Onboarding() {
             <Route path="/onboarding/signup">
               <AuthCard />
             </Route>
-            <Route path="/onboarding/login">
-              <AuthCard isLogin />
+            <Route path="/onboarding/signin">
+              <AuthCard isSignIn />
             </Route>
           </Switch>
         </div>

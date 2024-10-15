@@ -8,7 +8,7 @@ import { ReactComponent as LinkedInIcon } from "app/modules/onboarding-module/as
 import { ReactComponent as MicrosoftIcon } from "app/modules/onboarding-module/asset/microsoft-img.svg";
 import { useLocation } from "react-router-dom";
 
-export default function AuthCard(props: { isLogin?: boolean }) {
+export default function AuthCard(props: { isSignIn?: boolean }) {
   const [checked, setChecked] = React.useState(true);
   const location = useLocation();
 
@@ -44,7 +44,7 @@ export default function AuthCard(props: { isLogin?: boolean }) {
         css={socialloginbuttoncss}
         disabled={!checked}
         onClick={() => {
-          if (props.isLogin) {
+          if (props.isSignIn) {
             socialAuth("google-oauth2", undefined, location.search);
           } else {
             storeSignUpState();
@@ -52,14 +52,14 @@ export default function AuthCard(props: { isLogin?: boolean }) {
           }
         }}
       >
-        <GoogleIcon /> {props.isLogin ? "Log in" : "Sign up"} with Google
+        <GoogleIcon /> {props.isSignIn ? "Sign in" : "Sign up"} with Google
       </button>
       <button
         type="button"
         css={socialloginbuttoncss}
         disabled={!checked}
         onClick={() => {
-          if (props.isLogin) {
+          if (props.isSignIn) {
             socialAuth("linkedin", undefined, location.search);
           } else {
             storeSignUpState();
@@ -68,14 +68,14 @@ export default function AuthCard(props: { isLogin?: boolean }) {
         }}
       >
         <LinkedInIcon />
-        {props.isLogin ? "Log in" : "Sign up"} with LinkedIn
+        {props.isSignIn ? "Sign in" : "Sign up"} with LinkedIn
       </button>
       <button
         type="button"
         css={socialloginbuttoncss}
         disabled={!checked}
         onClick={() => {
-          if (props.isLogin) {
+          if (props.isSignIn) {
             socialAuth("windowslive", undefined, location.search);
           } else {
             storeSignUpState();
@@ -84,9 +84,9 @@ export default function AuthCard(props: { isLogin?: boolean }) {
         }}
       >
         <MicrosoftIcon />
-        {props.isLogin ? "Log in" : "Sign up"} with Microsoft
+        {props.isSignIn ? "Sign in" : "Sign up"} with Microsoft
       </button>
-      {props.isLogin ? null : (
+      {props.isSignIn ? null : (
         <FormControlLabel
           control={
             <Checkbox
