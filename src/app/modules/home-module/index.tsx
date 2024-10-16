@@ -141,7 +141,7 @@ export default function HomeModule() {
                           justify-content: center;
                           align-items: center;
                           button {
-                            width: 60%;
+                            width: 70%;
                             @media (max-width: 428px) {
                               width: 85%;
                             }
