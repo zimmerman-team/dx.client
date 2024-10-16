@@ -9,7 +9,7 @@ interface Props {
 export default function SplitBar(props: Props) {
   const history = useHistory();
   const location = useLocation();
-  const handleClick = (value: "login" | "signup") => {
+  const handleClick = (value: "signin" | "signup") => {
     history.push(`/onboarding/${value}`);
   };
   return (
@@ -26,8 +26,8 @@ export default function SplitBar(props: Props) {
         `}
       >
         <Slider.Left
-          active={location.pathname.includes("login") ? "#6061E5" : "#ADB5BD"}
-          onClick={() => handleClick("login")}
+          active={location.pathname.includes("signin") ? "#6061E5" : "#ADB5BD"}
+          onClick={() => handleClick("signin")}
         >
           <div className="title">
             <div

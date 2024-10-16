@@ -252,7 +252,7 @@ export function ReportSubheaderToolbar(
 
   const handleSignIn = () => {
     localStorage.setItem("duplicateReportAfterSignIn", page);
-    history.push("/onboarding/login");
+    history.push("/onboarding/signin");
   };
 
   return (

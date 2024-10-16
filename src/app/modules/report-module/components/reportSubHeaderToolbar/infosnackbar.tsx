@@ -150,6 +150,7 @@ export const shareModalcss = css`
     }
   }
   > div:nth-of-type(3) {
+    width: 100%;
     p {
       margin: 0;
       display: flex;
@@ -177,6 +178,10 @@ export const shareModalcss = css`
         width: 115.3px;
         height: 37px;
         cursor: pointer;
+        @media (max-width: 425px) {
+          flex-basis: 33.3%;
+          width: auto;
+        }
       }
     }
   }

@@ -89,6 +89,9 @@ export default function Settings() {
       <div
         css={`
           width: 70%;
+          @media (max-width: 600px) {
+            width: 100%;
+          }
         `}
       >
         <h4
@@ -112,6 +115,9 @@ export default function Settings() {
             css={`
               width: 60%;
               color: #ffffff;
+              button {
+                height: 32px;
+              }
             `}
           >
             <PrimaryButton

@@ -8,6 +8,7 @@ import { ReactComponent as FacebookIcon } from "app/components/Dialogs/EmbedChar
 import { ReactComponent as TwitterIcon } from "app/components/Dialogs/EmbedChartDialog/assets/twitter.svg";
 import { ReactComponent as LinkedinIcon } from "app/components/Dialogs/EmbedChartDialog/assets/linkedIn.svg";
 import { ReactComponent as PNGIcon } from "app/components/Dialogs/EmbedChartDialog/assets/png-icon.svg";
+import { ReactComponent as SVGIcon } from "app/components/Dialogs/EmbedChartDialog/assets/svg-icon.svg";
 import { ReactComponent as PDFIcon } from "app/components/Dialogs/EmbedChartDialog/assets/pdf-icon.svg";
 import { shareModalcss } from "app/modules/report-module/components/reportSubHeaderToolbar/infosnackbar";
 import SaveAlt from "@material-ui/icons/SaveAlt";
@@ -155,7 +156,7 @@ export default function ShareModal(props: {
                 handleTypeChange(".svg", props.datasetDetails?.name)
               }
             >
-              <PNGIcon />
+              <SVGIcon />
               SVG
             </button>
           </div>
