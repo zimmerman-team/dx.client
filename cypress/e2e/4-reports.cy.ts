@@ -466,10 +466,10 @@ describe("Edit, duplicate and delete report", () => {
     cy.wait(4000);
     cy.get('[data-cy="ai-agent-switch"]').should("not.be.checked");
 
-    cy.get('[data-cy="chart-type-item"]').contains("Bar chart").click();
+    cy.get('[data-cy="chart-type-item"]').contains("Bar Chart").first().click();
 
     cy.get('[data-cy="chart-type-preview"]')
-      .contains("Bar chart")
+      .contains("Bar Chart")
       .should("be.visible");
 
     cy.intercept(`${apiUrl}/chart`).as("saveChart");
