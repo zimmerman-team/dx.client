@@ -26,7 +26,7 @@ const useStyles = makeStyles(() =>
       width: 544,
       borderRadius: "10px",
       paddingRight: "2rem",
-      position: "absolute",
+      position: "relative",
       paddingLeft: "3.5rem",
       backgroundColor: "#fff",
       boxShadow:
@@ -62,15 +62,14 @@ export default function DeleteReportDialog(props: Props) {
           <div
             css={`
               width: 80%;
-              position: relative;
             `}
           >
             <IconButton
               onClick={() => props.setModalDisplay(false)}
               css={`
                 position: absolute;
-                right: -93px;
-                top: -16px;
+                right: 8px;
+                top: 6px;
               `}
             >
               <CloseOutlined htmlColor="#231D2C" />

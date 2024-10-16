@@ -26,7 +26,7 @@ const useStyles = makeStyles(() =>
       outline: 0,
       width: 646,
       borderRadius: "10px",
-      position: "absolute",
+      position: "relative",
       padding: "2.5rem 2.5rem 2.5rem 4.5rem",
       backgroundColor: "#fff",
       boxShadow:
@@ -74,14 +74,17 @@ export default function DeleteDatasetDialog(props: Props) {
             <form
               onSubmit={() => props.handleDelete(props.cardId)}
               data-cy="delete-dataset-item-form"
+              // css={`
+              //   width: 80%;
+              // `}
             >
               <div>
                 <IconButton
                   onClick={() => props.setModalDisplay(false)}
                   css={`
                     position: absolute;
-                    right: 20px;
-                    top: 18px;
+                    right: 8px;
+                    top: 6px;
                   `}
                 >
                   <CloseOutlined htmlColor="#231D2C" />
@@ -136,12 +139,15 @@ export default function DeleteDatasetDialog(props: Props) {
                       border-radius: 10px;
                       background: #ffffff;
                       height: 48px;
-                      width: 400px;
+                      width: 80%;
                       padding: 0px 24px;
                       :focus,
                       :active,
                       :hover {
                         outline: 1px solid #6061e5;
+                      }
+                      @media (max-width: 460px) {
+                        width: 100%;
                       }
                     `}
                     data-cy="delete-dataset-item-input"
