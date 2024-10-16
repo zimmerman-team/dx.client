@@ -560,7 +560,7 @@ const Box = (props: {
             ref={textResizableRef}
             onMouseEnter={() => setDisplayBoxIcons(true)}
             onMouseLeave={() => setDisplayBoxIcons(false)}
-            data-cy={`row-frame-text-item-${props.rowIndex}-${props.itemIndex}`}
+            data-cy={`row-frame-text-item`}
           >
             {!viewOnlyMode && displayBoxIcons && (
               <IconButton

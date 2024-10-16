@@ -367,7 +367,8 @@ describe("Edit, duplicate and delete report", () => {
 
     cy.get('[data-cy="row-frame-item-drop-zone-0-0"]').should("have.length", 0);
 
-    cy.get('[data-cy="row-frame-text-item-0-0"]')
+    cy.get('[data-cy="row-frame-text-item"]')
+      .first()
       .trigger("mouseover")
       .within(() => {
         cy.get('[data-cy="delete-item-button"]').click();
@@ -549,7 +550,8 @@ describe("Edit, duplicate and delete report", () => {
 
     cy.get('[data-cy="row-frame-chart-item-0-1"]').should("have.length", 1);
 
-    cy.get('[data-cy="row-frame-container-0"]')
+    cy.get('[data-cy="row-frame-container"]')
+      .first()
       .trigger("mouseover")
       .within(() => {
         cy.get('[data-cy="edit-row-structure-button"]').click();
@@ -587,12 +589,18 @@ describe("Edit, duplicate and delete report", () => {
 
     cy.wait("@fetchReport");
 
-    cy.get('[data-cy="row-frame-container-0"]').within(() => {
-      cy.get('[data-cy="row-frame-handle"]').drag();
-    });
+    cy.get('[data-cy="row-frame-container"]')
+      .first()
+      .within(() => {
+        cy.get('[data-cy="row-frame-handle"]').drag();
+      });
     cy.get('[data-cy="report-row-placeholder"]').eq(2).scrollIntoView().drop();
     cy.wait(5000);
-    cy.get('[data-cy="row-frame-text-item-0-0"]').should("have.length", 0);
+    cy.get('[data-cy="row-frame-container"]')
+      .first()
+      .within(() => {
+        cy.get('[data-cy="row-frame-text-item"]').should("have.length", 0);
+      });
   });
 
   it("Can delete a report", () => {
