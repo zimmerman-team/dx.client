@@ -153,6 +153,7 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
       return validSuggestions;
     } catch (e) {
       console.log(e);
+      return [];
     }
   };
 
@@ -315,51 +316,47 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
             justify-content: space-between;
           `}
         >
-          {chartTypesSuggestionsLoading ? (
-            <div
+          <>
+            <p
               css={`
-                height: 44px;
+                font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
+                font-size: 18px;
+                color: #231d2c;
+                margin-bottom: 0px;
+                span {
+                  color: #359c96;
+                  font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
+                }
               `}
-            />
-          ) : (
-            <>
-              {isAiActive ? (
-                <p
-                  css={`
-                    font-family: "GothamNarrow-Bold", "Helvetica Neue",
-                      sans-serif;
-                    font-size: 18px;
-                    color: #231d2c;
-                    margin-bottom: 0px;
-                    span {
-                      color: #359c96;
-                      font-family: "GothamNarrow-Bold", "Helvetica Neue",
-                        sans-serif;
-                    }
-                  `}
-                >
-                  {validAiSuggestions() === undefined ||
-                  validAiSuggestions()?.length === 0 ? (
-                    <>
-                      Our <span>AI agent</span> is unable to recommend a
-                      specific chart for your dataset. Feel free to choose any
-                      chart <br /> that best suits your needs. Your selection is
-                      entirely up to you! Simply make your choice and click
-                      "Next."{" "}
-                    </>
-                  ) : (
-                    <>
-                      Our <span>AI agent</span> is providing you with one or
-                      more suggested charts to communicate your dataset. <br />{" "}
-                      Feel free to pick another chart type.
-                    </>
-                  )}
-                </p>
-              ) : (
-                <div></div>
+            >
+              {isAiActive &&
+                !chartTypesSuggestionsLoading &&
+                validAiSuggestions().length === 0 && (
+                  <>
+                    Our <span>AI agent</span> is unable to recommend a specific
+                    chart for your dataset. Feel free to choose any chart <br />{" "}
+                    that best suits your needs. Your selection is entirely up to
+                    you! Simply make your choice and click "Next."{" "}
+                  </>
+                )}
+              {isAiActive && chartTypesSuggestionsLoading && (
+                <>
+                  Our <span>AI agent</span> is providing you with one or more
+                  suggested charts to communicate your dataset. <br /> Feel free
+                  to pick another chart type.
+                </>
               )}
-            </>
-          )}
+              {isAiActive &&
+                !chartTypesSuggestionsLoading &&
+                validAiSuggestions().length > 0 && (
+                  <>
+                    Our <span>AI agent</span> has provided you with one or more
+                    suggested charts to communicate your dataset. <br /> Feel
+                    free to pick another chart type.
+                  </>
+                )}
+            </p>
+          </>
           <div
             css={`
               display: flex;
