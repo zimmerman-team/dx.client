@@ -32,6 +32,9 @@ export default function PlanCard({
           line-height: 19.2px;
           font-weight: 325;
           font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
+          @media (max-width: 1300px) {
+            font-size: 12px;
+          }
         `}
       >
         per {activeView === "monthly" ? "month" : "year"}
@@ -47,6 +50,9 @@ export default function PlanCard({
           font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
           line-height: normal;
           font-style: normal;
+          @media (max-width: 1300px) {
+            font-size: 12px;
+          }
         `}
       >
         Or{" "}
@@ -65,6 +71,10 @@ export default function PlanCard({
         border-top-right-radius: 20px;
         border-top-left-radius: 20px;
         height: 343px;
+        @media (max-width: 1300px) {
+          width: 179px;
+          height: 267px;
+        }
       `}
     >
       <div
@@ -78,6 +88,9 @@ export default function PlanCard({
           box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.15);
           color: ${plan.recommended ? "#FFFFFF" : "#231D2C"};
           position: relative;
+          @media (max-width: 1300px) {
+            padding: 19px 20px 19.5px 19px;
+          }
         `}
       >
         <p
@@ -88,6 +101,9 @@ export default function PlanCard({
             font-weight: 400;
             line-height: normal;
             font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
+            @media (max-width: 1300px) {
+              font-size: 16px;
+            }
           `}
         >
           {plan.name}
@@ -101,6 +117,9 @@ export default function PlanCard({
             font-weight: 400;
             line-height: normal;
             font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
+            @media (max-width: 1300px) {
+              font-size: 32px;
+            }
           `}
         >
           {activeView === "monthly" ? plan.monthlyPrice : plan.yearlyPrice}
@@ -125,6 +144,9 @@ export default function PlanCard({
             font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
             white-space: pre-line;
             line-height: normal;
+            @media (max-width: 1300px) {
+              font-size: 12px;
+            }
           `}
         >
           {plan.text}
@@ -161,6 +183,9 @@ export default function PlanCard({
               color: #868d96;
               background: #f4f4f4;
               cursor: not-allowed;
+            }
+            @media (max-width: 1300px) {
+              width: 77.4%;
             }
           `}
           disabled={plan.current || !plan.available}
