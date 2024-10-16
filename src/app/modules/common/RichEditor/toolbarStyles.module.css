@@ -3,7 +3,6 @@
   background: var(--White, #fff);
   width: 100%;
   padding: 6px 24px;
-
   z-index: 2;
   margin-top: 5px;
   display: flex;
@@ -11,29 +10,38 @@
   gap: 14px;
 }
 @media (min-width: 768px) {
-  @media (max-width: 800px) {
+  @media (max-width: 840px) {
     .toolbar {
       padding: 5px 13px;
-      gap: 5px;
+      gap: 1.2%;
     }
   }
 }
-@media (min-width: 801px) {
-  @media (max-width: 920px) {
+@media (min-width: 841px) {
+  @media (max-width: 889px) {
+    .toolbar {
+      padding: 5px 13px;
+      gap: 1.5%;
+    }
+  }
+}
+@media (min-width: 890px) {
+  @media (max-width: 958px) {
     .toolbar {
       padding: 6px 3px;
-      gap: 1%;
+      gap: 1.8%;
     }
   }
 }
-@media (min-width: 921px) {
-  @media (max-width: 1083px) {
+@media (min-width: 959px) {
+  @media (max-width: 1051px) {
     .toolbar {
       padding: 6px 14px;
-      gap: 1.4%;
+      gap: 2%;
     }
   }
 }
+
 @media (min-width: 1084px) {
   @media (max-width: 1109px) {
     .toolbar {

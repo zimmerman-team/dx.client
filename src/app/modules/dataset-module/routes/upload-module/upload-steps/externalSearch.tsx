@@ -203,32 +203,49 @@ export default function ExternalSearch(props: {
         </p>
       </div>
       <Box height={32} />
-      <Grid
-        container
-        justifyContent="space-between"
-        alignItems="center"
-        wrap={"nowrap"}
-      >
-        <SourceCategoryList
-          sources={props.sources}
-          setSources={props.setSources}
-          baseSources={baseSources}
-          terminateSearch={terminateSearch}
-        />
-
-        <Filter
-          searchValue={props.searchValue as string}
-          setSearchValue={props.setSearchValue}
-          setSortValue={setSortValue}
-          setAssetsView={setView}
-          sortValue={sortValue}
-          assetsView={view}
-          terminateSearch={terminateSearch}
-          searchInputWidth="249px"
-          openSearch={props.openSearch}
-          setOpenSearch={props.setOpenSearch}
-          searchIconCypressId="open-search-button"
-        />
+      <Grid container alignItems="center">
+        <Grid item xs={12} sm={12} md={12} lg={12}>
+          <Filter
+            searchValue={props.searchValue as string}
+            setSearchValue={props.setSearchValue}
+            setSortValue={setSortValue}
+            setAssetsView={setView}
+            sortValue={sortValue}
+            assetsView={view}
+            terminateSearch={terminateSearch}
+            searchInputWidth="249px"
+            openSearch={props.openSearch}
+            setOpenSearch={props.setOpenSearch}
+            searchIconCypressId="open-search-button"
+          />
+        </Grid>
+        <Grid
+          item
+          xs={12}
+          sm={12}
+          md={12}
+          lg={12}
+          css={`
+            @media (max-width: 768px) {
+              display: none;
+            }
+          `}
+        >
+          <div
+            css={`
+              height: 24px;
+              @media (max-width: 769px) {
+                height: 16px;
+              }
+            `}
+          />
+          <SourceCategoryList
+            sources={props.sources}
+            setSources={props.setSources}
+            baseSources={baseSources}
+            terminateSearch={terminateSearch}
+          />
+        </Grid>
       </Grid>
 
       <Box height={32} />

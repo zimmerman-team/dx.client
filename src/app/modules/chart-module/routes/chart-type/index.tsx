@@ -259,6 +259,7 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
               css={`
                 font-size: 14px;
                 color: ${aIChartSuggestions(ct.id) ? "#fff" : "#262C34"};
+                text-transform: capitalize;
                 b {
                   margin: 0;
                 }

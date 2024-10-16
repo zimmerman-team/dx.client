@@ -135,7 +135,7 @@ export const echartTypes = (big: boolean): IEchartTypes[] => {
   return [
     {
       id: "echartsBarchart",
-      label: "Bar chart",
+      label: "Bar Chart",
       icon: <BarChartIcon big={big} />,
       preview: <BarChartPreviewImg />,
       categories: ["Correllations"],

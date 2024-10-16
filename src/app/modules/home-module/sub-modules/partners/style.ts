@@ -12,7 +12,7 @@ export const empowercss = (view: string) => css`
   background-size: 100% 100%, auto;
   overflow: hidden;
   z-index: 0;
-  @media (max-width: 641px) {
+  @media (max-width: 655px) {
     height: 100%;
     background: linear-gradient(
       180deg,
@@ -37,6 +37,16 @@ export const empowercss = (view: string) => css`
       font-size: 40px;
       line-height: 48px;
     }
+    &:nth-of-type(1) {
+      @media (max-width: 501px) {
+        display: none;
+      }
+    }
+    &:nth-of-type(2) {
+      @media (min-width: 501px) {
+        display: none;
+      }
+    }
   }
   p {
     margin: 0;
@@ -45,6 +55,10 @@ export const empowercss = (view: string) => css`
     line-height: 22px;
     text-align: center;
     font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
+    font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
+    @media (max-width: 500px) {
+      white-space: pre-line;
+    }
   }
   div {
     gap: 34px;
@@ -54,6 +68,22 @@ export const empowercss = (view: string) => css`
     justify-content: center;
     @media (max-width: 768px) {
       gap: 20px;
+    }
+    @media (max-width: 411px) {
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      a {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        button {
+          width: 80%;
+        }
+      }
     }
   }
   #auth-buttons {

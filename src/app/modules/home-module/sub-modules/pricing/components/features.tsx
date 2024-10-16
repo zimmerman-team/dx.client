@@ -221,7 +221,6 @@ const Features = () => {
       key={option.name}
       css={`
         display: flex;
-
         justify-content: space-between;
         border-top: 1px solid rgba(223, 227, 229, 0.5);
         :last-of-type {
@@ -308,17 +307,19 @@ const Features = () => {
               font-style: normal;
               font-weight: 500;
               color: #252c34;
-              /* text-align: center; */
               display: flex;
               justify-content: center;
               background: rgba(202, 202, 202, 0.1);
               width: 224px;
               padding: 9px 0;
               position: relative;
+              @media (max-width: 1300px) {
+                width: 179px;
+              }
             `}
           >
             {value === ">" || value === "<" ? (
-              <div
+              <span
                 css={`
                   position: absolute;
                   width: 24px;
@@ -412,6 +413,9 @@ const Features = () => {
                         background: rgba(202, 202, 202, 0.1);
                         width: 224px;
                         height: 100%;
+                        @media (max-width: 1300px) {
+                          width: 179px;
+                        }
                       `}
                     />
                   ))}
@@ -449,6 +453,9 @@ const Features = () => {
                       ? `border-bottom-right-radius: 20px;
                           border-bottom-left-radius: 20px;`
                       : ""}
+                    @media (max-width: 1300px) {
+                      width: 179px;
+                    }
                   `}
                 />
               ))}

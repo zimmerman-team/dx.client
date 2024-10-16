@@ -17,6 +17,10 @@ const BaseSnackbar = styled((props) => (
 ))`
   && {
     bottom: 16px;
+    width: 100%;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
   }
 
   & [class*="MuiSnackbarContent-root"] {
@@ -31,7 +35,10 @@ const BaseSnackbar = styled((props) => (
     justify-content: space-between;
 
     @media (max-width: 1280px) {
-      width: 100%;
+      width: 94%;
+      @media (max-width: 1280px) {
+        flex-grow: 0;
+      }
     }
   }
 
@@ -52,6 +59,9 @@ const BaseSnackbar = styled((props) => (
   & [class*="MuiSnackbarContent-message"] {
     padding: 24px 76px;
     width: 100%;
+    @media (max-width: 1024px) {
+      padding: 24px 25px;
+    }
   }
 
   & [class*="MuiSnackbarContent-action"] {
