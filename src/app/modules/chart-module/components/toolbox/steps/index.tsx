@@ -18,7 +18,7 @@ import { isEmpty } from "lodash";
 import { ToolboxNavType } from "app/modules/chart-module/components/toolbox/data";
 
 import { ChartRenderedItem } from "app/modules/chart-module/data";
-import { chartFromReportAtom, newChartAtom } from "app/state/recoil/atoms";
+import { chartFromReportAtom } from "app/state/recoil/atoms";
 import { useRecoilState } from "recoil";
 
 interface ChartToolBoxStepsProps {
@@ -57,7 +57,6 @@ export function ChartToolBoxSteps(props: ChartToolBoxStepsProps) {
   const appliedFilters = useStoreState(
     (state) => state.charts.appliedFilters.value
   );
-  const [newChart, setNewChart] = useRecoilState(newChartAtom);
   const [chartFromReport, setChartFromReport] =
     useRecoilState(chartFromReportAtom);
   let appliedFiltersCount = 0;
@@ -74,13 +73,7 @@ export function ChartToolBoxSteps(props: ChartToolBoxStepsProps) {
         setChartFromReport((prev) => ({ ...prev, chartId: page }));
         history.push(`/report/${reportPage}/edit`);
       } else {
-        if (newChart.state && newChart.chartId === page) {
-          props.setShowSnackbar("Chart saved successfully");
-          setNewChart({
-            state: false,
-            chartId: null,
-          });
-        }
+        props.setShowSnackbar("Your chart has been successfully saved!");
         history.push(`/chart/${page}`);
       }
     }

@@ -179,8 +179,8 @@ function ReportEditView(props: Readonly<ReportEditViewProps>) {
           previewItems: content,
         },
         content,
-        contentWidths: [...rowFrame.contentWidths?.widths] ?? [],
-        contentHeights: [...rowFrame.contentHeights?.heights] ?? [],
+        contentWidths: [...rowFrame.contentWidths?.widths],
+        contentHeights: [...rowFrame.contentHeights?.heights],
         contentTypes,
       };
     });

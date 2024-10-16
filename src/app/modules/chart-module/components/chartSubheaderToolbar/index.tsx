@@ -624,16 +624,14 @@ export function ChartSubheaderToolbar(
           aria-describedby="create-chart-snackbar-content"
           action={
             <>
-              {!window.location.pathname.includes("report") && (
-                <button
-                  onClick={() => {
-                    setShowSnackbar(null);
-                    history.push("/report/new/initial");
-                  }}
-                >
-                  CREATE NEW REPORT
-                </button>
-              )}
+              <button
+                onClick={() => {
+                  setShowSnackbar(null);
+                  history.push("/report/new/initial");
+                }}
+              >
+                CREATE NEW REPORT
+              </button>
             </>
           }
         />
