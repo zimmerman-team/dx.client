@@ -276,8 +276,8 @@ export function ChartModuleToolBox(props: Readonly<ChartToolBoxProps>) {
               font-weight: 400;
             `}
           >
-            Your chart has been successfully created! You can now find it in
-            your library.
+            Your chart has been successfully saved! You can now find it in your
+            library.
           </p>
           <div
             css={`
