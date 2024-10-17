@@ -381,7 +381,7 @@ const ActionMenu = () => {
       >
         <Link to={isAuthenticated ? "/dashboard" : "/onboarding/signin"}>
           <button data-cy="appbar-create-report/login">
-            {isAuthenticated ? "MY DASHBOARD" : "Signin"}
+            {isAuthenticated ? "MY DASHBOARD" : "Sign in"}
           </button>
         </Link>
         {/* {isAuthenticated && (
