@@ -28,6 +28,7 @@ export interface ReportModel {
     };
   }[];
   createdDate: Date;
+  updatedDate: Date;
   backgroundColor: string;
   titleColor: string;
   descriptionColor: string;
@@ -46,6 +47,7 @@ export const emptyReport: ReportModel = {
   showHeader: true,
   rows: [],
   createdDate: new Date(),
+  updatedDate: new Date(),
   backgroundColor: "#252c34",
   titleColor: "#ffffff",
   descriptionColor: "#ffffff",

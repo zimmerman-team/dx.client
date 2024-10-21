@@ -16,7 +16,6 @@ import { EditorState, convertFromRaw } from "draft-js";
 import { useSetRecoilState } from "recoil";
 import { planDialogAtom } from "app/state/recoil/atoms";
 import CircleLoader from "app/modules/home-module/components/Loader";
-import { useAuth0 } from "@auth0/auth0-react";
 
 interface Props {
   sortBy: string;
@@ -224,7 +223,7 @@ export default function ReportsGrid(props: Readonly<Props>) {
                 id={data.id}
                 key={data.id}
                 name={data.name}
-                date={data.createdDate}
+                date={data.updatedDate}
                 viz={<ColoredReportIcon />}
                 color={data.backgroundColor}
                 showMenuButton={props.showMenuButton}
@@ -246,11 +245,13 @@ export default function ReportsGrid(props: Readonly<Props>) {
       )}
       {props.view === "table" && (
         <HomepageTable
+          handleDelete={handleModal}
+          handleDuplicate={handleDuplicate}
           tableData={{
             columns: [
               { key: "name", label: "Name" },
               { key: "title", label: "Description" },
-              { key: "createdDate", label: "Date" },
+              { key: "updatedDate", label: "Last modified" },
             ],
             data: loadedReports.map((data) => ({
               ...data,

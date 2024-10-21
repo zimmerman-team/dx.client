@@ -13,7 +13,10 @@ import CircleLoader from "app/modules/home-module/components/Loader";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import DeleteChartDialog from "app/components/Dialogs/deleteChartDialog";
 import { HomepageTable } from "app/modules/home-module/components/Table";
-import { coloredEchartTypes } from "app/modules/chart-module/routes/chart-type/data";
+import {
+  coloredEchartTypes,
+  echartTypes,
+} from "app/modules/chart-module/routes/chart-type/data";
 import ChartAddnewCard from "app/modules/home-module/components/AssetCollection/Charts/chartAddNewCard";
 import GridItem from "app/modules/home-module/components/AssetCollection/Charts/gridItem";
 import { useAuth0 } from "@auth0/auth0-react";
@@ -246,7 +249,7 @@ export default function ChartsGrid(props: Props) {
               <GridItem
                 id={c.id}
                 title={c.name}
-                date={c.createdDate}
+                date={c.updatedDate}
                 viz={getIcon(c.vizType)}
                 vizType={c.vizType}
                 isMappingValid={c.isMappingValid}
@@ -269,15 +272,19 @@ export default function ChartsGrid(props: Props) {
       )}
       {props.view === "table" && (
         <HomepageTable
+          handleDelete={handleModal}
+          handleDuplicate={handleDuplicate}
           tableData={{
             columns: [
               { key: "name", label: "Name" },
-              { key: "title", label: "Description" },
-              { key: "createdDate", label: "Date" },
+              { key: "vizType", label: "Chart Type" },
+              { key: "updatedDate", label: "Last modified" },
             ],
             data: loadedCharts.map((data) => ({
               ...data,
               type: "chart",
+              vizType: echartTypes(false).find((e) => e.id === data.vizType)
+                ?.label,
             })),
           }}
         />
