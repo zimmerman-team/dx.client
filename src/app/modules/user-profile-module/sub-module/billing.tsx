@@ -1,5 +1,6 @@
 import React from "react";
 import { billingcss } from "app/modules/user-profile-module/style";
+import { InvoiceTable } from "app/modules/user-profile-module/component/table";
 
 export default function Billing() {
   return (
@@ -36,8 +37,14 @@ export default function Billing() {
         </div>
       </div>
       <div>
-        <button>Change payment method</button>
+        <button>Change billing info</button>
       </div>
+      <div
+        css={`
+          height: 48px;
+        `}
+      />
+      <InvoiceTable />
     </div>
   );
 }

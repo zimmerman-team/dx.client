@@ -95,7 +95,7 @@ export default function UserProfileLayout() {
               ))}
             </div>
           </Grid>
-          <Grid item xs={12} sm={6} md={5} lg={6}>
+          <Grid item xs={12} sm={6} md={5} lg={8}>
             <Switch>
               <Route path="/user-management/profile">
                 <Profile />

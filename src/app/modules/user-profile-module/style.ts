@@ -26,7 +26,7 @@ export const tabcss = (active: boolean, disabled: boolean) => css`
 `;
 export const profilecss = css`
   font-style: normal;
-
+  width: 72%;
   h4 {
     font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
     font-weight: 700;
@@ -37,6 +37,11 @@ export const profilecss = css`
     width: 11vw;
     font-weight: 400;
     font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
+  }
+  @media (max-width: 800px) {
+    @media (min-width: 600px) {
+      width: 100%;
+    }
   }
 `;
 
