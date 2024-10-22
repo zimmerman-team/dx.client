@@ -22,7 +22,7 @@ const tabList = [
   //   component: (active: boolean) => <RightIcon active={active} />,
   // },
   {
-    title: "Log Out",
+    title: "Sign Out",
     active: false,
     component: (active: boolean) => <LogOutIcon active={active} />,
   },

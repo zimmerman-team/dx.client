@@ -32,13 +32,13 @@ export default function UserProfileLayout() {
       component: (active: boolean) => <RightIcon active={active} />,
     },
     {
-      title: "Log Out",
+      title: "Sign Out",
       component: (active: boolean) => <LogOutIcon active={active} />,
     },
   ];
 
   const handleTabClick = (index: number, title: string) => {
-    if (title === "Log Out") {
+    if (title === "Sign Out") {
       setLogoutModalDisplay(true);
     } else {
       history.push(`/user-management/${title}`);

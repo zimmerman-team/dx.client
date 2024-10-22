@@ -226,7 +226,7 @@ export default function ExternalSearch(props: {
           md={12}
           lg={12}
           css={`
-            @media (max-width: 768px) {
+            @media (max-width: 767px) {
               display: none;
             }
           `}
@@ -234,7 +234,7 @@ export default function ExternalSearch(props: {
           <div
             css={`
               height: 24px;
-              @media (max-width: 769px) {
+              @media (max-width: 768px) {
                 height: 16px;
               }
             `}

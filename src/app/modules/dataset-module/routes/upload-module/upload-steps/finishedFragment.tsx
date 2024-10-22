@@ -13,6 +13,7 @@ import { ArrowBack } from "@material-ui/icons";
 import { useMediaQuery } from "usehooks-ts";
 import { DatasetListItemAPIModel } from "app/modules/dataset-module/data";
 import moment from "moment";
+import { useAuth0 } from "@auth0/auth0-react";
 
 interface Props {
   data: any[];
@@ -26,6 +27,7 @@ interface Props {
 
 export default function FinishedFragment(props: Props) {
   const location = useLocation();
+  const { user, isAuthenticated } = useAuth0();
   const isSmallScreen = useMediaQuery("(max-width:767px)"); //at this breakpoint, we limit user creation abilities
   const queryParams = new URLSearchParams(location.search);
   const reportPage = queryParams.get("page") as string;
@@ -190,9 +192,9 @@ export default function FinishedFragment(props: Props) {
             <></>
           ) : (
             <>
-              {!props.canDatasetEditDelete ? (
+              {!isAuthenticated ? (
                 <Link
-                  to="/onboarding/login"
+                  to="/onboarding/signin"
                   css={`
                     color: #fff;
                     width: 100%;
