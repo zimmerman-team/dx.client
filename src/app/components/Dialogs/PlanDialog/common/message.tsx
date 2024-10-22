@@ -15,7 +15,7 @@ const MessageContainer = styled((props) => <Box {...props} />)`
     align-items: normal;
   }
   p {
-    font-family: Inter;
+    font-family: "Inter", sans-serif;
     font-size: 14px;
     font-style: normal;
     font-weight: 500;
@@ -28,8 +28,10 @@ const MessageContainer = styled((props) => <Box {...props} />)`
 const Typo = styled((props) => <Typography {...props} />)`
   && {
     align-self: center;
+    flex-shrink: 4;
     @media (max-width: 960px) {
       margin-bottom: 8px;
+      align-self: start;
     }
   }
 `;
@@ -82,6 +84,10 @@ export const Message = (props: MessageProps) => {
           display: flex;
           align-items: center;
           gap: 16px;
+          flex-basis: auto;
+          @media (max-width: 960px) {
+            justify-content: flex-end;
+          }
         `}
       >
         <p

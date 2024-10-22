@@ -39,7 +39,7 @@ export function AuthProtectedRoute(props: AuthProtectedRouteProps) {
           return;
         }
         history.replace(
-          `/onboarding/login?to=${destination}${location.search}`
+          `/onboarding/signin?to=${destination}${location.search}`
         );
       });
   }, []);

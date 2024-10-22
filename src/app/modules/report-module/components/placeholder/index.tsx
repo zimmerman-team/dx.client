@@ -15,7 +15,7 @@ const PlaceHolder = (props: PlaceholderProps) => {
         props.index ?? draft.findIndex((frame) => frame.id === props.rowId) + 1;
 
       const fakeId = v4();
-      const tempItem = draft[dragIndex];
+      const tempItem = { ...draft[dragIndex] };
       draft[dragIndex].id = fakeId;
 
       draft.splice(dropIndex, 0, tempItem);

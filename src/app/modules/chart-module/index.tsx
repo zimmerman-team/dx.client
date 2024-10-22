@@ -57,7 +57,6 @@ import {
   chartFromReportAtom,
   isChartAIAgentActive,
   isChartAutoMappedAtom,
-  newChartAtom,
   planDialogAtom,
 } from "app/state/recoil/atoms";
 import { IDatasetDetails } from "./components/toolbox/steps/panels-content/SelectDataset";
@@ -76,9 +75,6 @@ export default function ChartModule() {
   );
 
   const setPlanDialog = useSetRecoilState(planDialogAtom);
-
-  const setNewChart = useSetRecoilState(newChartAtom);
-
   const [rawViz, setRawViz] = React.useState<any>(null);
   const [toolboxOpen, setToolboxOpen] = React.useState(Boolean(isValidView));
   const [savedChanges, setSavedChanges] = React.useState<boolean>(false);
@@ -331,10 +327,6 @@ export default function ChartModule() {
             onTryAgain: () => {},
           });
         }
-        setNewChart({
-          state: true,
-          chartId: data.id,
-        });
         history.push(
           `/chart/${data.id}/mapping${
             chartFromReport.state

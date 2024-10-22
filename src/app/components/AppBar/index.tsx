@@ -81,7 +81,7 @@ function MobileHeader(props: { navLocation: string }) {
           overflow: ${isNavExpanded ? "auto" : "hidden"};
           padding: 0px 16px 16px 16px;
           width: 100%;
-          background: ${isNavExpanded ? "#F2F7FD" : "#fff"};
+          background: #f2f7fd;
           transition: all cubic-bezier(0.4, 0, 0.2, 1) 0.3s;
           position: fixed;
           top: 0;
@@ -158,7 +158,7 @@ function MobileHeader(props: { navLocation: string }) {
               </button>
             ) : (
               <Link
-                to="/onboarding/login"
+                to="/onboarding/signin"
                 css={`
                   border-radius: 24.48px;
                   background: #dadaf8;
@@ -178,7 +178,7 @@ function MobileHeader(props: { navLocation: string }) {
                   white-space: nowrap;
                 `}
               >
-                Log in
+                Sign in
               </Link>
             )}
           </div>
@@ -379,9 +379,9 @@ const ActionMenu = () => {
           }
         `}
       >
-        <Link to={isAuthenticated ? "/dashboard" : "/onboarding/login"}>
+        <Link to={isAuthenticated ? "/dashboard" : "/onboarding/signin"}>
           <button data-cy="appbar-create-report/login">
-            {isAuthenticated ? "MY DASHBOARD" : "Log in"}
+            {isAuthenticated ? "MY DASHBOARD" : "Sign in"}
           </button>
         </Link>
         {/* {isAuthenticated && (

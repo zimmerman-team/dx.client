@@ -340,12 +340,7 @@ export default function AboutModule() {
                     width: 100%;
                     display: flex;
                     flex-direction: row;
-                    @media (max-width: 425px) {
-                      flex-direction: column;
-                      button {
-                        width: 100%;
-                      }
-                    }
+
                     > button {
                       gap: 10px;
                       color: #fff;
@@ -375,6 +370,18 @@ export default function AboutModule() {
                       }
                       @media (max-width: 600px) {
                         gap: 3px;
+                      }
+                    }
+                    @media (max-width: 660px) {
+                      flex-direction: column;
+                      gap: 10px;
+                      button {
+                        width: 80%;
+                      }
+                      @media (max-width: 475px) {
+                        button {
+                          width: 100%;
+                        }
                       }
                     }
                   `}

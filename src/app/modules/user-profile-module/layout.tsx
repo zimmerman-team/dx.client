@@ -51,7 +51,21 @@ export default function UserProfileLayout() {
       <Container maxWidth="lg">
         <PageTopSpacer />
         <Grid container spacing={3}>
-          <Grid item xs={12} sm={6} md={5} lg={4}>
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            md={5}
+            lg={4}
+            css={`
+              @media (max-width: 600px) {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+              }
+            `}
+          >
             <Box height={20} />
             <div css={bigAvicss}>
               <p>
@@ -60,7 +74,13 @@ export default function UserProfileLayout() {
               </p>
             </div>
             <Box height={109} />
-            <div>
+            <div
+              css={`
+                @media (max-width: 600px) {
+                  width: 100%;
+                }
+              `}
+            >
               {tabList.map((tab, index) => (
                 <div key={tab.title}>
                   <Tab

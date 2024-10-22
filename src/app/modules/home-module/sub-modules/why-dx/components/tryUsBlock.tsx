@@ -5,6 +5,7 @@ import { socialAuth } from "app/utils/socialAuth";
 import { ReactComponent as RightArr } from "app/modules/home-module/assets/right-arr-icon.svg";
 import { ReactComponent as GoogleIcon } from "app/modules/onboarding-module/asset/google-img.svg";
 import { ReactComponent as LinkedInIcon } from "app/modules/onboarding-module/asset/linkedIn-img.svg";
+import { ReactComponent as MicrosoftIcon } from "app/modules/onboarding-module/asset/microsoft-img.svg";
 
 export default function TryUsBlock() {
   const { isAuthenticated } = useAuth0();
@@ -64,7 +65,7 @@ export default function TryUsBlock() {
           @media (max-width: 774px) {
             padding: 32px 32px;
             flex-direction: column;
-            align-items: flex-start;
+            align-items: center;
             gap: 20px;
             height: 296px;
 
@@ -81,6 +82,10 @@ export default function TryUsBlock() {
                 line-height: normal;
                 margin-top: 8px;
               }
+            }
+            @media (max-width: 500px) {
+              align-items: flex-start;
+              height: 100%;
             }
           }
         `}
@@ -158,11 +163,8 @@ export default function TryUsBlock() {
             css={`
               display: flex;
               flex-direction: column;
-              gap: 42px;
+              gap: 16px;
               align-items: center;
-              @media (max-width: 774px) {
-                gap: 22px;
-              }
               button,
               a {
                 padding: 9px 18px;
@@ -197,6 +199,9 @@ export default function TryUsBlock() {
             </button>
             <button onClick={() => socialAuth("linkedin")}>
               <LinkedInIcon /> sign in for free
+            </button>
+            <button onClick={() => socialAuth("google-oauth2")}>
+              <MicrosoftIcon /> sign in for free
             </button>
           </div>
         )}

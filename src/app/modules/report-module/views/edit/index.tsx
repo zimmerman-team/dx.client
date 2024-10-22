@@ -179,8 +179,8 @@ function ReportEditView(props: Readonly<ReportEditViewProps>) {
           previewItems: content,
         },
         content,
-        contentWidths: [...rowFrame.contentWidths?.widths] ?? [],
-        contentHeights: [...rowFrame.contentHeights?.heights] ?? [],
+        contentWidths: [...rowFrame.contentWidths?.widths],
+        contentHeights: [...rowFrame.contentHeights?.heights],
         contentTypes,
       };
     });
@@ -352,7 +352,7 @@ function ReportEditView(props: Readonly<ReportEditViewProps>) {
 
           {props.framesArray?.map((frame, index) => {
             return (
-              <div key={frame.id} data-cy={`row-frame-container-${index}`}>
+              <div key={frame.id} data-cy={`row-frame-container`}>
                 {index === 0 && (
                   <PlaceHolder
                     index={index}

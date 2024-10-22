@@ -71,6 +71,11 @@ export const NoMatchPage = () => {
             display: flex;
             gap: 30px;
             justify-content: center;
+            @media (max-width: 500px) {
+              flex-direction: column;
+              align-items: center;
+              width: 100%;
+            }
           `}
         >
           <Link
@@ -84,6 +89,9 @@ export const NoMatchPage = () => {
               height: 41px;
               background: #262c34;
               border-radius: 20px;
+              @media (max-width: 500px) {
+                width: 86%;
+              }
             `}
           >
             <span
@@ -117,6 +125,9 @@ export const NoMatchPage = () => {
               background: #6061e5;
               border-radius: 30px;
               cursor: pointer;
+              @media (max-width: 500px) {
+                width: 86%;
+              }
             `}
           >
             <span

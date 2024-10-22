@@ -67,16 +67,19 @@ export default function DesktopFooter() {
                   </Link>
                 </li>
                 <li>
-                  <Link to="/why-dataxplorer"> Why Dataxplorer?</Link>{" "}
+                  <Link to="/explore">Explore</Link>{" "}
                 </li>
                 <li>
-                  <Link to="/explore">Explore</Link>{" "}
+                  <Link to="/why-dataxplorer"> Why Dataxplorer</Link>{" "}
                 </li>
                 <li>
                   <Link to="/about">About</Link>
                 </li>
                 <li>
                   <Link to="/partners">Partners</Link>
+                </li>
+                <li>
+                  <Link to="/pricing">Pricing</Link>
                 </li>
                 <li>
                   <Link to="/contact">Contact</Link>

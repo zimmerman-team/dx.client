@@ -189,52 +189,71 @@ export default function FinishedFragment(props: Props) {
           {isSmallScreen ? (
             <></>
           ) : (
-            <Link
-              to={{
-                pathname: `/chart/new/chart-type`,
-                search: `?loadataset=true${
-                  reportPage ? `&fromreport=true&page=${reportPage}` : ""
-                }`,
-              }}
-              css={`
-                pointer-events: ${props.canDatasetEditDelete ? "auto" : "none"};
-              `}
-            >
-              <button
-                disabled={
-                  props.canDatasetEditDelete
-                    ? !props.canDatasetEditDelete
-                    : false
-                }
-                css={`
-                  opacity: ${props.canDatasetEditDelete ? "1" : "0.5"};
-                  color: #fff;
-                  width: 100%;
-                  width: 200px;
-                  height: 41px;
-                  font-size: 14px;
-                  font-weight: 700;
-                  padding: 12px 27px;
-                  background: #64afaa;
-                  border-radius: 30px;
-                  text-transform: uppercase;
-                  font-family: "GothamNarrow-Bold";
-                  outline: none;
-                  border: none;
-                  display: flex;
-                  justify-content: center;
-                  align-items: center;
+            <>
+              {!props.canDatasetEditDelete ? (
+                <Link
+                  to="/onboarding/login"
+                  css={`
+                    color: #fff;
+                    width: 100%;
+                    width: 278px;
+                    height: 41px;
+                    font-size: 14px;
+                    background: #6061e5;
+                    border-radius: 30px;
+                    text-transform: uppercase;
+                    font-family: "GothamNarrow-Bold", sans-serif;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    :hover {
+                      opacity: 0.8;
+                      cursor: pointer;
+                    }
+                  `}
+                >
+                  Sign in to Create new chart
+                </Link>
+              ) : (
+                <Link
+                  to={{
+                    pathname: `/chart/new/chart-type`,
+                    search: `?loadataset=true${
+                      reportPage ? `&fromreport=true&page=${reportPage}` : ""
+                    }`,
+                  }}
+                >
+                  <button
+                    css={`
+                      color: #fff;
+                      width: 100%;
+                      width: 200px;
+                      height: 41px;
+                      font-size: 14px;
+                      font-weight: 700;
+                      padding: 12px 27px;
+                      background: #64afaa;
+                      border-radius: 30px;
+                      text-transform: uppercase;
+                      font-family: "GothamNarrow-Bold";
+                      outline: none;
+                      border: none;
+                      display: flex;
+                      justify-content: center;
+                      align-items: center;
 
-                  :hover {
-                    opacity: 0.8;
-                    cursor: pointer;
-                  }
-                `}
-                onClick={handleCreateNewChart}
-              >
-                create new chart
-              </button>
-            </Link>
+                      :hover {
+                        opacity: 0.8;
+                        cursor: pointer;
+                      }
+                    `}
+                    onClick={handleCreateNewChart}
+                  >
+                    create new chart
+                  </button>
+                </Link>
+              )}
+            </>
           )}
         </div>
         <DatasetDataTable

@@ -25,11 +25,14 @@ export const useStyles = makeStyles(() =>
       width: 544,
       borderRadius: "10px",
       paddingRight: "2rem",
-      position: "absolute",
+      position: "relative",
       paddingLeft: "3.5rem",
       backgroundColor: "#fff",
       boxShadow:
         "0px 14.8787px 22.318px rgba(0, 0, 0, 0.05), 0px 4.4636px 7.43933px rgba(0, 0, 0, 0.05), 0px 0.743933px 7.43933px rgba(0, 0, 0, 0.05)",
+      "@media (max-width: 577px)": {
+        width: "90%",
+      },
     },
   })
 );
@@ -58,15 +61,14 @@ export default function DeleteChartDialog(props: Props) {
           <div
             css={`
               width: 80%;
-              position: relative;
             `}
           >
             <IconButton
               onClick={() => props.setModalDisplay(false)}
               css={`
                 position: absolute;
-                right: -93px;
-                top: -16px;
+                right: 8px;
+                top: 6px;
               `}
             >
               <CloseOutlined htmlColor="#231D2C" />

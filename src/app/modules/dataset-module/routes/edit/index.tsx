@@ -1,10 +1,12 @@
 import { Container } from "@material-ui/core";
 import MetaData from "app/modules/dataset-module/routes/upload-module/upload-steps/metaData";
+import { allAssetsSortBy } from "app/state/recoil/atoms";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import axios from "axios";
 import React from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { useTitle } from "react-use";
+import { useRecoilValue } from "recoil";
 interface IDatasetDetail {
   name: string;
   description: string;
@@ -24,6 +26,7 @@ export default function EditMetaData() {
 
   const { page } = useParams<{ page: string }>();
   const token = useStoreState((state) => state.AuthToken.value);
+  const sortValue = useRecoilValue(allAssetsSortBy);
   const history = useHistory();
   const fetchDataset = useStoreActions(
     (actions) => actions.dataThemes.DatasetGet.fetch
@@ -78,7 +81,9 @@ export default function EditMetaData() {
           token,
           nonAuthCall: !token,
           storeInCrudData: true,
-          filterString: `filter={"order":"updatedDate desc","limit":15,"offset":0}`,
+          filterString: `filter={"order":"${sortValue} ${
+            sortValue === "name" ? "asc" : "desc"
+          }","limit":15,"offset":0}`,
         });
         history.goBack();
       })

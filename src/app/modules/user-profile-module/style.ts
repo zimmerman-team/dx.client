@@ -20,6 +20,9 @@ export const tabcss = (active: boolean, disabled: boolean) => css`
     text-transform: capitalize;
     color: ${active ? "#6061E5" : "#231D2C"};
   }
+  @media (max-width: 600px) {
+    width: 100%;
+  }
 `;
 export const profilecss = css`
   font-style: normal;
@@ -113,6 +116,9 @@ export const flexContainercss = css`
   grid-template-columns: 31% auto;
   align-items: center;
   margin-bottom: 24px;
+  @media (max-width: 428px) {
+    grid-template-columns: 45% auto;
+  }
 `;
 export const bigAvicss = css`
   width: 223px;
