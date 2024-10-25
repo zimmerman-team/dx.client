@@ -1,3 +1,4 @@
+import { modifyNode } from "app/modules/report-module/components/pdf-formatter";
 // @ts-ignore
 import domtoimage from "dom-to-image";
 // @ts-ignore
@@ -9,12 +10,13 @@ export function exportPage(type: string, bgcolor: string, filename: string) {
     node = document.getElementById("common-chart-render-container");
   }
   // const filter = (n: any) => n.id !== "app-bar" && n.id !== "subheader-toolbar";
+  const modifiedNode = modifyNode(node as HTMLElement);
 
   const somethingWrong = "oops, something went wrong!";
 
   if (type === "png") {
     domtoimage
-      .toPng(node, {
+      .toPng(modifiedNode.node, {
         bgcolor,
         filename,
       })
@@ -41,13 +43,15 @@ export function exportPage(type: string, bgcolor: string, filename: string) {
       });
   } else if ((type = "pdf")) {
     domtoimage
-      .toPng(node, {
+      .toPng(modifiedNode.node, {
         bgcolor,
         filename,
       })
       .then((dataUrl: any) => {
-        const height = node?.getBoundingClientRect().height as number;
-        const width = node?.getBoundingClientRect().width as number;
+        const height = modifiedNode?.node.getBoundingClientRect()
+          .height as number;
+        const width = modifiedNode?.node.getBoundingClientRect()
+          .width as number;
         const pdf = new jsPDF({
           orientation: "portrait",
           unit: "px",
@@ -71,6 +75,8 @@ export function exportPage(type: string, bgcolor: string, filename: string) {
         pdf.save(`${filename}.pdf`);
       })
       .catch((error: any) => {
+        modifiedNode.node.removeChild(modifiedNode.topLogoContainer);
+        modifiedNode.node.removeChild(modifiedNode.bottomLogoContainer);
         console.error(somethingWrong, error);
       });
   } else {

@@ -17,7 +17,6 @@ import { reportContentContainerWidth } from "app/state/recoil/atoms";
 import { linkDecorator } from "app/modules/common/RichEditor/decorators";
 import { useTitle } from "react-use";
 import ReportUsePanel from "app/modules/report-module/components/use-report-panel";
-import HomeFooter from "app/modules/home-module/components/Footer";
 import { PageLoader } from "app/modules/common/page-loader";
 
 export function ReportPreviewView(
@@ -143,107 +142,107 @@ export function ReportPreviewView(
   }
 
   return (
-    <div
-      id="export-container"
-      css={`
-        background: white;
-      `}
-    >
-      <HeaderBlock
-        isToolboxOpen={false}
-        previewMode={true}
-        headerDetails={{
-          title: reportData.title,
-          showHeader: reportData.showHeader,
-          heading: EditorState.createWithContent(
-            convertFromRaw(reportData.heading ?? emptyReport.heading)
-          ),
-          description: EditorState.createWithContent(
-            convertFromRaw(reportData.description ?? emptyReport.description)
-          ),
-          backgroundColor: reportData.backgroundColor,
-          titleColor: reportData.titleColor,
-          descriptionColor: reportData.descriptionColor,
-          dateColor: reportData.dateColor,
-        }}
-        setPlugins={() => {}}
-        setHeaderDetails={() => {}}
-        handleRightPanelOpen={() => {}}
-      />
-      <Container id="content-container" maxWidth="lg" ref={ref}>
-        <Box height={45} />
+    <div id="export-container">
+      <div
+        css={`
+          background: white;
+        `}
+      >
+        <HeaderBlock
+          isToolboxOpen={false}
+          previewMode={true}
+          headerDetails={{
+            title: reportData.title,
+            showHeader: reportData.showHeader,
+            heading: EditorState.createWithContent(
+              convertFromRaw(reportData.heading ?? emptyReport.heading)
+            ),
+            description: EditorState.createWithContent(
+              convertFromRaw(reportData.description ?? emptyReport.description)
+            ),
+            backgroundColor: reportData.backgroundColor,
+            titleColor: reportData.titleColor,
+            descriptionColor: reportData.descriptionColor,
+            dateColor: reportData.dateColor,
+          }}
+          setPlugins={() => {}}
+          setHeaderDetails={() => {}}
+          handleRightPanelOpen={() => {}}
+        />
+        <Container id="content-container" maxWidth="lg" ref={ref}>
+          <Box height={45} />
 
-        {!reportError401 &&
-          get(reportData, "rows", []).map((rowFrame, index) => {
-            const contentTypes = rowFrame.items.map((item) => {
-              if (item === null) {
-                return null;
+          {!reportError401 &&
+            get(reportData, "rows", []).map((rowFrame, index) => {
+              const contentTypes = rowFrame.items.map((item) => {
+                if (item === null) {
+                  return null;
+                }
+                if (get(item, "embedUrl", null)) {
+                  return "video";
+                } else if (get(item, "imageUrl", null)) {
+                  return "image";
+                } else if (typeof item === "object") {
+                  return "text";
+                } else {
+                  return "chart";
+                }
+              });
+              if (
+                rowFrame.items &&
+                rowFrame.items.length === 1 &&
+                rowFrame.items[0] === ReportElementsType.DIVIDER
+              ) {
+                return (
+                  <div
+                    key={`divider${index}`}
+                    css={`
+                      margin: 0 0 16px 0;
+                      height: 2px;
+                      width: 100%;
+                      background-color: #cfd4da;
+                    `}
+                  />
+                );
               }
-              if (get(item, "embedUrl", null)) {
-                return "video";
-              } else if (get(item, "imageUrl", null)) {
-                return "image";
-              } else if (typeof item === "object") {
-                return "text";
-              } else {
-                return "chart";
-              }
-            });
-            if (
-              rowFrame.items &&
-              rowFrame.items.length === 1 &&
-              rowFrame.items[0] === ReportElementsType.DIVIDER
-            ) {
+
               return (
-                <div
-                  key={`divider${index}`}
-                  css={`
-                    margin: 0 0 16px 0;
-                    height: 2px;
-                    width: 100%;
-                    background-color: #cfd4da;
-                  `}
+                <RowFrame
+                  rowId=""
+                  view="preview"
+                  type="rowFrame"
+                  rowIndex={index}
+                  framesArray={[]}
+                  setPlugins={() => {}}
+                  updateFramesArray={() => {}}
+                  key={`rowframe${index}`}
+                  endReportTour={() => {}}
+                  onSave={async () => {}}
+                  forceSelectedType={rowFrame.structure ?? undefined}
+                  previewItems={rowFrame.items.map((item, index) => {
+                    return contentTypes[index] === "text"
+                      ? EditorState.createWithContent(
+                          convertFromRaw(item as any),
+                          linkDecorator
+                        )
+                      : item;
+                  })}
+                  rowContentHeights={
+                    rowFrame.contentHeights?.heights ?? rowFrame.contentHeights
+                  }
+                  rowContentWidths={
+                    rowFrame.contentWidths?.widths ?? rowFrame.contentWidths
+                  }
                 />
               );
-            }
-
-            return (
-              <RowFrame
-                rowId=""
-                view="preview"
-                type="rowFrame"
-                rowIndex={index}
-                framesArray={[]}
-                setPlugins={() => {}}
-                updateFramesArray={() => {}}
-                key={`rowframe${index}`}
-                endReportTour={() => {}}
-                onSave={async () => {}}
-                forceSelectedType={rowFrame.structure ?? undefined}
-                previewItems={rowFrame.items.map((item, index) => {
-                  return contentTypes[index] === "text"
-                    ? EditorState.createWithContent(
-                        convertFromRaw(item as any),
-                        linkDecorator
-                      )
-                    : item;
-                })}
-                rowContentHeights={
-                  rowFrame.contentHeights?.heights ?? rowFrame.contentHeights
-                }
-                rowContentWidths={
-                  rowFrame.contentWidths?.widths ?? rowFrame.contentWidths
-                }
-              />
-            );
-          })}
-        <Box height={16} />
-      </Container>
-      {window.location.search.includes("?fromLanding=true") &&
-      !isAuthenticated ? (
-        <ReportUsePanel />
-      ) : null}
-      <Box height={71} /> <HomeFooter />
+            })}
+          <Box height={16} />
+        </Container>
+        {window.location.search.includes("?fromLanding=true") &&
+        !isAuthenticated ? (
+          <ReportUsePanel />
+        ) : null}
+      </div>
     </div>
   );
 }
