@@ -70,7 +70,12 @@ interface ChartToolBoxMappingItemProps {
   displayCloseButton?: boolean;
   showAggregation: boolean;
   handleButtonToggle?: (id: string) => void;
-  setIsDraggingMappingItem: (isDragging: boolean) => void;
+  setdraggingMappingItem: React.Dispatch<
+    React.SetStateAction<{
+      isDragging: boolean;
+      index: null | number;
+    }>
+  >;
 }
 
 const typeIcon = {
@@ -495,8 +500,13 @@ const NonStaticDimensionContainer = (props: {
     props.getValidDataTypes(props.dimension.validTypes, searchValue)
   );
 
-  const [isDraggingMappingItem, setIsDraggingMappingItem] =
-    React.useState(false);
+  const [draggingMappingItem, setdraggingMappingItem] = React.useState<{
+    isDragging: boolean;
+    index: null | number;
+  }>({
+    isDragging: false,
+    index: null,
+  });
   const [selectedMappingItemsState, setSelectedMappingItemsState] =
     React.useState<string[]>(props.dimension.mappedValues);
 
@@ -579,16 +589,16 @@ const NonStaticDimensionContainer = (props: {
             let type = props.getValidDataTypes(props.dimension.validTypes, "")[
               mappingItemValue
             ];
+
             return (
               <div>
                 {index === 0 && (
                   <DropPlaceholder
                     placeholderIndex={0}
                     dimension={props.dimension}
-                    isDragging={isDraggingMappingItem}
+                    draggingState={draggingMappingItem}
                   />
                 )}
-
                 <ChartToolBoxMappingItem
                   key={mappingItemValue}
                   testId={`mapping-item-${mappingItemValue}`}
@@ -607,12 +617,12 @@ const NonStaticDimensionContainer = (props: {
                   displayCloseButton
                   showAggregation
                   handleButtonToggle={props.handleButtonToggle}
-                  setIsDraggingMappingItem={setIsDraggingMappingItem}
+                  setdraggingMappingItem={setdraggingMappingItem}
                 />
                 <DropPlaceholder
                   placeholderIndex={index + 1}
                   dimension={props.dimension}
-                  isDragging={isDraggingMappingItem}
+                  draggingState={draggingMappingItem}
                 />
               </div>
             );
@@ -690,7 +700,7 @@ const NonStaticDimensionContainer = (props: {
                 nonStaticDimensionsIndex={props.dimensionIndex}
                 nonStaticDimensions={props.nonStaticDimensions}
                 showAggregation={false}
-                setIsDraggingMappingItem={() => {}}
+                setdraggingMappingItem={() => {}}
               />
             );
           })}
@@ -892,7 +902,7 @@ function ChartToolBoxMappingItem(
   }));
 
   React.useEffect(() => {
-    props.setIsDraggingMappingItem(isDragging);
+    props.setdraggingMappingItem({ isDragging, index: props.index });
   }, [isDragging]);
 
   const styleParams = {
@@ -1020,8 +1030,20 @@ function ChartToolBoxMappingItem(
 function DropPlaceholder(props: {
   placeholderIndex: number;
   dimension: any;
-  isDragging: boolean;
+  draggingState: { isDragging: boolean; index: null | number };
 }) {
+  const isDroppable = () => {
+    if (props.draggingState.isDragging) {
+      if (props.draggingState.index === -1) {
+        return true;
+      }
+      if (props.placeholderIndex === props.draggingState.index) {
+        return false;
+      }
+      return props.placeholderIndex - 1 !== props.draggingState.index;
+    }
+    return false;
+  };
   const mapping = useStoreState((state) => state.charts.mapping.value);
   const setMapping = useStoreActions(
     (actions) => actions.charts.mapping.setValue
@@ -1060,22 +1082,21 @@ function DropPlaceholder(props: {
     [mapping]
   );
 
-  console.log(isOver, "isOver");
-
   return (
     <div
       ref={drop}
       data-handler-id={handlerId}
       css={`
-        background: ${isOver ? "#6061E5" : "#231d2c"};
+        background: ${isOver ? "#231d2c" : "#fff"};
         width: 100%;
-        height: 100%;
+        height: 31px;
         margin-bottom: 3px;
-        display: ${props.isDragging ? "block" : "none"};
+        border-radius: 25px;
+        border: 1px dashed #231d2c;
+        opacity: 0.5;
+        display: ${isDroppable() ? "block" : "none"};
       `}
-    >
-      t
-    </div>
+    />
   );
 }
 
