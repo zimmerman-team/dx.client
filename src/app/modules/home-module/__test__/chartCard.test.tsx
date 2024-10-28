@@ -93,8 +93,8 @@ test("viz icon should be visible", async () => {
 });
 
 const chartGridItemMenuBtnTestId = "chart-grid-item-menu-btn";
-const duplicateButtonName = "duplicate-button";
-const deleteButtonName = "delete-button";
+const duplicateButtonName = "chart-duplicate-button";
+const deleteButtonName = "chart-delete-button";
 
 test("menu popup should display when menu icon is clicked", async () => {
   const { app } = appSetup({});

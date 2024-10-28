@@ -23,14 +23,6 @@ export default function MenuItems(props: {
     return isAuthenticated && props.owner === user?.sub;
   }, [user, isAuthenticated]);
 
-  const canReportEditDelete = React.useMemo(() => {
-    return isAuthenticated && props.owner === user?.sub;
-  }, [user, isAuthenticated]);
-
-  const canChartEditDelete = React.useMemo(() => {
-    return isAuthenticated && props.owner === user?.sub;
-  }, [user, isAuthenticated]);
-
   const disabledStyle = "opacity: 0.5;pointer-events: none;";
 
   return (
@@ -40,7 +32,7 @@ export default function MenuItems(props: {
           e.stopPropagation();
           props.handleClose();
         }}
-        data-testid={`${props.type}-grid-item-menu-overlay"`}
+        data-testid={`${props.type}-grid-item-menu-overlay`}
         css={`
           top: 0;
           left: 0;
@@ -87,19 +79,20 @@ export default function MenuItems(props: {
         `}
       >
         <div css={!isAuthenticated ? disabledStyle : ""}>
-          <Tooltip
-            title="Duplicate"
-            data-cy={`${props.type}-grid-item-duplicate-btn`}
-          >
-            <IconButton
-              onClick={(e) => {
-                e.stopPropagation();
-                props.handleDuplicate?.(props.id as string);
-              }}
-              aria-label={`${props.type}-duplicate-button`}
-            >
-              <DuplicateIcon />
-            </IconButton>
+          <Tooltip title="Duplicate">
+            <span>
+              <IconButton
+                onClick={(e) => {
+                  e.stopPropagation();
+                  props.handleDuplicate?.(props.id as string);
+                }}
+                data-cy={`${props.type}-grid-item-duplicate-btn`}
+                aria-label={`${props.type}-duplicate-button`}
+                disabled={!isAuthenticated}
+              >
+                <DuplicateIcon />
+              </IconButton>
+            </span>
           </Tooltip>
         </div>
         {!isMobile && (
@@ -108,11 +101,9 @@ export default function MenuItems(props: {
               to={props.path}
               aria-label="edit-icon"
               onClick={(e) => e.stopPropagation()}
+              data-cy={`${props.type}-grid-item-edit-btn`}
             >
-              <Tooltip
-                title="Edit"
-                data-cy={`${props.type}-grid-item-edit-btn`}
-              >
+              <Tooltip title="Edit">
                 <EditIcon
                   css={`
                     margin-top: 4px;
@@ -127,15 +118,19 @@ export default function MenuItems(props: {
             title="Delete"
             data-cy={`${props.type}-grid-item-delete-btn`}
           >
-            <IconButton
-              onClick={(e) => {
-                e.stopPropagation();
-                props.handleDelete(props.id as string);
-              }}
-              aria-label={`${props.type}-delete-button`}
-            >
-              <DeleteIcon />
-            </IconButton>
+            <span>
+              <IconButton
+                onClick={(e) => {
+                  e.stopPropagation();
+                  props.handleDelete(props.id as string);
+                }}
+                data-cy={`${props.type}-grid-item-delete-btn`}
+                aria-label={`${props.type}-delete-button`}
+                disabled={!canEditDelete}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </span>
           </Tooltip>
         </div>
       </div>
