@@ -9,7 +9,6 @@ import TableContainer from "@material-ui/core/TableContainer";
 import { Checkbox, Tooltip } from "@material-ui/core";
 import { SaveAlt } from "@material-ui/icons";
 import { PrintIcon } from "./icons";
-import { set } from "lodash";
 import { Tooltip as SpeechBubble } from "react-tooltip";
 import { InfoSnackbar } from "app/modules/report-module/components/reportSubHeaderToolbar/infosnackbar";
 import { ISnackbarState } from "app/modules/dataset-module/routes/upload-module/upload-steps/previewFragment";
@@ -27,47 +26,47 @@ export function InvoiceTable() {
     { key: "fileName", label: "File Name" },
     { key: "plan", label: "Plan" },
   ];
-
+  const date = "20/03/2021";
   const tableData = [
     {
       id: "1",
       // eslint-disable-next-line sonarjs/no-duplicate-string
-      date: "20/03/2021",
+      date,
       fileName: "Invoice 0112",
       plan: "Pro",
       checked: false,
     },
     {
       id: "2",
-      date: "20/03/2021",
+      date,
       fileName: "Invoice 0111",
       plan: "Pro",
       checked: false,
     },
     {
       id: "3",
-      date: "20/03/2021",
+      date,
       fileName: "Invoice 0110",
       plan: "Pro",
       checked: false,
     },
     {
       id: "4",
-      date: "20/03/2021",
+      date,
       fileName: "Invoice 0109",
       plan: "Pro",
       checked: false,
     },
     {
       id: "5",
-      date: "20/03/2021",
+      date,
       fileName: "Invoice 0108",
       plan: "Invoice 0108",
       checked: false,
     },
     {
       id: "6",
-      date: "20/03/2021",
+      date,
       fileName: "Invoice 0107",
       plan: "Invoice 0107",
       checked: false,
