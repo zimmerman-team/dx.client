@@ -180,7 +180,7 @@ export default function GridItem(props: Props) {
               ? `/chart/${props.id}/customize`
               : `/chart/${props.id}/mapping`
           }
-          type="dataset"
+          type="chart"
         />
       )}
     </div>

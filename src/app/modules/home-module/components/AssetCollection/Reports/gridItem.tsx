@@ -188,7 +188,7 @@ export default function GridItem(props: Readonly<Props>) {
           id={props.id as string}
           owner={props.owner}
           path={`/report/${props.id}/edit`}
-          type="dataset"
+          type="report"
         />
       )}
     </div>
