@@ -9,6 +9,7 @@ import { PageTopSpacer } from "app/modules/common/page-top-spacer";
 import { Route, Switch, useHistory, useParams } from "react-router-dom";
 import { LogOutIcon, RightIcon } from "./component/icons";
 import LogOutDialog from "app/components/Dialogs/logOutDialog";
+import Billing from "app/modules/user-profile-module/sub-module/billing";
 
 export default function UserProfileLayout() {
   const { user } = useAuth0();
@@ -87,20 +88,23 @@ export default function UserProfileLayout() {
                     active={tab.title === activeTab}
                     handleClick={() => handleTabClick(index, tab.title)}
                     component={() => tab.component(tab.title === activeTab)}
-                    disabled={tab.title === "billing"}
+                    disabled={false}
                   />
                   <Box height={10} />
                 </div>
               ))}
             </div>
           </Grid>
-          <Grid item xs={12} sm={6} md={5} lg={6}>
+          <Grid item xs={12} sm={6} md={5} lg={8}>
             <Switch>
               <Route path="/user-management/profile">
                 <Profile />
               </Route>
               <Route path="/user-management/settings">
                 <Settings />
+              </Route>
+              <Route path="/user-management/billing">
+                <Billing />
               </Route>
             </Switch>
           </Grid>

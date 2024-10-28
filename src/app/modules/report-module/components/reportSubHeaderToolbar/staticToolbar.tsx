@@ -91,6 +91,9 @@ export default function StaticToolbar(props: { plugins: ToolbarPluginsType }) {
                     onMouseDown={(e) => {
                       e.preventDefault();
                     }}
+                    css={`
+                      margin-bottom: -4px;
+                    `}
                   >
                     <LinkButton {...externalProps} />
                   </div>
@@ -226,6 +229,7 @@ export default function StaticToolbar(props: { plugins: ToolbarPluginsType }) {
                         position: absolute;
                         bottom: -48px;
                         right: 0;
+                        padding: 10px 10px;
 
                         box-shadow: 0px 9px 27px 0px rgba(0, 0, 0, 0.07),
                           0px 3.76px 11.28px 0px rgba(0, 0, 0, 0.05),

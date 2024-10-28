@@ -89,7 +89,7 @@ export default function Settings() {
       <div
         css={`
           width: 70%;
-          @media (max-width: 600px) {
+          @media (max-width: 800px) {
             width: 100%;
           }
         `}
@@ -113,7 +113,7 @@ export default function Settings() {
           <p>Account</p>
           <div
             css={`
-              width: 60%;
+              width: max-content;
               color: #ffffff;
               button {
                 height: 32px;
