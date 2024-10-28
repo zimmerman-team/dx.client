@@ -12,7 +12,10 @@ import { useInfinityScroll } from "app/hooks/useInfinityScroll";
 import CircleLoader from "app/modules/home-module/components/Loader";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import DeleteChartDialog from "app/components/Dialogs/deleteChartDialog";
-import { coloredEchartTypes } from "app/modules/chart-module/routes/chart-type/data";
+import {
+  coloredEchartTypes,
+  echartTypes,
+} from "app/modules/chart-module/routes/chart-type/data";
 import ChartGridItem from "app/modules/home-module/components/AssetCollection/Charts/gridItem";
 import DatasetGridItem from "app/modules/home-module/components/AssetCollection/Datasets/gridItem";
 import ReportGridItem from "app/modules/home-module/components/AssetCollection/Reports/gridItem";
@@ -36,7 +39,7 @@ interface Props {
   md?: GridSize;
   lg?: GridSize;
 }
-type assetType = "chart" | "dataset" | "report";
+export type assetType = "chart" | "dataset" | "report";
 
 export default function AssetsGrid(props: Props) {
   const observerTarget = React.useRef(null);
@@ -266,24 +269,31 @@ export default function AssetsGrid(props: Props) {
           onItemClick={props.onItemClick}
           inChartBuilder={props.inChartBuilder}
           all
+          handleDelete={handleModal}
+          handleDuplicate={handleDuplicate}
+          setActiveAssetType={setActiveAssetType}
           tableData={{
-            columns: getColumns("chart" as assetType),
+            columns: getColumns(),
             data: loadedAssets.map((data) => {
               if (data.assetType === "chart") {
                 return {
                   id: data.id,
                   name: data.name,
                   description: data.title,
-                  createdDate: data.createdDate,
+                  updatedDate: data.updatedDate,
                   type: data.assetType,
+                  owner: data.owner,
+                  vizType: echartTypes(false).find((e) => e.id === data.vizType)
+                    ?.label,
                 };
               } else if (data.assetType === "dataset") {
                 return {
                   id: data.id,
                   name: data.name,
                   description: data.description,
-                  createdDate: data.createdDate,
+                  updatedDate: data.updatedDate,
                   type: data.assetType,
+                  owner: data.owner,
                 };
               }
               return {
@@ -292,8 +302,9 @@ export default function AssetsGrid(props: Props) {
                 heading: data.heading
                   ? EditorState.createWithContent(convertFromRaw(data.heading))
                   : EditorState.createEmpty(),
-                createdDate: data.createdDate,
+                updatedDate: data.updatedDate,
                 type: data.assetType,
+                owner: data.owner,
               };
             }),
           }}
@@ -308,7 +319,7 @@ export default function AssetsGrid(props: Props) {
                     <ChartGridItem
                       id={d.id}
                       title={d.name}
-                      date={d.createdDate}
+                      date={d.updatedDate}
                       viz={getIcon(d.vizType)}
                       vizType={d.vizType}
                       isMappingValid={d.isMappingValid}
@@ -327,7 +338,7 @@ export default function AssetsGrid(props: Props) {
                     <DatasetGridItem
                       path={`/dataset/${d.id}/edit`}
                       title={d.name}
-                      date={d.createdDate}
+                      date={d.updatedDate}
                       handleDelete={() => {
                         setActiveAssetType(d.assetType as assetType);
                         handleModal(d.id);
@@ -347,7 +358,7 @@ export default function AssetsGrid(props: Props) {
                       id={d.id}
                       key={d.id}
                       name={d.name}
-                      date={d.createdDate}
+                      date={d.updatedDate}
                       viz={<ColoredReportIcon />}
                       color={d.backgroundColor}
                       handleDelete={() => {

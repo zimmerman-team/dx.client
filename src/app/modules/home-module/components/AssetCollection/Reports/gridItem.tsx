@@ -2,15 +2,12 @@ import React from "react";
 import moment from "moment";
 import { Link } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
-import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
 import { ReactComponent as MenuIcon } from "app/modules/home-module/assets/menu.svg";
-import { ReactComponent as EditIcon } from "app/modules/home-module/assets/edit.svg";
-import { ReactComponent as DeleteIcon } from "app/modules/home-module/assets/delete.svg";
 import { ReactComponent as ClockIcon } from "app/modules/home-module/assets/clock-icon.svg";
-import { ReactComponent as DuplicateIcon } from "app/modules/home-module/assets/duplicate.svg";
 import { EditorState } from "draft-js";
 import { useMediaQuery } from "@material-ui/core";
+import MenuItems from "app/modules/home-module/components/AssetCollection/Datasets/menuItems";
 
 interface Props {
   date: Date;
@@ -184,99 +181,15 @@ export default function GridItem(props: Readonly<Props>) {
         </div>
       </Link>
       {menuOptionsDisplay && (
-        <React.Fragment>
-          <div
-            data-testid="report-grid-item-menu-overlay"
-            css={`
-              top: 0;
-              left: 0;
-              z-index: 1;
-              width: 100vw;
-              height: 100vh;
-              position: fixed;
-            `}
-            onClick={() => setMenuOptionsDisplay(false)}
-          />
-          <div
-            css={`
-              top: 38px;
-              position: absolute;
-              right: 3%;
-              z-index: 2;
-              gap: 1rem;
-
-              display: flex;
-              height: 38px;
-              padding: 0 23px;
-              background: #adb5bd;
-              border-radius: 100px;
-              align-items: center;
-              justify-content: center;
-              a {
-                :hover {
-                  svg {
-                    path {
-                      fill: #fff;
-                    }
-                  }
-                }
-              }
-              button {
-                padding: 4px;
-                :hover {
-                  background: transparent;
-                  svg {
-                    path {
-                      fill: #fff;
-                    }
-                  }
-                }
-              }
-            `}
-          >
-            <div css={!isAuthenticated ? disabledStyle : ""}>
-              <IconButton
-                onClick={() => {
-                  props.handleDuplicate?.(props.id as string);
-                  setMenuOptionsDisplay(false);
-                }}
-                disabled={!isAuthenticated}
-                aria-label="report-duplicate-button"
-              >
-                <Tooltip
-                  title="Duplicate"
-                  data-cy="report-grid-item-duplicate-btn"
-                >
-                  <DuplicateIcon />
-                </Tooltip>
-              </IconButton>
-            </div>
-            {!isMobile && (
-              <div css={!canReportEditDelete ? disabledStyle : ""}>
-                <Link to={`/report/${props.id}/edit`} aria-label="edit-icon">
-                  <Tooltip title="Edit" data-cy="report-grid-item-edit-btn">
-                    <EditIcon
-                      css={`
-                        margin-top: 4px;
-                      `}
-                    />
-                  </Tooltip>
-                </Link>
-              </div>
-            )}
-            <div css={!canReportEditDelete ? disabledStyle : ""}>
-              <IconButton
-                onClick={() => props.handleDelete?.(props.id as string)}
-                aria-label="report-delete-button"
-                disabled={!canReportEditDelete}
-              >
-                <Tooltip title="Delete" data-cy="report-grid-item-delete-btn">
-                  <DeleteIcon />
-                </Tooltip>
-              </IconButton>
-            </div>
-          </div>
-        </React.Fragment>
+        <MenuItems
+          handleClose={() => setMenuOptionsDisplay(false)}
+          handleDelete={() => props.handleDelete?.(props.id as string)}
+          handleDuplicate={() => props.handleDuplicate?.(props.id as string)}
+          id={props.id as string}
+          owner={props.owner}
+          path={`/report/${props.id}/edit`}
+          type="report"
+        />
       )}
     </div>
   );

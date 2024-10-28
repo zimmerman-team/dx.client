@@ -275,14 +275,14 @@ export default function DatasetsGrid(props: Readonly<Props>) {
               <GridItem
                 path={`/dataset/${data.id}/edit`}
                 title={data.name}
-                date={data.createdDate}
+                date={data.updatedDate}
                 handleDelete={() => {
                   handleModal(data.id);
                 }}
-                descr={data.description}
                 handleDuplicate={() => {
                   handleDuplicate(data.id);
                 }}
+                descr={data.description}
                 showMenu={!props.inChartBuilder}
                 id={data.id}
                 owner={data.owner}
@@ -299,11 +299,13 @@ export default function DatasetsGrid(props: Readonly<Props>) {
         <HomepageTable
           onItemClick={props.onItemClick}
           inChartBuilder={props.inChartBuilder}
+          handleDelete={handleModal}
+          handleDuplicate={handleDuplicate}
           tableData={{
             columns: [
               { key: "name", label: "Name" },
               { key: "description", label: "Description" },
-              { key: "createdDate", label: "Date" },
+              { key: "updatedDate", label: "Last modified" },
             ],
             data: loadedDatasets.map((data) => ({
               ...data,

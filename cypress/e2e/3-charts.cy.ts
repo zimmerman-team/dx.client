@@ -119,10 +119,10 @@ describe("Testing create chart on DX", () => {
   });
 
   it("Can create a Line Chart", () => {
-    cy.get('[data-cy="chart-type-item"]').contains("Line chart").click();
+    cy.get('[data-cy="chart-type-item"]').contains("Line Chart").click();
 
     cy.get('[data-cy="chart-type-preview"]')
-      .contains("Line chart")
+      .contains("Line Chart")
       .should("be.visible");
 
     cy.intercept(`${apiUrl}/chart`).as("saveChart");

@@ -155,7 +155,7 @@ export const echartTypes = (big: boolean): IEchartTypes[] => {
     },
     {
       id: "echartsStackedBarchart",
-      label: "Stacked Bar chart",
+      label: "Stacked Bar Chart",
       icon: <BarChartIcon big={big} />,
       preview: <BarChartPreviewImg />,
       categories: ["Correllations", "Proportions"],
@@ -165,7 +165,7 @@ export const echartTypes = (big: boolean): IEchartTypes[] => {
     },
     {
       id: "echartsLinechart",
-      label: "Line chart",
+      label: "Line Chart",
       icon: <LineChartIcon big={big} />,
       preview: <LineChartPreviewImg />,
       categories: ["Trends", changesOverTime],
@@ -212,7 +212,7 @@ export const echartTypes = (big: boolean): IEchartTypes[] => {
 
     {
       id: "echartsSankey",
-      label: "Sankey diagram",
+      label: "Sankey Diagram",
       icon: <SankeyChartIcon big={big} />,
       preview: <SankeyPreviewImg />,
       categories: ["Networks"],
@@ -224,7 +224,7 @@ export const echartTypes = (big: boolean): IEchartTypes[] => {
     },
     {
       id: "echartsTreemap",
-      label: "Treemap diagram",
+      label: "Treemap Diagram",
       icon: <TreeMapIcon big={big} />,
       preview: <TreeMapPreviewImg />,
       categories: ["Hierarchies", "Proportions"],
@@ -303,7 +303,7 @@ export const echartTypes = (big: boolean): IEchartTypes[] => {
     },
     {
       id: "echartsSunburst",
-      label: "Sunburst diagram",
+      label: "Sunburst Diagram",
       icon: <SunburstIcon big={big} />,
       preview: <SunburstPreviewImg />,
       categories: ["Hierarchies", "Proportions"],
