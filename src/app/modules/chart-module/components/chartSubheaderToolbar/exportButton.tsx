@@ -7,11 +7,16 @@ import {
   StyledMenu,
   StyledMenuItem,
 } from "app/modules/chart-module/components/exporter";
+import { Link, useParams } from "react-router-dom";
 
 export function ExportChartButton(props: { filename: string }) {
+  const { page } = useParams<{
+    page: string;
+  }>();
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
   );
+  const open = Boolean(anchorEl);
 
   function handleClick(event: React.MouseEvent<HTMLButtonElement>) {
     setAnchorEl(event.currentTarget);
@@ -35,8 +40,6 @@ export function ExportChartButton(props: { filename: string }) {
     handleClose();
   }
 
-  const open = Boolean(anchorEl);
-
   return (
     <>
       <Tooltip title="Export">
@@ -53,18 +56,56 @@ export function ExportChartButton(props: { filename: string }) {
         <StyledMenuItem
           onClick={() => handleTypeChange(".pdf", props.filename)}
         >
-          .pdf
+          <Link
+            target="_blank"
+            to={`/report/${page}/downloaded-view?type=pdf&filename=${props.filename}`}
+            css={`
+              text-decoration: none;
+              color: #262c34;
+              width: 100%;
+              height: 100%;
+              &:hover {
+                color: #fff;
+              }
+            `}
+          >
+            .pdf
+          </Link>
         </StyledMenuItem>
-        <StyledMenuItem
-          onClick={() => handleTypeChange(".png", props.filename)}
-        >
-          .png
+        <StyledMenuItem>
+          <Link
+            target="_blank"
+            to={`/report/${page}/downloaded-view?type=png&filename=${props.filename}`}
+            css={`
+              text-decoration: none;
+              color: #262c34;
+              width: 100%;
+              height: 100%;
+              &:hover {
+                color: #fff;
+              }
+            `}
+          >
+            .png
+          </Link>
         </StyledMenuItem>
 
-        <StyledMenuItem
-          onClick={() => handleTypeChange(".svg", props.filename)}
-        >
-          .svg
+        <StyledMenuItem>
+          <Link
+            target="_blank"
+            to={`/report/${page}/downloaded-view?type=svg&filename=${props.filename}`}
+            css={`
+              text-decoration: none;
+              color: #262c34;
+              width: 100%;
+              height: 100%;
+              &:hover {
+                color: #fff;
+              }
+            `}
+          >
+            .svg
+          </Link>
         </StyledMenuItem>
       </StyledMenu>
     </>

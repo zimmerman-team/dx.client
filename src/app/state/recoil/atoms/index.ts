@@ -97,6 +97,11 @@ export const loadedDatasetsAtom = atom<DatasetListItemAPIModel[]>({
   effects_UNSTABLE: [persistAtom],
 });
 
+export const loadedChartsInReportAtom = atom<string[]>({
+  key: "loadedChartsInReportAtom",
+  default: [],
+});
+
 export const chartFromReportAtom = atom<{
   state: boolean;
   view: string;
