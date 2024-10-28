@@ -243,6 +243,7 @@ export function AppBar() {
         <MUIAppBar
           elevation={0}
           position="fixed"
+          id="app-bar-desktop"
           color={location.pathname !== "/" ? "secondary" : "transparent"}
           css={`
             display: flex;

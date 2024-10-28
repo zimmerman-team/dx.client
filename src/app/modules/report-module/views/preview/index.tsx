@@ -17,7 +17,6 @@ import { reportContentContainerWidth } from "app/state/recoil/atoms";
 import { linkDecorator } from "app/modules/common/RichEditor/decorators";
 import { useTitle } from "react-use";
 import ReportUsePanel from "app/modules/report-module/components/use-report-panel";
-import HomeFooter from "app/modules/home-module/components/Footer";
 import { PageLoader } from "app/modules/common/page-loader";
 
 export function ReportPreviewView(
@@ -144,7 +143,6 @@ export function ReportPreviewView(
 
   return (
     <div
-      id="export-container"
       css={`
         background: white;
       `}
@@ -243,7 +241,6 @@ export function ReportPreviewView(
       !isAuthenticated ? (
         <ReportUsePanel />
       ) : null}
-      <Box height={71} /> <HomeFooter />
     </div>
   );
 }

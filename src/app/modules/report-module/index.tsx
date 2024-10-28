@@ -31,6 +31,7 @@ import {
 import { ReportSubheaderToolbar } from "app/modules/report-module/components/reportSubHeaderToolbar";
 import { ToolbarPluginsType } from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
 import useAutosave from "app/hooks/useAutoSave";
+import DownloadedView from "./views/downloaded-view";
 
 export default function ReportModule() {
   const { user, isAuthenticated } = useAuth0();
@@ -475,6 +476,13 @@ export default function ReportModule() {
             `}
           />
           <ReportPreviewView
+            setIsPreviewView={setIsPreviewView}
+            setAutoSave={setAutoSave}
+          />
+        </Route>
+
+        <Route exact path="/report/:page/downloaded-view">
+          <DownloadedView
             setIsPreviewView={setIsPreviewView}
             setAutoSave={setAutoSave}
           />

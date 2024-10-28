@@ -68,7 +68,9 @@ export default function RowstructureDisplay(
   const location = useLocation();
   const { page } = useParams<{ page: string }>();
   const [handleDisplay, setHandleDisplay] = React.useState(false);
-  const viewOnlyMode = location.pathname === `/report/${page}`;
+  const viewOnlyMode =
+    location.pathname === `/report/${page}` ||
+    location.pathname === `/report/${page}/downloaded-view`;
 
   const handlers = viewOnlyMode
     ? {}
@@ -381,7 +383,9 @@ const Box = (props: {
   const [_isResizing, setIsResizing] = useRecoilState(
     reportContentIsResizingAtom
   );
-  const viewOnlyMode = location.pathname === `/report/${page}`;
+  const viewOnlyMode =
+    location.pathname === `/report/${page}` ||
+    location.pathname === `/report/${page}/downloaded-view`;
 
   const elementTypes = [
     ReportElementsType.TEXT,

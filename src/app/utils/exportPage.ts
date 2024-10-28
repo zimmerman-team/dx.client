@@ -8,10 +8,8 @@ export function exportPage(type: string, bgcolor: string, filename: string) {
   if (!node) {
     node = document.getElementById("common-chart-render-container");
   }
-  // const filter = (n: any) => n.id !== "app-bar" && n.id !== "subheader-toolbar";
 
   const somethingWrong = "oops, something went wrong!";
-
   if (type === "png") {
     domtoimage
       .toPng(node, {

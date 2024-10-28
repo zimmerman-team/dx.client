@@ -9,7 +9,7 @@ import {
 import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
 
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
-import { uniqueId, filter, isEmpty } from "lodash";
+import { uniqueId, filter, isEmpty, set } from "lodash";
 import { Box, Button, IconButton } from "@material-ui/core";
 import ToolboxSubheader from "app/modules/chart-module/components/toolbox/steps/sub-header";
 import { ReactComponent as DateIcon } from "app/modules/chart-module/assets/date.svg";
@@ -29,6 +29,8 @@ import { chartTypesFromMiddleWare } from "app/modules/chart-module/routes/chart-
 import { isChartAutoMappedAtom } from "app/state/recoil/atoms";
 import { useRecoilState } from "recoil";
 import axios from "axios";
+import { DndProvider, useDrag, useDrop } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 interface ChartToolBoxMappingProps {
   dataTypes: any;
@@ -37,6 +39,17 @@ interface ChartToolBoxMappingProps {
   setChartFromAPI: (
     value: React.SetStateAction<ChartRenderedItem | null>
   ) => void;
+}
+
+interface dimensionProp {
+  id: string;
+  name: string;
+  validTypes: any;
+  required: boolean;
+  aggregation: boolean;
+  aggregationDefault: "sum" | "avg" | "count" | "min" | "max";
+  mappedValues: string[];
+  mapValuesDisplayed: boolean;
 }
 interface ChartToolBoxMappingItemProps {
   index: number;
@@ -57,6 +70,7 @@ interface ChartToolBoxMappingItemProps {
   displayCloseButton?: boolean;
   showAggregation: boolean;
   handleButtonToggle?: (id: string) => void;
+  setIsDraggingMappingItem: (isDragging: boolean) => void;
 }
 
 const typeIcon = {
@@ -76,6 +90,8 @@ const AGGREGATIONS_LABELS = {
   csv: "CSV",
   csvDistinct: "CSV (unique)",
 };
+
+const MAPPING_ITEM_TYPE = "MAPPING_ITEM";
 
 const DimensionContainerSkeleton = () => {
   return (
@@ -371,87 +387,89 @@ export function ChartToolBoxMapping(props: Readonly<ChartToolBoxMappingProps>) {
   };
 
   return (
-    <div
-      css={`
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        margin-bottom: 30px;
-        height: 100%;
-      `}
-    >
-      <ToolboxSubheader
-        name="Map datapoints to the chart"
-        level={3}
-        tooltip="Assign dimensions from your data to suitable axes or parameters in the chart to represent your data."
-      />
+    <DndProvider backend={HTML5Backend}>
       <div
         css={`
-          width: 90%;
-          margin: auto;
-          overflow-y: auto;
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          margin-bottom: 30px;
           height: 100%;
-          padding-bottom: 40px;
-          max-height: calc(100vh - 260px);
-          &::-webkit-scrollbar {
-            width: 4px;
-            visibility: hidden;
-            background: #262c34;
-          }
-          &::-webkit-scrollbar-track {
-            background: #f1f3f5;
-            visibility: hidden;
-          }
-          &::-webkit-scrollbar-thumb {
-            border-radius: 4px;
-            background: #262c34;
-            visibility: hidden;
-          }
         `}
       >
-        <div>
-          {isEmpty(props.dimensions) ? (
-            <div
-              css={`
-                width: 100%;
-              `}
-            >
-              <Box height={16} />
-              <DimensionContainerSkeleton />
-              <DimensionContainerSkeleton />
-            </div>
-          ) : (
-            <>
-              {nonStaticDimensionsState?.map(
-                (dimension: any, dimensionIndex: number) => (
-                  <NonStaticDimensionContainer
-                    dataTypes={props.dataTypes}
-                    key={dimension.id}
-                    dimension={dimension}
-                    dimensionIndex={dimensionIndex}
-                    nonStaticDimensions={nonStaticDimensionsState}
-                    handleNonStaticDimensionsUpdate={
-                      handleNonStaticDimensionsUpdate
-                    }
-                    nonStaticDimensionsId={dimension.id}
-                    getValidDataTypes={getValidDataTypes}
-                    getSelectButtonLabel={getSelectButtonLabel}
-                    handleButtonToggle={handleButtonToggle}
-                  />
-                )
-              )}
-              {staticDimensions &&
-                staticDimensions.map((dimension: any) => (
-                  <StaticDimensionContainer
-                    key={dimension.id}
-                    dimension={dimension}
-                  />
-                ))}
-            </>
-          )}
+        <ToolboxSubheader
+          name="Map datapoints to the chart"
+          level={3}
+          tooltip="Assign dimensions from your data to suitable axes or parameters in the chart to represent your data."
+        />
+        <div
+          css={`
+            width: 90%;
+            margin: auto;
+            overflow-y: auto;
+            height: 100%;
+            padding-bottom: 40px;
+            max-height: calc(100vh - 260px);
+            &::-webkit-scrollbar {
+              width: 4px;
+              visibility: hidden;
+              background: #262c34;
+            }
+            &::-webkit-scrollbar-track {
+              background: #f1f3f5;
+              visibility: hidden;
+            }
+            &::-webkit-scrollbar-thumb {
+              border-radius: 4px;
+              background: #262c34;
+              visibility: hidden;
+            }
+          `}
+        >
+          <div>
+            {isEmpty(props.dimensions) ? (
+              <div
+                css={`
+                  width: 100%;
+                `}
+              >
+                <Box height={16} />
+                <DimensionContainerSkeleton />
+                <DimensionContainerSkeleton />
+              </div>
+            ) : (
+              <>
+                {nonStaticDimensionsState?.map(
+                  (dimension: any, dimensionIndex: number) => (
+                    <NonStaticDimensionContainer
+                      dataTypes={props.dataTypes}
+                      key={dimension.id}
+                      dimension={dimension}
+                      dimensionIndex={dimensionIndex}
+                      nonStaticDimensions={nonStaticDimensionsState}
+                      handleNonStaticDimensionsUpdate={
+                        handleNonStaticDimensionsUpdate
+                      }
+                      nonStaticDimensionsId={dimension.id}
+                      getValidDataTypes={getValidDataTypes}
+                      getSelectButtonLabel={getSelectButtonLabel}
+                      handleButtonToggle={handleButtonToggle}
+                    />
+                  )
+                )}
+                {staticDimensions &&
+                  staticDimensions.map((dimension: any) => (
+                    <StaticDimensionContainer
+                      key={dimension.id}
+                      dimension={dimension}
+                    />
+                  ))}
+              </>
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </DndProvider>
   );
 }
 
@@ -477,11 +495,14 @@ const NonStaticDimensionContainer = (props: {
     props.getValidDataTypes(props.dimension.validTypes, searchValue)
   );
 
-  const selectedDimensions = Object.keys(
-    props.getValidDataTypes(props.dimension.validTypes, "")
-  )?.filter((mappingItemValue: string) =>
-    props.dimension.mappedValues.includes(mappingItemValue)
-  );
+  const [isDraggingMappingItem, setIsDraggingMappingItem] =
+    React.useState(false);
+  const [selectedMappingItemsState, setSelectedMappingItemsState] =
+    React.useState<string[]>(props.dimension.mappedValues);
+
+  React.useEffect(() => {
+    setSelectedMappingItemsState(props.dimension.mappedValues);
+  }, [props.dimension.mappedValues]);
 
   return (
     <div
@@ -553,37 +574,55 @@ const NonStaticDimensionContainer = (props: {
           </div>
         </div>
 
-        {selectedDimensions.map((mappingItemValue: string, index: number) => {
-          let type = props.getValidDataTypes(props.dimension.validTypes, "")[
-            mappingItemValue
-          ];
-          return (
-            <ChartToolBoxMappingItem
-              key={mappingItemValue}
-              testId={`mapping-item-${mappingItemValue}`}
-              type={type}
-              index={index}
-              marginBottom="16px"
-              mappingItemValue={mappingItemValue}
-              dimension={props.dimension}
-              handleNonStaticDimensionsUpdate={
-                props.handleNonStaticDimensionsUpdate
-              }
-              dataTypes={props.dataTypes}
-              nonStaticDimensionsId={props.dimension.id}
-              nonStaticDimensionsIndex={props.dimensionIndex}
-              nonStaticDimensions={props.nonStaticDimensions}
-              displayCloseButton
-              showAggregation
-              handleButtonToggle={props.handleButtonToggle}
-            />
-          );
-        })}
+        {selectedMappingItemsState.map(
+          (mappingItemValue: string, index: number) => {
+            let type = props.getValidDataTypes(props.dimension.validTypes, "")[
+              mappingItemValue
+            ];
+            return (
+              <div>
+                {index === 0 && (
+                  <DropPlaceholder
+                    placeholderIndex={0}
+                    dimension={props.dimension}
+                    isDragging={isDraggingMappingItem}
+                  />
+                )}
+
+                <ChartToolBoxMappingItem
+                  key={mappingItemValue}
+                  testId={`mapping-item-${mappingItemValue}`}
+                  type={type}
+                  index={index}
+                  marginBottom={"3px"}
+                  mappingItemValue={mappingItemValue}
+                  dimension={props.dimension}
+                  handleNonStaticDimensionsUpdate={
+                    props.handleNonStaticDimensionsUpdate
+                  }
+                  dataTypes={props.dataTypes}
+                  nonStaticDimensionsId={props.dimension.id}
+                  nonStaticDimensionsIndex={props.dimensionIndex}
+                  nonStaticDimensions={props.nonStaticDimensions}
+                  displayCloseButton
+                  showAggregation
+                  handleButtonToggle={props.handleButtonToggle}
+                  setIsDraggingMappingItem={setIsDraggingMappingItem}
+                />
+                <DropPlaceholder
+                  placeholderIndex={index + 1}
+                  dimension={props.dimension}
+                  isDragging={isDraggingMappingItem}
+                />
+              </div>
+            );
+          }
+        )}
         <DimensionSelect
           dimension={props.dimension}
           getSelectButtonLabel={props.getSelectButtonLabel}
           handleButtonToggle={props.handleButtonToggle}
-          selectedDimensions={selectedDimensions}
+          selectedMappingItems={props.dimension.mappedValues}
           index={0}
         />
       </div>
@@ -651,6 +690,7 @@ const NonStaticDimensionContainer = (props: {
                 nonStaticDimensionsIndex={props.dimensionIndex}
                 nonStaticDimensions={props.nonStaticDimensions}
                 showAggregation={false}
+                setIsDraggingMappingItem={() => {}}
               />
             );
           })}
@@ -668,12 +708,12 @@ const DimensionSelect = (props: {
   ) => any;
   handleButtonToggle: (id: string) => void;
   index: number;
-  selectedDimensions: string[];
+  selectedMappingItems: string[];
 }) => {
   return (
     <>
       {!!props.dimension?.multiple ||
-      isEmpty(props.selectedDimensions) ||
+      isEmpty(props.selectedMappingItems) ||
       isEmpty(props.dimension.mappedValues) ? (
         <div
           css={`
@@ -763,7 +803,7 @@ function ChartToolBoxMappingItem(
       //replace mapping
       setMapping({
         [dimension.id]: {
-          ids: [uniqueId()],
+          ids: [props.mappingItemValue],
           value: [props.mappingItemValue],
           isValid: isValid,
           mappedType: columnDataType,
@@ -777,7 +817,7 @@ function ChartToolBoxMappingItem(
     } else {
       setMapping({
         [dimension.id]: {
-          ids: (localDimensionMapping.ids || []).concat(uniqueId()),
+          ids: (localDimensionMapping.ids || []).concat(props.mappingItemValue),
           value: [
             ...(localDimensionMapping.value || []),
             props.mappingItemValue,
@@ -841,13 +881,36 @@ function ChartToolBoxMappingItem(
     }
   }, [props.dimension, props.index, dimensionMapping]);
 
+  const [{ isDragging }, drag] = useDrag(() => ({
+    type: MAPPING_ITEM_TYPE,
+    item: { dragIndex: props.index, value: props.mappingItemValue },
+    collect: (monitor) => {
+      console.log(monitor.isDragging(), "monitor.isDragging()");
+
+      return { isDragging: !!monitor.isDragging() };
+    },
+  }));
+
+  React.useEffect(() => {
+    props.setIsDraggingMappingItem(isDragging);
+  }, [isDragging]);
+
+  const styleParams = {
+    backgroundColor: props.backgroundColor,
+    marginBottom: props.marginBottom,
+    isDragging: isDragging,
+    dimension: props.dimension,
+    mappingItemValue: props.mappingItemValue,
+  };
+
   return (
     <div
       key={props.mappingItemValue}
       id={props.testId}
-      css={mappingStyles.mappingItemcss(props)}
+      css={mappingStyles.mappingItemcss(styleParams)}
       onClick={handleClick}
       data-cy="chart-dimension-mapping-item"
+      ref={props.dimension.multiple ? drag : undefined}
     >
       <div>
         <p>{typeIcon[props.type]}</p>
@@ -953,6 +1016,82 @@ function ChartToolBoxMappingItem(
     </div>
   );
 }
+
+function DropPlaceholder(props: {
+  placeholderIndex: number;
+  dimension: any;
+  isDragging: boolean;
+}) {
+  const mapping = useStoreState((state) => state.charts.mapping.value);
+  const setMapping = useStoreActions(
+    (actions) => actions.charts.mapping.setValue
+  );
+  const [{ isOver, handlerId, canDrop, item }, drop] = useDrop(
+    () => ({
+      accept: MAPPING_ITEM_TYPE,
+      collect: (monitor) => ({
+        isOver: monitor.isOver({ shallow: true }),
+        canDrop: monitor.canDrop(),
+        item: monitor.getItem(),
+        handlerId: monitor.getHandlerId(),
+      }),
+
+      drop: (item: any, monitor) => {
+        setMapping({
+          ...mapping,
+          [props.dimension.id]: {
+            ...mapping[props.dimension.id],
+            ids: moveMappingItem(
+              mapping[props.dimension.id].ids,
+              item.dragIndex,
+              props.placeholderIndex,
+              item
+            ),
+            value: moveMappingItem(
+              mapping[props.dimension.id].value,
+              item.dragIndex,
+              props.placeholderIndex,
+              item
+            ),
+          },
+        });
+      },
+    }),
+    [mapping]
+  );
+
+  console.log(isOver, "isOver");
+
+  return (
+    <div
+      ref={drop}
+      data-handler-id={handlerId}
+      css={`
+        background: ${isOver ? "#6061E5" : "#231d2c"};
+        width: 100%;
+        height: 100%;
+        margin-bottom: 3px;
+        display: ${props.isDragging ? "block" : "none"};
+      `}
+    >
+      t
+    </div>
+  );
+}
+
+const moveMappingItem = (
+  arr: any,
+  dragIndex: number,
+  dropIndex: number,
+  item: any
+) => {
+  const newState = [...arr];
+  const isDragPositionHigher = dragIndex > dropIndex;
+  newState.splice(dropIndex, 0, item.value);
+  const removeIndex = isDragPositionHigher ? dragIndex + 1 : dragIndex;
+  newState.splice(removeIndex, 1);
+  return newState;
+};
 
 const StaticDimensionContainer = (props: { dimension: any }) => {
   const mapping = useStoreState((state) => state.charts.mapping.value);
