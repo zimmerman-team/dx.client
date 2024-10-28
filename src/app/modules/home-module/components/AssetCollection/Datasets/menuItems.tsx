@@ -114,10 +114,7 @@ export default function MenuItems(props: {
           </div>
         )}
         <div css={!canEditDelete ? disabledStyle : ""}>
-          <Tooltip
-            title="Delete"
-            data-cy={`${props.type}-grid-item-delete-btn`}
-          >
+          <Tooltip title="Delete">
             <span>
               <IconButton
                 onClick={(e) => {
