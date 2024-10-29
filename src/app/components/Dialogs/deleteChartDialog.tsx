@@ -26,7 +26,7 @@ export const useStyles = makeStyles(() =>
       borderRadius: "10px",
       paddingRight: "2rem",
       position: "relative",
-      paddingLeft: "3.5rem",
+      paddingLeft: "3rem",
       backgroundColor: "#fff",
       boxShadow:
         "0px 14.8787px 22.318px rgba(0, 0, 0, 0.05), 0px 4.4636px 7.43933px rgba(0, 0, 0, 0.05), 0px 0.743933px 7.43933px rgba(0, 0, 0, 0.05)",

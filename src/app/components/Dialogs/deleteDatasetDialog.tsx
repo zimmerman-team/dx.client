@@ -27,12 +27,12 @@ const useStyles = makeStyles(() =>
       width: 646,
       borderRadius: "10px",
       position: "relative",
-      padding: "2.5rem 2.5rem 2.5rem 4.5rem",
+      padding: "2.5rem 2.5rem 2.5rem 3.5rem",
       backgroundColor: "#fff",
       boxShadow:
         "0px 14.8787px 22.318px rgba(0, 0, 0, 0.05), 0px 4.4636px 7.43933px rgba(0, 0, 0, 0.05), 0px 0.743933px 7.43933px rgba(0, 0, 0, 0.05)",
-      "@media (max-width: 577px)": {
-        width: "90%",
+      "@media (max-width: 650px)": {
+        width: "80%",
       },
     },
   })
@@ -74,11 +74,12 @@ export default function DeleteDatasetDialog(props: Props) {
             <form
               onSubmit={() => props.handleDelete(props.cardId)}
               data-cy="delete-dataset-item-form"
-              // css={`
-              //   width: 80%;
-              // `}
             >
-              <div>
+              <div
+                css={`
+                  width: 80%;
+                `}
+              >
                 <IconButton
                   onClick={() => props.setModalDisplay(false)}
                   css={`
