@@ -124,7 +124,7 @@ interface IEchartTypes {
   ssr: boolean;
   description: string;
 }
-
+const networkAndFlows = "Network and flows";
 const barChartDescription =
   "Bar charts present data by visually displaying and comparing categorical information or discrete values through the use of bars of varying lengths or heights.";
 const changesOverTime = "changes over time";
@@ -164,13 +164,23 @@ export const echartTypes = (big: boolean): IEchartTypes[] => {
       description: barChartDescription,
     },
     {
+      id: "echartsAreastack",
+      label: "Line Stacked Chart",
+      icon: <AreastackedIcon big={big} />,
+      preview: <AreastackedPreviewImg />,
+      categories: ["Trends", changesOverTime],
+      class: "advanced",
+      ssr: false,
+      description:
+        "Line stacked charts present data by illustrating trends and changes in continuous or sequential data points over time, making them ideal for visualizing patterns, fluctuations, or relationships in data.",
+    },
+    {
       id: "echartsLinechart",
       label: "Line Chart",
       icon: <LineChartIcon big={big} />,
       preview: <LineChartPreviewImg />,
       categories: ["Trends", changesOverTime],
       class: "basic",
-
       ssr: false,
       description:
         "Line charts present data by illustrating trends and changes in continuous or sequential data points over time, making them ideal for visualizing patterns, fluctuations, or relationships in data.",
@@ -191,7 +201,7 @@ export const echartTypes = (big: boolean): IEchartTypes[] => {
       label: "Scatter Chart",
       icon: <ScatterIcon big={big} />,
       preview: <ScatterChartPreviewImg />,
-      categories: ["Correlations", "Proportions"],
+      categories: ["Relationships", "distribution"],
       class: "basic",
       ssr: false,
       description:
@@ -209,6 +219,17 @@ export const echartTypes = (big: boolean): IEchartTypes[] => {
       description:
         "A geomap is a map of a country, continent, or region map, with colors and values assigned to specific regions. Values are displayed as a color scale, and you can specify optional hovertext for regions. ",
     },
+    {
+      id: "bigNumber",
+      label: "Big number",
+      icon: <BigNumberIcon />,
+      preview: <BigNumberPreviewImg />,
+      categories: ["Key data points"],
+      class: "basic",
+      ssr: true,
+      description:
+        "Big number charts present specific, standout numerical values or key performance indicators in a visually prominent and easily digestible format, enabling quick recognition of important data points.",
+    },
 
     {
       id: "echartsSankey",
@@ -216,30 +237,28 @@ export const echartTypes = (big: boolean): IEchartTypes[] => {
       icon: <SankeyChartIcon big={big} />,
       preview: <SankeyPreviewImg />,
       categories: ["Networks"],
-      class: "advanced",
-
+      class: "basic",
       ssr: false,
       description:
         "Sankey diagrams represent flows among nodes of a network. Nodes are represented as rectangles, the height represents their value. Flows are represented with curved lines whose width is proportional to their value.",
     },
     {
       id: "echartsTreemap",
-      label: "Treemap Diagram",
+      label: "Tree Map",
       icon: <TreeMapIcon big={big} />,
       preview: <TreeMapPreviewImg />,
       categories: ["Hierarchies", "Proportions"],
       class: "advanced",
-
       ssr: false,
       description:
         "Tree maps present hierarchical data structures by visually depicting the relative proportions and relationships among different categories or subcategories, making them useful for displaying complex data in a compact and informative manner.",
     },
     {
       id: "echartsHeatmap",
-      label: "Heat map",
+      label: "Heatmap Chart",
       icon: <HeatmapIcon big={big} />,
       preview: <HeatmapPreviewImg />,
-      categories: ["Correlations", "Proportions"],
+      categories: ["Intensities", "distribution"],
       class: "advanced",
       ssr: false,
       description:
@@ -250,7 +269,7 @@ export const echartTypes = (big: boolean): IEchartTypes[] => {
       label: "Bubble Chart",
       icon: <BubblechartIcon big={big} />,
       preview: <BubbleChartPreviewImg />,
-      categories: ["Correlations", "Proportions"],
+      categories: ["Relationships", "Proportions"],
       class: "advanced",
       ssr: false,
       description:
@@ -261,35 +280,13 @@ export const echartTypes = (big: boolean): IEchartTypes[] => {
       label: "Radar Chart",
       icon: <RadarchartIcon big={big} />,
       preview: <RadarChartPreviewImg />,
-      categories: ["Correlations"],
+      categories: ["Proportions, percentages"],
       class: "advanced",
       ssr: false,
       description:
         "Radar charts are particularly useful for assessing and comparing the strengths and weaknesses of different data points or individuals across various attributes.",
     },
-    {
-      id: "bigNumber",
-      label: "Big number",
-      icon: <BigNumberIcon />,
-      preview: <BigNumberPreviewImg />,
-      categories: ["Key data points"],
-      class: "advanced",
 
-      ssr: true,
-      description:
-        "Big number charts present specific, standout numerical values or key performance indicators in a visually prominent and easily digestible format, enabling quick recognition of important data points.",
-    },
-    {
-      id: "echartsAreastack",
-      label: "Line Stacked Chart",
-      icon: <AreastackedIcon big={big} />,
-      preview: <AreastackedPreviewImg />,
-      categories: ["Trends", changesOverTime],
-      class: "compound",
-      ssr: false,
-      description:
-        "Line stacked charts present data by illustrating trends and changes in continuous or sequential data points over time, making them ideal for visualizing patterns, fluctuations, or relationships in data.",
-    },
     {
       id: "echartsAreatimeaxis",
       label: "Area Time Axis Chart",
@@ -330,7 +327,7 @@ export const echartTypes = (big: boolean): IEchartTypes[] => {
       label: "Circular Network Graph",
       icon: <CircularGraphIcon big={big} />,
       preview: <CirculargraphPreviewImg />,
-      categories: ["Networks"],
+      categories: [networkAndFlows],
       class: "compound",
       ssr: false,
       description: graphDescription,
@@ -340,7 +337,7 @@ export const echartTypes = (big: boolean): IEchartTypes[] => {
       label: "Network Graph",
       icon: <ForceGraphIcon big={big} />,
       preview: <ForcegraphPreviewImg />,
-      categories: ["Networks"],
+      categories: [networkAndFlows],
       class: "compound",
       ssr: false,
       description: graphDescription,
@@ -351,7 +348,7 @@ export const echartTypes = (big: boolean): IEchartTypes[] => {
       label: "Graph GL Chart",
       icon: <GraphGLIcon big={big} />,
       preview: <GraphGlPreviewImg />,
-      categories: ["Networks"],
+      categories: [networkAndFlows],
       class: "compound",
       ssr: false,
       description: graphDescription,
@@ -448,7 +445,7 @@ export const coloredEchartTypes = () => {
       id: "echartsPiechart",
       label: "Pie Chart",
       icon: <ColoredPieIcon />,
-      categories: ["Proportions"],
+      categories: ["Correlations and Proportions"],
       ssr: false,
       description:
         "Pie charts display data as slices of a circular pie, where each slice represents a category or value.",
@@ -498,7 +495,7 @@ export const coloredEchartTypes = () => {
     },
     {
       id: "echartsHeatmap",
-      label: "Heat map",
+      label: "Heatmap Chart",
       icon: <ColoredHeatmapIcon />,
       categories: ["Correlations", "Proportions"],
       ssr: false,
