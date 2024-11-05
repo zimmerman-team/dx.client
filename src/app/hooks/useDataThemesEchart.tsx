@@ -453,7 +453,7 @@ export function useDataThemesEchart() {
       marginLeft,
       // Tooltip
       palette,
-
+      roam,
       showTooltip,
       isMonetaryValue,
     } = visualOptions;
@@ -519,7 +519,7 @@ export function useDataThemesEchart() {
           type: "map",
           height: newHeight,
           width: newWidth,
-          roam: false,
+          roam: roam,
           map: "World",
           data: data.results,
           top: marginTop + top,
@@ -1125,14 +1125,16 @@ export function useDataThemesEchart() {
       legend: {
         type: "scroll",
         bottom: 10,
-        data: data.colors.map((color: any) => String(color)),
+        data: data.categories.map((color: any) => String(color)),
       },
       visualMap: {
         top: "middle",
         right: 10,
         color: checkLists.find((item) => item.label === palette)?.value,
         show: false,
+        calculable: true,
       },
+
       radar: {
         indicator: data.indicators,
       },
@@ -1277,11 +1279,13 @@ export function useDataThemesEchart() {
   }
 
   const valueFormatter1 = (params: any, isMonetaryValue: boolean) => {
-    return `${params.name}: ${
-      isMonetaryValue
+    if (params.dataType === "node") {
+      const value = isMonetaryValue
         ? formatFinancialValue(params.data.value, true)
-        : params.data.value
-    }`;
+        : params.data.value;
+      return `${params.name}: ${value ?? "unspecified"}`;
+    }
+    return params.name;
   };
 
   const setLinkOpacity = (link: any, linksOpacity: number) => {
@@ -1324,7 +1328,7 @@ export function useDataThemesEchart() {
     }, 0);
 
     nodes?.forEach(function (node: any) {
-      node.symbolSize = (node.value / maxValue) * 50; // making the symbol size relative to the max value but max at 50
+      node.symbolSize = (node.value / maxValue) * 20; // making the symbol size relative to the max value but max at 50
     });
 
     data.links?.forEach((link: any) => setLinkOpacity(link, linksOpacity));

@@ -26,7 +26,6 @@ import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import { ReportModel, emptyReport } from "app/modules/report-module/data";
 import DeleteReportDialog from "app/components/Dialogs/deleteReportDialog";
 import { ChartAPIModel, emptyChartAPI } from "app/modules/chart-module/data";
-import { ExportChartButton } from "app/modules/chart-module/components/chartSubheaderToolbar/exportButton";
 import { ReportSubheaderToolbarProps } from "app/modules/chart-module/components/chartSubheaderToolbar/data";
 import { ReactComponent as PlayIcon } from "app/modules/report-module/asset/play-icon.svg";
 import { styles } from "app/modules/report-module/components/reportSubHeaderToolbar/styles";
@@ -37,6 +36,7 @@ import AutoResizeInput from "app/modules/report-module/components/reportSubHeade
 import { InfoSnackbar } from "app/modules/report-module/components/reportSubHeaderToolbar/infosnackbar";
 import ShareModal from "app/modules/dataset-module/component/shareModal";
 import DuplicateMessage from "app/modules/common/mobile-duplicate-message";
+import { ExportReportButton } from "./exportButton";
 
 export const useStyles = makeStyles(() =>
   createStyles({
@@ -482,7 +482,7 @@ export function ReportSubheaderToolbar(
               )}
               {page !== "new" && !view && (
                 <div css={styles.previewEndContainer}>
-                  {isTabletView && <ExportChartButton filename={props.name} />}
+                  {isTabletView && <ExportReportButton filename={props.name} />}
 
                   <Tooltip title="Duplicate">
                     <IconButton
