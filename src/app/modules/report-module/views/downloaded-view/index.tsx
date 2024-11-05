@@ -42,7 +42,6 @@ export default function DownloadedView(props: {
     document.getElementById("app-bar-desktop")?.remove(); // Remove the app bar
     if (!reportData.id) return;
     let timeout: NodeJS.Timeout;
-    console.log("count ", loadedChartsInReport.length, getNumberOfRequests());
     if (loadedChartsInReport.length === getNumberOfRequests()) {
       if (getNumberOfRequests() === 0) {
         timeout = setTimeout(() => {
@@ -70,6 +69,7 @@ export default function DownloadedView(props: {
       id="export-container"
       css={`
         background: #fff;
+        padding: 0 24px;
       `}
     >
       {" "}
