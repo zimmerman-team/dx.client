@@ -1,5 +1,4 @@
-import { EditorState, RichUtils, ContentState, Modifier } from "draft-js";
-import { set } from "lodash";
+import { EditorState, RichUtils } from "draft-js";
 import React, { useEffect } from "react";
 
 interface Props {
@@ -31,9 +30,20 @@ export default function FontSizeController(props: Props) {
       const size = nfontSize.split("-")[2];
       setFontSize(Number(size));
     } else {
-      setFontSize(14);
+      const type = props
+        .getEditorState()
+        .getCurrentContent()
+        .getBlockForKey(props.getEditorState().getSelection().getStartKey())
+        .getType();
+      if (type === "header-one") {
+        setFontSize(28);
+      } else if (type === "header-two") {
+        setFontSize(21);
+      } else {
+        setFontSize(14);
+      }
     }
-  }, [props.getEditorState().getCurrentInlineStyle()]);
+  }, [props.getEditorState()]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     //number validation with regex so input only accepts number characters

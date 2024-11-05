@@ -26,7 +26,7 @@ export const useRenderChartFromAPI = (
   const [loadedChartsList, setLoadedChartsList] = useRecoilState(
     loadedChartsInReportAtom
   );
-  console.log("loadedChartsList", loadedChartsList);
+
   const fetchRenderChart = async (id: string) => {
     setLoading(true);
     setNotFound(false);

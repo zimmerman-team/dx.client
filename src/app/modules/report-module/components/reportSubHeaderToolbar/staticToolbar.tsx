@@ -42,7 +42,6 @@ export type ToolbarPluginsType = (
 
 export default function StaticToolbar(props: { plugins: ToolbarPluginsType }) {
   const isDesktop = useMediaQuery("(min-width: 1118px)");
-
   //control modals for color and background color pickers
   const [anchorEl, setAnchorEl] = React.useState<HTMLDivElement | null>(null);
   const [activeColorModal, setActiveColorModal] = React.useState<
@@ -78,6 +77,7 @@ export default function StaticToolbar(props: { plugins: ToolbarPluginsType }) {
   const linkInputComponent = document.querySelector(
     "input[placeholder='Enter a URL and press enter']"
   );
+
   return (
     <div>
       {props.plugins.length > 0 && (
@@ -85,6 +85,15 @@ export default function StaticToolbar(props: { plugins: ToolbarPluginsType }) {
           {
             // may be use React.Fragment instead of div to improve perfomance after React 16
             (externalProps) => {
+              const currentStyle = externalProps
+                .getEditorState()
+                .getCurrentInlineStyle();
+              const textColour = currentStyle.findLast((style: any) =>
+                style.includes("color-")
+              );
+              const textBgColour = currentStyle.findLast((style: any) =>
+                style.includes("bg-")
+              );
               const restIcons = (
                 <>
                   <div
@@ -135,7 +144,7 @@ export default function StaticToolbar(props: { plugins: ToolbarPluginsType }) {
                     onClick={(e) => handleClick(e, "color")}
                     id={colorId}
                     tabIndex={0} // Add tabIndex attribute to make the div focusable
-                    css={commonstyles.highlightPicker(colorOpen)}
+                    css={commonstyles.highlightPicker(!!textColour)}
                   >
                     {HiglightPicker}
                   </div>
@@ -145,7 +154,7 @@ export default function StaticToolbar(props: { plugins: ToolbarPluginsType }) {
                     onClick={(e) => handleClick(e, "bg")}
                     id={bgId}
                     tabIndex={0} // Add tabIndex attribute to make the div focusable
-                    css={commonstyles.highlightPicker(bgOpen)}
+                    css={commonstyles.highlightPicker(!!textBgColour)}
                   >
                     {BGHiglightPicker}
                   </div>
@@ -164,6 +173,7 @@ export default function StaticToolbar(props: { plugins: ToolbarPluginsType }) {
                   <div>
                     <FontSizeController {...externalProps} />
                   </div>
+
                   <HeaderOneButton {...externalProps} />
                   <HeaderTwoButton {...externalProps} />
                   <BlockquoteButton {...externalProps} />
