@@ -34,6 +34,8 @@ import {
 import { charts } from "app/modules/chart-module/data";
 import { drillDown } from "app/utils/getCirclePackingOption";
 import { checkLists } from "app/modules/chart-module/routes/customize/data";
+//@ts-ignore
+import { transform } from "echarts-stat";
 
 echarts.use([
   BarChart,
@@ -93,6 +95,7 @@ export function useDataThemesEchart() {
       isMonetaryValue,
       label,
       dataZoom,
+      logarithmicYAxis,
     } = visualOptions;
 
     const sortedData = sortBy(data, (d) => d.bars);
@@ -128,7 +131,7 @@ export function useDataThemesEchart() {
         },
       },
       yAxis: {
-        type: "value",
+        type: logarithmicYAxis ? "log" : "value",
         show: true,
         splitLine: {
           show: splitLineY ?? true,
@@ -941,10 +944,15 @@ export function useDataThemesEchart() {
       palette,
       // chart
       dataZoom,
+      trendline,
     } = visualOptions;
+    echarts.registerTransform(transform.regression);
+    const list = checkLists.find((item) => item.label === palette)?.value ?? [];
+    const splicedCheckLists = [...list];
+    splicedCheckLists.splice(1, 0, "#000000");
 
     return {
-      color: checkLists.find((item) => item.label === palette)?.value,
+      color: splicedCheckLists,
       grid: {
         top: marginTop,
         left: marginLeft,
@@ -979,17 +987,52 @@ export function useDataThemesEchart() {
           ]
         : null,
       tooltip: {
-        trigger: showTooltip ? "item" : "none",
+        trigger: "axis",
+        axisPointer: {
+          type: "cross",
+        },
+        // trigger: showTooltip ? "item" : "none",
         confine: true,
+        extraCssText: "border-radius: 20px;",
         valueFormatter: (value: number | string) =>
           valueFormatter2(value, isMonetaryValue),
       },
+
+      dataset: [
+        {
+          source: data.map((d: any) => [d.x, d.y]),
+        },
+        {
+          transform: {
+            type: "ecStat:regression",
+            config: {
+              method: "linear",
+            },
+          },
+        },
+      ],
       series: [
         {
           symbolSize: symbolSize ?? 4,
-          data: data.map((d: any) => [d.x, d.y]),
           type: "scatter",
+          name: "scatter",
+          datasetIndex: 0,
         },
+        trendline === "None"
+          ? {}
+          : {
+              name: "line",
+              type: "line",
+              smooth: true,
+              datasetIndex: 1,
+              symbolSize: 0.1,
+              symbol: "circle",
+              labelLayout: { dx: -20 },
+              encode: { label: 2, tooltip: 1 },
+              lineStyle: {
+                color: "black",
+              },
+            },
       ],
     };
   }
