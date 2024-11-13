@@ -3,17 +3,23 @@ import { ErrorOutlineRounded } from "@material-ui/icons";
 import HomeFooter from "app/modules/home-module/components/Footer";
 import { ReactComponent as GoogleIcon } from "app/modules/onboarding-module/asset/google-img.svg";
 import { ReactComponent as LinkedInIcon } from "app/modules/onboarding-module/asset/linkedIn-img.svg";
-import { Container } from "@material-ui/core";
+import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
+import { Container, useMediaQuery } from "@material-ui/core";
 import { useAuth0 } from "@auth0/auth0-react";
 import { socialAuth } from "app/utils/socialAuth";
+import { useHistory, useLocation } from "react-router-dom";
 
 export function NotAuthorizedMessageModule(props: {
   asset: "chart" | "report" | "dataset";
   action: "view" | "edit" | "delete";
   name?: string;
 }) {
+  const location = useLocation();
   const { isAuthenticated } = useAuth0();
+  const history = useHistory();
+  const isMobile = useMediaQuery("(max-width: 599px)");
   const destinationPath = `?to=${location.pathname}${location.search}`;
+
   return (
     <>
       <div
@@ -22,25 +28,37 @@ export function NotAuthorizedMessageModule(props: {
           height: 50px;
           align-items: center;
           display: ${props.name ? "flex" : "none"};
+          @media (max-width: 881px) {
+            margin-top: 17px;
+          }
         `}
       >
         <Container maxWidth="lg">
-          <h1
+          <div
             css={`
-              font-size: 24px;
-              margin: 0;
-              font-family: Inter;
-              font-weight: 700;
-              color: #231d2c;
-              max-width: 100%;
-              white-space: nowrap;
-              overflow: hidden;
-              text-overflow: ellipsis;
-              line-height: normal;
+              display: flex;
+              align-items: center;
+              gap: 4px;
             `}
           >
-            {props.name}
-          </h1>
+            {isMobile && <ArrowBackIosIcon onClick={() => history.go(-1)} />}
+            <h1
+              css={`
+                font-size: 24px;
+                margin: 0;
+                font-family: Inter;
+                font-weight: 700;
+                color: #231d2c;
+                max-width: 100%;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                line-height: normal;
+              `}
+            >
+              {props.name}
+            </h1>
+          </div>
         </Container>
       </div>
       <div
@@ -54,6 +72,9 @@ export function NotAuthorizedMessageModule(props: {
           justify-content: center;
           color: #e75656;
           text-align: center;
+          @media (max-width: 767px) {
+            padding-top: 200px;
+          }
         `}
       >
         <ErrorOutlineRounded
@@ -121,6 +142,13 @@ export function NotAuthorizedMessageModule(props: {
 
                 > svg {
                   transform: scale(0.8);
+                }
+              }
+              @media (max-width: 500px) {
+                flex-direction: column;
+                align-items: center;
+                button {
+                  width: 86%;
                 }
               }
             `}

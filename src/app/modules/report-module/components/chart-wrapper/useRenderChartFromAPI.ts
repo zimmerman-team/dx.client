@@ -1,14 +1,17 @@
 import { ChartRenderedItem } from "app/modules/chart-module/data";
+import { loadedChartsInReportAtom } from "app/state/recoil/atoms";
 import axios from "axios";
 import isEmpty from "lodash/isEmpty";
 import React from "react";
+import { useLocation } from "react-router-dom";
+import { useRecoilState } from "recoil";
 
 export const useRenderChartFromAPI = (
   token: string | undefined,
   chartId?: string
 ) => {
   const extraLoader = document.getElementById("extra-loader");
-
+  const location = useLocation();
   const body = {};
   const [loading, setLoading] = React.useState(false);
   const [notFound, setNotFound] = React.useState(false);
@@ -20,6 +23,10 @@ export const useRenderChartFromAPI = (
   const abortControllerRef = React.useRef<AbortController>(
     new AbortController()
   );
+  const [loadedChartsList, setLoadedChartsList] = useRecoilState(
+    loadedChartsInReportAtom
+  );
+
   const fetchRenderChart = async (id: string) => {
     setLoading(true);
     setNotFound(false);
@@ -42,6 +49,12 @@ export const useRenderChartFromAPI = (
       )
       .then((response) => {
         const chart = response.data || {};
+        if (!location.pathname.includes("downloaded-view")) {
+          console.log("view", location.pathname);
+        } else {
+          console.log("view", location.pathname, id);
+          setLoadedChartsList((prev) => [...prev, id]);
+        }
         setLoading(false);
         if (extraLoader) {
           extraLoader.style.display = "none";

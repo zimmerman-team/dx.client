@@ -14,13 +14,15 @@ interface MockProps {
   setActiveStep: jest.Mock<any, any, any>;
 }
 
+const localUploadOption = "Local upload";
+
 const defaultProps = (newProps: Partial<MockProps> = {}): MockProps => {
   return {
     onFileSubmit: jest.fn(),
     disabled: false,
     processingError: null,
     activeOption: null,
-    setActiveOption: jest.fn().mockImplementation(() => "Local upload"),
+    setActiveOption: jest.fn().mockImplementation(() => localUploadOption),
     setActiveStep: jest.fn(),
     ...newProps,
   };
@@ -75,14 +77,14 @@ test("open local upload option", async () => {
   await user.click(
     screen.getByTestId(/Local upload-option/i) as HTMLInputElement
   );
-  expect(props.setActiveOption).toHaveBeenCalledWith("Local upload");
+  expect(props.setActiveOption).toHaveBeenCalledWith(localUploadOption);
 });
 
 test("local file upload of dataset", async () => {
   const mockSetSelectedFile = jest.fn();
   const { app, props } = appFn({
     onFileSubmit: mockSetSelectedFile,
-    activeOption: "Local upload",
+    activeOption: localUploadOption,
   });
 
   render(app);

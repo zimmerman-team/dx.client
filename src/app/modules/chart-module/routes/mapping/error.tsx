@@ -21,7 +21,7 @@ import { ReactComponent as AreatimeaxisPlaceholderImage } from "app/modules/char
 import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 
 import { useStoreState } from "app/state/store/hooks";
-import { CHART_DEFAULT_HEIGHT } from "../../data";
+import { CHART_DEFAULT_HEIGHT } from "app/modules/chart-module/data";
 export default function MappingErrorComponent(props: {
   page: string;
   chartError: boolean;
@@ -392,6 +392,18 @@ export default function MappingErrorComponent(props: {
             position: absolute;
             top: 28%;
             left: 32%;
+            @media (min-width: 768px) {
+              @media (max-width: 902px) {
+                top: 22%;
+                left: 25%;
+              }
+            }
+            @media (min-width: 903px) {
+              @media (max-width: 1012px) {
+                top: 22%;
+                left: 28%;
+              }
+            }
           `}
         >
           <div

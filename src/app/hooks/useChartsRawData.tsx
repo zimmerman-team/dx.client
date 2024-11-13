@@ -2,7 +2,7 @@
 import React from "react";
 import filter from "lodash/filter";
 import isEmpty from "lodash/isEmpty";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import axios, { AxiosError, AxiosResponse } from "axios";
 /* project */
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
@@ -79,10 +79,13 @@ export function useChartsRawData(props: {
   isLoadedChartMappingValid?: boolean | null;
   setIsLoadedChartMappingValid?: (value: boolean | null) => void;
 }) {
+  const location = useLocation();
   const abortControllerRef = React.useRef<AbortController>(
     new AbortController()
   );
 
+  const defaultChartErrorMessage =
+    "Something went wrong with loading your data!\nChoose another dimensions or select different chart type.";
   const token = useStoreState((state) => state.AuthToken.value);
   const { visualOptions, chartFromAPI, setVisualOptions, setChartFromAPI } =
     props;
@@ -103,7 +106,7 @@ export function useChartsRawData(props: {
   const [dataError, setDataError] = React.useState(false);
   const [dataTotalCount, setDataTotalCount] = React.useState(0);
   const [chartErrorMessage, setChartErrorMessage] = React.useState<string>(
-    "Something went wrong with loading your data!\nChoose another dimensions or select different chart type."
+    defaultChartErrorMessage
   );
   const appliedFilters = useStoreState(
     (state) => state.charts.appliedFilters.value
@@ -166,10 +169,7 @@ export function useChartsRawData(props: {
         setLoading(false);
         if (isEmpty(response.data) || response.data.error) {
           setDataError(true);
-          setChartErrorMessage(
-            response.data.error ??
-              "Something went wrong with loading your data!\nChoose another dimensions or select different chart type."
-          );
+          setChartErrorMessage(response.data.error ?? defaultChartErrorMessage);
         } else {
           if (response.data.stats === "Error") {
             setDataStats([]);
@@ -282,9 +282,7 @@ export function useChartsRawData(props: {
         }
         setLoading(false);
         setChartError(true);
-        setChartErrorMessage(
-          "Something went wrong with loading your data!\nChoose another dimensions or select different chart type."
-        );
+        setChartErrorMessage(defaultChartErrorMessage);
 
         setError401(error.response?.status === 401);
       });

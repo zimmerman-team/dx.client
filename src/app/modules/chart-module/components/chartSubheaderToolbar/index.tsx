@@ -30,7 +30,6 @@ import { ChartSubheaderToolbarProps } from "app/modules/chart-module/components/
 import { ExportChartButton } from "app/modules/chart-module/components/chartSubheaderToolbar/exportButton";
 import { ISnackbarState } from "app/modules/dataset-module/routes/upload-module/upload-steps/previewFragment";
 import { chartFromReportAtom, planDialogAtom } from "app/state/recoil/atoms";
-import { getRequiredFieldsAndErrors } from "../../routes/mapping/utils";
 import AutoSaveSwitch from "app/modules/report-module/components/reportSubHeaderToolbar/autoSaveSwitch";
 import useAutosave from "app/hooks/useAutoSave";
 import { useStyles } from "app/modules/report-module/components/reportSubHeaderToolbar";
@@ -40,7 +39,9 @@ import EmbedChartDialog from "app/components/Dialogs/EmbedChartDialog";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import DuplicateMessage from "app/modules/common/mobile-duplicate-message";
 import { InfoSnackbar } from "app/modules/report-module/components/reportSubHeaderToolbar/infosnackbar";
+import ShareModal from "app/modules/dataset-module/component/shareModal";
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 export function ChartSubheaderToolbar(
   props: Readonly<ChartSubheaderToolbarProps>
 ) {
@@ -52,7 +53,8 @@ export function ChartSubheaderToolbar(
   const token = useStoreState((state) => state.AuthToken.value);
   const titleRef = React.useRef<HTMLDivElement>(null);
   const innerContainerRef = React.useRef<HTMLDivElement>(null);
-  const innerContainerWidth = innerContainerRef?.current?.offsetWidth;
+  const [isShareModalOpen, setIsShareModalOpen] =
+    React.useState<boolean>(false);
   const { page, view } = useParams<{ page: string; view?: string }>();
   const [showDeleteDialog, setShowDeleteDialog] = React.useState(false);
   const [enableButton, setEnableButton] = React.useState<boolean>(false);
@@ -88,6 +90,8 @@ export function ChartSubheaderToolbar(
     (state) =>
       (state.charts.ChartGet.crudData ?? emptyChartAPI) as ChartAPIModel
   );
+  const shareURL = `${window.location.origin}/chart/${loadedChart.id}`;
+
   const editChartCrudData = useStoreState(
     (state) => state.charts.ChartUpdate.crudData
   ) as ChartAPIModel;
@@ -144,9 +148,7 @@ export function ChartSubheaderToolbar(
   );
 
   const isPreviewDisabled: boolean = React.useMemo(() => {
-    const newValue =
-      isEmpty(selectedChartType) || !isMappingValid || view === "preview";
-    return newValue;
+    return isEmpty(selectedChartType) || !isMappingValid || view === "preview";
   }, [selectedChartType, mapping, view, editChartCrudData]);
 
   const handleDeleteModalInputChange = (
@@ -160,7 +162,11 @@ export function ChartSubheaderToolbar(
   };
 
   const handleShare = () => {
-    setDisplayEmbedModal(true);
+    if (isMobile) {
+      setIsShareModalOpen(true);
+    } else {
+      setDisplayEmbedModal(true);
+    }
   };
 
   const handleClose = () => {
@@ -189,17 +195,14 @@ export function ChartSubheaderToolbar(
   };
   const compareStateChanges = () => {
     if (loadedChart.id !== page) return false;
-    if (
+    return (
       !isEqual(props.name, loadedChart.name) ||
       !isEqual(selectedChartType, loadedChart.vizType) ||
       !isEqual(mapping, loadedChart.mapping) ||
       !isEqual(dataset as string, loadedChart.datasetId as string) ||
       !isEqual(props.visualOptions, loadedChart.vizOptions) ||
       !isEqual(appliedFilters, loadedChart.appliedFilters)
-    ) {
-      return true;
-    }
-    return false;
+    );
   };
 
   const open = Boolean(anchorEl);
@@ -284,7 +287,6 @@ export function ChartSubheaderToolbar(
   return (
     <div id="subheader-toolbar" css={styles.container}>
       {createChartLoading && <PageLoader />}
-
       <Container maxWidth="lg">
         <div css={styles.innercontainer} ref={innerContainerRef}>
           <div
@@ -614,22 +616,13 @@ export function ChartSubheaderToolbar(
             message={`Chart has been duplicated successfully!`}
             key={snackbarState.vertical + snackbarState.horizontal}
             action={
-              <button
-                onClick={() => {
-                  setSnackbarState({ ...snackbarState, open: false });
-
-                  history.push(`/chart/${duplicatedChartId}`);
-                  setDuplicatedChartId(null);
-                }}
-              >
-                GO TO CHART
-              </button>
+              <button onClick={handleViewDuplicatedChart}>GO TO CHART</button>
             }
           />
         )}
       </>
       <InfoSnackbar
-        gap={location.pathname.includes("report")}
+        gap={window.location.pathname.includes("report")}
         data-testid="create-chart-snackbar"
         onClose={() => setShowSnackbar(null)}
         open={showSnackbar !== null && showSnackbar !== ""}
@@ -639,16 +632,14 @@ export function ChartSubheaderToolbar(
           aria-describedby="create-chart-snackbar-content"
           action={
             <>
-              {!location.pathname.includes("report") && (
-                <button
-                  onClick={() => {
-                    setShowSnackbar(null);
-                    history.push("/report/new/initial");
-                  }}
-                >
-                  CREATE NEW REPORT
-                </button>
-              )}
+              <button
+                onClick={() => {
+                  setShowSnackbar(null);
+                  history.push("/report/new/initial");
+                }}
+              >
+                CREATE NEW REPORT
+              </button>
             </>
           }
         />
@@ -663,6 +654,13 @@ export function ChartSubheaderToolbar(
         onClose={handleCloseSnackbar}
         message="Link copied to clipboard"
         data-testid="copied-link-snackbar"
+      />
+      <ShareModal
+        datasetDetails={loadedChart}
+        isShareModalOpen={isShareModalOpen}
+        setIsShareModalOpen={setIsShareModalOpen}
+        handleCopy={handleCopy}
+        url={shareURL}
       />
       <DeleteChartDialog
         modalDisplay={showDeleteDialog}

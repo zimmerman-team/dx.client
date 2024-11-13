@@ -7,7 +7,7 @@ import {
   echartTypes,
   ChartTypeModel,
 } from "app/modules/chart-module/routes/chart-type/data";
-import ToolboxSubHeader from "../sub-header";
+import ToolboxSubHeader from "app/modules/chart-module/components/toolbox/steps/sub-header";
 import { Box, Grid } from "@material-ui/core";
 
 export function ChartToolBoxChartType() {

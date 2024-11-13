@@ -60,10 +60,10 @@ describe("Testing create chart on DX", () => {
   });
 
   it("Can create a bar chart", () => {
-    cy.get('[data-cy="chart-type-item"]').contains("Bar chart").click();
+    cy.get('[data-cy="chart-type-item"]').contains("Bar Chart").first().click();
 
     cy.get('[data-cy="chart-type-preview"]')
-      .contains("Bar chart")
+      .contains("Bar Chart")
       .should("be.visible");
 
     cy.intercept(`${apiUrl}/chart`).as("saveChart");
@@ -119,10 +119,10 @@ describe("Testing create chart on DX", () => {
   });
 
   it("Can create a Line Chart", () => {
-    cy.get('[data-cy="chart-type-item"]').contains("Line chart").click();
+    cy.get('[data-cy="chart-type-item"]').contains("Line Chart").click();
 
     cy.get('[data-cy="chart-type-preview"]')
-      .contains("Line chart")
+      .contains("Line Chart")
       .should("be.visible");
 
     cy.intercept(`${apiUrl}/chart`).as("saveChart");

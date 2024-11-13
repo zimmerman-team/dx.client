@@ -31,13 +31,15 @@ import {
 import { ReportSubheaderToolbar } from "app/modules/report-module/components/reportSubHeaderToolbar";
 import { ToolbarPluginsType } from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
 import useAutosave from "app/hooks/useAutoSave";
+import DownloadedView from "./views/downloaded-view";
 
 export default function ReportModule() {
   const { user, isAuthenticated } = useAuth0();
   const history = useHistory();
+  const aiTemplateString = "ai-template";
   const { page, view } = useParams<{
     page: string;
-    view: "initial" | "edit" | "create" | "preview" | "ai-template";
+    view: "initial" | "edit" | "create" | "preview" | typeof aiTemplateString;
   }>();
   const [hasChangesBeenMade, setHasChangesBeenMade] = React.useState(false);
   const [autoSave, setAutoSave] = React.useState<{
@@ -51,6 +53,7 @@ export default function ReportModule() {
     reportRightPanelViewAtom
   );
   const [isPreviewView, setIsPreviewView] = React.useState(false);
+  const defaultReportTitle = "Untitled report";
   const [rightPanelOpen, setRightPanelOpen] = React.useState(true);
   const [reportName, setReportName] = React.useState("Untitled report");
   const [hasReportNameFocused, setHasReportNameFocused] = React.useState(false);
@@ -151,7 +154,7 @@ export default function ReportModule() {
   React.useEffect(() => {
     //set report name back to untitled report if it is empty and user is not focused on subheader title
     if (reportName === "" && hasReportNameBlurred) {
-      setReportName("Untitled report");
+      setReportName(defaultReportTitle);
     }
     return () => {
       setHasReportNameBlurred(false);
@@ -282,7 +285,7 @@ export default function ReportModule() {
       descriptionColor: "#ffffff",
       dateColor: "#ffffff",
     });
-    setReportName("Untitled report");
+    setReportName(defaultReportTitle);
     setRightPanelView("charts");
     setRightPanelOpen(true);
     setAutoSave({ isAutoSaveEnabled: false });
@@ -364,7 +367,7 @@ export default function ReportModule() {
 
   const isSaveEnabled = React.useMemo(() => {
     let hasTextValue = !(
-      reportName === "Untitled report" &&
+      reportName === defaultReportTitle &&
       !headerDetails.description.getCurrentContent().hasText() &&
       isEmpty(headerDetails.title) &&
       framesArray.length === 1
@@ -473,6 +476,13 @@ export default function ReportModule() {
             `}
           />
           <ReportPreviewView
+            setIsPreviewView={setIsPreviewView}
+            setAutoSave={setAutoSave}
+          />
+        </Route>
+
+        <Route exact path="/report/:page/downloaded-view">
+          <DownloadedView
             setIsPreviewView={setIsPreviewView}
             setAutoSave={setAutoSave}
           />

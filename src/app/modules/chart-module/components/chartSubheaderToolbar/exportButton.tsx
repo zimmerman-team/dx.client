@@ -7,11 +7,16 @@ import {
   StyledMenu,
   StyledMenuItem,
 } from "app/modules/chart-module/components/exporter";
+import { Link, useParams } from "react-router-dom";
 
 export function ExportChartButton(props: { filename: string }) {
+  const { page } = useParams<{
+    page: string;
+  }>();
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
   );
+  const open = Boolean(anchorEl);
 
   function handleClick(event: React.MouseEvent<HTMLButtonElement>) {
     setAnchorEl(event.currentTarget);
@@ -34,8 +39,6 @@ export function ExportChartButton(props: { filename: string }) {
 
     handleClose();
   }
-
-  const open = Boolean(anchorEl);
 
   return (
     <>

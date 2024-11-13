@@ -48,6 +48,7 @@ interface Props {
   datasetDetails?: DatasetListItemAPIModel;
 }
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 export function CommonChart(props: Readonly<Props>) {
   const { render } = useDataThemesEchart();
   const token = useStoreState((state) => state.AuthToken.value);

@@ -1,5 +1,5 @@
 import { ToolbarPluginsType } from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
-import { IHeaderDetails } from "../../components/right-panel/data";
+import { IHeaderDetails } from "app/modules/report-module/components/right-panel/data";
 import { Updater } from "use-immer";
 
 interface IRowFrame {

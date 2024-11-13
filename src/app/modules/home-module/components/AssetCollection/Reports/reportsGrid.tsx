@@ -62,9 +62,9 @@ export default function ReportsGrid(props: Readonly<Props>) {
       props.searchStr?.length > 0
         ? `"where":{"name":{"like":"${props.searchStr}.*","options":"i"}},`
         : "";
-    return `filter={${value}"order":"${
-      props.sortBy
-    } desc","limit":${limit},"offset":${fromZeroOffset ? 0 : offset}}`;
+    return `filter={${value}"order":"${props.sortBy} ${
+      props.sortBy === "name" ? "asc" : "desc"
+    }","limit":${limit},"offset":${fromZeroOffset ? 0 : offset}}`;
   };
 
   const getWhereString = () => {
@@ -103,13 +103,14 @@ export default function ReportsGrid(props: Readonly<Props>) {
 
   React.useEffect(() => {
     //load data if intersection observer is triggered
-    if (reportsCount > limit) {
-      if (isObserved && reportsLoadSuccess) {
-        if (loadedReports.length !== reportsCount) {
-          //update the offset value for the next load
-          setOffset(offset + limit);
-        }
-      }
+    if (
+      reportsCount > limit &&
+      isObserved &&
+      reportsLoadSuccess &&
+      loadedReports.length !== reportsCount
+    ) {
+      //update the offset value for the next load
+      setOffset(offset + limit);
     }
   }, [isObserved]);
 
@@ -222,7 +223,7 @@ export default function ReportsGrid(props: Readonly<Props>) {
                 id={data.id}
                 key={data.id}
                 name={data.name}
-                date={data.createdDate}
+                date={data.updatedDate}
                 viz={<ColoredReportIcon />}
                 color={data.backgroundColor}
                 showMenuButton={props.showMenuButton}
@@ -244,11 +245,13 @@ export default function ReportsGrid(props: Readonly<Props>) {
       )}
       {props.view === "table" && (
         <HomepageTable
+          handleDelete={handleModal}
+          handleDuplicate={handleDuplicate}
           tableData={{
             columns: [
               { key: "name", label: "Name" },
               { key: "title", label: "Description" },
-              { key: "createdDate", label: "Date" },
+              { key: "updatedDate", label: "Last modified" },
             ],
             data: loadedReports.map((data) => ({
               ...data,

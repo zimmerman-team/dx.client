@@ -5,16 +5,16 @@ import React, { useCallback } from "react";
 
 import { DropZone } from "app/modules/dataset-module/routes/upload-module/component/dropzone";
 import { Box } from "@material-ui/core";
-import LocalIcon from "../assets/upload-options-icons/local";
-import GoogleIcon from "../assets/upload-options-icons/google";
-import MicrosoftIcon from "../assets/upload-options-icons/microsoft";
-import ApiIcon from "../assets/upload-options-icons/api";
-import MSSQLIcon from "../assets/upload-options-icons/mssql.png";
-import MYSQLIcon from "../assets/upload-options-icons/mysql.png";
-import PostgresIcon from "../assets/upload-options-icons/postgres";
-import MongoDbIcon from "../assets/upload-options-icons/mongodb";
-import HubspotIcon from "../assets/upload-options-icons/hubspot";
-import UploadOption from "../component/uploadOption";
+import LocalIcon from "app/modules/dataset-module/routes/upload-module/assets/upload-options-icons/local";
+import GoogleIcon from "app/modules/dataset-module/routes/upload-module/assets/upload-options-icons/google";
+import MicrosoftIcon from "app/modules/dataset-module/routes/upload-module/assets/upload-options-icons/microsoft";
+import ApiIcon from "app/modules/dataset-module/routes/upload-module/assets/upload-options-icons/api";
+import MSSQLIcon from "app/modules/dataset-module/routes/upload-module/assets/upload-options-icons/mssql.png";
+import MYSQLIcon from "app/modules/dataset-module/routes/upload-module/assets/upload-options-icons/mysql.png";
+import PostgresIcon from "app/modules/dataset-module/routes/upload-module/assets/upload-options-icons/postgres";
+import MongoDbIcon from "app/modules/dataset-module/routes/upload-module/assets/upload-options-icons/mongodb";
+import HubspotIcon from "app/modules/dataset-module/routes/upload-module/assets/upload-options-icons/hubspot";
+import UploadOption from "app/modules/dataset-module/routes/upload-module/component/uploadOption";
 import { useCookie } from "react-use";
 import useGoogleDrivePicker from "app/hooks/useGoogleDrivePicker";
 import { useOneDrivePicker } from "app/hooks/useOneDrivePicker";
@@ -63,6 +63,9 @@ export default function AddDatasetFragment(props: Props) {
       props.onFileSubmit(acceptedFiles[0]);
     }
   }, []);
+
+  const databaseConnection = "DataBase Connection";
+  const comingSoon = "Coming Soon";
 
   const uploadOptions = [
     {
@@ -115,40 +118,40 @@ export default function AddDatasetFragment(props: Props) {
     },
     {
       name: "MSSQL",
-      type: "DataBase Connection",
-      formats: ["Coming Soon"],
-      icon: <img width={30} height={33.462} src={MSSQLIcon} />,
+      type: databaseConnection,
+      formats: [comingSoon],
+      icon: <img width={30} height={33.462} src={MSSQLIcon} alt="mssql-logo" />,
       onClick: () => {},
       upgradeRequired: false,
     },
     {
       name: "MYSQL",
-      type: "DataBase Connection",
-      formats: ["Coming Soon"],
-      icon: <img width={30} height={30} src={MYSQLIcon} />,
+      type: databaseConnection,
+      formats: [comingSoon],
+      icon: <img width={30} height={30} src={MYSQLIcon} alt="mysql-logo" />,
       onClick: () => {},
       upgradeRequired: false,
     },
     {
       name: "PostgreSQL",
-      type: "DataBase Connection",
-      formats: ["Coming Soon"],
+      type: databaseConnection,
+      formats: [comingSoon],
       icon: <PostgresIcon />,
       onClick: () => {},
       upgradeRequired: false,
     },
     {
       name: "MongoDB",
-      type: "DataBase Connection",
-      formats: ["Coming Soon"],
+      type: databaseConnection,
+      formats: [comingSoon],
       icon: <MongoDbIcon />,
       onClick: () => {},
       upgradeRequired: false,
     },
     {
       name: "Hubspot",
-      type: "DataBase Connection",
-      formats: ["Coming Soon"],
+      type: databaseConnection,
+      formats: [comingSoon],
       icon: <HubspotIcon />,
       onClick: () => {},
       upgradeRequired: false,
@@ -199,12 +202,19 @@ export default function AddDatasetFragment(props: Props) {
           />
         </>
       ) : (
-        <div>
+        <div
+          css={`
+            background: #fff;
+            border-radius: 16px;
+            margin-bottom: 40px;
+          `}
+        >
           <div
             css={`
               padding: 19px 23px;
               font-size: 14px;
               font-style: normal;
+              background: rgba(218, 218, 248, 0.3);
               font-weight: 400;
               line-height: normal;
               font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;

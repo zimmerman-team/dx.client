@@ -1,5 +1,10 @@
 import React from "react";
-import { benefitscss, firstColcss, secondColcss, thirdColcss } from "../style";
+import {
+  benefitscss,
+  firstColcss,
+  secondColcss,
+  thirdColcss,
+} from "app/modules/home-module/sub-modules/why-dx/style";
 
 export default function BenefitsBlock() {
   return (

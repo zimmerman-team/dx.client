@@ -15,7 +15,7 @@ const PlaceHolder = (props: PlaceholderProps) => {
         props.index ?? draft.findIndex((frame) => frame.id === props.rowId) + 1;
 
       const fakeId = v4();
-      const tempItem = draft[dragIndex];
+      const tempItem = { ...draft[dragIndex] };
       draft[dragIndex].id = fakeId;
 
       draft.splice(dropIndex, 0, tempItem);
@@ -90,10 +90,7 @@ const PlaceHolder = (props: PlaceholderProps) => {
       if (placeholderIndex === dragIndex) {
         return false;
       }
-      if (placeholderIndex - 1 === dragIndex) {
-        return false;
-      }
-      return true;
+      return placeholderIndex - 1 !== dragIndex;
     }
     return false;
   };
@@ -106,14 +103,10 @@ const PlaceHolder = (props: PlaceholderProps) => {
       if (placeholderIndex === itemDragIndex) {
         return false;
       }
-      if (placeholderIndex - 1 === itemDragIndex) {
-        return false;
-      }
-      return true;
+      return placeholderIndex - 1 !== itemDragIndex;
     }
     return false;
   };
-
   return (
     <div
       data-cy="report-row-placeholder"

@@ -1,7 +1,7 @@
-import { ReactComponent as AITemplateImg } from "../../asset/aiTemplate-img.svg";
-import { ReactComponent as BlankTemplateImg } from "../../asset/blankTemplate-img.svg";
-import { ReactComponent as AdvancedTemplateImg } from "../../asset/advancedTemplate-img.svg";
-import { ReactComponent as RightArrowIcon } from "../../asset/rightArrow.svg";
+import { ReactComponent as AITemplateImg } from "app/modules/report-module/asset/aiTemplate-img.svg";
+import { ReactComponent as BlankTemplateImg } from "app/modules/report-module/asset/blankTemplate-img.svg";
+import { ReactComponent as AdvancedTemplateImg } from "app/modules/report-module/asset/advancedTemplate-img.svg";
+import { ReactComponent as RightArrowIcon } from "app/modules/report-module/asset/rightArrow.svg";
 
 export interface ReportInitialViewProps {
   resetReport: () => void;

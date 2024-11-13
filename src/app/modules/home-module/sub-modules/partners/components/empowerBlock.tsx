@@ -20,33 +20,28 @@ export default function EmpowerBlock(props: {
   const { isAuthenticated } = useAuth0();
 
   let mainText = "";
-  let subText = "";
+  let mainTextMobile = "";
+  let subText = `Dataxplorer simplifies and empowers \n visual data reporting for all.`;
 
   switch (props.view) {
     case "why-dx":
       mainText = `Turn Data into Impact in Minutes with\nDataxplorer`;
-      subText =
-        "Dataxplorer simplifies and empowers visual data reporting for all.";
+      mainTextMobile = `Turn Data into Impact\n in Minutes with\n Dataxplorer`;
       break;
     case "contact":
       mainText = "Dataxplorer Equips You with\nInsightful Data";
-      subText =
-        "Dataxplorer simplifies and empowers visual data reporting for all.";
+      mainTextMobile = "Dataxplorer Equips\n You with\nInsightful Data";
       break;
     case "about":
-      mainText = `Dataxplorer Equips You with\nInsightful Data`;
-      subText =
-        "Dataxplorer simplifies and empowers visual data reporting for all.";
+      mainText = `Dataxplorer Equips\n You with\nInsightful Data`;
       break;
     case "partners":
       mainText = `Global Health and International Development\nOrganizations are using Dataxplorer`;
-      subText =
-        "Dataxplorer simplifies and empowers visual data reporting for all.";
+      mainTextMobile = `Global Health and International Development\nOrganizations are\n using Dataxplorer`;
+
       break;
     case "explore":
       mainText = "Explore Empowered Data";
-      subText =
-        "Dataxplorer simplifies and empowers visual data reporting for all.";
       break;
     case "landing":
       mainText = "Start Making Impact Today\nwith Dataxplorer";
@@ -62,6 +57,8 @@ export default function EmpowerBlock(props: {
   return (
     <Box css={empowercss(props.view!)}>
       <h1>{mainText}</h1>
+      <h1>{mainTextMobile}</h1>
+
       <p>
         <b>{subText}</b>
       </p>
@@ -115,6 +112,7 @@ export default function EmpowerBlock(props: {
               color: #fff;
               display: flex;
               padding: 9px 17px !important;
+              height: 41px;
               border-radius: 30px;
               outline: none;
               border: none;
@@ -134,10 +132,13 @@ export default function EmpowerBlock(props: {
                 cursor: pointer;
               }
             }
-            @media (max-width: 420px) {
+            @media (max-width: 655px) {
               flex-direction: column;
               button {
-                width: 90%;
+                width: 60%;
+                @media (max-width: 428px) {
+                  width: 82%;
+                }
               }
             }
           `}

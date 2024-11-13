@@ -1,7 +1,7 @@
 /* third-party */
 import React from "react";
 import { useAuth0 } from "@auth0/auth0-react";
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory, useLocation, useParams } from "react-router-dom";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import { isEmpty } from "lodash";
 import { Slide, SnackbarContent, useMediaQuery } from "@material-ui/core";
@@ -20,7 +20,7 @@ import {
   chartViews,
 } from "app/modules/chart-module/data";
 import ToolboxNav from "app/modules/chart-module/components/toolbox/steps/navbar";
-import { InfoSnackbar } from "../chartSubheaderToolbar/infoSnackbar";
+import { InfoSnackbar } from "app/modules/chart-module/components/chartSubheaderToolbar/infoSnackbar";
 
 export function ChartModuleToolBox(props: Readonly<ChartToolBoxProps>) {
   const { page, view } = useParams<{ page: string; view?: string }>();
@@ -29,6 +29,8 @@ export function ChartModuleToolBox(props: Readonly<ChartToolBoxProps>) {
   const { isAuthenticated, user } = useAuth0();
   const isMobile = useMediaQuery("(max-width: 767px)");
   const [isClickable, setIsClickable] = React.useState(false);
+
+  const location = useLocation();
 
   const dataset = useStoreState((state) => state.charts.dataset.value);
 
@@ -120,7 +122,7 @@ export function ChartModuleToolBox(props: Readonly<ChartToolBoxProps>) {
   React.useEffect(() => {
     if (
       location.pathname === `/chart/${page}` ||
-      view == "preview" ||
+      view === "preview" ||
       !isValidView
     ) {
       setDisplayToolbar("none");
@@ -274,8 +276,8 @@ export function ChartModuleToolBox(props: Readonly<ChartToolBoxProps>) {
               font-weight: 400;
             `}
           >
-            Your chart has been successfully created! You can now find it in
-            your library.
+            Your chart has been successfully saved! You can now find it in your
+            library.
           </p>
           <div
             css={`

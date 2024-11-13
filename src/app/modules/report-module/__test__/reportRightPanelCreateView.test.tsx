@@ -60,6 +60,8 @@ interface Params {
   chartType: any;
 }
 
+const chartsButtonId = "charts-button";
+
 //mocks
 jest.mock("axios");
 
@@ -224,7 +226,7 @@ const appSetup = (
 //     screen.getByText("Remove or add header to your report")
 //   ).toBeInTheDocument();
 
-//   await user.click(screen.getByTestId("charts-button"));
+//   await user.click(screen.getByTestId(chartsButtonId));
 //   expect(reportRightPanelViewChange).toHaveBeenCalledWith("charts");
 //   expect(screen.getByText("charts")).toBeInTheDocument();
 
@@ -274,7 +276,7 @@ test("should search for charts in in chart view", async () => {
   render(app);
   mockStore.getActions().charts.ChartGetList.setCrudData(mockChartList);
 
-  await user.click(screen.getByTestId("charts-button"));
+  await user.click(screen.getByTestId(chartsButtonId));
   expect(reportRightPanelViewChange).toHaveBeenCalledWith("charts");
   expect(screen.getByText("Charts")).toBeInTheDocument();
 
@@ -295,7 +297,7 @@ test("clicking add chart card should redirect to chart page", async () => {
   const user = userEvent.setup();
   const { app } = appSetup();
   render(app);
-  await user.click(screen.getByTestId("charts-button"));
+  await user.click(screen.getByTestId(chartsButtonId));
   expect(reportRightPanelViewChange).toHaveBeenCalledWith("charts");
   expect(screen.getByText("Charts")).toBeInTheDocument();
   await userEvent.click(screen.getByText("New chart"));
@@ -313,7 +315,7 @@ test("charts items should be draggable", async () => {
   const { app, mockStore } = appSetup();
   render(app);
   mockStore.getActions().charts.ChartGetList.setCrudData(mockChartList);
-  await user.click(screen.getByTestId("charts-button"));
+  await user.click(screen.getByTestId(chartsButtonId));
   expect(reportRightPanelViewChange).toHaveBeenCalledWith("charts");
   expect(screen.getByText("Charts")).toBeInTheDocument();
   fireEvent.dragStart(screen.getByTestId("chart-0"));
@@ -338,7 +340,7 @@ test("chart card should be expandable", async () => {
   render(app);
   mockStore.getActions().charts.ChartGetList.setCrudData(mockChartList);
 
-  await user.click(screen.getByTestId("charts-button"));
+  await user.click(screen.getByTestId(chartsButtonId));
   expect(reportRightPanelViewChange).toHaveBeenCalledWith("charts");
   expect(screen.getByText("Charts")).toBeInTheDocument();
   expect(screen.getByText(/Sort by Recent/)).toBeInTheDocument();

@@ -23,7 +23,7 @@ import {
   reportContentContainerWidth,
   isChartDraggingAtom,
 } from "app/state/recoil/atoms";
-import { IFramesArray } from "../../views/create/data";
+import { IFramesArray } from "app/modules/report-module/views/create/data";
 import { ToolbarPluginsType } from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
 import { css } from "styled-components";
 import { Updater } from "use-immer";
@@ -39,7 +39,6 @@ interface RowStructureDisplayProps {
   selectedTypeHistory: string[];
   rowContentWidths: number[];
   rowContentHeights: number[];
-  setSelectedType: React.Dispatch<React.SetStateAction<string>>;
   updateFramesArray: Updater<IFramesArray[]>;
   deleteFrame: (id: string) => void;
   setSelectedTypeHistory: React.Dispatch<React.SetStateAction<string[]>>;
@@ -59,6 +58,7 @@ interface RowStructureDisplayProps {
   setPlugins: React.Dispatch<React.SetStateAction<ToolbarPluginsType>>;
   onSave: (type: "create" | "edit") => Promise<void>;
   forceSelectedType: string | undefined;
+  setTempRowState: React.Dispatch<React.SetStateAction<IFramesArray>>;
 }
 
 export default function RowstructureDisplay(
@@ -68,7 +68,9 @@ export default function RowstructureDisplay(
   const location = useLocation();
   const { page } = useParams<{ page: string }>();
   const [handleDisplay, setHandleDisplay] = React.useState(false);
-  const viewOnlyMode = location.pathname === `/report/${page}`;
+  const viewOnlyMode =
+    location.pathname === `/report/${page}` ||
+    location.pathname === `/report/${page}/downloaded-view`;
 
   const handlers = viewOnlyMode
     ? {}
@@ -198,6 +200,7 @@ export default function RowstructureDisplay(
                       props.selectedType,
                       "",
                     ]);
+                    props.setTempRowState(props.framesArray[props.rowIndex]);
                   }}
                   data-cy="edit-row-structure-button"
                 >
@@ -273,6 +276,7 @@ const Box = (props: {
     width: number,
     height: number
   ) => void;
+  // eslint-disable-next-line sonarjs/cognitive-complexity
 }) => {
   const location = useLocation();
   const history = useHistory();
@@ -356,11 +360,10 @@ const Box = (props: {
       draft[frameId].content[itemIndex] = itemContent;
       draft[frameId].contentTypes[itemIndex] = itemContentType;
       const heights = draft[frameId].contentHeights;
-      if (textHeight) {
-        //relative to the text content, we only want to increase the height of textbox
-        if (textHeight > heights[itemIndex]) {
-          heights[itemIndex] = textHeight;
-        }
+
+      //relative to the text content, we only want to increase the height of textbox
+      if (textHeight && textHeight > heights[itemIndex]) {
+        heights[itemIndex] = textHeight;
       }
     });
   };
@@ -380,7 +383,9 @@ const Box = (props: {
   const [_isResizing, setIsResizing] = useRecoilState(
     reportContentIsResizingAtom
   );
-  const viewOnlyMode = location.pathname === `/report/${page}`;
+  const viewOnlyMode =
+    location.pathname === `/report/${page}` ||
+    location.pathname === `/report/${page}/downloaded-view`;
 
   const elementTypes = [
     ReportElementsType.TEXT,
@@ -518,6 +523,15 @@ const Box = (props: {
     setIsResizing(true);
   };
 
+  const resetContent = () => {
+    setDisplayMode(null);
+    setChartId(null);
+    setTextContent(EditorState.createEmpty());
+    handleRowFrameItemRemoval(props.rowId, props.itemIndex);
+  };
+
+  const cursorDefault = "cursor: default;";
+
   const content = React.useMemo(() => {
     if (displayMode === "text") {
       return (
@@ -542,7 +556,7 @@ const Box = (props: {
             position: relative;
 
             div {
-              ${viewOnlyMode && "cursor: default;"}
+              ${viewOnlyMode && cursorDefault}
             }
           `}
         >
@@ -550,16 +564,11 @@ const Box = (props: {
             ref={textResizableRef}
             onMouseEnter={() => setDisplayBoxIcons(true)}
             onMouseLeave={() => setDisplayBoxIcons(false)}
-            data-cy={`row-frame-text-item-${props.rowIndex}-${props.itemIndex}`}
+            data-cy={`row-frame-text-item`}
           >
             {!viewOnlyMode && displayBoxIcons && (
               <IconButton
-                onClick={() => {
-                  setDisplayMode(null);
-                  setChartId(null);
-                  setTextContent(EditorState.createEmpty());
-                  handleRowFrameItemRemoval(props.rowId, props.itemIndex);
-                }}
+                onClick={resetContent}
                 css={`
                   top: 12px;
                   z-index: 1;
@@ -636,12 +645,7 @@ const Box = (props: {
             {!viewOnlyMode && displayBoxIcons && (
               <div>
                 <IconButton
-                  onClick={() => {
-                    setDisplayMode(null);
-                    setChartId(null);
-                    setTextContent(EditorState.createEmpty());
-                    handleRowFrameItemRemoval(props.rowId, props.itemIndex);
-                  }}
+                  onClick={resetContent}
                   css={`
                     top: 12px;
                     z-index: 1;
@@ -731,7 +735,7 @@ const Box = (props: {
             position: relative;
 
             div {
-              ${viewOnlyMode && "cursor: default;"}
+              ${viewOnlyMode && cursorDefault}
             }
           `}
         >
@@ -742,12 +746,7 @@ const Box = (props: {
           >
             {!viewOnlyMode && displayBoxIcons && (
               <IconButton
-                onClick={() => {
-                  setDisplayMode(null);
-                  setChartId(null);
-                  setTextContent(EditorState.createEmpty());
-                  handleRowFrameItemRemoval(props.rowId, props.itemIndex);
-                }}
+                onClick={resetContent}
                 css={`
                   top: 12px;
                   z-index: 1;
@@ -774,6 +773,7 @@ const Box = (props: {
               </IconButton>
             )}
             <iframe
+              title="Video Content"
               src={videoContent?.embedUrl}
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowFullScreen
@@ -816,7 +816,7 @@ const Box = (props: {
             position: relative;
 
             div {
-              ${viewOnlyMode && "cursor: default;"}
+              ${viewOnlyMode && cursorDefault}
             }
           `}
         >
@@ -827,12 +827,7 @@ const Box = (props: {
           >
             {!viewOnlyMode && displayBoxIcons && (
               <IconButton
-                onClick={() => {
-                  setDisplayMode(null);
-                  setChartId(null);
-                  setTextContent(EditorState.createEmpty());
-                  handleRowFrameItemRemoval(props.rowId, props.itemIndex);
-                }}
+                onClick={resetContent}
                 css={`
                   top: 12px;
                   z-index: 1;

@@ -1,13 +1,17 @@
 import React from "react";
 import moment from "moment";
 import Table from "@material-ui/core/Table";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import TableRow from "@material-ui/core/TableRow";
 import TableHead from "@material-ui/core/TableHead";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import { isValidDate } from "app/utils/isValidDate";
+import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
+import MenuItems from "app/modules/home-module/components/AssetCollection/Datasets/menuItems";
+import { IconButton } from "@material-ui/core";
+import { assetType } from "app/modules/home-module/components/AssetCollection/All/assetsGrid";
 
 interface IData {
   id: string;
@@ -15,6 +19,7 @@ interface IData {
   description?: string;
   createdDate: Date;
   type: string;
+  isMappingValid?: boolean;
 }
 export function HomepageTable(
   props: Readonly<{
@@ -25,10 +30,13 @@ export function HomepageTable(
       columns: { key: string; label: string; icon?: React.ReactNode }[];
       data: any[];
     };
+    handleDelete?: (id: string) => void;
+    handleDuplicate?: (id: string, type: assetType) => void;
+    setActiveAssetType?: React.Dispatch<React.SetStateAction<assetType | null>>;
   }>
 ) {
   const history = useHistory();
-
+  const location = useLocation();
   const getDestinationPath = (data: IData) => {
     let destinationPath = `/${data.type}/${data.id}`;
     if (data.type === "dataset") {
@@ -37,6 +45,34 @@ export function HomepageTable(
       }`;
     }
     return destinationPath;
+  };
+
+  const getEditDetailPath = (data: IData) => {
+    let editDetailPath = `/${data.type}/${data.id}/edit`;
+    if (data.type === "chart") {
+      editDetailPath = data.isMappingValid
+        ? `/${data.type}/${data.id}/customize`
+        : `/${data.type}/${data.id}/mapping`;
+    }
+    return editDetailPath;
+  };
+
+  const [tableData, setTableData] = React.useState<any>([]);
+
+  React.useEffect(() => {
+    setTableData(
+      props.tableData.data.map((data) => ({ ...data, isModalOpen: false }))
+    );
+  }, [props.tableData.data]);
+  const handleCloseModal = (id: string) => {
+    setTableData((prev: any) => {
+      return prev.map((item: any) => {
+        if (item.id === id) {
+          return { ...item, isModalOpen: !item.isModalOpen };
+        }
+        return item;
+      });
+    });
   };
 
   return (
@@ -52,9 +88,7 @@ export function HomepageTable(
           border-collapse: collapse;
 
           tr > td {
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
+            padding: 0 16px;
             &:nth-of-type(1) {
               max-width: 50px;
             }
@@ -78,6 +112,8 @@ export function HomepageTable(
             > tr > th {
               font-size: 14px;
               font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
+              height: 54px;
+              padding: 0 16px;
             }
           `}
         >
@@ -88,6 +124,7 @@ export function HomepageTable(
                 {val.label}
               </TableCell>
             ))}
+            <TableCell width="50px"></TableCell>
           </TableRow>
         </TableHead>
         <TableBody
@@ -95,7 +132,7 @@ export function HomepageTable(
             background: #fff;
           `}
         >
-          {props.tableData.data.map((data, index) => (
+          {tableData.map((data: any, index: any) => (
             <TableRow
               key={data.id}
               onClick={() => {
@@ -121,7 +158,14 @@ export function HomepageTable(
                     css={`
                       margin: 0;
                       overflow: clip;
-                      max-width: 220px;
+                      max-width: ${props.tableData.columns.some(
+                        (column) =>
+                          column.key === "type" && column.label === "Type"
+                      )
+                        ? "300px"
+                        : "500px"};
+
+                      min-width: 100px;
                       white-space: nowrap;
                       text-overflow: ellipsis;
                       min-width: ${val.key === "id" ? "30px" : "auto"};
@@ -129,11 +173,45 @@ export function HomepageTable(
                     `}
                   >
                     {isValidDate(data[val.key])
-                      ? moment(data[val.key]).format("MMMM YYYY")
+                      ? moment(data[val.key]).format("DD/MM/YYYY HH:mm")
                       : data[val.key] ?? ""}
                   </p>
                 </TableCell>
               ))}
+              <TableCell
+                css={`
+                  position: relative;
+                `}
+              >
+                <IconButton
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleCloseModal(data.id);
+                  }}
+                >
+                  <MoreHorizIcon htmlColor="#231D2C" />
+                </IconButton>
+                {tableData.find(
+                  (d: any) => d.isModalOpen && d.id === data.id
+                ) && (
+                  <MenuItems
+                    type={data.type}
+                    handleClose={() => handleCloseModal(data.id)}
+                    handleDelete={() => {
+                      props.setActiveAssetType?.(data.type);
+                      props.handleDelete?.(data.id as string);
+                    }}
+                    handleDuplicate={() =>
+                      props.handleDuplicate?.(data.id as string, data.type)
+                    }
+                    id={data.id}
+                    owner={data.owner}
+                    path={getEditDetailPath(data)}
+                    top="30px"
+                    right="50px"
+                  />
+                )}
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

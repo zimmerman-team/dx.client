@@ -1,6 +1,18 @@
 import React from "react";
 import get from "lodash/get";
 
+const COLOR_SCHEMES_LABELS = {
+  interpolateBlues: "Blue sequential",
+  interpolateGreens: "Green sequential",
+  interpolateReds: "Red sequential",
+  interpolateRdBu: "RdBu diverging",
+  interpolateBrBG: "BrBG diverging",
+  interpolatePiYG: "PiYG diverging",
+  schemeCategory10: "Categorical 10",
+  interpolateTurbo: "Turbo discrete",
+  interpolateSpectral: "Spectral discrete",
+};
+
 const ColorSchemePreview = ({ label, scale, numSamples = 150 }) => {
   let samples;
   if (scale.ticks) {

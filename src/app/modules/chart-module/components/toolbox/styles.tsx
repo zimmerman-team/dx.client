@@ -130,7 +130,7 @@ export const mappingStyles = {
       }
     }
   `,
-  mappingItemcss: (props: any) => css`
+  mappingItemcss: (params: any) => css`
     height: 31px;
     display: flex;
     justify-content: space-between;
@@ -139,12 +139,13 @@ export const mappingStyles = {
     padding-left: 16px;
     align-items: center;
     border-radius: 25px;
-    margin-bottom: ${props.marginBottom};
+    margin-bottom: ${params.marginBottom};
     color: #262c34;
-    background: ${props.backgroundColor ?? "#cfd4da"};
-    ${props.dimension.mappedValues.includes(props.mappingItemValue) &&
+    background: ${params.backgroundColor ?? "#cfd4da"};
+    ${params.dimension.mappedValues.includes(params.mappingItemValue) &&
     "background: #262c34; color: #fff;"}
-    >div:nth-of-type(1) {
+    transform: translate(0, 0);
+    > div:nth-of-type(1) {
       display: flex;
       align-items: center;
       gap: 13px;
@@ -163,7 +164,7 @@ export const mappingStyles = {
         }
       }
     }
-    cursor: pointer;
+    cursor: ${params.isDragging ? "grab" : "pointer"};
   `,
   mappedValuecss: css`
     height: 31px;

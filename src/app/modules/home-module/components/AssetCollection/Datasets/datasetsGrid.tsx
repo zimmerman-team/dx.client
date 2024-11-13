@@ -73,7 +73,9 @@ export default function DatasetsGrid(props: Readonly<Props>) {
 
     return `${props.userOnly ? "userOnly=true&" : ""}filter={${value}"order":"${
       props.sortBy
-    } desc","limit":${limit},"offset":${fromZeroOffset ? 0 : offset}}`;
+    } ${props.sortBy === "name" ? "asc" : "desc"}","limit":${limit},"offset":${
+      fromZeroOffset ? 0 : offset
+    }}`;
   };
 
   const getWhereString = () => {
@@ -114,13 +116,15 @@ export default function DatasetsGrid(props: Readonly<Props>) {
 
   React.useEffect(() => {
     //load data if intersection observer is triggered
-    if (datasetCount > limit) {
-      if (isObserved && datasetLoadSuccess) {
-        if (loadedDatasets.length !== datasetCount) {
-          //update the offset value for the next load
-          setOffset(offset + limit);
-        }
-      }
+
+    if (
+      datasetCount > limit &&
+      isObserved &&
+      datasetLoadSuccess &&
+      loadedDatasets.length !== datasetCount
+    ) {
+      //update the offset value for the next load
+      setOffset(offset + limit);
     }
   }, [isObserved]);
 
@@ -271,14 +275,14 @@ export default function DatasetsGrid(props: Readonly<Props>) {
               <GridItem
                 path={`/dataset/${data.id}/edit`}
                 title={data.name}
-                date={data.createdDate}
+                date={data.updatedDate}
                 handleDelete={() => {
                   handleModal(data.id);
                 }}
-                descr={data.description}
                 handleDuplicate={() => {
                   handleDuplicate(data.id);
                 }}
+                descr={data.description}
                 showMenu={!props.inChartBuilder}
                 id={data.id}
                 owner={data.owner}
@@ -295,11 +299,13 @@ export default function DatasetsGrid(props: Readonly<Props>) {
         <HomepageTable
           onItemClick={props.onItemClick}
           inChartBuilder={props.inChartBuilder}
+          handleDelete={handleModal}
+          handleDuplicate={handleDuplicate}
           tableData={{
             columns: [
               { key: "name", label: "Name" },
               { key: "description", label: "Description" },
-              { key: "createdDate", label: "Date" },
+              { key: "updatedDate", label: "Last modified" },
             ],
             data: loadedDatasets.map((data) => ({
               ...data,

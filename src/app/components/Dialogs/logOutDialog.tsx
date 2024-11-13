@@ -59,15 +59,14 @@ export default function LogOutDialog(props: Props) {
           <div
             css={`
               width: 80%;
-              position: relative;
             `}
           >
             <IconButton
               onClick={() => props.setModalDisplay(false)}
               css={`
                 position: absolute;
-                right: -93px;
-                top: -16px;
+                right: 8px;
+                top: 6px;
                 color: #231d2c;
               `}
             >
@@ -83,14 +82,14 @@ export default function LogOutDialog(props: Props) {
                 margin-top: 2.5rem;
               `}
             >
-              Log out
+              Sign out
             </p>
             <p
               css={`
                 margin-top: 3px;
               `}
             >
-              Are you sure you want to log out?
+              Are you sure you want to Sign out?
             </p>
           </div>
           <div
@@ -141,7 +140,7 @@ export default function LogOutDialog(props: Props) {
                 cursor: pointer;
               `}
             >
-              Log out
+              Sign out
             </button>
           </div>
         </div>

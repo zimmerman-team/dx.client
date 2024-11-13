@@ -1,7 +1,7 @@
 import FinishedFragment from "app/modules/dataset-module/routes/upload-module/upload-steps/finishedFragment";
 import { useChartsRawData } from "app/hooks/useChartsRawData";
 import React from "react";
-import DatasetSubHeaderToolbar from "../../component/datasetSubHeaderToolbar";
+import DatasetSubHeaderToolbar from "app/modules/dataset-module/component/datasetSubHeaderToolbar";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import get from "lodash/get";
 import { Container } from "@material-ui/core";

@@ -18,7 +18,6 @@ export default function ToolboxNav(
 ) {
   const { page } = useParams<{ page: string }>();
   const location = useLocation();
-
   const activePanelStep = useStoreState(
     (state) => state.charts.activePanels.value
   );
@@ -50,11 +49,13 @@ export default function ToolboxNav(
     };
   }, []);
 
-  const navContent = toolboxNavContent(page);
+  const [navContentState, setNavContentState] = React.useState(
+    toolboxNavContent(page)
+  );
   const activePanelStepIndex =
     activePanelStep === "selectDataset"
       ? 0
-      : navContent.findIndex((nav) => nav.name === activePanelStep);
+      : navContentState.findIndex((nav) => nav.name === activePanelStep);
 
   return (
     <div
@@ -69,7 +70,7 @@ export default function ToolboxNav(
         }
       `}
     >
-      {navContent.map((item, index) => (
+      {navContentState.map((item, index) => (
         <button
           css={`
             ${stepcss(
@@ -96,13 +97,40 @@ export default function ToolboxNav(
           }}
           onMouseOver={() => {
             props.onMouseOverNavBtn(item.name);
+            setNavContentState((prev) => {
+              const tempPrev = [...prev];
+              tempPrev[index].displayTooltip = true;
+              return tempPrev;
+            });
           }}
           onMouseOut={() => {
             props.setIsClickable(false);
+            setNavContentState((prev) => {
+              const tempPrev = [...prev];
+              tempPrev[index].displayTooltip = false;
+              return tempPrev;
+            });
           }}
           data-cy={`chart-toolbox-${item.name}-tab`}
         >
           {item.icon}
+          <span
+            css={`
+              position: absolute;
+              top: 50px;
+              right: ${index === 4 ? "0%" : index === 0 ? "-84px" : "-30%"};
+              font-size: 12px;
+              white-space: nowrap;
+              background: #626262;
+              padding: 4px 8px;
+              color: #ffffff;
+              border-radius: 4px;
+              display: ${item.displayTooltip ? "block" : "none"};
+              z-index: 1;
+            `}
+          >
+            {item.tooltip}
+          </span>
         </button>
       ))}
     </div>

@@ -7,7 +7,7 @@ import { screen } from "@testing-library/react";
 import { mockUseAuth0 } from "app/utils/mockAuth0";
 import { Router } from "react-router-dom";
 import { createMemoryHistory } from "history";
-import GridItem from "../components/AssetCollection/Charts/gridItem";
+import GridItem from "app/modules/home-module/components/AssetCollection/Charts/gridItem";
 
 interface MockProps {
   id: string;
@@ -37,9 +37,11 @@ jest.mock("@auth0/auth0-react", () => {
 });
 const history = createMemoryHistory({ initialEntries: ["/"] });
 
+const chartId = "chart-id";
+
 const defaultProps = (newProps: Partial<MockProps> = {}): MockProps => {
   return {
-    id: "chart-id",
+    id: chartId,
     title: "chart-title",
     date: "2021-08-13",
     vizType: "echartsBarchart",
@@ -90,16 +92,20 @@ test("viz icon should be visible", async () => {
   expect(screen.getByTestId("chart-grid-item-viz-icon")).toBeInTheDocument();
 });
 
+const chartGridItemMenuBtnTestId = "chart-grid-item-menu-btn";
+const duplicateButtonName = "chart-duplicate-button";
+const deleteButtonName = "chart-delete-button";
+
 test("menu popup should display when menu icon is clicked", async () => {
   const { app } = appSetup({});
   const user = userEvent.setup();
   render(app);
-  await user.click(screen.getByTestId("chart-grid-item-menu-btn"));
+  await user.click(screen.getByTestId(chartGridItemMenuBtnTestId));
   expect(
-    screen.getByRole("button", { name: "duplicate-button" })
+    screen.getByRole("button", { name: duplicateButtonName })
   ).toBeInTheDocument();
   expect(
-    screen.getByRole("button", { name: "delete-button" })
+    screen.getByRole("button", { name: deleteButtonName })
   ).toBeInTheDocument();
   expect(screen.getByRole("link", { name: "edit-icon" })).toBeInTheDocument();
 });
@@ -108,38 +114,43 @@ test("if menu popup is open, it shouldd close when user clicks overlay", async (
   const { app } = appSetup({});
   const user = userEvent.setup();
   render(app);
-  await user.click(screen.getByTestId("chart-grid-item-menu-btn"));
+  await user.click(screen.getByTestId(chartGridItemMenuBtnTestId));
   expect(
-    screen.getByRole("button", { name: "duplicate-button" })
+    screen.getByRole("button", { name: duplicateButtonName })
   ).toBeInTheDocument();
   await user.click(screen.getByTestId("chart-grid-item-menu-overlay"));
-  expect(screen.queryByRole("button", { name: "duplicate-button" })).toBeNull();
+  expect(
+    screen.queryByRole("button", { name: duplicateButtonName })
+  ).toBeNull();
 });
 
 test("delete button should be clickable if user is owner ans user is authenticated", async () => {
   const { app, props } = appSetup({});
   const user = userEvent.setup();
   render(app);
-  await user.click(screen.getByTestId("chart-grid-item-menu-btn"));
+  await user.click(screen.getByTestId(chartGridItemMenuBtnTestId));
 
   expect(
-    screen.getByRole("button", { name: "delete-button" })
+    screen.getByRole("button", { name: deleteButtonName })
   ).toBeInTheDocument();
-  await user.click(screen.getByRole("button", { name: "delete-button" }));
-  expect(props.handleDelete).toHaveBeenCalledWith("chart-id");
+  await user.click(screen.getByRole("button", { name: deleteButtonName }));
+  expect(props.handleDelete).toHaveBeenCalledWith(chartId);
 });
 
 test("delete button should not be clickable if user is not owner", async () => {
   const { app, props } = appSetup({ owner: "random-user" });
   const user = userEvent.setup();
   render(app);
-  await user.click(screen.getByTestId("chart-grid-item-menu-btn"));
+  await user.click(screen.getByTestId(chartGridItemMenuBtnTestId));
   expect(
-    screen.getByRole("button", { name: "delete-button" })
+    screen.getByRole("button", { name: deleteButtonName })
   ).toBeInTheDocument();
-  await userEvent.click(screen.getByRole("button", { name: "delete-button" }), {
-    pointerEventsCheck: PointerEventsCheckLevel.Never,
-  });
+  await userEvent.click(
+    screen.getByRole("button", { name: deleteButtonName }),
+    {
+      pointerEventsCheck: PointerEventsCheckLevel.Never,
+    }
+  );
   expect(props.handleDelete).not.toHaveBeenCalled();
 });
 
@@ -147,13 +158,13 @@ test("duplicate button should be clickable if user is owner ans user is authenti
   const { app, props } = appSetup({});
   const user = userEvent.setup();
   render(app);
-  await user.click(screen.getByTestId("chart-grid-item-menu-btn"));
+  await user.click(screen.getByTestId(chartGridItemMenuBtnTestId));
 
   expect(
-    screen.getByRole("button", { name: "duplicate-button" })
+    screen.getByRole("button", { name: duplicateButtonName })
   ).toBeInTheDocument();
-  await user.click(screen.getByRole("button", { name: "duplicate-button" }));
-  expect(props.handleDuplicate).toHaveBeenCalledWith("chart-id");
+  await user.click(screen.getByRole("button", { name: duplicateButtonName }));
+  expect(props.handleDuplicate).toHaveBeenCalledWith(chartId);
 });
 
 test("duplicate button should not be clickable if user is not authenticated", async () => {
@@ -161,12 +172,12 @@ test("duplicate button should not be clickable if user is not authenticated", as
   const user = userEvent.setup();
   mockLoginStatus = false;
   render(app);
-  await user.click(screen.getByTestId("chart-grid-item-menu-btn"));
+  await user.click(screen.getByTestId(chartGridItemMenuBtnTestId));
   expect(
-    screen.getByRole("button", { name: "duplicate-button" })
+    screen.getByRole("button", { name: duplicateButtonName })
   ).toBeInTheDocument();
   await userEvent.click(
-    screen.getByRole("button", { name: "duplicate-button" }),
+    screen.getByRole("button", { name: duplicateButtonName }),
     {
       pointerEventsCheck: PointerEventsCheckLevel.Never,
     }
@@ -178,7 +189,7 @@ test("edit link should be clickable if user is owner and user is authenticated "
   const { app, props } = appSetup({ id: "66904b45783f35006988513a" });
   const user = userEvent.setup();
   render(app);
-  await user.click(screen.getByTestId("chart-grid-item-menu-btn"));
+  await user.click(screen.getByTestId(chartGridItemMenuBtnTestId));
 
   expect(screen.getByRole("link", { name: "edit-icon" })).toBeInTheDocument();
   await user.click(screen.getByRole("link", { name: "edit-icon" }));
@@ -194,7 +205,7 @@ test("edit link should not be clickable if user is not owner", async () => {
   });
   const user = userEvent.setup();
   render(app);
-  await user.click(screen.getByTestId("chart-grid-item-menu-btn"));
+  await user.click(screen.getByTestId(chartGridItemMenuBtnTestId));
   expect(screen.getByRole("link", { name: "edit-icon" })).toBeInTheDocument();
   await userEvent.click(screen.getByRole("link", { name: "edit-icon" }), {
     pointerEventsCheck: PointerEventsCheckLevel.Never,
@@ -208,7 +219,7 @@ test("clicking edit link should redirect to mapping page is props.isMappingValid
   });
   const user = userEvent.setup();
   render(app);
-  await user.click(screen.getByTestId("chart-grid-item-menu-btn"));
+  await user.click(screen.getByTestId(chartGridItemMenuBtnTestId));
 
   expect(screen.getByRole("link", { name: "edit-icon" })).toBeInTheDocument();
   await user.click(screen.getByRole("link", { name: "edit-icon" }));

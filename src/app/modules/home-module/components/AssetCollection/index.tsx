@@ -151,7 +151,9 @@ function AssetsCollection() {
                     handleClick("dataset", () =>
                       history.push(
                         `/dataset/new/upload${
-                          location.pathname === "/" ? "?fromHome=true" : ""
+                          window.location.pathname === "/"
+                            ? "?fromHome=true"
+                            : ""
                         }`
                       )
                     )

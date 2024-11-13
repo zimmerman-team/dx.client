@@ -8,6 +8,7 @@ export const stepcss = (activeStep: boolean) => css`
   border: none;
   outline: none;
   cursor: pointer;
+  position: relative;
   &:disabled {
     cursor: not-allowed;
   }

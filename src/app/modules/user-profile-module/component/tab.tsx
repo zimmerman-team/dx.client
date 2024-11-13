@@ -1,5 +1,5 @@
 import React from "react";
-import { tabcss } from "../style";
+import { tabcss } from "app/modules/user-profile-module/style";
 
 interface TabProps {
   title: string;

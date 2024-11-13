@@ -5,7 +5,7 @@ import { ReactComponent as CharVizImg } from "app/modules/home-module/assets/why
 import { ReactComponent as OpenSourceImg } from "app/modules/home-module/assets/whydx-opensource-illustration.svg";
 import { ReactComponent as ReportsImg } from "app/modules/home-module/assets/whydx-reports-illustration.svg";
 import { ReactComponent as SearchImg } from "app/modules/home-module/assets/whydx-search-illustration.svg";
-import { keyfeaturescss } from "../style";
+import { keyfeaturescss } from "app/modules/home-module/sub-modules/why-dx/style";
 import { useMediaQuery } from "@material-ui/core";
 
 export default function KeyFeaturesBlock() {

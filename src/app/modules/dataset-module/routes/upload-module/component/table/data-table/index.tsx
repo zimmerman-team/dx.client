@@ -47,10 +47,8 @@ export function DatasetDataTable(props: DataThemesDataTableProps) {
 
   React.useEffect(() => {
     //load data if intersection observer is triggered
-    if (data.length > 0) {
-      if (isObserved) {
-        refetch(true);
-      }
+    if (data.length > 0 && isObserved) {
+      refetch(true);
     }
   }, [isObserved]);
 

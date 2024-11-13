@@ -6,6 +6,7 @@ import { socialAuth } from "app/utils/socialAuth";
 import { bestDecisioncss } from "app/modules/home-module/sub-modules/partners/style";
 import { ReactComponent as GoogleIcon } from "app/modules/onboarding-module/asset/google-img.svg";
 import { ReactComponent as LinkedInIcon } from "app/modules/onboarding-module/asset/linkedIn-img.svg";
+import { ReactComponent as MicrosoftIcon } from "app/modules/onboarding-module/asset/microsoft-img.svg";
 
 export default function BestDecisionBlock() {
   const { isAuthenticated } = useAuth0();
@@ -20,7 +21,7 @@ export default function BestDecisionBlock() {
           box-shadow: 0px 4px 30px 4px rgba(206, 168, 188, 0.08);
           border-radius: 24px;
           display: flex;
-          justify-content: space-between;
+          gap: 164px;
           padding: 30px;
           padding-top: 30px;
           padding-left: 52px;
@@ -30,21 +31,17 @@ export default function BestDecisionBlock() {
           a {
             text-decoration: none;
           }
-          @media (max-width: 800px) {
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding-top: 35px;
-            padding-left: 22px;
+          @media (max-width: 1200px) {
+            justify-content: space-between;
             height: 100%;
-          }
-          @media (max-width: 600px) {
-            flex-direction: column;
-            justify-content: center;
-            align-items: flex-start;
-            padding-top: 35px;
-            padding-left: 22px;
-            height: 100%;
+            @media (max-width: 800px) {
+              flex-direction: column;
+              justify-content: center;
+              align-items: flex-start;
+              gap: 28px;
+              padding-top: 35px;
+              padding-left: 22px;
+            }
           }
         `}
       >
@@ -85,25 +82,70 @@ export default function BestDecisionBlock() {
         </div>
         <div
           css={`
-            width: 35%;
+            /* width: 35%; */
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
             margin-top: 20px;
-            button {
-              margin-bottom: 20px;
+            a {
+              border-radius: 30px;
+              background: #fff;
+              text-decoration: none;
+              color: #231d2c;
+              font-family: "Inter", sans-serif;
+              font-size: 14px;
+              font-weight: 700;
+              text-transform: uppercase;
+              height: 41px;
+              padding: 12px 27px;
+              display: flex;
+              justify-content: center;
+              align-items: center;
               white-space: nowrap;
+              cursor: pointer;
             }
-            @media (max-width: 600px) {
-              align-items: flex-start;
-              width: 100%;
+            #auth-buttons {
+              gap: 20px;
+              display: flex;
+              flex-direction: column;
               button {
-                margin-bottom: 16px;
+                /* margin-bottom: 20px; */
+                white-space: nowrap;
               }
+            }
+            @media (max-width: 1200px) {
+              /* width: 100%; */
+              align-items: flex-start;
+              justify-content: center;
+              flex-direction: column-reverse;
+              #auth-buttons {
+                gap: 0px;
+                button {
+                  margin-bottom: 16px;
+                }
+                p {
+                  display: none;
+                }
+              }
+            }
+            @media (min-width: 800px) {
             }
           `}
         >
+          <Link to="/contact">Contact us</Link>
+          {!isAuthenticated && (
+            <p
+              css={`
+                font-size: 24px;
+                color: #f4f4f4;
+                margin-left: 42px;
+                margin-right: 32px;
+              `}
+            >
+              Or
+            </p>
+          )}
+
           {!isAuthenticated && (
             <div id="auth-buttons">
               <button onClick={() => socialAuth("google-oauth2")}>
@@ -112,13 +154,11 @@ export default function BestDecisionBlock() {
               <button onClick={() => socialAuth("linkedin")}>
                 <LinkedInIcon /> sign in for free
               </button>
+              <button onClick={() => socialAuth("windowslive")}>
+                <MicrosoftIcon /> sign in for free
+              </button>
             </div>
           )}
-          <Link to="/contact">
-            <button>
-              <p>Contact us</p>
-            </button>
-          </Link>
         </div>
       </div>
     </Grid>

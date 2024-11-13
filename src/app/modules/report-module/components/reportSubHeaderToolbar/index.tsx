@@ -26,7 +26,6 @@ import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import { ReportModel, emptyReport } from "app/modules/report-module/data";
 import DeleteReportDialog from "app/components/Dialogs/deleteReportDialog";
 import { ChartAPIModel, emptyChartAPI } from "app/modules/chart-module/data";
-import { ExportChartButton } from "app/modules/chart-module/components/chartSubheaderToolbar/exportButton";
 import { ReportSubheaderToolbarProps } from "app/modules/chart-module/components/chartSubheaderToolbar/data";
 import { ReactComponent as PlayIcon } from "app/modules/report-module/asset/play-icon.svg";
 import { styles } from "app/modules/report-module/components/reportSubHeaderToolbar/styles";
@@ -37,6 +36,7 @@ import AutoResizeInput from "app/modules/report-module/components/reportSubHeade
 import { InfoSnackbar } from "app/modules/report-module/components/reportSubHeaderToolbar/infosnackbar";
 import ShareModal from "app/modules/dataset-module/component/shareModal";
 import DuplicateMessage from "app/modules/common/mobile-duplicate-message";
+import { ExportReportButton } from "./exportButton";
 
 export const useStyles = makeStyles(() =>
   createStyles({
@@ -54,6 +54,7 @@ export const useStyles = makeStyles(() =>
   })
 );
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 export function ReportSubheaderToolbar(
   props: Readonly<ReportSubheaderToolbarProps>
 ) {
@@ -239,7 +240,7 @@ export function ReportSubheaderToolbar(
       .catch((error) => console.log(error));
   };
 
-  const handleViewDuplocatedReport = () => {
+  const handleViewDuplicatedReport = () => {
     setSnackbarState({ ...snackbarState, open: false });
     history.push(`/report/${duplicatedReportId}`);
     setDuplicatedReportId(null);
@@ -251,7 +252,7 @@ export function ReportSubheaderToolbar(
 
   const handleSignIn = () => {
     localStorage.setItem("duplicateReportAfterSignIn", page);
-    history.push("/onboarding/login");
+    history.push("/onboarding/signin");
   };
 
   return (
@@ -481,7 +482,7 @@ export function ReportSubheaderToolbar(
               )}
               {page !== "new" && !view && (
                 <div css={styles.previewEndContainer}>
-                  {isTabletView && <ExportChartButton filename={props.name} />}
+                  {isTabletView && <ExportReportButton filename={props.name} />}
 
                   <Tooltip title="Duplicate">
                     <IconButton
@@ -574,7 +575,7 @@ export function ReportSubheaderToolbar(
             key={snackbarState.vertical + snackbarState.horizontal}
           >
             <DuplicateMessage
-              action={handleViewDuplocatedReport}
+              action={handleViewDuplicatedReport}
               closeSnackbar={() =>
                 setSnackbarState({ ...snackbarState, open: false })
               }
@@ -593,15 +594,7 @@ export function ReportSubheaderToolbar(
             message={`Report has been duplicated successfully!`}
             key={snackbarState.vertical + snackbarState.horizontal}
             action={
-              <button
-                onClick={() => {
-                  setSnackbarState({ ...snackbarState, open: false });
-                  history.push(`/report/${duplicatedReportId}`);
-                  setDuplicatedReportId(null);
-                }}
-              >
-                GO TO REPORT
-              </button>
+              <button onClick={handleViewDuplicatedReport}>GO TO REPORT</button>
             }
           />
         )}
