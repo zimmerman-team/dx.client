@@ -95,7 +95,12 @@ export function FilterGroup(props: FilterGroupCompProps) {
         `}
       >
         {splitStrBasedOnCapitalLetters(
-          `${props.name[0].toUpperCase()}${props.name.slice(1)}`
+          `${props.name[0].toUpperCase()}${props.name.slice(
+            1
+          )} (${props.options.reduce(
+            (prev, curr) => prev + (curr.count ?? 0),
+            0
+          )})`
         ).replace(/_/g, "")}
         <IconButton>
           <TriangleXSIcon />
@@ -144,9 +149,9 @@ export function FilterGroup(props: FilterGroupCompProps) {
                 css={`
                   gap: 10px;
                   display: flex;
-                  color: #495057;
+                  color: ${fOption ? "#495057" : "#49505766"};
                   font-size: 14px;
-                  background: #fff;
+                  background: ${fOption ? "#fff" : "#ffffff66"};
                   padding: 6px 8px 6px 12px;
                   border-radius: 20px;
                   flex-direction: row;
