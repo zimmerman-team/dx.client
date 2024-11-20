@@ -8,18 +8,13 @@ import { useRecoilState } from "recoil";
 import { Box, Grid, Container } from "@material-ui/core";
 /* project */
 import HomeFooter from "app/modules/home-module/components/Footer";
-import DatasetDetailImage from "app/modules/home-module/assets/dataset-detail.png";
 import { ReactComponent as GoogleIcon } from "app/modules/onboarding-module/asset/google-img.svg";
 import { ReactComponent as LinkedInIcon } from "app/modules/onboarding-module/asset/linkedIn-img.svg";
 import { ReactComponent as MicrosoftIcon } from "app/modules/onboarding-module/asset/microsoft-img.svg";
 import HeroEllipses from "app/modules/home-module/assets/hero-ellipses.svg";
 
 import { homeDisplayAtom } from "app/state/recoil/atoms";
-import {
-  datsetDetailImgcss,
-  rowFlexCss,
-  turnsDataCss,
-} from "app/modules/home-module/style";
+import { rowFlexCss, turnsDataCss } from "app/modules/home-module/style";
 import AssetsCollection from "./components/AssetCollection";
 
 export default function HomeModule() {
@@ -177,12 +172,31 @@ export default function HomeModule() {
                   @media screen and (max-width: 1290px) {
                     justify-content: center;
                   }
+                  @media (max-width: 1240px) {
+                    > img {
+                      width: 70%;
+                      height: 100%;
+                      object-fit: contain;
+                    }
+                  }
+                  @media (max-width: 700px) {
+                    > img {
+                      width: 95%;
+                      height: 100%;
+                      object-fit: contain;
+                    }
+                  }
                 `}
               >
                 <img
-                  src={DatasetDetailImage}
+                  width={710}
+                  height={428}
+                  fetchPriority="high"
                   alt="dataset-detail-img"
-                  css={datsetDetailImgcss}
+                  src="/static/dataset-detail.webp"
+                  style={{
+                    borderRadius: "14px",
+                  }}
                 />
               </Grid>
             </Grid>
