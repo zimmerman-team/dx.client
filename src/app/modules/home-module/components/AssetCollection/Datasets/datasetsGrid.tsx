@@ -30,12 +30,22 @@ interface Props {
   userOnly?: boolean;
 }
 
+export const getLimit = () => {
+  let rows = 4;
+  const size = Math.floor(window.innerHeight / 400);
+  if (window.innerHeight <= 1050) {
+    return rows * 4;
+  } else {
+    rows += size;
+    return rows * 4;
+  }
+};
 export default function DatasetsGrid(props: Readonly<Props>) {
+  const limit = getLimit();
   const observerTarget = React.useRef(null);
   const [cardId, setCardId] = React.useState<string>("");
   const [enableButton, setEnableButton] = React.useState<boolean>(false);
   const [modalDisplay, setModalDisplay] = React.useState<boolean>(false);
-  const limit = 15;
   const initialRender = React.useRef(true);
   const [offset, setOffset] = React.useState(0);
   const { isObserved } = useInfinityScroll(observerTarget);
@@ -43,7 +53,6 @@ export default function DatasetsGrid(props: Readonly<Props>) {
   const setPlanDialog = useSetRecoilState(planDialogAtom);
   const [loadedDatasets, setLoadedDatasets] =
     useRecoilState(loadedDatasetsAtom);
-
   const datasets = useStoreState(
     (state) =>
       (state.dataThemes.DatasetGetList.crudData ??

@@ -22,6 +22,7 @@ import GridItem from "app/modules/home-module/components/AssetCollection/Charts/
 import { useAuth0 } from "@auth0/auth0-react";
 import { useSetRecoilState } from "recoil";
 import { planDialogAtom } from "app/state/recoil/atoms";
+import { getLimit } from "app/modules/home-module/components/AssetCollection/Datasets/datasetsGrid";
 
 interface Props {
   sortBy: string;
@@ -48,7 +49,8 @@ export default function ChartsGrid(props: Props) {
   const [enableButton, setEnableButton] = React.useState<boolean>(false);
   const token = useStoreState((state) => state.AuthToken.value);
   const initialRender = React.useRef(true);
-  const limit = 15;
+  const limit = getLimit();
+
   const [offset, setOffset] = React.useState(0);
 
   const { isObserved } = useInfinityScroll(observerTarget);

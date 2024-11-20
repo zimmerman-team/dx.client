@@ -16,6 +16,7 @@ import { EditorState, convertFromRaw } from "draft-js";
 import { useSetRecoilState } from "recoil";
 import { planDialogAtom } from "app/state/recoil/atoms";
 import CircleLoader from "app/modules/home-module/components/Loader";
+import { getLimit } from "app/modules/home-module/components/AssetCollection/Datasets/datasetsGrid";
 
 interface Props {
   sortBy: string;
@@ -31,7 +32,7 @@ export default function ReportsGrid(props: Readonly<Props>) {
   const [modalDisplay, setModalDisplay] = React.useState<boolean>(false);
   const [enableButton, setEnableButton] = React.useState<boolean>(false);
   const [loadedReports, setLoadedReports] = React.useState<ReportModel[]>([]);
-  const limit = 15;
+  const limit = getLimit();
   const initialRender = React.useRef(true);
   const [offset, setOffset] = React.useState(0);
   const { isObserved } = useInfinityScroll(observerTarget);

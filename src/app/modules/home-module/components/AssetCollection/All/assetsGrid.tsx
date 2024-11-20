@@ -23,7 +23,7 @@ import ColoredReportIcon from "app/assets/icons/ColoredReportIcon";
 import DeleteDatasetDialog from "app/components/Dialogs/deleteDatasetDialog";
 import DeleteReportDialog from "app/components/Dialogs/deleteReportDialog";
 import { EditorState, convertFromRaw } from "draft-js";
-import { DatasetListItemAPIModel } from "app/modules/dataset-module/data";
+import { getLimit } from "app/modules/home-module/components/AssetCollection/Datasets/datasetsGrid";
 import { HomepageTable } from "app/modules/home-module/components/Table/";
 import { planDialogAtom } from "app/state/recoil/atoms";
 import { useSetRecoilState } from "recoil";
@@ -55,7 +55,7 @@ export default function AssetsGrid(props: Props) {
 
   const token = useStoreState((state) => state.AuthToken.value);
 
-  const limit = 15;
+  const limit = getLimit();
   const [offset, setOffset] = React.useState(0);
 
   const { isObserved } = useInfinityScroll(observerTarget);
