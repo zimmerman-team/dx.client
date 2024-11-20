@@ -67,7 +67,7 @@ export function useDataThemesEchart() {
       height: height ?? "auto",
     });
   }
-
+  echarts.registerTransform(transform.regression);
   const valueFormatter3 = (params: any, isMonetaryValue: boolean) => {
     return `${params.name}: ${
       isMonetaryValue ? formatFinancialValue(params.value, true) : params.value
@@ -946,7 +946,7 @@ export function useDataThemesEchart() {
       dataZoom,
       trendline,
     } = visualOptions;
-    echarts.registerTransform(transform.regression);
+
     const list = checkLists.find((item) => item.label === palette)?.value ?? [];
     const splicedCheckLists = [...list];
     splicedCheckLists.splice(1, 0, "#000000");
@@ -1005,8 +1005,12 @@ export function useDataThemesEchart() {
         {
           transform: {
             type: "ecStat:regression",
+            formulaOn: "start",
             config: {
-              method: "linear",
+              method:
+                ["linear", "exponential", "logarithmic", "polynomial"].find(
+                  (m) => m === trendline.toLowerCase()
+                ) ?? "linear",
             },
           },
         },
@@ -1018,7 +1022,7 @@ export function useDataThemesEchart() {
           name: "scatter",
           datasetIndex: 0,
         },
-        trendline === "None"
+        trendline === "None" || data.length === 0
           ? {}
           : {
               name: "line",
@@ -1309,6 +1313,11 @@ export function useDataThemesEchart() {
             rotate: labelRotate,
             position: labelPosition,
             fontSize: labelFontSize,
+            textShadowColor: "#fff",
+            textShadowBlur: 1,
+            color: "#000",
+            textBorderColor: "rgba(255, 252, 252, 1)",
+            textBorderWidth: 2.5,
           },
         },
       ],
