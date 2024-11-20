@@ -129,130 +129,148 @@ export default function PartnersModule() {
 
   return (
     <>
-      <EmpowerBlock view="partners" />
-      <Container maxWidth="lg">
-        <Grid
-          container
-          justifyContent="center"
-          alignItems="center"
-          direction="column"
-          css={`
-            width: 100%;
-          `}
-        >
-          <OurPartnersBlock />
-          <DXBlock />
-          <div
-            onMouseEnter={() => setAutoPlay(false)}
-            onMouseLeave={() => setAutoPlay(true)}
-            css={`
-              width: 100%;
-              margin-top: 78px;
-              position: relative;
-              height: 639px;
-              @media (max-width: 1129px) {
-                width: 83%;
-                height: 100%;
-              }
-              @media (max-width: 600px) {
+      <div
+        css={`
+          display: flex;
+          justify-content: space-between;
+          flex-direction: column;
+          min-height: 100vh;
+        `}
+      >
+        <div>
+          <EmpowerBlock view="partners" />
+          <Container maxWidth="lg">
+            <Grid
+              container
+              justifyContent="center"
+              alignItems="center"
+              direction="column"
+              css={`
                 width: 100%;
-                height: 100%;
-              }
-            `}
-          >
-            <div
-              css={`
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
               `}
             >
-              <StyledTabs
+              <OurPartnersBlock />
+              <DXBlock />
+              <div
+                onMouseEnter={() => setAutoPlay(false)}
+                onMouseLeave={() => setAutoPlay(true)}
                 css={`
-                  margin-left: 5px;
+                  width: 100%;
+                  margin-top: 78px;
+                  position: relative;
+                  height: 639px;
+                  @media (max-width: 1129px) {
+                    width: 83%;
+                    height: 100%;
+                  }
+                  @media (max-width: 600px) {
+                    width: 100%;
+                    height: 100%;
+                  }
                 `}
-                TabIndicatorProps={{
-                  style: {
-                    bottom: "0px",
-                    height: "4px",
-                  },
-                }}
-                value={displayTab}
-                onChange={handleChange}
-                indicatorColor="primary"
-                textColor="primary"
-                className="Home-MuiTabs-flexContainer"
               >
-                <StyledTab disableTouchRipple label="About" value={0} />
-                <StyledTab disableTouchRipple label="Grants" value={1} />
-                <StyledTab disableTouchRipple label="Budgets" value={2} />
-                <StyledTab disableTouchRipple label="Performance" value={3} />
-              </StyledTabs>
-            </div>
-            <div
-              css={`
-                height: 55px;
-                @media (max-width: 1024px) {
-                  height: 32px;
-                }
-              `}
-            />
-            <div
-              css={`
-                position: relative;
-                background: linear-gradient(
-                  180deg,
-                  #a4a0ff -61.62%,
-                  #f8fcfc 114.5%
-                );
-                border-radius: 29px;
-              `}
-            >
-              <AutoPlaySwipeableViews
-                index={displayTab}
-                onChangeIndex={(index) => autoPlay && handleChange(null, index)}
-                animateTransitions={true}
-                interval={3000}
-              >
-                {cards.map((card, index) => (
-                  <div key={index}>{card}</div>
-                ))}
-              </AutoPlaySwipeableViews>
-              <Pagination
-                dots={4}
-                index={displayTab}
-                onChangeIndex={(index) => handleChange(null, index)}
+                <div
+                  css={`
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                  `}
+                >
+                  <StyledTabs
+                    css={`
+                      margin-left: 5px;
+                    `}
+                    TabIndicatorProps={{
+                      style: {
+                        bottom: "0px",
+                        height: "4px",
+                      },
+                    }}
+                    value={displayTab}
+                    onChange={handleChange}
+                    indicatorColor="primary"
+                    textColor="primary"
+                    className="Home-MuiTabs-flexContainer"
+                  >
+                    <StyledTab disableTouchRipple label="About" value={0} />
+                    <StyledTab disableTouchRipple label="Grants" value={1} />
+                    <StyledTab disableTouchRipple label="Budgets" value={2} />
+                    <StyledTab
+                      disableTouchRipple
+                      label="Performance"
+                      value={3}
+                    />
+                  </StyledTabs>
+                </div>
+                <div
+                  css={`
+                    height: 55px;
+                    @media (max-width: 1024px) {
+                      height: 32px;
+                    }
+                  `}
+                />
+                <div
+                  css={`
+                    position: relative;
+                    background: linear-gradient(
+                      180deg,
+                      #a4a0ff -61.62%,
+                      #f8fcfc 114.5%
+                    );
+                    border-radius: 29px;
+                  `}
+                >
+                  <AutoPlaySwipeableViews
+                    index={displayTab}
+                    onChangeIndex={(index) =>
+                      autoPlay && handleChange(null, index)
+                    }
+                    animateTransitions={true}
+                    interval={3000}
+                  >
+                    {cards.map((card, index) => (
+                      <div key={index}>{card}</div>
+                    ))}
+                  </AutoPlaySwipeableViews>
+                  <Pagination
+                    dots={4}
+                    index={displayTab}
+                    onChangeIndex={(index) => handleChange(null, index)}
+                  />
+                </div>
+                <div
+                  css={`
+                    height: 110px;
+                    @media (max-width: 1129px) {
+                      display: none;
+                    }
+                  `}
+                />
+              </div>
+              <div
+                css={`
+                  height: 75px;
+                `}
               />
-            </div>
+              <QuoteBlock />
+            </Grid>
             <div
               css={`
-                height: 110px;
+                height: 150px;
                 @media (max-width: 1129px) {
-                  display: none;
+                  height: 130px;
                 }
               `}
             />
-          </div>
-          <div
-            css={`
-              height: 75px;
-            `}
-          />
-          <QuoteBlock />
-        </Grid>
-        <div
-          css={`
-            height: 150px;
-            @media (max-width: 1129px) {
-              height: 130px;
-            }
-          `}
-        />
-        <BestDecisionBlock />
-      </Container>
-      <div css="width: 100%;height: 148px;" />
-      <HomeFooter />
+            <BestDecisionBlock />
+          </Container>
+
+          <div css="width: 100%;height: 148px;" />
+        </div>
+        <HomeFooter />
+      </div>
     </>
   );
 }

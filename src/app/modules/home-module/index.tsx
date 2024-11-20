@@ -40,6 +40,10 @@ export default function HomeModule() {
     <div
       css={`
         margin-top: 48px;
+        min-height: calc(100vh - 48px);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
       `}
     >
       {!isAuthenticated ? (
