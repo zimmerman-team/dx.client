@@ -42,7 +42,6 @@ const NavList = (props: {
   ];
   const handleNavigation = () => {
     props.setIsNavExpanded?.(false);
-    document.body.style.overflow = "auto";
   };
   return (
     <>

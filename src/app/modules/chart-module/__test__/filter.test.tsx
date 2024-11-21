@@ -103,7 +103,7 @@ const checkIfAllOptionsAreChecked = (options: FilterGroupOptionModel[]) => {
   options.forEach((option: FilterGroupOptionModel) => {
     expect(
       screen.getByRole("checkbox", {
-        name: option.label,
+        name: option.label + " ()",
       })
     ).toBeChecked();
     if (option.subOptions && isOptionExpanded) {
@@ -118,7 +118,7 @@ const checkIfAllOptionsAreUnchecked = (options: FilterGroupOptionModel[]) => {
   options.forEach((option: FilterGroupOptionModel) => {
     expect(
       screen.getByRole("checkbox", {
-        name: option.label,
+        name: option.label + " ()",
       })
     ).not.toBeChecked();
     if (option.subOptions && isOptionExpanded) {
@@ -354,14 +354,14 @@ test("search input should filter options", async () => {
   expect(screen.getAllByTestId("filter-option-checkbox").length).toBe(5);
   const filteredOptions = ["100", "1000", "10016", "10033", "1005"];
   filteredOptions.forEach((option: string) => {
-    expect(screen.getByLabelText(option)).toBeInTheDocument();
+    expect(screen.getByLabelText(option + " ()")).toBeInTheDocument();
   });
 
   //delete search input
   await user.clear(searchInput);
   expect(screen.getAllByTestId("filter-option-checkbox").length).toBe(3);
   props.options.forEach((option: any) => {
-    expect(screen.getByLabelText(option.label)).toBeInTheDocument();
+    expect(screen.getByLabelText(option.label + " ()")).toBeInTheDocument();
   });
 });
 
@@ -380,7 +380,9 @@ test("should multi check and uncheck filter options", async () => {
   render(app);
   const checkboxList: HTMLElement[] = [];
   props.options.forEach((option: any) => {
-    checkboxList.push(screen.getByRole("checkbox", { name: option.label }));
+    checkboxList.push(
+      screen.getByRole("checkbox", { name: option.label + " ()" })
+    );
   });
   expect(checkboxList.length).toBe(3);
   //multi check filte options

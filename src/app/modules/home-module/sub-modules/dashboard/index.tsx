@@ -11,7 +11,10 @@ function DashboardModule() {
       css={`
         margin-top: 48px;
         padding-top: 32px;
-        min-height: calc(100vh - 125px);
+        min-height: calc(100vh - 48px);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
       `}
     >
       <AssetsCollection />
