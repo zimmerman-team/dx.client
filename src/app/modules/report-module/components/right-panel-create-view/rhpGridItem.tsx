@@ -6,7 +6,7 @@ import { ReactComponent as ClockIcon } from "app/modules/report-module/asset/clo
 import { ReactComponent as ExpandIcon } from "app/modules/report-module/asset/expand-icon.svg";
 import { IconButton } from "@material-ui/core";
 import { ReportChartWrapper } from "app/modules/report-module/components/chart-wrapper/";
-import { ReactComponent as AIIcon } from "app/modules/chart-module/assets/ai-icon.svg";
+import AIIcon from "app/assets/icons/AIIcon";
 
 interface Props {
   id: string;

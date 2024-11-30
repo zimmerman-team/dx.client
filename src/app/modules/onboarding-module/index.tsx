@@ -4,7 +4,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { Route, Switch, useHistory, useLocation } from "react-router-dom";
 import AuthCard from "app/modules/onboarding-module/component/card";
-import OnboardingRightDeco from "app/modules/onboarding-module/asset/onboardingRight-img.svg";
+import OnboardingRightDeco from "app/modules/onboarding-module/asset/onboardingRight-img.png";
 import { useTitle } from "react-use";
 
 export default function Onboarding() {

@@ -7,14 +7,13 @@ import { useStoreState } from "app/state/store/hooks";
 import { CommonChart } from "app/modules/chart-module/components/common-chart";
 import { styles as commonStyles } from "app/modules/chart-module/routes/common/styles";
 import { ChartBuilderFiltersProps } from "app/modules/chart-module/routes/filters/data";
-import { ReactComponent as AIIcon } from "app/modules/chart-module/assets/ai-icon.svg";
 import ErrorComponent from "app/modules/chart-module/components/dialog/errrorComponent";
+import AIIcon from "app/assets/icons/AIIcon";
 
 function ChartBuilderFilters(props: Readonly<ChartBuilderFiltersProps>) {
   useTitle("DX Dataxplorer - Filters");
   const { page } = useParams<{ page: string }>();
   const mapping = useStoreState((state) => state.charts.mapping.value);
-
   if (props.dataError || props.chartError) {
     return (
       <>

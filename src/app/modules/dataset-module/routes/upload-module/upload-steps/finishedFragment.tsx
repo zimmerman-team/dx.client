@@ -342,6 +342,10 @@ export default function FinishedFragment(props: Props) {
             margin-top: 0;
             font-size: 12px;
             font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
+            > a {
+              text-decoration: none;
+              color: inherit;
+            }
           }
           @media (max-width: 450px) {
             display: none;
@@ -352,7 +356,20 @@ export default function FinishedFragment(props: Props) {
         <p>Data Description : {props.datasetDetails.description}</p>
         <p>Data Category : {props.datasetDetails.category}</p>
         <p>Data Source : {props.datasetDetails.source}</p>
-        <p>Link to data source : {props.datasetDetails.sourceUrl || "NIL"}</p>
+        <p>
+          Link to data source :{" "}
+          {props.datasetDetails.sourceUrl ? (
+            <a
+              href={props.datasetDetails.sourceUrl}
+              rel="noreferrer noopener"
+              target="_blank"
+            >
+              {props.datasetDetails.sourceUrl}
+            </a>
+          ) : (
+            "NIL"
+          )}
+        </p>
       </div>
       <div css={mobileDescriptioncss}>
         <div>
