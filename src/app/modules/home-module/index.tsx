@@ -8,6 +8,7 @@ import HomeFooter from "app/modules/home-module/components/Footer";
 import AssetsCollection from "./components/AssetCollection";
 import Hero from "./components/hero";
 import NonAuthUserLibrary from "./components/nonAuthUserLibrary";
+import { Box } from "@material-ui/core";
 
 export default function HomeModule() {
   useTitle("DX Dataxplorer");
@@ -25,8 +26,8 @@ export default function HomeModule() {
         background-color: #f2f7fd;
       `}
     >
-      {!isAuthenticated ? <Hero /> : <></>}
-      {/* <Box height={40} /> */}
+      {!isAuthenticated ? <Hero /> : <Box height={40} />}
+
       {!isAuthenticated ? <NonAuthUserLibrary /> : <AssetsCollection />}
 
       <HomeFooter />

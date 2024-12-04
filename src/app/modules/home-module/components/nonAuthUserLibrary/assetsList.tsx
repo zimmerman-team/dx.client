@@ -23,7 +23,7 @@ export default function AssetsList() {
           gap: 48px;
         `}
       >
-        <div css={style.assetCard}>
+        <a href="/report/664f406b82350800ca942b92" css={style.assetCard}>
           <img
             src={ClimateReportImg}
             alt="Climate Report"
@@ -33,8 +33,8 @@ export default function AssetsList() {
           />
           <p>Climate data report</p>
           <p>Report</p>
-        </div>
-        <div css={style.assetCard}>
+        </a>
+        <a href="/chart/66031cead6b19700d9e2a8ac" css={style.assetCard}>
           <img
             src={IATICountryImg}
             alt="IATI Country Chart"
@@ -43,7 +43,7 @@ export default function AssetsList() {
           />
           <p>IATI Country Incoming Funds 2024</p>
           <p>Chart</p>
-        </div>
+        </a>
       </div>
       <div
         css={`
@@ -52,7 +52,7 @@ export default function AssetsList() {
           gap: 40px;
         `}
       >
-        <div css={style.assetCard}>
+        <a href="/chart/66031b319b11a300b870c800" css={style.assetCard}>
           <img
             src={BudgetChartImg}
             alt="Budget Chart"
@@ -61,12 +61,12 @@ export default function AssetsList() {
           />
           <p>Budget Flow</p>
           <p>Chart</p>
-        </div>
+        </a>
         <div>
           <InfoCard />
         </div>
 
-        <div css={style.assetCard}>
+        <a href="/report/6603b021d6b19700d9e2a8ae" css={style.assetCard}>
           <img
             src={MalariaReportImg}
             alt="Malaria Report"
@@ -77,7 +77,7 @@ export default function AssetsList() {
             Malaria Eradication by 2030: A Challenge that Requires Urgent Action
           </p>
           <p>Report</p>
-        </div>
+        </a>
       </div>
       <div
         css={`
@@ -86,7 +86,7 @@ export default function AssetsList() {
           gap: 40px;
         `}
       >
-        <div css={style.assetCard}>
+        <a href="/report/6603d2cb5c200a009889ea05" css={style.assetCard}>
           <img
             src={GenderReportImg}
             alt="gender Report"
@@ -95,12 +95,15 @@ export default function AssetsList() {
           />
           <p>Gender based violence</p>
           <p>Report</p>
-        </div>
-        <div css={style.assetCard}>
+        </a>
+        <a
+          href="/dataset/6603136cab07ef3d7c7ff9be/detail?fromHome=true"
+          css={style.assetCard}
+        >
           <img src={BudgetDataImg} alt="Budget Data" width={384} height={245} />
           <p>Budget 2011</p>
           <p>Data</p>
-        </div>
+        </a>
       </div>
     </div>
   );

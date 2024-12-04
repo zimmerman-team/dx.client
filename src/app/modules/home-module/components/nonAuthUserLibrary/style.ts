@@ -2,6 +2,7 @@ import { css } from "styled-components";
 
 export const style = {
   assetCard: css`
+    text-decoration: none;
     > p:nth-of-type(1) {
       color: #231d2c;
       font-family: "GothamNarrow-Bold", sans-serif;
