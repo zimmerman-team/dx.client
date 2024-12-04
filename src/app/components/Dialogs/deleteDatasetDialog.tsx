@@ -66,7 +66,7 @@ export default function DeleteDatasetDialog(props: Props) {
         aria-describedby="simple-modal-description"
       >
         {loading ? (
-          <div className="w-full h-[80px] flex items-center justify-center">
+          <div>
             <CircleLoader />
           </div>
         ) : (
