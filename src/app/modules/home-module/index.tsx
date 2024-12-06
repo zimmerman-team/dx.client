@@ -82,8 +82,8 @@ export default function HomeModule() {
                   <Box height={26} />
                   <p>
                     <b>
-                      Dataxplorer simplifies and empowers visual data reporting
-                      for all.
+                      Dataxplorer simplifies and empowers visual data
+                      Storytelling for all.
                     </b>
                   </p>
                   <Box height={61} />

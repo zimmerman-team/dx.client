@@ -18,7 +18,7 @@ import ZoomOutMapIcon from "@material-ui/icons/ZoomOutMap";
 import { ReactComponent as DeleteIcon } from "app/modules/report-module/asset/deleteIcon.svg";
 import { ReportElementsType } from "app/modules/report-module/components/right-panel-create-view";
 import {
-  chartFromReportAtom,
+  chartFromStoryAtom,
   reportContentIsResizingAtom,
   reportContentContainerWidth,
   isChartDraggingAtom,
@@ -294,7 +294,7 @@ const Box = (props: {
     (state) => state.charts.ChartCreate.setCrudData
   );
   const isChartDragging = useRecoilValue(isChartDraggingAtom);
-  const setChartFromReport = useRecoilState(chartFromReportAtom)[1];
+  const setChartFromReport = useRecoilState(chartFromStoryAtom)[1];
   const resetMapping = useStoreActions(
     (actions) => actions.charts.mapping.reset
   );

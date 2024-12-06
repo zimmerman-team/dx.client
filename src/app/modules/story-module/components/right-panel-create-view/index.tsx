@@ -15,7 +15,7 @@ import Menu, { MenuProps } from "@material-ui/core/Menu";
 import TextFieldsIcon from "@material-ui/icons/TextFields";
 import {
   reportRightPanelViewAtom,
-  chartFromReportAtom,
+  chartFromStoryAtom,
   isDividerOrRowFrameDraggingAtom,
   isChartDraggingAtom,
   isChartAIAgentActive,
@@ -280,7 +280,7 @@ export function ReportRightPanelCreateView(props: Readonly<Props>) {
     reportRightPanelViewAtom
   );
   const [_chartFromReport, setChartFromReport] =
-    useRecoilState(chartFromReportAtom);
+    useRecoilState(chartFromStoryAtom);
   const whiteBackgroundOnly = "background-color: #fff;";
   const whiteBackgroundRoundedBottomRight =
     whiteBackgroundOnly + " border-radius: 0px 0px 8px 0px;";
@@ -1283,7 +1283,7 @@ function CreateChartCard(props: {
     (state) => state.charts.ChartCreate.setCrudData
   );
 
-  const setChartFromReport = useRecoilState(chartFromReportAtom)[1];
+  const setChartFromReport = useRecoilState(chartFromStoryAtom)[1];
 
   const action = () => {
     setChartFromReport({
@@ -1378,7 +1378,7 @@ function ChartItem(
 ) {
   const nullRef = React.useRef(null);
   const [chartPreview, setChartPreview] = React.useState(false);
-  const chartFromReport = useRecoilValue(chartFromReportAtom);
+  const chartFromReport = useRecoilValue(chartFromStoryAtom);
 
   const [{ isDragging }, drag] = useDrag(() => ({
     type: props.elementType,

@@ -21,8 +21,8 @@ export const emptyRowsAtom = atom({
   key: "emptyRowsAtom",
   default: false,
 });
-export const untitledReportAtom = atom({
-  key: "untitledReportAtom",
+export const untitledStoryAtom = atom({
+  key: "untitledStoryAtom",
   default: false,
 });
 
@@ -38,16 +38,16 @@ export const allAssetsSortBy = atom<"name" | "updatedDate" | "createdDate">({
   effects_UNSTABLE: [persistAtom],
 });
 
-export const homeDisplayAtom = atom<"all" | "data" | "charts" | "reports">({
+export const homeDisplayAtom = atom<"all" | "data" | "charts" | "stories">({
   key: "homeDisplayAtom",
   default: "all",
   effects_UNSTABLE: [persistAtom],
 });
 
-export const reportRightPanelViewAtom = atom<
+export const storyRightPanelViewAtom = atom<
   "elements" | "charts" | "media" | "editHeader"
 >({
-  key: "reportRightPanelViewAtom",
+  key: "storyRightPanelViewAtom",
   default: "charts",
 });
 
@@ -76,18 +76,18 @@ export const isChartAutoMappedAtom = atom<boolean>({
   default: false,
 });
 
-export const reportContentIsResizingAtom = atom<boolean>({
-  key: "reportContentIsResizing",
+export const storyContentIsResizingAtom = atom<boolean>({
+  key: "storyContentIsResizing",
   default: false,
 });
 
-export const reportContentContainerWidth = atom<number>({
-  key: "reportContentContainerWidth",
+export const storyContentContainerWidth = atom<number>({
+  key: "storyContentContainerWidth",
   default: 0,
 });
 
-export const reportCreationTourStepAtom = atom<number>({
-  key: "reportCreationTourStepAtom",
+export const storyCreationTourStepAtom = atom<number>({
+  key: "storyCreationTourStepAtom",
   default: 0,
 });
 
@@ -97,19 +97,19 @@ export const loadedDatasetsAtom = atom<DatasetListItemAPIModel[]>({
   effects_UNSTABLE: [persistAtom],
 });
 
-export const loadedChartsInReportAtom = atom<string[]>({
-  key: "loadedChartsInReportAtom",
+export const loadedChartsInStoryAtom = atom<string[]>({
+  key: "loadedChartsInStoryAtom",
   default: [],
 });
 
-export const chartFromReportAtom = atom<{
+export const chartFromStoryAtom = atom<{
   state: boolean;
   view: string;
   page: string;
   action: "create" | "edit" | null;
   chartId: string | null;
 }>({
-  key: "chartFromReportAtom",
+  key: "chartFromStoryAtom",
   default: {
     state: false,
     view: "",

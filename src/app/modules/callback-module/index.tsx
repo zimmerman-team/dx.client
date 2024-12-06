@@ -18,10 +18,10 @@ function AuthCallbackModule() {
   const queryParams = new URLSearchParams(location.search);
   const destinationPath = queryParams.get("to") as string;
 
-  const duplicateReport = async (id: string) => {
+  const duplicateStory = async (id: string) => {
     getAccessTokenSilently().then(async (newToken) => {
       const response = await axios.get(
-        `${process.env.REACT_APP_API}/users/duplicate-landing-report/${id}`,
+        `${process.env.REACT_APP_API}/users/duplicate-landing-story/${id}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -30,8 +30,8 @@ function AuthCallbackModule() {
         }
       );
       if (response.data) {
-        localStorage.removeItem("duplicateReportAfterSignIn");
-        history.push(`/report/${response.data.id}/edit`);
+        localStorage.removeItem("duplicateStoryAfterSignIn");
+        history.push(`/story/${response.data.id}/edit`);
       } else {
         history.replace("/");
       }
@@ -79,16 +79,16 @@ function AuthCallbackModule() {
       if (destinationPath) {
         return history.replace(destinationPath);
       }
-      const reportId = localStorage.getItem("duplicateReportAfterSignIn");
-      if (reportId) {
+      const storyId = localStorage.getItem("duplicateStoryAfterSignIn");
+      if (storyId) {
         (async () => {
           setLoading(true);
-          await duplicateReport(reportId);
+          await duplicateStory(storyId);
           setLoading(false);
         })();
       } else {
         if (localStorage.getItem("signup-state") === "true") {
-          history.replace("/report/new/initial");
+          history.replace("/story/new/initial");
           localStorage.removeItem("signup-state");
         } else {
           history.replace("/");

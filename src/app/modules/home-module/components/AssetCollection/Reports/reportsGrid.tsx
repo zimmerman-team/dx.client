@@ -8,7 +8,7 @@ import { ReportModel } from "app/modules/report-module/data";
 import ColoredReportIcon from "app/assets/icons/ColoredReportIcon";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import { HomepageTable } from "app/modules/home-module/components/Table";
-import DeleteReportDialog from "app/components/Dialogs/deleteReportDialog";
+import DeleteReportDialog from "app/components/Dialogs/deleteStoryDialog";
 import ReformedGridItem from "app/modules/home-module/components/AssetCollection/Reports/gridItem";
 import ReportAddnewCard from "./reportAddNewCard";
 import { useInfinityScroll } from "app/hooks/useInfinityScroll";

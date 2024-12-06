@@ -130,7 +130,7 @@ export default function SneakPreview(props: {
                 /* width: 457px; */
               `}
             >
-              Get ready for the future of reporting
+              Get ready for the future of storytelling
             </h1>
             <p
               css={`
@@ -138,9 +138,9 @@ export default function SneakPreview(props: {
                 line-height: 32px;
               `}
             >
-              Experience the future of reporting with our AI-powered template.
-              Watch the sneak preview video now for a game-changing solution
-              that revolutionizes data analysis and delivers actionable
+              Experience the future of storytelling with our AI-powered
+              template. Watch the sneak preview video now for a game-changing
+              solution that revolutionizes data analysis and delivers actionable
               insights. Available soon!
             </p>
           </div>

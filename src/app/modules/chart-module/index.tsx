@@ -54,7 +54,7 @@ import {
   useSetRecoilState,
 } from "recoil";
 import {
-  chartFromReportAtom,
+  chartFromStoryAtom,
   isChartAIAgentActive,
   isChartAutoMappedAtom,
   planDialogAtom,
@@ -154,8 +154,8 @@ export default function ChartModule() {
     (state) => state.charts.SelectedAIChartState.value
   );
 
-  const [chartFromReport, setChartFromReport] =
-    useRecoilState(chartFromReportAtom);
+  const [chartFromStory, setChartFromStory] =
+    useRecoilState(chartFromStoryAtom);
   const appliedFilters = useStoreState(
     (state) => state.charts.appliedFilters.value
   );
@@ -329,8 +329,8 @@ export default function ChartModule() {
         }
         history.push(
           `/chart/${data.id}/mapping${
-            chartFromReport.state
-              ? `?fromreport=true&page=${chartFromReport.page}`
+            chartFromStory.state
+              ? `?fromstory=true&page=${chartFromStory.page}`
               : ""
           }`
         );
@@ -444,7 +444,7 @@ export default function ChartModule() {
     setChartError(false);
     setDataTypes([]);
     resetIsChartAutoMapped();
-    setChartFromReport((prev) => ({
+    setChartFromStory((prev) => ({
       ...prev,
       state: false,
       page: "",

@@ -3,7 +3,7 @@ import { CloseOutlined } from "@material-ui/icons";
 import React from "react";
 import { useStyles } from "./deleteChartDialog";
 import { useRecoilState } from "recoil";
-import { untitledReportAtom } from "app/state/recoil/atoms";
+import { untitledStoryAtom } from "app/state/recoil/atoms";
 
 function rand() {
   return Math.round(Math.random() * 20) - 10;
@@ -19,10 +19,10 @@ function getModalStyle() {
   };
 }
 
-export default function UntitledReportDialog() {
+export default function UntitledStoryDialog() {
   const [modalStyle] = React.useState(getModalStyle);
   const classes = useStyles();
-  const [open, setOpen] = useRecoilState(untitledReportAtom);
+  const [open, setOpen] = useRecoilState(untitledStoryAtom);
   return (
     <div>
       <Modal
@@ -64,7 +64,7 @@ export default function UntitledReportDialog() {
                 font-family: "Inter", sans-serif;
               `}
             >
-              Untitled report
+              Untitled story
             </p>
             <p
               css={`
@@ -73,7 +73,7 @@ export default function UntitledReportDialog() {
                 line-height: normal;
               `}
             >
-              <b>You are attempting to save an untitled report.</b>
+              <b>You are attempting to save an untitled story.</b>
             </p>
             <p
               css={`
@@ -82,7 +82,7 @@ export default function UntitledReportDialog() {
                 line-height: normal;
               `}
             >
-              Please provide a title for the report before proceeding to ensure
+              Please provide a title for the story before proceeding to ensure
               accurate organization and easy retrieval in the future.
             </p>
           </div>

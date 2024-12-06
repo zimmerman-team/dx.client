@@ -1,7 +1,7 @@
 import React, { ReactElement, useMemo, useRef } from "react";
 import picker from "app/modules/common/RichEditor/ColorModal/Picker";
 import bgPicker from "app/modules/common/RichEditor/BGColorModal/Picker";
-import { ToolbarPluginsType } from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
+import { ToolbarPluginsType } from "app/modules/story-module/components/storySubHeaderToolbar/staticToolbar";
 
 /*plugins */
 import { EditorState, SelectionState } from "draft-js";
@@ -25,7 +25,7 @@ import "@draft-js-plugins/inline-toolbar/lib/plugin.css";
 import "@draft-js-plugins/static-toolbar/lib/plugin.css";
 import "@draft-js-plugins/emoji/lib/plugin.css";
 import fontSizeStyleMap from "app/modules/common/RichEditor/FontSizeController/styleMap";
-import { styles } from "app/modules/report-module/components/reportSubHeaderToolbar/styles";
+import { styles } from "app/modules/story-module/components/storySubHeaderToolbar/styles";
 
 export const RichEditor = (props: {
   editMode: boolean;

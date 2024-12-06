@@ -24,7 +24,7 @@ import { createStyles, makeStyles, useMediaQuery } from "@material-ui/core";
 import { Link, useHistory, useParams } from "react-router-dom";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import { ReportModel, emptyReport } from "app/modules/report-module/data";
-import DeleteReportDialog from "app/components/Dialogs/deleteReportDialog";
+import DeleteReportDialog from "app/components/Dialogs/deleteStoryDialog";
 import { ChartAPIModel, emptyChartAPI } from "app/modules/chart-module/data";
 import { ReportSubheaderToolbarProps } from "app/modules/chart-module/components/chartSubheaderToolbar/data";
 import { ReactComponent as PlayIcon } from "app/modules/report-module/asset/play-icon.svg";

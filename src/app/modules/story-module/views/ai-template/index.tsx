@@ -57,7 +57,7 @@ export default function AITemplate() {
         `}
       >
         <div css={newsletterIllustrationcss}>
-          <h1>Subscribe to our newsletter</h1>
+          <h1>Stay Up to Date</h1>
           <p>
             Want to be the first one to know when we launch our brand new
             AI-powered template for reports? Don't miss out on this exciting
@@ -118,7 +118,7 @@ export default function AITemplate() {
               <p>
                 Sign up now by entering your email below. Be among the first to
                 experience the future of <br />
-                reporting unfold right in your inbox. 🚀
+                storytelling unfold right in your inbox. 🚀
               </p>
               <div
                 css={`

@@ -181,13 +181,10 @@ export default function AddDatasetFragment(props: Props) {
           }
         `}
       >
-        <h1>File Upload</h1>
+        <h1>Connect Your Data</h1>
         <Box height={22} />
         <p>
-          Upload your favourite data effortlessly in Dataxplorer, and with just
-          a few clicks, import datasets without the hassle of downloading,{" "}
-          <br />
-          enabling you to visualize and analyse diverse data like never before.
+          Connect your data by uploading a file or connect to your cloud storage
         </p>
       </div>
 

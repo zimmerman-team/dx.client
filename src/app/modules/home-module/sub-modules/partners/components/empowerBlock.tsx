@@ -21,7 +21,7 @@ export default function EmpowerBlock(props: {
 
   let mainText = "";
   let mainTextMobile = "";
-  let subText = `Dataxplorer simplifies and empowers \n visual data reporting for all.`;
+  let subText = `Dataxplorer simplifies and empowers \n visual data Storytelling for all.`;
 
   switch (props.view) {
     case "why-dx":

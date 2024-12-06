@@ -38,7 +38,7 @@ const useStyles = makeStyles(() =>
   })
 );
 
-export default function DeleteReportDialog(props: Props) {
+export default function DeleteStoryDialog(props: Props) {
   const classes = useStyles();
 
   const onInputEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -56,7 +56,7 @@ export default function DeleteReportDialog(props: Props) {
       <div className={classes.paper}>
         <form
           onSubmit={() => props.handleDelete(props.cardId as string)}
-          data-cy="delete-report-item-form"
+          data-cy="delete-story-item-form"
           aria-label="form"
         >
           <div
@@ -83,14 +83,14 @@ export default function DeleteReportDialog(props: Props) {
                 margin-bottom: 0px;
               `}
             >
-              Delete report
+              Delete story
             </p>
             <p
               css={`
                 margin-top: 3px;
               `}
             >
-              Absolutely sure you want to delete the report(s)? <br />{" "}
+              Absolutely sure you want to delete the story(s)? <br />{" "}
               <b>This action is irreversible!</b>
             </p>
             <div
@@ -104,7 +104,7 @@ export default function DeleteReportDialog(props: Props) {
                 placeholder='Type "DELETE" to confirm'
                 onChange={props.handleInputChange}
                 onKeyPress={onInputEnter}
-                data-cy="delete-report-item-input"
+                data-cy="delete-story-item-input"
                 css={`
                   border: 1px solid #231d2c;
                   border-radius: 10px;

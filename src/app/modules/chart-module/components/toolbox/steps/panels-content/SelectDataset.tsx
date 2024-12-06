@@ -7,7 +7,7 @@ import { useHistory, useParams } from "react-router-dom";
 import ToolboxSubHeader from "app/modules/chart-module/components/toolbox/steps/sub-header";
 import { useRecoilValue, useResetRecoilState } from "recoil";
 import {
-  chartFromReportAtom,
+  chartFromStoryAtom,
   isChartAutoMappedAtom,
 } from "app/state/recoil/atoms";
 
@@ -174,7 +174,7 @@ function ChartToolBoxSelectDataset(props: { deselectDataset: () => void }) {
 
 const ConnectData = () => {
   const history = useHistory();
-  const chartFromReport = useRecoilValue(chartFromReportAtom);
+  const chartFromStory = useRecoilValue(chartFromStoryAtom);
   return (
     <div
       css={`
@@ -215,8 +215,8 @@ const ConnectData = () => {
         onClick={() =>
           history.push(
             `/dataset/new/upload${
-              chartFromReport.state
-                ? `?fromreport=true&page=${chartFromReport.page}`
+              chartFromStory.state
+                ? `?fromstory=true&page=${chartFromStory.page}`
                 : ""
             }`
           )

@@ -184,9 +184,9 @@ export const BudgetsTabCard = () => {
       The Global Fund applies strict budget requirements during the development,
       review and implementation of Global Fund-supported programs. It
       establishes clear eligibility criteria for grant expenditures and
-      requirements for monitoring and financial reporting obligations.
+      requirements for monitoring and financial storytelling obligations.
       <br />
-      <br /> All collected financial reporting data on budgets including
+      <br /> All collected financial storytelling data on budgets including
       investment landscapes and corresponding cost categories is presented via
       the Data Explorer.
       <br />

@@ -28,7 +28,7 @@ export default function NewsletterBlock(props: {
           font-family: "GothamNarrow-Medium", sans-serif;
         `}
       >
-        Subscribe to our newsletter
+        Stay Up to Date
       </p>
       {props.formError.email && (
         <label

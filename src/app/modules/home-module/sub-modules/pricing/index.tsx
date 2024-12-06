@@ -208,7 +208,7 @@ export default function PricingModule() {
             }
           `}
         >
-          DATAXPLORER simplifies and empowers visual data reporting for all.
+          DATAXPLORER simplifies and empowers visual data storytelling for all.
           <b> Free for all.</b>
         </p>
         <Box height={65} />

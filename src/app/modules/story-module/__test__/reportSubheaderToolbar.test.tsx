@@ -13,7 +13,7 @@ import {
   screen,
   waitFor,
 } from "@testing-library/react";
-import { homeDisplayAtom, chartFromReportAtom } from "app/state/recoil/atoms";
+import { homeDisplayAtom, chartFromStoryAtom } from "app/state/recoil/atoms";
 import { mockUseAuth0 } from "app/utils/mockAuth0";
 import { RecoilObserver } from "app/utils/recoilObserver";
 import { createStore, StoreProvider } from "easy-peasy";
@@ -218,7 +218,7 @@ describe("Tests for tablet and desktop view", () => {
       .spyOn(Router, "useParams")
       .mockReturnValue({ page: "n65e6d7498ad6100d2b27bd5cew", view: "edit" });
     const initialRecoilState = (snap: MutableSnapshot) => {
-      snap.set(chartFromReportAtom, {
+      snap.set(chartFromStoryAtom, {
         state: true,
         page: "65dcb26aaf4c8500693f1ab7",
         action: "edit",

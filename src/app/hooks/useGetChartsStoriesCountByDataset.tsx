@@ -3,19 +3,19 @@ import axios from "axios";
 import { get } from "lodash";
 import React, { useEffect } from "react";
 
-const useGetChartsReportsCountByDataset = (datasetId: string) => {
+const useGetChartsStoriesCountByDataset = (datasetId: string) => {
   const token = useStoreState((state) => state.AuthToken.value);
   const [loading, setLoading] = React.useState(false);
   const [data, setData] = React.useState({
     chartsCount: 0,
-    reportsCount: 0,
+    storiesCount: 0,
   });
 
   async function refetch() {
     setLoading(true);
     return await axios
       .get(
-        `${process.env.REACT_APP_API}/datasets/${datasetId}/charts-reports/count`,
+        `${process.env.REACT_APP_API}/datasets/${datasetId}/charts-stories/count`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -28,7 +28,7 @@ const useGetChartsReportsCountByDataset = (datasetId: string) => {
         setData(response.data);
       })
       .catch(async (error) => {
-        console.log("getChartsReportsCountByDataset error: " + error);
+        console.log("getChartsStoriesCountByDataset error: " + error);
       });
   }
   useEffect(() => {
@@ -40,4 +40,4 @@ const useGetChartsReportsCountByDataset = (datasetId: string) => {
   return { data, loading };
 };
 
-export default useGetChartsReportsCountByDataset;
+export default useGetChartsStoriesCountByDataset;

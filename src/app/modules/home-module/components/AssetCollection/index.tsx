@@ -96,10 +96,10 @@ function AssetsCollection() {
   }, [display]);
 
   const descriptions = {
-    all: "Explore the collection of Assets",
-    data: "Explore the collection of Datasets used to create Charts",
-    charts: "Explore the collection of Charts used in Reports",
-    reports: "Explore the collection of Reports",
+    all: "Explore stories collection of Assets",
+    data: "Explore stories collection of Datasets ",
+    charts: "Explore stories collection of Charts ",
+    reports: "Explore stories collection of Stories",
   };
 
   return (

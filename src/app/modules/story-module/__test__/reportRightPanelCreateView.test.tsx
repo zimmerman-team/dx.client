@@ -7,7 +7,7 @@ import {
 } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import {
-  chartFromReportAtom,
+  chartFromStoryAtom,
   isChartDraggingAtom,
   isDividerOrRowFrameDraggingAtom,
   reportRightPanelViewAtom,
@@ -94,7 +94,7 @@ const history = createMemoryHistory({
 //recoil states
 const reportRightPanelViewChange = jest.fn();
 const isDividerOrRowFrameDraggingAtomChange = jest.fn();
-const chartFromReportAtomChange = jest.fn();
+const chartFromStoryAtomChange = jest.fn();
 const isChartDraggingAtomChange = jest.fn();
 
 const appSetup = (
@@ -186,8 +186,8 @@ const appSetup = (
               onChange={isDividerOrRowFrameDraggingAtomChange}
             />
             <RecoilObserver
-              node={chartFromReportAtom}
-              onChange={chartFromReportAtomChange}
+              node={chartFromStoryAtom}
+              onChange={chartFromStoryAtomChange}
             />
             <RecoilObserver
               node={isChartDraggingAtom}

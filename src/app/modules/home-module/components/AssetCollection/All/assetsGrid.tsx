@@ -21,7 +21,7 @@ import DatasetGridItem from "app/modules/home-module/components/AssetCollection/
 import ReportGridItem from "app/modules/home-module/components/AssetCollection/Reports/gridItem";
 import ColoredReportIcon from "app/assets/icons/ColoredReportIcon";
 import DeleteDatasetDialog from "app/components/Dialogs/deleteDatasetDialog";
-import DeleteReportDialog from "app/components/Dialogs/deleteReportDialog";
+import DeleteReportDialog from "app/components/Dialogs/deleteStoryDialog";
 import { EditorState, convertFromRaw } from "draft-js";
 import { getLimit } from "app/modules/home-module/components/AssetCollection/Datasets/datasetsGrid";
 import { HomepageTable } from "app/modules/home-module/components/Table/";
