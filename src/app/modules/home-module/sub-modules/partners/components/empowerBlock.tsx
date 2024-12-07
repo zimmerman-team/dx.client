@@ -45,7 +45,7 @@ export default function EmpowerBlock(props: {
       break;
     case "landing":
       mainText = "Start Making Impact Today\nwith Dataxplorer";
-      subText = "Create top-notch reports for your business.";
+      subText = "Create top-notch stories for your business.";
       break;
 
     default:
@@ -71,11 +71,11 @@ export default function EmpowerBlock(props: {
           `}
         >
           <Link
-            data-cy="landing-report-link"
-            to="/report/664f406b82350800ca942b92?fromLanding=true"
+            data-cy="landing-story-link"
+            to="/story/664f406b82350800ca942b92?fromLanding=true"
           >
             <ClimateButton color="#6061E5" type="button">
-              EXPLORE CLIMATE CHANGE IN EUROPE 2022 REPORT
+              EXPLORE CLIMATE CHANGE IN EUROPE 2022 STORY
             </ClimateButton>
           </Link>
         </div>
@@ -84,16 +84,16 @@ export default function EmpowerBlock(props: {
       {isAuthenticated && (
         <div>
           <Link
-            to="/report/new/initial"
-            data-cy="empower-block-create-report-link"
+            to="/story/new/initial"
+            data-cy="empower-block-create-story-link"
           >
             <HomePrimaryButton color="#6061E5" type="button">
-              CREATE REPORT
+              CREATE STORY
             </HomePrimaryButton>
           </Link>
-          <Link to="/" data-cy="empower-block-explore-reports-link">
+          <Link to="/" data-cy="empower-block-explore-stories-link">
             <HomePrimaryButton color="#E492BD" type="button">
-              EXPLORE REPORTS
+              EXPLORE STORIES
             </HomePrimaryButton>
           </Link>
         </div>

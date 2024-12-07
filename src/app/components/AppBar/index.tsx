@@ -380,7 +380,7 @@ const ActionMenu = () => {
         `}
       >
         <Link to={isAuthenticated ? "/dashboard" : "/onboarding/signin"}>
-          <button data-cy="appbar-create-report/login">
+          <button data-cy="appbar-create-story/login">
             {isAuthenticated ? "MY DASHBOARD" : "Sign in"}
           </button>
         </Link>
@@ -391,7 +391,7 @@ const ActionMenu = () => {
                 actionPopoverAnchorEl ? null : event.currentTarget
               );
             }}
-            data-cy="create-report-dropdown"
+            data-cy="create-story-dropdown"
           >
             <KeyboardArrowDownIcon />
           </button>

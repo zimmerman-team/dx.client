@@ -12,30 +12,30 @@ import { useLoadDatasetDetails } from "./useLoadDatasetDetailsAPI";
 interface Props {
   id: string;
   width: string;
-  chartPreviewInReport?: boolean;
+  chartPreviewInStory?: boolean;
   setError: React.Dispatch<React.SetStateAction<boolean>>;
   error: boolean;
 }
 
-export function ReportChartWrapper(props: Props) {
+export function StoryChartWrapper(props: Props) {
   const token = useStoreState((state) => state.AuthToken.value);
 
   const containerRef = React.useRef<HTMLDivElement>(null);
   const [chartName, setChartName] = React.useState<string>("");
   const [isAiAssisted, setIsAiAssisted] = React.useState<boolean>(false);
   const loadChart = useStoreActions(
-    (actions) => actions.charts.ChartGetInReport.fetch
+    (actions) => actions.charts.ChartGetInStory.fetch
   );
   const chartError = useStoreState(
-    (state) => state.charts.ChartGetInReport.errorData
+    (state) => state.charts.ChartGetInStory.errorData
   );
 
   const loadedChart = useStoreState(
     (state) =>
-      (state.charts.ChartGetInReport.crudData ?? emptyChartAPI) as ChartAPIModel
+      (state.charts.ChartGetInStory.crudData ?? emptyChartAPI) as ChartAPIModel
   );
   const clearChart = useStoreActions(
-    (actions) => actions.charts.ChartGetInReport.clear
+    (actions) => actions.charts.ChartGetInStory.clear
   );
   const [datasetId, setDatasetId] = React.useState<string | null>(null);
   const { datasetDetails } = useLoadDatasetDetails(
@@ -71,7 +71,7 @@ export function ReportChartWrapper(props: Props) {
   }, [chartFromAPI]);
 
   const displayChartName =
-    renderedChartType !== "bigNumber" && !props.chartPreviewInReport;
+    renderedChartType !== "bigNumber" && !props.chartPreviewInStory;
 
   React.useEffect(() => {
     if (loadedChart && loadedChart.id !== "" && loadedChart.id === props.id) {
@@ -238,7 +238,7 @@ export function ReportChartWrapper(props: Props) {
         setChartErrorMessage={setChartErrorMessage}
         setChartError={setNotFound}
         inChartWrapper={true}
-        chartPreviewInReport={props.chartPreviewInReport}
+        chartPreviewInStory={props.chartPreviewInStory}
         mapping={chartFromAPI?.mapping}
         datasetDetails={datasetDetails}
       />

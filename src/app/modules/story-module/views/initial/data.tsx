@@ -1,14 +1,14 @@
-import { ReactComponent as AITemplateImg } from "app/modules/report-module/asset/aiTemplate-img.svg";
-import { ReactComponent as BlankTemplateImg } from "app/modules/report-module/asset/blankTemplate-img.svg";
-import { ReactComponent as AdvancedTemplateImg } from "app/modules/report-module/asset/advancedTemplate-img.svg";
-import { ReactComponent as RightArrowIcon } from "app/modules/report-module/asset/rightArrow.svg";
+import { ReactComponent as AITemplateImg } from "app/modules/story-module/asset/aiTemplate-img.svg";
+import { ReactComponent as BlankTemplateImg } from "app/modules/story-module/asset/blankTemplate-img.svg";
+import { ReactComponent as AdvancedTemplateImg } from "app/modules/story-module/asset/advancedTemplate-img.svg";
+import { ReactComponent as RightArrowIcon } from "app/modules/story-module/asset/rightArrow.svg";
 
-export interface ReportInitialViewProps {
-  resetReport: () => void;
+export interface StoryInitialViewProps {
+  resetStory: () => void;
   handleSetButtonActive: (type: "basic" | "advanced" | "ai") => void;
 }
 
-export interface ReportTemplateModel {
+export interface StoryTemplateModel {
   name: string;
   description: string;
   templateImg: React.ReactNode;
@@ -16,24 +16,24 @@ export interface ReportTemplateModel {
   available?: boolean;
 }
 
-export const templates: ReportTemplateModel[] = [
+export const templates: StoryTemplateModel[] = [
   {
-    name: "Blank template report",
-    description: "A basic template to create your report",
+    name: "Blank template story",
+    description: "A basic template to create your story",
     value: "basic",
     templateImg: <BlankTemplateImg />,
     available: true,
   },
   {
-    name: "Advanced template report",
-    description: "An advanced template to create your report",
+    name: "Advanced template story",
+    description: "An advanced template to create your story",
     value: "advanced",
     templateImg: <AdvancedTemplateImg />,
     available: true,
   },
   {
     name: "AI-powered template",
-    description: "Use AI to create your report",
+    description: "Use AI to create your story",
     value: "ai",
     templateImg: <AITemplateImg />,
     available: false,
@@ -47,7 +47,7 @@ export const TemplateItem = ({
   handleClick,
   templateImg,
   available,
-}: ReportTemplateModel & {
+}: StoryTemplateModel & {
   handleClick: () => void;
 }) => {
   return (
@@ -76,7 +76,7 @@ export const TemplateItem = ({
         }
       `}
       onClick={handleClick}
-      data-cy="report-template-card"
+      data-cy="story-template-card"
     >
       <div>
         <div
@@ -150,7 +150,7 @@ export const TemplateItem = ({
               font-family: "Inter", sans-serif;
             }
           `}
-          data-cy="use-report-template-button"
+          data-cy="use-story-template-button"
         >
           {value === "ai" ? (
             <span>Want to try it?</span>

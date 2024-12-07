@@ -5,11 +5,11 @@ import { socialAuth } from "app/utils/socialAuth";
 import React from "react";
 import { useParams } from "react-router-dom";
 
-function ReportUsePanel() {
+function StoryUsePanel() {
   const { page } = useParams<{ page: string }>();
 
   const handleSignIn = (connection: "google-oauth2" | "linkedin") => {
-    localStorage.setItem("duplicateReportAfterSignIn", page);
+    localStorage.setItem("duplicateStoryAfterSignIn", page);
     socialAuth(connection);
   };
 
@@ -47,7 +47,7 @@ function ReportUsePanel() {
                 color: #fff;
               `}
             >
-              Use this report and edit away!
+              Use this story and edit away!
             </p>
 
             <p
@@ -121,4 +121,4 @@ function ReportUsePanel() {
   );
 }
 
-export default ReportUsePanel;
+export default StoryUsePanel;

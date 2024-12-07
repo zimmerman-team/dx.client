@@ -8,15 +8,15 @@ import { useImmer } from "use-immer";
 import { useAuth0 } from "@auth0/auth0-react";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { NoMatchPage } from "app/modules/common/no-match-page";
-import ReportEditView from "app/modules/report-module/views/edit";
-import AITemplate from "app/modules/report-module/views/ai-template";
+import StoryEditView from "app/modules/story-module/views/edit";
+import AITemplate from "app/modules/story-module/views/ai-template";
 import { EditorState, convertToRaw } from "draft-js";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
-import { ReportModel, emptyReport } from "app/modules/report-module/data";
-import { ReportPreviewView } from "app/modules/report-module/views/preview";
-import ReportInitialView from "app/modules/report-module/views/initial";
-import { IFramesArray } from "app/modules/report-module/views/create/data";
-import { ReportRightPanel } from "app/modules/report-module/components/right-panel";
+import { StoryModel, emptyStory } from "app/modules/story-module/data";
+import { StoryPreviewView } from "app/modules/story-module/views/preview";
+import StoryInitialView from "app/modules/story-module/views/initial";
+import { IFramesArray } from "app/modules/story-module/views/create/data";
+import { StoryRightPanel } from "app/modules/story-module/components/right-panel";
 import {
   Route,
   Switch,
@@ -26,14 +26,14 @@ import {
 } from "react-router-dom";
 import {
   planDialogAtom,
-  reportRightPanelViewAtom,
+  storyRightPanelViewAtom,
 } from "app/state/recoil/atoms";
-import { ReportSubheaderToolbar } from "app/modules/report-module/components/reportSubHeaderToolbar";
-import { ToolbarPluginsType } from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
+import { StorySubheaderToolbar } from "app/modules/story-module/components/storySubHeaderToolbar";
+import { ToolbarPluginsType } from "app/modules/story-module/components/storySubHeaderToolbar/staticToolbar";
 import useAutosave from "app/hooks/useAutoSave";
 import DownloadedView from "./views/downloaded-view";
 
-export default function ReportModule() {
+export default function StoryModule() {
   const { user, isAuthenticated } = useAuth0();
   const history = useHistory();
   const aiTemplateString = "ai-template";
@@ -50,16 +50,16 @@ export default function ReportModule() {
   const [plugins, setPlugins] = React.useState<ToolbarPluginsType>([]);
   const token = useStoreState((state) => state.AuthToken.value);
   const [_rightPanelView, setRightPanelView] = useRecoilState(
-    reportRightPanelViewAtom
+    storyRightPanelViewAtom
   );
   const [isPreviewView, setIsPreviewView] = React.useState(false);
-  const defaultReportTitle = "Untitled report";
+  const defaultStoryTitle = "Untitled story";
   const [rightPanelOpen, setRightPanelOpen] = React.useState(true);
-  const [reportName, setReportName] = React.useState("Untitled report");
-  const [hasReportNameFocused, setHasReportNameFocused] = React.useState(false);
-  const [hasReportNameBlurred, setHasReportNameBlurred] = React.useState(false);
+  const [storyName, setStoryName] = React.useState("Untitled story");
+  const [hasStoryNameFocused, setHasStoryNameFocused] = React.useState(false);
+  const [hasStoryNameBlurred, setHasStoryNameBlurred] = React.useState(false);
 
-  const [reportType, setReportType] = React.useState<
+  const [storyType, setStoryType] = React.useState<
     "basic" | "advanced" | "ai" | null
   >(null);
 
@@ -77,65 +77,62 @@ export default function ReportModule() {
     (actions) => actions.charts.mapping.reset
   );
 
-  const reportGetData = useStoreState(
-    (state) => (state.reports.ReportGet.crudData ?? emptyReport) as ReportModel
+  const storyGetData = useStoreState(
+    (state) => (state.stories.StoryGet.crudData ?? emptyStory) as StoryModel
   );
 
-  const reportCreate = useStoreActions(
-    (actions) => actions.reports.ReportCreate.post
+  const storyCreate = useStoreActions(
+    (actions) => actions.stories.StoryCreate.post
   );
 
-  const reportCreateClear = useStoreActions(
-    (actions) => actions.reports.ReportCreate.clear
+  const storyCreateClear = useStoreActions(
+    (actions) => actions.stories.StoryCreate.clear
   );
 
-  const reportEdit = useStoreActions(
-    (actions) => actions.reports.ReportUpdate.patch
+  const storyEdit = useStoreActions(
+    (actions) => actions.stories.StoryUpdate.patch
   );
 
-  const reportEditClear = useStoreActions(
-    (actions) => actions.reports.ReportUpdate.clear
+  const storyEditClear = useStoreActions(
+    (actions) => actions.stories.StoryUpdate.clear
   );
 
-  const reportError401 = useStoreState(
+  const storyError401 = useStoreState(
     (state) =>
-      get(state.reports.ReportGet.errorData, "data.error.statusCode", 0) ===
+      get(state.stories.StoryGet.errorData, "data.error.statusCode", 0) ===
         401 ||
-      get(state.reports.ReportGet.crudData, "error", "") === "Unauthorized"
+      get(state.stories.StoryGet.crudData, "error", "") === "Unauthorized"
   );
 
-  const reportCreateData = useStoreState(
-    (state) => state.reports.ReportCreate.crudData as any
+  const storyCreateData = useStoreState(
+    (state) => state.stories.StoryCreate.crudData as any
   );
 
   React.useEffect(() => {
-    if (
-      reportCreateData?.error &&
-      reportCreateData?.errorType === "planError"
-    ) {
+    if (storyCreateData?.error && storyCreateData?.errorType === "planError") {
       setPlanDialog({
         open: true,
-        message: reportCreateData?.error,
+        message: storyCreateData?.error,
         tryAgain: "",
         onTryAgain: () => {},
       });
     }
-  }, [reportCreateData]);
+  }, [storyCreateData]);
 
-  const reportPlanWarning = useStoreState(
-    (state) => state.reports.ReportCreate.planWarning
+  const storyPlanWarning = useStoreState(
+    (state) => state.stories.StoryCreate.planWarning
   );
 
   React.useEffect(() => {
-    if (reportPlanWarning) {
+    if (storyPlanWarning) {
       setPlanDialog({
         open: true,
-        message: reportPlanWarning,
+        message: storyPlanWarning,
         tryAgain: "",
         onTryAgain: () => {},
       });
     }
-  }, [reportPlanWarning]);
+  }, [storyPlanWarning]);
 
   const [headerDetails, setHeaderDetails] = React.useState({
     title: "",
@@ -152,14 +149,14 @@ export default function ReportModule() {
     React.useState(false);
 
   React.useEffect(() => {
-    //set report name back to untitled report if it is empty and user is not focused on subheader title
-    if (reportName === "" && hasReportNameBlurred) {
-      setReportName(defaultReportTitle);
+    //set story name back to untitled story if it is empty and user is not focused on subheader title
+    if (storyName === "" && hasStoryNameBlurred) {
+      setStoryName(defaultStoryTitle);
     }
     return () => {
-      setHasReportNameBlurred(false);
+      setHasStoryNameBlurred(false);
     };
-  }, [hasReportNameBlurred]);
+  }, [hasStoryNameBlurred]);
 
   const deleteFrame = (id: string) => {
     updateFramesArray((draft) => {
@@ -168,7 +165,7 @@ export default function ReportModule() {
     });
   };
 
-  const basicReportInitialState = () => {
+  const basicStoryInitialState = () => {
     const id = v4();
     return [
       {
@@ -187,7 +184,7 @@ export default function ReportModule() {
     ] as IFramesArray[];
   };
 
-  const advancedReportInitialState = () => {
+  const advancedStoryInitialState = () => {
     const rowOne = v4();
     const rowTwo = v4();
 
@@ -243,13 +240,13 @@ export default function ReportModule() {
   };
 
   const initialFramesArray = React.useMemo(() => {
-    if (reportType === "basic") {
-      return basicReportInitialState();
-    } else if (reportType === "advanced") {
-      return advancedReportInitialState();
+    if (storyType === "basic") {
+      return basicStoryInitialState();
+    } else if (storyType === "advanced") {
+      return advancedStoryInitialState();
     }
     return [];
-  }, [reportType]);
+  }, [storyType]);
 
   const [framesArray, updateFramesArray] =
     useImmer<IFramesArray[]>(initialFramesArray);
@@ -264,8 +261,8 @@ export default function ReportModule() {
     return () => {
       resetDataset();
       resetChartType();
-      reportEditClear();
-      reportCreateClear();
+      storyEditClear();
+      storyCreateClear();
       resetMapping();
       clearChart();
       setRightPanelView("charts");
@@ -273,7 +270,7 @@ export default function ReportModule() {
     };
   }, []);
 
-  const resetReport = () => {
+  const resetStory = () => {
     updateFramesArray(initialFramesArray);
     setHeaderDetails({
       title: "",
@@ -285,19 +282,19 @@ export default function ReportModule() {
       descriptionColor: "#ffffff",
       dateColor: "#ffffff",
     });
-    setReportName(defaultReportTitle);
+    setStoryName(defaultStoryTitle);
     setRightPanelView("charts");
     setRightPanelOpen(true);
     setAutoSave({ isAutoSaveEnabled: false });
   };
 
   const onSave = async (type: "create" | "edit") => {
-    const action = type === "create" ? reportCreate : reportEdit;
+    const action = type === "create" ? storyCreate : storyEdit;
     action({
       token,
       patchId: page === "new" ? "public" : page,
       values: {
-        name: reportName,
+        name: storyName,
         authId: user?.sub,
         showHeader: headerDetails.showHeader,
         title: headerDetails.showHeader ? headerDetails.title : undefined,
@@ -337,23 +334,23 @@ export default function ReportModule() {
 
   const handleSetButtonActive = (type: "basic" | "advanced" | "ai") => {
     if (type === "ai") {
-      history.push(`/report/${page}/ai-template`);
+      history.push(`/story/${page}/ai-template`);
     } else if (type === "basic") {
-      updateFramesArray(basicReportInitialState());
+      updateFramesArray(basicStoryInitialState());
     } else if (type === "advanced") {
-      updateFramesArray(advancedReportInitialState());
+      updateFramesArray(advancedStoryInitialState());
     }
 
-    setReportType(type);
+    setStoryType(type);
   };
   React.useEffect(() => {
-    if (reportType === "advanced" || reportType === "basic") {
+    if (storyType === "advanced" || storyType === "basic") {
       onSave("create");
     }
     return () => {
-      setReportType(null);
+      setStoryType(null);
     };
-  }, [reportType]);
+  }, [storyType]);
 
   useAutosave(
     () => {
@@ -362,12 +359,12 @@ export default function ReportModule() {
     2 * 1000,
     autoSave.isAutoSaveEnabled,
     hasChangesBeenMade,
-    [framesArray, reportName, headerDetails]
+    [framesArray, storyName, headerDetails]
   );
 
   const isSaveEnabled = React.useMemo(() => {
     let hasTextValue = !(
-      reportName === defaultReportTitle &&
+      storyName === defaultStoryTitle &&
       !headerDetails.description.getCurrentContent().hasText() &&
       isEmpty(headerDetails.title) &&
       framesArray.length === 1
@@ -380,27 +377,27 @@ export default function ReportModule() {
         frame.structure !== null
     );
     return hasTextValue || framesArrayState;
-  }, [reportName, framesArray, headerDetails]);
+  }, [storyName, framesArray, headerDetails]);
 
-  const canEditDeleteReport = React.useMemo(() => {
-    return isAuthenticated && reportGetData?.owner === user?.sub;
-  }, [user, isAuthenticated, reportGetData]);
+  const canEditDeleteStory = React.useMemo(() => {
+    return isAuthenticated && storyGetData?.owner === user?.sub;
+  }, [user, isAuthenticated, storyGetData]);
 
-  const showReportHeader = view === "edit" ? canEditDeleteReport : true;
+  const showStoryHeader = view === "edit" ? canEditDeleteStory : true;
   return (
     <DndProvider backend={HTML5Backend}>
-      {!reportError401 &&
-        showReportHeader &&
+      {!storyError401 &&
+        showStoryHeader &&
         (view === "edit" || view === undefined) && (
-          <ReportSubheaderToolbar
+          <StorySubheaderToolbar
             autoSave={autoSave.isAutoSaveEnabled}
             setAutoSave={setAutoSave}
-            onReportSave={onSave}
-            setName={setReportName}
-            setHasReportNameFocused={setHasReportNameFocused}
-            setHasReportNameBlurred={setHasReportNameBlurred}
+            onStorySave={onSave}
+            setName={setStoryName}
+            setHasStoryNameFocused={setHasStoryNameFocused}
+            setHasStoryNameBlurred={setHasStoryNameBlurred}
             isSaveEnabled={isSaveEnabled}
-            name={page !== "new" && !view ? reportGetData.name : reportName}
+            name={page !== "new" && !view ? storyGetData.name : storyName}
             framesArray={framesArray}
             headerDetails={headerDetails}
             setStopInitializeFramesWidth={setStopInitializeFramesWidth}
@@ -408,8 +405,8 @@ export default function ReportModule() {
             plugins={plugins}
           />
         )}
-      {view && !reportError401 && view === "edit" && canEditDeleteReport && (
-        <ReportRightPanel
+      {view && !storyError401 && view === "edit" && canEditDeleteStory && (
+        <StoryRightPanel
           open={rightPanelOpen}
           currentView={view}
           headerDetails={headerDetails}
@@ -418,42 +415,40 @@ export default function ReportModule() {
           onClose={() => setRightPanelOpen(false)}
           showHeaderItem={!headerDetails.showHeader}
           framesArray={framesArray}
-          reportName={reportName}
+          storyName={storyName}
           onSave={onSave}
         />
       )}
 
       <Switch>
-        <Route exact path="/report/new/initial">
+        <Route exact path="/story/new/initial">
           <div
             css={`
               height: 98px;
             `}
           />
-          <ReportInitialView
-            resetReport={resetReport}
+          <StoryInitialView
+            resetStory={resetStory}
             handleSetButtonActive={handleSetButtonActive}
           />
         </Route>
-        <Route exact path="/report/new/ai-template">
+        <Route exact path="/story/new/ai-template">
           <AITemplate />
         </Route>
-        <Route exact path="/report/:page/edit">
+        <Route exact path="/story/:page/edit">
           <div
             css={`
-              height: ${canEditDeleteReport && !reportError401
-                ? "98px"
-                : "0px"};
+              height: ${canEditDeleteStory && !storyError401 ? "98px" : "0px"};
             `}
           />
-          <ReportEditView
+          <StoryEditView
             rightPanelOpen={rightPanelOpen}
             handleRightPanelOpen={() => setRightPanelOpen(true)}
             autoSave={autoSave.isAutoSaveEnabled}
-            reportType={reportType}
+            storyType={storyType}
             setHasChangesBeenMade={setHasChangesBeenMade}
-            setReportName={setReportName}
-            reportName={reportName}
+            setStoryName={setStoryName}
+            storyName={storyName}
             framesArray={framesArray}
             headerDetails={headerDetails}
             updateFramesArray={updateFramesArray}
@@ -461,34 +456,34 @@ export default function ReportModule() {
             stopInitializeFramesWidth={stopInitializeFramesWidth}
             setStopInitializeFramesWidth={setStopInitializeFramesWidth}
             view={view}
-            hasReportNameFocused={hasReportNameFocused}
-            setHasReportNameFocused={setHasReportNameFocused}
+            hasStoryNameFocused={hasStoryNameFocused}
+            setHasStoryNameFocused={setHasStoryNameFocused}
             setPlugins={setPlugins}
             setAutoSave={setAutoSave}
             isSaveEnabled={isSaveEnabled}
             onSave={onSave}
           />
         </Route>
-        <Route exact path="/report/:page">
+        <Route exact path="/story/:page">
           <div
             css={`
-              height: ${reportError401 ? "0px" : "98px"};
+              height: ${storyError401 ? "0px" : "98px"};
             `}
           />
-          <ReportPreviewView
+          <StoryPreviewView
             setIsPreviewView={setIsPreviewView}
             setAutoSave={setAutoSave}
           />
         </Route>
 
-        <Route exact path="/report/:page/downloaded-view">
+        <Route exact path="/story/:page/downloaded-view">
           <DownloadedView
             setIsPreviewView={setIsPreviewView}
             setAutoSave={setAutoSave}
           />
         </Route>
-        <Route exact path="/report/new">
-          <Redirect to="/report/new/initial" />
+        <Route exact path="/story/new">
+          <Redirect to="/story/new/initial" />
         </Route>
         <Route path="*">
           <NoMatchPage />

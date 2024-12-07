@@ -20,16 +20,16 @@ import { createStore, StoreProvider } from "easy-peasy";
 import { createMemoryHistory } from "history";
 import Router from "react-router-dom";
 import { MutableSnapshot, RecoilRoot } from "recoil";
-import { ToolbarPluginsType } from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
-import { IHeaderDetails } from "app/modules/report-module/components/right-panel/data";
-import { IFramesArray } from "app/modules/report-module/views/create/data";
+import { ToolbarPluginsType } from "app/modules/story-module/components/storySubHeaderToolbar/staticToolbar";
+import { IHeaderDetails } from "app/modules/story-module/components/right-panel/data";
+import { IFramesArray } from "app/modules/story-module/views/create/data";
 import {
-  ReportGet,
-  ReportGetList,
-  ReportUpdate,
-} from "app/state/api/action-reducers/reports";
+  StoryGet,
+  StoryGetList,
+  StoryUpdate,
+} from "app/state/api/action-reducers/stories";
 import axios, { AxiosResponse } from "axios";
-import { ReportSubheaderToolbar } from "app/modules/report-module/components/reportSubHeaderToolbar";
+import { StorySubheaderToolbar } from "app/modules/story-module/components/storySubHeaderToolbar";
 import { setMediaQueryForTest } from "app/utils/setMediaQueryForTest";
 
 interface MockProps {
@@ -37,18 +37,18 @@ interface MockProps {
   autoSave: boolean;
   setAutoSave: jest.Mock<any, any, any>;
   visualOptions?: any;
-  onReportSave: (type: "create" | "edit") => Promise<void>;
+  onStorySave: (type: "create" | "edit") => Promise<void>;
   setName: (name: string) => void;
   isSaveEnabled?: boolean;
   rawViz?: any;
   setHasSubHeaderTitleFocused?: (value: boolean) => void;
-  setHasReportNameFocused?: (value: boolean) => void;
+  setHasStoryNameFocused?: (value: boolean) => void;
   plugins: ToolbarPluginsType;
   isEditorFocused: boolean;
   headerDetails: IHeaderDetails;
   framesArray: IFramesArray[];
   setStopInitializeFramesWidth?: (value: boolean) => void;
-  handlePersistReportState?: () => void;
+  handlePersistStoryState?: () => void;
   isPreviewView: boolean;
 }
 type Params = {
@@ -76,30 +76,30 @@ jest.mock("@auth0/auth0-react", () => {
   };
 });
 const mockSetValues = {
-  name: "Untitled report",
+  name: "Untitled story",
   autoSave: false,
 };
 const defaultProps = (props: Partial<MockProps> = {}): MockProps => {
   return {
-    name: "Untitled report",
+    name: "Untitled story",
     autoSave: false,
     setAutoSave: jest.fn((value: { isAutoSaveEnabled: boolean }) => {
       mockSetValues.autoSave = value.isAutoSaveEnabled;
     }),
     visualOptions: {},
-    onReportSave: jest.fn().mockImplementation((type) => Promise.resolve()),
+    onStorySave: jest.fn().mockImplementation((type) => Promise.resolve()),
     setName: jest.fn((newName: string) => {
       mockSetValues.name = newName;
     }),
     isSaveEnabled: false,
     rawViz: {},
     setHasSubHeaderTitleFocused: jest.fn(),
-    setHasReportNameFocused: jest.fn(),
+    setHasStoryNameFocused: jest.fn(),
     plugins: {} as ToolbarPluginsType,
     isEditorFocused: false,
     headerDetails: {} as IHeaderDetails,
     framesArray: [],
-    handlePersistReportState: jest.fn(),
+    handlePersistStoryState: jest.fn(),
     isPreviewView: false,
     ...props,
   };
@@ -113,10 +113,10 @@ const appSetup = (params: Params, newProps: Partial<MockProps> = {}) => {
   const mockStore = createStore(
     {
       AuthToken: AuthTokenState,
-      reports: {
-        ReportGet,
-        ReportGetList,
-        ReportUpdate,
+      stories: {
+        StoryGet,
+        StoryGetList,
+        StoryUpdate,
       },
       charts: {
         ChartGet,
@@ -134,8 +134,8 @@ const appSetup = (params: Params, newProps: Partial<MockProps> = {}) => {
             },
           },
         },
-        reports: {
-          reportGet: {
+        stories: {
+          storyGet: {
             crudData: {
               owner: "auth0|123",
             },
@@ -154,7 +154,7 @@ const appSetup = (params: Params, newProps: Partial<MockProps> = {}) => {
                 node={homeDisplayAtom}
                 onChange={onHomeTabChange}
               />
-              <ReportSubheaderToolbar {...props} />
+              <StorySubheaderToolbar {...props} />
             </RecoilRoot>
           </StoreProvider>
         </Auth0Provider>
@@ -166,7 +166,7 @@ const appSetup = (params: Params, newProps: Partial<MockProps> = {}) => {
 };
 
 const setDefaultCrudData = (mockStore: any) => {
-  mockStore.getActions().reports.ReportGet.setCrudData({
+  mockStore.getActions().stories.StoryGet.setCrudData({
     id: "12345",
     name: "test",
     owner: "auth0|123",
@@ -178,17 +178,17 @@ describe("Tests for tablet and desktop view", () => {
   beforeEach(() => {
     setMediaQueryForTest(768);
   });
-  test("focusing on input should call setHasReportNameFocused", async () => {
+  test("focusing on input should call setHasStoryNameFocused", async () => {
     jest
       .spyOn(Router, "useParams")
       .mockReturnValue({ page: "65dcb26aaf4c8500693f1ab7", view: "edit" });
     const { app, props } = appSetup({ mockActions: false });
     render(app);
     screen.getByRole("textbox").focus();
-    expect(props.setHasReportNameFocused).toHaveBeenCalledWith(true);
+    expect(props.setHasStoryNameFocused).toHaveBeenCalledWith(true);
   });
 
-  test("blurring on input should call setHasReportNameFocused", async () => {
+  test("blurring on input should call setHasStoryNameFocused", async () => {
     jest
       .spyOn(Router, "useParams")
       .mockReturnValue({ page: "65dcb26aaf4c8500693f1ab7", view: "edit" });
@@ -196,10 +196,10 @@ describe("Tests for tablet and desktop view", () => {
     render(app);
     screen.getByRole("textbox").focus();
     screen.getByRole("textbox").blur();
-    expect(props.setHasReportNameFocused).toHaveBeenCalledWith(true);
+    expect(props.setHasStoryNameFocused).toHaveBeenCalledWith(true);
   });
 
-  test("clicking on input when value is Untitled report should clear the input", async () => {
+  test("clicking on input when value is Untitled story should clear the input", async () => {
     jest
       .spyOn(Router, "useParams")
       .mockReturnValue({ page: "65dcb26aaf4c8500693f1ab7", view: "edit" });
@@ -213,7 +213,7 @@ describe("Tests for tablet and desktop view", () => {
     expect(screen.getByRole("textbox")).toHaveValue("");
   });
 
-  test("typing on input should edit report title", async () => {
+  test("typing on input should edit story title", async () => {
     jest
       .spyOn(Router, "useParams")
       .mockReturnValue({ page: "n65e6d7498ad6100d2b27bd5cew", view: "edit" });
@@ -236,12 +236,12 @@ describe("Tests for tablet and desktop view", () => {
     expect(mockSetValues.name).toBe("new title");
   });
 
-  const waitForReportSave = (props: MockProps) => {
-    expect(props.onReportSave).toHaveBeenCalledWith("edit");
-    expect(history.location.pathname).toBe("/report/65dcb26aaf4c8500693f1ab7");
+  const waitForStorySave = (props: MockProps) => {
+    expect(props.onStorySave).toHaveBeenCalledWith("edit");
+    expect(history.location.pathname).toBe("/story/65dcb26aaf4c8500693f1ab7");
   };
 
-  test("clicking view report button should save report and go to report detail page", async () => {
+  test("clicking view story button should save story and go to story detail page", async () => {
     const user = userEvent.setup();
     jest
       .spyOn(Router, "useParams")
@@ -249,14 +249,14 @@ describe("Tests for tablet and desktop view", () => {
 
     const { app, props } = appSetup({ mockActions: false });
     render(app);
-    const viewReportButton = screen.getByRole("button", {
-      name: /view report button/i,
+    const viewStoryButton = screen.getByRole("button", {
+      name: /view story button/i,
     });
-    await user.click(viewReportButton);
-    await waitFor(() => waitForReportSave(props));
+    await user.click(viewStoryButton);
+    await waitFor(() => waitForStorySave(props));
   });
 
-  test("clicking view report button in tablet view should save report and go to report detail page", async () => {
+  test("clicking view story button in tablet view should save story and go to story detail page", async () => {
     const user = userEvent.setup();
     jest
       .spyOn(Router, "useParams")
@@ -264,11 +264,11 @@ describe("Tests for tablet and desktop view", () => {
 
     const { app, props } = appSetup({ mockActions: false });
     render(app);
-    const viewReportButton = screen.getByRole("button", {
-      name: /view-report-button-tablet/i,
+    const viewStoryButton = screen.getByRole("button", {
+      name: /view-story-button-tablet/i,
     });
-    await user.click(viewReportButton);
-    await waitFor(() => waitForReportSave(props));
+    await user.click(viewStoryButton);
+    await waitFor(() => waitForStorySave(props));
   });
 
   const autoSaveSwitchId = "auto-save-switch";
@@ -333,7 +333,7 @@ describe("Tests for tablet and desktop view", () => {
     expect(screen.getByRole("button", { name: /save button/ })).toBeEnabled();
   });
 
-  test("save button should call onReportSave when clicked", async () => {
+  test("save button should call onStorySave when clicked", async () => {
     const user = userEvent.setup();
     const { app, mockStore, props } = appSetup(
       { mockActions: true },
@@ -345,7 +345,7 @@ describe("Tests for tablet and desktop view", () => {
     render(app);
 
     await user.click(screen.getByRole("button", { name: /save button/ }));
-    expect(props.onReportSave).toHaveBeenCalledWith("edit");
+    expect(props.onStorySave).toHaveBeenCalledWith("edit");
   });
 
   test("savedChanges state should be true after edit success", async () => {
@@ -359,16 +359,16 @@ describe("Tests for tablet and desktop view", () => {
       .mockReturnValue({ page: "65dcb26aaf4c8500693f1ab7", view: "edit" });
     render(app);
     await act(async () => {
-      mockStore.getActions().reports.ReportUpdate.onSuccess([]);
+      mockStore.getActions().stories.StoryUpdate.onSuccess([]);
     });
 
-    expect(mockStore.getState().reports.ReportUpdate.success).toBeTruthy();
+    expect(mockStore.getState().stories.StoryUpdate.success).toBeTruthy();
     expect(screen.getByText(/All changes saved/)).toBeVisible();
 
     // expect(setTimeout).toHaveBeenCalledWith(expect.any(Function), 3000);
   });
 
-  test("input field should be disabled in report detail page", async () => {
+  test("input field should be disabled in story detail page", async () => {
     const { app, mockStore } = appSetup(
       { mockActions: false },
       { isSaveEnabled: true, isPreviewView: true }
@@ -398,7 +398,7 @@ describe("Tests for tablet and desktop view", () => {
     expect(screen.getByText(".svg")).toBeVisible();
   });
 
-  const goToReport = "GO TO REPORT";
+  const goToStory = "GO TO STORY";
 
   test("clicking on duplicate button should open duplicate dialog", async () => {
     const user = userEvent.setup();
@@ -422,14 +422,14 @@ describe("Tests for tablet and desktop view", () => {
     expect(axiosMock).toHaveBeenCalled();
 
     expect(
-      screen.getByText("Report has been duplicated successfully!")
+      screen.getByText("Story has been duplicated successfully!")
     ).toBeVisible();
 
-    expect(screen.getByRole("button", { name: goToReport })).toBeVisible();
-    await user.click(screen.getByRole("button", { name: goToReport }));
-    expect(screen.getByRole("button", { name: goToReport })).not.toBeVisible();
+    expect(screen.getByRole("button", { name: goToStory })).toBeVisible();
+    await user.click(screen.getByRole("button", { name: goToStory }));
+    expect(screen.getByRole("button", { name: goToStory })).not.toBeVisible();
 
-    expect(history.location.pathname).toBe("/report/12345");
+    expect(history.location.pathname).toBe("/story/12345");
   });
 
   test("clicking on share button should open share dialog", async () => {
@@ -456,7 +456,7 @@ describe("Tests for tablet and desktop view", () => {
     expect(screen.getByText("Link copied to clipboard")).toBeVisible();
   });
 
-  test("clicking on edit button should redirect to report edit page", async () => {
+  test("clicking on edit button should redirect to story edit page", async () => {
     const user = userEvent.setup();
     const { app, mockStore } = appSetup(
       { mockActions: false },
@@ -468,7 +468,7 @@ describe("Tests for tablet and desktop view", () => {
     act(() => setDefaultCrudData(mockStore));
     render(app);
     await user.click(screen.getByTestId("edit-button"));
-    expect(history.location.pathname).toBe("/report/12345/edit");
+    expect(history.location.pathname).toBe("/story/12345/edit");
   });
 
   test("clicking on delete button should open delete dialog", async () => {
@@ -497,7 +497,7 @@ describe("Tests for tablet and desktop view", () => {
     await user.click(screen.getByRole("button", { name: "Delete" }));
     expect(screen.getByRole("form")).toBeInTheDocument();
     expect(
-      screen.getByText("Absolutely sure you want to delete the report(s)?")
+      screen.getByText("Absolutely sure you want to delete the story(s)?")
     ).toBeVisible();
     const input = screen.getByPlaceholderText('Type "DELETE" to confirm');
     await user.type(input, "DELETE");
@@ -512,7 +512,7 @@ describe("Tests for mobile view", () => {
   beforeEach(() => {
     setMediaQueryForTest(450);
   });
-  test("export,  share, edit, buttons should not be visible in report detail mode for mobile views", async () => {
+  test("export,  share, edit, buttons should not be visible in story detail mode for mobile views", async () => {
     const { app, mockStore } = appSetup(
       { mockActions: false },
       { isSaveEnabled: true }

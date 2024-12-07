@@ -7,25 +7,25 @@ import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
 import IconButton from "@material-ui/core/IconButton";
 import { useLocation, useParams } from "react-router-dom";
-import { reportRightPanelViewAtom } from "app/state/recoil/atoms";
+import { storyRightPanelViewAtom } from "app/state/recoil/atoms";
 import { RichEditor } from "app/modules/common/RichEditor";
-import { ReactComponent as EditIcon } from "app/modules/report-module/asset/editIcon.svg";
-import { ReactComponent as DeleteIcon } from "app/modules/report-module/asset/deleteIcon.svg";
-import { headerBlockcss } from "app/modules/report-module/components/headerBlock/style";
-import { ReactComponent as HeaderHandlesvg } from "app/modules/report-module/asset/header-handle.svg";
+import { ReactComponent as EditIcon } from "app/modules/story-module/asset/editIcon.svg";
+import { ReactComponent as DeleteIcon } from "app/modules/story-module/asset/deleteIcon.svg";
+import { headerBlockcss } from "app/modules/story-module/components/headerBlock/style";
+import { ReactComponent as HeaderHandlesvg } from "app/modules/story-module/asset/header-handle.svg";
 import { Tooltip } from "@material-ui/core";
 import useDebounce from "react-use/lib/useDebounce";
-import { ToolbarPluginsType } from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
-import { IHeaderDetails } from "app/modules/report-module/components/right-panel/data";
+import { ToolbarPluginsType } from "app/modules/story-module/components/storySubHeaderToolbar/staticToolbar";
+import { IHeaderDetails } from "app/modules/story-module/components/right-panel/data";
 
 interface Props {
   isToolboxOpen: boolean;
   previewMode: boolean;
-  hasReportNameFocused?: boolean;
-  isReportHeadingModified?: boolean;
-  sethasReportNameFocused?: React.Dispatch<React.SetStateAction<boolean>>;
-  setReportName?: React.Dispatch<React.SetStateAction<string>>;
-  reportName?: string;
+  hasStoryNameFocused?: boolean;
+  isStoryHeadingModified?: boolean;
+  sethasStoryNameFocused?: React.Dispatch<React.SetStateAction<boolean>>;
+  setStoryName?: React.Dispatch<React.SetStateAction<string>>;
+  storyName?: string;
   handleRightPanelOpen: () => void;
   setPlugins: React.Dispatch<React.SetStateAction<ToolbarPluginsType>>;
   headerDetails: IHeaderDetails;
@@ -35,9 +35,7 @@ interface Props {
 export default function HeaderBlock(props: Props) {
   const location = useLocation();
   const { page } = useParams<{ page: string }>();
-  const [currentView, setCurrentView] = useRecoilState(
-    reportRightPanelViewAtom
-  );
+  const [currentView, setCurrentView] = useRecoilState(storyRightPanelViewAtom);
   const [handleDisplay, setHandleDisplay] = React.useState(false);
   const descriptionPlaceholder = "Add a header description";
   const headingPlaceholder = "Add a header title";
@@ -69,12 +67,12 @@ export default function HeaderBlock(props: Props) {
     }
   }, [props.headerDetails.isUpdated]);
 
-  //handles report name state
+  //handles story name state
   const [,] = useDebounce(
     () => {
-      // checks when headerDetails.heading is empty and report heading has not been focused
-      if (!props.hasReportNameFocused && props.isReportHeadingModified) {
-        props.setReportName?.(
+      // checks when headerDetails.heading is empty and story heading has not been focused
+      if (!props.hasStoryNameFocused && props.isStoryHeadingModified) {
+        props.setStoryName?.(
           props.headerDetails.heading.getCurrentContent().getPlainText()
         );
       }
@@ -176,7 +174,7 @@ export default function HeaderBlock(props: Props) {
         props.isToolboxOpen
       )}
       {...handlers}
-      data-cy="report-header-block"
+      data-cy="story-header-block"
       data-testid="header-block"
     >
       <div
@@ -321,8 +319,8 @@ export default function HeaderBlock(props: Props) {
               focusOnMount
               onBlur={() => {
                 setIsHeadingFocused(false);
-                if (!props.isReportHeadingModified && props.reportName === "") {
-                  props.setReportName?.("Untitled Report");
+                if (!props.isStoryHeadingModified && props.storyName === "") {
+                  props.setStoryName?.("Untitled Story");
                 }
               }}
               onFocus={() => {

@@ -23,20 +23,20 @@ import { PageLoader } from "app/modules/common/page-loader";
 import { createStyles, makeStyles, useMediaQuery } from "@material-ui/core";
 import { Link, useHistory, useParams } from "react-router-dom";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
-import { ReportModel, emptyReport } from "app/modules/report-module/data";
-import DeleteReportDialog from "app/components/Dialogs/deleteStoryDialog";
+import { StoryModel, emptyStory } from "app/modules/story-module/data";
+import DeleteStoryDialog from "app/components/Dialogs/deleteStoryDialog";
 import { ChartAPIModel, emptyChartAPI } from "app/modules/chart-module/data";
-import { ReportSubheaderToolbarProps } from "app/modules/chart-module/components/chartSubheaderToolbar/data";
-import { ReactComponent as PlayIcon } from "app/modules/report-module/asset/play-icon.svg";
-import { styles } from "app/modules/report-module/components/reportSubHeaderToolbar/styles";
+import { StorySubheaderToolbarProps } from "app/modules/chart-module/components/chartSubheaderToolbar/data";
+import { ReactComponent as PlayIcon } from "app/modules/story-module/asset/play-icon.svg";
+import { styles } from "app/modules/story-module/components/storySubHeaderToolbar/styles";
 import { ISnackbarState } from "app/modules/dataset-module/routes/upload-module/upload-steps/previewFragment";
-import StaticToolbar from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
-import AutoSaveSwitch from "app/modules/report-module/components/reportSubHeaderToolbar/autoSaveSwitch";
-import AutoResizeInput from "app/modules/report-module/components/reportSubHeaderToolbar/autoResizeInput";
-import { InfoSnackbar } from "app/modules/report-module/components/reportSubHeaderToolbar/infosnackbar";
+import StaticToolbar from "app/modules/story-module/components/storySubHeaderToolbar/staticToolbar";
+import AutoSaveSwitch from "app/modules/story-module/components/storySubHeaderToolbar/autoSaveSwitch";
+import AutoResizeInput from "app/modules/story-module/components/storySubHeaderToolbar/autoResizeInput";
+import { InfoSnackbar } from "app/modules/story-module/components/storySubHeaderToolbar/infosnackbar";
 import ShareModal from "app/modules/dataset-module/component/shareModal";
 import DuplicateMessage from "app/modules/common/mobile-duplicate-message";
-import { ExportReportButton } from "./exportButton";
+import { ExportStoryButton } from "./exportButton";
 
 export const useStyles = makeStyles(() =>
   createStyles({
@@ -55,8 +55,8 @@ export const useStyles = makeStyles(() =>
 );
 
 // eslint-disable-next-line sonarjs/cognitive-complexity
-export function ReportSubheaderToolbar(
-  props: Readonly<ReportSubheaderToolbarProps>
+export function StorySubheaderToolbar(
+  props: Readonly<StorySubheaderToolbarProps>
 ) {
   const history = useHistory();
   const classes = useStyles();
@@ -70,7 +70,7 @@ export function ReportSubheaderToolbar(
   const [enableButton, setEnableButton] = React.useState<boolean>(false);
   const [inputSpanVisibiltiy, setInputSpanVisibility] = React.useState(true);
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
-  const [duplicatedReportId, setDuplicatedReportId] = React.useState<
+  const [duplicatedStoryId, setDuplicatedStoryId] = React.useState<
     string | null
   >(null);
 
@@ -88,13 +88,13 @@ export function ReportSubheaderToolbar(
     React.useState<boolean>(false);
   const [savedChanges, setSavedChanges] = React.useState<boolean>(false);
 
-  const loadReports = useStoreActions(
-    (actions) => actions.reports.ReportGetList.fetch
+  const loadStories = useStoreActions(
+    (actions) => actions.stories.StoryGetList.fetch
   );
-  const loadedReport = useStoreState(
-    (state) => (state.reports.ReportGet.crudData ?? emptyReport) as ReportModel
+  const loadedStory = useStoreState(
+    (state) => (state.stories.StoryGet.crudData ?? emptyStory) as StoryModel
   );
-  const shareURL = `${window.location.origin}/report/${loadedReport.id}`;
+  const shareURL = `${window.location.origin}/story/${loadedStory.id}`;
 
   const loadedChart = useStoreState(
     (state) =>
@@ -113,17 +113,17 @@ export function ReportSubheaderToolbar(
     (actions) => actions.charts.ChartUpdate.clear
   );
 
-  const reportEditSuccess = useStoreState(
-    (state) => state.reports.ReportUpdate.success
+  const storyEditSuccess = useStoreState(
+    (state) => state.stories.StoryUpdate.success
   );
-  const reportEditLoading = useStoreState(
-    (state) => state.reports.ReportUpdate.loading
+  const storyEditLoading = useStoreState(
+    (state) => state.stories.StoryUpdate.loading
   );
 
   React.useEffect(() => {
     // handles saved changes state for autosave
     let timeout: NodeJS.Timeout;
-    if (reportEditSuccess) {
+    if (storyEditSuccess) {
       setSavedChanges(true);
       timeout = setTimeout(() => {
         setSavedChanges(false);
@@ -132,7 +132,7 @@ export function ReportSubheaderToolbar(
     return () => {
       clearTimeout(timeout);
     };
-  }, [reportEditSuccess]);
+  }, [storyEditSuccess]);
 
   const handleDeleteModalInputChange = (
     e: React.ChangeEvent<HTMLInputElement>
@@ -165,12 +165,12 @@ export function ReportSubheaderToolbar(
   };
 
   const onSave = () => {
-    props.onReportSave("edit");
+    props.onStorySave("edit");
   };
 
-  const handleViewReport = () => {
-    props.onReportSave("edit").then(() => {
-      history.push(`/report/${page}`);
+  const handleViewStory = () => {
+    props.onStorySave("edit").then(() => {
+      history.push(`/story/${page}`);
     });
   };
 
@@ -193,13 +193,13 @@ export function ReportSubheaderToolbar(
     setShowDeleteDialog(false);
 
     axios
-      .delete(`${process.env.REACT_APP_API}/report/${page}`, {
+      .delete(`${process.env.REACT_APP_API}/story/${page}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
       .then(async () => {
-        loadReports({
+        loadStories({
           token,
           storeInCrudData: true,
           filterString: "filter[order]=updatedDate desc",
@@ -212,7 +212,7 @@ export function ReportSubheaderToolbar(
 
   const handleDuplicate = () => {
     axios
-      .get(`${process.env.REACT_APP_API}/report/duplicate/${page}`, {
+      .get(`${process.env.REACT_APP_API}/story/duplicate/${page}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -226,12 +226,12 @@ export function ReportSubheaderToolbar(
             onTryAgain: () => {},
           });
         }
-        loadReports({
+        loadStories({
           token,
           storeInCrudData: true,
           filterString: "filter[order]=updatedDate desc",
         });
-        setDuplicatedReportId(response.data?.data?.id);
+        setDuplicatedStoryId(response.data?.data?.id);
         setSnackbarState({
           ...snackbarState,
           open: true,
@@ -240,18 +240,18 @@ export function ReportSubheaderToolbar(
       .catch((error) => console.log(error));
   };
 
-  const handleViewDuplicatedReport = () => {
+  const handleViewDuplicatedStory = () => {
     setSnackbarState({ ...snackbarState, open: false });
-    history.push(`/report/${duplicatedReportId}`);
-    setDuplicatedReportId(null);
+    history.push(`/story/${duplicatedStoryId}`);
+    setDuplicatedStoryId(null);
   };
 
-  const canReportEditDelete = React.useMemo(() => {
-    return isAuthenticated && loadedReport && loadedReport.owner === user?.sub;
-  }, [user, isAuthenticated, loadedChart, loadedReport]);
+  const canStoryEditDelete = React.useMemo(() => {
+    return isAuthenticated && loadedStory && loadedStory.owner === user?.sub;
+  }, [user, isAuthenticated, loadedChart, loadedStory]);
 
   const handleSignIn = () => {
-    localStorage.setItem("duplicateReportAfterSignIn", page);
+    localStorage.setItem("duplicateStoryAfterSignIn", page);
     history.push("/onboarding/signin");
   };
 
@@ -293,17 +293,17 @@ export function ReportSubheaderToolbar(
               spanVisibility={inputSpanVisibiltiy}
               setSpanVisibility={setInputSpanVisibility}
               onClick={(e) => {
-                if (props.name === "Untitled report") {
+                if (props.name === "Untitled story") {
                   e.currentTarget.value = "";
                 }
               }}
               onBlur={() => {
                 setInputSpanVisibility(true);
-                props.setHasReportNameBlurred?.(true);
+                props.setHasStoryNameBlurred?.(true);
               }}
               onFocus={() => {
-                props.setHasReportNameFocused?.(true);
-                props.setHasReportNameBlurred?.(false);
+                props.setHasStoryNameFocused?.(true);
+                props.setHasStoryNameBlurred?.(false);
                 setInputSpanVisibility(false);
               }}
               disabled={props.isPreviewView}
@@ -329,13 +329,13 @@ export function ReportSubheaderToolbar(
             >
               {view === "edit" && (
                 <button
-                  css={styles.viewReportBtn}
-                  onClick={handleViewReport}
-                  data-cy="view-report-button"
-                  aria-label="view report button"
+                  css={styles.viewStoryBtn}
+                  onClick={handleViewStory}
+                  data-cy="view-story-button"
+                  aria-label="view story button"
                 >
                   <PlayIcon />
-                  View Report
+                  View Story
                 </button>
               )}
             </div>
@@ -345,7 +345,7 @@ export function ReportSubheaderToolbar(
             <>
               {(page === "new" || view) && (
                 <div css={styles.endContainer}>
-                  {reportEditLoading && (
+                  {storyEditLoading && (
                     <div
                       css={`
                         display: flex;
@@ -432,9 +432,9 @@ export function ReportSubheaderToolbar(
                     />
                   </div>
                   {view === "edit" && (
-                    <Tooltip title="view report">
+                    <Tooltip title="view story">
                       <IconButton
-                        onClick={handleViewReport}
+                        onClick={handleViewStory}
                         css={`
                           padding: 0px;
                           :disabled {
@@ -447,8 +447,8 @@ export function ReportSubheaderToolbar(
                             }
                           }
                         `}
-                        data-cy="view-report-button-tablet"
-                        aria-label="view-report-button-tablet"
+                        data-cy="view-story-button-tablet"
+                        aria-label="view-story-button-tablet"
                       >
                         <svg width="20" height="19" viewBox="0 0 20 19">
                           <rect width="20" height="19" rx="3" fill="#262C34" />
@@ -472,7 +472,7 @@ export function ReportSubheaderToolbar(
                             opacity: 0.5;
                           }
                         `}
-                        data-cy="save-report-button"
+                        data-cy="save-story-button"
                       >
                         <SaveIcon htmlColor="#262c34" />
                       </IconButton>
@@ -482,7 +482,7 @@ export function ReportSubheaderToolbar(
               )}
               {page !== "new" && !view && (
                 <div css={styles.previewEndContainer}>
-                  {isTabletView && <ExportReportButton filename={props.name} />}
+                  {isTabletView && <ExportStoryButton filename={props.name} />}
 
                   <Tooltip title="Duplicate">
                     <IconButton
@@ -530,18 +530,18 @@ export function ReportSubheaderToolbar(
                       </CopyToClipboard>
                     </div>
                   </Popover>
-                  {canReportEditDelete && isTabletView && (
+                  {canStoryEditDelete && isTabletView && (
                     <Tooltip title="Edit">
                       <IconButton
                         component={Link}
-                        to={`/report/${page}/edit`}
+                        to={`/story/${page}/edit`}
                         data-testid="edit-button"
                       >
                         <EditIcon htmlColor="#262c34" />
                       </IconButton>
                     </Tooltip>
                   )}
-                  {canReportEditDelete && isTabletView && (
+                  {canStoryEditDelete && isTabletView && (
                     <Tooltip title="Delete">
                       <IconButton
                         onClick={handleModalDisplay}
@@ -575,12 +575,12 @@ export function ReportSubheaderToolbar(
             key={snackbarState.vertical + snackbarState.horizontal}
           >
             <DuplicateMessage
-              action={handleViewDuplicatedReport}
+              action={handleViewDuplicatedStory}
               closeSnackbar={() =>
                 setSnackbarState({ ...snackbarState, open: false })
               }
-              name={loadedReport.name}
-              type="report"
+              name={loadedStory.name}
+              type="story"
             />
           </InfoSnackbar>
         ) : (
@@ -591,10 +591,10 @@ export function ReportSubheaderToolbar(
             }}
             open={snackbarState.open}
             onClose={() => setSnackbarState({ ...snackbarState, open: false })}
-            message={`Report has been duplicated successfully!`}
+            message={`Story has been duplicated successfully!`}
             key={snackbarState.vertical + snackbarState.horizontal}
             action={
-              <button onClick={handleViewDuplicatedReport}>GO TO REPORT</button>
+              <button onClick={handleViewDuplicatedStory}>GO TO STORY</button>
             }
           />
         )}
@@ -610,13 +610,13 @@ export function ReportSubheaderToolbar(
         message="Link copied to clipboard"
       />
       <ShareModal
-        datasetDetails={loadedReport}
+        datasetDetails={loadedStory}
         isShareModalOpen={isShareModalOpen}
         setIsShareModalOpen={setIsShareModalOpen}
         handleCopy={handleCopy}
         url={shareURL}
       />
-      <DeleteReportDialog
+      <DeleteStoryDialog
         modalDisplay={showDeleteDialog}
         enableButton={enableButton}
         handleDelete={handleDelete}

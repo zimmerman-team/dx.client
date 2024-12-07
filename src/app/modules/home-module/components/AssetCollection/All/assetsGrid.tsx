@@ -18,10 +18,10 @@ import {
 } from "app/modules/chart-module/routes/chart-type/data";
 import ChartGridItem from "app/modules/home-module/components/AssetCollection/Charts/gridItem";
 import DatasetGridItem from "app/modules/home-module/components/AssetCollection/Datasets/gridItem";
-import ReportGridItem from "app/modules/home-module/components/AssetCollection/Reports/gridItem";
-import ColoredReportIcon from "app/assets/icons/ColoredReportIcon";
+import StoryGridItem from "app/modules/home-module/components/AssetCollection/Stories/gridItem";
+import ColoredStoryIcon from "app/assets/icons/ColoredStoryIcon";
 import DeleteDatasetDialog from "app/components/Dialogs/deleteDatasetDialog";
-import DeleteReportDialog from "app/components/Dialogs/deleteStoryDialog";
+import DeleteStoryDialog from "app/components/Dialogs/deleteStoryDialog";
 import { EditorState, convertFromRaw } from "draft-js";
 import { getLimit } from "app/modules/home-module/components/AssetCollection/Datasets/datasetsGrid";
 import { HomepageTable } from "app/modules/home-module/components/Table/";
@@ -39,7 +39,7 @@ interface Props {
   md?: GridSize;
   lg?: GridSize;
 }
-export type assetType = "chart" | "dataset" | "report";
+export type assetType = "chart" | "dataset" | "story";
 
 export default function AssetsGrid(props: Props) {
   const observerTarget = React.useRef(null);
@@ -160,7 +160,7 @@ export default function AssetsGrid(props: Props) {
     const url = {
       chart: `${process.env.REACT_APP_API}/chart/${id}`,
       dataset: `${process.env.REACT_APP_API}/datasets/${id}`,
-      report: `${process.env.REACT_APP_API}/report/${id}`,
+      story: `${process.env.REACT_APP_API}/story/${id}`,
     }[activeAssetType as assetType];
 
     axios
@@ -183,7 +183,7 @@ export default function AssetsGrid(props: Props) {
     const url = {
       chart: `${process.env.REACT_APP_API}/chart/duplicate/${id}`,
       dataset: `${process.env.REACT_APP_API}/dataset/duplicate/${id}`,
-      report: `${process.env.REACT_APP_API}/report/duplicate/${id}`,
+      story: `${process.env.REACT_APP_API}/story/duplicate/${id}`,
     }[assettype];
     axios
       .get(url, {
@@ -238,7 +238,7 @@ export default function AssetsGrid(props: Props) {
     if (!assetsLoadSuccess) {
       return;
     }
-    //update the loaded reports
+    //update the loaded stories
     setLoadedAssets((prevAssets) => {
       const prevAssetsIds = prevAssets.map((c) => c.id);
       const f = assets.filter((asset) => !prevAssetsIds.includes(asset.id));
@@ -353,13 +353,13 @@ export default function AssetsGrid(props: Props) {
                       inChartBuilder={props.inChartBuilder as boolean}
                     />
                   ),
-                  report: (
-                    <ReportGridItem
+                  story: (
+                    <StoryGridItem
                       id={d.id}
                       key={d.id}
                       name={d.name}
                       date={d.updatedDate}
-                      viz={<ColoredReportIcon />}
+                      viz={<ColoredStoryIcon />}
                       color={d.backgroundColor}
                       handleDelete={() => {
                         setActiveAssetType(d.assetType as assetType);
@@ -414,8 +414,8 @@ export default function AssetsGrid(props: Props) {
               setEnableButton={setEnableButton}
             />
           ),
-          report: (
-            <DeleteReportDialog
+          story: (
+            <DeleteStoryDialog
               cardId={cardId}
               modalDisplay={modalDisplay}
               enableButton={enableButton}

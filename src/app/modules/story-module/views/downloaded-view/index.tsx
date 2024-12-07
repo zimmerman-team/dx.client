@@ -1,12 +1,12 @@
 import React from "react";
-import { ReportPreviewView } from "app/modules/report-module/views/preview/";
+import { StoryPreviewView } from "app/modules/story-module/views/preview/";
 import { ReactComponent as LogoIcon } from "app/modules/home-module/components/Footer/asset/logo.svg";
 import { exportPage } from "app/utils/exportPage";
 import { Link, useLocation } from "react-router-dom";
 import { useStoreState } from "app/state/store/hooks";
-import { emptyReport, ReportModel } from "app/modules/report-module/data";
+import { emptyStory, StoryModel } from "app/modules/story-module/data";
 import { useRecoilValue } from "recoil";
-import { loadedChartsInReportAtom } from "app/state/recoil/atoms";
+import { loadedChartsInStoryAtom } from "app/state/recoil/atoms";
 
 export default function DownloadedView(props: {
   setIsPreviewView: React.Dispatch<React.SetStateAction<boolean>>;
@@ -18,15 +18,15 @@ export default function DownloadedView(props: {
 }) {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const reportData = useStoreState(
-    (state) => (state.reports.ReportGet.crudData ?? emptyReport) as ReportModel
+  const storyData = useStoreState(
+    (state) => (state.stories.StoryGet.crudData ?? emptyStory) as StoryModel
   );
-  const loadedChartsInReport = useRecoilValue(loadedChartsInReportAtom);
+  const loadedChartsInStory = useRecoilValue(loadedChartsInStoryAtom);
 
   const getNumberOfRequests = () => {
     let numberOfRequests = 0;
-    if (reportData.id) {
-      reportData.rows.forEach((row) => {
+    if (storyData.id) {
+      storyData.rows.forEach((row) => {
         row.items.forEach((item) => {
           if (item && typeof item === "string" && item !== "divider") {
             console.log("item: ", item, numberOfRequests);
@@ -40,9 +40,9 @@ export default function DownloadedView(props: {
 
   React.useEffect(() => {
     document.getElementById("app-bar-desktop")?.remove(); // Remove the app bar
-    if (!reportData.id) return;
+    if (!storyData.id) return;
     let timeout: NodeJS.Timeout;
-    if (loadedChartsInReport.length === getNumberOfRequests()) {
+    if (loadedChartsInStory.length === getNumberOfRequests()) {
       if (getNumberOfRequests() === 0) {
         timeout = setTimeout(() => {
           exportPage(
@@ -62,7 +62,7 @@ export default function DownloadedView(props: {
     return () => {
       clearTimeout(timeout);
     };
-  }, [reportData.id, loadedChartsInReport]);
+  }, [storyData.id, loadedChartsInStory]);
 
   return (
     <div
@@ -86,7 +86,7 @@ export default function DownloadedView(props: {
       >
         <LogoIcon />
       </Link>
-      <ReportPreviewView
+      <StoryPreviewView
         setIsPreviewView={props.setIsPreviewView}
         setAutoSave={props.setAutoSave}
       />

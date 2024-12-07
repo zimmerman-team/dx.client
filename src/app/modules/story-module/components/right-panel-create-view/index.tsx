@@ -14,7 +14,7 @@ import { useHistory, useParams } from "react-router-dom";
 import Menu, { MenuProps } from "@material-ui/core/Menu";
 import TextFieldsIcon from "@material-ui/icons/TextFields";
 import {
-  reportRightPanelViewAtom,
+  storyRightPanelViewAtom,
   chartFromStoryAtom,
   isDividerOrRowFrameDraggingAtom,
   isChartDraggingAtom,
@@ -27,39 +27,39 @@ import PhotoLibraryIcon from "@material-ui/icons/PhotoLibrary";
 /* project */
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
 
-import { IFramesArray } from "app/modules/report-module/views/create/data";
-import EditHeaderIcon from "app/modules/report-module/asset/EditHeaderIcon";
-import TextPreviewImg from "app/modules/report-module/asset/textPreview.svg";
-import { ReactComponent as YoutubeIcon } from "app/modules/report-module/asset/youtube-icon.svg";
-import YoutubeGradient from "app/modules/report-module/asset/youtube-gradient.png";
+import { IFramesArray } from "app/modules/story-module/views/create/data";
+import EditHeaderIcon from "app/modules/story-module/asset/EditHeaderIcon";
+import TextPreviewImg from "app/modules/story-module/asset/textPreview.svg";
+import { ReactComponent as YoutubeIcon } from "app/modules/story-module/asset/youtube-icon.svg";
+import YoutubeGradient from "app/modules/story-module/asset/youtube-gradient.png";
 import {
   Charts,
   IChartDetail,
-} from "app/modules/report-module/components/right-panel-create-view/data";
-import DividerPreviewImg from "app/modules/report-module/asset/dividerPreview.svg";
-import HeaderPreviewImg from "app/modules/report-module/asset/headerPreviewImg.svg";
-import RowFramePreviewImg from "app/modules/report-module/asset/rowframePreview.svg";
+} from "app/modules/story-module/components/right-panel-create-view/data";
+import DividerPreviewImg from "app/modules/story-module/asset/dividerPreview.svg";
+import HeaderPreviewImg from "app/modules/story-module/asset/headerPreviewImg.svg";
+import RowFramePreviewImg from "app/modules/story-module/asset/rowframePreview.svg";
 import { ReactComponent as AddNewImage } from "app/modules/home-module/assets/add-img.svg";
-import { ReactComponent as DividerIcon } from "app/modules/report-module/asset/dividerIcon.svg";
-import { ReactComponent as ActiveChartIcon } from "app/modules/report-module/asset/active-chart-icon.svg";
-import { ReactComponent as ActiveElementsIcon } from "app/modules/report-module/asset/active-elements-icon.svg";
-import { ReactComponent as ActiveMediaIcon } from "app/modules/report-module/asset/active-media-icon.svg";
-import { ReactComponent as ChartIcon } from "app/modules/report-module/asset/chart-icon.svg";
-import { ReactComponent as MediaIcon } from "app/modules/report-module/asset/media-icon.svg";
-import { ReactComponent as ElementsIcon } from "app/modules/report-module/asset/elements-icon.svg";
-import { ReactComponent as VideoIcon } from "app/modules/report-module/asset/video-icon.svg";
+import { ReactComponent as DividerIcon } from "app/modules/story-module/asset/dividerIcon.svg";
+import { ReactComponent as ActiveChartIcon } from "app/modules/story-module/asset/active-chart-icon.svg";
+import { ReactComponent as ActiveElementsIcon } from "app/modules/story-module/asset/active-elements-icon.svg";
+import { ReactComponent as ActiveMediaIcon } from "app/modules/story-module/asset/active-media-icon.svg";
+import { ReactComponent as ChartIcon } from "app/modules/story-module/asset/chart-icon.svg";
+import { ReactComponent as MediaIcon } from "app/modules/story-module/asset/media-icon.svg";
+import { ReactComponent as ElementsIcon } from "app/modules/story-module/asset/elements-icon.svg";
+import { ReactComponent as VideoIcon } from "app/modules/story-module/asset/video-icon.svg";
 import ChartOptionColor from "app/modules/chart-module/routes/customize/components/ChartOptionColor";
-import { ReactComponent as RowframeIcon } from "app/modules/report-module/asset/rowframe-icon.svg";
-import PanelLabel from "app/modules/report-module/components/right-panel-create-view/panelLabel";
-import { elementItemcss } from "app/modules/report-module/components/right-panel-create-view/style";
-import GridItem from "app/modules/report-module/components/right-panel-create-view/rhpGridItem";
+import { ReactComponent as RowframeIcon } from "app/modules/story-module/asset/rowframe-icon.svg";
+import PanelLabel from "app/modules/story-module/components/right-panel-create-view/panelLabel";
+import { elementItemcss } from "app/modules/story-module/components/right-panel-create-view/style";
+import GridItem from "app/modules/story-module/components/right-panel-create-view/rhpGridItem";
 import { css } from "styled-components";
 import { get } from "lodash";
 import { useSearchMediaSources } from "app/hooks/useSearchMediaSources";
 import { useDebounce } from "react-use";
 import Skeleton from "@material-ui/lab/Skeleton";
 import { useInfinityScroll } from "app/hooks/useInfinityScroll";
-import { IHeaderDetails } from "app/modules/report-module/components/right-panel/data";
+import { IHeaderDetails } from "app/modules/story-module/components/right-panel/data";
 import { useCheckUserPlan } from "app/hooks/useCheckUserPlan";
 
 interface Props {
@@ -67,7 +67,7 @@ interface Props {
   headerDetails: IHeaderDetails;
   setHeaderDetails: React.Dispatch<React.SetStateAction<IHeaderDetails>>;
   framesArray: IFramesArray[];
-  reportName: string;
+  storyName: string;
   onSave: (type: "create" | "edit") => Promise<void>;
 }
 
@@ -145,7 +145,7 @@ const StyledMenuItem = withStyles(() => ({
   },
 }))(MenuItem);
 
-export const ReportElementsType = {
+export const StoryElementsType = {
   ROWFRAME: "rowFrame",
   TEXT: "text",
   DIVIDER: "divider",
@@ -202,7 +202,7 @@ const UpgradeCard = (props: { onClose: () => void }) => {
           line-height: normal;
         `}
       >
-        Enhance Your Reports with Multimedia!
+        Enhance Your Stories with Multimedia!
       </h2>
       <p
         css={`
@@ -214,9 +214,9 @@ const UpgradeCard = (props: { onClose: () => void }) => {
           line-height: normal;
         `}
       >
-        Currently, adding videos and images to reports is a feature exclusive to
+        Currently, adding videos and images to stories is a feature exclusive to
         our premium plans. Upgrade now to bring your data to life with engaging
-        visuals and make your reports more impactful.
+        visuals and make your stories more impactful.
       </p>
 
       <div
@@ -275,11 +275,9 @@ const UpgradeCard = (props: { onClose: () => void }) => {
   );
 };
 
-export function ReportRightPanelCreateView(props: Readonly<Props>) {
-  const [currentView, setCurrentView] = useRecoilState(
-    reportRightPanelViewAtom
-  );
-  const [_chartFromReport, setChartFromReport] =
+export function StoryRightPanelCreateView(props: Readonly<Props>) {
+  const [currentView, setCurrentView] = useRecoilState(storyRightPanelViewAtom);
+  const [_chartFromStory, setChartFromStory] =
     useRecoilState(chartFromStoryAtom);
   const whiteBackgroundOnly = "background-color: #fff;";
   const whiteBackgroundRoundedBottomRight =
@@ -295,15 +293,15 @@ export function ReportRightPanelCreateView(props: Readonly<Props>) {
 
   const [elementItemDetails, setElementItemDetails] = React.useState([
     {
-      elementType: ReportElementsType.HEADER,
+      elementType: StoryElementsType.HEADER,
       leftIcon: <EditHeaderIcon />,
       previewImg: HeaderPreviewImg,
       name: "Header",
-      description: "Remove or add header to your report",
+      description: "Remove or add header to your story",
       openTooltip: false,
     },
     {
-      elementType: ReportElementsType.ROWFRAME,
+      elementType: StoryElementsType.ROWFRAME,
       leftIcon: <RowframeIcon />,
       previewImg: RowFramePreviewImg,
       name: "Add row frame",
@@ -312,7 +310,7 @@ export function ReportRightPanelCreateView(props: Readonly<Props>) {
     },
 
     {
-      elementType: ReportElementsType.DIVIDER,
+      elementType: StoryElementsType.DIVIDER,
       leftIcon: <DividerIcon />,
       previewImg: DividerPreviewImg,
       name: "Add divider",
@@ -323,7 +321,7 @@ export function ReportRightPanelCreateView(props: Readonly<Props>) {
 
   const [mediaItemDetails, setMediaItemDetails] = React.useState([
     {
-      elementType: ReportElementsType.TEXT,
+      elementType: StoryElementsType.TEXT,
       leftIcon: (
         <TextFieldsIcon
           css={`
@@ -334,11 +332,11 @@ export function ReportRightPanelCreateView(props: Readonly<Props>) {
       ),
       previewImg: TextPreviewImg,
       name: "Add text box",
-      description: "Include written content to enrich your reports",
+      description: "Include written content to enrich your stories",
       openTooltip: false,
     },
     {
-      elementType: ReportElementsType.IMAGE,
+      elementType: StoryElementsType.IMAGE,
       leftIcon: (
         <PhotoLibraryIcon
           css={`
@@ -350,15 +348,15 @@ export function ReportRightPanelCreateView(props: Readonly<Props>) {
       ),
       previewImg: TextPreviewImg,
       name: "Add image",
-      description: "Include imagery content to enrich your reports",
+      description: "Include imagery content to enrich your stories",
       openTooltip: false,
     },
     {
-      elementType: ReportElementsType.VIDEO,
+      elementType: StoryElementsType.VIDEO,
       leftIcon: <VideoIcon />,
       previewImg: TextPreviewImg,
       name: "Add video",
-      description: "Include video content to enrich your report",
+      description: "Include video content to enrich your story",
       openTooltip: false,
     },
   ]);
@@ -370,7 +368,7 @@ export function ReportRightPanelCreateView(props: Readonly<Props>) {
   }, [props.headerDetails.showHeader]);
   React.useEffect(() => {
     const timeout = setTimeout(() => {
-      setChartFromReport({
+      setChartFromStory({
         state: false,
         page: "",
         view: "",
@@ -415,7 +413,7 @@ export function ReportRightPanelCreateView(props: Readonly<Props>) {
           disableRipple
           data-testid="elements-button"
           onClick={() => setCurrentView("elements")}
-          data-cy="report-panel-elements-tab"
+          data-cy="story-panel-elements-tab"
           css={`
             ${(() => {
               if (currentView === "elements") {
@@ -437,7 +435,7 @@ export function ReportRightPanelCreateView(props: Readonly<Props>) {
           )}
         </IconButton>
         <IconButton
-          data-cy="report-panel-chart-tab"
+          data-cy="story-panel-chart-tab"
           disableRipple
           onClick={() => setCurrentView("charts")}
           data-testid="charts-button"
@@ -461,7 +459,7 @@ export function ReportRightPanelCreateView(props: Readonly<Props>) {
         <IconButton
           disableRipple
           onClick={() => setCurrentView("media")}
-          data-cy="report-panel-media-tab"
+          data-cy="story-panel-media-tab"
           data-testid="media-button"
           css={`
             ${(() => {
@@ -519,7 +517,7 @@ export function ReportRightPanelCreateView(props: Readonly<Props>) {
               key={item.elementType}
               {...item}
               disabled={
-                item.elementType === ReportElementsType.HEADER
+                item.elementType === StoryElementsType.HEADER
                   ? !props.showHeaderItem
                   : false
               }
@@ -528,10 +526,10 @@ export function ReportRightPanelCreateView(props: Readonly<Props>) {
         </div>
       )}
       {currentView === "charts" && (
-        <ReportRightPanelCreateViewChartList
+        <StoryRightPanelCreateViewChartList
           headerDetails={props.headerDetails}
           framesArray={props.framesArray}
-          reportName={props.reportName}
+          storyName={props.storyName}
           onSave={props.onSave}
         />
       )}
@@ -553,8 +551,8 @@ export function ReportRightPanelCreateView(props: Readonly<Props>) {
               {...item}
               disabled={false}
               upgradeRequired={
-                (item.elementType === ReportElementsType.IMAGE ||
-                  item.elementType === ReportElementsType.VIDEO) &&
+                (item.elementType === StoryElementsType.IMAGE ||
+                  item.elementType === StoryElementsType.VIDEO) &&
                 userPlan?.planData?.name === "Free"
               }
               ItemDetails={mediaItemDetails}
@@ -562,8 +560,8 @@ export function ReportRightPanelCreateView(props: Readonly<Props>) {
               index={index}
               draggable={
                 !(
-                  item.elementType === ReportElementsType.IMAGE ||
-                  item.elementType === ReportElementsType.VIDEO
+                  item.elementType === StoryElementsType.IMAGE ||
+                  item.elementType === StoryElementsType.VIDEO
                 )
               }
             />
@@ -575,11 +573,11 @@ export function ReportRightPanelCreateView(props: Readonly<Props>) {
   );
 }
 
-function ReportRightPanelCreateViewChartList(
+function StoryRightPanelCreateViewChartList(
   props: Readonly<{
     headerDetails: IHeaderDetails;
     framesArray: IFramesArray[];
-    reportName: string;
+    storyName: string;
     onSave: (type: "create" | "edit") => Promise<void>;
   }>
 ) {
@@ -631,7 +629,7 @@ function ReportRightPanelCreateViewChartList(
         <input
           type="text"
           onChange={(e) => setSearch(e.target.value)}
-          data-cy="report-panel-chart-search-input"
+          data-cy="story-panel-chart-search-input"
           css={`
             width: 187px;
             height: 35px;
@@ -730,7 +728,7 @@ function ReportRightPanelCreateViewChartList(
         <CreateChartCard
           headerDetails={props.headerDetails}
           framesArray={props.framesArray}
-          reportName={props.reportName}
+          storyName={props.storyName}
           onSave={props.onSave}
         />
         {chartList
@@ -748,8 +746,8 @@ function ReportRightPanelCreateViewChartList(
               isAIAssistedChart={chart.isAIAssisted}
               elementType={
                 (chart.vizType === "bigNumber"
-                  ? ReportElementsType.BIG_NUMBER
-                  : ReportElementsType.CHART) as "chart" | "bigNumber"
+                  ? StoryElementsType.BIG_NUMBER
+                  : StoryElementsType.CHART) as "chart" | "bigNumber"
               }
             />
           ))}
@@ -987,8 +985,8 @@ function ElementItem(props: {
 
   React.useEffect(() => {
     if (
-      (props.elementType === ReportElementsType.DIVIDER ||
-        props.elementType === ReportElementsType.ROWFRAME) &&
+      (props.elementType === StoryElementsType.DIVIDER ||
+        props.elementType === StoryElementsType.ROWFRAME) &&
       isDragging !== isItemDragging.state
     ) {
       setIsItemDragging({
@@ -998,8 +996,8 @@ function ElementItem(props: {
     }
   }, [isDragging]);
 
-  const isImageElement = props.elementType === ReportElementsType.IMAGE;
-  const isVideoElement = props.elementType === ReportElementsType.VIDEO;
+  const isImageElement = props.elementType === StoryElementsType.IMAGE;
+  const isVideoElement = props.elementType === StoryElementsType.VIDEO;
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -1053,7 +1051,7 @@ function ElementItem(props: {
       >
         <div
           ref={isImageElement || isVideoElement ? nullRef : drag}
-          data-cy={`report-panel-${props.elementType}-item`}
+          data-cy={`story-panel-${props.elementType}-item`}
           id={props.name}
           data-testid={props.name}
           css={elementItemcss(
@@ -1259,7 +1257,7 @@ function ElementItem(props: {
 }
 
 function CreateChartCard(props: {
-  reportName: string;
+  storyName: string;
   headerDetails: IHeaderDetails;
   framesArray: IFramesArray[];
   onSave: (type: "create" | "edit") => Promise<void>;
@@ -1283,10 +1281,10 @@ function CreateChartCard(props: {
     (state) => state.charts.ChartCreate.setCrudData
   );
 
-  const setChartFromReport = useRecoilState(chartFromStoryAtom)[1];
+  const setChartFromStory = useRecoilState(chartFromStoryAtom)[1];
 
   const action = () => {
-    setChartFromReport({
+    setChartFromStory({
       state: true,
       view,
       page,
@@ -1297,7 +1295,7 @@ function CreateChartCard(props: {
     setDataset(null);
     setLoadedChart(null);
     setCreateChartData(null);
-    //save report before exiting
+    //save story before exiting
     props.onSave("edit");
     history.push("/chart/new/data");
   };
@@ -1306,7 +1304,7 @@ function CreateChartCard(props: {
       <div
         onClick={action}
         data-testid="create-chart-card"
-        data-cy="report-panel-create-chart-card"
+        data-cy="story-panel-create-chart-card"
         css={`
           background: #f2f7fd;
           box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.1);
@@ -1378,7 +1376,7 @@ function ChartItem(
 ) {
   const nullRef = React.useRef(null);
   const [chartPreview, setChartPreview] = React.useState(false);
-  const chartFromReport = useRecoilValue(chartFromStoryAtom);
+  const chartFromStory = useRecoilValue(chartFromStoryAtom);
 
   const [{ isDragging }, drag] = useDrag(() => ({
     type: props.elementType,
@@ -1423,8 +1421,8 @@ function ChartItem(
       data-testid={props.chartIndex === 0 ? "chart-0" : "chart-n"}
       className={
         props.chartIndex === 0 &&
-        chartFromReport.action === "create" &&
-        chartFromReport.chartId === props.id
+        chartFromStory.action === "create" &&
+        chartFromStory.chartId === props.id
           ? "rhcpCard"
           : ""
       }
@@ -1444,7 +1442,7 @@ function ChartItem(
           width: 100%;
         }
       `}
-      data-cy="report-panel-chart-item"
+      data-cy="story-panel-chart-item"
     >
       <GridItem
         id={props.id}
@@ -1463,7 +1461,7 @@ function ChartItem(
 }
 
 function EditHeaderPanelView(props: Props) {
-  const [_, setCurrentView] = useRecoilState(reportRightPanelViewAtom);
+  const [_, setCurrentView] = useRecoilState(storyRightPanelViewAtom);
   const [displayColorsList, setDisplayColorsList] = React.useState(true);
   return (
     <div
@@ -1507,7 +1505,7 @@ function EditHeaderPanelView(props: Props) {
             `}
           >
             <EditHeaderIcon />
-            Edit the report header
+            Edit the story header
           </div>
           <span>
             <IconButton

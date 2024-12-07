@@ -3,23 +3,23 @@ import get from "lodash/get";
 import { SetterOrUpdater, useRecoilState, useResetRecoilState } from "recoil";
 import IconButton from "@material-ui/core/IconButton";
 import { useHistory, useLocation, useParams } from "react-router-dom";
-import { itemSpacing, containerGap } from "app/modules/report-module/data";
-import RowstructureDisplay from "app/modules/report-module/components/rowStructure/rowStructureDisplay";
-import { ReactComponent as CloseIcon } from "app/modules/report-module/asset/closeIcon.svg";
-import { ReactComponent as DeleteIcon } from "app/modules/report-module/asset/deleteIcon.svg";
+import { itemSpacing, containerGap } from "app/modules/story-module/data";
+import RowstructureDisplay from "app/modules/story-module/components/rowStructure/rowStructureDisplay";
+import { ReactComponent as CloseIcon } from "app/modules/story-module/asset/closeIcon.svg";
+import { ReactComponent as DeleteIcon } from "app/modules/story-module/asset/deleteIcon.svg";
 import {
   isDividerOrRowFrameDraggingAtom,
-  reportCreationTourStepAtom,
+  storyCreationTourStepAtom,
 } from "app/state/recoil/atoms";
 import {
   blockcss,
   containercss,
-} from "app/modules/report-module/components/rowStructure/style";
-import { IFramesArray } from "app/modules/report-module/views/create/data";
+} from "app/modules/story-module/components/rowStructure/style";
+import { IFramesArray } from "app/modules/story-module/views/create/data";
 import { useOnClickOutside } from "usehooks-ts";
-import { ToolbarPluginsType } from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
+import { ToolbarPluginsType } from "app/modules/story-module/components/storySubHeaderToolbar/staticToolbar";
 import { useDrag } from "react-dnd";
-import { ReportElementsType } from "app/modules/report-module/components/right-panel-create-view";
+import { StoryElementsType } from "app/modules/story-module/components/right-panel-create-view";
 import { usehandleRowFrameItemResize } from "app/hooks/useHandleRowFrameItemResize";
 import { Updater } from "use-immer";
 
@@ -131,7 +131,7 @@ interface RowFrameProps {
   rowContentHeights: number[];
   rowContentWidths: number[];
   setPlugins: React.Dispatch<React.SetStateAction<ToolbarPluginsType>>;
-  endReportTour: () => void;
+  endStoryTour: () => void;
   onSave: (type: "create" | "edit") => Promise<void>;
 }
 
@@ -146,7 +146,7 @@ interface IRowStructureType {
   ) => void;
   tourStep: number;
   setTourStep: SetterOrUpdater<number>;
-  endReportTour: () => void;
+  endStoryTour: () => void;
 }
 
 export default function RowFrame(props: RowFrameProps) {
@@ -157,12 +157,12 @@ export default function RowFrame(props: RowFrameProps) {
   const [selectedType, setSelectedType] = React.useState<string>(
     props.forceSelectedType ?? ""
   );
-  const [reportCreationTourStep, setReportCreationTourStep] = useRecoilState(
-    reportCreationTourStepAtom
+  const [storyCreationTourStep, setStoryCreationTourStep] = useRecoilState(
+    storyCreationTourStepAtom
   );
 
-  const clearReportCreationTourStep = useResetRecoilState(
-    reportCreationTourStepAtom
+  const clearStoryCreationTourStep = useResetRecoilState(
+    storyCreationTourStepAtom
   );
 
   const [tempRowState, setTempRowState] = React.useState<IFramesArray>(
@@ -352,14 +352,14 @@ export default function RowFrame(props: RowFrameProps) {
   React.useEffect(() => {
     // Add event listener for page exit or component unmount
     const handlePageExit = () => {
-      clearReportCreationTourStep();
+      clearStoryCreationTourStep();
     };
 
     window.addEventListener("beforeunload", handlePageExit);
 
     return () => {
       window.removeEventListener("beforeunload", handlePageExit);
-      clearReportCreationTourStep(); // Reset state when component unmounts
+      clearStoryCreationTourStep(); // Reset state when component unmounts
     };
   }, []);
 
@@ -526,10 +526,10 @@ export default function RowFrame(props: RowFrameProps) {
                 `}
                 onClick={() => {
                   if (
-                    reportCreationTourStep !== 0 &&
-                    reportCreationTourStep !== 3
+                    storyCreationTourStep !== 0 &&
+                    storyCreationTourStep !== 3
                   ) {
-                    props.endReportTour();
+                    props.endStoryTour();
                   }
                   deleteFrame(props.rowId);
                 }}
@@ -551,41 +551,41 @@ export default function RowFrame(props: RowFrameProps) {
                   handleRowFrameStructureTypeSelection={
                     handleRowFrameStructureTypeSelection
                   }
-                  tourStep={reportCreationTourStep}
-                  setTourStep={setReportCreationTourStep}
-                  endReportTour={props.endReportTour}
+                  tourStep={storyCreationTourStep}
+                  setTourStep={setStoryCreationTourStep}
+                  endStoryTour={props.endStoryTour}
                 />
                 <OneByTwo
                   handleRowFrameStructureTypeSelection={
                     handleRowFrameStructureTypeSelection
                   }
-                  tourStep={reportCreationTourStep}
-                  setTourStep={setReportCreationTourStep}
-                  endReportTour={props.endReportTour}
+                  tourStep={storyCreationTourStep}
+                  setTourStep={setStoryCreationTourStep}
+                  endStoryTour={props.endStoryTour}
                 />
                 <OneByThree
                   handleRowFrameStructureTypeSelection={
                     handleRowFrameStructureTypeSelection
                   }
-                  tourStep={reportCreationTourStep}
-                  setTourStep={setReportCreationTourStep}
-                  endReportTour={props.endReportTour}
+                  tourStep={storyCreationTourStep}
+                  setTourStep={setStoryCreationTourStep}
+                  endStoryTour={props.endStoryTour}
                 />
                 <OneByFour
                   handleRowFrameStructureTypeSelection={
                     handleRowFrameStructureTypeSelection
                   }
-                  tourStep={reportCreationTourStep}
-                  setTourStep={setReportCreationTourStep}
-                  endReportTour={props.endReportTour}
+                  tourStep={storyCreationTourStep}
+                  setTourStep={setStoryCreationTourStep}
+                  endStoryTour={props.endStoryTour}
                 />
                 <OneByFive
                   handleRowFrameStructureTypeSelection={
                     handleRowFrameStructureTypeSelection
                   }
-                  tourStep={reportCreationTourStep}
-                  setTourStep={setReportCreationTourStep}
-                  endReportTour={props.endReportTour}
+                  tourStep={storyCreationTourStep}
+                  setTourStep={setStoryCreationTourStep}
+                  endStoryTour={props.endStoryTour}
                 />
               </div>
             </div>
@@ -607,7 +607,7 @@ const OneByOne = (props: IRowStructureType) => {
     if (props.tourStep === 2) {
       props.setTourStep(3);
     } else {
-      props.endReportTour();
+      props.endStoryTour();
       props.handleRowFrameStructureTypeSelection("oneByOne");
     }
   };
@@ -632,7 +632,7 @@ const OneByTwo = (props: IRowStructureType) => {
     if (props.tourStep === 2) {
       props.setTourStep(3);
     } else {
-      props.endReportTour();
+      props.endStoryTour();
     }
     props.handleRowFrameStructureTypeSelection("oneByTwo");
   };
@@ -663,7 +663,7 @@ const OneByThree = (props: IRowStructureType) => {
     if (props.tourStep === 2) {
       props.setTourStep(3);
     } else {
-      props.endReportTour();
+      props.endStoryTour();
       props.handleRowFrameStructureTypeSelection("oneByThree");
     }
   };
@@ -695,7 +695,7 @@ const OneByFour = (props: IRowStructureType) => {
     if (props.tourStep === 2) {
       props.setTourStep(3);
     } else {
-      props.endReportTour();
+      props.endStoryTour();
       props.handleRowFrameStructureTypeSelection("oneByFour");
     }
   };
@@ -728,7 +728,7 @@ const OneByFive = (props: IRowStructureType) => {
     if (props.tourStep === 2) {
       props.setTourStep(3);
     } else {
-      props.endReportTour();
+      props.endStoryTour();
       props.handleRowFrameStructureTypeSelection("oneByFive");
     }
   };
@@ -769,12 +769,12 @@ function Divider(props: {
   const [handleDisplay, setHandleDisplay] = React.useState(false);
 
   const [{ isDragging }, drag] = useDrag({
-    type: ReportElementsType.ROW,
+    type: StoryElementsType.ROW,
     item: () => {
       return {
         id: props.dividerId,
         index: props.rowIndex,
-        type: ReportElementsType.ROW,
+        type: StoryElementsType.ROW,
       };
     },
     collect: (monitor: any) => ({

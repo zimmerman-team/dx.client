@@ -1,5 +1,5 @@
-import { ToolbarPluginsType } from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
-import { IHeaderDetails } from "app/modules/report-module/components/right-panel/data";
+import { ToolbarPluginsType } from "app/modules/story-module/components/storySubHeaderToolbar/staticToolbar";
+import { IHeaderDetails } from "app/modules/story-module/components/right-panel/data";
 import { Updater } from "use-immer";
 
 interface IRowFrame {
@@ -25,17 +25,17 @@ export interface IFramesArray {
     | "oneByFive";
 }
 
-export interface ReportCreateViewProps {
+export interface StoryCreateViewProps {
   rightPanelOpen: boolean;
   handleRightPanelOpen: () => void;
   view: "initial" | "edit" | "create" | "preview" | "ai-template";
-  setReportName: React.Dispatch<React.SetStateAction<string>>;
-  reportName: string;
-  reportType: "basic" | "advanced" | "ai" | null;
+  setStoryName: React.Dispatch<React.SetStateAction<string>>;
+  storyName: string;
+  storyType: "basic" | "advanced" | "ai" | null;
   updateFramesArray: Updater<IFramesArray[]>;
   deleteFrame: (id: string) => void;
   framesArray: IFramesArray[];
-  hasReportNameFocused: boolean;
+  hasStoryNameFocused: boolean;
   headerDetails: IHeaderDetails;
   setHeaderDetails: React.Dispatch<React.SetStateAction<IHeaderDetails>>;
   onSave: (type: "create" | "edit") => Promise<void>;

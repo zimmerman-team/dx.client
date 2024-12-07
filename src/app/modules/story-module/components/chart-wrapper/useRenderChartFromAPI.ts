@@ -1,5 +1,5 @@
 import { ChartRenderedItem } from "app/modules/chart-module/data";
-import { loadedChartsInReportAtom } from "app/state/recoil/atoms";
+import { loadedChartsInStoryAtom } from "app/state/recoil/atoms";
 import axios from "axios";
 import isEmpty from "lodash/isEmpty";
 import React from "react";
@@ -24,7 +24,7 @@ export const useRenderChartFromAPI = (
     new AbortController()
   );
   const [loadedChartsList, setLoadedChartsList] = useRecoilState(
-    loadedChartsInReportAtom
+    loadedChartsInStoryAtom
   );
 
   const fetchRenderChart = async (id: string) => {

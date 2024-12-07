@@ -183,7 +183,7 @@ export default function PricingModule() {
             }
           `}
         >
-          Create reports that aren't a pain to build
+          Create stories that aren't a pain to build
         </h1>
         <p
           css={`

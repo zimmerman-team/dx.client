@@ -75,7 +75,7 @@ describe("Testing create chart on DX", () => {
 
     cy.location("pathname").should("include", "/mapping");
 
-    cy.get('[data-cy="report-sub-header-title-input"]').type(
+    cy.get('[data-cy="story-sub-header-title-input"]').type(
       `{selectall}{backspace}${testname1}`
     );
 
@@ -134,7 +134,7 @@ describe("Testing create chart on DX", () => {
 
     cy.location("pathname").should("include", "/mapping");
 
-    cy.get('[data-cy="report-sub-header-title-input"]').type(
+    cy.get('[data-cy="story-sub-header-title-input"]').type(
       `{selectall}{backspace}${testname2}`
     );
     cy.contains('[data-cy="nonstatic-dimension-container"]', "X Axis").within(
@@ -240,7 +240,7 @@ describe("Testing Ai chart creation", () => {
 
     cy.location("pathname").should("include", "/mapping");
 
-    cy.get('[data-cy="report-sub-header-title-input"]').type(
+    cy.get('[data-cy="story-sub-header-title-input"]').type(
       `{selectall}{backspace}${testname3}`
     );
 

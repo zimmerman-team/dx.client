@@ -10,7 +10,7 @@ import {
   chartFromStoryAtom,
   isChartDraggingAtom,
   isDividerOrRowFrameDraggingAtom,
-  reportRightPanelViewAtom,
+  storyRightPanelViewAtom,
 } from "app/state/recoil/atoms";
 import { RecoilObserver } from "app/utils/recoilObserver";
 import { createMemoryHistory } from "history";
@@ -21,15 +21,15 @@ import Router from "react-router-dom";
 import { MutableSnapshot, RecoilRoot } from "recoil";
 
 import {
-  ReportElementsType,
-  ReportRightPanelCreateView,
-} from "app/modules/report-module/components/right-panel-create-view/";
+  StoryElementsType,
+  StoryRightPanelCreateView,
+} from "app/modules/story-module/components/right-panel-create-view/";
 import { StoreProvider, createStore } from "easy-peasy";
 import { AuthTokenState } from "app/state/api/action-reducers/sync";
 import {
   ChartCreate,
   ChartGet,
-  ChartGetInReport,
+  ChartGetInStory,
   ChartGetList,
 } from "app/state/api/action-reducers/charts";
 import {
@@ -38,7 +38,7 @@ import {
   ChartsEnabledFilterOptionGroupsState,
   ChartsMappingState,
 } from "app/state/api/action-reducers/sync/charts";
-import { mockChartList } from "app/modules/report-module/__test__/data";
+import { mockChartList } from "app/modules/story-module/__test__/data";
 import axios, { AxiosResponse } from "axios";
 import { ChartsAppliedFiltersState } from "app/state/api/action-reducers/sync/charts/filters";
 import { setupIntersectionObserverMock } from "./setupIntersectionObserver";
@@ -49,8 +49,8 @@ interface MockProps {
   headerDetails: any;
   setHeaderDetails: jest.Mock<any, any, any>;
   framesArray: never[];
-  reportName: string;
-  handlePersistReportState: jest.Mock<any, any, any>;
+  storyName: string;
+  handlePersistStoryState: jest.Mock<any, any, any>;
   onSave: jest.Mock<any, any, any>;
 }
 interface Params {
@@ -71,8 +71,8 @@ const defaultProps = (newProps: Partial<MockProps> = {}): MockProps => {
     headerDetails: {},
     setHeaderDetails: jest.fn(),
     framesArray: [],
-    reportName: "",
-    handlePersistReportState: jest.fn(),
+    storyName: "",
+    handlePersistStoryState: jest.fn(),
     onSave: jest.fn(),
     ...newProps,
   };
@@ -92,7 +92,7 @@ const history = createMemoryHistory({
   initialEntries: ["/chart/new/mapping"],
 });
 //recoil states
-const reportRightPanelViewChange = jest.fn();
+const storyRightPanelViewChange = jest.fn();
 const isDividerOrRowFrameDraggingAtomChange = jest.fn();
 const chartFromStoryAtomChange = jest.fn();
 const isChartDraggingAtomChange = jest.fn();
@@ -104,15 +104,15 @@ const appSetup = (
   const props = defaultProps(newProps);
 
   const initialRecoilState = (snap: MutableSnapshot) => {
-    snap.set(reportRightPanelViewAtom, "elements");
+    snap.set(storyRightPanelViewAtom, "elements");
   };
 
   const Droppable = () => {
     const [{ isOver }, drop] = useDrop(() => ({
       accept: [
-        ReportElementsType.TEXT,
-        ReportElementsType.BIG_NUMBER,
-        ReportElementsType.CHART,
+        StoryElementsType.TEXT,
+        StoryElementsType.BIG_NUMBER,
+        StoryElementsType.CHART,
       ],
 
       collect: (monitor) => ({
@@ -137,7 +137,7 @@ const appSetup = (
         ChartGetList,
         ChartGet,
         ChartCreate,
-        ChartGetInReport,
+        ChartGetInStory,
       },
     },
     {
@@ -178,8 +178,8 @@ const appSetup = (
         <StoreProvider store={mockStore}>
           <RecoilRoot initializeState={initialRecoilState}>
             <RecoilObserver
-              node={reportRightPanelViewAtom}
-              onChange={reportRightPanelViewChange}
+              node={storyRightPanelViewAtom}
+              onChange={storyRightPanelViewChange}
             />
             <RecoilObserver
               node={isDividerOrRowFrameDraggingAtom}
@@ -194,7 +194,7 @@ const appSetup = (
               onChange={isChartDraggingAtomChange}
             />
             <DndProvider backend={HTML5Backend}>
-              <ReportRightPanelCreateView {...props} />
+              <StoryRightPanelCreateView {...props} />
               <Droppable />
             </DndProvider>
           </RecoilRoot>
@@ -221,17 +221,17 @@ const appSetup = (
 //   render(app);
 //   expect(screen.getByText(/header/)).toBeInTheDocument();
 //   await user.click(screen.getByTestId("elements-button"));
-//   expect(reportRightPanelViewChange).toHaveBeenCalledWith("elements");
+//   expect(storyRightPanelViewChange).toHaveBeenCalledWith("elements");
 //   expect(
-//     screen.getByText("Remove or add header to your report")
+//     screen.getByText("Remove or add header to your story")
 //   ).toBeInTheDocument();
 
 //   await user.click(screen.getByTestId(chartsButtonId));
-//   expect(reportRightPanelViewChange).toHaveBeenCalledWith("charts");
+//   expect(storyRightPanelViewChange).toHaveBeenCalledWith("charts");
 //   expect(screen.getByText("charts")).toBeInTheDocument();
 
 //   await user.click(screen.getByTestId("media-button"));
-//   expect(reportRightPanelViewChange).toHaveBeenCalledWith("media");
+//   expect(storyRightPanelViewChange).toHaveBeenCalledWith("media");
 //   expect(screen.getByText("media")).toBeInTheDocument();
 // });
 
@@ -277,7 +277,7 @@ test("should search for charts in in chart view", async () => {
   mockStore.getActions().charts.ChartGetList.setCrudData(mockChartList);
 
   await user.click(screen.getByTestId(chartsButtonId));
-  expect(reportRightPanelViewChange).toHaveBeenCalledWith("charts");
+  expect(storyRightPanelViewChange).toHaveBeenCalledWith("charts");
   expect(screen.getByText("Charts")).toBeInTheDocument();
 
   await user.type(screen.getByRole("textbox"), "wine");
@@ -298,7 +298,7 @@ test("clicking add chart card should redirect to chart page", async () => {
   const { app } = appSetup();
   render(app);
   await user.click(screen.getByTestId(chartsButtonId));
-  expect(reportRightPanelViewChange).toHaveBeenCalledWith("charts");
+  expect(storyRightPanelViewChange).toHaveBeenCalledWith("charts");
   expect(screen.getByText("Charts")).toBeInTheDocument();
   await userEvent.click(screen.getByText("New chart"));
   expect(history.location.pathname).toBe("/chart/new/data");
@@ -316,7 +316,7 @@ test("charts items should be draggable", async () => {
   render(app);
   mockStore.getActions().charts.ChartGetList.setCrudData(mockChartList);
   await user.click(screen.getByTestId(chartsButtonId));
-  expect(reportRightPanelViewChange).toHaveBeenCalledWith("charts");
+  expect(storyRightPanelViewChange).toHaveBeenCalledWith("charts");
   expect(screen.getByText("Charts")).toBeInTheDocument();
   fireEvent.dragStart(screen.getByTestId("chart-0"));
   fireEvent.dragLeave(screen.getByTestId("chart-0"));
@@ -341,7 +341,7 @@ test("chart card should be expandable", async () => {
   mockStore.getActions().charts.ChartGetList.setCrudData(mockChartList);
 
   await user.click(screen.getByTestId(chartsButtonId));
-  expect(reportRightPanelViewChange).toHaveBeenCalledWith("charts");
+  expect(storyRightPanelViewChange).toHaveBeenCalledWith("charts");
   expect(screen.getByText("Charts")).toBeInTheDocument();
   expect(screen.getByText(/Sort by Recent/)).toBeInTheDocument();
   expect(screen.getByTestId("create-chart-card")).toBeInTheDocument();

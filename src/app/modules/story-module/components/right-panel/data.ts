@@ -1,5 +1,5 @@
 import { EditorState } from "draft-js";
-import { IFramesArray } from "app/modules/report-module/views/create/data";
+import { IFramesArray } from "app/modules/story-module/views/create/data";
 
 export interface IHeaderDetails {
   title: string;
@@ -12,7 +12,7 @@ export interface IHeaderDetails {
   dateColor: string;
   isUpdated?: boolean;
 }
-export interface ReportRightPanelProps {
+export interface StoryRightPanelProps {
   open: boolean;
   onOpen: () => void;
   onClose: () => void;
@@ -21,6 +21,6 @@ export interface ReportRightPanelProps {
   headerDetails: IHeaderDetails;
   setHeaderDetails: React.Dispatch<React.SetStateAction<IHeaderDetails>>;
   framesArray: IFramesArray[];
-  reportName: string;
+  storyName: string;
   onSave: (type: "create" | "edit") => Promise<void>;
 }

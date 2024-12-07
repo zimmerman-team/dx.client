@@ -2,7 +2,7 @@ import React from "react";
 import CloseIcon from "@material-ui/icons/Close";
 import { IconButton } from "@material-ui/core";
 import Plyr from "plyr";
-import Poster from "app/modules/report-module/asset/sneak-peek-poster.svg";
+import Poster from "app/modules/story-module/asset/sneak-peek-poster.svg";
 
 export default function SneakPreview(props: {
   setModalDisplay: (display: boolean) => void;

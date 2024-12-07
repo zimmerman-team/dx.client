@@ -1,12 +1,12 @@
 import React from "react";
 import { useRecoilValue } from "recoil";
-import { reportContentIsResizingAtom } from "app/state/recoil/atoms";
+import { storyContentIsResizingAtom } from "app/state/recoil/atoms";
 
 const COLUMN_WIDTH = 40;
 const COLUMN_GAP = 10;
 
 export function GridColumns() {
-  const isResizing = useRecoilValue(reportContentIsResizingAtom);
+  const isResizing = useRecoilValue(storyContentIsResizingAtom);
 
   if (!isResizing) return null;
 

@@ -2,11 +2,11 @@ import React from "react";
 import Slide from "@material-ui/core/Slide";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { TriangleXSIcon } from "app/assets/icons/TriangleXS";
-import { styles } from "app/modules/report-module/components/right-panel/styles";
-import { ReportRightPanelProps } from "app/modules/report-module/components/right-panel/data";
-import { ReportRightPanelCreateView } from "app/modules/report-module/components/right-panel-create-view";
+import { styles } from "app/modules/story-module/components/right-panel/styles";
+import { StoryRightPanelProps } from "app/modules/story-module/components/right-panel/data";
+import { StoryRightPanelCreateView } from "app/modules/story-module/components/right-panel-create-view";
 
-export function ReportRightPanel(props: ReportRightPanelProps) {
+export function StoryRightPanel(props: StoryRightPanelProps) {
   const isMobile = useMediaQuery("(max-width: 767px)");
 
   return (
@@ -62,12 +62,12 @@ export function ReportRightPanel(props: ReportRightPanelProps) {
           </section>
         )}
         {(props.currentView === "create" || props.currentView === "edit") && (
-          <ReportRightPanelCreateView
+          <StoryRightPanelCreateView
             showHeaderItem={props.showHeaderItem}
             headerDetails={props.headerDetails}
             setHeaderDetails={props.setHeaderDetails}
             framesArray={props.framesArray}
-            reportName={props.reportName}
+            storyName={props.storyName}
             onSave={props.onSave}
           />
         )}

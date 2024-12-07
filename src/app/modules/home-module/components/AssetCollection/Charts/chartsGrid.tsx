@@ -217,7 +217,7 @@ export default function ChartsGrid(props: Props) {
     if (!chartsLoadSuccess) {
       return;
     }
-    //update the loaded reports
+    //update the loaded stories
     setLoadedCharts((prevCharts) => {
       const prevChartsIds = prevCharts.map((c) => c.id);
       const f = charts.filter((chart) => !prevChartsIds.includes(chart.id));

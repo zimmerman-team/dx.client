@@ -4,27 +4,27 @@ import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
 import useResizeObserver from "use-resize-observer";
 import { useRecoilState } from "recoil";
-import { GridColumns } from "app/modules/report-module/components/grid-columns";
-import HeaderBlock from "app/modules/report-module/components/headerBlock";
-import { ItemComponent } from "app/modules/report-module/components/order-container";
-import AddRowFrameButton from "app/modules/report-module/components/rowStructure/addRowFrameButton";
-import RowFrame from "app/modules/report-module/components/rowStructure";
-import { ReportCreateViewProps } from "app/modules/report-module/views/create/data";
+import { GridColumns } from "app/modules/story-module/components/grid-columns";
+import HeaderBlock from "app/modules/story-module/components/headerBlock";
+import { ItemComponent } from "app/modules/story-module/components/order-container";
+import AddRowFrameButton from "app/modules/story-module/components/rowStructure/addRowFrameButton";
+import RowFrame from "app/modules/story-module/components/rowStructure";
+import { StoryCreateViewProps } from "app/modules/story-module/views/create/data";
 import {
   IRowFrameStructure,
-  reportContentContainerWidth,
+  storyContentContainerWidth,
 } from "app/state/recoil/atoms";
 import TourGuide from "app/components/Dialogs/TourGuide";
 import { useTitle } from "react-use";
-import PlaceHolder from "app/modules/report-module/components/placeholder";
+import PlaceHolder from "app/modules/story-module/components/placeholder";
 
-function ReportCreateView(props: Readonly<ReportCreateViewProps>) {
-  useTitle("DX Dataxplorer - Create Report");
+function StoryCreateView(props: Readonly<StoryCreateViewProps>) {
+  useTitle("DX Dataxplorer - Create Story");
 
   const { ref, width } = useResizeObserver<HTMLDivElement>();
 
   const [containerWidth, setContainerWidth] = useRecoilState(
-    reportContentContainerWidth
+    storyContentContainerWidth
   );
   const [rowStructureType, setRowStructuretype] =
     React.useState<IRowFrameStructure>({
@@ -34,7 +34,7 @@ function ReportCreateView(props: Readonly<ReportCreateViewProps>) {
     });
 
   React.useEffect(() => {
-    if (props.reportType === "advanced") {
+    if (props.storyType === "advanced") {
       const rowOne = v4();
       const rowTwo = v4();
 
@@ -85,7 +85,7 @@ function ReportCreateView(props: Readonly<ReportCreateViewProps>) {
         },
       ]);
     }
-  }, [props.reportType]);
+  }, [props.storyType]);
 
   React.useEffect(() => {
     if (width && width !== containerWidth) {
@@ -105,9 +105,9 @@ function ReportCreateView(props: Readonly<ReportCreateViewProps>) {
         previewMode={false}
         headerDetails={{ ...props.headerDetails }}
         setHeaderDetails={props.setHeaderDetails}
-        setReportName={props.setReportName}
-        reportName={props.reportName}
-        hasReportNameFocused={props.hasReportNameFocused}
+        setStoryName={props.setStoryName}
+        storyName={props.storyName}
+        hasStoryNameFocused={props.hasStoryNameFocused}
         setPlugins={props.setPlugins}
         handleRightPanelOpen={props.handleRightPanelOpen}
       />
@@ -129,7 +129,7 @@ function ReportCreateView(props: Readonly<ReportCreateViewProps>) {
         >
           <Box height={50} />
           <TourGuide
-            reportType={props.reportType ?? "basic"}
+            storyType={props.storyType ?? "basic"}
             toolBoxOpen={props.rightPanelOpen}
             handleClose={() => {}}
             open
@@ -160,7 +160,7 @@ function ReportCreateView(props: Readonly<ReportCreateViewProps>) {
                     }
                     onSave={props.onSave}
                     setPlugins={props.setPlugins}
-                    endReportTour={() => {}}
+                    endStoryTour={() => {}}
                   />
                 </div>
                 <Box height={38} />
@@ -191,4 +191,4 @@ function ReportCreateView(props: Readonly<ReportCreateViewProps>) {
   );
 }
 
-export default ReportCreateView;
+export default StoryCreateView;

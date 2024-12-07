@@ -31,7 +31,7 @@ export default function GridItem(props: Readonly<Props>) {
     e.stopPropagation();
     setMenuOptionsDisplay(!menuOptionsDisplay);
   };
-  const canReportEditDelete = React.useMemo(() => {
+  const canStoryEditDelete = React.useMemo(() => {
     return isAuthenticated && props.owner === user?.sub;
   }, [user, isAuthenticated]);
 
@@ -44,7 +44,7 @@ export default function GridItem(props: Readonly<Props>) {
       `}
     >
       <Link
-        to={`/report/${props.id}`}
+        to={`/story/${props.id}`}
         css={`
           width: 100%;
           height: 161.59px;
@@ -65,7 +65,7 @@ export default function GridItem(props: Readonly<Props>) {
             box-shadow: 0px 7px 22px 0px rgba(0, 0, 0, 0.1);
           }
         `}
-        data-cy="report-grid-item"
+        data-cy="story-grid-item"
       >
         <div
           css={`
@@ -130,9 +130,9 @@ export default function GridItem(props: Readonly<Props>) {
                 background: transparent;
               }
             `}
-            aria-label="report-menu-button"
+            aria-label="story-menu-button"
             onClick={showMenuOptions}
-            data-cy="report-grid-item-menu-btn"
+            data-cy="story-grid-item-menu-btn"
           >
             <MenuIcon />
           </IconButton>
@@ -187,8 +187,8 @@ export default function GridItem(props: Readonly<Props>) {
           handleDuplicate={() => props.handleDuplicate?.(props.id as string)}
           id={props.id as string}
           owner={props.owner}
-          path={`/report/${props.id}/edit`}
-          type="report"
+          path={`/story/${props.id}/edit`}
+          type="story"
         />
       )}
     </div>

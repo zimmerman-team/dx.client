@@ -2,10 +2,10 @@
 import React from "react";
 import moment from "moment";
 /* project */
-import { ReactComponent as ClockIcon } from "app/modules/report-module/asset/clock-img.svg";
-import { ReactComponent as ExpandIcon } from "app/modules/report-module/asset/expand-icon.svg";
+import { ReactComponent as ClockIcon } from "app/modules/story-module/asset/clock-img.svg";
+import { ReactComponent as ExpandIcon } from "app/modules/story-module/asset/expand-icon.svg";
 import { IconButton } from "@material-ui/core";
-import { ReportChartWrapper } from "app/modules/report-module/components/chart-wrapper/";
+import { StoryChartWrapper } from "app/modules/story-module/components/chart-wrapper/";
 import { ReactComponent as AIIcon } from "app/modules/chart-module/assets/ai-icon.svg";
 
 interface Props {
@@ -126,10 +126,10 @@ export default function GridItem(props: Props) {
         </div>
 
         {props.chartPreview ? (
-          <ReportChartWrapper
+          <StoryChartWrapper
             id={props.id}
             width={"100"}
-            chartPreviewInReport={true}
+            chartPreviewInStory={true}
             error={chartError}
             setError={setChartError}
           />

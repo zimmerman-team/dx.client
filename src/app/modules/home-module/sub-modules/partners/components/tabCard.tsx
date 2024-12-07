@@ -214,7 +214,7 @@ export const BudgetsTabCard = () => {
 export const PerformanceTabCard = () => {
   const description = (
     <p>
-      The Global Fund requires countries to report grant performance indicators
+      The Global Fund requires countries to story grant performance indicators
       on funded programs. The data provided by national monitoring and
       evaluation systems is critical to informing decision-making on the part of
       both implementers and funders.

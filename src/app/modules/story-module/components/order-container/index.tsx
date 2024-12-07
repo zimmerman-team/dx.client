@@ -1,7 +1,7 @@
 import React from "react";
 import { useDrag } from "react-dnd";
-import { ReactComponent as RowFrameHandleAdornment } from "app/modules/report-module/asset/rowFrameHandleAdornment.svg";
-import { ReportElementsType } from "app/modules/report-module/components/right-panel-create-view/";
+import { ReactComponent as RowFrameHandleAdornment } from "app/modules/story-module/asset/rowFrameHandleAdornment.svg";
+import { StoryElementsType } from "app/modules/story-module/components/right-panel-create-view/";
 import { useRecoilState } from "recoil";
 import { isDividerOrRowFrameDraggingAtom } from "app/state/recoil/atoms";
 
@@ -20,9 +20,9 @@ export function ItemComponent(props: ItemComponentProps) {
   const { id, children: content, index } = props;
 
   const [{ isDragging }, drag] = useDrag({
-    type: ReportElementsType.ROW,
+    type: StoryElementsType.ROW,
     item: () => {
-      return { id, index, type: ReportElementsType.ROW };
+      return { id, index, type: StoryElementsType.ROW };
     },
     collect: (monitor: any) => ({
       isDragging: monitor.isDragging(),

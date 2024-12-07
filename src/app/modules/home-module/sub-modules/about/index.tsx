@@ -36,7 +36,7 @@ export default function AboutModule() {
     {
       title: "+100.000",
       subtitle: "Datasets available",
-      text: "Access over 100.000 datasets to create reports and charts. Create impact with data from 3rd parties built in Dataxplorer or connect your in-house datasources.",
+      text: "Access over 100.000 datasets to create stories and charts. Create impact with data from 3rd parties built in Dataxplorer or connect your in-house datasources.",
     },
     {
       title: "+15 Visuals",
@@ -328,16 +328,16 @@ export default function AboutModule() {
                     `}
                   >
                     <Link
-                      to="/report/new/initial"
-                      data-cy="empower-block-create-report-link"
+                      to="/story/new/initial"
+                      data-cy="empower-block-create-story-link"
                     >
                       <HomePrimaryButton color="#6061E5" type="button">
-                        CREATE REPORT
+                        CREATE STORY
                       </HomePrimaryButton>
                     </Link>
-                    <Link to="/" data-cy="empower-block-explore-reports-link">
+                    <Link to="/" data-cy="empower-block-explore-stories-link">
                       <HomePrimaryButton color="#E492BD" type="button">
-                        EXPLORE REPORTS
+                        EXPLORE STORIES
                       </HomePrimaryButton>
                     </Link>
                   </div>

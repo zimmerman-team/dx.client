@@ -1,13 +1,13 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import HeaderBlock from "app/modules/report-module/components/headerBlock";
+import HeaderBlock from "app/modules/story-module/components/headerBlock";
 import { ContentState, EditorState } from "draft-js";
-import { ToolbarPluginsType } from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
+import { ToolbarPluginsType } from "app/modules/story-module/components/storySubHeaderToolbar/staticToolbar";
 import Router from "react-router-dom";
 import { MutableSnapshot, RecoilRoot } from "recoil";
 import { RecoilObserver } from "app/utils/recoilObserver";
 import { createMemoryHistory } from "history";
-import { reportRightPanelViewAtom } from "app/state/recoil/atoms";
+import { storyRightPanelViewAtom } from "app/state/recoil/atoms";
 import { DndProvider, useDrag } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
@@ -16,8 +16,8 @@ interface MockProps {
   previewMode: boolean;
   hasSubHeaderTitleFocused?: boolean;
   setHasSubHeaderTitleFocused?: React.Dispatch<React.SetStateAction<boolean>>;
-  setReportName?: React.Dispatch<React.SetStateAction<string>>;
-  reportName?: string;
+  setStoryName?: React.Dispatch<React.SetStateAction<string>>;
+  storyName?: string;
   handleRightPanelOpen: () => void;
   setPlugins: React.Dispatch<React.SetStateAction<ToolbarPluginsType>>;
   headerDetails: {
@@ -65,8 +65,8 @@ const defaultProps = (props: Partial<MockProps>): MockProps => {
     previewMode: false,
     hasSubHeaderTitleFocused: false,
     setHasSubHeaderTitleFocused: jest.fn(),
-    setReportName: jest.fn(),
-    reportName: "Test Report",
+    setStoryName: jest.fn(),
+    storyName: "Test Story",
     setPlugins: jest.fn(),
     headerDetails: {
       title: "Test Title",
@@ -101,13 +101,13 @@ const dragAndDrop = (source: string, target: string) => {
 const history = createMemoryHistory({
   initialEntries: ["/chart/new/mapping"],
 });
-const reportRightPanelViewChange = jest.fn();
+const storyRightPanelViewChange = jest.fn();
 
 const appSetup = (newProps: Partial<MockProps> = {}) => {
   const props = defaultProps(newProps);
 
   const initialRecoilState = (snap: MutableSnapshot) => {
-    snap.set(reportRightPanelViewAtom, "elements");
+    snap.set(storyRightPanelViewAtom, "elements");
   };
 
   const Draggable = () => {
@@ -129,8 +129,8 @@ const appSetup = (newProps: Partial<MockProps> = {}) => {
       <Router.Router history={history}>
         <RecoilRoot initializeState={initialRecoilState}>
           <RecoilObserver
-            node={reportRightPanelViewAtom}
-            onChange={reportRightPanelViewChange}
+            node={storyRightPanelViewAtom}
+            onChange={storyRightPanelViewChange}
           />
           <DndProvider backend={HTML5Backend}>
             <HeaderBlock {...props} />
@@ -143,7 +143,7 @@ const appSetup = (newProps: Partial<MockProps> = {}) => {
     props,
   };
 };
-const reportPath = "/report/12345/edit";
+const storyPath = "/story/12345/edit";
 test("title input should be visible and editable", async () => {
   const user = userEvent.setup();
   jest
@@ -151,7 +151,7 @@ test("title input should be visible and editable", async () => {
     .mockReturnValue({ page: "12345", view: "edit" });
 
   jest.spyOn(Router, "useLocation").mockReturnValue({
-    pathname: reportPath,
+    pathname: storyPath,
   } as any);
   //spy on window alert
   jest.spyOn(window, "scrollTo").mockImplementation(() => {});
@@ -173,7 +173,7 @@ test("focusing on description input should clear placeholder", async () => {
     .mockReturnValue({ page: "12345", view: "edit" });
 
   jest.spyOn(Router, "useLocation").mockReturnValue({
-    pathname: reportPath,
+    pathname: storyPath,
   } as any);
   const { app } = appSetup();
   render(app);
@@ -190,7 +190,7 @@ test("focusing on description input should call setIsEditorFocused", async () =>
     .mockReturnValue({ page: "12345", view: "edit" });
 
   jest.spyOn(Router, "useLocation").mockReturnValue({
-    pathname: reportPath,
+    pathname: storyPath,
   } as any);
   const { app, props } = appSetup();
   render(app);
@@ -224,7 +224,7 @@ test("hovering and unhovering should show and hide the edit and delete buttons",
     .mockReturnValue({ page: "12345", view: "edit" });
 
   jest.spyOn(Router, "useLocation").mockReturnValue({
-    pathname: reportPath,
+    pathname: storyPath,
   } as any);
   const { app } = appSetup();
   render(app);
@@ -242,7 +242,7 @@ test("hovering should show the edit and delete buttons", async () => {
     .mockReturnValue({ page: "12345", view: "edit" });
 
   jest.spyOn(Router, "useLocation").mockReturnValue({
-    pathname: reportPath,
+    pathname: storyPath,
   } as any);
   const { app, props } = appSetup();
   render(app);
@@ -251,7 +251,7 @@ test("hovering should show the edit and delete buttons", async () => {
   expect(screen.getByTestId(deleteHeaderButtonId)).toBeEnabled();
 
   fireEvent.click(screen.getByTestId(editHeaderButtonId));
-  expect(reportRightPanelViewChange).toHaveBeenCalledWith("editHeader");
+  expect(storyRightPanelViewChange).toHaveBeenCalledWith("editHeader");
 
   fireEvent.click(screen.getByTestId(deleteHeaderButtonId));
   expect(props.setHeaderDetails).toHaveBeenCalledWith({
@@ -266,7 +266,7 @@ test("drop area should be visible when showHeader is false", async () => {
     .mockReturnValue({ page: "12345", view: "edit" });
 
   jest.spyOn(Router, "useLocation").mockReturnValue({
-    pathname: reportPath,
+    pathname: storyPath,
   } as any);
   const { app } = appSetup({
     headerDetails: { ...headerDetailsResult.headerDetails, showHeader: false },
@@ -281,7 +281,7 @@ test("drop area should call setHeaderDetails when dropped", async () => {
     .mockReturnValue({ page: "12345", view: "edit" });
 
   jest.spyOn(Router, "useLocation").mockReturnValue({
-    pathname: reportPath,
+    pathname: storyPath,
   } as any);
   const { app, props } = appSetup({
     headerDetails: { ...headerDetailsResult.headerDetails, showHeader: false },

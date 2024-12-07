@@ -4,13 +4,13 @@ import get from "lodash/get";
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import useDebounce from "react-use/lib/useDebounce";
-import { ReportModel } from "app/modules/report-module/data";
-import ColoredReportIcon from "app/assets/icons/ColoredReportIcon";
+import { StoryModel } from "app/modules/story-module/data";
+import ColoredStoryIcon from "app/assets/icons/ColoredStoryIcon";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import { HomepageTable } from "app/modules/home-module/components/Table";
-import DeleteReportDialog from "app/components/Dialogs/deleteStoryDialog";
-import ReformedGridItem from "app/modules/home-module/components/AssetCollection/Reports/gridItem";
-import ReportAddnewCard from "./reportAddNewCard";
+import DeleteStoryDialog from "app/components/Dialogs/deleteStoryDialog";
+import ReformedGridItem from "app/modules/home-module/components/AssetCollection/Stories/gridItem";
+import StoryAddnewCard from "./storyAddNewCard";
 import { useInfinityScroll } from "app/hooks/useInfinityScroll";
 import { EditorState, convertFromRaw } from "draft-js";
 import { useSetRecoilState } from "recoil";
@@ -26,12 +26,12 @@ interface Props {
   addCard?: boolean;
 }
 
-export default function ReportsGrid(props: Readonly<Props>) {
+export default function StoriesGrid(props: Readonly<Props>) {
   const observerTarget = React.useRef(null);
   const [cardId, setCardId] = React.useState<string>("");
   const [modalDisplay, setModalDisplay] = React.useState<boolean>(false);
   const [enableButton, setEnableButton] = React.useState<boolean>(false);
-  const [loadedReports, setLoadedReports] = React.useState<ReportModel[]>([]);
+  const [loadedStories, setLoadedStories] = React.useState<StoryModel[]>([]);
   const limit = getLimit();
   const initialRender = React.useRef(true);
   const [offset, setOffset] = React.useState(0);
@@ -40,22 +40,22 @@ export default function ReportsGrid(props: Readonly<Props>) {
 
   const setPlanDialog = useSetRecoilState(planDialogAtom);
 
-  const reports = useStoreState(
-    (state) => (state.reports.ReportGetList.crudData ?? []) as ReportModel[]
+  const stories = useStoreState(
+    (state) => (state.stories.StoryGetList.crudData ?? []) as StoryModel[]
   );
-  const loadReportsCount = useStoreActions(
-    (actions) => actions.reports.ReportsCount.fetch
+  const loadStoriesCount = useStoreActions(
+    (actions) => actions.stories.StoriesCount.fetch
   );
-  const reportsCount = useStoreState(
-    (state) => get(state, "reports.ReportsCount.data.count", 0) as number
+  const storiesCount = useStoreState(
+    (state) => get(state, "stories.StoriesCount.data.count", 0) as number
   );
 
-  const loadReports = useStoreActions(
-    (actions) => actions.reports.ReportGetList.fetch
+  const loadStories = useStoreActions(
+    (actions) => actions.stories.StoryGetList.fetch
   );
-  const loading = useStoreState((state) => state.reports.ReportGetList.loading);
-  const reportsLoadSuccess = useStoreState(
-    (state) => state.reports.ReportGetList.success
+  const loading = useStoreState((state) => state.stories.StoryGetList.loading);
+  const storiesLoadSuccess = useStoreState(
+    (state) => state.stories.StoryGetList.success
   );
 
   const getFilterString = (fromZeroOffset?: boolean) => {
@@ -76,13 +76,13 @@ export default function ReportsGrid(props: Readonly<Props>) {
 
   const loadData = (fromZeroOffset?: boolean) => {
     if (token) {
-      loadReports({
+      loadStories({
         token,
         storeInCrudData: true,
         filterString: getFilterString(fromZeroOffset),
       });
     } else {
-      loadReports({
+      loadStories({
         token,
         nonAuthCall: !token,
         storeInCrudData: true,
@@ -93,11 +93,11 @@ export default function ReportsGrid(props: Readonly<Props>) {
 
   const reloadData = () => {
     if (token) {
-      loadReportsCount({ token, filterString: getWhereString() });
+      loadStoriesCount({ token, filterString: getWhereString() });
     } else {
-      loadReportsCount({ nonAuthCall: true, filterString: getWhereString() });
+      loadStoriesCount({ nonAuthCall: true, filterString: getWhereString() });
     }
-    setLoadedReports([]);
+    setLoadedStories([]);
     setOffset(0);
     loadData(true);
   };
@@ -105,10 +105,10 @@ export default function ReportsGrid(props: Readonly<Props>) {
   React.useEffect(() => {
     //load data if intersection observer is triggered
     if (
-      reportsCount > limit &&
+      storiesCount > limit &&
       isObserved &&
-      reportsLoadSuccess &&
-      loadedReports.length !== reportsCount
+      storiesLoadSuccess &&
+      loadedStories.length !== storiesCount
     ) {
       //update the offset value for the next load
       setOffset(offset + limit);
@@ -129,7 +129,7 @@ export default function ReportsGrid(props: Readonly<Props>) {
       return;
     }
     axios
-      .delete(`${process.env.REACT_APP_API}/report/${id}`, {
+      .delete(`${process.env.REACT_APP_API}/story/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -145,7 +145,7 @@ export default function ReportsGrid(props: Readonly<Props>) {
       return;
     }
     axios
-      .get(`${process.env.REACT_APP_API}/report/duplicate/${id}`, {
+      .get(`${process.env.REACT_APP_API}/story/duplicate/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -186,16 +186,16 @@ export default function ReportsGrid(props: Readonly<Props>) {
   };
 
   React.useEffect(() => {
-    if (!reportsLoadSuccess) {
+    if (!storiesLoadSuccess) {
       return;
     }
-    //update the loaded reports
-    setLoadedReports((prevReports) => {
-      const prevReportsIds = prevReports.map((r) => r.id);
-      const f = reports.filter((report) => !prevReportsIds.includes(report.id));
-      return [...prevReports, ...f];
+    //update the loaded stories
+    setLoadedStories((prevStories) => {
+      const prevStoriesIds = prevStories.map((r) => r.id);
+      const f = stories.filter((story) => !prevStoriesIds.includes(story.id));
+      return [...prevStories, ...f];
     });
-  }, [reportsLoadSuccess]);
+  }, [storiesLoadSuccess]);
 
   React.useEffect(() => {
     reloadData();
@@ -217,15 +217,15 @@ export default function ReportsGrid(props: Readonly<Props>) {
     <>
       {props.view === "grid" && (
         <Grid container spacing={2}>
-          {props.addCard ? <ReportAddnewCard /> : null}
-          {loadedReports.map((data, index) => (
+          {props.addCard ? <StoryAddnewCard /> : null}
+          {loadedStories.map((data, index) => (
             <Grid item key={data.id} xs={12} sm={6} md={4} lg={3}>
               <ReformedGridItem
                 id={data.id}
                 key={data.id}
                 name={data.name}
                 date={data.updatedDate}
-                viz={<ColoredReportIcon />}
+                viz={<ColoredStoryIcon />}
                 color={data.backgroundColor}
                 showMenuButton={props.showMenuButton}
                 handleDelete={() => handleModal(data.id)}
@@ -254,14 +254,14 @@ export default function ReportsGrid(props: Readonly<Props>) {
               { key: "title", label: "Description" },
               { key: "updatedDate", label: "Last modified" },
             ],
-            data: loadedReports.map((data) => ({
+            data: loadedStories.map((data) => ({
               ...data,
               description: data.heading
                 ? EditorState.createWithContent(convertFromRaw(data.heading))
                     .getCurrentContent()
                     .getPlainText()
                 : "",
-              type: "report",
+              type: "story",
             })),
           }}
         />
@@ -269,7 +269,7 @@ export default function ReportsGrid(props: Readonly<Props>) {
       <Box height={80} />
       <div ref={observerTarget} />
       {loading && <CircleLoader />}
-      <DeleteReportDialog
+      <DeleteStoryDialog
         cardId={cardId}
         modalDisplay={modalDisplay}
         enableButton={enableButton}

@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { styles } from "app/modules/report-module/components/reportSubHeaderToolbar/styles";
+import { styles } from "app/modules/story-module/components/storySubHeaderToolbar/styles";
 
 interface InputProps
   extends React.DetailedHTMLProps<
@@ -94,7 +94,7 @@ export default function AutoResizeInput(props: InputProps) {
         value={name}
         onChange={(e) => onChange(e.target.value)}
         style={getInputStyle()}
-        data-cy="report-sub-header-title-input"
+        data-cy="story-sub-header-title-input"
         title={name}
       />
       <span

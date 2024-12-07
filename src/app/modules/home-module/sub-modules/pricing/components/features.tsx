@@ -2,7 +2,7 @@ import React from "react";
 import BackupIcon from "app/modules/home-module/sub-modules/pricing/assets/backup";
 import AddChartIcon from "app/modules/home-module/sub-modules/pricing/assets/add-chart";
 import GoodIcon from "app/modules/home-module/sub-modules/pricing/assets/good-icon";
-import ReportIcon from "app/modules/home-module/sub-modules/pricing/assets/report";
+import StoryIcon from "app/modules/home-module/sub-modules/pricing/assets/story";
 import UserShieldIcon from "app/modules/home-module/sub-modules/pricing/assets/user-shied";
 import SupportIcon from "app/modules/home-module/sub-modules/pricing/assets/support";
 import InfoIcon from "app/modules/home-module/sub-modules/pricing/assets/info-icon";
@@ -110,15 +110,15 @@ const Features = () => {
       ],
     },
     {
-      title: "Create report",
+      title: "Create story",
       subtitle:
-        "Create comprehensive reports effortlessly with our versatile report creation tools.",
+        "Create comprehensive stories effortlessly with our versatile story creation tools.",
       color: "#E492BD",
-      icon: ReportIcon,
+      icon: StoryIcon,
       options: [
         {
-          name: "Number of reports",
-          info: "The amount of reports you can manage.",
+          name: "Number of stories",
+          info: "The amount of stories you can manage.",
           values: [5, 100, "1.000", "10.000"],
         },
         {
@@ -137,14 +137,14 @@ const Features = () => {
           values: ["", true, true, true],
         },
         {
-          name: "Report AI Chat",
+          name: "Story AI Chat",
           info: "Talk to your data",
           button: true,
           values: ["", true, true, true],
         },
         {
-          name: "Report AI Builder",
-          info: "Use AI Agent to draft your Report",
+          name: "Story AI Builder",
+          info: "Use AI Agent to draft your Story",
           button: true,
           values: ["", true, true, true],
         },

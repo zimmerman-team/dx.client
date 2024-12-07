@@ -31,8 +31,8 @@ export default function HomeModule() {
 
   const exploreViewRef = React.useRef<HTMLDivElement>(null);
 
-  const exploreReportClick = () => {
-    setDisplay("reports");
+  const exploreStoryClick = () => {
+    setDisplay("stories");
     exploreViewRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
@@ -95,20 +95,20 @@ export default function HomeModule() {
                       `}
                     >
                       <Link
-                        to="report/new/initial"
+                        to="story/new/initial"
                         css={`
                           background: #6061e5;
                         `}
                       >
-                        CREATE REPORT
+                        CREATE STORY
                       </Link>
                       <button
-                        onClick={exploreReportClick}
+                        onClick={exploreStoryClick}
                         css={`
                           background: #e492bd;
                         `}
                       >
-                        EXPLORE REPORTS
+                        EXPLORE STORIES
                       </button>
                     </div>
                   )}

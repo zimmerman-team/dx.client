@@ -9,7 +9,7 @@ import {
 } from "app/modules/chart-module/components/exporter";
 import { Link, useParams } from "react-router-dom";
 
-export function ExportReportButton(props: { filename: string }) {
+export function ExportStoryButton(props: { filename: string }) {
   const { page } = useParams<{
     page: string;
   }>();
@@ -58,7 +58,7 @@ export function ExportReportButton(props: { filename: string }) {
         >
           <Link
             target="_blank"
-            to={`/report/${page}/downloaded-view?type=pdf&filename=${props.filename}`}
+            to={`/story/${page}/downloaded-view?type=pdf&filename=${props.filename}`}
             css={`
               text-decoration: none;
               color: #262c34;
@@ -75,7 +75,7 @@ export function ExportReportButton(props: { filename: string }) {
         <StyledMenuItem>
           <Link
             target="_blank"
-            to={`/report/${page}/downloaded-view?type=png&filename=${props.filename}`}
+            to={`/story/${page}/downloaded-view?type=png&filename=${props.filename}`}
             css={`
               text-decoration: none;
               color: #262c34;
@@ -93,7 +93,7 @@ export function ExportReportButton(props: { filename: string }) {
         <StyledMenuItem>
           <Link
             target="_blank"
-            to={`/report/${page}/downloaded-view?type=svg&filename=${props.filename}`}
+            to={`/story/${page}/downloaded-view?type=svg&filename=${props.filename}`}
             css={`
               text-decoration: none;
               color: #262c34;

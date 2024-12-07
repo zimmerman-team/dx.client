@@ -12,19 +12,19 @@ import { useStoreActions } from "app/state/store/hooks";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { useHistory, useLocation, useParams } from "react-router-dom";
 import { RichEditor } from "app/modules/common/RichEditor";
-import { ReportChartWrapper } from "app/modules/report-module/components/chart-wrapper";
-import { ReactComponent as EditIcon } from "app/modules/report-module/asset/editIcon.svg";
+import { StoryChartWrapper } from "app/modules/story-module/components/chart-wrapper";
+import { ReactComponent as EditIcon } from "app/modules/story-module/asset/editIcon.svg";
 import ZoomOutMapIcon from "@material-ui/icons/ZoomOutMap";
-import { ReactComponent as DeleteIcon } from "app/modules/report-module/asset/deleteIcon.svg";
-import { ReportElementsType } from "app/modules/report-module/components/right-panel-create-view";
+import { ReactComponent as DeleteIcon } from "app/modules/story-module/asset/deleteIcon.svg";
+import { StoryElementsType } from "app/modules/story-module/components/right-panel-create-view";
 import {
   chartFromStoryAtom,
-  reportContentIsResizingAtom,
-  reportContentContainerWidth,
+  storyContentIsResizingAtom,
+  storyContentContainerWidth,
   isChartDraggingAtom,
 } from "app/state/recoil/atoms";
-import { IFramesArray } from "app/modules/report-module/views/create/data";
-import { ToolbarPluginsType } from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
+import { IFramesArray } from "app/modules/story-module/views/create/data";
+import { ToolbarPluginsType } from "app/modules/story-module/components/storySubHeaderToolbar/staticToolbar";
 import { css } from "styled-components";
 import { Updater } from "use-immer";
 import { useMediaQuery } from "@material-ui/core";
@@ -69,8 +69,8 @@ export default function RowstructureDisplay(
   const { page } = useParams<{ page: string }>();
   const [handleDisplay, setHandleDisplay] = React.useState(false);
   const viewOnlyMode =
-    location.pathname === `/report/${page}` ||
-    location.pathname === `/report/${page}/downloaded-view`;
+    location.pathname === `/story/${page}` ||
+    location.pathname === `/story/${page}/downloaded-view`;
 
   const handlers = viewOnlyMode
     ? {}
@@ -294,7 +294,7 @@ const Box = (props: {
     (state) => state.charts.ChartCreate.setCrudData
   );
   const isChartDragging = useRecoilValue(isChartDraggingAtom);
-  const setChartFromReport = useRecoilState(chartFromStoryAtom)[1];
+  const setChartFromStory = useRecoilState(chartFromStoryAtom)[1];
   const resetMapping = useStoreActions(
     (actions) => actions.charts.mapping.reset
   );
@@ -328,7 +328,7 @@ const Box = (props: {
     React.useState<string>(placeholder);
 
   const handleEditChart = () => {
-    setChartFromReport({
+    setChartFromStory({
       state: true,
       view,
       page,
@@ -340,7 +340,7 @@ const Box = (props: {
     setCreateChartData(null);
     resetMapping();
 
-    //save report before exiting
+    //save story before exiting
     props.onSave("edit");
     history.push(`/chart/${chartId}/mapping`);
   };
@@ -379,34 +379,34 @@ const Box = (props: {
     });
   };
 
-  const containerWidth = useRecoilValue(reportContentContainerWidth);
+  const containerWidth = useRecoilValue(storyContentContainerWidth);
   const [_isResizing, setIsResizing] = useRecoilState(
-    reportContentIsResizingAtom
+    storyContentIsResizingAtom
   );
   const viewOnlyMode =
-    location.pathname === `/report/${page}` ||
-    location.pathname === `/report/${page}/downloaded-view`;
+    location.pathname === `/story/${page}` ||
+    location.pathname === `/story/${page}/downloaded-view`;
 
   const elementTypes = [
-    ReportElementsType.TEXT,
-    ReportElementsType.BIG_NUMBER,
-    ReportElementsType.CHART,
-    ReportElementsType.IMAGE,
-    ReportElementsType.VIDEO,
+    StoryElementsType.TEXT,
+    StoryElementsType.BIG_NUMBER,
+    StoryElementsType.CHART,
+    StoryElementsType.IMAGE,
+    StoryElementsType.VIDEO,
   ];
 
   const [{ isOver }, drop] = useDrop(() => ({
     accept:
       props.rowType === "oneByFive"
         ? elementTypes
-        : elementTypes.filter((type) => type !== ReportElementsType.BIG_NUMBER),
+        : elementTypes.filter((type) => type !== StoryElementsType.BIG_NUMBER),
     collect: (monitor) => ({
       isOver: monitor.isOver(),
       canDrop: monitor.canDrop(),
       item: monitor.getItem(),
     }),
     drop: (item: any, monitor) => {
-      if (item.type === ReportElementsType.TEXT) {
+      if (item.type === StoryElementsType.TEXT) {
         handleRowFrameItemAddition(
           props.rowId,
           props.itemIndex,
@@ -415,8 +415,8 @@ const Box = (props: {
         );
         setDisplayMode("text");
       } else if (
-        item.type === ReportElementsType.CHART ||
-        item.type === ReportElementsType.BIG_NUMBER
+        item.type === StoryElementsType.CHART ||
+        item.type === StoryElementsType.BIG_NUMBER
       ) {
         handleRowFrameItemAddition(
           props.rowId,
@@ -427,7 +427,7 @@ const Box = (props: {
         setChartId(item.value);
         setDisplayMode("chart");
         monitor.getDropResult();
-      } else if (item.type === ReportElementsType.VIDEO) {
+      } else if (item.type === StoryElementsType.VIDEO) {
         handleRowFrameItemAddition(
           props.rowId,
           props.itemIndex,
@@ -436,7 +436,7 @@ const Box = (props: {
         );
         setVideoContent(item.value);
         setDisplayMode("video");
-      } else if (item.type === ReportElementsType.IMAGE) {
+      } else if (item.type === StoryElementsType.IMAGE) {
         handleRowFrameItemAddition(
           props.rowId,
           props.itemIndex,
@@ -604,7 +604,7 @@ const Box = (props: {
               placeholder={placeholder}
               setPlaceholderState={setTextPlaceholderState}
               placeholderState={textPlaceholderState}
-              testId="report-rich-text-editor"
+              testId="story-rich-text-editor"
             />
           </div>
         </Resizable>
@@ -701,7 +701,7 @@ const Box = (props: {
                 </IconButton>
               </div>
             )}
-            <ReportChartWrapper
+            <StoryChartWrapper
               id={chartId}
               width={width.slice(0, -2)}
               error={chartError}
@@ -786,7 +786,7 @@ const Box = (props: {
                 border: none;
                 box-shadow: none;
               `}
-              data-cy="report-video-content"
+              data-cy="story-video-content"
             ></iframe>
           </div>
         </Resizable>
@@ -861,7 +861,7 @@ const Box = (props: {
                 height: ${props.height}px;
                 object-fit: cover;
               `}
-              data-cy="report-image-content"
+              data-cy="story-image-content"
             />
           </div>
         </Resizable>

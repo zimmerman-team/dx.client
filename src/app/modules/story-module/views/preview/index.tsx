@@ -8,18 +8,18 @@ import useResizeObserver from "use-resize-observer";
 import Container from "@material-ui/core/Container";
 import { EditorState, convertFromRaw } from "draft-js";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
-import { ReportModel, emptyReport } from "app/modules/report-module/data";
-import RowFrame from "app/modules/report-module/components/rowStructure";
-import HeaderBlock from "app/modules/report-module/components/headerBlock";
+import { StoryModel, emptyStory } from "app/modules/story-module/data";
+import RowFrame from "app/modules/story-module/components/rowStructure";
+import HeaderBlock from "app/modules/story-module/components/headerBlock";
 import { NotAuthorizedMessageModule } from "app/modules/common/not-authorized-message";
-import { ReportElementsType } from "app/modules/report-module/components/right-panel-create-view";
-import { reportContentContainerWidth } from "app/state/recoil/atoms";
+import { StoryElementsType } from "app/modules/story-module/components/right-panel-create-view";
+import { storyContentContainerWidth } from "app/state/recoil/atoms";
 import { linkDecorator } from "app/modules/common/RichEditor/decorators";
 import { useTitle } from "react-use";
-import ReportUsePanel from "app/modules/report-module/components/use-report-panel";
+import StoryUsePanel from "app/modules/story-module/components/use-story-panel";
 import { PageLoader } from "app/modules/common/page-loader";
 
-export function ReportPreviewView(
+export function StoryPreviewView(
   props: Readonly<{
     setIsPreviewView: React.Dispatch<React.SetStateAction<boolean>>;
     setAutoSave: React.Dispatch<
@@ -29,7 +29,7 @@ export function ReportPreviewView(
     >;
   }>
 ) {
-  useTitle(`DX DataXplorer - Report View`);
+  useTitle(`DX DataXplorer - Story View`);
 
   const { page } = useParams<{ page: string }>();
 
@@ -38,50 +38,50 @@ export function ReportPreviewView(
   const { ref, width } = useResizeObserver<HTMLDivElement>();
 
   const [containerWidth, setContainerWidth] = useRecoilState(
-    reportContentContainerWidth
+    storyContentContainerWidth
   );
 
   const token = useStoreState((state) => state.AuthToken.value);
 
-  const reportData = useStoreState(
-    (state) => (state.reports.ReportGet.crudData ?? emptyReport) as ReportModel
+  const storyData = useStoreState(
+    (state) => (state.stories.StoryGet.crudData ?? emptyStory) as StoryModel
   );
 
-  const [isReportLoading, setIsReportLoading] = React.useState<boolean | null>(
+  const [isStoryLoading, setIsStoryLoading] = React.useState<boolean | null>(
     null
   );
-  const loadingReportData = useStoreState(
-    (state) => state.reports.ReportGet.loading
+  const loadingStoryData = useStoreState(
+    (state) => state.stories.StoryGet.loading
   );
 
-  const reportError401 = useStoreState(
+  const storyError401 = useStoreState(
     (state) =>
-      get(state.reports.ReportGet.errorData, "data.error.statusCode", 0) ===
+      get(state.stories.StoryGet.errorData, "data.error.statusCode", 0) ===
         401 ||
-      get(state.reports.ReportGet.crudData, "error", "") === "Unauthorized"
+      get(state.stories.StoryGet.crudData, "error", "") === "Unauthorized"
   );
 
-  const errorReportName = useStoreState((state) =>
-    get(state.reports.ReportGet.crudData, "name", "")
+  const errorStoryName = useStoreState((state) =>
+    get(state.stories.StoryGet.crudData, "name", "")
   );
 
-  const fetchReportData = useStoreActions(
-    (actions) => actions.reports.ReportGet.fetch
+  const fetchStoryData = useStoreActions(
+    (actions) => actions.stories.StoryGet.fetch
   );
-  const clearReportData = useStoreActions(
-    (actions) => actions.reports.ReportGet.clear
-  );
-
-  const reportEditClear = useStoreActions(
-    (actions) => actions.reports.ReportUpdate.clear
+  const clearStoryData = useStoreActions(
+    (actions) => actions.stories.StoryGet.clear
   );
 
-  const reportCreateClear = useStoreActions(
-    (actions) => actions.reports.ReportCreate.clear
+  const storyEditClear = useStoreActions(
+    (actions) => actions.stories.StoryUpdate.clear
   );
 
-  const reportGetClear = useStoreActions(
-    (actions) => actions.reports.ReportGet.clear
+  const storyCreateClear = useStoreActions(
+    (actions) => actions.stories.StoryCreate.clear
+  );
+
+  const storyGetClear = useStoreActions(
+    (actions) => actions.stories.StoryGet.clear
   );
 
   React.useEffect(() => {
@@ -91,13 +91,13 @@ export function ReportPreviewView(
       return;
     }
     if (token) {
-      fetchReportData({ token, getId: page });
+      fetchStoryData({ token, getId: page });
     } else if (!isAuthenticated) {
-      fetchReportData({ nonAuthCall: true, getId: page });
+      fetchStoryData({ nonAuthCall: true, getId: page });
     }
 
     return () => {
-      clearReportData();
+      clearStoryData();
     };
   }, [page, token, isLoading, isAuthenticated]);
 
@@ -110,32 +110,32 @@ export function ReportPreviewView(
   React.useEffect(() => {
     props.setIsPreviewView(true);
     return () => {
-      reportGetClear();
-      reportEditClear();
-      reportCreateClear();
+      storyGetClear();
+      storyEditClear();
+      storyCreateClear();
       props.setIsPreviewView(false);
     };
   }, []);
 
   React.useEffect(() => {
-    if (!loadingReportData && isReportLoading === null) {
+    if (!loadingStoryData && isStoryLoading === null) {
       return;
     }
-    setIsReportLoading(loadingReportData);
-  }, [loadingReportData]);
+    setIsStoryLoading(loadingStoryData);
+  }, [loadingStoryData]);
 
-  if (loadingReportData || isReportLoading === null) {
+  if (loadingStoryData || isStoryLoading === null) {
     return <PageLoader />;
   }
 
-  if (reportError401) {
+  if (storyError401) {
     return (
       <>
         <Box height={48} />
         <NotAuthorizedMessageModule
-          asset="report"
+          asset="story"
           action="view"
-          name={errorReportName}
+          name={errorStoryName}
         />
       </>
     );
@@ -151,18 +151,18 @@ export function ReportPreviewView(
         isToolboxOpen={false}
         previewMode={true}
         headerDetails={{
-          title: reportData.title,
-          showHeader: reportData.showHeader,
+          title: storyData.title,
+          showHeader: storyData.showHeader,
           heading: EditorState.createWithContent(
-            convertFromRaw(reportData.heading ?? emptyReport.heading)
+            convertFromRaw(storyData.heading ?? emptyStory.heading)
           ),
           description: EditorState.createWithContent(
-            convertFromRaw(reportData.description ?? emptyReport.description)
+            convertFromRaw(storyData.description ?? emptyStory.description)
           ),
-          backgroundColor: reportData.backgroundColor,
-          titleColor: reportData.titleColor,
-          descriptionColor: reportData.descriptionColor,
-          dateColor: reportData.dateColor,
+          backgroundColor: storyData.backgroundColor,
+          titleColor: storyData.titleColor,
+          descriptionColor: storyData.descriptionColor,
+          dateColor: storyData.dateColor,
         }}
         setPlugins={() => {}}
         setHeaderDetails={() => {}}
@@ -171,8 +171,8 @@ export function ReportPreviewView(
       <Container id="content-container" maxWidth="lg" ref={ref}>
         <Box height={45} />
 
-        {!reportError401 &&
-          get(reportData, "rows", []).map((rowFrame, index) => {
+        {!storyError401 &&
+          get(storyData, "rows", []).map((rowFrame, index) => {
             const contentTypes = rowFrame.items.map((item) => {
               if (item === null) {
                 return null;
@@ -190,7 +190,7 @@ export function ReportPreviewView(
             if (
               rowFrame.items &&
               rowFrame.items.length === 1 &&
-              rowFrame.items[0] === ReportElementsType.DIVIDER
+              rowFrame.items[0] === StoryElementsType.DIVIDER
             ) {
               return (
                 <div
@@ -215,7 +215,7 @@ export function ReportPreviewView(
                 setPlugins={() => {}}
                 updateFramesArray={() => {}}
                 key={`rowframe${index}`}
-                endReportTour={() => {}}
+                endStoryTour={() => {}}
                 onSave={async () => {}}
                 forceSelectedType={rowFrame.structure ?? undefined}
                 previewItems={rowFrame.items.map((item, index) => {
@@ -239,7 +239,7 @@ export function ReportPreviewView(
       </Container>
       {window.location.search.includes("?fromLanding=true") &&
       !isAuthenticated ? (
-        <ReportUsePanel />
+        <StoryUsePanel />
       ) : null}
     </div>
   );

@@ -150,8 +150,8 @@ export default function TryUsBlock() {
               }
             `}
           >
-            <Link to="/report/new/initial">
-              CREATE REPORT <RightArr />
+            <Link to="/story/new/initial">
+              CREATE STORY <RightArr />
             </Link>
             <Link to="/contact">
               Contact sales <RightArr />

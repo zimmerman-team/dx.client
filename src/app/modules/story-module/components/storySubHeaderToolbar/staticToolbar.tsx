@@ -23,8 +23,8 @@ import {
   HeaderOneButton,
   HeaderTwoButton,
 } from "app/modules/common/RichEditor/buttons";
-import { styles as commonstyles } from "app/modules/report-module/components/reportSubHeaderToolbar/styles";
-import { ReactComponent as MoreIcon } from "app/modules/report-module/asset/more-icon.svg";
+import { styles as commonstyles } from "app/modules/story-module/components/storySubHeaderToolbar/styles";
+import { ReactComponent as MoreIcon } from "app/modules/story-module/asset/more-icon.svg";
 import React from "react";
 
 type UndoRedoType = {

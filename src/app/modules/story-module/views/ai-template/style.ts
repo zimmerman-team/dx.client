@@ -164,7 +164,7 @@ export const chartIllustrationcss = css`
   left: 40%;
 `;
 
-export const reportIllustrationcss = css`
+export const storyIllustrationcss = css`
   position: absolute;
   z-index: 1;
   top: 45%;

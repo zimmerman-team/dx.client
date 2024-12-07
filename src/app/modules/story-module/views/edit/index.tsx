@@ -9,21 +9,21 @@ import { EditorState, convertFromRaw } from "draft-js";
 import { useTitle } from "react-use";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
-import { ReportModel, emptyReport } from "app/modules/report-module/data";
-import { ReportEditViewProps } from "app/modules/report-module/views/edit/data";
-import HeaderBlock from "app/modules/report-module/components/headerBlock";
+import { StoryModel, emptyStory } from "app/modules/story-module/data";
+import { StoryEditViewProps } from "app/modules/story-module/views/edit/data";
+import HeaderBlock from "app/modules/story-module/components/headerBlock";
 import { NotAuthorizedMessageModule } from "app/modules/common/not-authorized-message";
-import { ItemComponent } from "app/modules/report-module/components/order-container";
-import { ReportElementsType } from "app/modules/report-module/components/right-panel-create-view";
-import AddRowFrameButton from "app/modules/report-module/components/rowStructure/addRowFrameButton";
-import { GridColumns } from "app/modules/report-module/components/grid-columns";
+import { ItemComponent } from "app/modules/story-module/components/order-container";
+import { StoryElementsType } from "app/modules/story-module/components/right-panel-create-view";
+import AddRowFrameButton from "app/modules/story-module/components/rowStructure/addRowFrameButton";
+import { GridColumns } from "app/modules/story-module/components/grid-columns";
 
 import {
   IRowFrameStructure,
-  reportContentContainerWidth,
+  storyContentContainerWidth,
 } from "app/state/recoil/atoms";
-import { IFramesArray } from "app/modules/report-module/views/create/data";
-import RowFrame from "app/modules/report-module/components/rowStructure";
+import { IFramesArray } from "app/modules/story-module/views/create/data";
+import RowFrame from "app/modules/story-module/components/rowStructure";
 import TourGuide from "app/components/Dialogs/TourGuide";
 import useCookie from "@devhammed/use-cookie";
 import isEqual from "lodash/isEqual";
@@ -33,11 +33,11 @@ import { handleDragOverScroll } from "app/utils/handleAutoScroll";
 import {
   compareFramesArrayState,
   compareHeaderDetailsState,
-} from "app/modules/report-module/views/edit/compareStates";
-import PlaceHolder from "app/modules/report-module/components/placeholder";
+} from "app/modules/story-module/views/edit/compareStates";
+import PlaceHolder from "app/modules/story-module/components/placeholder";
 
-function ReportEditView(props: Readonly<ReportEditViewProps>) {
-  useTitle("DX Dataxplorer - Edit Report");
+function StoryEditView(props: Readonly<StoryEditViewProps>) {
+  useTitle("DX Dataxplorer - Edit Story");
 
   const { page } = useParams<{ page: string }>();
   const token = useStoreState((state) => state.AuthToken.value);
@@ -48,9 +48,9 @@ function ReportEditView(props: Readonly<ReportEditViewProps>) {
     tourCookie && !props.isSaveEnabled
   );
   const [containerWidth, setContainerWidth] = useRecoilState(
-    reportContentContainerWidth
+    storyContentContainerWidth
   );
-  const [isReportHeadingModified, setIsReportHeadingModified] =
+  const [isStoryHeadingModified, setIsStoryHeadingModified] =
     React.useState(false);
   const [rowStructureType, setRowStructuretype] =
     React.useState<IRowFrameStructure>({
@@ -59,34 +59,34 @@ function ReportEditView(props: Readonly<ReportEditViewProps>) {
       disableAddRowStructureButton: false,
     });
 
-  const fetchReportData = useStoreActions(
-    (actions) => actions.reports.ReportGet.fetch
+  const fetchStoryData = useStoreActions(
+    (actions) => actions.stories.StoryGet.fetch
   );
 
-  const [isReportLoading, setIsReportLoading] = React.useState<boolean | null>(
+  const [isStoryLoading, setIsStoryLoading] = React.useState<boolean | null>(
     null
   );
 
-  const loadingReportData = useStoreState(
-    (state) => state.reports.ReportGet.loading
+  const loadingStoryData = useStoreState(
+    (state) => state.stories.StoryGet.loading
   );
 
-  const clearReportData = useStoreActions(
-    (actions) => actions.reports.ReportGet.clear
+  const clearStoryData = useStoreActions(
+    (actions) => actions.stories.StoryGet.clear
   );
-  const reportData = useStoreState(
-    (state) => (state.reports.ReportGet.crudData ?? emptyReport) as ReportModel
+  const storyData = useStoreState(
+    (state) => (state.stories.StoryGet.crudData ?? emptyStory) as StoryModel
   );
 
-  const reportError401 = useStoreState(
+  const storyError401 = useStoreState(
     (state) =>
-      get(state.reports.ReportGet.errorData, "data.error.statusCode", 0) ===
+      get(state.stories.StoryGet.errorData, "data.error.statusCode", 0) ===
         401 ||
-      get(state.reports.ReportGet.crudData, "error", "") === "Unauthorized"
+      get(state.stories.StoryGet.crudData, "error", "") === "Unauthorized"
   );
 
-  const errorReportName = useStoreState((state) =>
-    get(state.reports.ReportGet.crudData, "name", "")
+  const errorStoryName = useStoreState((state) =>
+    get(state.stories.StoryGet.crudData, "name", "")
   );
 
   function deleteFrame(id: string) {
@@ -99,18 +99,18 @@ function ReportEditView(props: Readonly<ReportEditViewProps>) {
 
   React.useEffect(() => {
     if (token) {
-      fetchReportData({ token, getId: page });
+      fetchStoryData({ token, getId: page });
     }
     return () => {
-      clearReportData();
+      clearStoryData();
     };
   }, [page, token]);
 
   React.useEffect(() => {
-    if (reportData.id !== page) {
+    if (storyData.id !== page) {
       return;
     }
-    const items = reportData.rows.map((rowFrame, index) =>
+    const items = storyData.rows.map((rowFrame, index) =>
       rowFrame.items.filter((item) => typeof item === "string")
     ) as string[][];
     let pickedItems: string[] = [];
@@ -118,7 +118,7 @@ function ReportEditView(props: Readonly<ReportEditViewProps>) {
     for (const element of items) {
       pickedItems = [...pickedItems, ...element];
     }
-  }, [reportData]);
+  }, [storyData]);
 
   React.useEffect(() => {
     if (width && width !== containerWidth) {
@@ -126,7 +126,7 @@ function ReportEditView(props: Readonly<ReportEditViewProps>) {
     }
   }, [width]);
 
-  function handleEndReportTour() {
+  function handleEndStoryTour() {
     setTourCookie("false", {
       expires: 31536000 * 20,
       domain: "",
@@ -154,8 +154,8 @@ function ReportEditView(props: Readonly<ReportEditViewProps>) {
     }
   };
 
-  const framesArrayFromReportData = (): IFramesArray[] => {
-    return reportData.rows?.map((rowFrame, index) => {
+  const framesArrayFromStoryData = (): IFramesArray[] => {
+    return storyData.rows?.map((rowFrame, index) => {
       const contentTypes = rowFrame.items.map(getContentType);
       const content = rowFrame.items.map((item, index) => {
         return contentTypes[index] === "text"
@@ -165,7 +165,7 @@ function ReportEditView(props: Readonly<ReportEditViewProps>) {
       const isDivider =
         content &&
         content.length === 1 &&
-        content[0] === ReportElementsType.DIVIDER;
+        content[0] === StoryElementsType.DIVIDER;
       const id = v4();
 
       return {
@@ -186,53 +186,53 @@ function ReportEditView(props: Readonly<ReportEditViewProps>) {
     });
   };
 
-  const headerDetailsFromReportData = () => {
+  const headerDetailsFromStoryData = () => {
     return {
-      title: reportData.title,
-      showHeader: reportData.showHeader,
-      heading: reportData?.heading
+      title: storyData.title,
+      showHeader: storyData.showHeader,
+      heading: storyData?.heading
         ? EditorState.moveFocusToEnd(
-            EditorState.createWithContent(convertFromRaw(reportData?.heading))
+            EditorState.createWithContent(convertFromRaw(storyData?.heading))
           )
         : EditorState.moveFocusToEnd(EditorState.createEmpty()),
-      description: reportData?.description
-        ? EditorState.createWithContent(convertFromRaw(reportData?.description))
+      description: storyData?.description
+        ? EditorState.createWithContent(convertFromRaw(storyData?.description))
         : EditorState.createEmpty(),
-      backgroundColor: reportData.backgroundColor,
-      titleColor: reportData.titleColor,
-      descriptionColor: reportData.descriptionColor,
-      dateColor: reportData.dateColor,
+      backgroundColor: storyData.backgroundColor,
+      titleColor: storyData.titleColor,
+      descriptionColor: storyData.descriptionColor,
+      dateColor: storyData.dateColor,
       isUpdated: true,
     };
   };
 
   const hasChangesBeenMadeCheck = () => {
-    if (reportData.id !== page) {
+    if (storyData.id !== page) {
       return;
     }
     const areHeaderDetailsStatesEqual = compareHeaderDetailsState(
       props.headerDetails,
-      headerDetailsFromReportData()
+      headerDetailsFromStoryData()
     );
     const areFramesArrayStatesEqual = compareFramesArrayState(
       props.framesArray,
-      framesArrayFromReportData()
+      framesArrayFromStoryData()
     );
 
     if (
       !areFramesArrayStatesEqual ||
       !areHeaderDetailsStatesEqual ||
-      reportData.name !== props.reportName
+      storyData.name !== props.storyName
     ) {
       props.setHasChangesBeenMade(true);
     }
     if (
       !isEqual(
         props.headerDetails.heading.getCurrentContent().getPlainText(),
-        headerDetailsFromReportData().heading.getCurrentContent().getPlainText()
+        headerDetailsFromStoryData().heading.getCurrentContent().getPlainText()
       )
     ) {
-      setIsReportHeadingModified(true);
+      setIsStoryHeadingModified(true);
     }
   };
 
@@ -240,67 +240,62 @@ function ReportEditView(props: Readonly<ReportEditViewProps>) {
     hasChangesBeenMadeCheck();
     return () => {
       props.setHasChangesBeenMade(false);
-      setIsReportHeadingModified(false);
+      setIsStoryHeadingModified(false);
     };
-  }, [
-    props.framesArray,
-    props.reportName,
-    props.headerDetails,
-    props.autoSave,
-  ]);
+  }, [props.framesArray, props.storyName, props.headerDetails, props.autoSave]);
 
-  const updateReportStatesWithReportData = async () => {
-    if (reportData.id !== page) {
+  const updateStoryStatesWithStoryData = async () => {
+    if (storyData.id !== page) {
       return;
     }
-    props.setHasReportNameFocused(reportData.name !== "Untitled report");
-    props.setReportName(reportData.name);
-    props.setHeaderDetails(headerDetailsFromReportData());
-    props.updateFramesArray(framesArrayFromReportData());
+    props.setHasStoryNameFocused(storyData.name !== "Untitled story");
+    props.setStoryName(storyData.name);
+    props.setHeaderDetails(headerDetailsFromStoryData());
+    props.updateFramesArray(framesArrayFromStoryData());
   };
 
   React.useEffect(() => {
-    updateReportStatesWithReportData().finally(() => {
+    updateStoryStatesWithStoryData().finally(() => {
       props.setAutoSave({ isAutoSaveEnabled: true });
     });
-  }, [reportData]);
+  }, [storyData]);
 
   React.useEffect(() => {
-    if (!loadingReportData && isReportLoading === null) {
+    if (!loadingStoryData && isStoryLoading === null) {
       return;
     }
-    setIsReportLoading(loadingReportData);
-  }, [loadingReportData]);
+    setIsStoryLoading(loadingStoryData);
+  }, [loadingStoryData]);
 
-  const canEditDeleteReport = React.useMemo(() => {
-    return isAuthenticated && reportData?.owner === user?.sub;
-  }, [user, isAuthenticated, reportData]);
+  const canEditDeleteStory = React.useMemo(() => {
+    return isAuthenticated && storyData?.owner === user?.sub;
+  }, [user, isAuthenticated, storyData]);
 
-  if (loadingReportData || isReportLoading === null) {
+  if (loadingStoryData || isStoryLoading === null) {
     return <PageLoader />;
   }
 
-  if (reportError401) {
+  if (storyError401) {
     return (
       <>
         <Box height={48} />
         <NotAuthorizedMessageModule
-          asset="report"
+          asset="story"
           action="edit"
-          name={errorReportName}
+          name={errorStoryName}
         />
       </>
     );
   }
 
-  if (!canEditDeleteReport && !loadingReportData) {
+  if (!canEditDeleteStory && !loadingStoryData) {
     return (
       <>
         <Box height={48} />
         <NotAuthorizedMessageModule
-          asset="report"
+          asset="story"
           action="edit"
-          name={reportData?.name}
+          name={storyData?.name}
         />
         ;
       </>
@@ -320,15 +315,15 @@ function ReportEditView(props: Readonly<ReportEditViewProps>) {
         headerDetails={{
           ...props.headerDetails,
         }}
-        reportName={reportData.name}
-        setReportName={props.setReportName}
-        hasReportNameFocused={props.hasReportNameFocused}
-        sethasReportNameFocused={props.setHasReportNameFocused}
+        storyName={storyData.name}
+        setStoryName={props.setStoryName}
+        hasStoryNameFocused={props.hasStoryNameFocused}
+        sethasStoryNameFocused={props.setHasStoryNameFocused}
         setHeaderDetails={props.setHeaderDetails}
         setPlugins={props.setPlugins}
         isToolboxOpen={props.rightPanelOpen}
         handleRightPanelOpen={props.handleRightPanelOpen}
-        isReportHeadingModified={isReportHeadingModified}
+        isStoryHeadingModified={isStoryHeadingModified}
       />
       <Container maxWidth="lg">
         <div
@@ -344,9 +339,9 @@ function ReportEditView(props: Readonly<ReportEditViewProps>) {
         >
           <Box height={50} />
           <TourGuide
-            reportType={props.reportType ?? "basic"}
+            storyType={props.storyType ?? "basic"}
             toolBoxOpen={props.rightPanelOpen}
-            handleClose={handleEndReportTour}
+            handleClose={handleEndStoryTour}
             open={openTour}
           />
 
@@ -382,7 +377,7 @@ function ReportEditView(props: Readonly<ReportEditViewProps>) {
                       rowContentWidths={frame.contentWidths}
                       setPlugins={props.setPlugins}
                       onSave={props.onSave}
-                      endReportTour={handleEndReportTour}
+                      endStoryTour={handleEndStoryTour}
                     />
                   </div>
                 </ItemComponent>
@@ -408,7 +403,7 @@ function ReportEditView(props: Readonly<ReportEditViewProps>) {
             rowStructureType={rowStructureType}
             updateFramesArray={props.updateFramesArray}
             setRowStructureType={setRowStructuretype}
-            endTour={handleEndReportTour}
+            endTour={handleEndStoryTour}
           />
           <Box height={45} />
           <GridColumns />
@@ -418,4 +413,4 @@ function ReportEditView(props: Readonly<ReportEditViewProps>) {
   );
 }
 
-export default ReportEditView;
+export default StoryEditView;

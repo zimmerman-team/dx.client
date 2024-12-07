@@ -3,11 +3,11 @@ import { useHistory } from "react-router-dom";
 import { Grid, IconButton } from "@material-ui/core";
 import { ReactComponent as AddNewImage } from "app/modules/home-module/assets/add-img-white.svg";
 
-export default function ReportAddnewCard() {
+export default function StoryAddnewCard() {
   const history = useHistory();
 
   const action = () => {
-    history.push("/report/new/initial");
+    history.push("/story/new/initial");
   };
 
   return (
@@ -62,7 +62,7 @@ export default function ReportAddnewCard() {
                 letter-spacing: 0.5px;
               `}
             >
-              <b>Create Report</b>
+              <b>Create Story</b>
             </p>
           </p>
         </div>

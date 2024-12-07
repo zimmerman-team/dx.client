@@ -29,7 +29,7 @@ export const styles = {
       width: 100%;
     }
   `,
-  viewReportBtn: css`
+  viewStoryBtn: css`
     height: 24.3px;
     background: #231d2c;
     border-radius: 30px;

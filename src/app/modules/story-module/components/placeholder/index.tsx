@@ -1,6 +1,6 @@
 import React from "react";
-import { PlaceholderProps } from "app/modules/report-module/views/create/data";
-import { ReportElementsType } from "app/modules/report-module/components/right-panel-create-view";
+import { PlaceholderProps } from "app/modules/story-module/views/create/data";
+import { StoryElementsType } from "app/modules/story-module/components/right-panel-create-view";
 import { useDrop } from "react-dnd";
 import { isDividerOrRowFrameDraggingAtom } from "app/state/recoil/atoms";
 import { useRecoilValue } from "recoil";
@@ -26,9 +26,9 @@ const PlaceHolder = (props: PlaceholderProps) => {
   const [{ isOver, handlerId, item: dragItem }, drop] = useDrop(() => ({
     // The type (or types) to accept - strings or symbols
     accept: [
-      ReportElementsType.DIVIDER,
-      ReportElementsType.ROWFRAME,
-      ReportElementsType.ROW,
+      StoryElementsType.DIVIDER,
+      StoryElementsType.ROWFRAME,
+      StoryElementsType.ROW,
     ],
     // Props to collect
     collect: (monitor) => ({
@@ -38,7 +38,7 @@ const PlaceHolder = (props: PlaceholderProps) => {
       handlerId: monitor.getHandlerId(),
     }),
     drop: (item: any, monitor) => {
-      if (item.type === ReportElementsType.ROW) {
+      if (item.type === StoryElementsType.ROW) {
         moveCard(item.id);
       } else {
         props.updateFramesArray((draft) => {
@@ -56,11 +56,11 @@ const PlaceHolder = (props: PlaceholderProps) => {
               type: item.type,
             },
             content:
-              item.type === ReportElementsType.ROWFRAME ? [] : ["divider"],
+              item.type === StoryElementsType.ROWFRAME ? [] : ["divider"],
             contentWidths: [],
             contentHeights: [],
             contentTypes:
-              item.type === ReportElementsType.ROWFRAME ? [] : ["divider"],
+              item.type === StoryElementsType.ROWFRAME ? [] : ["divider"],
             structure: null,
           });
         });
@@ -109,7 +109,7 @@ const PlaceHolder = (props: PlaceholderProps) => {
   };
   return (
     <div
-      data-cy="report-row-placeholder"
+      data-cy="story-row-placeholder"
       data-handler-id={handlerId}
       ref={drop}
       css={`

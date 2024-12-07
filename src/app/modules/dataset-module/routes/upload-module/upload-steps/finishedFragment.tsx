@@ -30,13 +30,13 @@ export default function FinishedFragment(props: Props) {
   const { user, isAuthenticated } = useAuth0();
   const isSmallScreen = useMediaQuery("(max-width:767px)"); //at this breakpoint, we limit user creation abilities
   const queryParams = new URLSearchParams(location.search);
-  const reportPage = queryParams.get("page") as string;
+  const storyPage = queryParams.get("page") as string;
   const fromHome = location.search.includes("fromHome=true");
   let redirectPath = `/dataset/${props.datasetId}/detail${
     fromHome ? "?fromHome=true" : ""
   }`;
-  if (reportPage) {
-    redirectPath += `?fromreport=true&page=${reportPage}`;
+  if (storyPage) {
+    redirectPath += `?fromstory=true&page=${storyPage}`;
   }
   const setDatasetId = useStoreActions(
     (actions) => actions.charts.dataset.setValue
@@ -221,7 +221,7 @@ export default function FinishedFragment(props: Props) {
                   to={{
                     pathname: `/chart/new/chart-type`,
                     search: `?loadataset=true${
-                      reportPage ? `&fromreport=true&page=${reportPage}` : ""
+                      storyPage ? `&fromstory=true&page=${storyPage}` : ""
                     }`,
                   }}
                 >

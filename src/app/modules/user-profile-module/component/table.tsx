@@ -10,7 +10,7 @@ import { Checkbox, Tooltip } from "@material-ui/core";
 import { SaveAlt } from "@material-ui/icons";
 import { PrintIcon } from "./icons";
 import { Tooltip as SpeechBubble } from "react-tooltip";
-import { InfoSnackbar } from "app/modules/report-module/components/reportSubHeaderToolbar/infosnackbar";
+import { InfoSnackbar } from "app/modules/story-module/components/storySubHeaderToolbar/infosnackbar";
 import { ISnackbarState } from "app/modules/dataset-module/routes/upload-module/upload-steps/previewFragment";
 
 interface IData {
@@ -138,11 +138,11 @@ export function InvoiceTable() {
           `}
         >
           <p>Invoices</p>
-          <a href="." className="report-panel-info">
+          <a href="." className="story-panel-info">
             <InfoIcon />
           </a>
           <SpeechBubble
-            anchorSelect=".report-panel-info"
+            anchorSelect=".story-panel-info"
             place="right"
             style={{
               background: "#231D2C",

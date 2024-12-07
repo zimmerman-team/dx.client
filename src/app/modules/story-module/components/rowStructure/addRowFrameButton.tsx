@@ -1,8 +1,8 @@
 import React from "react";
 import { v4 } from "uuid";
 import IconButton from "@material-ui/core/IconButton";
-import { IFramesArray } from "app/modules/report-module/views/create/data";
-import { ReactComponent as PlusIcon } from "app/modules/report-module/asset/addButton.svg";
+import { IFramesArray } from "app/modules/story-module/views/create/data";
+import { ReactComponent as PlusIcon } from "app/modules/story-module/asset/addButton.svg";
 import { IRowFrameStructure } from "app/state/recoil/atoms";
 import { Updater } from "use-immer";
 interface Props {

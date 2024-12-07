@@ -1,15 +1,15 @@
 import React from "react";
 import Grid from "@material-ui/core/Grid";
 import { FieldErrors } from "react-hook-form";
-import { ReactComponent as MailImg } from "app/modules/report-module/asset/mail-img.svg";
-import { ReactComponent as TopEllipse } from "app/modules/report-module/asset/ai-newsletter-top-ellipse.svg";
-import { ReactComponent as BigEllipse } from "app/modules/report-module/asset/ai-newsletter-big-ellipse.svg";
-import { ReactComponent as MidEllipse } from "app/modules/report-module/asset/ai-newsletter-md-btm-ellipse.svg";
-import { ReactComponent as BtmGreenEllipse } from "app/modules/report-module/asset/ai-newsletter-btm-green-ellipse.svg";
-import { ReactComponent as BtmPurpleEllipse } from "app/modules/report-module/asset/ai-newsletter-sm-purple-ellispe.svg";
-import { ReactComponent as ReportIllustration } from "app/modules/report-module/asset/report-illustration.svg";
-import { ReactComponent as DatasetIllustration } from "app/modules/report-module/asset/dataset-illustration.svg";
-import { ReactComponent as ChartIllustration } from "app/modules/report-module/asset/chart-illustration.svg";
+import { ReactComponent as MailImg } from "app/modules/story-module/asset/mail-img.svg";
+import { ReactComponent as TopEllipse } from "app/modules/story-module/asset/ai-newsletter-top-ellipse.svg";
+import { ReactComponent as BigEllipse } from "app/modules/story-module/asset/ai-newsletter-big-ellipse.svg";
+import { ReactComponent as MidEllipse } from "app/modules/story-module/asset/ai-newsletter-md-btm-ellipse.svg";
+import { ReactComponent as BtmGreenEllipse } from "app/modules/story-module/asset/ai-newsletter-btm-green-ellipse.svg";
+import { ReactComponent as BtmPurpleEllipse } from "app/modules/story-module/asset/ai-newsletter-sm-purple-ellispe.svg";
+import { ReactComponent as StoryIllustration } from "app/modules/story-module/asset/story-illustration.svg";
+import { ReactComponent as DatasetIllustration } from "app/modules/story-module/asset/dataset-illustration.svg";
+import { ReactComponent as ChartIllustration } from "app/modules/story-module/asset/chart-illustration.svg";
 import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 import {
   bigEllipsecss,
@@ -20,7 +20,7 @@ import {
   midEllipsecss,
   newsletterIllustrationcss,
   notSubscribedcss,
-  reportIllustrationcss,
+  storyIllustrationcss,
   subscribedcss,
   topEllipsecss,
 } from "./style";
@@ -60,7 +60,7 @@ export default function AITemplate() {
           <h1>Stay Up to Date</h1>
           <p>
             Want to be the first one to know when we launch our brand new
-            AI-powered template for reports? Don't miss out on this exciting
+            AI-powered template for stories? Don't miss out on this exciting
             opportunity!
           </p>
           <div
@@ -75,7 +75,7 @@ export default function AITemplate() {
             <BtmPurpleEllipse css={btmPurpleEllipsecss} />
             <DatasetIllustration css={datasetIllustrationcss} />
             <ChartIllustration css={chartIllustrationcss} />
-            <ReportIllustration css={reportIllustrationcss} />
+            <StoryIllustration css={storyIllustrationcss} />
           </div>
           <TopEllipse css={topEllipsecss} />
         </div>

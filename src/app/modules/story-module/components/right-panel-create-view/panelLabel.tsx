@@ -1,23 +1,23 @@
 /* third-party */
 import React from "react";
 /* project */
-import { ReactComponent as InfoIcon } from "app/modules/report-module/asset/info-icon.svg";
+import { ReactComponent as InfoIcon } from "app/modules/story-module/asset/info-icon.svg";
 import { Tooltip } from "react-tooltip";
 
 export default function PanelLabel(props: {
   currentView: "charts" | "media" | "elements" | "editHeader";
 }) {
-  let label = "Elements to control this report";
+  let label = "Elements to control this story";
   let tooltip =
-    "Choose what elements you want to have in your report. Simply drag and drop them on the canvas!";
+    "Choose what elements you want to have in your story. Simply drag and drop them on the canvas!";
   if (props.currentView === "charts") {
     label = "Charts";
     tooltip =
-      "Add charts from Dataxplorer into your report. Simply drag and drop charts into the report placeholders!";
+      "Add charts from Dataxplorer into your story. Simply drag and drop charts into the story placeholders!";
   } else if (props.currentView === "media") {
     label = "Media content";
     tooltip =
-      "Add media content to your report. Simply drag and drop media content into the report placeholders!";
+      "Add media content to your story. Simply drag and drop media content into the story placeholders!";
   }
   return (
     <div
@@ -45,11 +45,11 @@ export default function PanelLabel(props: {
       `}
     >
       <p>{label}</p>
-      <a href="." className="report-panel-info">
+      <a href="." className="story-panel-info">
         <InfoIcon />
       </a>
       <Tooltip
-        anchorSelect=".report-panel-info"
+        anchorSelect=".story-panel-info"
         place="bottom"
         style={{
           background: "#231D2C",

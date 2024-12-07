@@ -1,6 +1,6 @@
 import { EditorState, convertToRaw, RawDraftContentState } from "draft-js";
 
-export interface ReportModel {
+export interface StoryModel {
   id: string;
   name: string;
   title: string;
@@ -37,9 +37,9 @@ export interface ReportModel {
   isUpdated: boolean;
 }
 
-export const emptyReport: ReportModel = {
+export const emptyStory: StoryModel = {
   id: "",
-  name: "Untitled report",
+  name: "Untitled story",
   title: "",
   public: false,
   description: convertToRaw(EditorState.createEmpty().getCurrentContent()),

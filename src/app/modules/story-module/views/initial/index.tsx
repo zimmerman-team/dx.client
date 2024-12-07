@@ -4,11 +4,11 @@ import Container from "@material-ui/core/Container";
 import {
   templates,
   TemplateItem,
-  ReportInitialViewProps,
-  ReportTemplateModel,
-} from "app/modules/report-module/views/initial/data";
-import { ReportModel, emptyReport } from "app/modules/report-module/data";
-import ReportsGrid from "app/modules/home-module/components/AssetCollection/Reports/reportsGrid";
+  StoryInitialViewProps,
+  StoryTemplateModel,
+} from "app/modules/story-module/views/initial/data";
+import { StoryModel, emptyStory } from "app/modules/story-module/data";
+import StoriesGrid from "app/modules/home-module/components/AssetCollection/Stories/storiesGrid";
 import { useHistory } from "react-router-dom";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import { useMount, useTitle, useUpdateEffect } from "react-use";
@@ -16,12 +16,12 @@ import { isEmpty } from "lodash";
 import Filter from "app/modules/home-module/components/Filter";
 import { useMediaQuery } from "@material-ui/core";
 
-function ReportInitialView(props: Readonly<ReportInitialViewProps>) {
-  useTitle("DX Dataxplorer - New Report");
+function StoryInitialView(props: Readonly<StoryInitialViewProps>) {
+  useTitle("DX Dataxplorer - New Story");
 
   const history = useHistory();
   const isMobile = useMediaQuery("(max-width: 599px)");
-  const [reportsView, setReportsView] = React.useState<"grid" | "table">(
+  const [storiesView, setStoriesView] = React.useState<"grid" | "table">(
     "grid"
   );
   const [searchValue, setSearchValue] = React.useState<undefined | string>(
@@ -30,38 +30,37 @@ function ReportInitialView(props: Readonly<ReportInitialViewProps>) {
   const [openSearch, setOpenSearch] = React.useState(false);
   const [sortValue, setSortValue] = React.useState("updatedDate");
 
-  const reportCreateSuccess = useStoreState(
-    (state) => state.reports.ReportCreate.success
+  const storyCreateSuccess = useStoreState(
+    (state) => state.stories.StoryCreate.success
   );
 
-  const reportCreateData = useStoreState(
-    (state) =>
-      (state.reports.ReportCreate.crudData ?? emptyReport) as ReportModel
+  const storyCreateData = useStoreState(
+    (state) => (state.stories.StoryCreate.crudData ?? emptyStory) as StoryModel
   );
-  const clearReportEdit = useStoreActions(
-    (actions) => actions.reports.ReportUpdate.clear
+  const clearStoryEdit = useStoreActions(
+    (actions) => actions.stories.StoryUpdate.clear
   );
-  const clearReportCreate = useStoreActions(
-    (actions) => actions.reports.ReportCreate.clear
+  const clearStoryCreate = useStoreActions(
+    (actions) => actions.stories.StoryCreate.clear
   );
-  const handleTemplateSelected = (option: ReportTemplateModel) => {
+  const handleTemplateSelected = (option: StoryTemplateModel) => {
     props.handleSetButtonActive(option.value);
   };
 
   React.useEffect(() => {
-    props.resetReport();
+    props.resetStory();
   }, []);
 
   useMount(() => {
-    clearReportCreate();
-    clearReportEdit();
+    clearStoryCreate();
+    clearStoryEdit();
   });
 
   useUpdateEffect(() => {
-    if (reportCreateSuccess && !isEmpty(reportCreateData?.id)) {
-      history.push(`/report/${reportCreateData.id}/edit`);
+    if (storyCreateSuccess && !isEmpty(storyCreateData?.id)) {
+      history.push(`/story/${storyCreateData.id}/edit`);
     }
-  }, [reportCreateSuccess, reportCreateData]);
+  }, [storyCreateSuccess, storyCreateData]);
 
   return (
     <Container maxWidth="lg">
@@ -75,7 +74,7 @@ function ReportInitialView(props: Readonly<ReportInitialViewProps>) {
             margin: 0;
           `}
         >
-          Select your report template
+          Select your story template
         </h4>
       </div>
       <div
@@ -130,7 +129,7 @@ function ReportInitialView(props: Readonly<ReportInitialViewProps>) {
               font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
             `}
           >
-            Explore or duplicate reports
+            Explore or duplicate stories
           </h4>
         </Grid>
         <Grid item lg={6} md={6} sm={6} xs={6}>
@@ -138,23 +137,23 @@ function ReportInitialView(props: Readonly<ReportInitialViewProps>) {
             searchValue={searchValue as string}
             setSearchValue={setSearchValue}
             setSortValue={setSortValue}
-            setAssetsView={setReportsView}
+            setAssetsView={setStoriesView}
             sortValue={sortValue}
-            assetsView={reportsView}
+            assetsView={storiesView}
             openSearch={openSearch}
             setOpenSearch={setOpenSearch}
             searchIconCypressId="open-search-button"
           />
         </Grid>
       </Grid>
-      <ReportsGrid
+      <StoriesGrid
         sortBy={sortValue}
         searchStr={searchValue as string}
-        view={reportsView}
+        view={storiesView}
         showMenuButton
       />
     </Container>
   );
 }
 
-export default ReportInitialView;
+export default StoryInitialView;

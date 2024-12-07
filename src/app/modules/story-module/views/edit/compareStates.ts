@@ -1,5 +1,5 @@
-import { IHeaderDetails } from "app/modules/report-module/components/right-panel/data";
-import { IFramesArray } from "app/modules/report-module/views/create/data";
+import { IHeaderDetails } from "app/modules/story-module/components/right-panel/data";
+import { IFramesArray } from "app/modules/story-module/views/create/data";
 import _ from "lodash";
 import { EditorState } from "draft-js";
 
@@ -58,7 +58,7 @@ export const compareFramesArrayState = (
       framesArrayProps[i],
       "id",
       "frame.rowId",
-      "frame.handlePersistReportState",
+      "frame.handlePersistStoryState",
       "frame.handleRowFrameItemResize",
       "frame.previewItems"
     );
@@ -66,7 +66,7 @@ export const compareFramesArrayState = (
       framesArrayState[i],
       "id",
       "frame.rowId",
-      "frame.handlePersistReportState",
+      "frame.handlePersistStoryState",
       "frame.handleRowFrameItemResize",
       "frame.previewItems"
     );
