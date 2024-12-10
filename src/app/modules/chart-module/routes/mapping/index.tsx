@@ -12,11 +12,11 @@ import {
   ChartBuilderMappingProps,
 } from "app/modules/chart-module/routes/mapping/data";
 import ChartPlaceholder from "app/modules/chart-module/components/placeholder";
-import { ReactComponent as AIIcon } from "app/modules/chart-module/assets/ai-icon.svg";
 import { useRecoilState } from "recoil";
 import { chartFromReportAtom } from "app/state/recoil/atoms";
 import { useLocation, useParams } from "react-router-dom";
 import MappingErrorComponent from "app/modules/chart-module/routes/mapping/error";
+import AIIcon from "app/assets/icons/AIIcon";
 
 function ChartBuilderMapping(props: Readonly<ChartBuilderMappingProps>) {
   useTitle("DX Dataxplorer - Mapping");

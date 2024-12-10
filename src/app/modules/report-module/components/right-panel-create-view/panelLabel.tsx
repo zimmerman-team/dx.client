@@ -31,7 +31,7 @@ export default function PanelLabel(props: {
         padding-top: 4px;
         margin-left: 5%;
         margin-bottom: 8px;
-        a {
+        span {
           display: flex;
           align-items: center;
           justify-content: center;
@@ -45,9 +45,9 @@ export default function PanelLabel(props: {
       `}
     >
       <p>{label}</p>
-      <a href="." className="report-panel-info">
+      <span className="report-panel-info">
         <InfoIcon />
-      </a>
+      </span>
       <Tooltip
         anchorSelect=".report-panel-info"
         place="bottom"

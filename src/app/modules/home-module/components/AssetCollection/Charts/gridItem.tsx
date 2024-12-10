@@ -5,8 +5,8 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { IconButton, useMediaQuery } from "@material-ui/core";
 import { ReactComponent as MenuIcon } from "app/modules/home-module/assets/menu.svg";
 import { ReactComponent as ClockIcon } from "app/modules/home-module/assets/clock-icon.svg";
-import { ReactComponent as AIIcon } from "app/modules/chart-module/assets/ai-icon.svg";
 import MenuItems from "app/modules/home-module/components/AssetCollection/Datasets/menuItems";
+import AIIcon from "app/assets/icons/AIIcon";
 
 interface Props {
   id: string;

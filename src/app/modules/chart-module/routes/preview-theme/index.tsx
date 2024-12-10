@@ -11,13 +11,13 @@ import { useDataThemesEchart } from "app/hooks/useDataThemesEchart";
 import { styles as commonStyles } from "app/modules/chart-module/routes/common/styles";
 import { ChartBuilderPreviewThemeProps } from "app/modules/chart-module/routes/preview-theme/data";
 import WarningDialog from "app/modules/chart-module/components/dialog/warningDialog";
-import { ReactComponent as AIIcon } from "app/modules/chart-module/assets/ai-icon.svg";
 import GeomapLegend from "app/modules/chart-module/components/geomap-legend";
 import ErrorComponent from "app/modules/chart-module/components/dialog/errrorComponent";
 import { DatasetListItemAPIModel } from "app/modules/dataset-module/data";
 import { getDatasetDetailsSource } from "app/modules/chart-module/util/getDatasetDetailsSource";
 import { mobileDescriptioncss } from "app/modules/dataset-module/routes/upload-module/style";
 import moment from "moment";
+import AIIcon from "app/assets/icons/AIIcon";
 
 export function ChartBuilderPreviewTheme(props: ChartBuilderPreviewThemeProps) {
   useTitle("DX Dataxplorer - Preview Chart");
