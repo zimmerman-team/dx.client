@@ -104,6 +104,7 @@ export default function NewsletterForm(
         ref={inputRef}
         onFocus={inputRefFocus}
         onBlur={inputRefBlur}
+        autoComplete="email"
       />
       <button type="submit">SUBSCRIBE</button>
     </form>

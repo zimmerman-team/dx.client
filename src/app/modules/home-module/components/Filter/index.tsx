@@ -81,6 +81,8 @@ export default function Filter(
               onChange={handleSearch}
               data-cy="filter-search-input"
               aria-label="search"
+              name="search"
+              autoComplete="search"
             />
             <IconButton
               onClick={() => {
