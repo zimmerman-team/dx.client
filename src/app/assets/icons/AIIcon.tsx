@@ -24,7 +24,7 @@ export default function AIIcon() {
           fontFamily: "GothamNarrow-Medium, 'Helvetica Neue', sans-serif",
           width: "320px",
           lineHeight: "16px",
-          zIndex: 1,
+          zIndex: 100,
         }}
       >
         Based on the dataset selected, a recommendation for this chart was
