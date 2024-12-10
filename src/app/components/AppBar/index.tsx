@@ -18,7 +18,7 @@ const NavList = (props: {
   setIsNavExpanded?: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const list = [
-    { name: "Explore", path: "/", cy: "nav-explore", class: "" },
+    { name: "Library", path: "/", cy: "nav-explore", class: "" },
     {
       name: "Why Dataxplorer",
       path: "/why-dataxplorer",

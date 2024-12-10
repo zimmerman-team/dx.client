@@ -5,9 +5,9 @@ import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import { CommonChart } from "app/modules/chart-module/components/common-chart";
 import { ChartAPIModel, emptyChartAPI } from "app/modules/chart-module/data";
-import { ReactComponent as AIIcon } from "app/modules/chart-module/assets/ai-icon.svg";
 import { useRenderChartFromAPI } from "./useRenderChartFromAPI";
 import { useLoadDatasetDetails } from "./useLoadDatasetDetailsAPI";
+import AIIcon from "app/assets/icons/AIIcon";
 
 interface Props {
   id: string;

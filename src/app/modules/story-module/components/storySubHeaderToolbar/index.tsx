@@ -205,9 +205,10 @@ export function StorySubheaderToolbar(
           filterString: "filter[order]=updatedDate desc",
         });
       })
-      .catch((error) => console.log(error));
-
-    history.replace("/");
+      .catch((error) => console.log(error))
+      .finally(() => {
+        history.replace("/");
+      });
   };
 
   const handleDuplicate = () => {

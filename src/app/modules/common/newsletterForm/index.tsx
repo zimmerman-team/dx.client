@@ -49,16 +49,9 @@ export default function NewsletterForm(
     props.setIsSubscriptionFailed(false);
     axios
       .post(
-        `https://api.hsforms.com/submissions/v3/integration/submit/${process.env.REACT_APP_HUBSPOT_PORTAL_ID}/${process.env.REACT_APP_HUBSPOT_SUBSCRIBE_FORM_ID}`,
+        `${process.env.REACT_APP_API}/users/subscribe-to-newsletter`,
         {
-          portalId: process.env.REACT_APP_HUBSPOT_PORTAL_ID,
-          formGuid: process.env.REACT_APP_HUBSPOT_SUBSCRIBE_FORM_ID,
-          fields: [
-            {
-              name: "email",
-              value: formValues.email,
-            },
-          ],
+          email: formValues.email,
         },
         {
           headers: {
@@ -68,6 +61,9 @@ export default function NewsletterForm(
       )
       .then((response: AxiosResponse) => {
         if (response.status === 200) {
+          if (response.data.error) {
+            return props.setIsSubscriptionFailed(true);
+          }
           setValue("email", "");
           setPlaceholder(emailAddress);
           props.setIsSubscribed(true);

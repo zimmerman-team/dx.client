@@ -66,14 +66,18 @@ export default function DeleteDatasetDialog(props: Props) {
         aria-describedby="simple-modal-description"
       >
         {loading ? (
-          <div className="w-full h-[80px] flex items-center justify-center">
+          <div>
             <CircleLoader />
           </div>
         ) : (
           <div className={classes.paper}>
             <form
-              onSubmit={() => props.handleDelete(props.cardId)}
+              onSubmit={(e) => {
+                e.preventDefault();
+                props.handleDelete(props.cardId);
+              }}
               data-cy="delete-dataset-item-form"
+              aria-label="form"
             >
               <div
                 css={`

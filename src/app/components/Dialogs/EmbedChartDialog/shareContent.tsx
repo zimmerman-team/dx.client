@@ -28,7 +28,7 @@ export default function ShareContent(props: {
           padding: 16px 4px;
         }
       `}
-      id="embed-code"
+      id="shared-link"
     >
       {props.content}
     </div>

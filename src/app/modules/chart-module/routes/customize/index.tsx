@@ -5,9 +5,9 @@ import { CommonChart } from "app/modules/chart-module/components/common-chart";
 import { styles as commonStyles } from "app/modules/chart-module/routes/common/styles";
 import { ChartBuilderCustomizeProps } from "app/modules/chart-module/routes/customize/data";
 import { useStoreState } from "app/state/store/hooks";
-import { ReactComponent as AIIcon } from "app/modules/chart-module/assets/ai-icon.svg";
 import ErrorComponent from "app/modules/chart-module/components/dialog/errrorComponent";
 import { useParams } from "react-router-dom";
+import AIIcon from "app/assets/icons/AIIcon";
 
 function ChartBuilderCustomize(props: Readonly<ChartBuilderCustomizeProps>) {
   useTitle("DX Dataxplorer - Customise");

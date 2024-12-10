@@ -282,13 +282,7 @@ export default function ChartModule() {
       isMappingValid,
       isAIAssisted: selectedAIChart,
     };
-    if (view !== undefined && page !== "new") {
-      editChart({
-        token,
-        patchId: page,
-        values: chart,
-      });
-    } else {
+    if (page === "new") {
       try {
         return await axios.post(`${process.env.REACT_APP_API}/chart/`, chart, {
           headers: {
@@ -299,6 +293,12 @@ export default function ChartModule() {
       } catch (e) {
         console.log(e);
       }
+    } else if (view !== undefined) {
+      editChart({
+        token,
+        patchId: page,
+        values: chart,
+      });
     }
   };
 

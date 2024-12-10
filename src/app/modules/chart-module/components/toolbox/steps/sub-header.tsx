@@ -48,9 +48,9 @@ export default function ToolboxSubHeader(
       <div>
         <p>{props.name}</p>{" "}
         <p>
-          <a href="." className="my-anchor-element">
+          <span className="my-anchor-element">
             <InfoIcon />
-          </a>
+          </span>
           <Tooltip
             anchorSelect=".my-anchor-element"
             place="top"

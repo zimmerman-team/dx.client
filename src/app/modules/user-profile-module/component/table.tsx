@@ -131,18 +131,18 @@ export function InvoiceTable() {
             display: flex;
             align-items: center;
             font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
-            a {
+            span {
               display: flex;
               align-items: center;
             }
           `}
         >
           <p>Invoices</p>
-          <a href="." className="story-panel-info">
+          <span className="invoice-info">
             <InfoIcon />
-          </a>
+          </span>
           <SpeechBubble
-            anchorSelect=".story-panel-info"
+            anchorSelect=".invoice-info"
             place="right"
             style={{
               background: "#231D2C",
