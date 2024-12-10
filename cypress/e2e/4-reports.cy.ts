@@ -214,7 +214,7 @@ describe("Edit, duplicate and delete story", () => {
 
     cy.get('[data-cy="story-grid-item-edit-btn"]').click();
 
-    cy.wait("@fetchstory");
+    cy.wait("@fetchStory");
 
     cy.get('[data-cy="story-sub-header-title-input"]').type(" - Edited");
 

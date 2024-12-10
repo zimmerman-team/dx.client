@@ -17,6 +17,6 @@ describe("General tests", () => {
       "/story/664f406b82350800ca942b92"
     );
     cy.wait("@fetchStory");
-    cy.get("input").should("have.value", "Impact Story on Climate Migration");
+    cy.get("input").should("have.value", "Impact Report on Climate Migration");
   });
 });
