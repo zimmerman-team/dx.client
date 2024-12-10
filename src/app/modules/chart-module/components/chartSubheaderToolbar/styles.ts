@@ -41,7 +41,7 @@ export const styles = {
     color: white;
     text-decoration: none;
   `,
-  backToReport: css`
+  backToStory: css`
     background: #231d2c;
     border-radius: 8px;
     display: flex;

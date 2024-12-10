@@ -13,7 +13,7 @@ import {
 } from "app/modules/chart-module/routes/mapping/data";
 import ChartPlaceholder from "app/modules/chart-module/components/placeholder";
 import { useRecoilState } from "recoil";
-import { chartFromReportAtom } from "app/state/recoil/atoms";
+import { chartFromStoryAtom } from "app/state/recoil/atoms";
 import { useLocation, useParams } from "react-router-dom";
 import MappingErrorComponent from "app/modules/chart-module/routes/mapping/error";
 import AIIcon from "app/assets/icons/AIIcon";
@@ -33,12 +33,12 @@ function ChartBuilderMapping(props: Readonly<ChartBuilderMappingProps>) {
     { id: string; name: string; minValues: number }[]
   >([]);
 
-  const [chartFromReport, setChartFromReport] =
-    useRecoilState(chartFromReportAtom);
+  const [chartFromStory, setChartFromStory] =
+    useRecoilState(chartFromStoryAtom);
   // access query parameters
   const queryParams = new URLSearchParams(location.search);
-  const paramValue = queryParams.get("fromreport");
-  const reportPage = queryParams.get("page") as string;
+  const paramValue = queryParams.get("fromstory");
+  const storyPage = queryParams.get("page") as string;
 
   React.useEffect(() => {
     const { updRequiredFields, updMinValuesFields } =
@@ -51,11 +51,11 @@ function ChartBuilderMapping(props: Readonly<ChartBuilderMappingProps>) {
 
   React.useEffect(() => {
     if (paramValue === "true") {
-      setChartFromReport((prev) => ({
-        ...chartFromReport,
+      setChartFromStory((prev) => ({
+        ...chartFromStory,
         state: true,
         action: "create",
-        page: reportPage,
+        page: storyPage,
         chartId: page,
       }));
     }

@@ -73,7 +73,7 @@ export default function TourStart(props: {
               font-family: "Inter", sans-serif;
             `}
           >
-            Welcome to the Dataxplorer report builder!
+            Welcome to the Dataxplorer story builder!
           </p>
           <p
             css={`
@@ -82,7 +82,7 @@ export default function TourStart(props: {
               line-height: normal;
             `}
           >
-            <b>Are you ready to create your first report?</b>
+            <b>Are you ready to create your first story?</b>
           </p>
           <p
             css={`

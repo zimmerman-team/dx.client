@@ -21,7 +21,7 @@ export default function ChartContainer(props: {
   setChartErrorMessage: React.Dispatch<React.SetStateAction<string>>;
   renderedChartType?: ChartType;
   inChartWrapper?: boolean;
-  chartPreviewInReport?: boolean;
+  chartPreviewInStory?: boolean;
   mapping?: any;
   datasetDetails?: DatasetListItemAPIModel;
   setNotFound: React.Dispatch<React.SetStateAction<boolean>>;

@@ -139,7 +139,7 @@ export default function DesktopFooter() {
                 font-family: "GothamNarrow-Medium", sans-serif;
               `}
             >
-              Subscribe to our newsletter
+              Stay Up To Date
             </p>
             {formError.email && (
               <label

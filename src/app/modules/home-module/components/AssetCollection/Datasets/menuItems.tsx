@@ -13,7 +13,7 @@ export default function MenuItems(props: {
   path: string;
   handleDuplicate: (id: string, type?: string) => void;
   handleDelete: (id: string) => void;
-  type: "chart" | "dataset" | "report";
+  type: "chart" | "dataset" | "story";
   top?: string;
   right?: string;
 }) {

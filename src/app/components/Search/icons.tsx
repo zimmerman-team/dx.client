@@ -21,7 +21,7 @@ export function getIcon(type: string) {
       return <BarIcon />;
     case "Chart":
       return <SankeyIcon />;
-    case "Report":
+    case "Story":
       return <TreemapIcon />;
     default:
       return <AllCategoriesIcon />;

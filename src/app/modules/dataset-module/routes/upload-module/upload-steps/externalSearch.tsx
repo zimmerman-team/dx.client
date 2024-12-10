@@ -151,9 +151,9 @@ export default function ExternalSearch(props: {
     }
   }, [token]);
   const t =
-    "http://localhost:4200/reports?filter={%22order%22:%22updatedDate%20desc%22,%22limit%22:15,%22offset%22:0}";
+    "http://localhost:4200/stories?filter={%22order%22:%22updatedDate%20desc%22,%22limit%22:15,%22offset%22:0}";
   const v =
-    "http://localhost:4200/reports?filter={%22order%22:%22updatedDate%20desc%22,%22limit%22:15,%22offset%22:0}";
+    "http://localhost:4200/stories?filter={%22order%22:%22updatedDate%20desc%22,%22limit%22:15,%22offset%22:0}";
 
   const [,] = useDebounce(
     () => {
@@ -193,14 +193,11 @@ export default function ExternalSearch(props: {
           }
         `}
       >
-        <h1>Federated Search</h1>
+        <h1>Search External Data Sources</h1>
         <Box height={22} />
         <p>
-          Connect to your favourite data sources effortlessly in Dataxplorer,
-          and with just a few clicks, import datasets without the hassle of
-          downloading,
-          <br /> enabling you to visualize and analyse diverse data like never
-          before.
+          External search allows you to search and import data rom WHO, World
+          Bank, The Global Fund, Kaggle and the Humanitarian Data Exchange
         </p>
       </div>
       <Box height={32} />

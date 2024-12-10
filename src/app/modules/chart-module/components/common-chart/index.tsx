@@ -43,7 +43,7 @@ interface Props {
   setChartErrorMessage: React.Dispatch<React.SetStateAction<string>>;
   renderedChartType?: ChartType;
   inChartWrapper?: boolean;
-  chartPreviewInReport?: boolean;
+  chartPreviewInStory?: boolean;
   mapping?: any;
   datasetDetails?: DatasetListItemAPIModel;
 }
@@ -81,7 +81,7 @@ export function CommonChart(props: Readonly<Props>) {
 
   let content;
   let contentHeight;
-  if (!props.chartPreviewInReport && props.renderedChartType !== "bigNumber") {
+  if (!props.chartPreviewInStory && props.renderedChartType !== "bigNumber") {
     contentHeight = props.visualOptions?.height - 28 + "px";
   } else {
     contentHeight = "auto";
@@ -163,7 +163,7 @@ export function CommonChart(props: Readonly<Props>) {
           },
           props.mapping,
           `common-chart-render-container-${props.chartId || "1"}-${
-            props.chartPreviewInReport
+            props.chartPreviewInStory
           }`
         );
       } catch (e: any) {
@@ -191,7 +191,7 @@ export function CommonChart(props: Readonly<Props>) {
       <div
         ref={domRef}
         id={`common-chart-render-container-${props.chartId || "1"}-${
-          props.chartPreviewInReport
+          props.chartPreviewInStory
         }`}
         data-cy="common-chart-container"
         css={`

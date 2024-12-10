@@ -1,6 +1,6 @@
-import { IFramesArray } from "app/modules/report-module/views/create/data";
-import { IHeaderDetails } from "app/modules/report-module/components/right-panel/data";
-import { ToolbarPluginsType } from "app/modules/report-module/components/reportSubHeaderToolbar/staticToolbar";
+import { IFramesArray } from "app/modules/story-module/views/create/data";
+import { IHeaderDetails } from "app/modules/story-module/components/right-panel/data";
+import { ToolbarPluginsType } from "app/modules/story-module/components/storySubHeaderToolbar/staticToolbar";
 
 export interface ChartSubheaderToolbarProps {
   name: string;
@@ -25,7 +25,7 @@ export interface ChartSubheaderToolbarProps {
   savedChanges: boolean;
 }
 
-export interface ReportSubheaderToolbarProps {
+export interface StorySubheaderToolbarProps {
   name: string;
   autoSave: boolean;
   setAutoSave: React.Dispatch<
@@ -34,16 +34,16 @@ export interface ReportSubheaderToolbarProps {
     }>
   >;
   visualOptions?: any;
-  onReportSave: (type: "create" | "edit") => Promise<void>;
+  onStorySave: (type: "create" | "edit") => Promise<void>;
   setName: (name: string) => void;
   isSaveEnabled?: boolean;
   rawViz?: any;
-  setHasReportNameFocused?: (value: boolean) => void;
-  setHasReportNameBlurred?: (value: boolean) => void;
+  setHasStoryNameFocused?: (value: boolean) => void;
+  setHasStoryNameBlurred?: (value: boolean) => void;
   plugins: ToolbarPluginsType;
   headerDetails: IHeaderDetails;
   framesArray: IFramesArray[];
   setStopInitializeFramesWidth?: (value: boolean) => void;
-  handlePersistReportState?: () => void;
+  handlePersistStoryState?: () => void;
   isPreviewView: boolean;
 }

@@ -374,7 +374,7 @@ function DatasetUploadSteps(props: Props) {
                     icon: <Search />,
                   },
                   {
-                    label: "File upload",
+                    label: "Connect Data",
                     value: "file",
                     testId: "file-upload-tab",
                     icon: <DesktopWindowsIcon />,

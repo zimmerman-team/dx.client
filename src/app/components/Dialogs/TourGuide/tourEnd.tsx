@@ -5,12 +5,12 @@ import React from "react";
 export default function TourEnd({
   handleClose,
   open,
-  reportType,
+  storyType,
   toolBoxOpen,
 }: {
   handleClose: () => void;
   open: boolean;
-  reportType: "basic" | "advanced" | "ai";
+  storyType: "basic" | "advanced" | "ai";
   toolBoxOpen: boolean;
 }) {
   return (
@@ -18,9 +18,9 @@ export default function TourEnd({
       css={`
         position: absolute;
 
-        ${reportType === "basic" &&
+        ${storyType === "basic" &&
         `top: 19.8rem; right: ${toolBoxOpen ? "-25%" : "-10%"};`}
-        ${reportType === "advanced" &&
+        ${storyType === "advanced" &&
         `top: 2.4rem; right: ${toolBoxOpen ? "-29%" : "-10%"};`} 
         display: ${open ? "block" : "none"};
         transition: right 225ms cubic-bezier(0, 0, 0.2, 1) 0ms;
@@ -82,13 +82,13 @@ export default function TourEnd({
           <CloseOutlined color={"inherit"} fontSize={"inherit"} />
         </IconButton>
         <p>
-          {reportType === "basic" &&
+          {storyType === "basic" &&
             " Good job! These grey rectangles are called placeholders. You drag and drop Chart or other Layout elements inside from the right panel."}
-          {reportType === "advanced" &&
+          {storyType === "advanced" &&
             "These grey rectangles are called placeholders. You drag and drop Chart or other Layout elements inside from the right panel"}
           <br />
           <br />
-          That’s how you create a report. Easy right!
+          That’s how you create a story. Easy right!
         </p>
         <button
           type="button"

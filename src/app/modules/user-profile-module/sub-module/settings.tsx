@@ -25,15 +25,15 @@ export default function Settings() {
   const clearCharts = useStoreActions(
     (actions) => actions.charts.ChartGetList.clear
   );
-  const clearReports = useStoreActions(
-    (actions) => actions.reports.ReportGetList.clear
+  const clearStories = useStoreActions(
+    (actions) => actions.stories.StoryGetList.clear
   );
 
   function clearAssets() {
     setToken("");
     clearDatasets();
     clearCharts();
-    clearReports();
+    clearStories();
   }
 
   const deleteUserAccount = async () => {

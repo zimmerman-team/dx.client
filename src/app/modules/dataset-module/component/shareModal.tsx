@@ -10,7 +10,7 @@ import { ReactComponent as LinkedinIcon } from "app/components/Dialogs/EmbedChar
 import { ReactComponent as PNGIcon } from "app/components/Dialogs/EmbedChartDialog/assets/png-icon.svg";
 import { ReactComponent as SVGIcon } from "app/components/Dialogs/EmbedChartDialog/assets/svg-icon.svg";
 import { ReactComponent as PDFIcon } from "app/components/Dialogs/EmbedChartDialog/assets/pdf-icon.svg";
-import { shareModalcss } from "app/modules/report-module/components/reportSubHeaderToolbar/infosnackbar";
+import { shareModalcss } from "app/modules/story-module/components/storySubHeaderToolbar/infosnackbar";
 import SaveAlt from "@material-ui/icons/SaveAlt";
 import { makeStyles, createStyles } from "@material-ui/core";
 import CopyToClipboard from "react-copy-to-clipboard";

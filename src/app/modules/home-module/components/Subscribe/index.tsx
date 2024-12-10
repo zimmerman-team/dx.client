@@ -73,7 +73,7 @@ export default function Subscribe() {
             margin-bottom: 16px;
           `}
         >
-          Subscribe to our newsletter
+          Stay Up to Date
         </p>
 
         {formError.email && (

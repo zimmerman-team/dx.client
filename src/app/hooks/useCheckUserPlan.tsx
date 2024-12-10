@@ -33,8 +33,8 @@ export function useCheckUserPlan() {
         aiAgent: boolean;
         customCharting: boolean;
       };
-      reports: {
-        noOfReports: number;
+      stories: {
+        noOfStories: number;
         basicTemplates: boolean;
         advancedTemplates: boolean;
         mediaSupport: boolean;
@@ -45,7 +45,7 @@ export function useCheckUserPlan() {
     assetsCount: {
       datasets: number;
       charts: number;
-      reports: number;
+      stories: number;
     };
   } | null>(null);
 
@@ -71,7 +71,7 @@ export function useCheckUserPlan() {
   }, [token]);
 
   const handleClick = (
-    asset: "report" | "chart" | "dataset",
+    asset: "story" | "chart" | "dataset",
     handleCreate: () => void
   ) => {
     if (!isAuthenticated) {
@@ -103,15 +103,15 @@ export function useCheckUserPlan() {
             onTryAgain: () => {},
           });
         }
-      } else if (asset === "report") {
+      } else if (asset === "story") {
         if (
-          userPlan.planData.reports.noOfReports > userPlan.assetsCount.reports
+          userPlan.planData.stories.noOfStories > userPlan.assetsCount.stories
         ) {
           handleCreate();
         } else {
           setPlanDialog({
             open: true,
-            message: `You have reached the <b>${userPlan.planData.reports.noOfReports}</b> reports limit for your ${userPlan.planData.name} Plan. Upgrade to increase.`,
+            message: `You have reached the <b>${userPlan.planData.stories.noOfStories}</b> stories limit for your ${userPlan.planData.name} Plan. Upgrade to increase.`,
             tryAgain: "",
             onTryAgain: () => {},
           });

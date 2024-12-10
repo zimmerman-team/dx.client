@@ -10,7 +10,7 @@ import { socialAuth } from "app/utils/socialAuth";
 import { useHistory, useLocation } from "react-router-dom";
 
 export function NotAuthorizedMessageModule(props: {
-  asset: "chart" | "report" | "dataset";
+  asset: "chart" | "story" | "dataset";
   action: "view" | "edit" | "delete";
   name?: string;
 }) {

@@ -1,13 +1,13 @@
 import React from "react";
 
 import EmptyRowsDialog from "./emptyRowsDialog";
-import UntitledReportDialog from "./untitledReportDialog";
+import UntitledStoryDialog from "./untitledStoryDialog";
 
 export function AppDialogs() {
   return (
     <React.Fragment>
       <EmptyRowsDialog />
-      <UntitledReportDialog />
+      <UntitledStoryDialog />
     </React.Fragment>
   );
 }

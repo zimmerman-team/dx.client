@@ -10,7 +10,7 @@ import { Checkbox, Tooltip } from "@material-ui/core";
 import { SaveAlt } from "@material-ui/icons";
 import { PrintIcon } from "./icons";
 import { Tooltip as SpeechBubble } from "react-tooltip";
-import { InfoSnackbar } from "app/modules/report-module/components/reportSubHeaderToolbar/infosnackbar";
+import { InfoSnackbar } from "app/modules/story-module/components/storySubHeaderToolbar/infosnackbar";
 import { ISnackbarState } from "app/modules/dataset-module/routes/upload-module/upload-steps/previewFragment";
 
 interface IData {

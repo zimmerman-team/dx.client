@@ -1,7 +1,7 @@
-import { ReportModel } from "app/modules/report-module/data";
+import { StoryModel } from "app/modules/story-module/data";
 import moment from "moment";
 
-export const mockReportsCrudData = [
+export const mockStoriesCrudData = [
   {
     id: "6698d8e5ff2ce60069aea622",
     name: "Lana del ray (Copy)",

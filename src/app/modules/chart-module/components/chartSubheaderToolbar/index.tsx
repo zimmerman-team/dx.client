@@ -29,16 +29,16 @@ import { ChartAPIModel, emptyChartAPI } from "app/modules/chart-module/data";
 import { ChartSubheaderToolbarProps } from "app/modules/chart-module/components/chartSubheaderToolbar/data";
 import { ExportChartButton } from "app/modules/chart-module/components/chartSubheaderToolbar/exportButton";
 import { ISnackbarState } from "app/modules/dataset-module/routes/upload-module/upload-steps/previewFragment";
-import { chartFromReportAtom, planDialogAtom } from "app/state/recoil/atoms";
-import AutoSaveSwitch from "app/modules/report-module/components/reportSubHeaderToolbar/autoSaveSwitch";
+import { chartFromStoryAtom, planDialogAtom } from "app/state/recoil/atoms";
+import AutoSaveSwitch from "app/modules/story-module/components/storySubHeaderToolbar/autoSaveSwitch";
 import useAutosave from "app/hooks/useAutoSave";
-import { useStyles } from "app/modules/report-module/components/reportSubHeaderToolbar";
-import AutoResizeInput from "app/modules/report-module/components/reportSubHeaderToolbar/autoResizeInput";
+import { useStyles } from "app/modules/story-module/components/storySubHeaderToolbar";
+import AutoResizeInput from "app/modules/story-module/components/storySubHeaderToolbar/autoResizeInput";
 import { isEqual } from "lodash";
 import EmbedChartDialog from "app/components/Dialogs/EmbedChartDialog";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import DuplicateMessage from "app/modules/common/mobile-duplicate-message";
-import { InfoSnackbar } from "app/modules/report-module/components/reportSubHeaderToolbar/infosnackbar";
+import { InfoSnackbar } from "app/modules/story-module/components/storySubHeaderToolbar/infosnackbar";
 import ShareModal from "app/modules/dataset-module/component/shareModal";
 
 // eslint-disable-next-line sonarjs/cognitive-complexity
@@ -70,8 +70,8 @@ export function ChartSubheaderToolbar(
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
   );
-  const [chartFromReport, setChartFromReport] =
-    useRecoilState(chartFromReportAtom);
+  const [chartFromStory, setChartFromStory] =
+    useRecoilState(chartFromStoryAtom);
 
   const mapping = useStoreState((state) => state.charts.mapping.value);
 
@@ -278,11 +278,11 @@ export function ChartSubheaderToolbar(
   const handleBackToEdit = () => {
     history.go(-1);
   };
-  const handleBackToReport = () => {
-    const { page: reportPage, view: reportView } = chartFromReport;
-    setChartFromReport((prev) => ({ ...prev, chartId: page }));
+  const handleBackToStory = () => {
+    const { page: storyPage, view: storyView } = chartFromStory;
+    setChartFromStory((prev) => ({ ...prev, chartId: page }));
     props.onSave();
-    history.push(`/report/${reportPage}/edit`);
+    history.push(`/story/${storyPage}/edit`);
   };
 
   return (
@@ -413,15 +413,15 @@ export function ChartSubheaderToolbar(
                 </p>
               </div>
             )}
-            {chartFromReport.state && (
+            {chartFromStory.state && (
               <button
-                onClick={handleBackToReport}
-                css={styles.backToReport}
+                onClick={handleBackToStory}
+                css={styles.backToStory}
                 type="button"
-                data-testid="back-to-report-button"
-                data-cy="back-to-report-button"
+                data-testid="back-to-story-button"
+                data-cy="back-to-story-button"
               >
-                Back to the report
+                Back to the story
               </button>
             )}
             {view === "preview" && (
@@ -623,7 +623,7 @@ export function ChartSubheaderToolbar(
         )}
       </>
       <InfoSnackbar
-        gap={window.location.pathname.includes("report")}
+        gap={window.location.pathname.includes("story")}
         data-testid="create-chart-snackbar"
         onClose={() => setShowSnackbar(null)}
         open={showSnackbar !== null && showSnackbar !== ""}
@@ -636,10 +636,10 @@ export function ChartSubheaderToolbar(
               <button
                 onClick={() => {
                   setShowSnackbar(null);
-                  history.push("/report/new/initial");
+                  history.push("/story/new/initial");
                 }}
               >
-                CREATE NEW REPORT
+                CREATE NEW STORY
               </button>
             </>
           }
