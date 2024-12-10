@@ -77,3 +77,5 @@ cypress/e2e/3-getting-started
 cypress/e2e/2-advanced-examples
 
 rawgraphs-charts
+
+.vscode
