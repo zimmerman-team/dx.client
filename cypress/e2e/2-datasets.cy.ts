@@ -36,7 +36,7 @@ describe("Testing connecting data on DX", () => {
     cy.wait("@planData");
   });
 
-  it("Can filter results by source in the federated search", () => {
+  it("Can filter results by source in the external search", () => {
     cy.wait("@getDefaultData").then((interception) => {
       cy.wait(2000);
       cy.contains('[data-cy="source-category-button"]', "Kaggle").click();

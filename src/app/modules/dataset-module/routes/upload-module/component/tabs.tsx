@@ -45,7 +45,7 @@ function UploadTabs({ activeTab, setActiveTab }: Props) {
           color: ${activeTab === "search" ? "white" : "#231D2C"};
         `}
         onClick={() => setActiveTab("search")}
-        data-cy="federated-search-tab"
+        data-cy="external-search-tab"
       >
         <Search /> External search
       </button>

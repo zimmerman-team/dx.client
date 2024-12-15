@@ -29,7 +29,7 @@ export default function ExtraFeaturesCard(props: { handleClose: () => void }) {
     {
       title: "Collaborate Better",
       description:
-        "Work with your team in real-time, and ensure everyone’s on the same page with centralized data reporting",
+        "Work with your team in real-time, and ensure everyone’s on the same page with centralized data storytelling",
       img: <CollaborateImg />,
     },
     {
