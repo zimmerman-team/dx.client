@@ -196,7 +196,7 @@ export default function ExternalSearch(props: {
         <h1>Search External Data Sources</h1>
         <Box height={22} />
         <p>
-          External search allows you to search and import data rom WHO, World
+          External search allows you to search and import data from WHO, World
           Bank, The Global Fund, Kaggle and the Humanitarian Data Exchange
         </p>
       </div>
@@ -306,8 +306,8 @@ export default function ExternalSearch(props: {
             font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
           `}
         >
-          No datasets were found using federated search. Please consider trying
-          a different search description.
+          No datasets were found using external search. Please consider trying a
+          different search description.
         </div>
       ) : null}
 

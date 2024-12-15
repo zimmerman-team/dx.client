@@ -368,9 +368,9 @@ function DatasetUploadSteps(props: Props) {
                 setActiveTab={setActiveTab}
                 tabs={[
                   {
-                    label: "Federated search",
+                    label: "External search",
                     value: "search",
-                    testId: "federated-search-tab",
+                    testId: "external-search-tab",
                     icon: <Search />,
                   },
                   {

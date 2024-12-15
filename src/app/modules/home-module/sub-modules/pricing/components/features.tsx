@@ -28,7 +28,7 @@ const Features = () => {
           ],
         },
         {
-          name: "Federated search",
+          name: "External search",
           info: "Access to datasources like Worldbank, Kaggle, WHO, HDX and more.",
           values: ["Max 12 results", "Unlimited", "Unlimited", "Unlimited"],
         },

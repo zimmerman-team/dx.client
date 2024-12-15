@@ -86,7 +86,7 @@ export default function Hero() {
             Create high impact data driven <b>stories</b>
           </h1>
           <h3>
-            Dataxplorer simplifies and empowers visual data reporting for all
+            Dataxplorer simplifies and empowers visual data storytelling for all
           </h3>
           <Box>
             <p>Sign in for free to unlock data visualisation tools with</p>

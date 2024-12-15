@@ -345,6 +345,7 @@ export default function FinishedFragment(props: Props) {
             > a {
               text-decoration: none;
               color: inherit;
+              border-bottom: 1px solid #70777e;
             }
           }
           @media (max-width: 450px) {
