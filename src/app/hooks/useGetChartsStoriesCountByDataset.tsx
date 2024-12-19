@@ -1,3 +1,4 @@
+import { APPLICATION_JSON } from "app/state/api";
 import { useStoreState } from "app/state/store/hooks";
 import axios from "axios";
 import { get } from "lodash";
@@ -18,7 +19,7 @@ const useGetChartsStoriesCountByDataset = (datasetId: string) => {
         `${process.env.REACT_APP_API}/datasets/${datasetId}/charts-stories/count`,
         {
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": APPLICATION_JSON,
             Authorization: `Bearer ${token}`,
           },
         }

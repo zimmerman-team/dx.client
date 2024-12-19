@@ -14,6 +14,7 @@ import { useTitle } from "react-use";
 import { PageLoader } from "app/modules/common/page-loader";
 import NewsletterBlock from "./newsletterBlock";
 import { FieldErrors } from "react-hook-form";
+import { APPLICATION_JSON } from "app/state/api";
 
 const CssTextField = withStyles({
   root: {
@@ -80,7 +81,7 @@ export default function ContactModule() {
         contactFormDetails,
         {
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": APPLICATION_JSON,
           },
         }
       )

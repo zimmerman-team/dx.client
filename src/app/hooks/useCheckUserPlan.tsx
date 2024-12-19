@@ -1,4 +1,5 @@
 import { useAuth0 } from "@auth0/auth0-react";
+import { APPLICATION_JSON } from "app/state/api";
 import { fetchPlanLoadingAtom, planDialogAtom } from "app/state/recoil/atoms";
 import { useStoreState } from "app/state/store/hooks";
 import axios from "axios";
@@ -55,7 +56,7 @@ export function useCheckUserPlan() {
     axios
       .get(`${process.env.REACT_APP_API}/users/plan-data`, {
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": APPLICATION_JSON,
           Authorization: `Bearer ${token}`,
         },
       })

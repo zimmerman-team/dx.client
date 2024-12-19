@@ -29,6 +29,7 @@ import { dataUploadTabAtom, planDialogAtom } from "app/state/recoil/atoms";
 import BasicSwitch from "app/components/Switch/BasicSwitch";
 import Search from "@material-ui/icons/Search";
 import DesktopWindowsIcon from "@material-ui/icons/DesktopWindows";
+import { APPLICATION_JSON } from "app/state/api";
 
 interface Props {
   datasetId: string;
@@ -171,7 +172,7 @@ function DatasetUploadSteps(props: Props) {
         { ...formDetails, authId: user?.sub, id: props.datasetId },
         {
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": APPLICATION_JSON,
             Authorization: `Bearer ${token}`,
           },
         }
@@ -279,7 +280,7 @@ function DatasetUploadSteps(props: Props) {
         { ...externalDataset, id },
         {
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": APPLICATION_JSON,
             Authorization: `Bearer ${token}`,
           },
           onUploadProgress,

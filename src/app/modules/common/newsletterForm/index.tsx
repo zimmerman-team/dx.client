@@ -1,4 +1,5 @@
 import { yupResolver } from "@hookform/resolvers/yup";
+import { APPLICATION_JSON } from "app/state/api";
 import { emailSchema } from "app/utils/emailValidation";
 import axios, { AxiosResponse, AxiosError } from "axios";
 import React from "react";
@@ -55,7 +56,7 @@ export default function NewsletterForm(
         },
         {
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": APPLICATION_JSON,
           },
         }
       )

@@ -1,5 +1,6 @@
 import { Container } from "@material-ui/core";
 import MetaData from "app/modules/dataset-module/routes/upload-module/upload-steps/metaData";
+import { APPLICATION_JSON } from "app/state/api";
 import { allAssetsSortBy } from "app/state/recoil/atoms";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import axios from "axios";
@@ -71,7 +72,7 @@ export default function EditMetaData() {
         { ...formDetails },
         {
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": APPLICATION_JSON,
             Authorization: `Bearer ${token}`,
           },
         }
