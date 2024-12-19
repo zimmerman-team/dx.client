@@ -27,6 +27,7 @@ import {
 } from "app/modules/callback-module/payment";
 import { useRecoilValue } from "recoil";
 import { fetchPlanLoadingAtom } from "./state/recoil/atoms";
+import { APPLICATION_JSON } from "./state/api";
 
 const LandingModule = lazy(
   () => import("app/modules/home-module/sub-modules/landing")
@@ -184,7 +185,7 @@ const IntercomBootupComponent = () => {
         `${process.env.REACT_APP_API}/users/intercom-hash`,
         {
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": APPLICATION_JSON,
             Authorization: `Bearer ${newToken}`,
           },
         }
