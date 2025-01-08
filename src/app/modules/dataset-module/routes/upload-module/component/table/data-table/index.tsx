@@ -37,7 +37,7 @@ export function DatasetDataTable(props: DataThemesDataTableProps) {
     { [key: string]: number | string | null | boolean }[]
   >([]);
   const observerTarget = React.useRef(null);
-  const { isObserved } = useInfinityScroll(observerTarget);
+  const { isObserved } = useInfinityScroll(observerTarget, 0);
 
   const {
     data: tableData,
