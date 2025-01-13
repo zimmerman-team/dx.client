@@ -8,8 +8,8 @@ import axios from "axios";
 import CircleLoader from "app/modules/home-module/components/Loader";
 import { useInfinityScroll } from "app/hooks/useInfinityScroll";
 import SourceCategoryList from "app/modules/dataset-module/routes/upload-module/component/externalSourcesList";
-import { useSetRecoilState } from "recoil";
-import { planDialogAtom } from "app/state/recoil/atoms";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { externalDataSortByAtom, planDialogAtom } from "app/state/recoil/atoms";
 import SaveAltIcon from "@material-ui/icons/SaveAlt";
 import ExternalSearchTable from "app/modules/dataset-module/routes/upload-module/component/table/externalSearchTable";
 import { useCheckUserPlan } from "app/hooks/useCheckUserPlan";
@@ -46,7 +46,8 @@ export default function ExternalSearch(props: {
   const observerTarget = React.useRef(null);
   const [view, setView] = React.useState<"grid" | "table">("grid");
 
-  const [sortValue, setSortValue] = React.useState("name");
+  // const [sortValue, setSortValue] = React.useState("name");
+  const [sortValue, setSortValue] = useRecoilState(externalDataSortByAtom);
   const token = useStoreState((state) => state.AuthToken.value);
   const [loading, setLoading] = React.useState(false);
   const [offset, setOffset] = React.useState(0);
@@ -150,9 +151,9 @@ export default function ExternalSearch(props: {
     }
   }, [token]);
   const t =
-    "http://localhost:4200/reports?filter={%22order%22:%22updatedDate%20desc%22,%22limit%22:15,%22offset%22:0}";
+    "http://localhost:4200/stories?filter={%22order%22:%22updatedDate%20desc%22,%22limit%22:15,%22offset%22:0}";
   const v =
-    "http://localhost:4200/reports?filter={%22order%22:%22updatedDate%20desc%22,%22limit%22:15,%22offset%22:0}";
+    "http://localhost:4200/stories?filter={%22order%22:%22updatedDate%20desc%22,%22limit%22:15,%22offset%22:0}";
 
   const [,] = useDebounce(
     () => {
@@ -192,14 +193,11 @@ export default function ExternalSearch(props: {
           }
         `}
       >
-        <h1>Federated Search</h1>
+        <h1>Search External Data Sources</h1>
         <Box height={22} />
         <p>
-          Connect to your favourite data sources effortlessly in Dataxplorer,
-          and with just a few clicks, import datasets without the hassle of
-          downloading,
-          <br /> enabling you to visualize and analyse diverse data like never
-          before.
+          External search allows you to search and import data from WHO, World
+          Bank, The Global Fund, Kaggle and the Humanitarian Data Exchange
         </p>
       </div>
       <Box height={32} />
@@ -308,8 +306,8 @@ export default function ExternalSearch(props: {
             font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
           `}
         >
-          No datasets were found using federated search. Please consider trying
-          a different search description.
+          No datasets were found using external search. Please consider trying a
+          different search description.
         </div>
       ) : null}
 

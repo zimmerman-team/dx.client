@@ -11,8 +11,8 @@ export const GlobalSearchCharts: ApiCallModel = {
   ...APIModel(`${process.env.REACT_APP_API}/charts`),
 };
 
-export const GlobalSearchReports: ApiCallModel = {
-  ...APIModel(`${process.env.REACT_APP_API}/reports`),
+export const GlobalSearchStories: ApiCallModel = {
+  ...APIModel(`${process.env.REACT_APP_API}/stories`),
 };
 
 export const GlobalSearchDatasets: ApiCallModel = {

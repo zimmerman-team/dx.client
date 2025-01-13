@@ -29,9 +29,9 @@ import {
 } from "app/modules/chart-module/__test__/data";
 import { RecoilObserver } from "app/utils/recoilObserver";
 import {
-  chartFromReportAtom,
+  chartFromStoryAtom,
   homeDisplayAtom,
-  reportRightPanelViewAtom,
+  storyRightPanelViewAtom,
 } from "app/state/recoil/atoms";
 import { ChartsAppliedFiltersState } from "app/state/api/action-reducers/sync/charts/filters";
 import {
@@ -49,7 +49,7 @@ interface MockProps {
   setHasSubHeaderTitleFocused?: (value: boolean) => void;
   setHasSubHeaderTitleBlurred?: (value: boolean) => void;
   setStopInitializeFramesWidth?: (value: boolean) => void;
-  handlePersistReportState?: () => void;
+  handlePersistStoryState?: () => void;
   isPreviewView: boolean;
   dimensions: any;
   setAutoSaveState: jest.Mock<any, any, any>;
@@ -100,7 +100,7 @@ const defaultProps = (props: Partial<MockProps> = {}): MockProps => {
     setHasSubHeaderTitleFocused: jest.fn(),
     setHasSubHeaderTitleBlurred: jest.fn(),
     setStopInitializeFramesWidth: jest.fn(),
-    handlePersistReportState: jest.fn(),
+    handlePersistStoryState: jest.fn(),
     isPreviewView: false,
     setAutoSaveState: jest.fn(),
     autoSave: false,
@@ -119,7 +119,7 @@ const appSetup = (params: Params, newProps: Partial<MockProps> = {}) => {
   const props = defaultProps(newProps);
   const onHomeTabChange = jest.fn();
   const onRightPanelViewChange = jest.fn();
-  const onChartFromReportChange = jest.fn();
+  const onChartFromStoryChange = jest.fn();
   const mockStore = createStore(
     {
       AuthToken: AuthTokenState,
@@ -178,12 +178,12 @@ const appSetup = (params: Params, newProps: Partial<MockProps> = {}) => {
                 onChange={onHomeTabChange}
               />
               <RecoilObserver
-                node={reportRightPanelViewAtom}
+                node={storyRightPanelViewAtom}
                 onChange={onRightPanelViewChange}
               />
               <RecoilObserver
-                node={chartFromReportAtom}
-                onChange={onChartFromReportChange}
+                node={chartFromStoryAtom}
+                onChange={onChartFromStoryChange}
               />
               <ChartSubheaderToolbar {...props} />
             </RecoilRoot>
@@ -427,13 +427,13 @@ test("clicking document body should close create chart snackbar", async () => {
   expect(props.onSave).toHaveBeenCalled();
 });
 
-test("clicking back to report button should reroute to report path ", async () => {
+test("clicking back to story button should reroute to story path ", async () => {
   const user = userEvent.setup();
   jest
     .spyOn(Router, "useParams")
     .mockReturnValue({ page: "new", view: "mapping" });
   const initialRecoilState = (snap: MutableSnapshot) => {
-    snap.set(chartFromReportAtom, {
+    snap.set(chartFromStoryAtom, {
       state: true,
       page: "65dcb26aaf4c8500693f1ab7",
       action: "edit",
@@ -454,14 +454,14 @@ test("clicking back to report button should reroute to report path ", async () =
   );
   render(app);
   // click save button
-  const backToReportButton = screen.getByRole("button", {
-    name: "Back to the report",
+  const backToStoryButton = screen.getByRole("button", {
+    name: "Back to the story",
   });
-  expect(backToReportButton).toBeEnabled();
-  await user.click(backToReportButton);
+  expect(backToStoryButton).toBeEnabled();
+  await user.click(backToStoryButton);
 
   expect(history.location.pathname).toBe(
-    "/report/65dcb26aaf4c8500693f1ab7/edit"
+    "/story/65dcb26aaf4c8500693f1ab7/edit"
   );
 });
 
@@ -624,7 +624,7 @@ test('should call onSave function when "save" button is clicked', async () => {
     .mockReturnValue({ page: "chartid", view: "customize" });
 
   const initialRecoilState = (snap: MutableSnapshot) => {
-    snap.set(chartFromReportAtom, {
+    snap.set(chartFromStoryAtom, {
       state: false,
       page: "65dcb26aaf4c8500693f1ab7",
       action: "edit",

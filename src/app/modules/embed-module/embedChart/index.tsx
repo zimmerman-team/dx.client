@@ -1,8 +1,8 @@
 import ChartContainer from "app/components/Dialogs/EmbedChartDialog/chartContainer";
 import { emptyChartAPI, ChartAPIModel } from "app/modules/chart-module/data";
 import { getDatasetDetailsSource } from "app/modules/chart-module/util/getDatasetDetailsSource";
-import { useLoadDatasetDetails } from "app/modules/report-module/components/chart-wrapper/useLoadDatasetDetailsAPI";
-import { useRenderChartFromAPI } from "app/modules/report-module/components/chart-wrapper/useRenderChartFromAPI";
+import { useLoadDatasetDetails } from "app/modules/story-module/components/chart-wrapper/useLoadDatasetDetailsAPI";
+import { useRenderChartFromAPI } from "app/modules/story-module/components/chart-wrapper/useRenderChartFromAPI";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
 import { get } from "lodash";
 import React from "react";
@@ -17,14 +17,14 @@ export default function EmbedChartRoute() {
   const containerRef = React.useRef<HTMLDivElement>(null);
   const { datasetDetails } = useLoadDatasetDetails(datasetId, undefined);
   const loadChart = useStoreActions(
-    (actions) => actions.charts.ChartGetInReport.fetch
+    (actions) => actions.charts.ChartGetInStory.fetch
   );
   const loadedChart = useStoreState(
     (state) =>
-      (state.charts.ChartGetInReport.crudData ?? emptyChartAPI) as ChartAPIModel
+      (state.charts.ChartGetInStory.crudData ?? emptyChartAPI) as ChartAPIModel
   );
   const clearChart = useStoreActions(
-    (actions) => actions.charts.ChartGetInReport.clear
+    (actions) => actions.charts.ChartGetInStory.clear
   );
   const {
     loading,

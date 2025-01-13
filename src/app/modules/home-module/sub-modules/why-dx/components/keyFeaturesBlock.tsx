@@ -3,7 +3,7 @@ import Grid, { GridSpacing } from "@material-ui/core/Grid";
 import { ReactComponent as AIPoweredImg } from "app/modules/home-module/assets/whydx-ai-powered-illustration.svg";
 import { ReactComponent as CharVizImg } from "app/modules/home-module/assets/whydx-chartviz-illustration.svg";
 import { ReactComponent as OpenSourceImg } from "app/modules/home-module/assets/whydx-opensource-illustration.svg";
-import { ReactComponent as ReportsImg } from "app/modules/home-module/assets/whydx-reports-illustration.svg";
+import { ReactComponent as StoriesImg } from "app/modules/home-module/assets/whydx-stories-illustration.svg";
 import { ReactComponent as SearchImg } from "app/modules/home-module/assets/whydx-search-illustration.svg";
 import { keyfeaturescss } from "app/modules/home-module/sub-modules/why-dx/style";
 import { useMediaQuery } from "@material-ui/core";
@@ -47,9 +47,9 @@ export default function KeyFeaturesBlock() {
             <p>
               Dataxplorer consolidates all your data management needs into a
               single, integrated stack. Whether it's data integration,
-              visualization, or report creation, you'll find it all here. No
-              more juggling multiple tools or struggling to maintain
-              compatibility. <br /> <br />
+              visualization, or story creation, you'll find it all here. No more
+              juggling multiple tools or struggling to maintain compatibility.{" "}
+              <br /> <br />
               Our open-source platform simplifies your workflow, making your
               mission more efficient, and saving you time and resources
             </p>
@@ -178,11 +178,11 @@ export default function KeyFeaturesBlock() {
       >
         <Grid item lg={6} md={9} sm={12} xs={12}>
           <div css={keyfeaturescss.text}>
-            <p>Interactive Reports </p>
+            <p>Interactive Stories </p>
             <p>
               Transform your data-driven insights into engaging narratives that
               captivate and inform your stakeholders. Dataxplorer allows you to
-              effortlessly create interactive reports that captivate and inform
+              effortlessly create interactive stories that captivate and inform
               your stakeholders. <br /> <br />
               Incorporate charts, text, images, and videos seamlessly. Your
               ability to convey your findings with impact is now within reach,
@@ -219,7 +219,7 @@ export default function KeyFeaturesBlock() {
         `}
       >
         <Grid item lg={6} md={9} sm={12} xs={12}>
-          <ReportsImg
+          <StoriesImg
             css={`
               margin-left: -30px;
             `}

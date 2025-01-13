@@ -53,7 +53,7 @@ const EmbedChartModule = lazy(
 );
 
 const ChartModule = lazy(() => import("app/modules/chart-module"));
-const ReportModule = lazy(() => import("app/modules/report-module"));
+const StoryModule = lazy(() => import("app/modules/story-module"));
 
 const AuthCallbackModule = lazy(() => import("app/modules/callback-module"));
 const OnboardingModule = lazy(() => import("app/modules/onboarding-module"));
@@ -268,9 +268,9 @@ export function MainRoutes() {
               <DashboardModule />
             </AuthProtectedRoute>
           </RouteWithAppBar>
-          <RouteWithAppBar exact path="/report/:page/:view?">
+          <RouteWithAppBar exact path="/story/:page/:view?">
             <AuthProtectedRoute>
-              <ReportModule />
+              <StoryModule />
             </AuthProtectedRoute>
           </RouteWithAppBar>
           <RouteWithAppBar exact path="/dataset/:page/:view?">

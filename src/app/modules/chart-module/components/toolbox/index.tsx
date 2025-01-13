@@ -231,7 +231,7 @@ export function ChartModuleToolBox(props: Readonly<ChartToolBoxProps>) {
         </div>
       </Slide>
       <InfoSnackbar
-        gap={location.pathname.includes("report")}
+        gap={location.pathname.includes("story")}
         data-testid="create-chart-snackbar"
         onClose={() => setShowSnackbar(null)}
         open={showSnackbar !== null && showSnackbar !== ""}
@@ -289,10 +289,10 @@ export function ChartModuleToolBox(props: Readonly<ChartToolBoxProps>) {
             <button
               onClick={() => {
                 setShowSnackbar(null);
-                history.push("/report/new/initial");
+                history.push("/story/new/initial");
               }}
             >
-              CREATE REPORT
+              CREATE STORY
             </button>
             <p
               css={`

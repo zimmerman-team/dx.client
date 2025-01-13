@@ -18,7 +18,7 @@ const NavList = (props: {
   setIsNavExpanded?: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const list = [
-    { name: "Explore", path: "/", cy: "nav-explore", class: "" },
+    { name: "Library", path: "/", cy: "nav-explore", class: "" },
     {
       name: "Why Dataxplorer",
       path: "/why-dataxplorer",
@@ -42,7 +42,6 @@ const NavList = (props: {
   ];
   const handleNavigation = () => {
     props.setIsNavExpanded?.(false);
-    document.body.style.overflow = "auto";
   };
   return (
     <>
@@ -381,7 +380,7 @@ const ActionMenu = () => {
         `}
       >
         <Link to={isAuthenticated ? "/dashboard" : "/onboarding/signin"}>
-          <button data-cy="appbar-create-report/login">
+          <button data-cy="appbar-create-story/login">
             {isAuthenticated ? "MY DASHBOARD" : "Sign in"}
           </button>
         </Link>
@@ -392,7 +391,7 @@ const ActionMenu = () => {
                 actionPopoverAnchorEl ? null : event.currentTarget
               );
             }}
-            data-cy="create-report-dropdown"
+            data-cy="create-story-dropdown"
           >
             <KeyboardArrowDownIcon />
           </button>

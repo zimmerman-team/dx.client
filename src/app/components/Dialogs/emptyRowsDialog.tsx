@@ -76,7 +76,7 @@ export default function EmptyRowsDialog() {
             `}
           >
             <b>
-              We are unable to save the report as it contains rows with empty
+              We are unable to save the story as it contains rows with empty
               placeholders.
             </b>
           </p>

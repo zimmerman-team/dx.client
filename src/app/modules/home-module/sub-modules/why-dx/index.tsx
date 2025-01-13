@@ -23,39 +23,50 @@ export default function WhyDX() {
 
   return (
     <>
-      <EmpowerBlock view="why-dx" />
       <div
         css={`
-          background-image: url(${Ellipses});
-          background-repeat: no-repeat;
-          background-position: ${isTablet ? "49% 58%" : "44% 4%"};
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          min-height: 100vh;
         `}
       >
-        <Container maxWidth="lg">
-          <KeyFeaturesBlock />
+        <div>
+          <EmpowerBlock view="why-dx" />
           <div
             css={`
-              height: 50px;
+              background-image: url(${Ellipses});
+              background-repeat: no-repeat;
+              background-position: ${isTablet ? "49% 58%" : "44% 4%"};
             `}
-          />
-          <div
-            css={`
-              height: 129px;
-              @media (max-width: 1024px) {
-                height: 39px;
-              }
-            `}
-          />
-          <TryUsBlock />
-          <div
-            css={`
-              height: 50px;
-            `}
-          />
-        </Container>
+          >
+            <Container maxWidth="lg">
+              <KeyFeaturesBlock />
+              <div
+                css={`
+                  height: 50px;
+                `}
+              />
+              <div
+                css={`
+                  height: 129px;
+                  @media (max-width: 1024px) {
+                    height: 39px;
+                  }
+                `}
+              />
+              <TryUsBlock />
+              <div
+                css={`
+                  height: 50px;
+                `}
+              />
+            </Container>
+          </div>
+          <div css="width: 100%;height: 19px" />
+        </div>
+        <HomeFooter />
       </div>
-      <div css="width: 100%;height: 19px" />
-      <HomeFooter />
     </>
   );
 }

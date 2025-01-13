@@ -1,6 +1,6 @@
 import { IconButton, Modal, createStyles, makeStyles } from "@material-ui/core";
 import { CloseOutlined } from "@material-ui/icons";
-import useGetChartsReportsCountByDataset from "app/hooks/useGetChartsReportsCountByDataset";
+import useGetChartsStoriesCountByDataset from "app/hooks/useGetChartsStoriesCountByDataset";
 import CircleLoader from "app/modules/home-module/components/Loader";
 import React from "react";
 
@@ -54,7 +54,7 @@ export default function DeleteDatasetDialog(props: Props) {
     }
   };
 
-  const { data, loading } = useGetChartsReportsCountByDataset(props.cardId);
+  const { data, loading } = useGetChartsStoriesCountByDataset(props.cardId);
 
   return (
     <div>
@@ -66,14 +66,18 @@ export default function DeleteDatasetDialog(props: Props) {
         aria-describedby="simple-modal-description"
       >
         {loading ? (
-          <div className="w-full h-[80px] flex items-center justify-center">
+          <div>
             <CircleLoader />
           </div>
         ) : (
           <div className={classes.paper}>
             <form
-              onSubmit={() => props.handleDelete(props.cardId)}
+              onSubmit={(e) => {
+                e.preventDefault();
+                props.handleDelete(props.cardId);
+              }}
               data-cy="delete-dataset-item-form"
+              aria-label="form"
             >
               <div
                 css={`
@@ -112,10 +116,10 @@ export default function DeleteDatasetDialog(props: Props) {
                   By deleting this dataset you and other users will lose access
                   to
                   <br />
-                  this data and will affect usage of some charts and reports. A
+                  this data and will affect usage of some charts and stories. A
                   <br />
-                  total of {data.chartsCount} charts and {data.reportsCount}{" "}
-                  reports will be affected.
+                  total of {data.chartsCount} charts and {data.storiesCount}{" "}
+                  stories will be affected.
                   <br /> <br />{" "}
                   <b>
                     Once you delete this dataset there is no turning back as

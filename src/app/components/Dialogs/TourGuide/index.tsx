@@ -4,25 +4,25 @@ import RowFrameIntro from "app/components/Dialogs/TourGuide/rowFrameIntro";
 import SelectStructure from "./selectStructure";
 import TourEnd from "./tourEnd";
 import { useRecoilState } from "recoil";
-import { reportCreationTourStepAtom } from "app/state/recoil/atoms";
+import { storyCreationTourStepAtom } from "app/state/recoil/atoms";
 import useCookie from "@devhammed/use-cookie";
 
 export default function TourGuide(props: {
-  reportType: "basic" | "advanced" | "ai";
+  storyType: "basic" | "advanced" | "ai";
   toolBoxOpen: boolean;
   handleClose: () => void;
   open: boolean;
 }) {
-  const [reportCreationTourStep, setReportCreationTourStep] = useRecoilState(
-    reportCreationTourStepAtom
+  const [storyCreationTourStep, setStoryCreationTourStep] = useRecoilState(
+    storyCreationTourStepAtom
   );
 
-  const displayBasicReportTourStep = () => {
-    switch (reportCreationTourStep) {
+  const displayBasicStoryTourStep = () => {
+    switch (storyCreationTourStep) {
       case 0:
         return (
           <TourStart
-            setStep={setReportCreationTourStep}
+            setStep={setStoryCreationTourStep}
             open={props.open}
             handleClose={props.handleClose}
           />
@@ -30,11 +30,11 @@ export default function TourGuide(props: {
       case 1:
         return (
           <RowFrameIntro
-            setStep={setReportCreationTourStep}
+            setStep={setStoryCreationTourStep}
             handleClose={props.handleClose}
             open={props.open}
             toolBoxOpen={props.toolBoxOpen}
-            reportType={props.reportType}
+            storyType={props.storyType}
           />
         );
       case 2:
@@ -50,7 +50,7 @@ export default function TourGuide(props: {
           <TourEnd
             handleClose={props.handleClose}
             open={props.open}
-            reportType={props.reportType}
+            storyType={props.storyType}
             toolBoxOpen={props.toolBoxOpen}
           />
         );
@@ -58,12 +58,12 @@ export default function TourGuide(props: {
         return;
     }
   };
-  const displayAdvancedReportTourStep = () => {
-    switch (reportCreationTourStep) {
+  const displayAdvancedStoryTourStep = () => {
+    switch (storyCreationTourStep) {
       case 0:
         return (
           <TourStart
-            setStep={setReportCreationTourStep}
+            setStep={setStoryCreationTourStep}
             open={props.open}
             handleClose={props.handleClose}
           />
@@ -71,11 +71,11 @@ export default function TourGuide(props: {
       case 1:
         return (
           <RowFrameIntro
-            setStep={setReportCreationTourStep}
+            setStep={setStoryCreationTourStep}
             handleClose={props.handleClose}
             open={props.open}
             toolBoxOpen={props.toolBoxOpen}
-            reportType={props.reportType}
+            storyType={props.storyType}
           />
         );
       case 2:
@@ -83,7 +83,7 @@ export default function TourGuide(props: {
           <TourEnd
             handleClose={props.handleClose}
             open={props.open}
-            reportType={props.reportType}
+            storyType={props.storyType}
             toolBoxOpen={props.toolBoxOpen}
           />
         );
@@ -95,8 +95,8 @@ export default function TourGuide(props: {
 
   return (
     <>
-      {props.reportType === "basic" && displayBasicReportTourStep()}
-      {props.reportType === "advanced" && displayAdvancedReportTourStep()}
+      {props.storyType === "basic" && displayBasicStoryTourStep()}
+      {props.storyType === "advanced" && displayAdvancedStoryTourStep()}
     </>
   );
 }

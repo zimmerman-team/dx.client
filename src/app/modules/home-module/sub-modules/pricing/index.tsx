@@ -160,6 +160,10 @@ export default function PricingModule() {
         background-position: center 72px;
         background-repeat: no-repeat;
         padding-top: 48px; // AppBar height
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        min-height: 100vh;
       `}
     >
       <Container maxWidth="lg">
@@ -179,7 +183,7 @@ export default function PricingModule() {
             }
           `}
         >
-          Create reports that aren't a pain to build
+          Create stories that aren't a pain to build
         </h1>
         <p
           css={`
@@ -204,7 +208,7 @@ export default function PricingModule() {
             }
           `}
         >
-          DATAXPLORER simplifies and empowers visual data reporting for all.
+          DATAXPLORER simplifies and empowers visual data storytelling for all.
           <b> Free for all.</b>
         </p>
         <Box height={65} />

@@ -19,6 +19,8 @@ interface DropzoneProps {
 export const DropZone = (props: DropzoneProps) => {
   const ACCEPTED_FILES = {
     "text/csv": [".csv"],
+    "application/json": [".json"],
+    "application/vnd.oasis.opendocument.spreadsheet": [".ods"],
     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": [
       ".xlsx",
     ],
@@ -85,7 +87,7 @@ export const DropZone = (props: DropzoneProps) => {
                   margin-top: 18px;
                 `}
               >
-                Supports: XMl, XLSX, CSV
+                Supports: XML, XLSX, CSV, JSON, ODS
               </p>
               <p
                 css={`

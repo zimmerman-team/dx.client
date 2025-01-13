@@ -12,7 +12,7 @@ export function AuthProtectedRoute(props: AuthProtectedRouteProps) {
   const { getAccessTokenSilently } = useAuth0();
   const location = useLocation();
   const exemptedRoutes = [
-    "/report/:page",
+    "/story/:page",
     "/chart/:page",
     "/dataset/:page/detail",
   ];

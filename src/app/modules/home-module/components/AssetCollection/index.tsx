@@ -10,7 +10,7 @@ import Container from "@material-ui/core/Container";
 /* project */
 import { Tab } from "app/components/Styled/tabs";
 import ChartsGrid from "app/modules/home-module/components/AssetCollection/Charts/chartsGrid";
-import ReportsGrid from "app/modules/home-module/components/AssetCollection/Reports/reportsGrid";
+import StoriesGrid from "app/modules/home-module/components/AssetCollection/Stories/storiesGrid";
 import DatasetsGrid from "app/modules/home-module/components/AssetCollection/Datasets/datasetsGrid";
 import {
   homeDisplayAtom,
@@ -43,7 +43,7 @@ function AssetsCollection() {
 
   const history = useHistory();
 
-  const handleChange = (newValue: "all" | "data" | "charts" | "reports") => {
+  const handleChange = (newValue: "all" | "data" | "charts" | "stories") => {
     setDisplay(newValue);
   };
 
@@ -66,9 +66,9 @@ function AssetsCollection() {
             view={assetsView}
           />
         );
-      case "reports":
+      case "stories":
         return (
-          <ReportsGrid
+          <StoriesGrid
             sortBy={sortByStr}
             searchStr={searchStr}
             view={assetsView}
@@ -96,10 +96,10 @@ function AssetsCollection() {
   }, [display]);
 
   const descriptions = {
-    all: "Explore the collection of Assets",
-    data: "Explore the collection of Datasets used to create Charts",
-    charts: "Explore the collection of Charts used in Reports",
-    reports: "Explore the collection of Reports",
+    all: "Explore stories collection of Assets",
+    data: "Explore stories collection of Datasets ",
+    charts: "Explore stories collection of Charts ",
+    stories: "Explore stories collection of Stories",
   };
 
   return (
@@ -176,14 +176,14 @@ function AssetsCollection() {
                   css={`
                     background: #6061e5;
                   `}
-                  data-cy="home-create-report-button"
+                  data-cy="home-create-story-button"
                   onClick={() =>
-                    handleClick("report", () =>
-                      history.push("/report/new/initial")
+                    handleClick("story", () =>
+                      history.push("/story/new/initial")
                     )
                   }
                 >
-                  CREATE REPORT
+                  CREATE STORY
                 </button>
               </div>
             </Grid>
@@ -234,11 +234,11 @@ function AssetsCollection() {
               </Tab.Center>
 
               <Tab.Right
-                active={display === "reports"}
-                onClick={() => handleChange("reports")}
-                data-cy="home-reports-tab"
+                active={display === "stories"}
+                onClick={() => handleChange("stories")}
+                data-cy="home-stories-tab"
               >
-                Reports
+                Stories
               </Tab.Right>
             </Tab.Container>
           </Grid>

@@ -1,5 +1,4 @@
 import React from "react";
-import get from "lodash/get";
 import { Link, useHistory } from "react-router-dom";
 import { ReactComponent as NotFoundIcon } from "app/modules/common/no-match-page/asset/404.svg";
 import { ReactComponent as BgImg } from "app/modules/common/no-match-page/asset/bg-ellipse.svg";
@@ -11,7 +10,14 @@ import SmallFooter from "app/modules/home-module/components/Footer/smallFooter";
 export const NoMatchPage = () => {
   const history = useHistory();
   return (
-    <div>
+    <div
+      css={`
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      `}
+    >
       <div
         css={`
           width: 100%;

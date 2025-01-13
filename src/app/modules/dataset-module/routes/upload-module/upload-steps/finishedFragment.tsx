@@ -30,13 +30,13 @@ export default function FinishedFragment(props: Props) {
   const { user, isAuthenticated } = useAuth0();
   const isSmallScreen = useMediaQuery("(max-width:767px)"); //at this breakpoint, we limit user creation abilities
   const queryParams = new URLSearchParams(location.search);
-  const reportPage = queryParams.get("page") as string;
+  const storyPage = queryParams.get("page") as string;
   const fromHome = location.search.includes("fromHome=true");
   let redirectPath = `/dataset/${props.datasetId}/detail${
     fromHome ? "?fromHome=true" : ""
   }`;
-  if (reportPage) {
-    redirectPath += `?fromreport=true&page=${reportPage}`;
+  if (storyPage) {
+    redirectPath += `?fromstory=true&page=${storyPage}`;
   }
   const setDatasetId = useStoreActions(
     (actions) => actions.charts.dataset.setValue
@@ -221,7 +221,7 @@ export default function FinishedFragment(props: Props) {
                   to={{
                     pathname: `/chart/new/chart-type`,
                     search: `?loadataset=true${
-                      reportPage ? `&fromreport=true&page=${reportPage}` : ""
+                      storyPage ? `&fromstory=true&page=${storyPage}` : ""
                     }`,
                   }}
                 >
@@ -342,6 +342,11 @@ export default function FinishedFragment(props: Props) {
             margin-top: 0;
             font-size: 12px;
             font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
+            > a {
+              text-decoration: none;
+              color: inherit;
+              border-bottom: 1px solid #70777e;
+            }
           }
           @media (max-width: 450px) {
             display: none;
@@ -352,7 +357,20 @@ export default function FinishedFragment(props: Props) {
         <p>Data Description : {props.datasetDetails.description}</p>
         <p>Data Category : {props.datasetDetails.category}</p>
         <p>Data Source : {props.datasetDetails.source}</p>
-        <p>Link to data source : {props.datasetDetails.sourceUrl || "NIL"}</p>
+        <p>
+          Link to data source :{" "}
+          {props.datasetDetails.sourceUrl ? (
+            <a
+              href={props.datasetDetails.sourceUrl}
+              rel="noreferrer noopener"
+              target="_blank"
+            >
+              {props.datasetDetails.sourceUrl}
+            </a>
+          ) : (
+            "NIL"
+          )}
+        </p>
       </div>
       <div css={mobileDescriptioncss}>
         <div>

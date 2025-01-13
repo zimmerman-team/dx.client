@@ -45,9 +45,9 @@ function UploadTabs({ activeTab, setActiveTab }: Props) {
           color: ${activeTab === "search" ? "white" : "#231D2C"};
         `}
         onClick={() => setActiveTab("search")}
-        data-cy="federated-search-tab"
+        data-cy="external-search-tab"
       >
-        <Search /> Federated search
+        <Search /> External search
       </button>
 
       <button
@@ -59,8 +59,8 @@ function UploadTabs({ activeTab, setActiveTab }: Props) {
         onClick={() => setActiveTab("file")}
         data-cy="file-upload-tab"
       >
-        <ComputerIcon color={activeTab === "file" ? "white" : "#231D2C"} /> FILE
-        upload
+        <ComputerIcon color={activeTab === "file" ? "white" : "#231D2C"} />{" "}
+        Connect Data
       </button>
     </div>
   );

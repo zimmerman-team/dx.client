@@ -231,7 +231,12 @@ export function ExpandedFilterGroup(props: ExpandedFilterGroupProps) {
             `}
           >
             {splitStrBasedOnCapitalLetters(
-              `${props.name[0].toUpperCase()}${props.name.slice(1)}`
+              `${props.name[0].toUpperCase()}${props.name.slice(
+                1
+              )} (${props.options.reduce(
+                (prev, curr) => prev + (curr.count ?? 0),
+                0
+              )})`
             ).replace(/_/g, "")}
           </div>
         </div>
@@ -440,7 +445,7 @@ function FilterOption(props: FilterOptionProps) {
               }
             />
           }
-          label={props.label}
+          label={props.label + ` (${props?.count ?? ""})`}
         />
         {props.subOptions && (
           <React.Fragment>

@@ -8,15 +8,15 @@ import { mockUseAuth0 } from "app/utils/mockAuth0";
 import { Router } from "react-router-dom";
 import { createMemoryHistory } from "history";
 import GridItem from "app/modules/home-module/components/AssetCollection/Charts/gridItem";
-import ReportsGrid from "app/modules/home-module/components/AssetCollection/Reports/reportsGrid";
+import StoriesGrid from "app/modules/home-module/components/AssetCollection/Stories/storiesGrid";
 import { StoreProvider, createStore } from "easy-peasy";
 import {
-  ReportGetList,
-  ReportsCount,
-} from "app/state/api/action-reducers/reports";
+  StoryGetList,
+  StoriesCount,
+} from "app/state/api/action-reducers/stories";
 import { AuthTokenState } from "app/state/api/action-reducers/sync";
-import { mockReportsCrudData } from "./data";
-import { setupIntersectionObserverMock } from "app/modules/report-module/__test__/setupIntersectionObserver";
+import { mockStoriesCrudData } from "./data";
+import { setupIntersectionObserverMock } from "app/modules/story-module/__test__/setupIntersectionObserver";
 import axios, { AxiosResponse } from "axios";
 interface MockProps {
   sortBy: string;
@@ -58,22 +58,22 @@ const defaultProps = (newProps: Partial<MockProps> = {}): MockProps => {
 const mockStore = (mockActions: boolean) =>
   createStore(
     {
-      reports: {
-        ReportGetList,
-        ReportsCount,
+      stories: {
+        StoryGetList,
+        StoriesCount,
       },
       AuthToken: AuthTokenState,
     },
     {
       mockActions,
       initialState: {
-        reports: {
-          ReportGetlist: {
+        stories: {
+          StoryGetlist: {
             crudData: [],
             loading: false,
             success: true,
           },
-          ReportsCount: {
+          StoriesCount: {
             data: { count: 3 },
             loading: false,
             success: true,
@@ -92,7 +92,7 @@ const appSetup = (newProps: Partial<MockProps> = {}, mockActions: boolean) => {
       <Auth0Provider clientId="__test_client_id__" domain="__test_domain__">
         <StoreProvider store={mockStore(mockActions)}>
           <Router history={history}>
-            <ReportsGrid {...props} />
+            <StoriesGrid {...props} />
           </Router>
         </StoreProvider>
       </Auth0Provider>
@@ -102,14 +102,14 @@ const appSetup = (newProps: Partial<MockProps> = {}, mockActions: boolean) => {
   };
 };
 
-test("renders ReportsGrid component", async () => {
+test("renders StoriesGrid component", async () => {
   const { app, mockStore, props } = appSetup({}, false);
   mockGet
-    .mockResolvedValueOnce({ data: mockReportsCrudData } as AxiosResponse<any>)
+    .mockResolvedValueOnce({ data: mockStoriesCrudData } as AxiosResponse<any>)
     .mockResolvedValueOnce({ data: [] } as AxiosResponse<any>);
   render(app);
   await act(async () => {
-    mockStore.getActions().reports.ReportsCount.setData({ count: 1 });
+    mockStore.getActions().stories.StoriesCount.setData({ count: 1 });
   });
   // expect(screen.getByText("Lana del ray")).toBeInTheDocument();
   // expect(screen.getByText("Lana del ray")).toBeInTheDocument();

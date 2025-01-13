@@ -9,7 +9,7 @@ import {
 import GlobalSearch, {
   GlobalSearchCharts,
   GlobalSearchDatasets,
-  GlobalSearchReports,
+  GlobalSearchStories,
 } from "app/state/api/action-reducers/search";
 import {
   DatasetGetList,
@@ -30,21 +30,21 @@ import {
   ChartDelete,
   ChartDuplicate,
   ChartGet,
-  ChartGetInReport,
+  ChartGetInStory,
   ChartGetList,
   ChartTypesSuggest,
   ChartUpdate,
   ChartsCount,
 } from "app/state/api/action-reducers/charts";
 import {
-  ReportCreate,
-  ReportDelete,
-  ReportDuplicate,
-  ReportGet,
-  ReportGetList,
-  ReportUpdate,
-  ReportsCount,
-} from "app/state/api/action-reducers/reports";
+  StoryCreate,
+  StoryDelete,
+  StoryDuplicate,
+  StoryGet,
+  StoryGetList,
+  StoryUpdate,
+  StoriesCount,
+} from "app/state/api/action-reducers/stories";
 import {
   AssetGetList,
   AssetsCount,
@@ -73,7 +73,7 @@ const storeContent: StoreModel = {
   },
   charts: {
     ChartGet: persist(ChartGet),
-    ChartGetInReport: persist(ChartGetInReport),
+    ChartGetInStory: persist(ChartGetInStory),
     ChartCreate: persist(ChartCreate),
     ChartUpdate: persist(ChartUpdate),
     ChartDelete: persist(ChartDelete),
@@ -89,18 +89,18 @@ const storeContent: StoreModel = {
     enabledFilterOptionGroups: persist(ChartsEnabledFilterOptionGroupsState),
     SelectedAIChartState: persist(SelectedAIChartState),
   },
-  reports: {
-    ReportGet: persist(ReportGet),
-    ReportCreate: persist(ReportCreate),
-    ReportUpdate: persist(ReportUpdate),
-    ReportDelete: persist(ReportDelete),
-    ReportDuplicate: persist(ReportDuplicate),
-    ReportGetList: ReportGetList,
-    ReportsCount: persist(ReportsCount),
+  stories: {
+    StoryGet: persist(StoryGet),
+    StoryCreate: persist(StoryCreate),
+    StoryUpdate: persist(StoryUpdate),
+    StoryDelete: persist(StoryDelete),
+    StoryDuplicate: persist(StoryDuplicate),
+    StoryGetList: StoryGetList,
+    StoriesCount: persist(StoriesCount),
   },
   search: {
     charts: persist(GlobalSearchCharts),
-    reports: persist(GlobalSearchReports),
+    stories: persist(GlobalSearchStories),
     datasets: persist(GlobalSearchDatasets),
   },
 };

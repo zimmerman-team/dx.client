@@ -2,11 +2,11 @@ import React from "react";
 import CloseOutlined from "@material-ui/icons/ClearOutlined";
 import Modal from "@material-ui/core/Modal";
 import { useStyles } from "app/components/Dialogs/deleteChartDialog";
-import { useRenderChartFromAPI } from "app/modules/report-module/components/chart-wrapper/useRenderChartFromAPI";
+import { useRenderChartFromAPI } from "app/modules/story-module/components/chart-wrapper/useRenderChartFromAPI";
 import IconButton from "@material-ui/core/IconButton";
 import Snackbar from "@material-ui/core/Snackbar";
 import get from "lodash/get";
-import { useLoadDatasetDetails } from "app/modules/report-module/components/chart-wrapper/useLoadDatasetDetailsAPI";
+import { useLoadDatasetDetails } from "app/modules/story-module/components/chart-wrapper/useLoadDatasetDetailsAPI";
 import ChartContainer from "./chartContainer";
 import { copyToClipboard } from "app/utils/copyToClipboard";
 import { useStoreActions, useStoreState } from "app/state/store/hooks";
@@ -34,13 +34,18 @@ export default function EmbedChartDialog(props: {
     props.datasetId!,
     token ?? undefined
   );
+  const switchTabs = [
+    { value: "embed-code", label: "Embed Code" },
+    { value: "shared-link", label: "Shared Link" },
+  ];
   const [displayMode, setDisplayMode] = React.useState<string>("tracklist");
   const [widthValue, setWidthValue] = React.useState<number>(0);
   const [heightValue, setHeightValue] = React.useState<number>(0);
   const [copyAlert, setCopyAlert] = React.useState<boolean>(false);
-  const defaultSwitchTab = "embed-code";
-  const [activeSwitchTab, setActiveSwitchTab] =
-    React.useState<string>(defaultSwitchTab);
+
+  const [activeSwitchTab, setActiveSwitchTab] = React.useState<string>(
+    switchTabs[1].value
+  );
 
   const {
     notFound,
@@ -63,10 +68,6 @@ export default function EmbedChartDialog(props: {
   const displayModes = [
     { value: "tracklist", label: "With tracklist" },
     { value: "compact", label: "Compact" },
-  ];
-  const switchTabs = [
-    { value: defaultSwitchTab, label: "Embed Code" },
-    { value: "lishared-link", label: "Shared Link" },
   ];
 
   const renderedChart = React.useMemo(() => {
@@ -100,7 +101,7 @@ export default function EmbedChartDialog(props: {
   };
 
   const handleCopyToClipboard = async () => {
-    copyToClipboard(defaultSwitchTab).then(() => {
+    copyToClipboard(switchTabs[1].value).then(() => {
       setCopyAlert(true);
     });
   };
@@ -248,7 +249,7 @@ export default function EmbedChartDialog(props: {
               </p>
             </div>
           </div>
-          {activeSwitchTab === defaultSwitchTab ? (
+          {activeSwitchTab !== switchTabs[1].value ? (
             <EmbedOptions
               chartId={props.chartId}
               displayMode={displayMode}

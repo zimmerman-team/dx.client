@@ -1,6 +1,6 @@
 import EmpowerBlock from "app/modules/home-module/sub-modules/partners/components/empowerBlock";
 import { Box, Container } from "@material-ui/core";
-import ReportImage from "app/modules/home-module/sub-modules/landing/assets/report.png";
+import StoryImage from "app/modules/home-module/sub-modules/landing/assets/story.png";
 import InteractImage from "app/modules/home-module/sub-modules/landing/assets/interact.png";
 import Investment from "app/modules/home-module/sub-modules/landing/assets/investment.png";
 import ThePowerImage from "app/modules/home-module/sub-modules/landing/assets/the-power.png";
@@ -21,10 +21,10 @@ export default function LandingModule() {
       <EmpowerBlock view="landing" />
 
       <Container maxWidth="lg">
-        <Link to="/report/664f406b82350800ca942b92?fromLanding=true">
+        <Link to="/story/664f406b82350800ca942b92?fromLanding=true">
           <img
-            src={ReportImage}
-            alt="report"
+            src={StoryImage}
+            alt="Story"
             css={`
               width: 100%;
               margin-top: -140px;
@@ -69,12 +69,12 @@ export default function LandingModule() {
                 width: 583px;
               `}
             >
-              <h2>Interactive Reports</h2>
+              <h2>Interactive Stories</h2>
 
               <p>
                 Transform your data-driven insights into engaging narratives
                 that captivate and inform your stakeholders. Dataxplorer allows
-                you to effortlessly create interactive reports that captivate
+                you to effortlessly create interactive stories that captivate
                 and inform your stakeholders.
                 <br /> <br />
                 Incorporate charts, text, images, and videos seamlessly. Your

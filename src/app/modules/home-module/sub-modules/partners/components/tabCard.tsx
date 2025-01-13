@@ -2,7 +2,7 @@ import React from "react";
 import AboutCard from "app/modules/home-module/assets/about-card.png";
 import GrantsCard from "app/modules/home-module/assets/grants-card.png";
 import BudgetsCard from "app/modules/home-module/assets/budgets-card.png";
-import PerfomanceCard from "app/modules/home-module/assets/targets-results.png";
+import PerfomanceCard from "app/modules/home-module/assets/targets-result.png";
 import { TabCardEllipseCss } from "app/modules/home-module/sub-modules/partners/style";
 import { ReactComponent as FullEliipse } from "app/modules/home-module/assets/full-light-ellipse.svg";
 
@@ -184,9 +184,9 @@ export const BudgetsTabCard = () => {
       The Global Fund applies strict budget requirements during the development,
       review and implementation of Global Fund-supported programs. It
       establishes clear eligibility criteria for grant expenditures and
-      requirements for monitoring and financial reporting obligations.
+      requirements for monitoring and financial storytelling obligations.
       <br />
-      <br /> All collected financial reporting data on budgets including
+      <br /> All collected financial storytelling data on budgets including
       investment landscapes and corresponding cost categories is presented via
       the Data Explorer.
       <br />
@@ -214,7 +214,7 @@ export const BudgetsTabCard = () => {
 export const PerformanceTabCard = () => {
   const description = (
     <p>
-      The Global Fund requires countries to report grant performance indicators
+      The Global Fund requires countries to story grant performance indicators
       on funded programs. The data provided by national monitoring and
       evaluation systems is critical to informing decision-making on the part of
       both implementers and funders.

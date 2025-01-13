@@ -1,4 +1,4 @@
-import { InfoSnackbarDuplicateContentcss } from "app/modules/report-module/components/reportSubHeaderToolbar/infosnackbar";
+import { InfoSnackbarDuplicateContentcss } from "app/modules/story-module/components/storySubHeaderToolbar/infosnackbar";
 import React from "react";
 import { CloseOutlined } from "@material-ui/icons";
 
@@ -6,7 +6,7 @@ export default function DuplicateMessage(props: {
   name: string;
   closeSnackbar: () => void;
   action: () => void;
-  type: "data" | "chart" | "report";
+  type: "data" | "chart" | "story";
 }) {
   return (
     <div css={InfoSnackbarDuplicateContentcss}>
