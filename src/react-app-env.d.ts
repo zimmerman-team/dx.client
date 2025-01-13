@@ -45,11 +45,3 @@ declare module "*.svg" {
   const src: string;
   export default src;
 }
-
-declare module "react" {
-  import React from "react";
-
-  interface ImgHTMLAttributes<T> extends HTMLAttributes<T> {
-    fetchPriority?: "high" | "low" | "auto";
-  }
-}
