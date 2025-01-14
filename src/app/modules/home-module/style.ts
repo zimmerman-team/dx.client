@@ -85,22 +85,6 @@ export const featuredAssetsCss = css`
   }
 `;
 
-export const datsetDetailImgcss = css`
-  width: 710px;
-  height: 428px;
-  border-radius: 14px;
-  @media (max-width: 1240px) {
-    width: 70%;
-    object-fit: contain;
-    height: 100%;
-  }
-  @media (max-width: 700px) {
-    width: 95%;
-    object-fit: contain;
-    height: 100%;
-  }
-`;
-
 export const rowFlexCss = css`
   display: flex;
   justify-content: center;

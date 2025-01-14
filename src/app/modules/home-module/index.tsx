@@ -4,7 +4,6 @@ import { useAuth0 } from "@auth0/auth0-react";
 import useTitle from "react-use/lib/useTitle";
 /* project */
 import HomeFooter from "app/modules/home-module/components/Footer";
-
 import AssetsCollection from "./components/AssetCollection";
 import Hero from "./components/hero";
 import NonAuthUserLibrary from "./components/nonAuthUserLibrary";
