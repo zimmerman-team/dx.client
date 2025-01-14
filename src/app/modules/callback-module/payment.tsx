@@ -101,6 +101,10 @@ export function PaymentSuccessCallbackModule() {
         background-position: center 72px;
         background-repeat: no-repeat;
         padding-top: 48px; // AppBar height
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        min-height: 100vh;
       `}
     >
       {loading && <PageLoader />}
@@ -183,6 +187,12 @@ export function PaymentCanceledCallbackModule() {
         background-position: center 72px;
         background-repeat: no-repeat;
         padding-top: 48px; // AppBar height
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        min-height: 100vh;
+      
+    >
       `}
     >
       <Container
