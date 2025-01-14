@@ -63,7 +63,7 @@ export function useCheckUserPlan() {
         setUserPlan(response.data);
       })
       .catch((error) => {
-        console.error(error);
+        //TODO: handle error;
       })
       .finally(() => {
         setLoading(false);

@@ -179,8 +179,6 @@ export const useOneDrivePicker = ({
         break;
 
       default:
-        console.warn(`Unsupported command: ${JSON.stringify(command)}`, 2);
-
         port.postMessage({
           result: "error",
           error: {
@@ -226,7 +224,7 @@ export const useOneDrivePicker = ({
 
       onFileSubmit(gfile);
     } catch (e) {
-      console.log(e, " error");
+      //TODO: handle error
     }
   };
 

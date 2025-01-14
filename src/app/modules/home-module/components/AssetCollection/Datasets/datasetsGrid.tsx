@@ -179,7 +179,9 @@ export default function DatasetsGrid(props: Readonly<Props>) {
         }
         reloadData();
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        //TODO: handle error
+      });
   };
 
   const handleModal = (id: string) => {
@@ -197,7 +199,9 @@ export default function DatasetsGrid(props: Readonly<Props>) {
       .then(() => {
         reloadData();
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        //TODO: handle error
+      });
   }
 
   React.useEffect(() => {

@@ -70,7 +70,6 @@ export default function Settings() {
       })
       .catch((err) => {
         setLoading(false);
-        console.log(err);
       });
   };
 

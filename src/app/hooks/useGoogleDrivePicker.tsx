@@ -91,7 +91,7 @@ function useGoogleDrivePicker({
         },
       });
     } catch (e) {
-      console.log(e, "error");
+      //TODO: handle error
     }
   };
 

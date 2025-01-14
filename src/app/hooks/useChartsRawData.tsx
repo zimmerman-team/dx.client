@@ -189,7 +189,6 @@ export function useChartsRawData(props: {
         return response.data?.sample;
       })
       .catch((error: AxiosError) => {
-        console.log(error);
         setDataError(true);
         setDataStats([]);
         setSampleData([]);

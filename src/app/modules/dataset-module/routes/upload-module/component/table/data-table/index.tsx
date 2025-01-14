@@ -21,7 +21,6 @@ const getColumns = (
   try {
     return data.map((d) => d.name);
   } catch (e) {
-    console.error(e);
     return [];
   }
 };

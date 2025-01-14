@@ -157,7 +157,9 @@ export default function ChartsGrid(props: Props) {
       .then(() => {
         reloadData();
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        //TODO: handle error
+      });
   };
 
   const handleDuplicate = (id: string) => {
@@ -189,7 +191,9 @@ export default function ChartsGrid(props: Props) {
         }
         reloadData();
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        //TODO: handle error
+      });
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -50,9 +50,7 @@ export const useRenderChartFromAPI = (
       .then((response) => {
         const chart = response.data || {};
         if (!location.pathname.includes("downloaded-view")) {
-          console.log("view", location.pathname);
         } else {
-          console.log("view", location.pathname, id);
           setLoadedChartsList((prev) => [...prev, id]);
         }
         setLoading(false);
@@ -73,8 +71,7 @@ export const useRenderChartFromAPI = (
         }
       })
 
-      .catch((error) => {
-        console.log("API call error: " + error.message);
+      .catch(() => {
         if (extraLoader) {
           extraLoader.style.display = "none";
         }

@@ -152,7 +152,6 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
       });
       return validSuggestions;
     } catch (e) {
-      console.log(e);
       return [];
     }
   };
@@ -166,7 +165,7 @@ function ChartBuilderChartType(props: Readonly<ChartBuilderChartTypeProps>) {
           chartTypesFromMiddleWare[c.charttype] === ctId
       );
     } catch (e) {
-      console.log(e);
+      //TODO: handle error
     }
   };
 

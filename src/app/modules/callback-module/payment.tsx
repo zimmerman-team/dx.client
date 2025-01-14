@@ -71,7 +71,6 @@ export function PaymentSuccessCallbackModule() {
             setLoading(false);
           })
           .catch((error) => {
-            console.error(error);
             setError(error.message);
             setLoading(false);
           });

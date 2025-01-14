@@ -12,9 +12,6 @@ export const useLoadDatasetDetails = (
     React.useState<DatasetListItemAPIModel>({} as DatasetListItemAPIModel);
   const [datasetDetailsError, setDatasetDetailsError] =
     React.useState<string>("");
-  const abortControllerRef = React.useRef<AbortController>(
-    new AbortController()
-  );
 
   const loadDatasetDetails = async () => {
     try {
@@ -39,9 +36,8 @@ export const useLoadDatasetDetails = (
       }
     } catch (e) {
       setDatasetDetailsLoading(false);
-      console.log("load dataset details error", e);
       if (axios.isCancel(e)) {
-        console.log("Request cancelled");
+        //TODO: handle error
       } else {
         setDatasetDetailsError(
           "An error occurred while fetching dataset details."

@@ -28,7 +28,7 @@ const useGetChartsStoriesCountByDataset = (datasetId: string) => {
         setData(response.data);
       })
       .catch(async (error) => {
-        console.log("getChartsStoriesCountByDataset error: " + error);
+        //TODO: handle error
       });
   }
   useEffect(() => {

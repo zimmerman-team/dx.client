@@ -164,10 +164,7 @@ export default function MetaData(props: Readonly<Props>) {
     }
 
     if (Object.values(rest).every((value) => value !== "")) {
-      console.log("submitting form");
       props.onSubmit(props.formDetails);
-    } else {
-      console.log("form errors", rest);
     }
   };
 

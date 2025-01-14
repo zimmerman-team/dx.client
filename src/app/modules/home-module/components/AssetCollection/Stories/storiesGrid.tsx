@@ -137,7 +137,9 @@ export default function StoriesGrid(props: Readonly<Props>) {
       .then(() => {
         reloadData();
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        //TODO: handle error
+      });
   };
 
   const handleDuplicate = (id: string) => {
@@ -169,7 +171,9 @@ export default function StoriesGrid(props: Readonly<Props>) {
         }
         reloadData();
       })
-      .catch((error) => console.log(error));
+      .catch(() => {
+        //TODO: handle error
+      });
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {

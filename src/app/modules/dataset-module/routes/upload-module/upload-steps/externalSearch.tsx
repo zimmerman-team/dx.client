@@ -105,7 +105,6 @@ export default function ExternalSearch(props: {
       );
       setLoading(false);
       if (response.data.error) {
-        console.log(response.data.error);
         return;
       }
       if (response.data.planWarning) {
@@ -120,7 +119,6 @@ export default function ExternalSearch(props: {
       }
     } catch (e) {
       setLoading(false);
-      console.log(e);
     }
   };
 

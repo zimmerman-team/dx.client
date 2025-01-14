@@ -29,7 +29,6 @@ export default function DownloadedView(props: {
       storyData.rows.forEach((row) => {
         row.items.forEach((item) => {
           if (item && typeof item === "string" && item !== "divider") {
-            console.log("item: ", item, numberOfRequests);
             numberOfRequests++;
           }
         });

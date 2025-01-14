@@ -112,7 +112,7 @@ export function InvoiceTable() {
     if (isEveryItemUnchecked) {
       setSnackbarState({ ...snackbarState, open: true });
     } else {
-      console.log("Downloaded");
+      //TODO: handle download logic
     }
   };
 

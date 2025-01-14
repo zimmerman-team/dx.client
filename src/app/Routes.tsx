@@ -141,7 +141,9 @@ const OneTapLoginComponent = () => {
 
   useGoogleOneTapLogin({
     disabled: isLoading || isAuthenticated,
-    onError: (error) => console.log(error),
+    onError: (error) => {
+      console.log(error);
+    },
     onSuccess: (response) => socialAuth("google-oauth2", response.email),
     googleAccountConfigs: {
       client_id: process.env.REACT_APP_GOOGLE_API_CLIENT_ID!,

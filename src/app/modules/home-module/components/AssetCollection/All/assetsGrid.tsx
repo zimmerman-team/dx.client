@@ -151,8 +151,6 @@ export default function AssetsGrid(props: Props) {
     setModalDisplay(false);
     setEnableButton(false);
 
-    console.log(activeAssetType);
-
     if (!id) {
       return;
     }
@@ -173,7 +171,9 @@ export default function AssetsGrid(props: Props) {
         reloadData();
         setActiveAssetType(null);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        //TODO: handle error
+      });
   };
 
   const handleDuplicate = (id: string, assettype: assetType) => {
@@ -210,7 +210,9 @@ export default function AssetsGrid(props: Props) {
         }
         reloadData();
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        //TODO: handle error
+      });
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {

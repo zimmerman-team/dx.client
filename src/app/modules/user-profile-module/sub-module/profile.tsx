@@ -49,7 +49,7 @@ export default function Profile() {
         });
       }
     } catch (err) {
-      console.log(err);
+      // TODO: handle error
     }
   };
   const handleSubmit = async (

@@ -229,7 +229,9 @@ export function ChartSubheaderToolbar(
           filterString: "filter[order]=updatedDate desc",
         });
       })
-      .catch((error) => console.log(error))
+      .catch((error) => {
+        //TODO: handle error
+      })
       .finally(() => {
         history.replace("/");
       });
@@ -262,7 +264,9 @@ export function ChartSubheaderToolbar(
           open: true,
         });
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        //TODO: handle error
+      });
   };
 
   const handlePreviewMode = () => {

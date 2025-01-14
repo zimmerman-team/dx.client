@@ -291,7 +291,7 @@ export default function ChartModule() {
           },
         });
       } catch (e) {
-        console.log(e);
+        //TODO: handle error
       }
     } else if (view !== undefined) {
       editChart({
@@ -338,7 +338,7 @@ export default function ChartModule() {
         onSave();
       }
     } catch (e) {
-      console.log(e);
+      //TODO: handle error
     }
   };
 
@@ -487,7 +487,6 @@ export default function ChartModule() {
     if (page !== "new") {
       if (!isLoading) {
         if (token.length > 0) {
-          console.log("---load chart");
           loadChart({ token, getId: page });
         } else if (!isAuthenticated) {
           loadChart({ nonAuthCall: true, getId: page });

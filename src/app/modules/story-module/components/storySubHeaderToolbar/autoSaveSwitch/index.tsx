@@ -63,7 +63,6 @@ const AutoSaveSwitch = (props: {
         checked={props.checked}
         disabled={props.disabled ?? false}
         onChange={(e) => {
-          console.log("calling?", e.target.checked);
           props.setAutoSave({
             isAutoSaveEnabled: e.target.checked,
             enableAutoSaveSwitch: true,

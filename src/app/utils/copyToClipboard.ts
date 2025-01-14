@@ -2,7 +2,6 @@ export async function copyToClipboard(elementId: string) {
   const element = document.getElementById(elementId);
 
   if (!element) {
-    console.error(`Element with ID "${elementId}" not found.`);
     return;
   }
 
@@ -13,9 +12,9 @@ export async function copyToClipboard(elementId: string) {
   navigator.clipboard
     .writeText(textToCopy!)
     .then(() => {
-      console.log("Copied to clipboard:", textToCopy);
+      //TODO:handle success
     })
     .catch((err) => {
-      console.error("Failed to copy text:", err);
+      //TODO: handle error
     });
 }

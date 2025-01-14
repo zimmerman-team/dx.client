@@ -168,7 +168,6 @@ export function CommonChart(props: Readonly<Props>) {
         );
       } catch (e: any) {
         if (process.env.NODE_ENV === "development") {
-          console.log("chart error", e);
           props.setChartError(true);
           props.setChartErrorMessage(e.message);
         }

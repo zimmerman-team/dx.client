@@ -116,7 +116,9 @@ export default function DatasetSubHeaderToolbar(
           open: true,
         });
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        //TODO: handle error
+      });
   };
 
   const handleCloseSnackbar = () => {
@@ -157,7 +159,9 @@ export default function DatasetSubHeaderToolbar(
           filterString: "filter[order]=updatedDate desc",
         });
       })
-      .catch((error) => console.log(error))
+      .catch((error) => {
+        //TODO: handle error
+      })
       .finally(() => {
         history.replace("/");
       });

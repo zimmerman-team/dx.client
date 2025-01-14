@@ -202,7 +202,6 @@ function DatasetUploadSteps(props: Props) {
         setActiveStep(3);
       })
       .catch((error) => {
-        console.debug("Dataset creation error", error);
         setProcessingError(defaultProcessingError);
       });
   };
@@ -239,7 +238,6 @@ function DatasetUploadSteps(props: Props) {
         }
         if (response.data?.errorType !== "planError") {
           setProcessingError(response.data.error);
-          console.debug(dataUploadError, response.data.error);
           return;
         }
         if (response.data?.processingMessage) {
@@ -261,7 +259,6 @@ function DatasetUploadSteps(props: Props) {
         }
       })
       .catch((error) => {
-        console.debug(dataUploadError, error);
         setProcessingError(defaultProcessingError);
         setSelectedFile(null);
       });
@@ -290,7 +287,6 @@ function DatasetUploadSteps(props: Props) {
 
         if (response.data.error) {
           setProcessingError(response.data.error);
-          console.debug(dataUploadError, response.data.error);
         } else {
           setFormDetails({
             category: "",
@@ -306,7 +302,6 @@ function DatasetUploadSteps(props: Props) {
         }
       })
       .catch((error) => {
-        console.debug(dataUploadError, error);
         setActiveStep(0);
         setProcessingError(defaultProcessingError);
       });

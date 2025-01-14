@@ -39,7 +39,6 @@ const useGetDatasetContent = (datasetId: string, pageSize: number = 10) => {
       })
       .catch(async (error) => {
         setLoading(false);
-        console.log("getDatasetContent: " + error);
       });
   };
 

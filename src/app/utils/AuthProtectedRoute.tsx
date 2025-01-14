@@ -27,8 +27,6 @@ export function AuthProtectedRoute(props: AuthProtectedRouteProps) {
       })
       .catch((error) => {
         setLoading(false);
-
-        console.log(error, "error");
         if (
           matchPath(destination, {
             path: exemptedRoutes,

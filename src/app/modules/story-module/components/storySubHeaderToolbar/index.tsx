@@ -205,7 +205,9 @@ export function StorySubheaderToolbar(
           filterString: "filter[order]=updatedDate desc",
         });
       })
-      .catch((error) => console.log(error))
+      .catch((error) => {
+        //TODO: handle error
+      })
       .finally(() => {
         history.replace("/");
       });
@@ -238,7 +240,9 @@ export function StorySubheaderToolbar(
           open: true,
         });
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        //TODO: handle error
+      });
   };
 
   const handleViewDuplicatedStory = () => {

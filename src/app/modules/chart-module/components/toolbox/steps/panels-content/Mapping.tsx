@@ -287,7 +287,7 @@ export function ChartToolBoxMapping(props: Readonly<ChartToolBoxMappingProps>) {
       setMapping(localMapping);
       setIsChartAutoMapped(true);
     } catch (e) {
-      console.log("error in ai suggestions", e);
+      //TODO: handle error
     }
   };
 
@@ -895,8 +895,6 @@ function ChartToolBoxMappingItem(
     type: MAPPING_ITEM_TYPE,
     item: { dragIndex: props.index, value: props.mappingItemValue },
     collect: (monitor) => {
-      console.log(monitor.isDragging(), "monitor.isDragging()");
-
       return { isDragging: !!monitor.isDragging() };
     },
   }));

@@ -76,7 +76,7 @@ export default function EditMetaData() {
           },
         }
       )
-      .then((response) => {
+      .then(() => {
         loadDatasets({
           token,
           nonAuthCall: !token,
@@ -87,8 +87,8 @@ export default function EditMetaData() {
         });
         history.goBack();
       })
-      .catch((error) => {
-        console.debug("Dataset creation error", error);
+      .catch(() => {
+        //TODO: handle error
       });
   };
   const handleBack = () => {

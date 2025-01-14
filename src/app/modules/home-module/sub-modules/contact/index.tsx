@@ -99,7 +99,6 @@ export default function ContactModule() {
       })
       .catch((error: AxiosError) => {
         setLoading(false);
-        console.log(error);
         setContactFormFailed(true);
       });
   };

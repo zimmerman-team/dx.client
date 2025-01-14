@@ -9,7 +9,6 @@ export function exportPage(type: string, bgcolor: string, filename: string) {
     node = document.getElementById("common-chart-render-container");
   }
 
-  const somethingWrong = "oops, something went wrong!";
   if (type === "png") {
     domtoimage
       .toPng(node, {
@@ -23,7 +22,7 @@ export function exportPage(type: string, bgcolor: string, filename: string) {
         link.click();
       })
       .catch((error: any) => {
-        console.error(somethingWrong, error);
+        //TODO: handle error
       });
   } else if (type === "svg") {
     domtoimage
@@ -35,7 +34,7 @@ export function exportPage(type: string, bgcolor: string, filename: string) {
         link.click();
       })
       .catch((error: any) => {
-        console.error(somethingWrong, error);
+        //TODO: handle error
       });
   } else if ((type = "pdf")) {
     domtoimage
@@ -69,7 +68,7 @@ export function exportPage(type: string, bgcolor: string, filename: string) {
         pdf.save(`${filename}.pdf`);
       })
       .catch((error: any) => {
-        console.error(somethingWrong, error);
+        //TODO: handle error
       });
   } else {
     domtoimage
@@ -81,7 +80,7 @@ export function exportPage(type: string, bgcolor: string, filename: string) {
         link.click();
       })
       .catch((error: any) => {
-        console.error(somethingWrong, error);
+        //TODO: handle error
       });
   }
 }

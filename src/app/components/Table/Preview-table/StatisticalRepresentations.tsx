@@ -107,7 +107,7 @@ export const BarChartRepresentation = (props: ChartRepresentationProps) => {
           domRef.current.removeChild(domRef.current.firstChild);
         }
         if (process.env.NODE_ENV === "development") {
-          console.log("chart error", e);
+          //TODO: handle error
         }
       }
     }
