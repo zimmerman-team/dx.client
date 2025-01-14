@@ -3,6 +3,7 @@ import { css } from "styled-components";
 export const layoutcss = css`
   margin-top: 3rem;
 `;
+
 export const tabcss = (active: boolean, disabled: boolean) => css`
   width: 224px;
   height: 48px;
@@ -24,6 +25,7 @@ export const tabcss = (active: boolean, disabled: boolean) => css`
     width: 100%;
   }
 `;
+
 export const profilecss = css`
   font-style: normal;
   width: 72%;
@@ -67,6 +69,11 @@ export const billingcss = css`
     font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
     font-size: 12px;
     cursor: pointer;
+
+    :disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
   }
   & > div:nth-of-type(1),
   & > div:nth-of-type(3),
@@ -77,13 +84,13 @@ export const billingcss = css`
     margin-bottom: 24px;
     p {
       margin: 0;
+      font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
     }
     p:nth-child(1) {
       width: 134px;
     }
     p:nth-child(2) {
       color: #231d2c;
-      font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
       font-size: 14px;
     }
   }
@@ -125,6 +132,7 @@ export const flexContainercss = css`
     grid-template-columns: 45% auto;
   }
 `;
+
 export const bigAvicss = css`
   width: 223px;
   height: 223px;
@@ -133,12 +141,14 @@ export const bigAvicss = css`
   display: flex;
   align-items: center;
   justify-content: center;
+  text-transform: uppercase;
   p {
     font-weight: 500;
     font-size: 96px;
     color: #231d2c;
   }
 `;
+
 export const avicss = css`
   width: 52px;
   height: 52px;
@@ -154,6 +164,7 @@ export const avicss = css`
   b {
   }
 `;
+
 export const inputcss = css`
   border: 1px solid #231d2c;
   border-radius: 10px;

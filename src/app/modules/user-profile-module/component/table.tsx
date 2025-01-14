@@ -1,101 +1,58 @@
 import React from "react";
+// @ts-ignore
+import domtoimage from "dom-to-image";
 import Table from "@material-ui/core/Table";
-import { ReactComponent as InfoIcon } from "app/modules/user-profile-module/asset/info-icon.svg";
+import Tooltip from "@material-ui/core/Tooltip";
+import SaveAlt from "@material-ui/icons/SaveAlt";
+import Checkbox from "@material-ui/core/Checkbox";
 import TableRow from "@material-ui/core/TableRow";
 import TableHead from "@material-ui/core/TableHead";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import { Checkbox, Tooltip } from "@material-ui/core";
-import { SaveAlt } from "@material-ui/icons";
-import { PrintIcon } from "./icons";
 import { Tooltip as SpeechBubble } from "react-tooltip";
+import TableContainer from "@material-ui/core/TableContainer";
+import { PrintIcon } from "app/modules/user-profile-module/component/icons";
+import { ReactComponent as InfoIcon } from "app/modules/user-profile-module/asset/info-icon.svg";
 import { InfoSnackbar } from "app/modules/story-module/components/storySubHeaderToolbar/infosnackbar";
 import { ISnackbarState } from "app/modules/dataset-module/routes/upload-module/upload-steps/previewFragment";
 
-interface IData {
-  id: string;
-  name: string;
-  description?: string;
-  createdDate: Date;
-  type: string;
+const dataCols = [
+  { key: "date", label: "Date" },
+  { key: "name", label: "File Name" },
+  { key: "plan", label: "Plan" },
+];
+
+interface InvoiceTableProps {
+  tableData: {
+    id: string;
+    date: string;
+    url: string;
+    hostedUrl: string;
+    checked?: boolean;
+  }[];
 }
-export function InvoiceTable() {
-  const dataCols = [
-    { key: "date", label: "Date" },
-    { key: "fileName", label: "File Name" },
-    { key: "plan", label: "Plan" },
-  ];
-  const date = "20/03/2021";
-  const tableData = [
-    {
-      id: "1",
-      // eslint-disable-next-line sonarjs/no-duplicate-string
-      date,
-      fileName: "Invoice 0112",
-      plan: "Pro",
-      checked: false,
-    },
-    {
-      id: "2",
-      date,
-      fileName: "Invoice 0111",
-      plan: "Pro",
-      checked: false,
-    },
-    {
-      id: "3",
-      date,
-      fileName: "Invoice 0110",
-      plan: "Pro",
-      checked: false,
-    },
-    {
-      id: "4",
-      date,
-      fileName: "Invoice 0109",
-      plan: "Pro",
-      checked: false,
-    },
-    {
-      id: "5",
-      date,
-      fileName: "Invoice 0108",
-      plan: "Invoice 0108",
-      checked: false,
-    },
-    {
-      id: "6",
-      date,
-      fileName: "Invoice 0107",
-      plan: "Invoice 0107",
-      checked: false,
-    },
-  ];
+
+export function InvoiceTable(props: InvoiceTableProps) {
+  const { tableData } = props;
+
+  const [tableDataState, setTableDataState] = React.useState<
+    InvoiceTableProps["tableData"]
+  >([]);
   const [snackbarState, setSnackbarState] = React.useState<ISnackbarState>({
     open: false,
     vertical: "bottom",
     horizontal: "center",
   });
-  const [tableDataState, setTableDataState] = React.useState(tableData);
-  const isEveryItemChecked = tableDataState.every((val) => val.checked);
+
   const handleCheckUncheckAll = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.checked) {
-      setTableDataState((prev) => {
-        return prev.map((val) => ({
-          ...val,
-          checked: true,
-        }));
-      });
-    } else {
-      setTableDataState((prev) => {
-        return prev.map((val) => ({
-          ...val,
-          checked: false,
-        }));
-      });
-    }
+    setTableDataState((prev) => {
+      return prev.map((val) => ({
+        ...val,
+        checked: e.target.checked,
+      }));
+    });
   };
+
   const handleCheckUncheck = (
     e: React.ChangeEvent<HTMLInputElement>,
     index: number
@@ -107,17 +64,159 @@ export function InvoiceTable() {
     });
   };
 
-  const handleDownload = () => {
+  const handleRowClick = (url: string) => (e: any) => {
+    if (e.target.tagName !== "INPUT") window.open(url, "_blank");
+  };
+
+  const downloadInvoice = (invoice: any) => {
+    const link = document.createElement("a");
+    link.style.display = "none";
+    link.href = invoice.url;
+    link.download = invoice.name;
+    link.click();
+    link.remove();
+  };
+
+  const onDownloadClick = () => {
     const isEveryItemUnchecked = tableDataState.every((val) => !val.checked);
     if (isEveryItemUnchecked) {
       setSnackbarState({ ...snackbarState, open: true });
-    } else {
-      console.log("Downloaded");
+      return;
+    }
+    const selectedInvoices = tableDataState.filter((val) => val.checked);
+    selectedInvoices.forEach((invoice) => downloadInvoice(invoice));
+  };
+
+  const onPrintClick = () => {
+    const t = document.getElementById("invoice-table");
+    if (t) {
+      domtoimage
+        .toPng(t, {
+          bgcolor: "#fff",
+          filename: "dataxplorer-invoices",
+        })
+        .then((dataUrl: any) => {
+          const link = document.createElement("a");
+          link.download = "dataxplorer-invoices.png";
+          link.href = dataUrl;
+          link.click();
+        })
+        .catch((error: any) => {
+          console.error("oops, something went wrong", error);
+        });
     }
   };
 
+  const isEveryItemChecked = React.useMemo(() => {
+    if (tableDataState.length === 0) return false;
+    return tableDataState.every((val) => val.checked);
+  }, [tableDataState]);
+
+  const table = React.useMemo(() => {
+    return (
+      <Table
+        id="invoice-table"
+        data-cy="homepage-table"
+        css={`
+          border-spacing: 0;
+          border-style: hidden;
+          border-collapse: collapse;
+
+          tr > td {
+            padding: 0px 16px;
+            height: 56px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            &:nth-of-type(1) {
+              width: 75px;
+            }
+            &:nth-of-type(2) {
+              width: 105px;
+            }
+            &:nth-of-type(3) {
+              width: 352px;
+            }
+            &:nth-of-type(4) {
+              width: 200px;
+            }
+          }
+        `}
+      >
+        <TableHead
+          css={`
+            background: #dadaf8;
+
+            > tr > th {
+              font-size: 14px;
+              padding: 0px 16px;
+              height: 56px;
+              font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
+            }
+          `}
+        >
+          <TableRow>
+            <TableCell>
+              <Checkbox
+                color="primary"
+                checked={isEveryItemChecked}
+                onChange={handleCheckUncheckAll}
+              />
+            </TableCell>
+            {dataCols.map((val) => (
+              <TableCell key={val.key} css={``}>
+                {val.label}
+              </TableCell>
+            ))}
+          </TableRow>
+        </TableHead>
+        <TableBody
+          css={`
+            background: #fff;
+          `}
+        >
+          {tableDataState.map((data, index) => (
+            <TableRow
+              key={data.id}
+              onClick={handleRowClick(data.hostedUrl)}
+              css={`
+                &:hover {
+                  cursor: pointer;
+                  background: #f1f3f5;
+                }
+              `}
+            >
+              <TableCell>
+                <Checkbox
+                  color="primary"
+                  checked={data.checked}
+                  onChange={(e) => handleCheckUncheck(e, index)}
+                />
+              </TableCell>
+              {dataCols.map((val) => (
+                <TableCell key={val.key}>
+                  <p title={val.key}>{data[val.key as keyof typeof data]}</p>
+                </TableCell>
+              ))}
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    );
+  }, [
+    isEveryItemChecked,
+    handleCheckUncheckAll,
+    handleCheckUncheck,
+    handleRowClick,
+    tableDataState,
+  ]);
+
+  React.useEffect(() => {
+    setTableDataState(tableData);
+  }, [tableData]);
+
   return (
-    <>
+    <React.Fragment>
       <div
         css={`
           display: flex;
@@ -171,16 +270,16 @@ export function InvoiceTable() {
             }
           `}
         >
-          <button onClick={handleDownload}>
-            <Tooltip title="Download">
+          <Tooltip title="Download">
+            <button onClick={onDownloadClick}>
               <SaveAlt htmlColor="#262c34" />
-            </Tooltip>
-          </button>
-          <button>
-            <Tooltip title="Print">
+            </button>
+          </Tooltip>
+          <Tooltip title="Print">
+            <button onClick={onPrintClick}>
               <PrintIcon />
-            </Tooltip>
-          </button>
+            </button>
+          </Tooltip>
         </div>
       </div>
       <TableContainer
@@ -188,96 +287,7 @@ export function InvoiceTable() {
           border-radius: 8px;
         `}
       >
-        <Table
-          css={`
-            border-spacing: 0;
-            border-style: hidden;
-            border-collapse: collapse;
-
-            tr > td {
-              padding: 0px 16px;
-              height: 56px;
-              overflow: hidden;
-              white-space: nowrap;
-              text-overflow: ellipsis;
-              &:nth-of-type(1) {
-                /* width: 75px; */
-              }
-              &:nth-of-type(2) {
-                width: 135px;
-              }
-              &:nth-of-type(3) {
-                width: 352px;
-              }
-              &:nth-of-type(4) {
-                width: 200px;
-              }
-            }
-          `}
-          data-cy="homepage-table"
-        >
-          <TableHead
-            css={`
-              background: #dadaf8;
-
-              > tr > th {
-                font-size: 14px;
-                padding: 0px 16px;
-                height: 56px;
-                font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
-              }
-            `}
-          >
-            <TableRow>
-              <TableCell>
-                {" "}
-                <Checkbox
-                  color="primary"
-                  checked={isEveryItemChecked}
-                  onChange={handleCheckUncheckAll}
-                />
-              </TableCell>
-              {dataCols.map((val) => (
-                <TableCell key={val.key} css={``}>
-                  {val.label}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody
-            css={`
-              background: #fff;
-            `}
-          >
-            {tableDataState.map((data, index) => (
-              <TableRow
-                key={data.id}
-                css={`
-                  &:hover {
-                    cursor: pointer;
-                    background: #f1f3f5;
-                  }
-                `}
-              >
-                <TableCell>
-                  {" "}
-                  <Checkbox
-                    color="primary"
-                    checked={data.checked}
-                    onChange={(e) => handleCheckUncheck(e, index)}
-                  />
-                </TableCell>
-                {dataCols.map((val) => (
-                  <TableCell key={val.key}>
-                    <p title={data[val.key as keyof typeof data] as string}>
-                      {data[val.key as keyof typeof data]}
-                    </p>
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+        {table}
       </TableContainer>
       <div
         css={`
@@ -285,15 +295,15 @@ export function InvoiceTable() {
         `}
       />
       <InfoSnackbar
+        open={snackbarState.open}
+        key={snackbarState.vertical + snackbarState.horizontal}
+        message="Please select the invoice you want to download!"
+        onClose={() => setSnackbarState({ ...snackbarState, open: false })}
         anchorOrigin={{
           vertical: snackbarState.vertical,
           horizontal: snackbarState.horizontal,
         }}
-        open={snackbarState.open}
-        onClose={() => setSnackbarState({ ...snackbarState, open: false })}
-        message={`Please select the invoice you want to print!`}
-        key={snackbarState.vertical + snackbarState.horizontal}
       />
-    </>
+    </React.Fragment>
   );
 }

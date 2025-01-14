@@ -7,6 +7,7 @@ import Container from "@material-ui/core/Container";
 import { PageLoader } from "app/modules/common/page-loader";
 import HomeFooter from "app/modules/home-module/components/Footer";
 import BgEllipses from "app/modules/home-module/assets/full-bg-ellipses.svg";
+import { APPLICATION_JSON } from "app/state/api";
 
 const CommonLink = (props: { to: string; text: string; replace?: boolean }) => {
   return (
@@ -41,7 +42,7 @@ const CommonLink = (props: { to: string; text: string; replace?: boolean }) => {
 
 export function PaymentSuccessCallbackModule() {
   const history = useHistory();
-  const { isAuthenticated, getAccessTokenSilently } = useAuth0();
+  const { user, isAuthenticated, getAccessTokenSilently } = useAuth0();
 
   const [loading, setLoading] = React.useState(true);
   const [success, setSuccess] = React.useState(false);
@@ -61,7 +62,7 @@ export function PaymentSuccessCallbackModule() {
             },
             {
               headers: {
-                "Content-Type": "application/json",
+                "Content-Type": APPLICATION_JSON,
                 Authorization: `Bearer ${token}`,
               },
             }
@@ -75,6 +76,19 @@ export function PaymentSuccessCallbackModule() {
             setError(error.message);
             setLoading(false);
           });
+        axios
+          .get(
+            `${process.env.REACT_APP_API}/stripe/auto-update-address/${user?.sub}`,
+            {
+              headers: {
+                "Content-Type": APPLICATION_JSON,
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          )
+          .catch((error) => {
+            console.error(error);
+          });
       });
     }
   }, [isAuthenticated]);
@@ -87,6 +101,10 @@ export function PaymentSuccessCallbackModule() {
         background-position: center 72px;
         background-repeat: no-repeat;
         padding-top: 48px; // AppBar height
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        min-height: 100vh;
       `}
     >
       {loading && <PageLoader />}
@@ -169,6 +187,12 @@ export function PaymentCanceledCallbackModule() {
         background-position: center 72px;
         background-repeat: no-repeat;
         padding-top: 48px; // AppBar height
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        min-height: 100vh;
+      
+    >
       `}
     >
       <Container

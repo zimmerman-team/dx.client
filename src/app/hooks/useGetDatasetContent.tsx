@@ -1,3 +1,4 @@
+import { APPLICATION_JSON } from "app/state/api";
 import { useStoreState } from "app/state/store/hooks";
 import axios from "axios";
 import React, { useEffect } from "react";
@@ -21,7 +22,7 @@ const useGetDatasetContent = (datasetId: string, pageSize: number = 10) => {
         }/${datasetId}/data?page=${nextPageToken}&pageSize=${pageSize}`,
         {
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": APPLICATION_JSON,
             Authorization: `Bearer ${token}`,
           },
         }

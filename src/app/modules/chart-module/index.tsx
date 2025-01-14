@@ -60,6 +60,7 @@ import {
   planDialogAtom,
 } from "app/state/recoil/atoms";
 import { IDatasetDetails } from "./components/toolbox/steps/panels-content/SelectDataset";
+import { APPLICATION_JSON } from "app/state/api";
 
 export default function ChartModule() {
   const { user, isLoading, isAuthenticated } = useAuth0();
@@ -286,7 +287,7 @@ export default function ChartModule() {
       try {
         return await axios.post(`${process.env.REACT_APP_API}/chart/`, chart, {
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": APPLICATION_JSON,
             Authorization: `Bearer ${token}`,
           },
         });
