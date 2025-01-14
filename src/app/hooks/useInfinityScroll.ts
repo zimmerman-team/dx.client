@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 export const useInfinityScroll = (
-  observerTarget: React.MutableRefObject<null>
+  observerTarget: React.MutableRefObject<null>,
+  threshold: number = 1
 ) => {
   const [isObserved, setIsObserved] = useState(false);
 
@@ -15,7 +16,7 @@ export const useInfinityScroll = (
           setIsObserved(false);
         }
       },
-      { threshold: 1 }
+      { threshold }
     );
 
     if (observerTarget.current) {
