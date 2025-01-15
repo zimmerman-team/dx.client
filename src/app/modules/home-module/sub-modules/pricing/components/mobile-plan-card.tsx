@@ -225,7 +225,7 @@ export default function MobilePlanCard() {
                 color: #262c34;
                 border: 1px solid #262c34;
                 ${plan.currentPlan &&
-                "background:#f4f4f4; color: #868D96;  border: none;"}
+                "background:#000000; color: #ffffff;  border: none;"}
                 ${plan.recommended &&
                 "background: #2C2C79; color: #F5F5F7;  border: none;"}
                 height: 41px;
