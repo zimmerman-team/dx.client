@@ -183,6 +183,12 @@ export default function PlanCard({
               color: #868d96;
               background: #f4f4f4;
               cursor: not-allowed;
+              ${plan.current &&
+              `
+              background:#000000; 
+              color: #ffffff;  
+              border: none;
+              `}
             }
             @media (max-width: 1300px) {
               width: 77.4%;
