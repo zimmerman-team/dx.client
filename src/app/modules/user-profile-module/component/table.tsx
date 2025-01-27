@@ -73,6 +73,7 @@ export function InvoiceTable(props: InvoiceTableProps) {
     link.style.display = "none";
     link.href = invoice.url;
     link.download = invoice.name;
+    link.target = "_blank";
     link.click();
     link.remove();
   };
