@@ -1,4 +1,5 @@
 import { DatasetListItemAPIModel } from "app/modules/dataset-module/data";
+import { APPLICATION_JSON } from "app/state/api";
 import axios from "axios";
 import { isEmpty } from "lodash";
 import React from "react";
@@ -23,7 +24,7 @@ export const useLoadDatasetDetails = (
         `${process.env.REACT_APP_API}/datasets${token ? "" : "/public"}/${id}`,
         {
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": APPLICATION_JSON,
             Authorization: (token ? `Bearer ${token}` : undefined) as string,
           },
         }

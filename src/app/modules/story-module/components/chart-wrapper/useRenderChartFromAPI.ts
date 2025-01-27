@@ -1,4 +1,5 @@
 import { ChartRenderedItem } from "app/modules/chart-module/data";
+import { APPLICATION_JSON } from "app/state/api";
 import { loadedChartsInStoryAtom } from "app/state/recoil/atoms";
 import axios from "axios";
 import isEmpty from "lodash/isEmpty";
@@ -42,7 +43,7 @@ export const useRenderChartFromAPI = (
         {
           signal: abortControllerRef.current.signal,
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": APPLICATION_JSON,
             Authorization: `Bearer ${token}`,
           },
         }
