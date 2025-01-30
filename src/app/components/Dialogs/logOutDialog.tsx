@@ -125,6 +125,7 @@ export default function LogOutDialog(props: Props) {
             <button
               type="button"
               onClick={onLogout}
+              data-cy="modal-sign-out-btn"
               css={`
                 background: #231d2c;
                 border-radius: 30px;

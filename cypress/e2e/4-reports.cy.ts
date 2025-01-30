@@ -46,6 +46,18 @@ describe("Testing stories on DX", () => {
 
     cy.get('[data-cy="story-sub-header-title-input"]').type(storyTestName);
 
+    //remove header
+    cy.get('[data-cy="story-header-block"]').click();
+    cy.get('[data-cy="delete-header-button"]').click();
+
+    //drag and drop header block
+    cy.get('[data-cy="story-panel-elements-tab"]').click();
+    cy.wait(1000);
+
+    cy.get('[data-cy="story-panel-header-item"]').first().drag();
+    cy.get('[data-cy="header-drop-area"]').drop();
+
+    //fill header inputs
     cy.get('[data-cy="story-header-block"]').within(() => {
       cy.get('[data-testid="heading-rich-text-editor"]').type(storyTestName);
       cy.get('[data-cy="description-rich-text-editor-container"]').click();
@@ -53,6 +65,34 @@ describe("Testing stories on DX", () => {
         "This is a story on football players"
       );
     });
+    //edit report header colors
+    cy.get('[data-cy="edit-header-button"]').click();
+    cy.get('[data-cy="color-label-Background color"]').within(() => {
+      cy.get('[data-cy="color-picker"]').click();
+      cy.get('[data-cy="sketch-picker"]').within(() => {
+        cy.get("input").first().type("{selectall}{backspace}#245B9A");
+      });
+    });
+    cy.get('[data-cy="color-label-Background color"]').click();
+
+    cy.get('[data-cy="color-label-Title color"]').within(() => {
+      cy.get('[data-cy="color-picker"]').click();
+      cy.get('[data-cy="sketch-picker"]').within(() => {
+        cy.get("input").first().type("{selectall}{backspace}#D8B5B5");
+      });
+    });
+    cy.get('[data-cy="color-label-Title color"]').click();
+
+    cy.get('[data-cy="color-label-Description color"]').within(() => {
+      cy.get('[data-cy="color-picker"]').click();
+      cy.get('[data-cy="sketch-picker"]').within(() => {
+        cy.get("input").first().type("{selectall}{backspace}#D8B5B5");
+      });
+    });
+    cy.get('[data-cy="color-label-Description color"]').click();
+
+    //close edit header panel
+    cy.get('[data-cy="edit-header-panel-close"]').click();
 
     cy.intercept(`${apiUrl}/story/*`).as("fetchStory");
     cy.intercept(`${apiUrl}/stories?filter=*`).as("fetchStories");
@@ -143,8 +183,33 @@ describe("Testing stories on DX", () => {
       .scrollIntoView()
       .should("be.visible");
 
-    // Save the story
+    //add dividers
+    cy.get('[data-cy="story-panel-elements-tab"]').click();
+    cy.wait(1000);
 
+    cy.get('[data-cy="story-panel-divider-item"]').first().drag();
+    cy.get('[data-cy="story-row-placeholder-0"]').scrollIntoView();
+    cy.get('[data-cy="story-row-placeholder-0"]').drop();
+
+    //drag and drop row frame
+    cy.get('[data-cy="story-panel-rowFrame-item"]').first().drag();
+    cy.get('[data-cy="story-row-placeholder-1"]').scrollIntoView();
+    cy.get('[data-cy="story-row-placeholder-1"]').drop();
+    cy.get('[data-cy="empty-row-frame"]')
+
+      .first()
+      .within(() => {
+        cy.get('[data-cy="one-by-two-type"]').click({ timeout: 2000 });
+      });
+    cy.get('[data-cy="story-panel-chart-tab"]').click();
+    cy.wait("@fetchCharts");
+    cy.get('[data-cy="story-panel-chart-search-input"]').type("chart-testName");
+    cy.wait("@fetchCharts");
+    cy.get('[data-cy="row-frame-item-drop-zone-1-0"]');
+    cy.get('[data-cy="story-panel-chart-item"]').eq(2).drag();
+    cy.get('[data-cy="row-frame-item-drop-zone-1-0"]').drop();
+
+    // Save the story
     cy.get('[data-cy="save-story-button"]').click();
 
     cy.wait("@patchStory");
@@ -674,5 +739,35 @@ describe("Edit, duplicate and delete story", () => {
     cy.wait("@fetchStories");
 
     cy.contains(`${storyTestName} - Edited`).should("not.exist");
+  });
+
+  it("Can Download a story - PDF", () => {
+    cy.intercept(`${apiUrl}/story*`).as("fetchStory");
+    cy.get('[data-cy="story-grid-item"]').first().scrollIntoView().click();
+    // cy.wait("@fetchStory");
+
+    // cy.contains(storyTestName);
+    cy.get('[data-cy="export-report"]').click();
+    cy.get('[data-cy="export-report-pdf"]').click();
+  });
+
+  it("Can Download a story -SVG", () => {
+    cy.intercept(`${apiUrl}/story*`).as("fetchStory");
+    cy.get('[data-cy="story-grid-item"]').first().scrollIntoView().click();
+    // cy.wait("@fetchStory");
+
+    // cy.contains(storyTestName);
+    cy.get('[data-cy="export-report"]').click();
+    cy.get('[data-cy="export-report-svg"]').click();
+  });
+
+  it("Can Download a story - PNG", () => {
+    cy.intercept(`${apiUrl}/story*`).as("fetchStory");
+    cy.get('[data-cy="story-grid-item"]').first().scrollIntoView().click();
+    // cy.wait("@fetchStory");
+
+    // cy.contains(storyTestName);
+    cy.get('[data-cy="export-report"]').click();
+    cy.get('[data-cy="export-report-png"]').click();
   });
 });

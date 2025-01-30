@@ -1465,6 +1465,7 @@ function EditHeaderPanelView(props: Props) {
   const [displayColorsList, setDisplayColorsList] = React.useState(true);
   return (
     <div
+      data-cy="edit-header-panel"
       css={`
         width: 100%;
         height: 100%;
@@ -1515,6 +1516,7 @@ function EditHeaderPanelView(props: Props) {
               onClick={() => {
                 setCurrentView("charts");
               }}
+              data-cy="edit-header-panel-close"
             >
               <Close color="inherit" />
             </IconButton>

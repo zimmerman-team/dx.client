@@ -23,18 +23,22 @@ export default function UserProfileLayout() {
     {
       title: "profile",
       component: (active: boolean) => <RightIcon active={active} />,
+      testId: "",
     },
     {
       title: "settings",
       component: (active: boolean) => <RightIcon active={active} />,
+      testId: "",
     },
     {
       title: "billing",
       component: (active: boolean) => <RightIcon active={active} />,
+      testId: "",
     },
     {
       title: "Sign Out",
       component: (active: boolean) => <LogOutIcon active={active} />,
+      testId: "sign-out-btn",
     },
   ];
 
@@ -82,7 +86,7 @@ export default function UserProfileLayout() {
               `}
             >
               {tabList.map((tab, index) => (
-                <div key={tab.title}>
+                <div key={tab.title} data-cy={tab.testId}>
                   <Tab
                     title={tab.title}
                     active={tab.title === activeTab}

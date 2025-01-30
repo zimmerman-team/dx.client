@@ -55,7 +55,7 @@ export default function DesktopFooter() {
                 }
               `}
             >
-              <li>
+              <li data-cy="footer-logo">
                 <Link to="/">
                   <LogoIcon />
                 </Link>
