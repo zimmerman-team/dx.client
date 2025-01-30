@@ -9,6 +9,7 @@ import {
 import { uploadAreacss } from "app/modules/dataset-module/routes/upload-module/style";
 import { ReactComponent as UploadIcon } from "app/modules/dataset-module/routes/upload-module/assets/upload.svg";
 import { formatBytes } from "app/utils/formatBytes";
+import { APPLICATION_JSON } from "app/state/api";
 
 interface DropzoneProps {
   uploadError: boolean;
@@ -19,7 +20,7 @@ interface DropzoneProps {
 export const DropZone = (props: DropzoneProps) => {
   const ACCEPTED_FILES = {
     "text/csv": [".csv"],
-    "application/json": [".json"],
+    [APPLICATION_JSON]: [".json"],
     "application/vnd.oasis.opendocument.spreadsheet": [".ods"],
     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": [
       ".xlsx",

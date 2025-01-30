@@ -14,8 +14,9 @@ import TGFLogo from "./assets/tgf-logo";
 import IATILogo from "./assets/iati-logo";
 import { useHistory } from "react-router-dom";
 import MobilePlanCard from "./components/mobile-plan-card";
+import { APPLICATION_JSON } from "app/state/api";
 
-const views = [
+const VIEWS = [
   {
     name: "Monthly Plan",
     key: "monthly",
@@ -26,6 +27,57 @@ const views = [
   },
 ];
 
+const PLANS = [
+  {
+    name: "Free Plan",
+    yearlyPrice: "Free forever",
+    monthlyPrice: "Free forever",
+    text: "For individuals or teams just getting started in Dataxplorer",
+    current: false,
+    recommended: false,
+    buttonText: "Activate",
+    discount: "",
+    key: "free",
+    available: true,
+  },
+  {
+    name: "Pro",
+    yearlyPrice: "€720",
+    monthlyPrice: "€75",
+    text: "For individual users.",
+    current: false,
+    recommended: true,
+    buttonText: "Activate a free trial",
+    discount: "(Save 20%)",
+    key: "pro",
+    available: true,
+  },
+  {
+    name: "Team",
+    yearlyPrice: "€576",
+    monthlyPrice: "€60",
+    text: "Scale up to 100 users and connect your team.",
+    current: false,
+    recommended: false,
+    buttonText: "Activate free trial",
+    discount: "(Save 20%)",
+    key: "team",
+    available: true,
+  },
+  {
+    name: "Enterprise",
+    yearlyPrice: "Custom",
+    monthlyPrice: "Custom",
+    text: "For organisations looking scale into powerful data visualization, with full support and security",
+    current: false,
+    recommended: false,
+    buttonText: "Contact us",
+    discount: "",
+    key: "enterprise",
+    available: true,
+  },
+];
+
 export default function PricingModule() {
   useTitle("DX Dataxplorer - Pricing");
 
@@ -33,6 +85,9 @@ export default function PricingModule() {
   const isMobile = useMediaQuery("(max-width: 1030px)");
 
   const [subscriptionPlan, setSubscriptionPlan] = React.useState("monthly");
+  const [currentPlan, setCurrentPlan] = React.useState(
+    isAuthenticated ? PLANS[0].name : ""
+  );
 
   const token = useStoreState((state) => state.AuthToken.value);
 
@@ -48,7 +103,7 @@ export default function PricingModule() {
       },
       {
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": APPLICATION_JSON,
           Authorization: `Bearer ${token}`,
         },
       }
@@ -56,56 +111,25 @@ export default function PricingModule() {
     return customerCreationResponse.data.data;
   };
 
-  const plans = [
-    {
-      name: "Free Plan",
-      yearlyPrice: "Free forever",
-      monthlyPrice: "Free forever",
-      text: "For individuals or teams just getting started in Dataxplorer",
-      current: isAuthenticated ? true : false,
-      recommended: isAuthenticated ? false : true,
-      buttonText: "Activate",
-      discount: "",
-      key: "free",
-      available: true,
-    },
-    {
-      name: "Pro",
-      yearlyPrice: "€720",
-      monthlyPrice: "€75",
-      text: "For individual users.",
-      current: false,
-      recommended: false,
-      buttonText: "Activate a free trial",
-      discount: "(Save 20%)",
-      key: "pro",
-      available: false,
-    },
-    {
-      name: "Team",
-      yearlyPrice: "€576",
-      monthlyPrice: "€60",
-      text: "Scale up to 100 users and connect your team.",
-      current: false,
-      recommended: false,
-      buttonText: "Activate free trial",
-      discount: "(Save 20%)",
-      key: "team",
-      available: false,
-    },
-    {
-      name: "Enterprise",
-      yearlyPrice: "Custom",
-      monthlyPrice: "Custom",
-      text: "For organisations looking scale into powerful data visualization, with full support and security",
-      current: false,
-      recommended: false,
-      buttonText: "Contact us",
-      discount: "",
-      key: "enterprise",
-      available: false,
-    },
-  ];
+  const getCurrentSubscriptionPlan = async () => {
+    await axios
+      .get(`${process.env.REACT_APP_API}/stripe/subscription/${user?.sub}`, {
+        headers: {
+          "Content-Type": APPLICATION_JSON,
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        setCurrentPlan(
+          response.data.data.plan === "Free"
+            ? "Free Plan"
+            : response.data.data.plan
+        );
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
   const createStripeCheckoutSession = async (
     customerId: string,
@@ -122,7 +146,7 @@ export default function PricingModule() {
       },
       {
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": APPLICATION_JSON,
           Authorization: `Bearer ${token}`,
         },
       }
@@ -136,21 +160,44 @@ export default function PricingModule() {
         `/onboarding/signin?to=${window.location.pathname}${window.location.search}`
       );
     }
+    if (currentPlan !== PLANS[0].name) {
+      history.push("/user-management/billing");
+      return;
+    }
     switch (key) {
       case plans[0].key:
+      case plans[1].key:
+      case plans[2].key:
         const customerId = await createNewStripeCustomer();
         if (customerId) {
           const sessionUrl = await createStripeCheckoutSession(customerId, key);
           if (sessionUrl) window.location.href = sessionUrl;
         }
         break;
-      case plans[1].key:
-      case plans[2].key:
       case plans[3].key:
+        history.push("/contact");
+        break;
       default:
         break;
     }
   };
+
+  const plans = React.useMemo(() => {
+    return PLANS.map((plan) => {
+      return {
+        ...plan,
+        current: plan.name === currentPlan,
+      };
+    });
+  }, [currentPlan]);
+
+  React.useEffect(() => {
+    if (isAuthenticated) {
+      getCurrentSubscriptionPlan();
+    } else {
+      setCurrentPlan(PLANS[0].name);
+    }
+  }, [isAuthenticated]);
 
   return (
     <section
@@ -276,7 +323,7 @@ export default function PricingModule() {
               }
             `}
           >
-            {views.map((view) => (
+            {VIEWS.map((view) => (
               <button
                 key={view.key}
                 css={`
@@ -319,7 +366,6 @@ export default function PricingModule() {
                 />
               ))}
             </div>
-
             <Features />
             <Box height={100} />
             <div>

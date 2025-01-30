@@ -5,6 +5,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { PageLoader } from "app/modules/common/page-loader";
 import axios from "axios";
 import { useCookie, useTitle } from "react-use";
+import { APPLICATION_JSON } from "app/state/api";
 
 function AuthCallbackModule() {
   useTitle("DX Dataxplorer - Auth Callback");
@@ -24,7 +25,7 @@ function AuthCallbackModule() {
         `${process.env.REACT_APP_API}/users/duplicate-landing-story/${id}`,
         {
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": APPLICATION_JSON,
             Authorization: `Bearer ${newToken}`,
           },
         }
@@ -45,7 +46,7 @@ function AuthCallbackModule() {
         {},
         {
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": APPLICATION_JSON,
             Authorization: `Bearer ${newToken}`,
           },
         }
