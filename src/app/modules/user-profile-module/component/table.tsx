@@ -43,8 +43,8 @@ export function InvoiceTable(props: InvoiceTableProps) {
     vertical: "bottom",
     horizontal: "center",
   });
-
   const handleCheckUncheckAll = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(e.target.checked, "checked");
     setTableDataState((prev) => {
       return prev.map((val) => ({
         ...val,
@@ -52,6 +52,8 @@ export function InvoiceTable(props: InvoiceTableProps) {
       }));
     });
   };
+
+  console.log(tableDataState, "tableDataState");
 
   const handleCheckUncheck = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -162,6 +164,8 @@ export function InvoiceTable(props: InvoiceTableProps) {
                 color="primary"
                 checked={isEveryItemChecked}
                 onChange={handleCheckUncheckAll}
+                defaultChecked={false}
+                data-cy="checkAllInvoice"
               />
             </TableCell>
             {dataCols.map((val) => (
@@ -192,6 +196,8 @@ export function InvoiceTable(props: InvoiceTableProps) {
                   color="primary"
                   checked={data.checked}
                   onChange={(e) => handleCheckUncheck(e, index)}
+                  defaultChecked={false}
+                  data-cy="check-invoice"
                 />
               </TableCell>
               {dataCols.map((val) => (
@@ -213,7 +219,7 @@ export function InvoiceTable(props: InvoiceTableProps) {
   ]);
 
   React.useEffect(() => {
-    setTableDataState(tableData);
+    setTableDataState(tableData.map((d) => ({ ...d, checked: false })));
   }, [tableData]);
 
   return (

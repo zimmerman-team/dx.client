@@ -115,6 +115,7 @@ export default function ContactModule() {
         autoHideDuration={5000}
         onClose={() => setOpenSnackbar(false)}
         message={message}
+        data-cy="contact-form-alert"
       />
       {loading && <PageLoader />}
       <div
