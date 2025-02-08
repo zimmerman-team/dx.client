@@ -262,8 +262,9 @@ export default createTheme({
       tooltip: {
         fontSize: 12,
         color: "#fff",
-        backgroundColor: "#373d43",
+        backgroundColor: "#626262",
         fontFamily: '"GothamNarrow-Book", "Helvetica", "Arial", sans-serif',
+        borderRadius: "4px",
       },
     },
     MuiBottomNavigationAction: {
