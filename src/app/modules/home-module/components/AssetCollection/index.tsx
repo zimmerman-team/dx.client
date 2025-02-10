@@ -108,19 +108,6 @@ function AssetsCollection() {
     url: "http://localhost:3000/chart/6796530b8f00e1006902376d",
   };
 
-  const btn = document.querySelector("button");
-  const resultPara = document.querySelector(".result");
-
-  // Share must be triggered by "user activation"
-  const handleClickMe = async () => {
-    try {
-      await navigator.share(shareData);
-      console.log("MDN shared successfully");
-    } catch (err) {
-      console.log(`Error: ${err}`);
-    }
-  };
-
   return (
     <Container maxWidth="lg">
       <div css={turnsDataCss}>
@@ -128,14 +115,6 @@ function AssetsCollection() {
           <Grid container>
             <Grid lg={5} md={5} sm={12} xs={11}>
               <h2>Welcome {user?.given_name ?? user?.name?.split(" ")[0]}</h2>
-              <button
-                css={`
-                  background: black;
-                `}
-                onClick={handleClickMe}
-              >
-                Click Me!
-              </button>
             </Grid>
             <Grid
               lg={7}

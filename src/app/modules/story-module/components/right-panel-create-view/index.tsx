@@ -1117,6 +1117,7 @@ function ElementItem(props: {
                 type="text"
                 onChange={(e) => setSearchValue(e.target.value)}
                 value={searchValue}
+                data-cy={`search-${props.elementType}-list`}
                 css={`
                   outline: none;
                   height: 34px;

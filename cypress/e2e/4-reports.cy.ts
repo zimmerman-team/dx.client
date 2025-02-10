@@ -152,6 +152,8 @@ describe("Testing stories on DX", () => {
     cy.wait("@fetchYoutubeVideos");
 
     cy.get('[data-cy="story-panel-video-item"]').click();
+    cy.get('[data-cy="search-video-list"]').type("climate");
+    cy.wait("@fetchYoutubeVideos");
     cy.get('[data-cy="video-frame"]').first().drag();
     cy.get('[data-cy="row-frame-item-drop-zone-1-0"]').scrollIntoView().drop();
 
@@ -176,6 +178,8 @@ describe("Testing stories on DX", () => {
     cy.wait("@fetchUnsplashImages");
 
     cy.get('[data-cy="story-panel-image-item"]').click();
+    cy.get('[data-cy="search-image-list"]').type("climate");
+    cy.wait("@fetchUnsplashImages");
     cy.get('[data-cy="image-frame"]').first().drag();
     cy.get('[data-cy="row-frame-item-drop-zone-2-0"]').scrollIntoView().drop();
 
@@ -201,6 +205,8 @@ describe("Testing stories on DX", () => {
       .within(() => {
         cy.get('[data-cy="one-by-two-type"]').click({ timeout: 2000 });
       });
+
+    //search for a chart and add to row frame
     cy.get('[data-cy="story-panel-chart-tab"]').click();
     cy.wait("@fetchCharts");
     cy.get('[data-cy="story-panel-chart-search-input"]').type("chart-testName");
