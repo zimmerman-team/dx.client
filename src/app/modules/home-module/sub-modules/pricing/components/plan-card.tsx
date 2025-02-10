@@ -76,6 +76,7 @@ export default function PlanCard({
           height: 267px;
         }
       `}
+      data-cy="plan-card"
     >
       <div
         key={plan.name}
@@ -196,6 +197,7 @@ export default function PlanCard({
           `}
           disabled={plan.current || !plan.available}
           onClick={() => onButtonClick(plan.key)}
+          data-cy="plan-button"
         >
           {plan.current
             ? "Current Plan"

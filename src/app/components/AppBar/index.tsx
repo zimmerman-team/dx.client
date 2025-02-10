@@ -248,6 +248,7 @@ export function AppBar() {
             display: flex;
             background-color: #f2f7fd;
           `}
+          data-cy="app-bar"
         >
           <Toolbar
             disableGutters

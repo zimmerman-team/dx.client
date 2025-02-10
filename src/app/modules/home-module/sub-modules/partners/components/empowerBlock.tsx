@@ -143,13 +143,22 @@ export default function EmpowerBlock(props: {
             }
           `}
         >
-          <button onClick={() => socialAuth("google-oauth2")}>
+          <button
+            data-cy="google-button"
+            onClick={() => socialAuth("google-oauth2")}
+          >
             <GoogleIcon /> sign in for free
           </button>
-          <button onClick={() => socialAuth("linkedin")}>
+          <button
+            data-cy="linkedin-button"
+            onClick={() => socialAuth("linkedin")}
+          >
             <LinkedInIcon /> sign in for free
           </button>
-          <button onClick={() => socialAuth("windowslive")}>
+          <button
+            data-cy="microsoft-button"
+            onClick={() => socialAuth("windowslive")}
+          >
             <MicrosoftIcon /> sign in for free
           </button>
         </div>

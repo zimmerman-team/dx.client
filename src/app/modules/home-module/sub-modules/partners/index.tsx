@@ -192,6 +192,7 @@ export default function PartnersModule() {
                     indicatorColor="primary"
                     textColor="primary"
                     className="Home-MuiTabs-flexContainer"
+                    data-cy="partners-tabs"
                   >
                     <StyledTab disableTouchRipple label="About" value={0} />
                     <StyledTab disableTouchRipple label="Grants" value={1} />
@@ -231,7 +232,9 @@ export default function PartnersModule() {
                     interval={3000}
                   >
                     {cards.map((card, index) => (
-                      <div key={index}>{card}</div>
+                      <div key={index} data-cy="partners-view">
+                        {card}
+                      </div>
                     ))}
                   </AutoPlaySwipeableViews>
                   <Pagination
