@@ -21,6 +21,7 @@ describe("Testing connecting data on DX", () => {
   const apiUrl = Cypress.env("api_url");
 
   beforeEach(() => {
+    // restore login session
     cy.restoreLocalStorageCache();
     // cy.setGoogleAccessToken();
 

@@ -2,13 +2,15 @@
 
 describe("Dashboard", () => {
   const apiUrl = Cypress.env("api_url");
+
   beforeEach(() => {
+    // restore login session
+    cy.restoreLocalStorageCache();
     cy.intercept("GET", `${apiUrl}/assets**`).as("fetchAssets");
     cy.intercept("GET", `${apiUrl}/datasets?filter=*`).as("fetchDatasets");
     cy.intercept("GET", `${apiUrl}/charts*`).as("fetchCharts");
     cy.intercept(`${apiUrl}/stories?filter=*`).as("fetchStories");
 
-    cy.restoreLocalStorageCache();
     cy.visit("/");
 
     cy.get('[data-cy="cookie-btn"]').click();

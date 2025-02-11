@@ -1,6 +1,7 @@
 /// <reference types="cypress" />
 
 describe("testing footer for valid links", () => {
+  const apiUrl = Cypress.env("api_url");
   beforeEach(() => {
     cy.visit("/");
     cy.contains("Accept").click();
@@ -54,75 +55,80 @@ describe("testing footer for valid links", () => {
     cy.get('input[placeholder="Email address"]').type(
       "emmanuella@zimmerman.team"
     );
+    cy.intercept("POST", `${apiUrl}/users/subscribe-to-newsletter`).as(
+      "subscribe"
+    );
     cy.contains("SUBSCRIBE").click();
-    cy.wait(2000);
+    cy.wait("@subscribe");
     cy.contains("Thank you for subscribing!");
   });
 
-  cy.get('[data-cy="home-footer"]').within(() => {
-    cy.contains("Email: contact@dataxplorer.org");
+  it("is should display alid links in footer", () => {
+    cy.get('[data-cy="home-footer"]').within(() => {
+      cy.contains("Email: contact@dataxplorer.org");
 
-    cy.contains("Keizersgracht 520H");
-    cy.contains("1017 EK Amsterdam");
-    cy.contains("The Netherlands");
-  });
-  cy.get('[data-cy="home-footer"]').within(() => {
-    cy.contains("a", "Explore").click();
-    cy.location("pathname").should("include", "/");
-  });
+      cy.contains("Keizersgracht 520H");
+      cy.contains("1017 EK Amsterdam");
+      cy.contains("The Netherlands");
+    });
+    cy.get('[data-cy="home-footer"]').within(() => {
+      cy.contains("a", "Explore").click();
+      cy.location("pathname").should("include", "/");
+    });
 
-  cy.visit("/");
+    cy.visit("/");
 
-  cy.get('[data-cy="home-footer"]').within(() => {
-    cy.contains("a", "Why Dataxplorer").click();
-    cy.location("pathname").should("include", "/why-dataxplorer");
-  });
+    cy.get('[data-cy="home-footer"]').within(() => {
+      cy.contains("a", "Why Dataxplorer").click();
+      cy.location("pathname").should("include", "/why-dataxplorer");
+    });
 
-  cy.visit("/");
+    cy.visit("/");
 
-  cy.get('[data-cy="home-footer"]').within(() => {
-    cy.contains("a", "About").click();
-    cy.location("pathname").should("include", "/about");
-  });
+    cy.get('[data-cy="home-footer"]').within(() => {
+      cy.contains("a", "About").click();
+      cy.location("pathname").should("include", "/about");
+    });
 
-  cy.visit("/");
+    cy.visit("/");
 
-  cy.get('[data-cy="home-footer"]').within(() => {
-    cy.contains("a", "Partners").click();
-    cy.location("pathname").should("include", "/partners");
-  });
+    cy.get('[data-cy="home-footer"]').within(() => {
+      cy.contains("a", "Partners").click();
+      cy.location("pathname").should("include", "/partners");
+    });
 
-  cy.visit("/");
+    cy.visit("/");
 
-  cy.get('[data-cy="home-footer"]').within(() => {
-    cy.contains("a", "Contact").click();
-    cy.location("pathname").should("include", "/contact");
-  });
+    cy.get('[data-cy="home-footer"]').within(() => {
+      cy.contains("a", "Contact").click();
+      cy.location("pathname").should("include", "/contact");
+    });
 
-  cy.visit("/");
+    cy.visit("/");
 
-  cy.get('[data-cy="home-footer"]').within(() => {
-    cy.contains("a", "Pricing").click();
-    cy.location("pathname").should("include", "/pricing");
-  });
+    cy.get('[data-cy="home-footer"]').within(() => {
+      cy.contains("a", "Pricing").click();
+      cy.location("pathname").should("include", "/pricing");
+    });
 
-  cy.get('[data-cy="home-footer"]').within(() => {
-    cy.contains("a", "Privacy").invoke("removeAttr", "target").click();
-  });
+    cy.get('[data-cy="home-footer"]').within(() => {
+      cy.contains("a", "Privacy").invoke("removeAttr", "target").click();
+    });
 
-  cy.origin("https://drive.google.com", () => {
-    cy.location("hostname").should("include", "drive.google.com");
-  });
+    cy.origin("https://drive.google.com", () => {
+      cy.location("hostname").should("include", "drive.google.com");
+    });
 
-  cy.visit("/");
+    cy.visit("/");
 
-  cy.get('[data-cy="home-footer"]').within(() => {
-    cy.contains("a", "Terms and conditions")
-      .invoke("removeAttr", "target")
-      .click();
-  });
+    cy.get('[data-cy="home-footer"]').within(() => {
+      cy.contains("a", "Terms and conditions")
+        .invoke("removeAttr", "target")
+        .click();
+    });
 
-  cy.origin("https://drive.google.com", () => {
-    cy.location("origin").should("include", "https://drive.google.com");
+    cy.origin("https://drive.google.com", () => {
+      cy.location("origin").should("include", "https://drive.google.com");
+    });
   });
 });

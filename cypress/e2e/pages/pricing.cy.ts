@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-describe("Testing the Why dataxplorer page logged in", () => {
+describe("Testing the Pricing page", () => {
   const apiUrl = Cypress.env("api_url");
 
   beforeEach(() => {

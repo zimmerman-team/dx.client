@@ -75,6 +75,7 @@ cypress.env.json
 cypress/fixtures/localStorage.json
 cypress/e2e/3-getting-started
 cypress/e2e/2-advanced-examples
+cypress/downloads/
 
 rawgraphs-charts
 
