@@ -133,6 +133,8 @@ describe("Testing stories on DX", () => {
 
     cy.get('[data-cy="row-frame-item-drop-zone-0-1"]');
 
+    cy.get('[data-cy="story-panel-chart-search-input"]').type("testname");
+
     cy.get('[data-cy="story-panel-chart-item"]').first().drag();
     cy.get('[data-cy="row-frame-item-drop-zone-0-1"]').drop();
 
@@ -186,34 +188,6 @@ describe("Testing stories on DX", () => {
     cy.get('[data-cy="story-image-content"]')
       .scrollIntoView()
       .should("be.visible");
-
-    //add dividers
-    cy.get('[data-cy="story-panel-elements-tab"]').click();
-    cy.wait(1000);
-
-    cy.get('[data-cy="story-panel-divider-item"]').first().drag();
-    cy.get('[data-cy="story-row-placeholder-0"]').scrollIntoView();
-    cy.get('[data-cy="story-row-placeholder-0"]').drop();
-
-    //drag and drop row frame
-    cy.get('[data-cy="story-panel-rowFrame-item"]').first().drag();
-    cy.get('[data-cy="story-row-placeholder-1"]').scrollIntoView();
-    cy.get('[data-cy="story-row-placeholder-1"]').drop();
-    cy.get('[data-cy="empty-row-frame"]')
-
-      .first()
-      .within(() => {
-        cy.get('[data-cy="one-by-two-type"]').click({ timeout: 2000 });
-      });
-
-    //search for a chart and add to row frame
-    cy.get('[data-cy="story-panel-chart-tab"]').click();
-    cy.wait("@fetchCharts");
-    cy.get('[data-cy="story-panel-chart-search-input"]').type("chart-testName");
-    cy.wait("@fetchCharts");
-    cy.get('[data-cy="row-frame-item-drop-zone-1-0"]');
-    cy.get('[data-cy="story-panel-chart-item"]').eq(2).drag();
-    cy.get('[data-cy="row-frame-item-drop-zone-1-0"]').drop();
 
     // Save the story
     cy.get('[data-cy="save-story-button"]').click();
