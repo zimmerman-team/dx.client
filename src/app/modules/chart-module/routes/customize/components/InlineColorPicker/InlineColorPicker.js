@@ -31,6 +31,7 @@ export default function InlineColorPicker({
         onClick={() => setDisplayColorPicker(true)}
         id="inline-color-picker-swatch"
         ref={pickerRef}
+        data-cy="color-picker"
       >
         <div className={styles.color} style={{ background: color }} />
         {color.toUpperCase()}
@@ -50,6 +51,7 @@ export default function InlineColorPicker({
             onClick={() => setDisplayColorPicker(false)}
           />
           <div
+            data-cy="sketch-picker"
             css={`
               .sketch-pickerz {
                 padding: 16px !important;

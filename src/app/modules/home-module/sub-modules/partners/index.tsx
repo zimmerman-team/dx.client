@@ -194,13 +194,29 @@ export default function PartnersModule() {
                     className="Home-MuiTabs-flexContainer"
                     data-cy="partners-tabs"
                   >
-                    <StyledTab disableTouchRipple label="About" value={0} />
-                    <StyledTab disableTouchRipple label="Grants" value={1} />
-                    <StyledTab disableTouchRipple label="Budgets" value={2} />
+                    <StyledTab
+                      disableTouchRipple
+                      label="About"
+                      value={0}
+                      data-cy="about-tab"
+                    />
+                    <StyledTab
+                      disableTouchRipple
+                      label="Grants"
+                      value={1}
+                      data-cy="grants-tab"
+                    />
+                    <StyledTab
+                      disableTouchRipple
+                      label="Budgets"
+                      value={2}
+                      data-cy="budgets-tab"
+                    />
                     <StyledTab
                       disableTouchRipple
                       label="Performance"
                       value={3}
+                      data-cy="performance-tab"
                     />
                   </StyledTabs>
                 </div>

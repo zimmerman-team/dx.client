@@ -11,7 +11,11 @@ interface TabProps {
 
 export default function Tab(props: TabProps) {
   return (
-    <div onClick={props.handleClick} css={tabcss(props.active, props.disabled)}>
+    <div
+      onClick={props.handleClick}
+      css={tabcss(props.active, props.disabled)}
+      data-cy="profile-tab"
+    >
       <p>{props.title}</p>
       <div
         css={`

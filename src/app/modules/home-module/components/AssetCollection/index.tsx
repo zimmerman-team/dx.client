@@ -102,6 +102,12 @@ function AssetsCollection() {
     stories: "Explore stories collection of Stories",
   };
 
+  const shareData = {
+    title: "MDN",
+    text: "Best Seller Book chart",
+    url: "http://localhost:3000/chart/6796530b8f00e1006902376d",
+  };
+
   return (
     <Container maxWidth="lg">
       <div css={turnsDataCss}>

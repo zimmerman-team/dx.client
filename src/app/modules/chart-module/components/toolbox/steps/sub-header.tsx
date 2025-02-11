@@ -71,7 +71,7 @@ export default function ToolboxSubHeader(
       {props.showResetButton && (
         <div>
           <span>Reset filters</span>{" "}
-          <IconButton onClick={props.resetFilters}>
+          <IconButton onClick={props.resetFilters} data-cy="reset-filters">
             <SettingsBackupRestoreIcon color="inherit" />
           </IconButton>
         </div>

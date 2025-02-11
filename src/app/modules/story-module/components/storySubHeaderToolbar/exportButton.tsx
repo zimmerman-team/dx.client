@@ -42,11 +42,15 @@ export function ExportStoryButton(props: { filename: string }) {
 
   return (
     <>
-      <Tooltip title="Export">
-        <IconButton onClick={handleClick} aria-label="export-button">
+      <IconButton
+        onClick={handleClick}
+        aria-label="export-button"
+        data-cy="export-report"
+      >
+        <Tooltip title="Export">
           <SaveAlt htmlColor="#262c34" />
-        </IconButton>
-      </Tooltip>
+        </Tooltip>
+      </IconButton>
       <StyledMenu
         keepMounted
         open={open}
@@ -59,6 +63,7 @@ export function ExportStoryButton(props: { filename: string }) {
           <Link
             target="_blank"
             to={`/story/${page}/downloaded-view?type=pdf&filename=${props.filename}`}
+            data-cy="export-report-pdf"
             css={`
               text-decoration: none;
               color: #262c34;
@@ -76,6 +81,7 @@ export function ExportStoryButton(props: { filename: string }) {
           <Link
             target="_blank"
             to={`/story/${page}/downloaded-view?type=png&filename=${props.filename}`}
+            data-cy="export-report-png"
             css={`
               text-decoration: none;
               color: #262c34;
@@ -94,6 +100,7 @@ export function ExportStoryButton(props: { filename: string }) {
           <Link
             target="_blank"
             to={`/story/${page}/downloaded-view?type=svg&filename=${props.filename}`}
+            data-cy="export-report-svg"
             css={`
               text-decoration: none;
               color: #262c34;

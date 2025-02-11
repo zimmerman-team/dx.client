@@ -1174,6 +1174,7 @@ const StaticDimensionContainer = (props: { dimension: any }) => {
   const [,] = useDebounce(() => onValueChange(value), 1000, [value]);
   return (
     <div
+      data-cy="static-dimension-container"
       key={`${props.dimension.id}`}
       css={`
         width: 100%;
