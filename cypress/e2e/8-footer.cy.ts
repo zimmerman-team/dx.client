@@ -51,16 +51,18 @@ describe("testing footer for valid links", () => {
     cy.contains(
       "You will receive occasional emails from DX. You always have choice to unsubscribe within every Email."
     );
-    cy.contains("SUBSCRIBE");
-    cy.get('input[placeholder="Email address"]').type(
-      "emmanuella@zimmerman.team"
-    );
-    cy.intercept("POST", `${apiUrl}/users/subscribe-to-newsletter`).as(
-      "subscribe"
-    );
-    cy.contains("SUBSCRIBE").click();
-    cy.wait("@subscribe");
-    cy.contains("Thank you for subscribing!");
+
+    // Commenting this out since we disabled intercom on the test environment
+    // cy.contains("SUBSCRIBE");
+    // cy.get('input[placeholder="Email address"]').type(
+    //   "emmanuella@zimmerman.team"
+    // );
+    // cy.intercept("POST", `${apiUrl}/users/subscribe-to-newsletter`).as(
+    //   "subscribe"
+    // );
+    // cy.contains("SUBSCRIBE").click();
+    // cy.wait("@subscribe");
+    // cy.contains("Thank you for subscribing!");
   });
 
   it("is should display alid links in footer", () => {
