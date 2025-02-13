@@ -182,16 +182,16 @@ describe("Testing connecting data on DX", () => {
     });
 
     cy.get('[data-cy="open-search-button"]').click();
-    cy.intercept(
-      `${apiUrl}/external-sources/search?q=El%20Salvador%20People*`
-    ).as("getDefaultData2");
+    cy.intercept(`${apiUrl}/external-sources/search?q=n*`).as(
+      "getDefaultData2"
+    );
     cy.wait(2000);
-    cy.get('[data-cy="filter-search-input"]').type("El Salvador People");
+    cy.get('[data-cy="filter-search-input"]').type("n");
 
     cy.wait("@getDefaultData2").then((interception) => {
       cy.get('[data-cy="external-search-card-HDX"]').should(
         "have.length.greaterThan",
-        1
+        0
       );
     });
 

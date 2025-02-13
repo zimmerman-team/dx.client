@@ -848,6 +848,14 @@ describe("Edit, duplicate and delete story", () => {
 
     // Delete the advanced story
 
+    cy.get("[data-cy=home-search-button]").click();
+    cy.wait(2000);
+    cy.get("[data-cy=filter-search-input]").type(
+      `{selectall}{backspace}${advancedStoryTestName}`
+    );
+
+    cy.wait("@fetchStories");
+
     cy.contains('[data-cy="story-grid-item"]', `${advancedStoryTestName}`)
       .first()
       .scrollIntoView()

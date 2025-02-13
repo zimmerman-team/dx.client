@@ -109,7 +109,7 @@ const PlaceHolder = (props: PlaceholderProps) => {
   };
   return (
     <div
-      data-cy={`story-row-placeholder-${placeholderIndex}`}
+      data-cy={`story-row-placeholder`}
       data-handler-id={handlerId}
       ref={drop}
       css={`

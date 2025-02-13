@@ -60,7 +60,10 @@ Cypress.on("uncaught:exception", (err, runnable) => {
     err.message.includes(
       "ResizeObserver loop completed with undelivered notifications"
     ) ||
-    err.message.includes("Error: Consent required")
+    err.message.includes("Error: Consent required") ||
+    err.message.includes(
+      'Blocked a frame with origin "https://billing.stripe.com"'
+    )
   ) {
     return false;
   }

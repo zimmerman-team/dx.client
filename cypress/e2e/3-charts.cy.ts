@@ -514,13 +514,14 @@ describe("Testing create chart on DX", () => {
     cy.contains('[data-cy="nonstatic-dimension-container"]', "Steps").within(
       () => {
         cy.get('[data-cy="chart-dimension-select"]').first().click();
-        cy.get('[data-cy="chart-dimension-mapping-item"]').first().click();
-      }
-    );
-    cy.contains('[data-cy="nonstatic-dimension-container"]', "Steps").within(
-      () => {
+        cy.get('[data-cy="chart-dimension-mapping-container"]').within(() => {
+          cy.get('[data-cy="chart-dimension-mapping-item"]').first().click();
+        });
+
         cy.get('[data-cy="chart-dimension-select"]').first().click();
-        cy.get('[data-cy="chart-dimension-mapping-item"]').eq(3).click();
+        cy.get('[data-cy="chart-dimension-mapping-container"]').within(() => {
+          cy.get('[data-cy="chart-dimension-mapping-item"]').eq(1).click();
+        });
       }
     );
 
@@ -1712,22 +1713,21 @@ describe("Testing create chart on DX", () => {
       "Dimensions"
     ).within(() => {
       cy.get('[data-cy="chart-dimension-select"]').first().click();
-      cy.get('[data-cy="chart-dimension-mapping-item"]').first().click();
-    });
-    cy.contains(
-      '[data-cy="nonstatic-dimension-container"]',
-      "Dimensions"
-    ).within(() => {
+      cy.get('[data-cy="chart-dimension-mapping-container"]').within(() => {
+        cy.get('[data-cy="chart-dimension-mapping-item"]').first().click();
+      });
+
       cy.get('[data-cy="chart-dimension-select"]').first().click();
-      cy.get('[data-cy="chart-dimension-mapping-item"]').eq(3).click();
-    });
-    cy.contains(
-      '[data-cy="nonstatic-dimension-container"]',
-      "Dimensions"
-    ).within(() => {
+      cy.get('[data-cy="chart-dimension-mapping-container"]').within(() => {
+        cy.get('[data-cy="chart-dimension-mapping-item"]').eq(1).click();
+      });
+
       cy.get('[data-cy="chart-dimension-select"]').first().click();
-      cy.get('[data-cy="chart-dimension-mapping-item"]').eq(2).click();
+      cy.get('[data-cy="chart-dimension-mapping-container"]').within(() => {
+        cy.get('[data-cy="chart-dimension-mapping-item"]').eq(2).click();
+      });
     });
+
     cy.wait("@renderChart");
 
     // cy.intercept(`${apiUrl}/chart/*/render`).as("renderChart");
@@ -1988,6 +1988,12 @@ describe("Edit, duplicate and delete chart", () => {
   });
 
   it("Can Edit a chart", () => {
+    cy.get("[data-cy=home-search-button]").click();
+    cy.wait(2000);
+    cy.get("[data-cy=filter-search-input]").type(
+      `{selectall}{backspace}${testname1}`
+    );
+    cy.wait("@fetchCharts");
     cy.contains('[data-cy="chart-grid-item"]', testname1)
       .first()
       .scrollIntoView()
@@ -2036,6 +2042,12 @@ describe("Edit, duplicate and delete chart", () => {
   });
 
   it("Can Duplicate a chart", () => {
+    cy.get("[data-cy=home-search-button]").click();
+    cy.wait(2000);
+    cy.get("[data-cy=filter-search-input]").type(
+      `{selectall}{backspace}${testname1}`
+    );
+    cy.wait("@fetchCharts");
     cy.intercept(`${apiUrl}/chart/duplicate/*`).as("duplicateChart");
 
     cy.contains('[data-cy="chart-grid-item"]', testname1)
