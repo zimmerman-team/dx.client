@@ -106,4 +106,5 @@ jobs:
           # Records to Cypress Cloud
           # https://docs.cypress.io/guides/cloud/projects#Set-up-a-project-to-record
           record: true
+          browser: chrome
           # parallel: true # Runs test in parallel using settings above
