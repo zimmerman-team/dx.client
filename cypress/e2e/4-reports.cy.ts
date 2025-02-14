@@ -472,10 +472,12 @@ describe("Edit, duplicate and delete story", () => {
     cy.get('[data-cy="nonstatic-dimension-container"]')
       .first()
       .within(() => {
-        cy.get('[data-cy="chart-dimension-mapping-item"]').click();
+        cy.get('[data-cy="chart-dimension-mapping-item"]').first().click();
       });
 
-    cy.get('[data-cy="chart-dimension-mapping-item"]').eq(2).click();
+    cy.get('[data-cy="chart-dimension-mapping-container"]').within(() => {
+      cy.get('[data-cy="chart-dimension-mapping-item"]').eq(2).click();
+    });
 
     cy.intercept(`${apiUrl}/chart/*/render`).as("renderChart");
 
