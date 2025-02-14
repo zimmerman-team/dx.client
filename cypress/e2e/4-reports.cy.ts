@@ -501,7 +501,7 @@ describe("Edit, duplicate and delete story", () => {
 
     // cy.get('[data-cy="back-to-story-button"]').click();
 
-    cy.waitForNetworkIdle(apiUrl, 0);
+    cy.waitForNetworkIdle(apiUrl, 2000);
 
     cy.get('[data-cy="story-panel-chart-search-input"]').type(
       `${chartTestName}-Edited`
@@ -602,7 +602,7 @@ describe("Edit, duplicate and delete story", () => {
 
     cy.intercept(`${apiUrl}/story/*`).as("fetchStory");
 
-    cy.waitForNetworkIdle(apiUrl, 0);
+    cy.waitForNetworkIdle(apiUrl, 2000);
 
     cy.get('[data-cy="story-grid-item-edit-btn"]').click();
 
@@ -688,7 +688,7 @@ describe("Edit, duplicate and delete story", () => {
 
     // cy.get('[data-cy="back-to-story-button"]').click();
 
-    cy.waitForNetworkIdle(apiUrl, 0);
+    cy.waitForNetworkIdle(apiUrl, 2000);
 
     cy.get('[data-cy="story-panel-chart-search-input"]').type(chartTestName);
     cy.wait("@fetchCharts");
