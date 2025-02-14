@@ -591,7 +591,7 @@ const NonStaticDimensionContainer = (props: {
             ];
 
             return (
-              <div>
+              <div key={mappingItemValue}>
                 {index === 0 && (
                   <DropPlaceholder
                     placeholderIndex={0}

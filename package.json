@@ -110,6 +110,7 @@
     "babel-plugin-transform-remove-console": "^6.9.4",
     "cypress": "^13.6.6",
     "cypress-file-upload": "^5.0.8",
+    "cypress-network-idle": "^1.15.0",
     "depcheck": "^1.4.7",
     "eslint-config-airbnb-typescript-prettier": "^4.2.0",
     "eslint-plugin-no-relative-import-paths": "^1.5.5",

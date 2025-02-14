@@ -113,10 +113,11 @@ function AssetsCollection() {
       <div css={turnsDataCss}>
         {isAuthenticated ? (
           <Grid container>
-            <Grid lg={5} md={5} sm={12} xs={11}>
+            <Grid item lg={5} md={5} sm={12} xs={11}>
               <h2>Welcome {user?.given_name ?? user?.name?.split(" ")[0]}</h2>
             </Grid>
             <Grid
+              item
               lg={7}
               md={7}
               sm={12}
