@@ -102,15 +102,22 @@ function AssetsCollection() {
     stories: "Explore stories collection of Stories",
   };
 
+  const shareData = {
+    title: "MDN",
+    text: "Best Seller Book chart",
+    url: "http://localhost:3000/chart/6796530b8f00e1006902376d",
+  };
+
   return (
     <Container maxWidth="lg">
       <div css={turnsDataCss}>
         {isAuthenticated ? (
           <Grid container>
-            <Grid lg={5} md={5} sm={12} xs={11}>
+            <Grid item lg={5} md={5} sm={12} xs={11}>
               <h2>Welcome {user?.given_name ?? user?.name?.split(" ")[0]}</h2>
             </Grid>
             <Grid
+              item
               lg={7}
               md={7}
               sm={12}

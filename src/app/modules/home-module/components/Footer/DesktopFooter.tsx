@@ -19,7 +19,7 @@ export default function DesktopFooter() {
   >({});
   return (
     <div css={homeFootercss}>
-      <Container maxWidth="lg">
+      <Container maxWidth="lg" data-cy="home-footer">
         <Grid
           container
           alignContent="space-between"
@@ -55,7 +55,7 @@ export default function DesktopFooter() {
                 }
               `}
             >
-              <li>
+              <li data-cy="footer-logo">
                 <Link to="/">
                   <LogoIcon />
                 </Link>

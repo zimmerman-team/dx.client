@@ -12,6 +12,7 @@
 const randomId = () => Cypress._.random(0, 1e6);
 //@ts-ignore
 const storyTestName = `story-testname${randomId()}`;
+const advancedStoryTestName = `story-testname${randomId()}`;
 const chartTestName = `chart-testname${randomId()}`;
 
 describe("Testing stories on DX", () => {
@@ -46,6 +47,18 @@ describe("Testing stories on DX", () => {
 
     cy.get('[data-cy="story-sub-header-title-input"]').type(storyTestName);
 
+    //remove header
+    cy.get('[data-cy="story-header-block"]').click();
+    cy.get('[data-cy="delete-header-button"]').click();
+
+    //drag and drop header block
+    cy.get('[data-cy="story-panel-elements-tab"]').click();
+    cy.wait(1000);
+
+    cy.get('[data-cy="story-panel-header-item"]').first().drag();
+    cy.get('[data-cy="header-drop-area"]').drop();
+
+    //fill header inputs
     cy.get('[data-cy="story-header-block"]').within(() => {
       cy.get('[data-testid="heading-rich-text-editor"]').type(storyTestName);
       cy.get('[data-cy="description-rich-text-editor-container"]').click();
@@ -53,6 +66,34 @@ describe("Testing stories on DX", () => {
         "This is a story on football players"
       );
     });
+    //edit report header colors
+    cy.get('[data-cy="edit-header-button"]').click();
+    cy.get('[data-cy="color-label-Background color"]').within(() => {
+      cy.get('[data-cy="color-picker"]').click();
+      cy.get('[data-cy="sketch-picker"]').within(() => {
+        cy.get("input").first().type("{selectall}{backspace}#245B9A");
+      });
+    });
+    cy.get('[data-cy="color-label-Background color"]').click();
+
+    cy.get('[data-cy="color-label-Title color"]').within(() => {
+      cy.get('[data-cy="color-picker"]').click();
+      cy.get('[data-cy="sketch-picker"]').within(() => {
+        cy.get("input").first().type("{selectall}{backspace}#D8B5B5");
+      });
+    });
+    cy.get('[data-cy="color-label-Title color"]').click();
+
+    cy.get('[data-cy="color-label-Description color"]').within(() => {
+      cy.get('[data-cy="color-picker"]').click();
+      cy.get('[data-cy="sketch-picker"]').within(() => {
+        cy.get("input").first().type("{selectall}{backspace}#D8B5B5");
+      });
+    });
+    cy.get('[data-cy="color-label-Description color"]').click();
+
+    //close edit header panel
+    cy.get('[data-cy="edit-header-panel-close"]').click();
 
     cy.intercept(`${apiUrl}/story/*`).as("fetchStory");
     cy.intercept(`${apiUrl}/stories?filter=*`).as("fetchStories");
@@ -93,6 +134,8 @@ describe("Testing stories on DX", () => {
 
     cy.get('[data-cy="row-frame-item-drop-zone-0-1"]');
 
+    cy.get('[data-cy="story-panel-chart-search-input"]').type("testname");
+
     cy.get('[data-cy="story-panel-chart-item"]').first().drag();
     cy.get('[data-cy="row-frame-item-drop-zone-0-1"]').drop();
 
@@ -112,6 +155,8 @@ describe("Testing stories on DX", () => {
     cy.wait("@fetchYoutubeVideos");
 
     cy.get('[data-cy="story-panel-video-item"]').click();
+    cy.get('[data-cy="search-video-list"]').type("climate");
+    cy.wait("@fetchYoutubeVideos");
     cy.get('[data-cy="video-frame"]').first().drag();
     cy.get('[data-cy="row-frame-item-drop-zone-1-0"]').scrollIntoView().drop();
 
@@ -136,8 +181,134 @@ describe("Testing stories on DX", () => {
     cy.wait("@fetchUnsplashImages");
 
     cy.get('[data-cy="story-panel-image-item"]').click();
+    cy.get('[data-cy="search-image-list"]').type("climate");
+    cy.wait("@fetchUnsplashImages");
     cy.get('[data-cy="image-frame"]').first().drag();
     cy.get('[data-cy="row-frame-item-drop-zone-2-0"]').scrollIntoView().drop();
+
+    cy.get('[data-cy="story-image-content"]')
+      .scrollIntoView()
+      .should("be.visible");
+
+    // Save the story
+    cy.get('[data-cy="save-story-button"]').click();
+
+    cy.wait("@patchStory");
+
+    cy.get('[data-cy="view-story-button"]').click();
+
+    cy.wait("@fetchStory");
+
+    cy.visit("/");
+
+    cy.get('[data-cy="home-charts-tab"]').scrollIntoView().click();
+
+    cy.get('[data-cy="home-stories-tab"]').scrollIntoView().click();
+
+    cy.wait("@fetchStories");
+
+    cy.get("[data-cy=home-search-button]").click();
+    cy.wait(2000);
+    cy.get("[data-cy=filter-search-input]").type(
+      `{selectall}{backspace}${storyTestName}`
+    );
+
+    cy.wait("@fetchStories");
+
+    cy.contains(storyTestName).should("be.visible");
+  });
+
+  it("Can Create an Advanced story", () => {
+    cy.get('[data-cy="home-create-story-button"]').click();
+
+    cy.contains(
+      '[data-cy="story-template-card"]',
+      "Advanced template story"
+    ).within(() => {
+      cy.get('[data-cy="use-story-template-button"]').click();
+    });
+    cy.wait(2000);
+    // cy.contains("Untitled story", { timeout: 2000 }).should("be.hidden");
+
+    // cy.get('[data-cy="skip-tour-button"]').click();
+
+    cy.get('[data-cy="story-sub-header-title-input"]').type(
+      advancedStoryTestName
+    );
+
+    cy.get('[data-cy="story-header-block"]').within(() => {
+      cy.get('[data-testid="heading-rich-text-editor"]').type(
+        advancedStoryTestName
+      );
+      cy.get('[data-cy="description-rich-text-editor-container"]').click();
+      cy.get('[data-testid="description-rich-text-editor"]').type(
+        "This is a story on advanced football players"
+      );
+    });
+
+    cy.intercept(`${apiUrl}/story/*`).as("fetchStory");
+    cy.intercept(`${apiUrl}/stories?filter=*`).as("fetchStories");
+
+    cy.intercept("PATCH", `${apiUrl}/story/*`).as("patchStory");
+
+    cy.intercept(`${apiUrl}/charts?filter=*`).as("fetchCharts");
+
+    // Drop Text item
+
+    cy.get('[data-cy="story-panel-media-tab"]').click();
+    cy.wait(1000);
+    cy.get('[data-cy="row-frame-item-drop-zone-0-0"]').scrollIntoView();
+
+    cy.get('[data-cy="story-panel-text-item"]').first().drag();
+    cy.get('[data-cy="row-frame-item-drop-zone-0-0"]').drop();
+
+    cy.get("[data-cy=row-frame-0]").within(() => {
+      cy.get('[data-testid="story-rich-text-editor"]')
+        .first()
+        .type("This is a story on advanced football players");
+    });
+
+    // Drag and drop chart item
+
+    cy.get('[data-cy="story-panel-chart-tab"]').click();
+    cy.get('[data-cy="story-panel-chart-tab"]').click();
+
+    cy.wait("@fetchCharts");
+
+    cy.get('[data-cy="row-frame-item-drop-zone-1-0"]');
+
+    cy.get('[data-cy="story-panel-chart-item"]').first().drag();
+    cy.get('[data-cy="row-frame-item-drop-zone-1-0"]').drop();
+
+    // Drag and drop video item
+
+    cy.intercept(`${apiUrl}/youtube/search**`).as("fetchYoutubeVideos");
+
+    cy.get('[data-cy="story-panel-media-tab"]').click();
+
+    cy.wait("@fetchYoutubeVideos");
+
+    cy.get('[data-cy="story-panel-video-item"]').click();
+    cy.get('[data-cy="video-frame"]').first().drag();
+    cy.get('[data-cy="row-frame-item-drop-zone-2-0"]').scrollIntoView().drop();
+
+    cy.get('[data-cy="story-video-content"]')
+      .scrollIntoView()
+      .should("be.visible");
+
+    // Drag and drop image item
+
+    cy.intercept(`${apiUrl}/unsplash/image/search**`).as("fetchUnsplashImages");
+
+    cy.get('[data-cy="story-panel-chart-tab"]').click();
+    cy.get('[data-cy="story-panel-chart-tab"]').click();
+    cy.get('[data-cy="story-panel-media-tab"]').click();
+
+    cy.wait("@fetchUnsplashImages");
+
+    cy.get('[data-cy="story-panel-image-item"]').click();
+    cy.get('[data-cy="image-frame"]').first().drag();
+    cy.get('[data-cy="row-frame-item-drop-zone-2-1"]').scrollIntoView().drop();
 
     cy.get('[data-cy="story-image-content"]')
       .scrollIntoView()
@@ -164,12 +335,12 @@ describe("Testing stories on DX", () => {
     cy.get("[data-cy=home-search-button]").click();
     cy.wait(2000);
     cy.get("[data-cy=filter-search-input]").type(
-      `{selectall}{backspace}${storyTestName}`
+      `{selectall}{backspace}${advancedStoryTestName}`
     );
 
     cy.wait("@fetchStories");
 
-    cy.contains(storyTestName).should("be.visible");
+    cy.contains(advancedStoryTestName).should("be.visible");
   });
 });
 
@@ -301,10 +472,12 @@ describe("Edit, duplicate and delete story", () => {
     cy.get('[data-cy="nonstatic-dimension-container"]')
       .first()
       .within(() => {
-        cy.get('[data-cy="chart-dimension-mapping-item"]').click();
+        cy.get('[data-cy="chart-dimension-mapping-item"]').first().click();
       });
 
-    cy.get('[data-cy="chart-dimension-mapping-item"]').eq(2).click();
+    cy.get('[data-cy="chart-dimension-mapping-container"]').within(() => {
+      cy.get('[data-cy="chart-dimension-mapping-item"]').eq(2).click();
+    });
 
     cy.intercept(`${apiUrl}/chart/*/render`).as("renderChart");
 
@@ -330,7 +503,7 @@ describe("Edit, duplicate and delete story", () => {
 
     // cy.get('[data-cy="back-to-story-button"]').click();
 
-    cy.wait("@fetchCharts");
+    cy.waitForNetworkIdle(apiUrl, 2000);
 
     cy.get('[data-cy="story-panel-chart-search-input"]').type(
       `${chartTestName}-Edited`
@@ -431,6 +604,8 @@ describe("Edit, duplicate and delete story", () => {
 
     cy.intercept(`${apiUrl}/story/*`).as("fetchStory");
 
+    cy.waitForNetworkIdle(apiUrl, 2000);
+
     cy.get('[data-cy="story-grid-item-edit-btn"]').click();
 
     cy.wait("@fetchStory");
@@ -515,7 +690,7 @@ describe("Edit, duplicate and delete story", () => {
 
     // cy.get('[data-cy="back-to-story-button"]').click();
 
-    cy.wait("@fetchCharts");
+    cy.waitForNetworkIdle(apiUrl, 2000);
 
     cy.get('[data-cy="story-panel-chart-search-input"]').type(chartTestName);
     cy.wait("@fetchCharts");
@@ -674,5 +849,72 @@ describe("Edit, duplicate and delete story", () => {
     cy.wait("@fetchStories");
 
     cy.contains(`${storyTestName} - Edited`).should("not.exist");
+
+    // Delete the advanced story
+
+    cy.get("[data-cy=home-search-button]").click();
+    cy.wait(2000);
+    cy.get("[data-cy=filter-search-input]").type(
+      `{selectall}{backspace}${advancedStoryTestName}`
+    );
+
+    cy.wait("@fetchStories");
+
+    cy.contains('[data-cy="story-grid-item"]', `${advancedStoryTestName}`)
+      .first()
+      .scrollIntoView()
+      .within(() => {
+        cy.get('[data-cy="story-grid-item-menu-btn"]').click();
+      });
+
+    cy.get('[data-cy="story-grid-item-delete-btn"]').click();
+
+    cy.get('[data-cy="delete-story-item-form"]').within(() => {
+      cy.get('[data-cy="delete-story-item-input"]').type("DELETE{enter}");
+    });
+
+    cy.wait("@deleteStory");
+
+    cy.wait("@fetchStories");
+
+    cy.get("[data-cy=home-search-button]").click();
+    cy.wait(2000);
+    cy.get("[data-cy=filter-search-input]").type(
+      `{selectall}{backspace}${advancedStoryTestName}`
+    );
+
+    cy.wait("@fetchStories");
+
+    cy.contains(`${storyTestName}`).should("not.exist");
+  });
+
+  it("Can Download a story - PDF", () => {
+    cy.intercept(`${apiUrl}/story*`).as("fetchStory");
+    cy.get('[data-cy="story-grid-item"]').first().scrollIntoView().click();
+    // cy.wait("@fetchStory");
+
+    // cy.contains(storyTestName);
+    cy.get('[data-cy="export-report"]').click();
+    cy.get('[data-cy="export-report-pdf"]').click();
+  });
+
+  it("Can Download a story -SVG", () => {
+    cy.intercept(`${apiUrl}/story*`).as("fetchStory");
+    cy.get('[data-cy="story-grid-item"]').first().scrollIntoView().click();
+    // cy.wait("@fetchStory");
+
+    // cy.contains(storyTestName);
+    cy.get('[data-cy="export-report"]').click();
+    cy.get('[data-cy="export-report-svg"]').click();
+  });
+
+  it("Can Download a story - PNG", () => {
+    cy.intercept(`${apiUrl}/story*`).as("fetchStory");
+    cy.get('[data-cy="story-grid-item"]').first().scrollIntoView().click();
+    // cy.wait("@fetchStory");
+
+    // cy.contains(storyTestName);
+    cy.get('[data-cy="export-report"]').click();
+    cy.get('[data-cy="export-report-png"]').click();
   });
 });

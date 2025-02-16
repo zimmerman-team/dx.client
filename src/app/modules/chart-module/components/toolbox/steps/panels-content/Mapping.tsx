@@ -591,7 +591,7 @@ const NonStaticDimensionContainer = (props: {
             ];
 
             return (
-              <div>
+              <div key={mappingItemValue}>
                 {index === 0 && (
                   <DropPlaceholder
                     placeholderIndex={0}
@@ -647,6 +647,7 @@ const NonStaticDimensionContainer = (props: {
               width: 0px;
             }
           `}
+          data-cy="chart-dimension-mapping-container"
         >
           <div
             css={`
@@ -1174,6 +1175,7 @@ const StaticDimensionContainer = (props: { dimension: any }) => {
   const [,] = useDebounce(() => onValueChange(value), 1000, [value]);
   return (
     <div
+      data-cy="static-dimension-container"
       key={`${props.dimension.id}`}
       css={`
         width: 100%;

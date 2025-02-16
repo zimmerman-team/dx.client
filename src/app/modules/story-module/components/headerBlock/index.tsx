@@ -156,6 +156,7 @@ export default function HeaderBlock(props: Props) {
       <div
         ref={drop}
         data-testid="drop-area"
+        data-cy="header-drop-area"
         css={`
           z-index: 1;
           width: 100%;
@@ -245,6 +246,7 @@ export default function HeaderBlock(props: Props) {
               onClick={onEdit}
               id="edit-header-icon"
               data-testid="edit-header-button"
+              data-cy="edit-header-button"
             >
               <Tooltip title="Edit" placement="right">
                 <EditIcon />
@@ -254,6 +256,7 @@ export default function HeaderBlock(props: Props) {
               onClick={onRemove}
               id="delete-header-icon"
               data-testid="delete-header-button"
+              data-cy="delete-header-button"
             >
               <Tooltip title="Remove header" placement="right">
                 <DeleteIcon />

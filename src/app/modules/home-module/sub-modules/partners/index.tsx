@@ -192,14 +192,31 @@ export default function PartnersModule() {
                     indicatorColor="primary"
                     textColor="primary"
                     className="Home-MuiTabs-flexContainer"
+                    data-cy="partners-tabs"
                   >
-                    <StyledTab disableTouchRipple label="About" value={0} />
-                    <StyledTab disableTouchRipple label="Grants" value={1} />
-                    <StyledTab disableTouchRipple label="Budgets" value={2} />
+                    <StyledTab
+                      disableTouchRipple
+                      label="About"
+                      value={0}
+                      data-cy="about-tab"
+                    />
+                    <StyledTab
+                      disableTouchRipple
+                      label="Grants"
+                      value={1}
+                      data-cy="grants-tab"
+                    />
+                    <StyledTab
+                      disableTouchRipple
+                      label="Budgets"
+                      value={2}
+                      data-cy="budgets-tab"
+                    />
                     <StyledTab
                       disableTouchRipple
                       label="Performance"
                       value={3}
+                      data-cy="performance-tab"
                     />
                   </StyledTabs>
                 </div>
@@ -231,7 +248,9 @@ export default function PartnersModule() {
                     interval={3000}
                   >
                     {cards.map((card, index) => (
-                      <div key={index}>{card}</div>
+                      <div key={index} data-cy="partners-view">
+                        {card}
+                      </div>
                     ))}
                   </AutoPlaySwipeableViews>
                   <Pagination

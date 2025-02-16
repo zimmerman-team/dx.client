@@ -21,6 +21,7 @@ describe("Testing connecting data on DX", () => {
   const apiUrl = Cypress.env("api_url");
 
   beforeEach(() => {
+    // restore login session
     cy.restoreLocalStorageCache();
     // cy.setGoogleAccessToken();
 
@@ -33,7 +34,7 @@ describe("Testing connecting data on DX", () => {
     cy.get('[data-cy="cookie-btn"]').click();
     cy.intercept(`${apiUrl}/external-sources/search?q=*`).as("getDefaultData");
     cy.get('[data-cy="home-connect-dataset-button"]').click();
-    cy.wait("@planData");
+    cy.wait(2000);
   });
 
   it("Can filter results by source in the external search", () => {
@@ -56,7 +57,232 @@ describe("Testing connecting data on DX", () => {
     cy.get('[data-cy="external-search-card-WHO"]').should("be.visible");
   });
 
-  it("Can import data from External Search", () => {
+  //Feature not implemented yet so can not test
+  // it("Can import data from External Search - TGF", () => {
+  //   cy.wait("@getDefaultData").then((interception) => {
+  //     cy.wait(2000);
+  //     cy.contains('[data-cy="source-category-button"]', "TGF").click();
+  //     cy.wait("@getDefaultData");
+  //     cy.get('[data-cy="external-search-card-TGF"]').should(
+  //       "have.length.greaterThan",
+  //       1
+  //     );
+  //   });
+
+  //   cy.get('[data-cy="open-search-button"]').click();
+  //   cy.intercept(
+  //     `${apiUrl}/external-sources/search?q=Exclusive%20breastfeeding*`
+  //   ).as("getDefaultData2");
+  //   cy.wait(2000);
+  //   cy.get('[data-cy="filter-search-input"]').type("Exclusive breastfeeding");
+
+  //   cy.wait("@getDefaultData2").then((interception) => {
+  //     cy.get('[data-cy="external-search-card-TGF"]').should(
+  //       "have.length.greaterThan",
+  //       1
+  //     );
+  //   });
+
+  //   cy.intercept(`${apiUrl}/external-sources/download`).as("downloadData");
+  //   cy.get('[data-cy="external-search-card-TGF"]')
+  //     .first()
+  //     .trigger("mouseover")
+  //     .within(() => {
+  //       cy.get('[data-cy="import-to-dx-button"]').click();
+  //     });
+  //   cy.wait("@downloadData");
+
+  //   cy.get('[data-cy="dataset-metadata-title"]').type(
+  //     `{selectall}{backspace}${testname1}`
+  //   );
+  //   cy.get('[data-cy="dataset-metadata-description"]').type(
+  //     `{selectall}{backspace}${testname1}`
+  //   );
+  //   cy.get('[data-cy="dataset-metadata-source"]').type(
+  //     "{selectall}{backspace}Rawgraphs"
+  //   );
+  //   cy.get('[data-cy="dataset-metadata-link"]').type(
+  //     "{selectall}{backspace}https://notavailableexternal.com"
+  //   );
+  //   cy.get('[data-cy="dataset-metadata-category"]').click();
+  //   cy.get('[data-value="Social"]').click();
+  //   cy.get('[data-cy="dataset-metadata-submit"]').scrollIntoView();
+  //   cy.intercept(`${apiUrl}/datasets`).as("submitData");
+  //   cy.get('[data-cy="dataset-metadata-submit"]').click();
+
+  //   cy.wait("@submitData");
+  //   cy.contains(testname1).should("be.visible");
+  // });
+
+  it("Can import data from External Search - WHO", () => {
+    cy.wait("@getDefaultData").then((interception) => {
+      cy.wait(2000);
+      cy.contains('[data-cy="source-category-button"]', "WHO").click();
+      cy.wait("@getDefaultData");
+      cy.get('[data-cy="external-search-card-WHO"]').should(
+        "have.length.greaterThan",
+        1
+      );
+    });
+
+    cy.get('[data-cy="open-search-button"]').click();
+    cy.intercept(
+      `${apiUrl}/external-sources/search?q=Exclusive%20breastfeeding*`
+    ).as("getDefaultData2");
+    cy.wait(2000);
+    cy.get('[data-cy="filter-search-input"]').type("Exclusive breastfeeding");
+
+    cy.wait("@getDefaultData2").then((interception) => {
+      cy.get('[data-cy="external-search-card-WHO"]').should(
+        "have.length.greaterThan",
+        1
+      );
+    });
+
+    cy.intercept(`${apiUrl}/external-sources/download`).as("downloadData");
+    cy.get('[data-cy="external-search-card-WHO"]')
+      .first()
+      .trigger("mouseover")
+      .within(() => {
+        cy.get('[data-cy="import-to-dx-button"]').click();
+      });
+    cy.wait("@downloadData");
+
+    cy.get('[data-cy="dataset-metadata-title"]').type(
+      `{selectall}{backspace}${testname1}`
+    );
+    cy.get('[data-cy="dataset-metadata-description"]').type(
+      `{selectall}{backspace}${testname1}`
+    );
+    cy.get('[data-cy="dataset-metadata-source"]').type(
+      "{selectall}{backspace}Rawgraphs"
+    );
+    cy.get('[data-cy="dataset-metadata-link"]').type(
+      "{selectall}{backspace}https://notavailableexternal.com"
+    );
+    cy.get('[data-cy="dataset-metadata-category"]').click();
+    cy.get('[data-value="Social"]').click();
+    cy.get('[data-cy="dataset-metadata-submit"]').scrollIntoView();
+    cy.intercept(`${apiUrl}/datasets`).as("submitData");
+    cy.get('[data-cy="dataset-metadata-submit"]').click();
+
+    cy.wait("@submitData");
+    cy.contains(testname1).should("be.visible");
+  });
+
+  it("Can import data from External Search - HDX", () => {
+    cy.wait("@getDefaultData").then((interception) => {
+      cy.wait(2000);
+      cy.contains('[data-cy="source-category-button"]', "HDX").click();
+      cy.wait("@getDefaultData");
+      cy.get('[data-cy="external-search-card-HDX"]').should(
+        "have.length.greaterThan",
+        1
+      );
+    });
+
+    cy.get('[data-cy="open-search-button"]').click();
+    cy.intercept(`${apiUrl}/external-sources/search?q=n*`).as(
+      "getDefaultData2"
+    );
+    cy.wait(2000);
+    cy.get('[data-cy="filter-search-input"]').type("n");
+
+    cy.wait("@getDefaultData2").then((interception) => {
+      cy.get('[data-cy="external-search-card-HDX"]').should(
+        "have.length.greaterThan",
+        0
+      );
+    });
+
+    cy.intercept(`${apiUrl}/external-sources/download`).as("downloadData");
+    cy.get('[data-cy="external-search-card-HDX"]')
+      .first()
+      .trigger("mouseover")
+      .within(() => {
+        cy.get('[data-cy="import-to-dx-button"]').click();
+      });
+    cy.wait("@downloadData");
+
+    cy.get('[data-cy="dataset-metadata-title"]').type(
+      `{selectall}{backspace}${testname1}`
+    );
+    cy.get('[data-cy="dataset-metadata-description"]').type(
+      `{selectall}{backspace}${testname1}`
+    );
+    cy.get('[data-cy="dataset-metadata-source"]').type(
+      "{selectall}{backspace}Rawgraphs"
+    );
+    cy.get('[data-cy="dataset-metadata-link"]').type(
+      "{selectall}{backspace}https://notavailableexternal.com"
+    );
+    cy.get('[data-cy="dataset-metadata-category"]').click();
+    cy.get('[data-value="Social"]').click();
+    cy.get('[data-cy="dataset-metadata-submit"]').scrollIntoView();
+    cy.intercept(`${apiUrl}/datasets`).as("submitData");
+    cy.get('[data-cy="dataset-metadata-submit"]').click();
+
+    cy.wait("@submitData");
+    cy.contains(testname1).should("be.visible");
+  });
+  it("Can import data from External Search - World Bank", () => {
+    cy.wait("@getDefaultData").then((interception) => {
+      cy.wait(2000);
+      cy.contains('[data-cy="source-category-button"]', "World Bank").click();
+      cy.wait("@getDefaultData");
+      cy.get('[data-cy="external-search-card-World Bank"]').should(
+        "have.length.greaterThan",
+        1
+      );
+    });
+
+    cy.get('[data-cy="open-search-button"]').click();
+    cy.intercept(`${apiUrl}/external-sources/search?q=Voice%20and*`).as(
+      "getDefaultData2"
+    );
+
+    cy.wait(2000);
+    cy.get('[data-cy="filter-search-input"]').type("Voice and");
+
+    cy.wait("@getDefaultData2").then((interception) => {
+      cy.get('[data-cy="external-search-card-World Bank"]').should(
+        "have.length.greaterThan",
+        1
+      );
+    });
+
+    cy.intercept(`${apiUrl}/external-sources/download`).as("downloadData");
+    cy.get('[data-cy="external-search-card-World Bank"]')
+      .first()
+      .trigger("mouseover")
+      .within(() => {
+        cy.get('[data-cy="import-to-dx-button"]').click();
+      });
+    cy.wait("@downloadData");
+
+    cy.get('[data-cy="dataset-metadata-title"]').type(
+      `{selectall}{backspace}${testname1}`
+    );
+    cy.get('[data-cy="dataset-metadata-description"]').type(
+      `{selectall}{backspace}${testname1}`
+    );
+    cy.get('[data-cy="dataset-metadata-source"]').type(
+      "{selectall}{backspace}Rawgraphs"
+    );
+    cy.get('[data-cy="dataset-metadata-link"]').type(
+      "{selectall}{backspace}https://notavailableexternal.com"
+    );
+    cy.get('[data-cy="dataset-metadata-category"]').click();
+    cy.get('[data-value="Social"]').click();
+    cy.get('[data-cy="dataset-metadata-submit"]').scrollIntoView();
+    cy.intercept(`${apiUrl}/datasets`).as("submitData");
+    cy.get('[data-cy="dataset-metadata-submit"]').click();
+
+    cy.wait("@submitData");
+    cy.contains(testname1).should("be.visible");
+  });
+
+  it("Can import data from External Search - Kaggle", () => {
     cy.wait("@getDefaultData").then((interception) => {
       cy.wait(2000);
       cy.contains('[data-cy="source-category-button"]', "Kaggle").click();

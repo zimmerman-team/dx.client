@@ -74,26 +74,32 @@ export function ExpandedFilterGroup(props: ExpandedFilterGroupProps) {
       setOptionsToShow(props.options);
       return;
     }
-    const searchOptions = (options: FilterGroupOptionModel[]) => {
-      const results: FilterGroupOptionModel[] = [];
+    const results: FilterGroupOptionModel[] = [];
+    try {
+      const searchOptions = (options: FilterGroupOptionModel[]) => {
+        options.forEach((option) => {
+          if (
+            option.label.toString().toLowerCase().indexOf(value.toLowerCase()) >
+            -1
+          ) {
+            results.push(option);
+          } else if (option?.subOptions) {
+            const searchResponse = searchOptions(option.subOptions);
 
-      options.forEach((option) => {
-        if (option.label.toLowerCase().indexOf(value.toLowerCase()) > -1) {
-          results.push(option);
-        } else if (option?.subOptions) {
-          const searchResponse = searchOptions(option.subOptions);
-
-          if (searchResponse.length) {
-            results.push({
-              ...option,
-              subOptions: searchResponse,
-            });
+            if (searchResponse.length) {
+              results.push({
+                ...option,
+                subOptions: searchResponse,
+              });
+            }
           }
-        }
-      });
+        });
+        return results;
+      };
+      setOptionsToShow(searchOptions(props.options));
+    } catch (e) {
       return results;
-    };
-    setOptionsToShow(searchOptions(props.options));
+    }
   };
 
   function handleChangeAll(event: React.ChangeEvent<HTMLInputElement>) {
@@ -248,6 +254,7 @@ export function ExpandedFilterGroup(props: ExpandedFilterGroupProps) {
                 checked={allSelected}
                 onChange={handleChangeAll}
                 disabled={searchValue.length > 0}
+                data-cy="select-all-filters-checkbox"
               />
             }
             label="Select all"
@@ -432,6 +439,7 @@ function FilterOption(props: FilterOptionProps) {
               color="primary"
               checked={props.selected}
               data-testid="filter-option-checkbox"
+              data-cy="filter-option-checkbox"
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 props.onOptionChange(
                   e.target.checked,

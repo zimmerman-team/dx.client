@@ -79,6 +79,7 @@ export function FilterGroup(props: FilterGroupCompProps) {
       <div
         onClick={props.expandGroup}
         data-testid="filter-group"
+        data-cy="filter-group"
         css={`
           width: 100%;
           display: flex;
@@ -109,6 +110,7 @@ export function FilterGroup(props: FilterGroupCompProps) {
       {appliedFilters.length > 0 && (
         <div
           data-testid="applied-filters"
+          data-cy="applied-filters"
           css={`
             gap: 6px;
             width: 100%;

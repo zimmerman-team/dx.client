@@ -248,6 +248,7 @@ export function AppBar() {
             display: flex;
             background-color: #f2f7fd;
           `}
+          data-cy="app-bar"
         >
           <Toolbar
             disableGutters
@@ -291,6 +292,7 @@ export function AppBar() {
                       display: flex;
                       align-items: center;
                     `}
+                    data-cy="header-logo"
                   >
                     <NavLink to="/" css={logocss}>
                       <img src="/logo.svg" alt="logo" />
@@ -364,15 +366,7 @@ const ActionMenu = () => {
                 opacity: 0.8;
               }
             }
-            /* :nth-child(2) {
-              width: 41px;
-              height: 34px;
-              border-radius: 0px 24px 24px 0px;
-              background: ${openActionPopover ? "#b5b5db" : "#dadaf8"};
-              &:hover {
-                background: #b5b5db;
-              } */
-            }
+
             svg {
               ${openActionPopover ? "transform: rotate(180deg)" : ""}
             }
@@ -384,21 +378,11 @@ const ActionMenu = () => {
             {isAuthenticated ? "MY DASHBOARD" : "Sign in"}
           </button>
         </Link>
-        {/* {isAuthenticated && (
-          <button
-            onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
-              setActionPopoverAnchorEl(
-                actionPopoverAnchorEl ? null : event.currentTarget
-              );
-            }}
-            data-cy="create-story-dropdown"
-          >
-            <KeyboardArrowDownIcon />
-          </button>
-        )} */}
+
         {isAuthenticated && (
           <button
             onClick={() => history.push("/user-management/profile")}
+            data-cy="navbar-profile-btn"
             css={`
               min-width: 33px;
               height: 33px;

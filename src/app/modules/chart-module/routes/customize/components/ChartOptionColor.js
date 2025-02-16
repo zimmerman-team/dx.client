@@ -26,7 +26,10 @@ const ChartOptionColor = ({
   }
 
   return (
-    <label className={props.className + " row"}>
+    <label
+      className={props.className + " row"}
+      data-cy={`color-label-${label}`}
+    >
       <Col xs={6} className="d-flex align-items-center">
         {label}
       </Col>
