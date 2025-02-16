@@ -5,7 +5,7 @@ import {
   searchInputCss,
   sortByItemCss,
 } from "app/modules/home-module/style";
-import { IconButton, Popover } from "@material-ui/core";
+import { IconButton, Popover, Tooltip } from "@material-ui/core";
 import { ReactComponent as SortIcon } from "app/modules/home-module/assets/sort-fill.svg";
 import { ReactComponent as GridIcon } from "app/modules/home-module/assets/grid-fill.svg";
 import { ReactComponent as CloseIcon } from "app/modules/home-module/assets/close-icon.svg";
@@ -113,7 +113,9 @@ export default function Filter(
             css={iconButtonCss(props.openSearch)}
             aria-label="search-button"
           >
-            <SearchIcon />
+            <Tooltip title="Search" placement="bottom-start">
+              <SearchIcon />
+            </Tooltip>
           </IconButton>
         </div>
         <IconButton
@@ -125,7 +127,9 @@ export default function Filter(
           css={iconButtonCss(openSortPopover)}
           aria-label="sort-button"
         >
-          <SortIcon />
+          <Tooltip title="Sort by" placement="bottom-start">
+            <SortIcon />
+          </Tooltip>
         </IconButton>
         <Popover
           open={openSortPopover}
@@ -184,7 +188,9 @@ export default function Filter(
             props.assetsView === "table" ? "grid" : "table"
           }-view-button`}
         >
-          {props.assetsView === "table" ? <TableIcon /> : <GridIcon />}
+          <Tooltip title="Card/List view" placement="bottom-start">
+            {props.assetsView === "table" ? <TableIcon /> : <GridIcon />}
+          </Tooltip>
         </IconButton>
       </div>
     </div>
