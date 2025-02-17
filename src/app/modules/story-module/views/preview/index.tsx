@@ -84,17 +84,20 @@ export function StoryPreviewView(
     (actions) => actions.stories.StoryGet.clear
   );
 
+  const loadStoryData = () => {
+    if (token) {
+      fetchStoryData({ token, getId: page });
+    } else if (!isAuthenticated) {
+      fetchStoryData({ nonAuthCall: true, getId: page });
+    }
+  };
   React.useEffect(() => {
     props.setAutoSave({ isAutoSaveEnabled: false });
 
     if (isLoading) {
       return;
     }
-    if (token) {
-      fetchStoryData({ token, getId: page });
-    } else if (!isAuthenticated) {
-      fetchStoryData({ nonAuthCall: true, getId: page });
-    }
+    loadStoryData();
 
     return () => {
       clearStoryData();
@@ -136,6 +139,7 @@ export function StoryPreviewView(
           asset="story"
           action="view"
           name={errorStoryName}
+          handleRetry={loadStoryData}
         />
       </>
     );

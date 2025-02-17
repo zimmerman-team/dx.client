@@ -19,6 +19,8 @@ interface Props {
 
 export function StoryChartWrapper(props: Props) {
   const token = useStoreState((state) => state.AuthToken.value);
+  const chartNotFoundMessage =
+    "This chart has been deleted! You can create or add a new chart from Right Panel.";
 
   const containerRef = React.useRef<HTMLDivElement>(null);
   const [chartName, setChartName] = React.useState<string>("");
@@ -96,7 +98,7 @@ export function StoryChartWrapper(props: Props) {
     if (notFound || dataError) {
       props.setError(true);
       if ((chartError?.data as any)?.error?.code === "ENTITY_NOT_FOUND") {
-        setChartErrorMessage("This chart is no longer available.");
+        setChartErrorMessage(chartNotFoundMessage);
       }
     }
   }, [notFound, dataError]);
@@ -124,6 +126,10 @@ export function StoryChartWrapper(props: Props) {
     containerRef.current?.clientWidth,
     containerRef.current?.clientHeight,
   ]);
+  const message = chartNotFoundMessage;
+  const boldText = "create or add a new chart";
+
+  const parts = message.split(boldText);
 
   if (notFound || dataError) {
     return (
@@ -137,14 +143,40 @@ export function StoryChartWrapper(props: Props) {
           justify-content: center;
           color: #e75656;
           font-size: ${parseInt(props.width) > 250 ? "14px" : "10px"};
-          line-height: 15px;
           font-weight: bold;
           font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
           text-align: center;
+          svg {
+            width: 53.3px;
+            height: 53.3px;
+          }
+          h3 {
+            font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
+            font-size: 36px;
+            margin: 16px 0;
+          }
+          p {
+            font-weight: normal;
+            font-size: 18px;
+            line-height: normal;
+            margin: 0;
+            margin-top: 4px;
+          }
         `}
       >
         <ErrorOutlineIcon htmlColor="#E75656" fontSize="large" />
-        <p>{chartErrorMessage}</p>
+        <h3>Error</h3>
+        <p>
+          {chartErrorMessage === chartNotFoundMessage ? (
+            <>
+              {parts[0]}
+              <b>{boldText}</b>
+              {parts[1]}
+            </>
+          ) : (
+            chartErrorMessage
+          )}
+        </p>
       </div>
     );
   }
