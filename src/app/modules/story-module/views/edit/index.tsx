@@ -283,6 +283,7 @@ function StoryEditView(props: Readonly<StoryEditViewProps>) {
           asset="story"
           action="edit"
           name={errorStoryName}
+          handleRetry={() => {}}
         />
       </>
     );
@@ -296,6 +297,7 @@ function StoryEditView(props: Readonly<StoryEditViewProps>) {
           asset="story"
           action="edit"
           name={storyData?.name}
+          handleRetry={() => {}}
         />
         ;
       </>

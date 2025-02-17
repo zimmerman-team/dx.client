@@ -7,12 +7,13 @@ import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import { Container, useMediaQuery } from "@material-ui/core";
 import { useAuth0 } from "@auth0/auth0-react";
 import { socialAuth } from "app/utils/socialAuth";
-import { useHistory, useLocation } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
 
 export function NotAuthorizedMessageModule(props: {
   asset: "chart" | "story" | "dataset";
   action: "view" | "edit" | "delete";
   name?: string;
+  handleRetry: () => void;
 }) {
   const location = useLocation();
   const { isAuthenticated } = useAuth0();
@@ -72,6 +73,42 @@ export function NotAuthorizedMessageModule(props: {
           justify-content: center;
           color: #e75656;
           text-align: center;
+          h3 {
+            margin-top: 13.3px;
+            margin-bottom: 0px;
+            font-size: 36px;
+            white-space: pre-line;
+            font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
+          }
+          button,
+          a {
+            border-radius: 12px;
+            background: #231d2c;
+            display: flex;
+            padding: 0px 24px;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
+            font-size: 16px;
+            font-weight: 400;
+            border: none;
+            outline: none;
+            text-decoration: none;
+            height: 48px;
+            cursor: pointer;
+
+            > svg {
+              transform: scale(0.8);
+            }
+          }
+          @media (max-width: 500px) {
+            flex-direction: column;
+            align-items: center;
+            button {
+              width: 86%;
+            }
+          }
           @media (max-width: 767px) {
             padding-top: 200px;
           }
@@ -80,9 +117,10 @@ export function NotAuthorizedMessageModule(props: {
         <ErrorOutlineRounded
           htmlColor="#e75656"
           css={`
-            font-size: 48px;
+            font-size: 64px;
           `}
         />{" "}
+        <h3>Error</h3>
         <p
           css={`
             font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
@@ -116,41 +154,6 @@ export function NotAuthorizedMessageModule(props: {
               flex-direction: row;
               justify-content: center;
               margin-top: 32px;
-
-              > button {
-                gap: 10px;
-                color: #fff;
-                display: flex;
-                padding: 9px 18px !important;
-                background: #a1a2ff;
-                align-items: center;
-                justify-content: center;
-                text-transform: uppercase;
-                border-radius: 30px;
-                outline: none;
-                border: none;
-                font-family: "Inter", sans-serif;
-                font-weight: 700;
-                font-size: 14px;
-                text-transform: uppercase;
-                text-decoration: none;
-
-                :hover {
-                  opacity: 0.8;
-                  cursor: pointer;
-                }
-
-                > svg {
-                  transform: scale(0.8);
-                }
-              }
-              @media (max-width: 500px) {
-                flex-direction: column;
-                align-items: center;
-                button {
-                  width: 86%;
-                }
-              }
             `}
           >
             <button
@@ -165,6 +168,21 @@ export function NotAuthorizedMessageModule(props: {
             >
               <LinkedInIcon /> sign in for free
             </button>
+          </div>
+        )}
+        {isAuthenticated && (
+          <div
+            css={`
+              gap: 20px;
+              width: 100%;
+              display: flex;
+              flex-direction: row;
+              justify-content: center;
+              margin-top: 32px;
+            `}
+          >
+            <button onClick={props.handleRetry}>Retry</button>
+            <Link to="/">Back to Dashboard</Link>
           </div>
         )}
       </div>

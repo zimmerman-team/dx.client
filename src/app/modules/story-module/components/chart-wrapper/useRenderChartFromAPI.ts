@@ -62,7 +62,9 @@ export const useRenderChartFromAPI = (
         }
         if (isEmpty(chart)) {
           setNotFound(true);
-          setChartErrorMessage("This chart is no longer available.");
+          setChartErrorMessage(
+            "This chart has been deleted! You can create or add a new chart from Right Panel."
+          );
         } else if (response.data.error) {
           setChartErrorMessage(response.data.error);
           setDataError(true);
@@ -81,7 +83,9 @@ export const useRenderChartFromAPI = (
         }
         setLoading(false);
         setNotFound(true);
-        setChartErrorMessage("This chart is no longer available.");
+        setChartErrorMessage(
+          "This chart has been deleted! You can create or add a new chart from Right Panel."
+        );
       });
   };
 

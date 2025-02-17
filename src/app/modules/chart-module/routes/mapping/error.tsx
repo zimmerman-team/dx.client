@@ -22,6 +22,7 @@ import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 
 import { useStoreState } from "app/state/store/hooks";
 import { CHART_DEFAULT_HEIGHT } from "app/modules/chart-module/data";
+import { Link } from "react-router-dom";
 export default function MappingErrorComponent(props: {
   page: string;
   chartError: boolean;
@@ -372,6 +373,8 @@ export default function MappingErrorComponent(props: {
     return placeholder?.placeholder;
   };
 
+  const handleRetryMapping = () => {};
+
   return (
     <div
       css={`
@@ -423,22 +426,25 @@ export default function MappingErrorComponent(props: {
               font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
               text-align: center;
               svg {
-                width: 48px;
-                height: 48px;
+                width: 64px;
+                height: 64px;
               }
-              button {
-                outline: none;
-                border: none;
-                background: transparent;
-                cursor: pointer;
-                text-decoration: underline;
+
+              h3 {
+                margin-top: 13.3px;
+                margin-bottom: 0px;
+                font-size: 36px;
+                white-space: pre-line;
+                font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
               }
               p:nth-of-type(1) {
-                margin-top: 34px;
+                margin: 0;
+                margin-top: 20px;
                 white-space: pre-line;
-                line-height: 22px;
-                font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
+                font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
+                font-weight: normal;
                 font-size: 18px;
+                width: 358px;
               }
               p:nth-of-type(2) {
                 margin: 0;
@@ -448,14 +454,48 @@ export default function MappingErrorComponent(props: {
           >
             <>
               <ErrorOutlineIcon htmlColor="#E75656" />
+              <h3>Error</h3>
+
               <p>
-                Something went wrong rendering your chart! <br /> Check your
-                mapping or pick different dimensions.
+                Mapping could not be processed, please try again or contact your
+                administrator.
               </p>
-              <p>"Error rendering dimensions" </p>
             </>
-            {/* {(props.chartError || props.dataError) && (
-          )} */}
+            <div
+              css={`
+                gap: 16px;
+                display: flex;
+                justify-content: center;
+                margin-top: 32px;
+                @media (max-width: 768px) {
+                  flex-direction: column;
+                }
+                button,
+                a {
+                  border-radius: 12px;
+                  background: #231d2c;
+                  display: flex;
+                  padding: 0px 24px;
+                  justify-content: center;
+                  align-items: center;
+                  color: #fff;
+                  font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
+                  font-size: 16px;
+                  font-weight: 400;
+                  border: none;
+                  outline: none;
+                  text-decoration: none;
+                  height: 48px;
+                  cursor: pointer;
+                }
+              `}
+            >
+              <button onClick={handleRetryMapping}>Retry</button>
+              <Link to={`/chart/${props.page}/data`}>
+                Select Different Dimensions
+              </Link>
+              <Link to="/">Back to Dashboard</Link>
+            </div>
           </div>
         </div>{" "}
       </div>

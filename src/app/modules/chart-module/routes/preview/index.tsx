@@ -26,6 +26,7 @@ interface ChartBuilderPreviewProps {
   chartError: boolean;
   dataError: boolean;
   chartErrorMessage: string;
+  datasetId: string;
 }
 
 export function ChartBuilderPreview(props: ChartBuilderPreviewProps) {
@@ -51,6 +52,11 @@ export function ChartBuilderPreview(props: ChartBuilderPreviewProps) {
           dataError={props.dataError}
           chartError={props.chartError}
           page={page}
+          view="preview-data"
+          selectDataProps={{
+            datasetId: props.datasetId,
+            loadDataset: props.loadDataset,
+          }}
         />
       </>
     );

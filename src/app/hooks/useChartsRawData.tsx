@@ -249,7 +249,9 @@ export function useChartsRawData(props: {
         }
         if (isEmpty(chart)) {
           setChartError(true);
-          setChartErrorMessage("This chart is no longer available.");
+          setChartErrorMessage(
+            "Something went wrong with loading your data!\n\nChoose another dimensions or select different chart type."
+          );
         } else if (response.data.error) {
           setChartErrorMessage(
             "Something went wrong with loading your data!\n\nChoose another dimensions or select different chart type."
