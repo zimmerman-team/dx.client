@@ -1,30 +1,46 @@
 import styled from "styled-components/macro";
 
 interface Props {
-  light?: boolean;
-  dark?: boolean;
+  bg: "light" | "dark";
+  size: "big" | "small";
 }
 export const PrimaryButton = styled.button<Props>`
-  background: ${(props) =>
-    props.light ? "#E4E4E4" : props.dark ? "#231D2C" : props.color};
-  border-radius: 30px;
-  border: none;
-  outline: none;
-  padding: 12px 27px;
-  height: 41px;
   display: flex;
-  color: inherit;
-  justify-content: center;
   align-items: center;
-  width: 100%;
-  text-transform: uppercase;
+  justify-content: center;
+  border-radius: 12px;
+  background: ${(props) => (props.bg === "light" ? "#6061E5" : "#231d2c")};
+  color: #fff;
+  width: max-content;
+  height: ${(props) => (props.size === "big" ? "48px" : "35px")};
+  outline: none;
+  border: none;
+  font-family: "GothamNarrow-Bold", sans-serif;
+  padding: 0 24px;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  text-transform: capitalize;
   cursor: pointer;
+
+  @media (max-width: 744px) {
+    height: 35px;
+  }
+  @media (max-width: 425px) {
+    width: 100%;
+  }
 
   :disabled {
     background: #dfe3e6;
     pointer-events: none;
-    border: 1px solid #fff;
+    color: #70777e;
   }
+`;
+
+export const TertiaryButton = styled(PrimaryButton)`
+  background: #dfe3e5;
+  color: #70777e;
 `;
 
 export const HomePrimaryButton = styled.button`

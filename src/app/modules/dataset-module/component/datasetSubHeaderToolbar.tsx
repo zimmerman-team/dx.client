@@ -29,6 +29,7 @@ import { useSetRecoilState } from "recoil";
 import { planDialogAtom } from "app/state/recoil/atoms";
 import ShareModal from "./shareModal";
 import DuplicateMessage from "app/modules/common/mobile-duplicate-message";
+import { PrimaryButton } from "app/components/Styled/button";
 
 export default function DatasetSubHeaderToolbar(
   props: Readonly<{ name: string }>
@@ -53,6 +54,7 @@ export default function DatasetSubHeaderToolbar(
     open: false,
     vertical: "bottom",
     horizontal: "center",
+    message: "Your dataset has been successfully duplicated!",
   });
   const setPlanDialog = useSetRecoilState(planDialogAtom);
 
@@ -163,6 +165,10 @@ export default function DatasetSubHeaderToolbar(
       });
   }
 
+  const handleCloseSnackbarState = () => {
+    setSnackbarState((prev) => ({ ...prev, open: false }));
+  };
+
   return (
     <div id="subheader-toolbar" css={styles.container}>
       <Snackbar
@@ -191,14 +197,12 @@ export default function DatasetSubHeaderToolbar(
           }}
           open={snackbarState.open}
           autoHideDuration={6000}
-          onClose={() => setSnackbarState({ ...snackbarState, open: false })}
+          onClose={handleCloseSnackbarState}
           key={snackbarState.vertical + snackbarState.horizontal}
         >
           <DuplicateMessage
             action={handleBackToDataset}
-            closeSnackbar={() =>
-              setSnackbarState({ ...snackbarState, open: false })
-            }
+            closeSnackbar={handleCloseSnackbarState}
             name={datasetDetails.name}
             type="data"
           />
@@ -210,10 +214,19 @@ export default function DatasetSubHeaderToolbar(
             horizontal: snackbarState.horizontal,
           }}
           open={snackbarState.open}
-          onClose={() => setSnackbarState({ ...snackbarState, open: false })}
-          message={`Dataset has been duplicated successfully!`}
+          onClose={handleCloseSnackbarState}
+          message={snackbarState.message}
           key={snackbarState.vertical + snackbarState.horizontal}
-          action={<button onClick={handleBackToDataset}>GO TO Dataset</button>}
+          action={
+            <PrimaryButton
+              size="big"
+              bg="dark"
+              style={{ textTransform: "none" }}
+              onClick={handleBackToDataset}
+            >
+              Go to Copied Dataset
+            </PrimaryButton>
+          }
         />
       )}
       <ShareModal

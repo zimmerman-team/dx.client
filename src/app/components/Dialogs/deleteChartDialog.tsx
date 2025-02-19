@@ -1,6 +1,7 @@
 import React from "react";
 import CloseOutlined from "@material-ui/icons/ClearOutlined";
 import { createStyles, IconButton, makeStyles, Modal } from "@material-ui/core";
+import { PrimaryButton } from "app/components/Styled/button";
 
 interface Props {
   cardId?: string;
@@ -22,16 +23,17 @@ export const useStyles = makeStyles(() =>
     },
     paper: {
       outline: 0,
-      width: 544,
-      borderRadius: "10px",
-      paddingRight: "2rem",
+      width: 560,
+      borderRadius: "16px",
       position: "relative",
-      paddingLeft: "3rem",
+      padding: "0 81px",
+      paddingBottom: "32px",
       backgroundColor: "#fff",
       boxShadow:
         "0px 14.8787px 22.318px rgba(0, 0, 0, 0.05), 0px 4.4636px 7.43933px rgba(0, 0, 0, 0.05), 0px 0.743933px 7.43933px rgba(0, 0, 0, 0.05)",
       "@media (max-width: 577px)": {
         width: "90%",
+        padding: "0 48px",
       },
     },
   })
@@ -61,11 +63,7 @@ export default function DeleteChartDialog(props: Props) {
           data-cy="delete-chart-item-form"
           aria-label="form"
         >
-          <div
-            css={`
-              width: 80%;
-            `}
-          >
+          <div>
             <IconButton
               onClick={() => props.setModalDisplay(false)}
               css={`
@@ -78,8 +76,8 @@ export default function DeleteChartDialog(props: Props) {
             </IconButton>
             <p
               css={`
-                font-weight: 400;
-                font-size: 34px;
+                font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
+                font-size: 40px;
                 color: #231d2c;
                 line-height: 41px;
                 margin-bottom: 0px;
@@ -89,17 +87,15 @@ export default function DeleteChartDialog(props: Props) {
             </p>
             <p
               css={`
-                margin-top: 3px;
+                margin-top: 16px;
+                margin-bottom: 36px;
+                font-size: 18px;
               `}
             >
               Absolutely sure you want to delete the chart(s)? <br />{" "}
               <b>This action is irreversible!</b>
             </p>
-            <div
-              css={`
-                margin-top: 3rem;
-              `}
-            >
+            <div>
               <input
                 autoFocus
                 type="text"
@@ -125,34 +121,19 @@ export default function DeleteChartDialog(props: Props) {
           </div>
           <div
             css={`
+              margin-top: 36px;
               display: flex;
               justify-content: flex-end;
-              margin-top: 3rem;
-
-              margin-bottom: 2rem;
-              padding-right: 1rem;
             `}
           >
-            <button
+            <PrimaryButton
+              bg="dark"
+              size="big"
               type="submit"
               disabled={!props.enableButton}
-              css={`
-                background: ${props.enableButton ? "#231D2C" : "#e4e4e4"};
-                border-radius: 30px;
-                width: 107px;
-                height: 41px;
-                outline: none;
-                border: none;
-                text-transform: uppercase;
-                color: #ffffff;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                cursor: pointer;
-              `}
             >
               Delete
-            </button>
+            </PrimaryButton>
           </div>
         </form>
       </div>

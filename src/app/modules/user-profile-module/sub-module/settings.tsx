@@ -122,8 +122,9 @@ export default function Settings() {
             `}
           >
             <PrimaryButton
-              dark
               type="button"
+              bg="dark"
+              size="big"
               onClick={() => setModalDisplay(true)}
             >
               Delete account

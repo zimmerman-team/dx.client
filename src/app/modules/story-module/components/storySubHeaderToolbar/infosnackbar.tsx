@@ -3,7 +3,7 @@ import styled, { css } from "styled-components/macro";
 
 export const InfoSnackbar = styled((props) => <Snackbar {...props} />)`
   && {
-    bottom: 8px;
+    bottom: 16px;
     @media (max-width: 900px) {
       width: 80%;
     }
@@ -19,9 +19,9 @@ export const InfoSnackbar = styled((props) => <Snackbar {...props} />)`
   }
 
   & [class*="MuiSnackbarContent-root"] {
-    width: 100%;
+    width: 1232px;
     display: flex;
-    padding: 0 78px;
+    padding: 0 56px;
     background: #fff;
     flex-wrap: nowrap;
     border-radius: 12px;
@@ -29,12 +29,15 @@ export const InfoSnackbar = styled((props) => <Snackbar {...props} />)`
     justify-content: center;
     box-shadow: 0 8px 17px -4px rgba(130, 142, 148, 0.35),
       0 0 4px 0 rgba(130, 142, 148, 0.16), 0 0 2px 0 rgba(130, 142, 148, 0.12);
-    @media (max-width: 880px) {
-      gap: 24px;
-    }
-    @media (max-width: 599px) {
-      height: 280px;
-      border-radius: 20px 20px 0px 0px;
+    @media (max-width: 1270px) {
+      width: 94vw;
+      @media (max-width: 880px) {
+        gap: 24px;
+      }
+      @media (max-width: 599px) {
+        height: 280px;
+        border-radius: 20px 20px 0px 0px;
+      }
     }
   }
 
@@ -45,19 +48,6 @@ export const InfoSnackbar = styled((props) => <Snackbar {...props} />)`
     font-weight: 700;
     font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
     white-space: nowrap;
-  }
-
-  & [class*="MuiSnackbarContent-action"] {
-    > button {
-      color: #fff;
-      cursor: pointer;
-      font-size: 14px;
-      border-style: none;
-      padding: 12px 27px;
-      background: #262c34;
-      border-radius: 20px;
-      white-space: nowrap;
-    }
   }
 
   & [class*="MuiSnackbarContent-action"] {

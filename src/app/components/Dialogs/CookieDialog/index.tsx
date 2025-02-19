@@ -13,23 +13,27 @@ const BaseSnackbar = styled((props) => (
   <Snackbar {...props} data-cy="cookie-dialog" />
 ))`
   && {
-    bottom: 0;
+    bottom: 16px;
     @media (max-width: 500px) {
       left: unset;
       right: unset;
+      @media (max-width: 425px) {
+        bottom: 0px;
+      }
     }
   }
 
   & [class*="MuiSnackbarContent-root"] {
     background-color: white;
     width: 1280px;
-    border-radius: 20px 20px 0px 0px;
+    border-radius: 12;
     box-shadow: 0 8px 17px -4px rgba(130, 142, 148, 0.35),
       0 0 4px 0 rgba(130, 142, 148, 0.16), 0 0 2px 0 rgba(130, 142, 148, 0.12);
     flex-wrap: nowrap;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
+    padding: 0px;
     @media (max-width: 1300px) {
       @media (min-width: 501px) {
         width: 95vw;
@@ -37,6 +41,9 @@ const BaseSnackbar = styled((props) => (
     }
     @media (max-width: 500px) {
       width: 100vw;
+      @media (max-width: 425px) {
+        border-radius: 12px 12px 0px 0px;
+      }
     }
   }
 
@@ -52,12 +59,19 @@ const BaseSnackbar = styled((props) => (
     > a {
       font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
     }
+    @media (max-width: 744px) {
+      font-size: 14px;
+    }
   }
 
   & [class*="MuiSnackbarContent-message"] {
-    padding-left: 0;
-    padding-top: 16px;
-    padding-bottom: 16px;
+    padding: 16px 56px;
+    width: 100%;
+    @media (max-width: 744px) {
+      left: unset;
+      right: unset;
+      padding: 16px 24px;
+    }
   }
 
   & [class*="MuiSnackbarContent-action"] {

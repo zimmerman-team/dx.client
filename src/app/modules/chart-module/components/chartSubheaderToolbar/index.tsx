@@ -40,6 +40,7 @@ import useMediaQuery from "@material-ui/core/useMediaQuery";
 import DuplicateMessage from "app/modules/common/mobile-duplicate-message";
 import { InfoSnackbar } from "app/modules/story-module/components/storySubHeaderToolbar/infosnackbar";
 import ShareModal from "app/modules/dataset-module/component/shareModal";
+import { PrimaryButton } from "app/components/Styled/button";
 
 // eslint-disable-next-line sonarjs/cognitive-complexity
 export function ChartSubheaderToolbar(
@@ -63,7 +64,6 @@ export function ChartSubheaderToolbar(
   const [hasChangesBeenMade, setHasChangesBeenMade] = React.useState(false);
 
   const [inputSpanVisibiltiy, setInputSpanVisibility] = React.useState(true);
-  const [showSnackbar, setShowSnackbar] = React.useState<string | null>(null);
   const [duplicatedChartId, setDuplicatedChartId] = React.useState<
     string | null
   >(null);
@@ -116,6 +116,7 @@ export function ChartSubheaderToolbar(
     open: false,
     vertical: "bottom",
     horizontal: "center",
+    message: "Your chart has been successfully duplicated!",
   });
 
   React.useEffect(() => {
@@ -614,37 +615,22 @@ export function ChartSubheaderToolbar(
             data-testid="duplicated-chart-snackbar"
             open={snackbarState.open}
             onClose={() => setSnackbarState({ ...snackbarState, open: false })}
-            message={`Chart has been duplicated successfully!`}
+            message={snackbarState.message}
             key={snackbarState.vertical + snackbarState.horizontal}
             action={
-              <button onClick={handleViewDuplicatedChart}>GO TO CHART</button>
+              <PrimaryButton
+                size="big"
+                bg="dark"
+                style={{ textTransform: "none" }}
+                onClick={handleViewDuplicatedChart}
+              >
+                Go to Copied Chart
+              </PrimaryButton>
             }
           />
         )}
       </>
-      <InfoSnackbar
-        gap={window.location.pathname.includes("story")}
-        data-testid="create-chart-snackbar"
-        onClose={() => setShowSnackbar(null)}
-        open={showSnackbar !== null && showSnackbar !== ""}
-      >
-        <SnackbarContent
-          message={showSnackbar}
-          aria-describedby="create-chart-snackbar-content"
-          action={
-            <>
-              <button
-                onClick={() => {
-                  setShowSnackbar(null);
-                  history.push("/story/new/initial");
-                }}
-              >
-                CREATE NEW STORY
-              </button>
-            </>
-          }
-        />
-      </InfoSnackbar>
+
       <Snackbar
         anchorOrigin={{
           vertical: "bottom",

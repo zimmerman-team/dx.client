@@ -3,6 +3,7 @@ import { CloseOutlined } from "@material-ui/icons";
 import useGetChartsStoriesCountByDataset from "app/hooks/useGetChartsStoriesCountByDataset";
 import CircleLoader from "app/modules/home-module/components/Loader";
 import React from "react";
+import { PrimaryButton } from "app/components/Styled/button";
 
 interface Props {
   modalDisplay: boolean;
@@ -25,14 +26,15 @@ const useStyles = makeStyles(() =>
     paper: {
       outline: 0,
       width: 646,
-      borderRadius: "10px",
+      borderRadius: "16px",
       position: "relative",
-      padding: "2.5rem 2.5rem 2.5rem 3.5rem",
+      padding: "2.5rem 81px",
       backgroundColor: "#fff",
       boxShadow:
         "0px 14.8787px 22.318px rgba(0, 0, 0, 0.05), 0px 4.4636px 7.43933px rgba(0, 0, 0, 0.05), 0px 0.743933px 7.43933px rgba(0, 0, 0, 0.05)",
       "@media (max-width: 650px)": {
         width: "80%",
+        padding: "2.5rem 48px",
       },
     },
   })
@@ -79,11 +81,7 @@ export default function DeleteDatasetDialog(props: Props) {
               data-cy="delete-dataset-item-form"
               aria-label="form"
             >
-              <div
-                css={`
-                  width: 80%;
-                `}
-              >
+              <div>
                 <IconButton
                   onClick={() => props.setModalDisplay(false)}
                   css={`
@@ -96,21 +94,22 @@ export default function DeleteDatasetDialog(props: Props) {
                 </IconButton>
                 <p
                   css={`
-                    font-weight: 400;
-                    font-size: 34px;
+                    font-size: 40px;
                     padding: 0;
                     margin: 0;
                     color: #231d2c;
                     line-height: 41px;
                     margin-bottom: 0px;
+                    font-family: "GothamNarrow-Bold", "Helvetica Neue",
+                      sans-serif;
                   `}
                 >
                   Delete dataset
                 </p>
                 <p
                   css={`
-                    margin-top: 8px;
-                    font-size: 16px;
+                    margin-top: 16px;
+                    font-size: 18px;
                   `}
                 >
                   By deleting this dataset you and other users will lose access
@@ -128,64 +127,45 @@ export default function DeleteDatasetDialog(props: Props) {
                     action is irreversible.
                   </b>
                 </p>
-                <div
+
+                <input
+                  autoFocus
+                  type="text"
+                  placeholder='Type "DELETE" to confirm'
+                  onChange={handleInputChange}
+                  onKeyPress={onInputEnter}
                   css={`
                     margin-top: 32px;
+                    border: 1px solid #231d2c;
+                    border-radius: 10px;
+                    background: #ffffff;
+                    height: 48px;
+                    width: 100%;
+                    padding: 0px 24px;
+                    :focus,
+                    :active,
+                    :hover {
+                      outline: 1px solid #6061e5;
+                    }
                   `}
-                >
-                  <input
-                    autoFocus
-                    type="text"
-                    placeholder='Type "DELETE" to confirm'
-                    onChange={handleInputChange}
-                    onKeyPress={onInputEnter}
-                    css={`
-                      border: 1px solid #231d2c;
-                      border-radius: 10px;
-                      background: #ffffff;
-                      height: 48px;
-                      width: 80%;
-                      padding: 0px 24px;
-                      :focus,
-                      :active,
-                      :hover {
-                        outline: 1px solid #6061e5;
-                      }
-                      @media (max-width: 460px) {
-                        width: 100%;
-                      }
-                    `}
-                    data-cy="delete-dataset-item-input"
-                  />
-                </div>
-              </div>
-              <div
-                css={`
-                  display: flex;
-                  justify-content: flex-end;
-                  margin-top: 36px;
-                `}
-              >
-                <button
-                  type="submit"
-                  disabled={!props.enableButton}
+                  data-cy="delete-dataset-item-input"
+                />
+                <div
                   css={`
-                    background: ${props.enableButton ? "#231D2C" : "#e4e4e4"};
-                    border-radius: 30px;
-                    width: 107px;
-                    height: 41px;
-                    outline: none;
-                    border: none;
-                    text-transform: uppercase;
-                    color: #ffffff;
                     display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    cursor: pointer;
+                    justify-content: flex-end;
+                    margin-top: 36px;
                   `}
                 >
-                  Delete
-                </button>
+                  <PrimaryButton
+                    bg="dark"
+                    size="big"
+                    type="submit"
+                    disabled={!props.enableButton}
+                  >
+                    Delete
+                  </PrimaryButton>
+                </div>
               </div>
             </form>
           </div>

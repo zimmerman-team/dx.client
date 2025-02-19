@@ -37,6 +37,7 @@ import { InfoSnackbar } from "app/modules/story-module/components/storySubHeader
 import ShareModal from "app/modules/dataset-module/component/shareModal";
 import DuplicateMessage from "app/modules/common/mobile-duplicate-message";
 import { ExportStoryButton } from "./exportButton";
+import { PrimaryButton } from "app/components/Styled/button";
 
 export const useStyles = makeStyles(() =>
   createStyles({
@@ -83,6 +84,7 @@ export function StorySubheaderToolbar(
     open: false,
     vertical: "bottom",
     horizontal: "center",
+    message: "Your story has been successfully duplicated!",
   });
   const [isShareModalOpen, setIsShareModalOpen] =
     React.useState<boolean>(false);
@@ -592,10 +594,17 @@ export function StorySubheaderToolbar(
             }}
             open={snackbarState.open}
             onClose={() => setSnackbarState({ ...snackbarState, open: false })}
-            message={`Story has been duplicated successfully!`}
+            message={snackbarState.message}
             key={snackbarState.vertical + snackbarState.horizontal}
             action={
-              <button onClick={handleViewDuplicatedStory}>GO TO STORY</button>
+              <PrimaryButton
+                size="big"
+                bg="dark"
+                style={{ textTransform: "none" }}
+                onClick={handleViewDuplicatedStory}
+              >
+                Go to Copied Story
+              </PrimaryButton>
             }
           />
         )}

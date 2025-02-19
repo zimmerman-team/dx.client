@@ -203,3 +203,44 @@ export const mappingStyles = {
     cursor: pointer;
   `,
 };
+
+export const snackbarStyle = css`
+  border-radius: 12px;
+  width: 1232px;
+  padding: 16px 56px;
+  display: flex;
+  align-items: center;
+  background: #fff;
+  box-shadow: 0px 0px 10px 0px rgba(152, 161, 170, 0.6);
+  justify-content: space-between;
+  gap: 48px;
+  p {
+    font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    margin: 0;
+    @media (max-width: 744px) {
+      font-size: 14px;
+
+      white-space: nowrap;
+    }
+  }
+  div {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+  @media (max-width: 1255px) {
+    width: 90vw;
+
+    @media (max-width: 978px) {
+      padding: 16px;
+      gap: 16px;
+      flex-wrap: wrap;
+      div {
+        justify-content: end;
+        width: 100%;
+      }
+    }
+  }
+`;

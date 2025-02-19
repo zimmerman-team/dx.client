@@ -21,6 +21,12 @@ const BaseSnackbar = styled((props) => (
     left: 50%;
     right: auto;
     transform: translateX(-50%);
+    @media (max-width: 600px) {
+      bottom: 0px;
+      transform: translateX(0%);
+      right: auto;
+      left: auto;
+    }
   }
 
   & [class*="MuiSnackbarContent-root"] {
@@ -33,19 +39,8 @@ const BaseSnackbar = styled((props) => (
     padding: 0 0;
     display: flex;
     justify-content: space-between;
-
-    @media (max-width: 1280px) {
-      width: 94%;
-      @media (max-width: 1280px) {
-        flex-grow: 0;
-      }
-    }
   }
 
-  /* & [class*="MuiButtonBase-root"] {
-    border-radius: 10px;
-    height: 32px;
-  } */
   & [class*="MuiTypography-root"] {
     font-weight: 325;
     font-size: 16px;
@@ -57,10 +52,10 @@ const BaseSnackbar = styled((props) => (
   }
 
   & [class*="MuiSnackbarContent-message"] {
-    padding: 24px 76px;
+    padding: 28px 56px;
     width: 100%;
     @media (max-width: 1024px) {
-      padding: 24px 25px;
+      padding: 24px;
     }
   }
 

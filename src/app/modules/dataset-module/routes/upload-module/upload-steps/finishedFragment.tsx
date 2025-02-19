@@ -46,6 +46,7 @@ export default function FinishedFragment(props: Props) {
     open: false,
     vertical: "bottom",
     horizontal: "center",
+    message: "",
   });
 
   const [openFullScreenTooltip, setOpenFullScreenTooltip] =
@@ -57,24 +58,60 @@ export default function FinishedFragment(props: Props) {
   const [openFullScreen, setOpenFullScreen] = React.useState(false);
 
   React.useEffect(() => {
-    let snackbarTimeOut: any;
     if (
       props.dataTotalCount > 0 &&
       location.pathname === "/dataset/new/upload"
     ) {
-      setSnackbarState({ ...snackbarState, open: true });
-      snackbarTimeOut = setTimeout(() => {
-        setSnackbarState({ ...snackbarState, open: false });
-      }, 5000);
+      setSnackbarState((prev) => ({
+        ...prev,
+        open: true,
+        message: `${props.dataTotalCount} rows have been successfully processed!`,
+      }));
     }
-    return () => {
-      clearTimeout(snackbarTimeOut);
-    };
   }, [props.dataTotalCount]);
 
   function handleCreateNewChart() {
     setDatasetId(props.datasetId);
   }
+
+  const handleFullScreenDisplay = () => {
+    setOpenFullScreen(true);
+    setSnackbarState((prev) => ({
+      ...prev,
+      open: true,
+      message: "Press ESC to exit Full Screen",
+    }));
+  };
+
+  React.useEffect(() => {
+    if (snackbarState.open) {
+      if (snackbarState.message.includes("Press ESC to exit Full Screen")) {
+        const timer = setTimeout(() => {
+          setSnackbarState((prev) => ({ ...prev, open: false }));
+        }, 30000);
+        return () => clearTimeout(timer);
+      } else {
+        const timer = setTimeout(() => {
+          setSnackbarState((prev) => ({ ...prev, open: false }));
+        }, 3000);
+        return () => clearTimeout(timer);
+      }
+    }
+  }, [snackbarState.open]);
+
+  React.useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setOpenFullScreen(false);
+        setSnackbarState((prev) => ({ ...prev, open: false }));
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
 
   return (
     <div css={dataSetsCss}>
@@ -150,7 +187,7 @@ export default function FinishedFragment(props: Props) {
               `}
               onMouseOver={() => setOpenFullScreenTooltip(true)}
               onMouseLeave={() => setOpenFullScreenTooltip(false)}
-              onClick={() => setOpenFullScreen(true)}
+              onClick={handleFullScreenDisplay}
               data-cy="dataset-full-screen-btn"
             >
               <FullScreenIcon />
@@ -271,7 +308,7 @@ export default function FinishedFragment(props: Props) {
             position: fixed;
             top: 0;
             left: 0;
-            z-index: 100001;
+            z-index: 1101;
             width: 100vw;
             height: 100vh;
             padding: 26px 100px 26px 108px;
@@ -413,8 +450,10 @@ export default function FinishedFragment(props: Props) {
           horizontal: snackbarState.horizontal,
         }}
         open={snackbarState.open}
-        onClose={() => setSnackbarState({ ...snackbarState, open: false })}
-        message={`${props.dataTotalCount} rows have been successfully parsed!`}
+        onClose={() =>
+          setSnackbarState((prev) => ({ ...prev, open: false, message: "" }))
+        }
+        message={snackbarState.message}
         key={snackbarState.vertical + snackbarState.horizontal}
       />
     </div>

@@ -4,6 +4,7 @@ import { useStyles } from "./deleteChartDialog";
 import { CloseOutlined } from "@material-ui/icons";
 import { IconButton, Modal } from "@material-ui/core";
 import { useStoreActions } from "app/state/store/hooks";
+import { PrimaryButton, TertiaryButton } from "app/components/Styled/button";
 
 interface Props {
   modalDisplay: boolean;
@@ -56,11 +57,7 @@ export default function LogOutDialog(props: Props) {
         className={classes.modal}
       >
         <div className={classes.paper}>
-          <div
-            css={`
-              width: 80%;
-            `}
-          >
+          <div>
             <IconButton
               onClick={() => props.setModalDisplay(false)}
               css={`
@@ -74,8 +71,8 @@ export default function LogOutDialog(props: Props) {
             </IconButton>
             <p
               css={`
-                font-weight: 400;
-                font-size: 34px;
+                font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
+                font-size: 40px;
                 color: #231d2c;
                 line-height: 41px;
                 margin-bottom: 0px;
@@ -86,7 +83,9 @@ export default function LogOutDialog(props: Props) {
             </p>
             <p
               css={`
-                margin-top: 3px;
+                margin-top: 16px;
+                margin-bottom: 36px;
+                font-size: 18px;
               `}
             >
               Are you sure you want to Sign out?
@@ -96,52 +95,25 @@ export default function LogOutDialog(props: Props) {
             css={`
               display: flex;
               justify-content: flex-end;
-              margin-top: 4rem;
-              gap: 2rem;
-              margin-bottom: 2rem;
-              padding-right: 1rem;
+              gap: 16px;
             `}
           >
-            <button
+            <TertiaryButton
               type="button"
+              bg="dark"
+              size="big"
               onClick={() => props.setModalDisplay(false)}
-              css={`
-                background: transparent;
-                border-radius: 30px;
-                width: 107px;
-                height: 41px;
-                outline: none;
-                border: none;
-                text-transform: uppercase;
-                color: #231d2c;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                cursor: pointer;
-              `}
             >
               Cancel
-            </button>
-            <button
-              type="button"
+            </TertiaryButton>
+            <PrimaryButton
+              bg="dark"
+              size="big"
+              type="submit"
               onClick={onLogout}
-              css={`
-                background: #231d2c;
-                border-radius: 30px;
-                width: 107px;
-                height: 41px;
-                outline: none;
-                border: none;
-                text-transform: uppercase;
-                color: #ffffff;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                cursor: pointer;
-              `}
             >
               Sign out
-            </button>
+            </PrimaryButton>
           </div>
         </div>
       </Modal>

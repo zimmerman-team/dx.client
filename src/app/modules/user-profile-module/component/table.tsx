@@ -42,6 +42,7 @@ export function InvoiceTable(props: InvoiceTableProps) {
     open: false,
     vertical: "bottom",
     horizontal: "center",
+    message: "Please select the invoice you want to download!",
   });
 
   const handleCheckUncheckAll = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -298,7 +299,7 @@ export function InvoiceTable(props: InvoiceTableProps) {
       <InfoSnackbar
         open={snackbarState.open}
         key={snackbarState.vertical + snackbarState.horizontal}
-        message="Please select the invoice you want to download!"
+        message={snackbarState.message}
         onClose={() => setSnackbarState({ ...snackbarState, open: false })}
         anchorOrigin={{
           vertical: snackbarState.vertical,
