@@ -26,6 +26,11 @@ export default function LinkOptions(props: {
     >
       <p>Copy the following link to share it</p>
       <ShareContent height="48px" content={url} />
+      <div
+        css={`
+          height: 16px;
+        `}
+      />
       <CopyButton
         handleCopyToClipboard={props.handleCopyToClipboard}
         name="copy share link"

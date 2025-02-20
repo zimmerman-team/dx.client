@@ -33,15 +33,19 @@ export default function DatasetCategoryList(props: Readonly<Props>) {
         }
 
         > button {
-          width: 160px;
-          height: 40px;
-          font-size: 14px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: max-content;
+          padding: 0 24px;
+          height: 35px;
+          font-size: 16px;
+          white-space: nowrap;
           cursor: pointer;
-          min-width: 160px;
-          max-width: 160px;
           background: #fff;
-          border-radius: 30px;
+          border-radius: 12px;
           border: 1px solid #231d2c;
+          font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
         }
       `}
     >

@@ -41,10 +41,11 @@ export default function SourceCategoryList(props: Readonly<Props>) {
           cursor: pointer;
           width: max-content;
           background: #fff;
-          border-radius: 30px;
+          border-radius: 12px;
           border: 0.5px solid #231d2c;
           font-family: "GothamNarrow-Book", "Helvetica Neue", sans-serif;
-          padding: 12px 27px;
+          padding: 0px 24px;
+          height: 35px;
         }
       `}
     >

@@ -14,6 +14,7 @@ import { useMediaQuery } from "usehooks-ts";
 import { DatasetListItemAPIModel } from "app/modules/dataset-module/data";
 import moment from "moment";
 import { useAuth0 } from "@auth0/auth0-react";
+import { PrimaryButton } from "app/components/Styled/button";
 
 interface Props {
   data: any[];
@@ -235,12 +236,12 @@ export default function FinishedFragment(props: Props) {
                   css={`
                     color: #fff;
                     width: 100%;
-                    width: 278px;
-                    height: 41px;
+                    width: max-content;
+                    height: 48px;
+                    padding: 0 24px;
                     font-size: 14px;
                     background: #6061e5;
-                    border-radius: 30px;
-                    text-transform: uppercase;
+                    border-radius: 12px;
                     font-family: "GothamNarrow-Bold", sans-serif;
                     display: flex;
                     justify-content: center;
@@ -251,7 +252,7 @@ export default function FinishedFragment(props: Props) {
                     }
                   `}
                 >
-                  Sign in to Create new chart
+                  Sign in to Create Chart
                 </Link>
               ) : (
                 <Link
@@ -262,34 +263,14 @@ export default function FinishedFragment(props: Props) {
                     }`,
                   }}
                 >
-                  <button
-                    css={`
-                      color: #fff;
-                      width: 100%;
-                      width: 200px;
-                      height: 41px;
-                      font-size: 14px;
-                      font-weight: 700;
-                      padding: 12px 27px;
-                      background: #64afaa;
-                      border-radius: 30px;
-                      text-transform: uppercase;
-                      font-family: "GothamNarrow-Bold";
-                      outline: none;
-                      border: none;
-                      display: flex;
-                      justify-content: center;
-                      align-items: center;
-
-                      :hover {
-                        opacity: 0.8;
-                        cursor: pointer;
-                      }
-                    `}
+                  <PrimaryButton
+                    size="big"
+                    bg="dark"
+                    type="button"
                     onClick={handleCreateNewChart}
                   >
-                    create new chart
-                  </button>
+                    create chart
+                  </PrimaryButton>
                 </Link>
               )}
             </>

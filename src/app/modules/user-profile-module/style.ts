@@ -54,27 +54,7 @@ export const billingcss = css`
     font-size: 24px;
     height: 38px;
   }
-  button {
-    display: flex;
-    width: 100%;
-    height: 28.3px;
-    justify-content: center;
-    align-items: center;
-    gap: 5.959px;
-    border-radius: 17.876px;
-    background: #231d2c;
-    border: none;
-    outline: none;
-    color: #ffffff;
-    font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
-    font-size: 12px;
-    cursor: pointer;
 
-    :disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-  }
   & > div:nth-of-type(1),
   & > div:nth-of-type(3),
   & > div:nth-of-type(5) {
@@ -99,27 +79,11 @@ export const billingcss = css`
     gap: 16px;
     align-items: center;
     margin-bottom: 48px;
-
-    button:nth-child(1) {
-      width: 124px;
-    }
-    button:nth-child(2) {
-      width: 133px;
-    }
-    button:nth-child(3) {
-      width: 130px;
-    }
   }
   & > div:nth-of-type(4) {
-    button {
-      width: 195px;
-    }
     margin-bottom: 48px;
   }
   & > div:nth-of-type(6) {
-    button {
-      width: 167px;
-    }
   }
 `;
 

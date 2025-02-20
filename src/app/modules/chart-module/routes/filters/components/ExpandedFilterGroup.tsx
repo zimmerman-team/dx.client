@@ -28,6 +28,7 @@ import {
   multiUnCheckFilterOptions,
 } from "app/modules/chart-module/routes/filters/utils";
 import { isEmpty } from "lodash";
+import { PrimaryButton } from "app/components/Styled/button";
 
 interface ExpandedFilterGroupProps extends FilterGroupModel, FilterGroupProps {
   goBack: () => void;
@@ -354,27 +355,14 @@ export function ExpandedFilterGroup(props: ExpandedFilterGroupProps) {
           />
         ))}
       </div>
-
-      <button
-        type="button"
-        onClick={handleApply}
+      <div
         css={`
-          color: #fff;
-          font-size: 14px;
-          cursor: pointer;
-          margin-top: 15px;
-          font-weight: 500;
-          width: fit-content;
-          padding: 12px 27px;
-          border-style: none;
-          border-radius: 30px;
-          background: #231d2c;
-          box-shadow: 0px 0px 10px rgba(152, 161, 170, 0.05);
-          font-family: "Inter", sans-serif;
+          height: 15px;
         `}
-      >
+      />
+      <PrimaryButton size="big" bg="dark" type="button" onClick={handleApply}>
         Apply
-      </button>
+      </PrimaryButton>
     </React.Fragment>
   );
 }

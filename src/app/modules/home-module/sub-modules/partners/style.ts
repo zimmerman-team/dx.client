@@ -61,13 +61,14 @@ export const empowercss = (view: string) => css`
     }
   }
   div {
-    gap: 34px;
     display: flex;
     margin-top: ${view === "landing" ? "28px" : "50px"};
     align-items: center;
     justify-content: center;
+    gap: 16px;
+
     @media (max-width: 768px) {
-      gap: 20px;
+      gap: 8px;
     }
     @media (max-width: 411px) {
       flex-direction: column;
@@ -241,60 +242,6 @@ export const bestDecisioncss = css`
     @media (max-width: 1024px) {
       font-size: 34px;
       line-height: 40.8px;
-    }
-  }
-  div {
-    button {
-      gap: 10px;
-      color: #231d2c;
-      display: flex;
-      padding: 9px 18px;
-      background: #fff;
-      font-weight: 700;
-      font-family: "Inter", sans-serif;
-      font-size: 14px;
-      align-items: center;
-      justify-content: center;
-      text-transform: uppercase;
-      border: none;
-      outline: none;
-      border-radius: 30px;
-      :hover {
-        opacity: 0.95;
-        cursor: pointer;
-      }
-      > svg {
-        transform: scale(0.8);
-      }
-    }
-  }
-  a {
-    button {
-      outline: none;
-      border: none;
-      background: #ffffff;
-      border-radius: 30px;
-      height: 41px;
-      color: #231d2c;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-shrink: 0;
-      white-space: nowrap;
-      padding: 12px 27px;
-      gap: 10px;
-      p {
-        text-transform: uppercase;
-        font-family: "Inter", sans-serif;
-        font-weight: 700;
-        font-size: 14px;
-        color: #231d2c;
-        white-space: nowrap;
-      }
-      :hover {
-        opacity: 0.95;
-        cursor: pointer;
-      }
     }
   }
 `;

@@ -12,6 +12,7 @@ import {
 } from "app/modules/dataset-module/routes/upload-module/style";
 import { useLocation } from "react-router-dom";
 import { isValidUrl } from "app/utils/emailValidation";
+import { PrimaryButton } from "app/components/Styled/button";
 
 interface Props {
   onSubmit: (data: IFormDetails) => void;
@@ -288,47 +289,32 @@ export default function MetaData(props: Readonly<Props>) {
           css={`
             display: flex;
             justify-content: flex-end;
-            margin-top: 12rem;
+            margin: 40px 0;
             gap: 1rem;
             @media (min-width: 768px) {
               @media (max-width: 13004px) {
-                margin-top: 4rem;
                 padding-bottom: 10px;
               }
             }
           `}
         >
-          <button
+          <PrimaryButton
+            size="big"
+            bg="light"
+            type="button"
             onClick={props.handleBack}
-            css={`
-              color: #231d2c;
-              text-transform: uppercase;
-              width: 125px;
-
-              :hover {
-                opacity: 0.5;
-              }
-            `}
           >
             {view === "edit" ? "Cancel" : "previous"}
-          </button>
-          <button
+          </PrimaryButton>
+          <PrimaryButton
+            size="big"
+            bg="dark"
             type="button"
             onClick={handleSubmit}
             data-cy="dataset-metadata-submit"
-            css={`
-              color: #231d2c;
-              text-transform: uppercase;
-              width: 125px;
-              background: #231d2c;
-              color: #fff;
-              :hover {
-                opacity: 0.8;
-              }
-            `}
           >
             {view === "edit" ? "Save" : "Next"}
-          </button>
+          </PrimaryButton>
         </div>
       </div>
     </div>

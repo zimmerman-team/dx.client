@@ -2,6 +2,7 @@ import React from "react";
 import Box from "@material-ui/core/Box";
 import styled from "styled-components/macro";
 import Typography from "@material-ui/core/Typography";
+import { PrimaryButton } from "app/components/Styled/button";
 
 const MessageContainer = styled((props) => <Box {...props} />)`
   align-items: center;
@@ -81,10 +82,15 @@ export const Message = (props: MessageProps) => {
         </a>{" "}
         for more details.
       </Typo>
-      <Button data-cy="cookie-btn" type="button" onClick={props.onClose}>
-        {" "}
+      <PrimaryButton
+        type="button"
+        bg="dark"
+        size="big"
+        data-cy="cookie-btn"
+        onClick={props.onClose}
+      >
         Agree
-      </Button>
+      </PrimaryButton>
     </MessageContainer>
   );
 };

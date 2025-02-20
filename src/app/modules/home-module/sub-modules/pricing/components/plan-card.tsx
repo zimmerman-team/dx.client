@@ -157,7 +157,7 @@ export default function PlanCard({
             position: absolute;
             bottom: 23px;
             left: 23px;
-            border-radius: 50px;
+            border-radius: 12px;
             border: 1px solid ${plan.recommended ? "transparent" : "#262C34"};
             line-height: normal;
             font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;

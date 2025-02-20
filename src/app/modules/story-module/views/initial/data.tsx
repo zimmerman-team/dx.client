@@ -1,7 +1,7 @@
 import { ReactComponent as AITemplateImg } from "app/modules/story-module/asset/aiTemplate-img.svg";
 import { ReactComponent as BlankTemplateImg } from "app/modules/story-module/asset/blankTemplate-img.svg";
 import { ReactComponent as AdvancedTemplateImg } from "app/modules/story-module/asset/advancedTemplate-img.svg";
-import { ReactComponent as RightArrowIcon } from "app/modules/story-module/asset/rightArrow.svg";
+import { PrimaryButton } from "app/components/Styled/button";
 
 export interface StoryInitialViewProps {
   resetStory: () => void;
@@ -121,45 +121,24 @@ export const TemplateItem = ({
               line-height: 14px;
               border-radius: 10px;
               border: 1px solid #000;
+              font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
             `}
           >
             Sneak Preview
           </div>
         )}
-        <button
+        <PrimaryButton
+          size="xs"
+          bg="dark"
+          data-cy="use-story-template-button"
           css={`
             bottom: 16px;
             right: 14px;
             position: absolute;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5.96px;
-            outline: none;
-            border: none;
-            background: #231d2c;
-            border-radius: 17.8756px;
-            height: 24.3px;
-            width: 99px;
-            padding: 7.15026px 10px;
-            color: #ffffff;
-            span {
-              font-size: 8.34197px;
-              font-weight: 500;
-              text-transform: uppercase;
-              font-family: "Inter", sans-serif;
-            }
           `}
-          data-cy="use-story-template-button"
         >
-          {value === "ai" ? (
-            <span>Want to try it?</span>
-          ) : (
-            <>
-              <span>Use template</span> <RightArrowIcon />
-            </>
-          )}
-        </button>
+          {value === "ai" ? "Want to try it?" : " Use template"}
+        </PrimaryButton>
       </div>
     </div>
   );

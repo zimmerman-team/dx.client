@@ -83,20 +83,6 @@ export const metaDatacss = css`
       }
     }
   }
-  button {
-    border-radius: 30px;
-    padding: 12px 27px;
-    height: 41px;
-
-    font-weight: 500;
-    font-size: 14px;
-    border: none;
-    outline: none;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-  }
 `;
 
 export const dataSetsCss = css`

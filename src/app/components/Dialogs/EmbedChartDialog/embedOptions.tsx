@@ -121,6 +121,11 @@ export default function EmbedOptions(props: {
           height="66px"
           content={`<iframe src="${window.location.origin}/chart-embed/${props.chartId}/${props.datasetId}" width="${props.widthValue}" height="${props.heightValue}"></iframe>`}
         />
+        <div
+          css={`
+            height: 16px;
+          `}
+        />
 
         <CopyButton
           handleCopyToClipboard={props.handleCopyToClipboard}

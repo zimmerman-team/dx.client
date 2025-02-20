@@ -15,6 +15,7 @@ import { PageLoader } from "app/modules/common/page-loader";
 import NewsletterBlock from "./newsletterBlock";
 import { FieldErrors } from "react-hook-form";
 import { APPLICATION_JSON } from "app/state/api";
+import { PrimaryButton } from "app/components/Styled/button";
 
 const CssTextField = withStyles({
   root: {
@@ -293,26 +294,9 @@ export default function ContactModule() {
                   }
                 `}
               >
-                <button
-                  type="submit"
-                  css={`
-                    border: none;
-                    outline: none;
-                    background: #6061e5;
-                    border-radius: 30px;
-                    height: 48px;
-                    width: 133px;
-                    color: #ffffff;
-                    font-size: 20px;
-                    font-family: "GothamNarrow-Bold", sans-serif;
-                    :hover {
-                      cursor: pointer;
-                      opacity: 0.9;
-                    }
-                  `}
-                >
+                <PrimaryButton type="submit" size="big" bg="dark">
                   SUBMIT
-                </button>
+                </PrimaryButton>
               </div>
             </form>
           </div>

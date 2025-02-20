@@ -2,25 +2,39 @@ import styled from "styled-components/macro";
 
 interface Props {
   bg: "light" | "dark";
-  size: "big" | "small";
+  size: "big" | "small" | "xs";
 }
+const sizes = {
+  big: {
+    height: "48px",
+    padding: "0 24px",
+    radius: "12px",
+  },
+  small: {
+    height: "35px",
+    padding: "0 24px",
+    radius: "12px",
+  },
+  xs: {
+    height: "24px",
+    padding: "0 16px",
+    radius: "8px",
+  },
+};
 export const PrimaryButton = styled.button<Props>`
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 12px;
+  border-radius: ${(props) => sizes[props.size].radius};
   background: ${(props) => (props.bg === "light" ? "#6061E5" : "#231d2c")};
   color: #fff;
   width: max-content;
-  height: ${(props) => (props.size === "big" ? "48px" : "35px")};
+  height: ${(props) => sizes[props.size].height};
   outline: none;
   border: none;
   font-family: "GothamNarrow-Bold", sans-serif;
-  padding: 0 24px;
+  padding: ${(props) => sizes[props.size].padding};
   font-size: 14px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: normal;
   text-transform: capitalize;
   cursor: pointer;
 

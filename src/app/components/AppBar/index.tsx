@@ -18,7 +18,7 @@ const NavList = (props: {
   setIsNavExpanded?: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const list = [
-    { name: "Library", path: "/", cy: "nav-explore", class: "" },
+    { name: "Dasboard", path: "/", cy: "nav-explore", class: "" },
     {
       name: "Why Dataxplorer",
       path: "/why-dataxplorer",
@@ -172,7 +172,6 @@ function MobileHeader(props: { navLocation: string }) {
                   font-family: "Inter", sans-serif;
                   font-size: 11.424px;
                   font-weight: 500;
-                  text-transform: uppercase;
                   text-decoration: none;
                   white-space: nowrap;
                 `}
@@ -351,51 +350,36 @@ const ActionMenu = () => {
             border: none;
             background: #dadaf8;
             color: #231d2c;
-            font-size: 11.424px;
+            font-size: 16px;
             line-height: normal;
             padding: 0px;
-            font-family: "Inter", sans-serif;
-
-            :nth-child(1) {
-              width: ${isAuthenticated ? "146px" : "110px"};
-              height: 34px;
-              border-radius: 24px;
-              &:hover {
-                opacity: 0.8;
-              }
-            }
-            /* :nth-child(2) {
-              width: 41px;
-              height: 34px;
-              border-radius: 0px 24px 24px 0px;
-              background: ${openActionPopover ? "#b5b5db" : "#dadaf8"};
-              &:hover {
-                background: #b5b5db;
-              } */
-            }
-            svg {
-              ${openActionPopover ? "transform: rotate(180deg)" : ""}
-            }
+            font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
+          }
+          svg {
+            ${openActionPopover ? "transform: rotate(180deg)" : ""}
           }
         `}
       >
-        <Link to={isAuthenticated ? "/dashboard" : "/onboarding/signin"}>
-          <button data-cy="appbar-create-story/login">
-            {isAuthenticated ? "MY DASHBOARD" : "Sign in"}
-          </button>
-        </Link>
-        {/* {isAuthenticated && (
-          <button
-            onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
-              setActionPopoverAnchorEl(
-                actionPopoverAnchorEl ? null : event.currentTarget
-              );
-            }}
-            data-cy="create-story-dropdown"
+        {!isAuthenticated && (
+          <Link
+            to="/onboarding/signin"
+            data-cy="appbar-create-story/login"
+            css={`
+              background: #dadaf8;
+              color: #231d2c;
+              font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
+              width: 96px;
+              height: 34px;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              border-radius: 10px;
+            `}
           >
-            <KeyboardArrowDownIcon />
-          </button>
-        )} */}
+            Sign in
+          </Link>
+        )}
+
         {isAuthenticated && (
           <button
             onClick={() => history.push("/user-management/profile")}
@@ -468,7 +452,6 @@ const ActionMenu = () => {
                 display: flex;
                 gap: 8px;
                 align-items: center;
-                text-transform: uppercase;
                 font-weight: 500;
                 font-family: "Inter", sans-serif;
               }

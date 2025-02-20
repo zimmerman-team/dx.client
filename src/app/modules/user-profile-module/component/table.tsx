@@ -269,6 +269,9 @@ export function InvoiceTable(props: InvoiceTableProps) {
             button {
               flex: 0 1 auto;
               background: transparent !important;
+              border: none;
+              outline: none;
+              cursor: pointer;
             }
           `}
         >

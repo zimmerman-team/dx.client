@@ -1,6 +1,7 @@
 import React from "react";
 import SettingsIcon from "app/modules/dataset-module/routes/upload-module/assets/upload-options-icons/settings";
 import { useHistory } from "react-router-dom";
+import { PrimaryButton } from "app/components/Styled/button";
 
 const UploadOption = (props: {
   name: string;
@@ -174,35 +175,16 @@ const UploadOption = (props: {
                     e.stopPropagation();
                   }}
                 >
-                  <button
+                  <PrimaryButton
+                    bg="light"
+                    size="xs"
                     onClick={() => {
                       props.onLogout?.();
                       setOpenSettings(false);
                     }}
-                    css={`
-                      font-size: 12px;
-                      font-style: normal;
-                      font-weight: 400;
-                      line-height: 15px; /* 125% */
-                      letter-spacing: 0.5px;
-                      color: white;
-                      font-family: "GothamNarrow-Bold", "Helvetica Neue",
-                        sans-serif;
-                      border-radius: 12px;
-                      background: #6061e5;
-                      box-shadow: 0px 4px 30px 0px rgba(0, 0, 0, 0.1);
-                      border: none;
-                      /* padding: 5px 0; */
-                      width: 113px;
-                      height: 24px;
-                      cursor: pointer;
-                      :hover: {
-                        opacity: 0.8;
-                      }
-                    `}
                   >
-                    Logout
-                  </button>
+                    Sign out
+                  </PrimaryButton>
                 </div>
 
                 <SettingsIcon />

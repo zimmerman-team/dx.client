@@ -7,6 +7,7 @@ import { PageLoader } from "app/modules/common/page-loader";
 import { billingcss } from "app/modules/user-profile-module/style";
 import { InvoiceTable } from "app/modules/user-profile-module/component/table";
 import { APPLICATION_JSON } from "app/state/api";
+import { PrimaryButton } from "app/components/Styled/button";
 
 export default function Billing() {
   const { user } = useAuth0();
@@ -165,13 +166,25 @@ export default function Billing() {
           </p>
         </div>
         <div>
-          <button disabled={!isOnPaidPlan} onClick={getGenericPortal}>
+          <PrimaryButton
+            bg="dark"
+            size="small"
+            disabled={!isOnPaidPlan}
+            onClick={getGenericPortal}
+          >
             RENEW PLAN
-          </button>
-          <button onClick={getGenericPortal}>UPGRADE PLAN</button>
-          <button disabled={!isOnPaidPlan} onClick={getGenericPortal}>
+          </PrimaryButton>
+          <PrimaryButton bg="dark" size="small" onClick={getGenericPortal}>
+            UPGRADE PLAN
+          </PrimaryButton>
+          <PrimaryButton
+            bg="dark"
+            size="small"
+            disabled={!isOnPaidPlan}
+            onClick={getGenericPortal}
+          >
             CANCEL PLAN
-          </button>
+          </PrimaryButton>
         </div>
         <div>
           <p>Payment method</p>
@@ -188,9 +201,14 @@ export default function Billing() {
           </div>
         </div>
         <div>
-          <button disabled={!isOnPaidPlan} onClick={changePaymentMethod}>
+          <PrimaryButton
+            bg="dark"
+            size="small"
+            disabled={!isOnPaidPlan}
+            onClick={changePaymentMethod}
+          >
             CHANGE PAYMENT METHOD
-          </button>
+          </PrimaryButton>
         </div>
         <div>
           <p>Billing info</p>
@@ -219,9 +237,14 @@ export default function Billing() {
           </div>
         </div>
         <div>
-          <button disabled={!isOnPaidPlan} onClick={getGenericPortal}>
+          <PrimaryButton
+            bg="dark"
+            size="small"
+            disabled={!isOnPaidPlan}
+            onClick={getGenericPortal}
+          >
             CHANGE BILLING INFO
-          </button>
+          </PrimaryButton>
         </div>
         <div
           css={`

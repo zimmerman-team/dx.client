@@ -10,6 +10,7 @@ import {
   chartFromStoryAtom,
   isChartAutoMappedAtom,
 } from "app/state/recoil/atoms";
+import { PrimaryButton } from "app/components/Styled/button";
 
 export interface IDatasetDetails {
   id: string;
@@ -186,22 +187,7 @@ const ConnectData = () => {
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        button {
-          display: flex;
-          padding: 12px 27px;
-          align-items: flex-start;
-          gap: 10px;
-          border-radius: 30px;
-          background: var(--primary-dark, #231d2c);
-          font-family: "Inter", sans-serif;
-          font-size: 14px;
-          font-weight: 500;
-          text-transform: uppercase;
-          color: #fff;
-          border: none;
-          outline: none;
-          cursor: pointer;
-        }
+
         p {
           font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
           margin-bottom: 4px;
@@ -211,7 +197,9 @@ const ConnectData = () => {
       `}
     >
       <p>Or connect new data</p>
-      <button
+      <PrimaryButton
+        size="small"
+        bg="dark"
         onClick={() =>
           history.push(
             `/dataset/new/upload${
@@ -223,7 +211,7 @@ const ConnectData = () => {
         }
       >
         add new dataset
-      </button>
+      </PrimaryButton>
     </div>
   );
 };

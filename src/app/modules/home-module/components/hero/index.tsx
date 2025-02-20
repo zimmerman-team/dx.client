@@ -1,7 +1,7 @@
 import React from "react";
-import { ReactComponent as GoogleIcon } from "app/modules/home-module/assets/google-icon-flat.svg";
-import { ReactComponent as LinkedInIcon } from "app/modules/home-module/assets/linkedIn-icon-flat.svg";
-import { ReactComponent as MicrosoftIcon } from "app/modules/home-module/assets/microsoft-icon-flat.svg";
+import { ReactComponent as GoogleIcon } from "app/modules/onboarding-module/asset/google-img.svg";
+import { ReactComponent as LinkedInIcon } from "app/modules/onboarding-module/asset/linkedIn-img.svg";
+import { ReactComponent as MicrosoftIcon } from "app/modules/onboarding-module/asset/microsoft-img.svg";
 import HeroEllipses from "app/modules/home-module/assets/hero-ellipses.svg";
 import { socialAuth } from "app/utils/socialAuth";
 import { Box, Container } from "@material-ui/core";
@@ -55,22 +55,27 @@ export default function Hero() {
           }
         }
         button {
+          gap: 8px;
+          color: #fff;
           display: flex;
-          width: 203px;
-          height: 35px;
-          padding: 8px 18px;
-          justify-content: center;
-          align-items: center;
-          gap: 10px;
-          border-radius: 30px;
-          background: #13183f;
-          border: none;
+          padding: 9px 17px !important;
+          height: 48px;
+          border-radius: 12px;
           outline: none;
-          color: #ffffff;
-          font-weight: bold;
-          font-family: "Inter", sans-serif;
-          font-size: 14px;
-          cursor: pointer;
+          border: none;
+          background: #a1a2ff;
+          align-items: center;
+          justify-content: center;
+          font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
+          white-space: nowrap;
+          font-size: 16px;
+          > svg {
+            transform: scale(0.8);
+          }
+          :hover {
+            opacity: 0.8;
+            cursor: pointer;
+          }
         }
       `}
     >

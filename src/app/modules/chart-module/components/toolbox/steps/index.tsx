@@ -182,20 +182,18 @@ export function ChartToolBoxSteps(props: ChartToolBoxStepsProps) {
           button {
             outline: none;
             border: none;
-            border-radius: 8px;
+            border-radius: 12px;
             width: 188px;
             height: 48px;
-            background: #dfe3e5;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 14px;
             font-family: "GothamNarrow-Bold", "Helvetica Neue", sans-serif;
             cursor: ${props.isClickable ? "pointer" : "not-allowed"};
-            /* pointer-events: ${props.isClickable ? "auto" : "none"}; */
             :nth-child(1) {
-              background: #dfe3e5;
-              color: #262c34;
+              background: ${currentPathIndex !== 0 ? "#adb5bd" : "#DFE3E5"};
+              color: #231d2c;
             }
             :nth-child(2) {
               background: #262c34;

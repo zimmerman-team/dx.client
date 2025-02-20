@@ -10,7 +10,7 @@ import { Carousel } from "react-responsive-carousel";
 import HomeFooter from "app/modules/home-module/components/Footer";
 import { subParagraphcss } from "./style";
 import { useTitle } from "react-use";
-import { HomePrimaryButton } from "app/components/Styled/button";
+import { HomePrimaryButton, PrimaryButton } from "app/components/Styled/button";
 import { Link } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import { socialAuth } from "app/utils/socialAuth";
@@ -318,12 +318,19 @@ export default function AboutModule() {
                     css={`
                       display: flex;
                       column-gap: 20px;
+                      a {
+                        text-decoration: none;
+                        :nth-of-type(1) {
+                          @media (max-width: 767px) {
+                            display: none;
+                          }
+                        }
+                      }
                       @media (max-width: 425px) {
                         flex-direction: column;
                         gap: 10px;
-                        button {
-                          width: 51%;
-                        }
+                        justify-content: center;
+                        align-items: center;
                       }
                     `}
                   >
@@ -336,74 +343,61 @@ export default function AboutModule() {
                       </HomePrimaryButton>
                     </Link>
                     <Link to="/" data-cy="empower-block-explore-stories-link">
-                      <HomePrimaryButton color="#E492BD" type="button">
-                        EXPLORE STORIES
-                      </HomePrimaryButton>
+                      <PrimaryButton size="big" bg="light" type="button">
+                        Explore the Dashboard
+                      </PrimaryButton>
                     </Link>
                   </div>
                 )}
                 {!isAuthenticated && (
                   <div
-                    id="auth-buttons"
                     css={`
-                      gap: 20px;
-                      width: 100%;
                       display: flex;
-                      flex-direction: row;
-
+                      gap: 16px;
                       > button {
-                        gap: 10px;
-                        color: #fff;
+                        gap: 8px;
+                        color: #231d2c;
                         display: flex;
-                        padding: 9px 18px !important;
+                        padding: 9px 17px !important;
+                        height: 48px;
+                        border-radius: 12px;
+                        outline: none;
+                        border: none;
                         background: #a1a2ff;
                         align-items: center;
                         justify-content: center;
-                        text-transform: uppercase;
-                        height: 41px;
-                        border-radius: 30px;
-                        outline: none;
-                        border: none;
-                        font-family: "Inter", sans-serif;
-                        font-weight: 700;
-                        font-size: 14px;
-                        text-transform: uppercase;
-                        text-decoration: none;
+                        font-family: "GothamNarrow-Bold", "Helvetica Neue",
+                          sans-serif;
                         white-space: nowrap;
+                        font-size: 16px;
+                        > svg {
+                          transform: scale(0.8);
+                        }
                         :hover {
                           opacity: 0.8;
                           cursor: pointer;
                         }
-
-                        > svg {
-                          transform: scale(0.8);
-                        }
-                        @media (max-width: 600px) {
-                          gap: 3px;
-                        }
                       }
-                      @media (max-width: 660px) {
+                      @media (max-width: 500px) {
                         flex-direction: column;
-                        gap: 10px;
+                        justify-content: center;
+                        align-items: center;
+                        gap: 8px;
+
                         button {
-                          width: 80%;
-                        }
-                        @media (max-width: 475px) {
-                          button {
-                            width: 100%;
-                          }
+                          width: 95%;
                         }
                       }
                     `}
                   >
                     <button onClick={() => socialAuth("google-oauth2")}>
-                      <GoogleIcon /> sign in for free
+                      <GoogleIcon /> Google
                     </button>
                     <button onClick={() => socialAuth("linkedin")}>
-                      <LinkedInIcon /> sign in for free
+                      <LinkedInIcon /> LinkedIn
                     </button>
                     <button onClick={() => socialAuth("windowslive")}>
-                      <MicrosoftIcon /> sign in for free
+                      <MicrosoftIcon /> Microsoft
                     </button>
                   </div>
                 )}
